@@ -1,0 +1,14 @@
+platform :ios, '11.0'
+
+target 'falcon' do
+  use_frameworks!
+
+  pod 'core', :path => '../core'
+end
+
+pre_install do |installer|
+    # XCode runs scripts in a custom env where GOPATH is missing, so we store it in a file the build script can find
+    File.open('.gopath', 'w') {|f| f.write(ENV["GOPATH"]) }
+
+    `../tools/libwallet-ios.sh`
+end

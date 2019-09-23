@@ -1,0 +1,72 @@
+{
+  "name": "core",
+  "version": "0.1.0",
+  "summary": "Muun iOS app core lib",
+  "homepage": "https://muun.com",
+  "authors": {
+    "Juan Pablo Civile": "champo@muun.com",
+    "Manu Herrera": "manu@muun.com"
+  },
+  "source": {
+    "git": "https://github.com/muun/muun.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "11.0"
+  },
+  "static_framework": true,
+  "dependencies": {
+    "Crashlytics": [
+      "3.10.7"
+    ]
+  },
+  "script_phases": [
+    {
+      "name": "Swiftlint",
+      "script": "cd \"$PODS_TARGET_SRCROOT\"; if which swiftlint >/dev/null; then swiftlint; else echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"; fi",
+      "execution_position": "before_compile"
+    },
+    {
+      "name": "Libwallet",
+      "script": "cd \"$(git rev-parse --show-toplevel)\"; ./tools/libwallet-ios.sh",
+      "execution_position": "before_compile"
+    }
+  ],
+  "subspecs": [
+    {
+      "name": "all",
+      "source_files": "Classes/**/*",
+      "dependencies": {
+        "Dip": [
+          "7.0.1"
+        ],
+        "GRDB.swift": [
+          "3.6.1"
+        ],
+        "RxGRDB": [
+          "0.13.0"
+        ],
+        "RxSwift": [
+          "4.4.2"
+        ],
+        "RxBlocking": [
+          "4.4.2"
+        ]
+      },
+      "vendored_frameworks": "Libwallet.framework"
+    },
+    {
+      "name": "notifications",
+      "source_files": [
+        "Classes/Environment.swift",
+        "Classes/Data/Errors/Logger.swift",
+        "Classes/Data/Service/Base/BaseRequest.swift",
+        "Classes/Data/Service/DTO/**/*",
+        "Classes/Domain/Model/Operations/MonetaryAmount.swift",
+        "Classes/Data/Errors/MuunError.swift",
+        "Classes/Constant.swift",
+        "Classes/Extension/JSONDecoder+Extension.swift"
+      ]
+    }
+  ]
+}
