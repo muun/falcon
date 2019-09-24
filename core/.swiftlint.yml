@@ -1,0 +1,12 @@
+disabled_rules: # rule identifiers to exclude from running
+ - identifier_name
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+ - Pods
+ - falconTests
+function_parameter_count:
+  warning: 6
+custom_rules:
+  use_wrapped_error:
+    regex: throw (?!MuunError)
+    severity: warning
+    message: replace with throw MuunError(...)
