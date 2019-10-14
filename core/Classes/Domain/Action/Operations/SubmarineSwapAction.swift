@@ -13,17 +13,23 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
 
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
+    private let blockchainHeightRepository: BlockchainHeightRepository
 
-    init(houstonService: HoustonService, keysRepository: KeysRepository) {
+    init(houstonService: HoustonService,
+         keysRepository: KeysRepository,
+         blockchainHeightRepository: BlockchainHeightRepository) {
         self.houstonService = houstonService
         self.keysRepository = keysRepository
+        self.blockchainHeightRepository = blockchainHeightRepository
 
         super.init(name: "SubmarineSwapAction")
     }
 
-    public func run(invoice: String) {
+    public func run(invoice: String, swapExpirationInBlocks: Int) {
+        let submarineSwapRequest = SubmarineSwapRequest(invoice: invoice,
+                                                        swapExpirationInBlocks: swapExpirationInBlocks)
         runSingle(
-            houstonService.prepareSubmarineSwap(invoice: invoice)
+            houstonService.createSubmarineSwap(submarineSwapRequest: submarineSwapRequest)
                 .map({ swap in
                     let isValid = try doWithError({ err in
                         LibwalletValidateSubmarineSwap(invoice,
@@ -41,6 +47,36 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
                     }
                 })
         )
+    }
+
+    public func verifyLockTime(_ submarineSwap: SubmarineSwap, expirationInBlocks: Int) {
+        /*
+         Clients should check that the locktime in the funding output script for the swap is less than or equal to
+         current_blockchain_height + previously_chosen_blocks_until_expiration + 1.
+         The plus one is to prevent a race condition if the server finds out about a new block before the client.
+         */
+        let currentBlockchainHeight = blockchainHeightRepository.getCurrentBlockchainHeight()
+        let userLockTime = submarineSwap._fundingOutput._userLockTime
+        if currentBlockchainHeight + expirationInBlocks + 1 < userLockTime {
+            Logger.fatal(
+                """
+                This means we have a mismatch between the client information and the server about the blockchain tip.
+                Current Blockchain Height: \(currentBlockchainHeight) \
+                Expiration in Blocks: \(expirationInBlocks) \
+                Swap user lock time: \(userLockTime)
+                """
+            )
+        }
+     }
+
+    public func chooseExpirationTimeInBlocks(sats: Decimal) -> Int {
+        // For 1-conf transactions (amount > 150_000 sats) just use 24 hours (144 blocks).
+        // For 0-conf transactions scale the expiration time linearly from 1 day to 7 days.
+        if sats > 150_000 {
+            return 144
+        }
+        let value = NSDecimalNumber(decimal: 144 * (7 - 6 * sats / 150_000.0))
+        return Int(truncating: value)
     }
 
     enum Errors: Error {

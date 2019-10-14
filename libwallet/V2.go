@@ -20,7 +20,12 @@ func CreateAddressV2(userKey, muunKey *HDPublicKey) (MuunAddress, error) {
 		return nil, errors.Wrapf(err, "failed to generate multisig address")
 	}
 
-	return &muunAddress{address: address.String(), version: addressV2, derivationPath: userKey.Path}, nil
+	return &muunAddress{
+		address:        address.String(),
+		version:        addressV2,
+		derivationPath: userKey.Path,
+		redeemScript:   script,
+	}, nil
 }
 
 func createRedeemScriptV2(userKey, muunKey *HDPublicKey) ([]byte, error) {
@@ -41,7 +46,7 @@ func createRedeemScriptV2(userKey, muunKey *HDPublicKey) ([]byte, error) {
 	}, 2)
 }
 
-func signInputV2(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey,
+func addUserSignatureInputV2(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey,
 	muunKey *HDPublicKey) (*wire.TxIn, error) {
 
 	if len(input.MuunSignature()) == 0 {
@@ -55,14 +60,9 @@ func signInputV2(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKe
 		return nil, errors.Wrapf(err, "failed to build reedem script for signing")
 	}
 
-	privKey, err := privateKey.key.ECPrivKey()
+	sig, err := signInputV2(input, index, tx, privateKey.PublicKey(), muunKey, privateKey)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to produce EC priv key for signing")
-	}
-
-	sig, err := txscript.RawTxInSignature(tx, index, redeemScript, txscript.SigHashAll, privKey)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to sign V2 output")
+		return nil, err
 	}
 
 	// This is a standard 2 of 2 multisig script
@@ -82,4 +82,25 @@ func signInputV2(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKe
 	txInput.SignatureScript = script
 
 	return txInput, nil
+}
+
+func signInputV2(input Input, index int, tx *wire.MsgTx, userKey, muunKey *HDPublicKey,
+	signingKey *HDPrivateKey) ([]byte, error) {
+
+	redeemScript, err := createRedeemScriptV2(userKey, muunKey)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to build reedem script for signing")
+	}
+
+	privKey, err := signingKey.key.ECPrivKey()
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to produce EC priv key for signing")
+	}
+
+	sig, err := txscript.RawTxInSignature(tx, index, redeemScript, txscript.SigHashAll, privKey)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to sign V2 output")
+	}
+
+	return sig, nil
 }

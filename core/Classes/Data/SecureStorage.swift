@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SecureStorage {
+public class SecureStorage {
 
     enum Errors: Error {
         case secureStorageError

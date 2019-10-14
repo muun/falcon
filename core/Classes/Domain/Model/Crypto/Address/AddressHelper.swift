@@ -48,6 +48,10 @@ public enum AddressHelper {
             LibwalletGetPaymentURI(rawAddress, Environment.current.network, error)
         }
 
+        if let invoice = muunUri.invoice {
+            return .submarineSwap(invoice: invoice)
+        }
+
         let address: String? = !muunUri.address.isEmpty ? muunUri.address : nil
         let bip70Url: String? = !muunUri.biP70Url.isEmpty ? muunUri.biP70Url : nil
 

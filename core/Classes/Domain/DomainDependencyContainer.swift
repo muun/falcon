@@ -43,6 +43,8 @@ public extension DependencyContainer {
             container.register(.singleton, factory: BIP70Action.init)
 
             container.register(.singleton, factory: UserSelector.init)
+            container.register(.singleton, factory: EncryptedUserKeySelector.init)
+            container.register(.singleton, factory: EncryptedMuunKeySelector.init)
 
             container.register(.singleton) {
                 SyncAction(houstonService: $0,

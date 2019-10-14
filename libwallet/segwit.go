@@ -39,7 +39,7 @@ func signNonNativeSegwitInput(input Input, index int, tx *wire.MsgTx, privateKey
 	sigHashes := txscript.NewTxSigHashes(tx)
 	sig, err := txscript.RawTxInWitnessSignature(tx, sigHashes, index, input.OutPoint().Amount(), witnessScript, txscript.SigHashAll, privKey)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to sign V3 output")
+		return nil, errors.Wrapf(err, "failed to sign V3 input")
 	}
 
 	return sig, nil

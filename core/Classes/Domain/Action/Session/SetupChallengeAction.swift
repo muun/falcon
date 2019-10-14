@@ -38,7 +38,7 @@ public class SetupChallengeAction: AsyncAction<()> {
             .do(onSuccess: { response in
 
                 let challengeKey = ChallengeKey(type: type,
-                                                publicKey: Data(challengePublicKey.stringBytes),
+                                                publicKey: Data(hex: challengePublicKey),
                                                 salt: Data(salt))
 
                 try self.keysRepository.store(challengeKey: challengeKey, type: type)

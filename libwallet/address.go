@@ -7,11 +7,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pkg/errors"
-
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcutil"
-	proto "github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 )
 
 type AddressVersion int
@@ -27,6 +26,7 @@ type muunAddress struct {
 	version        AddressVersion
 	derivationPath string
 	address        string
+	redeemScript   []byte
 }
 
 func newMuunAddress(version AddressVersion, userPublicKey, muunPublicKey *HDPublicKey) (MuunAddress, error) {
@@ -60,6 +60,10 @@ func (a *muunAddress) Address() string {
 	return a.address
 }
 
+func (a *muunAddress) RedeemScript() []byte {
+	return a.redeemScript
+}
+
 // MuunPaymentURI is muun's uri struct
 type MuunPaymentURI struct {
 	Address      string
@@ -70,6 +74,7 @@ type MuunPaymentURI struct {
 	BIP70Url     string
 	CreationTime string
 	ExpiresTime  string
+	Invoice      *Invoice
 }
 
 const (
@@ -116,6 +121,14 @@ func GetPaymentURI(address string, network *Network) (*MuunPaymentURI, error) {
 
 	if len(queryValues["amount"]) != 0 {
 		amount = queryValues["amount"][0]
+	}
+
+	if len(queryValues["lightning"]) != 0 {
+		invoice, err := ParseInvoice(queryValues["lightning"][0], network)
+
+		if err == nil {
+			return &MuunPaymentURI{Invoice:invoice}, nil
+		}
 	}
 
 	//BIP70 check

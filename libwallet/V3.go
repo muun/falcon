@@ -20,7 +20,12 @@ func CreateAddressV3(userKey, muunKey *HDPublicKey) (MuunAddress, error) {
 		return nil, err
 	}
 
-	return &muunAddress{address: address.EncodeAddress(), version: addressV3, derivationPath: userKey.Path}, nil
+	return &muunAddress{
+		address:        address.EncodeAddress(),
+		version:        addressV3,
+		derivationPath: userKey.Path,
+		redeemScript:   redeemScript,
+	}, nil
 }
 
 func createRedeemScriptV3(userKey, muunKey *HDPublicKey) ([]byte, error) {
@@ -37,24 +42,19 @@ func createWitnessScriptV3(userKey, muunKey *HDPublicKey) ([]byte, error) {
 	return createRedeemScriptV2(userKey, muunKey)
 }
 
-func signInputV3(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey,
-	muunKey *HDPublicKey) (*wire.TxIn, error) {
+func addUserSignatureInputV3(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey, muunKey *HDPublicKey) (*wire.TxIn, error) {
 
 	if len(input.MuunSignature()) == 0 {
 		return nil, errors.Errorf("muun signature must be present")
 	}
 
-	redeemScript, err := createRedeemScriptV3(privateKey.PublicKey(), muunKey)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to build reedem script for signing")
-	}
 
 	witnessScript, err := createWitnessScriptV3(privateKey.PublicKey(), muunKey)
 	if err != nil {
 		return nil, err
 	}
 
-	sig, err := signNonNativeSegwitInput(input, index, tx, privateKey, redeemScript, witnessScript)
+	sig, err := signInputV3(input, index, tx, privateKey.PublicKey(), muunKey, privateKey)
 	if err != nil {
 		return nil, err
 	}
@@ -65,4 +65,20 @@ func signInputV3(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKe
 	txInput.Witness = wire.TxWitness{zeroByteArray, sig, input.MuunSignature(), witnessScript}
 
 	return txInput, nil
+}
+
+func signInputV3(input Input, index int, tx *wire.MsgTx, userKey *HDPublicKey, muunKey *HDPublicKey,
+	signingKey *HDPrivateKey) ([]byte, error) {
+
+	witnessScript, err := createWitnessScriptV3(userKey, muunKey)
+	if err != nil {
+		return nil, err
+	}
+
+	redeemScript, err := createRedeemScriptV3(userKey, muunKey)
+	if err != nil {
+		return nil,  errors.Wrapf(err, "failed to build reedem script for signing")
+	}
+
+	return signNonNativeSegwitInput(input, index, tx, signingKey, redeemScript, witnessScript)
 }

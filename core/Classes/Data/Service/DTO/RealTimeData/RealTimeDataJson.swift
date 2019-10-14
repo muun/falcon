@@ -12,6 +12,7 @@ struct RealTimeDataJson: Codable {
 
     let feeWindow: FeeWindowJson
     let exchangeRateWindow: ExchangeRateWindowJson
+    let currentBlockchainHeight: Int
 
 }
 

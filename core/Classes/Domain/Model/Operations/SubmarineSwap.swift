@@ -169,3 +169,13 @@ extension SubmarineSwapFundingOutput: LibwalletSubmarineSwapFundingOutputProtoco
         return _serverPublicKeyInHex
     }
 }
+
+public class SubmarineSwapRequest: NSObject {
+    let _invoice: String
+    let _swapExpirationInBlocks: Int
+
+    init(invoice: String, swapExpirationInBlocks: Int) {
+        _invoice = invoice
+        _swapExpirationInBlocks = swapExpirationInBlocks
+    }
+}

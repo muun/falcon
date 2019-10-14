@@ -1,6 +1,7 @@
 package libwallet
 
 import (
+	"encoding/hex"
 	"reflect"
 	"testing"
 )
@@ -14,7 +15,12 @@ func Test_CreateAddressV3(t *testing.T) {
 		basePK          = "tpubDAN21T1DFREQQS4FvpUktKRBzXXsj5ddenAa5u198hLXvErFFR4Lj8bt8xMG3xnZr6u8mx1vrFW9RwCDXQwQuYRCLq1j9Nr2VJUrENzteQH"
 		baseCosigningPK = "tpubDAsVhzq6otpasovieofhiaY38bSFGyJaBGvrJjBv9whhSnftUXfMTMVrq4BbTXT5A9b78CqqbPuM2j1ZGWdiggd7JHUTZAHh8GXDTt4Pkj9"
 		basePath        = "m/schema:1'/recovery:1'"
+		v3EncodedScript = "0020e1fbfbd395aff8b4087fee3e4488815ef659b559b3cd0d6800b5a591efd99f38"
 	)
+
+	v3Script := make([]byte, 34)
+	hex.Decode(v3Script[:], []byte(v3EncodedScript))
+
 	baseMuunKey, _ := NewHDPublicKeyFromString(baseCosigningPK, basePath)
 	muunKey, _ := baseMuunKey.DeriveTo(addressPath)
 
@@ -33,7 +39,7 @@ func Test_CreateAddressV3(t *testing.T) {
 	}{
 		{name: "gen address",
 			args: args{userKey: userKey, muunKey: muunKey},
-			want: &muunAddress{address: v3Address, derivationPath: addressPath, version: addressV3}},
+			want: &muunAddress{address: v3Address, derivationPath: addressPath, version: addressV3, redeemScript: v3Script}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -89,9 +89,13 @@ public class Logger {
             log(.err, trace, filename: filename, line: line, funcName: funcName)
         }
         #else
-        Crashlytics.sharedInstance().recordError(error, withAdditionalUserInfo: [
-            "stack_trace": stacktrace.joined(separator: "\n")
-            ])
+        var additionalInfo: [String: Any] = ["stack_trace": stacktrace.joined(separator: "\n")]
+        if let muunError = error as? MuunError {
+            additionalInfo["muun_error"] = muunError
+            additionalInfo["muun_error_kind"] = muunError.kind
+            additionalInfo["muun_error_stack"] = muunError.stackSymbols.joined(separator: "\n")
+        }
+        Crashlytics.sharedInstance().recordError(error, withAdditionalUserInfo: additionalInfo)
         #endif
     }
 

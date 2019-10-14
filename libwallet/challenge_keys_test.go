@@ -25,3 +25,30 @@ func TestNewChallengePrivateKey(t *testing.T) {
 		})
 	}
 }
+
+func TestChallengeKeyCrypto(t *testing.T) {
+
+	const birthday = 376
+	network := Mainnet()
+	salt := randomBytes(8)
+
+	privKey, _ := NewHDPrivateKey(randomBytes(32), network)
+	challengePrivKey := NewChallengePrivateKey([]byte("viva peron"), salt)
+
+	encryptedKey, err := challengePrivKey.PubKey().EncryptKey(privKey, salt, birthday)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	decryptedKey, err := challengePrivKey.DecryptKey(encryptedKey, network)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if privKey.String() != decryptedKey.Key.String() {
+		t.Fatalf("keys dont match: orig %v vs decrypted %v", privKey.String(), decryptedKey.Key.String())
+	}
+	if birthday != decryptedKey.Birthday {
+		t.Fatalf("birthdays dont match: expected %v got %v", birthday, decryptedKey.Birthday)
+	}
+}

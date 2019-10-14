@@ -14,16 +14,20 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     private let houstonService: HoustonService
     private let feeWindowRepository: FeeWindowRepository
     private let exchangeRateWindowRepository: ExchangeRateWindowRepository
+    private let blockchainHeightRepository: BlockchainHeightRepository
+
     private let secondsForFreshData: Double = 5 * 60
 
     init(houstonService: HoustonService,
          feeWindowRepository: FeeWindowRepository,
-         exchangeRateWindowRepository: ExchangeRateWindowRepository) {
+         exchangeRateWindowRepository: ExchangeRateWindowRepository,
+         blockchainHeightRepository: BlockchainHeightRepository) {
 
         self.houstonService = houstonService
 
         self.feeWindowRepository = feeWindowRepository
         self.exchangeRateWindowRepository = exchangeRateWindowRepository
+        self.blockchainHeightRepository = blockchainHeightRepository
 
         super.init(name: "RealTimeDataAction")
     }
@@ -38,10 +42,14 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                 .do(onSuccess: { (data) in
                     self.feeWindowRepository.setFeeWindow(data.feeWindow)
                     self.exchangeRateWindowRepository.setExchangeRateWindow(data.exchangeRateWindow)
+                    self.blockchainHeightRepository.setBlockchainHeight(data.currentBlockchainHeight)
                 })
         } else {
-            let realData = RealTimeData(feeWindow: feeWindowRepository.getFeeWindow()!,
-                                        exchangeRateWindow: exchangeRateWindowRepository.getExchangeRateWindow()!)
+            let realData = RealTimeData(
+                feeWindow: feeWindowRepository.getFeeWindow()!,
+                exchangeRateWindow: exchangeRateWindowRepository.getExchangeRateWindow()!,
+                currentBlockchainHeight: blockchainHeightRepository.getCurrentBlockchainHeight()
+            )
             return Single.just(realData)
         }
     }

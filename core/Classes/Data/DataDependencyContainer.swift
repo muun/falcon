@@ -21,7 +21,8 @@ public extension DependencyContainer {
             container.register(.singleton) {
                 try DatabaseCoordinator(
                     url: try container.resolve(tag: DataTags.databaseUrl),
-                    preferences: try container.resolve()
+                    preferences: try container.resolve(),
+                    secureStorage: try container.resolve()
                 )
             }
 
@@ -41,6 +42,7 @@ public extension DependencyContainer {
             container.register(factory: PublicProfileRepository.init)
             container.register(factory: TaskRunner.init)
             container.register(factory: SubmarineSwapRepository.init)
+            container.register(factory: BlockchainHeightRepository.init)
 
             container.register(factory: HoustonService.init)
             container.register(factory: MuunWebService.init)

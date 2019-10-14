@@ -875,7 +875,8 @@ extension RealTimeDataJson: ModelConvertible {
 
     public func toModel() -> RealTimeData {
         return RealTimeData(feeWindow: feeWindow.toModel(),
-                            exchangeRateWindow: exchangeRateWindow.toModel())
+                            exchangeRateWindow: exchangeRateWindow.toModel(),
+                            currentBlockchainHeight: currentBlockchainHeight)
     }
 
 }
@@ -896,6 +897,14 @@ extension LinkAction: APIConvertible {
 
     func toJson() -> LinkActionJson {
         return LinkActionJson(uuid: uuid)
+    }
+
+}
+
+extension SubmarineSwapRequest: APIConvertible {
+
+    func toJson() -> SubmarineSwapRequestJson {
+        return SubmarineSwapRequestJson(invoice: _invoice, swapExpirationInBlocks: _swapExpirationInBlocks)
     }
 
 }

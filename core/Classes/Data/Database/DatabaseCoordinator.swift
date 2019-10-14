@@ -13,10 +13,12 @@ public class DatabaseCoordinator {
 
     public let queue: DatabaseQueue
     let preferences: Preferences
+    let secureStorage: SecureStorage
 
-    public init(url: URL, preferences: Preferences) throws {
+    public init(url: URL, preferences: Preferences, secureStorage: SecureStorage) throws {
         self.queue = try DatabaseQueue(path: url.path)
         self.preferences = preferences
+        self.secureStorage = secureStorage
 
         try migrate()
     }
@@ -134,6 +136,22 @@ public class DatabaseCoordinator {
                     .defaults(to: 0)
                     .notNull()
             })
+        }
+
+        migrator.registerMigration("challenge keys format") { _ in
+
+            let fixKey = { (keyType: SecureStorage.Keys) -> () in
+                if try self.secureStorage.has(keyType) {
+                    let publicKey = try self.secureStorage.get(keyType)
+                    if publicKey.count > 33,
+                        let stringyKey = String(data: Data(hex: publicKey), encoding: .utf8) {
+                        try self.secureStorage.store(stringyKey, at: keyType)
+                    }
+                }
+            }
+
+            try fixKey(.passwordPublicKey)
+            try fixKey(.recoveryCodePublicKey)
         }
 
         return migrator

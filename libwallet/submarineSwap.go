@@ -47,7 +47,7 @@ func CreateAddressSubmarineSwap(publicKey *HDPublicKey) (MuunAddress, error) {
 	return &muunAddress{address: address, version: addressSubmarineSwap, derivationPath: publicKey.Path}, nil
 }
 
-func signInputSubmarineSwap(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey,
+func addUserSignatureInputSubmarineSwap(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey,
 	muunKey *HDPublicKey) (*wire.TxIn, error) {
 
 	submarineSwap := input.SubmarineSwap()

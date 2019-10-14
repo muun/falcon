@@ -241,12 +241,10 @@ public class HoustonService: BaseService {
     // ---------------------------------------------------------------------------------------------
     // Submarine swaps:
 
-    func prepareSubmarineSwap(invoice: String) -> Single<SubmarineSwap> {
-        guard let data = invoice.data(using: .utf8) else {
-            fatalError("ERROR")
-        }
+    func createSubmarineSwap(submarineSwapRequest: SubmarineSwapRequest) -> Single<SubmarineSwap> {
+        let jsonData = data(from: submarineSwapRequest)
 
-        return post("operations/sswap/prepare", body: data, andReturn: SubmarineSwapJson.self)
+        return post("operations/sswap/create", body: jsonData, andReturn: SubmarineSwapJson.self)
             .map({ $0.toModel() })
     }
 

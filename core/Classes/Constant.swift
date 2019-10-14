@@ -15,6 +15,5 @@ public enum Constant {
     // giving Houston enough time to timeout by itself (90 seconds)
     static let requestTimeoutInterval = TimeInterval(32)
 
-    static let feeTargetForZeroConfSwaps: UInt = 9
     static let minimumFeePerVByte: Decimal = 1
 }

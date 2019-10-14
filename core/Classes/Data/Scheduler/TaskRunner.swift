@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-typealias RunnableAsyncAction<T> = AsyncAction<T> & Runnable
+typealias RunnableAsyncAction = AsyncAction<()> & Runnable
 
 public class TaskRunner {
 
@@ -53,21 +53,17 @@ public class TaskRunner {
         }
     }
 
-    private func run<T>(action: RunnableAsyncAction<T>, retryInterval: TimeInterval = 1, retries: Int = 3) {
-
-        func failed() {
-            if retries == 0 {
-                return
-            }
-
-            self.schedule(after: retryInterval) {
-                self.run(action: action, retryInterval: retryInterval * 2, retries: retries - 1)
-            }
-        }
+    private func run(action: RunnableAsyncAction, retryInterval: TimeInterval = 1, retries: Int = 3) {
 
         _ = action.getValue()
             .do(onError: { _ in
-                failed()
+                if retries == 0 {
+                    return
+                }
+
+                self.schedule(after: retryInterval) {
+                    self.run(action: action, retryInterval: retryInterval * 2, retries: retries - 1)
+                }
             })
             .subscribe()
 

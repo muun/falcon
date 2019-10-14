@@ -94,12 +94,17 @@ extension PaymentRequestType {
 
     }
 
-    public func defaultConfirmationTarget() -> UInt {
+    public func defaultConfirmationTarget(currentBlockchainHeight: Int) -> UInt {
         switch self {
         case .submarineSwap(_, let swap):
-            // For 0-conf payments, fee can be low and aim for a longer confirmation target:
+            /*
+            For 0-conf payments:
+            Clients should choose a fee rate targeting block (swap.user_time_lock - current_blockchain_height) / 4 - 3.
+             The minus 3 is to prevent a race condition between the client and server finding out about blocks,
+             and also having slightly different values of the fee rates per block target.
+             */
             if swap._fundingOutput._confirmationsNeeded == 0 {
-                return Constant.feeTargetForZeroConfSwaps
+                return UInt((swap._fundingOutput._userLockTime - currentBlockchainHeight) / 4 - 3)
             }
             // For non 0-conf, use 1 block as confirmation target:
             return 1

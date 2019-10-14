@@ -19,8 +19,6 @@ extension Error {
                 switch error {
 
                 case .customError(let devError):
-                    Logger.log(error: devError)
-
                     switch devError.getKindOfError() {
 
                     case exactError:

@@ -20,23 +20,13 @@ func CreateAddressV1(publicKey *HDPublicKey) (MuunAddress, error) {
 	return &muunAddress{address: address, version: addressV1, derivationPath: publicKey.Path}, nil
 }
 
-func signInputV1(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey) (*wire.TxIn, error) {
+func addUserSignatureInputV1(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey) (*wire.TxIn, error) {
 
 	txInput := tx.TxIn[index]
 
-	redeemScript, err := createRedeemScriptV1(privateKey.PublicKey())
+	sig, err := signInputV1(input, index, tx, privateKey)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to build reedem script for signing")
-	}
-
-	privKey, err := privateKey.key.ECPrivKey()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to produce EC priv key for signing")
-	}
-
-	sig, err := txscript.RawTxInSignature(tx, index, redeemScript, txscript.SigHashAll, privKey)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to sign V1 output")
+		return nil, errors.Wrapf(err, "failed to sign V1 input")
 	}
 
 	builder := txscript.NewScriptBuilder()
@@ -60,4 +50,24 @@ func createRedeemScriptV1(publicKey *HDPublicKey) ([]byte, error) {
 	}
 
 	return txscript.PayToAddrScript(userAddress.AddressPubKeyHash())
+}
+
+func signInputV1(input Input, index int, tx *wire.MsgTx, privateKey *HDPrivateKey) ([]byte, error) {
+
+	redeemScript, err := createRedeemScriptV1(privateKey.PublicKey())
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to build reedem script for signing")
+	}
+
+	privKey, err := privateKey.key.ECPrivKey()
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to produce EC priv key for signing")
+	}
+
+	sig, err := txscript.RawTxInSignature(tx, index, redeemScript, txscript.SigHashAll, privKey)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to sign V1 input")
+	}
+
+	return sig, nil
 }

@@ -27,6 +27,16 @@ func NewHDPrivateKey(seed []byte, network *Network) (*HDPrivateKey, error) {
 	return &HDPrivateKey{key: *key, Network: network, Path: "m"}, nil
 }
 
+// NewHDPrivateKey builds an HD priv key from the compress priv and chain code for a given network
+func NewHDPrivateKeyFromBytes(rawKey, chainCode []byte, network *Network) (*HDPrivateKey, error) {
+
+	parentFP := []byte{0, 0, 0, 0}
+	key := hdkeychain.NewExtendedKey(network.network.HDPrivateKeyID[:],
+		rawKey, chainCode, parentFP, 0, 0, true)
+
+	return &HDPrivateKey{key: *key, Network: network, Path: "m"}, nil
+}
+
 // NewHDPrivateKeyFromString creates an HD priv key from a base58-encoded string
 // If the parsed key is public, it returns an error
 func NewHDPrivateKeyFromString(str, path string) (*HDPrivateKey, error) {

@@ -83,6 +83,10 @@ class KeysRepository {
         try secureStorage.store(muunPrivateKey, at: .muunPrivateKey)
     }
 
+    func getMuunPrivateKey() throws -> String {
+        return try secureStorage.get(.muunPrivateKey)
+    }
+
     private func saltKey(for type: ChallengeType) -> SecureStorage.Keys {
 
         switch type {
@@ -113,6 +117,12 @@ class KeysRepository {
 
     func hasChallengeKey(type: ChallengeType) throws -> Bool {
         return try secureStorage.has(saltKey(for: type))
+    }
+
+    func getChallengeKey(with type: ChallengeType) throws -> ChallengeKey {
+        return ChallengeKey(type: type,
+                            publicKey: Data(hex: try secureStorage.get(publicKeyKey(for: type))),
+                            salt: Data(hex: try secureStorage.get(saltKey(for: type))))
     }
 
 }

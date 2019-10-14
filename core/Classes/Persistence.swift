@@ -48,4 +48,6 @@ public enum Persistence: String, CaseIterable {
     case syncStatus
 
     case currentEnvironment
+    
+    case blockchainHeight
 }

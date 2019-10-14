@@ -45,3 +45,8 @@ struct SubmarineSwapFundingOutputJson: Codable {
     let serverPaymentHashInHex: String
     let serverPublicKeyInHex: String
 }
+
+struct SubmarineSwapRequestJson: Codable {
+    let invoice: String
+    let swapExpirationInBlocks: Int
+}
