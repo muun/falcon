@@ -20,7 +20,7 @@ public class FeeCalculatorAction: AsyncAction<(FeeCalculator, FeeWindow, Exchang
         super.init(name: "FeeCalculatorAction")
     }
 
-    public func run() {
+    public func run(isSwap: Bool) {
 
         let single = realTimeDataAction.getValue()
             .map({ data -> (FeeCalculator, FeeWindow, ExchangeRateWindow) in
@@ -34,6 +34,7 @@ public class FeeCalculatorAction: AsyncAction<(FeeCalculator, FeeWindow, Exchang
             })
 
         runSingle(single)
-        realTimeDataAction.run()
+        // We need to have the latest realTimeData before paying a swap
+        realTimeDataAction.run(forceUpdate: isSwap)
     }
 }

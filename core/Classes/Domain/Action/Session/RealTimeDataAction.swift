@@ -32,12 +32,12 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
         super.init(name: "RealTimeDataAction")
     }
 
-    public func run() {
-        runSingle(fetchRealTimeData())
+    public func run(forceUpdate: Bool = false) {
+        runSingle(fetchRealTimeData(forceUpdate: forceUpdate))
     }
 
-    private func fetchRealTimeData() -> Single<RealTimeData> {
-        if shouldUpdateData() {
+    private func fetchRealTimeData(forceUpdate: Bool = false) -> Single<RealTimeData> {
+        if shouldUpdateData() || forceUpdate {
             return houstonService.fetchRealTimeData()
                 .do(onSuccess: { (data) in
                     self.feeWindowRepository.setFeeWindow(data.feeWindow)

@@ -41,6 +41,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: SubmarineSwapAction.init)
             container.register(.singleton, factory: LappListAction.init)
             container.register(.singleton, factory: BIP70Action.init)
+            container.register(.singleton, factory: SendEncryptedKeysEmailAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EncryptedUserKeySelector.init)

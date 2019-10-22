@@ -52,12 +52,12 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
     public func verifyLockTime(_ submarineSwap: SubmarineSwap, expirationInBlocks: Int) {
         /*
          Clients should check that the locktime in the funding output script for the swap is less than or equal to
-         current_blockchain_height + previously_chosen_blocks_until_expiration + 1.
-         The plus one is to prevent a race condition if the server finds out about a new block before the client.
+         current_blockchain_height + previously_chosen_blocks_until_expiration + 2.
+         The + 2 is to prevent a race condition if the server finds out about new blocks before the client.
          */
         let currentBlockchainHeight = blockchainHeightRepository.getCurrentBlockchainHeight()
         let userLockTime = submarineSwap._fundingOutput._userLockTime
-        if currentBlockchainHeight + expirationInBlocks + 1 < userLockTime {
+        if currentBlockchainHeight + expirationInBlocks + 2 < userLockTime {
             Logger.fatal(
                 """
                 This means we have a mismatch between the client information and the server about the blockchain tip.

@@ -42,7 +42,7 @@ public class NotificationProcessor {
                 let previousId = self.sessionRepository.getLastNotificationId()
                 if previousId < maximumId {
 
-                    let nextBatch = try self.fetchNotificationsAfter(previousId)
+                    let nextBatch = try self.fetchNotificationsAfter(previousId, retries: 5)
                     _ = try self._process(notifications: nextBatch).toBlocking().materialize()
                 }
 
@@ -73,15 +73,33 @@ public class NotificationProcessor {
         return subject.asObservable().ignoreElements()
     }
 
-    private func fetchNotificationsAfter(_ notificationId: Int) throws -> [Notification] {
-        let fetched = try houstonService.fetchNotificationsAfter(notificationId: notificationId)
-            .toBlocking()
-            .first()
+    private func fetchNotificationsAfter(_ notificationId: Int, retries: Int) throws -> [Notification] {
+        // The retries param is here because we are having a weird bug in the backend.
+        // Will delete it once we fix the backend.
+        let notifications = houstonService.fetchNotificationsAfter(notificationId: notificationId).toBlocking()
 
-        if let notifications = fetched {
-            return notifications
-        } else {
+        switch notifications.materialize() {
+        case .completed(let elements):
+            if let notifications = elements.first {
+                return notifications
+            } else {
+                Logger.log(.err, "Got completed but no elements")
+            }
+
+        case .failed(let elements, let error):
+            if let notifications = elements.first {
+                Logger.log(.err, "Got notifications and error too: \(error)")
+                return notifications
+            } else {
+                Logger.log(error: error)
+            }
+        }
+
+        if retries == 0 {
             throw MuunError(Errors.failedFetch(fromId: notificationId))
+        } else {
+            Logger.log(error: MuunError(Errors.failedFetch(fromId: notificationId)))
+            return try fetchNotificationsAfter(notificationId, retries: retries - 1)
         }
     }
 
@@ -95,7 +113,7 @@ public class NotificationProcessor {
         var toProcess: [Notification]
         let previousId = sessionRepository.getLastNotificationId()
         if firstNotification.previousId > previousId {
-            toProcess = try fetchNotificationsAfter(previousId)
+            toProcess = try fetchNotificationsAfter(previousId, retries: 5)
         } else {
             toProcess = notifications
         }

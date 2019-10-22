@@ -115,6 +115,13 @@ public class HoustonService: BaseService {
             .map({ $0.toModel() })
     }
 
+    func sendEncryptedKeysEmail(encryptedKey: SendEncryptedKeys) -> Single<()> {
+        let jsonData = data(from: encryptedKey)
+
+        return post("user/export-keys", body: jsonData, andReturn: EmptyJson.self)
+            .map({ $0.toModel() })
+    }
+
     // ---------------------------------------------------------------------------------------------
     // User and Profile:
 

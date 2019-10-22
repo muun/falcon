@@ -17,6 +17,7 @@ public struct DeveloperError: Codable, Error {
 
     public func getKindOfError() -> ExactDeveloperError {
         switch errorCode {
+        case 429: return .tooManyRequests
         case 2016: return .missingOrInvalidAuthToken
         case 2021: return .exchangeRateWindowTooOld
         case 2038: return .sessionExpired
@@ -38,6 +39,7 @@ public struct DeveloperError: Codable, Error {
 
 public enum ExactDeveloperError {
     case defaultError
+    case tooManyRequests
 
     case missingOrInvalidAuthToken
     case forceUpdate

@@ -15,7 +15,6 @@ public class TaskRunner {
 
     let syncExternalAddressesAction: SyncExternalAddresses
     let fetchNotificationsAction: FetchNotificationsAction
-    var lastRun: Date?
 
     public init(syncExternalAddressesAction: SyncExternalAddresses,
                 fetchNotificationsAction: FetchNotificationsAction) {
@@ -24,18 +23,6 @@ public class TaskRunner {
     }
 
     public func run() {
-
-        let now = Date()
-        if let lastRun = lastRun,
-            lastRun.addingTimeInterval(60 * 60) > now {
-
-            // If at least an hour hasn't elapsed since the last known run, skip it
-            // If lastRun is nil it means the app just started and we should run
-            return
-        }
-
-        lastRun = now
-
         // This isn't a critical action so delay to avoid stepping on other requests
         schedule(after: 2) {
             self.run(action: self.syncExternalAddressesAction)

@@ -34,18 +34,15 @@ public class AsyncAction<T>: NSObject {
 
         _ = single
             .observeOn(scheduler)
-            .do(
+            .do(onSubscribe: { self.subject.onNext(ActionState.createLoading()) })
+            .subscribe(
                 onSuccess: {
                     self.subject.onNext(ActionState.createValue(value: $0))
                 },
                 onError: {
                     self.subject.onNext(ActionState.createError(error: $0))
-                },
-                onSubscribe: {
-                    self.subject.onNext(ActionState.createLoading())
                 }
             )
-            .subscribe()
 
     }
 

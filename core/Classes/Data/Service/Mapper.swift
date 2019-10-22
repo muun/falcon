@@ -392,6 +392,14 @@ extension PublicKeySetJson: ModelConvertible {
 
 }
 
+extension SendEncryptedKeys: APIConvertible {
+
+    func toJson() -> SendEncryptedKeysJson {
+        return SendEncryptedKeysJson(userKey: userKey)
+    }
+
+}
+
 extension IntegrityCheck: APIConvertible {
 
     func toJson() -> IntegrityCheckJson {

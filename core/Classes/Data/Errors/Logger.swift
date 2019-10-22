@@ -90,12 +90,19 @@ public class Logger {
         }
         #else
         var additionalInfo: [String: Any] = ["stack_trace": stacktrace.joined(separator: "\n")]
+        let finalError: NSError
+        let caller = "\(filename) \(line) \(funcName)"
         if let muunError = error as? MuunError {
+            let domain = "\(muunError.kindDescription) - \(caller)"
             additionalInfo["muun_error"] = muunError
             additionalInfo["muun_error_kind"] = muunError.kind
             additionalInfo["muun_error_stack"] = muunError.stackSymbols.joined(separator: "\n")
+            finalError = NSError(domain: domain, code: 0, userInfo: additionalInfo)
+        } else {
+            let domain = "\(error.localizedDescription) - \(caller)"
+            finalError = NSError(domain: domain, code: 0, userInfo: additionalInfo)
         }
-        Crashlytics.sharedInstance().recordError(error, withAdditionalUserInfo: additionalInfo)
+        Crashlytics.sharedInstance().recordError(finalError, withAdditionalUserInfo: additionalInfo)
         #endif
     }
 
