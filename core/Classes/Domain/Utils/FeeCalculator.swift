@@ -17,6 +17,11 @@ public enum FeeError: Error {
 
 public class FeeCalculator {
 
+    public enum Result {
+        case valid(_ fee: Satoshis, rate: FeeRate)
+        case invalid(_ fee: Satoshis, rate: FeeRate)
+    }
+
     let targetedFees: [UInt: FeeRate]
     let sizeProgression: [SizeForAmount]
 
@@ -28,27 +33,49 @@ public class FeeCalculator {
     public func calculateMinimumFee() -> Satoshis {
         // Minimum fee is set to 1 sat/vByte
         let feeRate = FeeRate(satsPerWeightUnit: Constant.minimumFeePerVByte)
-        return feeRate.calculateFee(sizeInWeightUnit: sizeProgression.last!.sizeInBytes)
+        if let last = sizeProgression.last {
+            return feeRate.calculateFee(sizeInWeightUnit: last.sizeInBytes)
+        }
+        // In case the size progression is empty, we just return 0
+        // (This is going to be used in the insufficient funds screen)
+        return Satoshis(value: 0)
     }
 
     public func totalBalance() -> Satoshis {
         if let lastItem = sizeProgression.last {
             return lastItem.amountInSatoshis
+        } else {
+            return Satoshis(value: 0)
         }
-
-        Logger.fatal("Size progression must have at least one element by this point")
     }
 
-    public func feeFor(amount: Satoshis, confirmationTarget: UInt, takeFeeFromAmount: Bool = false) throws -> Satoshis {
+    public func feeFor(amount: Satoshis, confirmationTarget: UInt) throws -> Result {
         let feeRate = getMinimumFeeRate(confirmationTarget: confirmationTarget)
-
-        return try feeFor(amount: amount, feeRate: feeRate, takeFeeFromAmount: takeFeeFromAmount)
+        return try feeFor(amount: amount, rate: feeRate)
     }
 
-    public func feeFor(amount: Satoshis, feeRate: FeeRate, takeFeeFromAmount: Bool = false) throws -> Satoshis {
+    public func feeFor(amount: Satoshis, rate feeRate: FeeRate) throws -> Result {
 
         if amount < Satoshis.dust {
             throw MuunError(FeeError.amountTooSmall)
+        }
+
+        if shouldTakeFeeFromAmount(amount) {
+
+            if let biggestSize = sizeProgression.last {
+
+                let fee = feeRate.calculateFee(sizeInWeightUnit: biggestSize.sizeInBytes)
+
+                if biggestSize.amountInSatoshis > fee + Satoshis.dust  {
+                    return .valid(fee, rate: feeRate)
+                } else {
+                    return .invalid(fee, rate: feeRate)
+                }
+ 
+            } else {
+
+                throw MuunError(FeeError.insufficientBalance)
+            }
         }
 
         for size in sizeProgression {
@@ -58,20 +85,21 @@ public class FeeCalculator {
 
             let fee = feeRate.calculateFee(sizeInWeightUnit: size.sizeInBytes)
 
-            if takeFeeFromAmount {
-                // If its take fee from amount, return the fee for the last progression
-                if let last = sizeProgression.last?.amountInSatoshis, size.amountInSatoshis == last {
-                    return fee
-                }
-            } else {
-                // We need to have enough to cover the fee too
-                if amount + fee <= size.amountInSatoshis {
-                    return fee
-                }
+            // We need to have enough to cover the fee too
+            if amount + fee <= size.amountInSatoshis {
+                return .valid(fee, rate: feeRate)
             }
         }
 
-        throw MuunError(FeeError.insufficientBalance)
+        if let biggestSize = sizeProgression.last,
+            isAmountPayable(amount) {
+
+            return .invalid(feeRate.calculateFee(sizeInWeightUnit: biggestSize.sizeInBytes),
+                            rate: feeRate)
+        } else {
+
+            throw MuunError(FeeError.insufficientBalance)
+        }
     }
 
     public func isAmountPayable(_ amount: Satoshis) -> Bool {
@@ -121,4 +149,18 @@ extension FeeCalculator {
         Logger.fatal(error: MuunError(FeeError.noFeeForConfirmationTarget))
     }
 
+}
+
+extension FeeCalculator.Result: Equatable {
+
+    public static func ==(lhs: FeeCalculator.Result, rhs: FeeCalculator.Result) -> Bool {
+        switch (lhs, rhs) {
+        case (.valid(let lhsFee, let lhsRate), .valid(let rhsFee, let rhsRate)):
+            return lhsFee == rhsFee && lhsRate == rhsRate
+        case (.invalid(let lhsFee, let lhsRate), .invalid(let rhsFee, let rhsRate)):
+            return lhsFee == rhsFee && lhsRate == rhsRate
+        default:
+            return false
+        }
+    }
 }

@@ -37,13 +37,22 @@ struct SubmarineSwapReceiverJson: Codable {
 }
 
 struct SubmarineSwapFundingOutputJson: Codable {
+    let scriptVersion: Int
     let outputAddress: String
     let outputAmountInSatoshis: Int64
     let confirmationsNeeded: Int
-    let userLockTime: Int
-    let userRefundAddress: MuunAddressJson
+    // This field is available once the funding has 1 conf
+    let userLockTime: Int?
     let serverPaymentHashInHex: String
     let serverPublicKeyInHex: String
+    let expirationInBlocks: Int?
+
+    // v1 only
+    let userRefundAddress: MuunAddressJson?
+
+    // v2 only
+    let userPublicKey: PublicKeyJson?
+    let muunPublicKey: PublicKeyJson?
 }
 
 struct SubmarineSwapRequestJson: Codable {

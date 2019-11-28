@@ -682,13 +682,17 @@ extension SubmarineSwapReceiver: APIConvertible {
 
 extension SubmarineSwapFundingOutput: APIConvertible {
     func toJson() -> SubmarineSwapFundingOutputJson {
-        return SubmarineSwapFundingOutputJson(outputAddress: _outputAddress,
+        return SubmarineSwapFundingOutputJson(scriptVersion: _scriptVersion,
+                                              outputAddress: _outputAddress,
                                               outputAmountInSatoshis: _outputAmount.value,
                                               confirmationsNeeded: _confirmationsNeeded,
                                               userLockTime: _userLockTime,
-                                              userRefundAddress: _userRefundAddress.toJson(),
                                               serverPaymentHashInHex: _serverPaymentHashInHex,
-                                              serverPublicKeyInHex: _serverPublicKeyInHex)
+                                              serverPublicKeyInHex: _serverPublicKeyInHex,
+                                              expirationInBlocks: _expirationInBlocks,
+                                              userRefundAddress: _userRefundAddress?.toJson(),
+                                              userPublicKey: _userPublicKey?.toJson(),
+                                              muunPublicKey: _muunPublicKey?.toJson())
     }
 }
 
@@ -716,13 +720,17 @@ extension SubmarineSwapReceiverJson: ModelConvertible {
 
 extension SubmarineSwapFundingOutputJson: ModelConvertible {
     public func toModel() -> SubmarineSwapFundingOutput {
-        return SubmarineSwapFundingOutput(outputAddress: outputAddress,
+        return SubmarineSwapFundingOutput(scriptVersion: scriptVersion,
+                                          outputAddress: outputAddress,
                                           outputAmount: Satoshis(value: outputAmountInSatoshis),
                                           confirmationsNeeded: confirmationsNeeded,
                                           userLockTime: userLockTime,
-                                          userRefundAddress: userRefundAddress.toModel(),
+                                          userRefundAddress: userRefundAddress?.toModel(),
                                           serverPaymentHashInHex: serverPaymentHashInHex,
-                                          serverPublicKeyInHex: serverPublicKeyInHex)
+                                          serverPublicKeyInHex: serverPublicKeyInHex,
+                                          expirationTimeInBlocks: expirationInBlocks,
+                                          userPublicKey: userPublicKey?.toModel(),
+                                          muunPublicKey: muunPublicKey?.toModel())
     }
 }
 
@@ -819,18 +827,33 @@ extension MuunInputJson: ModelConvertible {
                          address: address.toModel(),
                          userSignature: userSignature?.toModel(),
                          muunSignature: muunSignature?.toModel(),
-                         submarineSwap: submarineSwap?.toModel())
+                         submarineSwapV1: submarineSwap?.toModel(),
+                         submarineSwapV2: submarineSwapV102?.toModel())
     }
 
 }
 
-extension InputSubmarineSwapJson: ModelConvertible {
+extension InputSubmarineSwapV1Json: ModelConvertible {
 
-    public func toModel() -> InputSubmarineSwap {
-        return InputSubmarineSwap(refundAddress: refundAddress,
-                                  paymentHash256: Data(hex: swapPaymentHash256Hex),
-                                  serverPublicKey: Data(hex: swapServerPublicKeyHex),
-                                  locktime: lockTime)
+    public func toModel() -> InputSubmarineSwapV1 {
+        return InputSubmarineSwapV1(refundAddress: refundAddress,
+                                    paymentHash256: Data(hex: swapPaymentHash256Hex),
+                                    serverPublicKey: Data(hex: swapServerPublicKeyHex),
+                                    locktime: lockTime)
+    }
+
+}
+
+extension InputSubmarineSwapV2Json: ModelConvertible {
+
+    public func toModel() -> InputSubmarineSwapV2 {
+        let sig = swapServerSignature.map({ Data(hex: $0.hex) })
+        return InputSubmarineSwapV2(paymentHash256: Data(hex: swapPaymentHash256Hex),
+                                    userPublicKey: Data(hex: userPublicKeyHex),
+                                    muunPublicKey: Data(hex: muunPublicKeyHex),
+                                    serverPublicKey: Data(hex: swapServerPublicKeyHex),
+                                    blocksForExpiration: Int64(numBlocksForExpiration),
+                                    serverSignature: sig)
     }
 
 }

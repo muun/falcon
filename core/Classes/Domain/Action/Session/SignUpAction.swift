@@ -43,16 +43,17 @@ public class SignUpAction: AsyncAction<SignupOk> {
         }
 
         // We send muun the encrypted root and store ourselves the prederived to base path one
+        let type: ChallengeType = .PASSWORD
         let setup = ChallengeSetup(
-            type: .PASSWORD,
+            type: type,
             passwordSecretPublicKey: challengePublicKey,
             passwordSecretSalt: salt.toHexString(),
             encryptedPrivateKey: KeyCrypter.encrypt(walletPrivateKey, passphrase: passphrase),
-            version: Int(Constant.buildVersion)!
+            version: type.getVersion()
         )
 
         let single = Single.deferred({
-                Single.just(try self.generateSignUpModel(challenge: setup, baseKey: baseKey, currencyCode: currencyCode))
+            Single.just(try self.generateSignUpModel(challenge: setup, baseKey: baseKey, currencyCode: currencyCode))
             })
             .flatMap(houstonService.signup(signupObject:))
             .do(onSuccess: { response in

@@ -2,20 +2,20 @@ PODS:
   - core (0.1.0):
     - core/all (= 0.1.0)
     - core/notifications (= 0.1.0)
-    - Crashlytics (= 3.10.7)
+    - Crashlytics (= 3.14.0)
   - core/all (0.1.0):
-    - Crashlytics (= 3.10.7)
+    - Crashlytics (= 3.14.0)
     - Dip (= 7.0.1)
     - GRDB.swift (= 3.6.1)
     - RxBlocking (= 4.4.2)
     - RxGRDB (= 0.13.0)
     - RxSwift (= 4.4.2)
   - core/notifications (0.1.0):
-    - Crashlytics (= 3.10.7)
-  - Crashlytics (3.10.7):
-    - Fabric (~> 1.7.11)
+    - Crashlytics (= 3.14.0)
+  - Crashlytics (3.14.0):
+    - Fabric (~> 1.10.2)
   - Dip (7.0.1)
-  - Fabric (1.7.13)
+  - Fabric (1.10.2)
   - GRDB.swift (3.6.1)
   - RxAtomic (4.4.2)
   - RxBlocking (4.4.2):
@@ -34,7 +34,7 @@ DEPENDENCIES:
   - core (from `../core`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Crashlytics
     - Dip
     - Fabric
@@ -49,10 +49,10 @@ EXTERNAL SOURCES:
     :path: "../core"
 
 SPEC CHECKSUMS:
-  core: 71105d2105b098e83c0fa19d96407bd90a3ec1ee
-  Crashlytics: ccaac42660eb9351b9960c0d66106b0bcf99f4fa
+  core: 43721d3ef1cfb5712ad5cf2abe5f8e6192a85a63
+  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Dip: 79509d5dc4f648e10e922ed79c608a7761c52b13
-  Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
+  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   GRDB.swift: 2ea998984ce0d8b869917e1452b5d87f1ec5e0dd
   RxAtomic: d00e97c10db88c6f08540e0bf2752fc5a2404167
   RxBlocking: e96fdda1473d81332a6ed2cface935dc2167a122

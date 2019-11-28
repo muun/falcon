@@ -18,18 +18,21 @@ class MuunInput: NSObject {
     let _address: MuunAddress
     let _userSignature: Signature?
     let _muunSignature: Signature?
-    let _submarineSwap: InputSubmarineSwap?
+    let _submarineSwapV1: InputSubmarineSwapV1?
+    let _submarineSwapV2: InputSubmarineSwapV2?
 
     init(prevOut: MuunOutput,
          address: MuunAddress,
          userSignature: Signature?,
          muunSignature: Signature?,
-         submarineSwap: InputSubmarineSwap?) {
+         submarineSwapV1: InputSubmarineSwapV1?,
+         submarineSwapV2: InputSubmarineSwapV2?) {
         self._prevOut = prevOut
         self._address = address
         self._userSignature = userSignature
         self._muunSignature = muunSignature
-        self._submarineSwap = submarineSwap
+        self._submarineSwapV1 = submarineSwapV1
+        self._submarineSwapV2 = submarineSwapV2
 
         super.init()
     }
@@ -63,7 +66,7 @@ class MuunAddress: NSObject {
     }
 }
 
-class InputSubmarineSwap: NSObject {
+class InputSubmarineSwapV1: NSObject {
     let _refundAddress: String
     let _swapPaymentHash256: Data
     let _swapServerPublicKey: Data
@@ -74,6 +77,27 @@ class InputSubmarineSwap: NSObject {
         self._swapPaymentHash256 = paymentHash256
         self._swapServerPublicKey = serverPublicKey
         self._lockTime = locktime
+
+        super.init()
+    }
+}
+
+class InputSubmarineSwapV2: NSObject {
+    let _swapPaymentHash256: Data
+    let _userPublicKey: Data
+    let _muunPublicKey: Data
+    let _swapServerPublicKey: Data
+    let _blocksForExpiration: Int64
+    let _serverSignature: Data?
+
+    init(paymentHash256: Data, userPublicKey: Data, muunPublicKey: Data,
+         serverPublicKey: Data, blocksForExpiration: Int64, serverSignature: Data?) {
+        self._swapPaymentHash256 = paymentHash256
+        self._userPublicKey = userPublicKey
+        self._muunPublicKey = muunPublicKey
+        self._swapServerPublicKey = serverPublicKey
+        self._blocksForExpiration = blocksForExpiration
+        self._serverSignature = serverSignature
 
         super.init()
     }
@@ -103,12 +127,19 @@ extension MuunInput: LibwalletInputProtocol {
         return nil
     }
 
-    func submarineSwap() -> LibwalletInputSubmarineSwapProtocol? {
-        if let ss = _submarineSwap {
+    func submarineSwapV1() -> LibwalletInputSubmarineSwapV1Protocol? {
+        if let ss = _submarineSwapV1 {
             return ss
         }
         return nil
     }
+
+    func submarineSwapV2() -> LibwalletInputSubmarineSwapV2Protocol? {
+         if let ss = _submarineSwapV2 {
+             return ss
+         }
+         return nil
+     }
 
 }
 
@@ -144,7 +175,7 @@ extension MuunAddress: LibwalletMuunAddressProtocol {
 
 }
 
-extension InputSubmarineSwap: LibwalletInputSubmarineSwapProtocol {
+extension InputSubmarineSwapV1: LibwalletInputSubmarineSwapV1Protocol {
 
     func lockTime() -> Int64 {
         return _lockTime
@@ -156,6 +187,34 @@ extension InputSubmarineSwap: LibwalletInputSubmarineSwapProtocol {
 
     func refundAddress() -> String {
         return _refundAddress
+    }
+
+    func serverPublicKey() -> Data? {
+        return _swapServerPublicKey
+    }
+
+}
+
+extension InputSubmarineSwapV2: LibwalletInputSubmarineSwapV2Protocol {
+
+    func blocksForExpiration() -> Int64 {
+        return Int64(_blocksForExpiration)
+    }
+
+    func muunPublicKey() -> Data? {
+        return _muunPublicKey
+    }
+
+    func serverSignature() -> Data? {
+        return _serverSignature
+    }
+
+    func userPublicKey() -> Data? {
+        return _userPublicKey
+    }
+
+    func paymentHash256() -> Data? {
+        return _swapPaymentHash256
     }
 
     func serverPublicKey() -> Data? {

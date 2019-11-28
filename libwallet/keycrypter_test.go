@@ -29,7 +29,7 @@ func TestKeyCrypt(t *testing.T) {
 			t.Fatalf("KeyEncrypt() error = %v", err)
 		}
 
-		decrypted, err := KeyDecrypt(encrypted, testPassphrase)
+		decrypted, err := KeyDecrypt(encrypted, testPassphrase, Regtest())
 		if err != nil {
 			t.Fatalf("KeyEncrypt() error = %v", err)
 		}
@@ -50,7 +50,7 @@ func TestKeyCrypt(t *testing.T) {
 			t.Fatalf("KeyEncrypt() error = %v", err)
 		}
 
-		_, err = KeyDecrypt(encrypted, testPassphrase+"foo")
+		_, err = KeyDecrypt(encrypted, testPassphrase+"foo", Regtest())
 		if err == nil {
 			t.Fatalf("expected decryption error")
 		}

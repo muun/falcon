@@ -17,7 +17,7 @@
   "static_framework": true,
   "dependencies": {
     "Crashlytics": [
-      "3.10.7"
+      "3.14.0"
     ]
   },
   "script_phases": [

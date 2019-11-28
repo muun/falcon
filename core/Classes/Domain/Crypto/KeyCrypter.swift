@@ -25,7 +25,7 @@ class KeyCrypter {
     static func decrypt(_ value: String, passphrase: String) throws -> WalletPrivateKey {
 
         let decrypted = try doWithError({ error in
-            LibwalletKeyDecrypt(value, passphrase, error)
+            LibwalletKeyDecrypt(value, passphrase, Environment.current.network, error)
         })
 
         return WalletPrivateKey(decrypted.key!)

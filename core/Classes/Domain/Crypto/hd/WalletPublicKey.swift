@@ -29,7 +29,7 @@ extension WalletPublicKey {
 
     static func fromBase58(_ str: String, on path: String) -> WalletPublicKey {
 
-        let key = LibwalletHDPublicKey(from: str, path: path)!
+        let key = LibwalletHDPublicKey(from: str, path: path, network: Environment.current.network)!
 
         return WalletPublicKey(key)
     }

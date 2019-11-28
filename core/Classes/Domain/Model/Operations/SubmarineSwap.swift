@@ -67,7 +67,7 @@ public class SubmarineSwapFees: NSObject {
 
 public class SubmarineSwapReceiver: NSObject {
     public let _alias: String?
-    let _networkAddresses: [String]
+    public let _networkAddresses: [String]
     public let _publicKey: String?
 
     init(alias: String?,
@@ -83,19 +83,32 @@ public class SubmarineSwapFundingOutput: NSObject {
     public let _outputAddress: String
     let _outputAmount: Satoshis
     public let _confirmationsNeeded: Int
-    let _userLockTime: Int
-    let _userRefundAddress: MuunAddress
+    let _userLockTime: Int?
     let _serverPaymentHashInHex: String
     let _serverPublicKeyInHex: String
+    let _expirationInBlocks: Int?
+    let _scriptVersion: Int
 
-    init(outputAddress: String,
+    // v1 only
+    let _userRefundAddress: MuunAddress?
+
+    // v2 only
+    let _userPublicKey: WalletPublicKey?
+    let _muunPublicKey: WalletPublicKey?
+
+    init(scriptVersion: Int,
+         outputAddress: String,
          outputAmount: Satoshis,
          confirmationsNeeded: Int,
-         userLockTime: Int,
-         userRefundAddress: MuunAddress,
+         userLockTime: Int?,
+         userRefundAddress: MuunAddress?,
          serverPaymentHashInHex: String,
-         serverPublicKeyInHex: String) {
+         serverPublicKeyInHex: String,
+         expirationTimeInBlocks: Int?,
+         userPublicKey: WalletPublicKey?,
+         muunPublicKey: WalletPublicKey?) {
 
+        self._scriptVersion = scriptVersion
         self._outputAddress = outputAddress
         self._outputAmount = outputAmount
         self._confirmationsNeeded = confirmationsNeeded
@@ -103,6 +116,9 @@ public class SubmarineSwapFundingOutput: NSObject {
         self._userRefundAddress = userRefundAddress
         self._serverPaymentHashInHex = serverPaymentHashInHex
         self._serverPublicKeyInHex = serverPublicKeyInHex
+        self._expirationInBlocks = expirationTimeInBlocks
+        self._userPublicKey = userPublicKey
+        self._muunPublicKey = muunPublicKey
 
     }
 }
@@ -141,6 +157,23 @@ extension SubmarineSwapReceiver: LibwalletSubmarineSwapReceiverProtocol {
 }
 
 extension SubmarineSwapFundingOutput: LibwalletSubmarineSwapFundingOutputProtocol {
+
+    public func expirationInBlocks() -> Int64 {
+        return Int64(_expirationInBlocks ?? 0)
+    }
+
+    public func muunPublicKey() -> LibwalletHDPublicKey? {
+        return _muunPublicKey?.key
+    }
+
+    public func scriptVersion() -> Int64 {
+        return Int64(_scriptVersion)
+    }
+
+    public func userPublicKey() -> LibwalletHDPublicKey? {
+        return _userPublicKey?.key
+    }
+
     public func outputAddress() -> String {
         return _outputAddress
     }
@@ -154,7 +187,7 @@ extension SubmarineSwapFundingOutput: LibwalletSubmarineSwapFundingOutputProtoco
     }
 
     public func userLockTime() -> Int64 {
-        return Int64(_userLockTime)
+        return Int64(_userLockTime ?? 0)
     }
 
     public func userRefundAddress() -> LibwalletMuunAddressProtocol? {

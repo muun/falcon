@@ -15,6 +15,7 @@ public class AddressActions {
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
     private let syncExternalAddresses: SyncExternalAddresses
+    private let externalAddressWatchWindowSize: Int = 15
 
     init(houstonService: HoustonService,
          keysRepository: KeysRepository,
@@ -49,7 +50,8 @@ public class AddressActions {
             .asCompletable()
     }
 
-    public func generateExternalAddress() throws -> LibwalletMuunAddressProtocol {
+    public func generateExternalAddresses() throws
+        -> (segwit: LibwalletMuunAddressProtocol, legacy: LibwalletMuunAddressProtocol) {
 
         let maxUsedIndex = keysRepository.getMaxUsedIndex()
         let maxWatchingIndex = keysRepository.getMaxWatchingIndex()
@@ -60,7 +62,10 @@ public class AddressActions {
         } else if maxUsedIndex < maxWatchingIndex {
             nextIndex = maxUsedIndex + 1
         } else {
-            nextIndex = Int.random(in: 0 ..< maxWatchingIndex)
+            // This means the user is deriving addresses offline, so we take a random one from the last address
+            // window because the server is watching them all 👀.
+            let minWatchIndex = maxWatchingIndex - externalAddressWatchWindowSize
+            nextIndex = Int.random(in: minWatchIndex ..< maxWatchingIndex)
         }
 
         let derivedMuunKey = try keysRepository.getCosigningKey()
@@ -71,7 +76,11 @@ public class AddressActions {
             .derive(to: .external)
             .derive(at: UInt32(nextIndex))
 
-        let address = try doWithError { error in
+        let segwitAddress = try doWithError { error in
+            LibwalletCreateAddressV4(derivedKey.key, derivedMuunKey.key, error)
+        }
+
+        let legacyAddress = try doWithError { error in
             LibwalletCreateAddressV3(derivedKey.key, derivedMuunKey.key, error)
         }
 
@@ -81,6 +90,6 @@ public class AddressActions {
             syncExternalAddresses.run()
         }
 
-        return address
+        return (segwitAddress, legacyAddress)
     }
 }

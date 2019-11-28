@@ -41,13 +41,11 @@ public enum Persistence: String, CaseIterable {
     case isBalanceHidden
     case displayFiatCurrencyAsMain
 
-    case isTryLightningHidden
-
     case hasRecoveryCode
 
     case syncStatus
 
     case currentEnvironment
-    
+
     case blockchainHeight
 }

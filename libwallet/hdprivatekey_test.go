@@ -71,7 +71,7 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 	})
 
 	t.Run("invalid key deserialization", func(t *testing.T) {
-		badKey, err := NewHDPrivateKeyFromString("fooo", "m")
+		badKey, err := NewHDPrivateKeyFromString("fooo", "m", Regtest())
 		if badKey != nil || err == nil {
 			t.Errorf("bad key should only return error returned %v, %v", badKey, err)
 		}
@@ -81,17 +81,17 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 		randomKey.key.SetNet(&chaincfg.Params{HDPrivateKeyID: [4]byte{1, 2, 3, 4}})
 
 		// Parsing it should fail since we check we know the chain
-		badKey, err = NewHDPrivateKeyFromString(randomKey.String(), "m")
+		badKey, err = NewHDPrivateKeyFromString(randomKey.String(), "m", Regtest())
 		if badKey != nil || err == nil {
 			t.Errorf("expected failure when parsing key with fake chain, got %v, %v", badKey, err)
 		}
 
-		badKey, err = NewHDPrivateKeyFromString(vector1FirstPub, "m")
+		badKey, err = NewHDPrivateKeyFromString(vector1FirstPub, "m", Regtest())
 		if badKey != nil || err == nil {
 			t.Errorf("expected failure when parsing pub key as priv key, got %v, %v", badKey, err)
 		}
 
-		badPubKey, err := NewHDPublicKeyFromString(vector1FirstPriv, "m")
+		badPubKey, err := NewHDPublicKeyFromString(vector1FirstPriv, "m", Regtest())
 		if badPubKey != nil || err == nil {
 			t.Errorf("expected failure when parsing priv key as pub key, got %v, %v", badPubKey, err)
 		}
@@ -103,7 +103,7 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 		randomKey.key.SetNet(&chaincfg.RegressionNetParams)
 
 		// Parsing it should fail since we check we know the chain
-		key, err := NewHDPrivateKeyFromString(randomKey.String(), "m")
+		key, err := NewHDPrivateKeyFromString(randomKey.String(), "m", Regtest())
 		if key == nil || err != nil {
 			t.Errorf("failed to parse regtest key, got err %v", err)
 		}
@@ -117,7 +117,7 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 		}
 
 		serialized := randomKey.String()
-		deserialized, err := NewHDPrivateKeyFromString(serialized, "m")
+		deserialized, err := NewHDPrivateKeyFromString(serialized, "m", Regtest())
 		if err != nil {
 			t.Fatalf("failed to deserialize key")
 		}
@@ -129,7 +129,7 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 
 	t.Run("Child key serialization", func(t *testing.T) {
 		root, err := NewHDPrivateKeyFromString(
-			"tprv8ZgxMBicQKsPdGCzsJ31BsQnFL1TSQ82dfsZYTtsWJ1T8g7xTfnV19gf8nYPqzkzk6yLL9kzDYshmUrYyXt7uXsGbk9eN7juRxg9sjaxSjn", "m")
+			"tprv8ZgxMBicQKsPdGCzsJ31BsQnFL1TSQ82dfsZYTtsWJ1T8g7xTfnV19gf8nYPqzkzk6yLL9kzDYshmUrYyXt7uXsGbk9eN7juRxg9sjaxSjn", "m", Regtest())
 		if err != nil {
 			t.Fatalf("failed to parse root key")
 		}
@@ -142,7 +142,7 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 			t.Fatalf("derived key doesn't match serialized")
 		}
 
-		decodedKey, _ := NewHDPrivateKeyFromString(encodedKey, "m")
+		decodedKey, _ := NewHDPrivateKeyFromString(encodedKey, "m", Regtest())
 
 		if decodedKey.String() != encodedKey {
 			t.Fatalf("decoded key doesn't match encoded string")
@@ -167,7 +167,7 @@ func TestKeyDerivation(t *testing.T) {
 	}
 
 	t.Run("vector1", func(t *testing.T) {
-		privKey, _ := NewHDPrivateKeyFromString(vector1PrivKey, "m")
+		privKey, _ := NewHDPrivateKeyFromString(vector1PrivKey, "m", Regtest())
 		if privKey.PublicKey().String() != vector1PubKey {
 			t.Errorf("pub key doesnt match")
 		}
@@ -177,7 +177,7 @@ func TestKeyDerivation(t *testing.T) {
 	})
 
 	t.Run("vector2", func(t *testing.T) {
-		privKey, _ := NewHDPrivateKeyFromString(vector2PrivKey, "m")
+		privKey, _ := NewHDPrivateKeyFromString(vector2PrivKey, "m", Regtest())
 		if privKey.PublicKey().String() != vector2PubKey {
 			t.Errorf("pub key doesnt match")
 		}
@@ -188,7 +188,7 @@ func TestKeyDerivation(t *testing.T) {
 	})
 
 	t.Run("vector3", func(t *testing.T) {
-		privKey, _ := NewHDPrivateKeyFromString(vector3PrivKey, "m")
+		privKey, _ := NewHDPrivateKeyFromString(vector3PrivKey, "m", Regtest())
 		if privKey.PublicKey().String() != vector3PubKey {
 			t.Errorf("pub key doesnt match")
 		}
@@ -199,7 +199,7 @@ func TestKeyDerivation(t *testing.T) {
 
 func TestSymmetricDerivation(t *testing.T) {
 
-	privKey, _ := NewHDPrivateKeyFromString(symmetricPrivKey, "m")
+	privKey, _ := NewHDPrivateKeyFromString(symmetricPrivKey, "m", Regtest())
 	pubKey := privKey.PublicKey()
 
 	t.Run("basic check", func(t *testing.T) {
@@ -253,7 +253,7 @@ func TestSymmetricDerivation(t *testing.T) {
 	})
 
 	testBadDerivation := func(t *testing.T, path string) {
-		privKey, _ := NewHDPrivateKeyFromString(vector1PrivKey, "m/123")
+		privKey, _ := NewHDPrivateKeyFromString(vector1PrivKey, "m/123", Regtest())
 		pubKey := privKey.PublicKey()
 
 		badKey, err := privKey.DeriveTo(path)

@@ -43,7 +43,7 @@ extension WalletPrivateKey {
     }
 
     static func fromBase58(_ str: String, on path: String) -> WalletPrivateKey {
-        let key = LibwalletHDPrivateKey(from: str, path: path)!
+        let key = LibwalletHDPrivateKey(from: str, path: path, network: Environment.current.network)!
         return WalletPrivateKey(key)
     }
 

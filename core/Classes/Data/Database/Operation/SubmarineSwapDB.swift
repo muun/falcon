@@ -34,16 +34,26 @@ struct SubmarineSwapDB: Codable, FetchableRecord, PersistableRecord {
     let outputAddress: String
     let outputAmount: Int64
     let confirmationsNeeded: Int
-    let userLockTime: Int
 
-    let userRefundAddress: String
-    let userRefundAddressVersion: Int
-    let userRefundAddressPath: String
+    let userLockTime: Int
+    let expirationInBlocks: Int?
+
+    let userRefundAddress: String?
+    let userRefundAddressVersion: Int?
+    let userRefundAddressPath: String?
 
     let serverPaymentHashInHex: String
     let serverPublicKeyInHex: String
 
     let willPreOpenChannel: Bool
+
+    let scriptVersion: Int
+
+    let userPublicKeyHex: String?
+    let userPublicKeyPath: String?
+
+    let muunPublicKeyHex: String?
+    let muunPublicKeyPath: String?
 }
 
 extension SubmarineSwapDB: DatabaseModelConvertible {
@@ -64,32 +74,76 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
                   outputAddress: from._fundingOutput._outputAddress,
                   outputAmount: from._fundingOutput._outputAmount.value,
                   confirmationsNeeded: from._fundingOutput._confirmationsNeeded,
-                  userLockTime: from._fundingOutput._userLockTime,
-                  userRefundAddress: from._fundingOutput._userRefundAddress.address(),
-                  userRefundAddressVersion: from._fundingOutput._userRefundAddress.version(),
-                  userRefundAddressPath: from._fundingOutput._userRefundAddress.derivationPath(),
+                  userLockTime: from._fundingOutput._userLockTime ?? -1,
+                  expirationInBlocks: from._fundingOutput._expirationInBlocks,
+                  userRefundAddress: from._fundingOutput._userRefundAddress?.address(),
+                  userRefundAddressVersion: from._fundingOutput._userRefundAddress?.version(),
+                  userRefundAddressPath: from._fundingOutput._userRefundAddress?.derivationPath(),
                   serverPaymentHashInHex: from._fundingOutput._serverPaymentHashInHex,
                   serverPublicKeyInHex: from._fundingOutput._serverPublicKeyInHex,
-                  willPreOpenChannel: from._willPreOpenChannel)
+                  willPreOpenChannel: from._willPreOpenChannel,
+                  scriptVersion: from._fundingOutput._scriptVersion,
+                  userPublicKeyHex: from._fundingOutput._userPublicKey?.toBase58(),
+                  userPublicKeyPath: from._fundingOutput._userPublicKey?.path,
+                  muunPublicKeyHex: from._fundingOutput._muunPublicKey?.toBase58(),
+                  muunPublicKeyPath: from._fundingOutput._muunPublicKey?.path)
     }
 
     func to(using db: Database) throws -> SubmarineSwap {
         let networkAddress = serializedNetworkAddresses?.split(separator: "-").map(String.init) ?? []
-        let sswapUserRefundAddress = MuunAddress(version: userRefundAddressVersion,
-                                                 derivationPath: userRefundAddressPath,
-                                                 address: userRefundAddress)
+        let sswapUserRefundAddress: MuunAddress?
+        let userPublicKey: WalletPublicKey?
+        let muunPublicKey: WalletPublicKey?
+
+        if let version = userRefundAddressVersion,
+            let path = userRefundAddressPath,
+            let address = userRefundAddress {
+            sswapUserRefundAddress = MuunAddress(version: version,
+                                                 derivationPath: path,
+                                                 address: address)
+        } else {
+            sswapUserRefundAddress = nil
+        }
+
+        if let key = userPublicKeyHex,
+            let path = userPublicKeyPath {
+            userPublicKey = WalletPublicKey.fromBase58(key, on: path)
+        } else {
+            userPublicKey = nil
+        }
+
+        if let key = muunPublicKeyHex,
+            let path = muunPublicKeyPath {
+            muunPublicKey = WalletPublicKey.fromBase58(key, on: path)
+        } else {
+            muunPublicKey = nil
+        }
+
+        // GRDB doesn't support altering or dropping columns, so we have to hot patch nullability into an existing field
+        // -1 is not a valid lock time and thus makes a good replacement value for nil
+        let realUserLockTime: Int?
+        if userLockTime == -1 {
+            realUserLockTime = nil
+        } else {
+            realUserLockTime = userLockTime
+        }
+
         return SubmarineSwap(swapUuid: swapUuid,
                              invoice: invoice,
                              receiver: SubmarineSwapReceiver(alias: alias,
                                                              networkAddresses: networkAddress,
                                                              publicKey: publicKey),
-                             fundingOutput: SubmarineSwapFundingOutput(outputAddress: outputAddress,
+                             fundingOutput: SubmarineSwapFundingOutput(scriptVersion: scriptVersion,
+                                                                       outputAddress: outputAddress,
                                                                        outputAmount: Satoshis(value: outputAmount),
                                                                        confirmationsNeeded: confirmationsNeeded,
-                                                                       userLockTime: userLockTime,
+                                                                       userLockTime: realUserLockTime,
                                                                        userRefundAddress: sswapUserRefundAddress,
                                                                        serverPaymentHashInHex: serverPaymentHashInHex,
-                                                                       serverPublicKeyInHex: serverPublicKeyInHex),
+                                                                       serverPublicKeyInHex: serverPublicKeyInHex,
+                                                                       expirationTimeInBlocks: expirationInBlocks,
+                                                                       userPublicKey: userPublicKey,
+                                                                       muunPublicKey: muunPublicKey),
                              fees: SubmarineSwapFees(lightning: Satoshis(value: lightningFee),
                                                      sweep: Satoshis(value: sweepFee),
                                                      channelOpen: Satoshis(value: channelOpenFee),

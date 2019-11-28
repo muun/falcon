@@ -154,6 +154,22 @@ public class DatabaseCoordinator {
             try fixKey(.recoveryCodePublicKey)
         }
 
+        migrator.registerMigration("swaps v2") { db in
+            try db.alter(table: "submarineSwapDB", body: { t in
+                t.add(column: "scriptVersion", .numeric)
+                    .defaults(to: 101)
+                    .notNull()
+
+                t.add(column: "userPublicKeyHex", .text)
+                t.add(column: "userPublicKeyPath", .text)
+                t.add(column: "muunPublicKeyHex", .text)
+                t.add(column: "muunPublicKeyPath", .text)
+
+                t.add(column: "expirationInBlocks", .numeric)
+                    .defaults(to: 0)
+            })
+        }
+
         return migrator
     }
     // swiftlint:enable function_body_length

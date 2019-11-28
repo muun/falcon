@@ -3,6 +3,7 @@ package libwallet
 import (
 	"bytes"
 	"encoding/hex"
+	fmt "fmt"
 	"testing"
 
 	"github.com/btcsuite/btcd/txscript"
@@ -14,11 +15,12 @@ const (
 )
 
 type input struct {
-	outpoint      outpoint
-	address       muunAddress
-	userSignature []byte
-	muunSignature []byte
-	submarineSwap inputSubmarineSwap
+	outpoint        outpoint
+	address         muunAddress
+	userSignature   []byte
+	muunSignature   []byte
+	submarineSwapV1 inputSubmarineSwapV1
+	submarineSwapV2 inputSubmarineSwapV2
 }
 
 func (i *input) OutPoint() Outpoint {
@@ -37,8 +39,12 @@ func (i *input) MuunSignature() []byte {
 	return i.muunSignature
 }
 
-func (i *input) SubmarineSwap() InputSubmarineSwap {
-	return &i.submarineSwap
+func (i *input) SubmarineSwapV1() InputSubmarineSwapV1 {
+	return &i.submarineSwapV1
+}
+
+func (i *input) SubmarineSwapV2() InputSubmarineSwapV2 {
+	return &i.submarineSwapV2
 }
 
 type outpoint struct {
@@ -59,27 +65,60 @@ func (o *outpoint) Amount() int64 {
 	return o.amount
 }
 
-type inputSubmarineSwap struct {
+type inputSubmarineSwapV1 struct {
 	refundAddress   string
 	paymentHash256  []byte
 	serverPublicKey []byte
 	lockTime        int64
 }
 
-func (i *inputSubmarineSwap) RefundAddress() string {
+func (i *inputSubmarineSwapV1) RefundAddress() string {
 	return i.refundAddress
 }
 
-func (i *inputSubmarineSwap) PaymentHash256() []byte {
+func (i *inputSubmarineSwapV1) PaymentHash256() []byte {
 	return i.paymentHash256
 }
 
-func (i *inputSubmarineSwap) ServerPublicKey() []byte {
+func (i *inputSubmarineSwapV1) ServerPublicKey() []byte {
 	return i.serverPublicKey
 }
 
-func (i *inputSubmarineSwap) LockTime() int64 {
+func (i *inputSubmarineSwapV1) LockTime() int64 {
 	return i.lockTime
+}
+
+type inputSubmarineSwapV2 struct {
+	paymentHash256      []byte
+	serverPublicKey     []byte
+	userPublicKey       []byte
+	muunPublicKey       []byte
+	blocksForExpiration int64
+	serverSignature     []byte
+}
+
+func (i *inputSubmarineSwapV2) PaymentHash256() []byte {
+	return i.paymentHash256
+}
+
+func (i *inputSubmarineSwapV2) ServerPublicKey() []byte {
+	return i.serverPublicKey
+}
+
+func (i *inputSubmarineSwapV2) UserPublicKey() []byte {
+	return i.userPublicKey
+}
+
+func (i *inputSubmarineSwapV2) MuunPublicKey() []byte {
+	return i.muunPublicKey
+}
+
+func (i *inputSubmarineSwapV2) BlocksForExpiration() int64 {
+	return i.blocksForExpiration
+}
+
+func (i *inputSubmarineSwapV2) ServerSignature() []byte {
+	return i.serverSignature
 }
 
 func TestPartillySignedTransaction_SignV1(t *testing.T) {
@@ -107,7 +146,7 @@ func TestPartillySignedTransaction_SignV1(t *testing.T) {
 	partial, _ := NewPartiallySignedTransaction(hexTx)
 	partial.inputs = inputs
 
-	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath)
+	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath, Regtest())
 	// We dont need to use the muunKey in V1
 	signedRawTx, err := partial.Sign(userKey, userKey.PublicKey())
 
@@ -189,8 +228,8 @@ func TestPartiallySignedTransaction_SignV2(t *testing.T) {
 	partial, _ := NewPartiallySignedTransaction(hexTx)
 	partial.inputs = inputs
 
-	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, basePath)
-	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath)
+	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, basePath, Regtest())
+	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath, Regtest())
 	signedRawTx, err := partial.Sign(userKey, muunKey)
 
 	if err != nil {
@@ -237,8 +276,8 @@ func TestPartiallySignedTransaction_SignV3(t *testing.T) {
 	partial, _ := NewPartiallySignedTransaction(hexTx)
 	partial.inputs = inputs
 
-	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, basePath)
-	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath)
+	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, basePath, Regtest())
+	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath, Regtest())
 	signedRawTx, err := partial.Sign(userKey, muunKey)
 
 	if err != nil {
@@ -251,7 +290,7 @@ func TestPartiallySignedTransaction_SignV3(t *testing.T) {
 	verifyInput(t, signedTx, hexTx1, txIndex1, 0)
 }
 
-func TestPartiallySignedTransaction_SignSubmarineSwap(t *testing.T) {
+func TestPartiallySignedTransaction_SignSubmarineSwapV1(t *testing.T) {
 	const (
 		hexTx = "01000000021a608c7d6e40586806c33b3b1036fbd305c37e9d38990d912cc02de7e7cec05e0000000000fffffffff18bce10875329410641316bf7c4d984e00780174b6983080e9225dc26e5bd8c0100000000feffffff01705bc0230000000017a91470fcbc29723c85fdbf9fb5189220f279e9be4508878f030000"
 
@@ -293,8 +332,8 @@ func TestPartiallySignedTransaction_SignSubmarineSwap(t *testing.T) {
 		},
 		&input{
 			outpoint: outpoint{index: txIndex2, amount: txAmount2, txId: txOut2},
-			address:  muunAddress{address: txAddress2, derivationPath: txAddressPath2, version: addressSubmarineSwap},
-			submarineSwap: inputSubmarineSwap{
+			address:  muunAddress{address: txAddress2, derivationPath: txAddressPath2, version: addressSubmarineSwapV1},
+			submarineSwapV1: inputSubmarineSwapV1{
 				refundAddress:   txRefundAddress2,
 				paymentHash256:  paymentHash2,
 				serverPublicKey: serverPubKey2,
@@ -306,8 +345,8 @@ func TestPartiallySignedTransaction_SignSubmarineSwap(t *testing.T) {
 	partial, _ := NewPartiallySignedTransaction(hexTx)
 	partial.inputs = inputs
 
-	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, basePath)
-	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath)
+	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, basePath, Regtest())
+	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, basePath, Regtest())
 	signedRawTx, err := partial.Sign(userKey, muunKey)
 
 	if err != nil {
@@ -347,4 +386,70 @@ func verifyInput(t *testing.T, signedTx *wire.MsgTx, hexPrevTx string, prevIndex
 	if err := vm.Execute(); err != nil {
 		t.Fatalf("failed to verify script: %v", err)
 	}
+}
+
+func TestPartiallySignedTransaction_SignSubmarineSwapV2(t *testing.T) {
+	const (
+		hexTx = "010000000001010a1e9552f252c4f94dae951a3a2789263650d69de286ed4813333ac73179b4790000000023220020fc4ea5a79e0de596005a77df25fdc1d76a5bd2ca022b58260830b45dbf48005fffffffff0100000000000000001976a91476e6856729db9c3885fbd72c47bd225990eee4ad88ac03473044022038395a9846c02cc1b87655ea4679f3df127fa5f781c7db3598ee43acc65adab4022051f0f874a8c16544c4ab492b8a091b630703d742599ea17c61b2bfadb747f30e0147304402207bd5a91f032ed3d69a7999d170c696861f36991f6b54e24da4319eaf512ccac402203d3d14c42103261f605b3a870ab10b03ff8b84537575768067e41853d77d2b240187210310df0c435a58758d53821915501301581be8c18b63d5a0dab281aa7f98bcb6e67c210226048275203811ab30a61759f8271280cb754ede8c38b5c51fc662dec441511eac637c76a914f722e6b3c976eba035578a7b268de980682d60b1876375677cac6867029000b275ad76a9141528942b8aef6f523d8050ad6bab416d6199352288ac6800000000"
+
+		txIndex2              = 0
+		txAmount2             = 1000
+		hexTxOut2             = "79b47931c73a331348ed86e29dd650362689273a1a95ae4df9c452f252951e0a"
+		hexTx2                = "0100000001b9c3208b3cd1c687d73fec2022ac6ce057c00cf8ae060e5579107a8d99681a7f000000006a473044022042d2e34afb3b66b27641c774b467ce854cfa5d4f9a1eaa462174fa3c688208840220651fdeab3a8134c65431dba040b654d9d21f50343f82bc1870b5280eaff89fc101210209d4e395ce720f13439f4f73b0dac8433f2fa17f094c5fcdaa6965bf96ece088ffffffff02e80300000000000017a914fc7ee7c4ce68ca09559d9e8776f0455039ea18d58718ee052a010000001976a9143447bbd5107cb1572eeb8550f74e5d31a4bf5bd888ac00000000"
+		txAddressPath2        = "m"
+		txAddress2            = "2NGGJJARaFRcARRMDeSWQ46LwU46Z9oKNCZ"
+		txPaymentHashHex2     = "cdb14d5fcf498e8785caff18940bbd713b98b4d425ab0503adb92ab08c5850e3"
+		txServerPubKeyHex2    = "0226048275203811ab30a61759f8271280cb754ede8c38b5c51fc662dec441511e"
+		txBlockForExpiration2 = 144
+		txServerSignatureHex2 = "304402207bd5a91f032ed3d69a7999d170c696861f36991f6b54e24da4319eaf512ccac402203d3d14c42103261f605b3a870ab10b03ff8b84537575768067e41853d77d2b2401"
+
+		encodedMuunKey = "tpubD6NzVbkrYhZ4Yg872usw1wxNYrpCsUmiG4faYMaogSFwJFX9sz8MrR6GNKg4qUDjb3KUYcC9nrUL7tQYfK441qkFP9pwsw6fb8gTW7vJjXq"
+		encodedUserKey = "tprv8ZgxMBicQKsPdu1SiZiQbV4K2af648S6jf8Axu7RkgQborzWpQVRzrSvyoYWb5Rmy8VVyFBDjZobn7ZaK3Ax2hLvF9NxJ6gUWNLwgLxRav7"
+	)
+
+	txOut2, _ := hex.DecodeString(hexTxOut2)
+
+	paymentHash2, _ := hex.DecodeString(txPaymentHashHex2)
+	serverPubKey2, _ := hex.DecodeString(txServerPubKeyHex2)
+	serverSignature2, _ := hex.DecodeString(txServerSignatureHex2)
+
+	muunKey, _ := NewHDPublicKeyFromString(encodedMuunKey, "m", Regtest())
+	userKey, _ := NewHDPrivateKeyFromString(encodedUserKey, "m", Regtest())
+
+	inputs := []Input{
+		&input{
+			outpoint: outpoint{index: txIndex2, amount: txAmount2, txId: txOut2},
+			address:  muunAddress{address: txAddress2, derivationPath: txAddressPath2, version: addressSubmarineSwapV2},
+			submarineSwapV2: inputSubmarineSwapV2{
+				paymentHash256:      paymentHash2,
+				serverPublicKey:     serverPubKey2,
+				userPublicKey:       userKey.PublicKey().Raw(),
+				muunPublicKey:       muunKey.Raw(),
+				blocksForExpiration: txBlockForExpiration2,
+				serverSignature:     serverSignature2,
+			},
+		},
+	}
+
+	partial, _ := NewPartiallySignedTransaction(hexTx)
+	partial.inputs = inputs
+
+	signedRawTx, err := partial.Sign(userKey, muunKey)
+
+	if err != nil {
+		t.Fatalf("failed to sign tx due to %v", err)
+	}
+
+	signedTx := wire.NewMsgTx(0)
+	signedTx.BtcDecode(bytes.NewBuffer(signedRawTx.Bytes), 0, wire.WitnessEncoding)
+
+	verifyInput(t, signedTx, hexTx2, txIndex2, 0)
+}
+
+func TestBlo(t *testing.T) {
+	hexBlob := "2103285ec73aa7b8e86a37a2919c3cba5da7862d64523c16c1868fbbdde0e5c7b5e57c21028b7c740b590012eaffef072675baaa95aee39508fd049ed1cd698ee26ce33f02ac637c76a914477f2112346a2b3a5969001d322f13e1a96da7bb876375677cac6867029000b275ad76a914a5d78a66701ac212735adeb31112c948b7b9ed7e88ac68"
+	data, _ := hex.DecodeString(hexBlob)
+
+	str, _ := txscript.DisasmString(data)
+	fmt.Println(str)
 }

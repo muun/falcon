@@ -55,6 +55,12 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     }
 
     private func shouldUpdateData() -> Bool {
+        #if DEBUG
+        if ProcessInfo().arguments.contains("testMode") {
+            return true
+        }
+        #endif
+
         if let exchangeRateWindow = exchangeRateWindowRepository.getExchangeRateWindow(),
             let feeWindow = feeWindowRepository.getFeeWindow() {
             return Date().timeIntervalSince(exchangeRateWindow.fetchDate) >= secondsForFreshData

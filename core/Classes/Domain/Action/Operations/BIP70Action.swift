@@ -32,7 +32,7 @@ public class BIP70Action: AsyncAction<PaymentRequestType> {
                                         creationTime: newUri.creationTime,
                                         expiresTime: newUri.expiresTime)
 
-        return Single.just(PaymentRequestType.toAddress(uri: newMuunUri))
+        return Single.just(FlowToAddress(uri: newMuunUri))
     }
 
 }

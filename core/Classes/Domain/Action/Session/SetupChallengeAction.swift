@@ -61,7 +61,7 @@ public class SetupChallengeAction: AsyncAction<()> {
             passwordSecretPublicKey: challengePublicKey,
             passwordSecretSalt: salt.toHexString(),
             encryptedPrivateKey: encryptedKey,
-            version: Int(Constant.buildVersion)!
+            version: type.getVersion()
         )
     }
 }

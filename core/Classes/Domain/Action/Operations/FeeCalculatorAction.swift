@@ -8,7 +8,13 @@
 
 import Foundation
 
-public class FeeCalculatorAction: AsyncAction<(FeeCalculator, FeeWindow, ExchangeRateWindow)> {
+public struct FeeCalculatorResult {
+    public let feeCalculator: FeeCalculator
+    public let feeWindow: FeeWindow
+    public let exchangeRateWindow: ExchangeRateWindow
+}
+
+public class FeeCalculatorAction: AsyncAction<FeeCalculatorResult> {
 
     private let realTimeDataAction: RealTimeDataAction
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
@@ -23,14 +29,16 @@ public class FeeCalculatorAction: AsyncAction<(FeeCalculator, FeeWindow, Exchang
     public func run(isSwap: Bool) {
 
         let single = realTimeDataAction.getValue()
-            .map({ data -> (FeeCalculator, FeeWindow, ExchangeRateWindow) in
+            .map({ data -> FeeCalculatorResult in
                 let calculator = FeeCalculator(
                     targetedFees: data.feeWindow.targetedFees,
                     // FIXME: This should consume some action to get the next transaction size
                     sizeProgression: self.nextTransactionSizeRepository.getNextTransactionSize()!.sizeProgression
                 )
 
-                return (calculator, data.feeWindow, data.exchangeRateWindow)
+                return FeeCalculatorResult(feeCalculator: calculator,
+                                           feeWindow: data.feeWindow,
+                                           exchangeRateWindow: data.exchangeRateWindow)
             })
 
         runSingle(single)

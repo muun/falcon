@@ -50,6 +50,24 @@ extension BitcoinAmount {
                              inPrimaryCurrency: inPrimaryCurrency)
     }
 
+    public static func from(satoshis: Satoshis,
+                            with window: ExchangeRateWindow,
+                            mirroring mirror: BitcoinAmount) -> BitcoinAmount {
+
+        func valuation(for currency: String) -> MonetaryAmount {
+            do {
+                let rate = try window.rate(for: currency)
+                return satoshis.valuation(at: rate, currency: currency)
+            } catch {
+                Logger.fatal(error: error)
+            }
+        }
+
+        return BitcoinAmount(inSatoshis: satoshis,
+                             inInputCurrency: valuation(for: mirror.inInputCurrency.currency),
+                             inPrimaryCurrency: valuation(for: mirror.inPrimaryCurrency.currency))
+    }
+
 }
 
 public struct Satoshis {
@@ -132,7 +150,7 @@ extension Satoshis: Comparable {
 
 }
 
-public struct FeeRate: Codable {
+public struct FeeRate: Codable, Equatable {
     public let satsPerVByte: Decimal
 
     public init(satsPerWeightUnit: Decimal) {
