@@ -64,7 +64,7 @@ public class AddressActions {
         } else {
             // This means the user is deriving addresses offline, so we take a random one from the last address
             // window because the server is watching them all 👀.
-            let minWatchIndex = maxWatchingIndex - externalAddressWatchWindowSize
+            let minWatchIndex = max(maxWatchingIndex - externalAddressWatchWindowSize, 0)
             nextIndex = Int.random(in: minWatchIndex ..< maxWatchingIndex)
         }
 

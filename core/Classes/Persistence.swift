@@ -40,8 +40,10 @@ public enum Persistence: String, CaseIterable {
 
     case isBalanceHidden
     case displayFiatCurrencyAsMain
+    case displayBTCasSAT
 
     case hasRecoveryCode
+    case rcSetupInProcess
 
     case syncStatus
 

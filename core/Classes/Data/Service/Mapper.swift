@@ -634,7 +634,7 @@ extension Operation: APIConvertible {
                              status: status.toJson(),
                              transaction: transaction?.toJson(),
                              creationDate: creationDate,
-                             outputAmountInSatoshis: outputAmountInSatoshis,
+                             outputAmountInSatoshis: outputAmount.value,
                              swapUuid: submarineSwap?._swapUuid,
                              swap: submarineSwap?.toJson())
     }
@@ -872,7 +872,8 @@ extension OperationCreatedJson: ModelConvertible {
     public func toModel() -> OperationCreated {
         return OperationCreated(operation: operation.toModel(),
                                 partiallySignedTransaction: partiallySignedTransaction.toModel(),
-                                nextTransactionSize: nextTransactionSize.toModel())
+                                nextTransactionSize: nextTransactionSize.toModel(),
+                                change: changeAddress?.toModel())
     }
 
 }

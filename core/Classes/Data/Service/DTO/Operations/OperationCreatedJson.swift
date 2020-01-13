@@ -11,5 +11,6 @@ struct OperationCreatedJson: Codable {
     let operation: OperationJson
     let partiallySignedTransaction: PartiallySignedTransactionJson
     let nextTransactionSize: NextTransactionSizeJson
+    let changeAddress: MuunAddressJson?
 
 }

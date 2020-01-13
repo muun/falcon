@@ -14,11 +14,16 @@ public class SessionActions {
     private let sessionRepository: SessionRepository
     private let userRepository: UserRepository
     private let keysRepository: KeysRepository
+    private let secureStorage: SecureStorage
 
-    init(repository: SessionRepository, userRepository: UserRepository, keysRepository: KeysRepository) {
+    init(repository: SessionRepository,
+         userRepository: UserRepository,
+         keysRepository: KeysRepository,
+         secureStorage: SecureStorage) {
         self.sessionRepository = repository
         self.userRepository = userRepository
         self.keysRepository = keysRepository
+        self.secureStorage = secureStorage
     }
 
     public func isLoggedIn() -> Bool {
@@ -26,7 +31,21 @@ public class SessionActions {
     }
 
     public func isFirstLaunch() -> Bool {
-        return sessionRepository.getStatus() == nil || userRepository.getUser() == nil
+        // We determine that it's Falcon first launch when:
+        // 1. Session is null or
+        // 2. User is null or
+        // 3. The user doesn't have the auth token in it's secure storage
+        return sessionRepository.getStatus() == nil
+            || userRepository.getUser() == nil
+            || !hasAuthToken()
+    }
+
+    private func hasAuthToken() -> Bool {
+        do {
+            return try secureStorage.has(.authToken)
+        } catch {
+            return false
+        }
     }
 
     public func watchEmailAuthorization() -> Completable {

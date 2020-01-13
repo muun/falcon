@@ -23,16 +23,19 @@ public class ApplicationLockManager {
     private let sessionRepository: SessionRepository
     private let logoutAction: LogoutAction
     private let userRepository: UserRepository
+    private let preferences: Preferences
 
     init(secureStorage: SecureStorage,
          sessionRepository: SessionRepository,
          logoutAction: LogoutAction,
-         userRepository: UserRepository) {
+         userRepository: UserRepository,
+         preferences: Preferences) {
 
         self.secureStorage = secureStorage
         self.sessionRepository = sessionRepository
         self.logoutAction = logoutAction
         self.userRepository = userRepository
+        self.preferences = preferences
     }
 
     public var isShowingLockScreen: Bool = false
@@ -41,6 +44,8 @@ public class ApplicationLockManager {
     public func firstLaunch() {
         // Secure storage isn't cleared when the app is uninstalled
         secureStorage.wipeAll()
+        // Preferences aren't cleared when someone transfer their data onto a new iOS device
+        preferences.wipeAll()
     }
 
     public func wipeDataAndLogOut() {

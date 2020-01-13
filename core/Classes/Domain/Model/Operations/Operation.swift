@@ -34,11 +34,11 @@ public struct Operation {
 
     public var submarineSwap: SubmarineSwap?
 
-    public var outputAmountInSatoshis: Int64 {
+    public var outputAmount: Satoshis {
         if let sswap = submarineSwap {
-            return sswap._fees.total().value + amount.inSatoshis.value
+            return sswap._fees.total() + amount.inSatoshis
         }
-        return amount.inSatoshis.value
+        return amount.inSatoshis
     }
 
     public init(id: Int?, requestId: String, isExternal: Bool, direction: OperationDirection,

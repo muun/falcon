@@ -13,6 +13,7 @@ public class SupportAction: AsyncAction<()> {
     public enum RequestType: String {
         case feedback
         case help
+        case support
     }
 
     private let houstonService: HoustonService

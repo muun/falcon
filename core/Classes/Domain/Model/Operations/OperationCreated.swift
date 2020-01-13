@@ -11,5 +11,6 @@ struct OperationCreated {
     let operation: Operation
     let partiallySignedTransaction: PartiallySignedTransaction
     let nextTransactionSize: NextTransactionSize
+    let change: MuunAddress?
 
 }

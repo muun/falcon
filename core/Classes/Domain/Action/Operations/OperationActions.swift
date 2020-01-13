@@ -107,12 +107,25 @@ public class OperationActions {
 
     public func newOperation(_ operation: core.Operation) -> Single<core.Operation> {
 
+        guard let destinationAddress = operation.receiverAddress else {
+            Logger.fatal("Tried to create new operation without a destination address")
+        }
+
         return houstonService.newOperation(operation: operation)
             .flatMap({ created in
                 let privateKey = try self.keysRepository.getBasePrivateKey()
                 let muunKey = try self.keysRepository.getCosigningKey()
 
-                let signedTransaction = try created.partiallySignedTransaction.sign(key: privateKey, muunKey: muunKey)
+                let expectations = PartiallySignedTransaction.Expectations(
+                    destination: destinationAddress,
+                    amount: operation.outputAmount,
+                    fee: operation.fee.inSatoshis,
+                    change: created.change)
+
+                let signedTransaction = try created.partiallySignedTransaction.sign(
+                    key: privateKey,
+                    muunKey: muunKey,
+                    expectations: expectations)
 
                 var operationUpdated = created.operation
                 operationUpdated.transaction?.hash = signedTransaction.hash
