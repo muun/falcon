@@ -15,16 +15,20 @@ public struct DeveloperError: Codable, Error {
     let requestId: Int
     let status: Int
 
+    // swiftlint:disable cyclomatic_complexity
     public func getKindOfError() -> ExactDeveloperError {
         switch errorCode {
         case 429: return .tooManyRequests
         case 2016: return .missingOrInvalidAuthToken
+        case 2018: return .emailAlreadyUsed
         case 2021: return .exchangeRateWindowTooOld
         case 2038: return .sessionExpired
         case 2045: return .invalidChallengeSignature
         case 2052: return .invalidEmail
 
         case 4002: return .forceUpdate
+
+        case 5003: return .emailNotRegistered
 
         // Swaps
         case 8100: return .invalidInvoice
@@ -35,6 +39,7 @@ public struct DeveloperError: Codable, Error {
         default: return .defaultError
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 }
 
 public enum ExactDeveloperError {
@@ -45,6 +50,8 @@ public enum ExactDeveloperError {
     case forceUpdate
     case sessionExpired
     case invalidEmail
+    case emailNotRegistered
+    case emailAlreadyUsed
     case nonUserFacing
     case invalidChallengeSignature
     case exchangeRateWindowTooOld

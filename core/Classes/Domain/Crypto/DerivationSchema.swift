@@ -15,6 +15,7 @@ enum DerivationSchema {
     case change
     case external
     case contacts
+    case metadata
 
     var path: String {
 
@@ -27,6 +28,8 @@ enum DerivationSchema {
             return "\(basePath)/external:1"
         case .contacts:
             return "\(basePath)/contacts:2"
+        case .metadata:
+            return "\(basePath)/metadata:3"
         }
     }
 }

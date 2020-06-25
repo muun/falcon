@@ -18,10 +18,14 @@ public class VerifyAuthorizeAction: AsyncAction<()> {
         super.init(name: "VerifyAuthorizeAction")
     }
 
-    public func run(uuid: String) {
+    public func run(uuid: String, flow: SignFlow) {
         let linkAction = LinkAction(uuid: uuid)
 
-        runSingle(houstonService.authorizeSession(linkAction: linkAction))
+        if flow == .recover {
+            runSingle(houstonService.authorizeSession(linkAction: linkAction))
+        } else if flow == .create {
+            runSingle(houstonService.verifySignUp(linkAction: linkAction))
+        }
     }
 
 }

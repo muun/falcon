@@ -36,7 +36,11 @@ public struct Operation {
 
     public var outputAmount: Satoshis {
         if let sswap = submarineSwap {
-            return sswap._fees.total() + amount.inSatoshis
+            var outputAmount = sswap._fees.total() + amount.inSatoshis
+            if sswap.getDebtType() == .COLLECT {
+                outputAmount += sswap._fundingOutput._debtAmount
+            }
+            return outputAmount
         }
         return amount.inSatoshis
     }
@@ -66,6 +70,15 @@ public struct Operation {
         self.transaction = transaction
         self.creationDate = creationDate
         self.submarineSwap = submarineSwap
+    }
+
+    public func isPending() -> Bool {
+        let pendingStates: [OperationStatus] = [
+            .CREATED, .SIGNING, .SIGNED, .BROADCASTED,
+            .SWAP_PENDING, .SWAP_OPENING_CHANNEL, .SWAP_WAITING_CHANNEL, .SWAP_ROUTING
+        ]
+
+        return pendingStates.contains(status)
     }
 
 }

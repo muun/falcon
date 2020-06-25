@@ -14,7 +14,7 @@ public class ApplicationLockManager {
     static let secondsInBackgroundBeforeShowingLockScreen = 10
 
     public enum PinCheck {
-        case invalid
+        case invalid(isAnonUser: Bool)
         case valid
         case noMoreAttempts
     }
@@ -72,7 +72,14 @@ public class ApplicationLockManager {
     }
 
     public func isValid(pin: String) -> PinCheck {
+        if userRepository.isAnonUser() {
+            return isValidForAnonUser(pin: pin)
+        }
 
+        return isValidForUser(pin: pin)
+    }
+
+    private func isValidForUser(pin: String) -> PinCheck {
         do {
             let isValid = try sessionRepository.getPin() == pin
 
@@ -91,14 +98,34 @@ public class ApplicationLockManager {
 
                 try sessionRepository.store(pinAttemptsLeft: attemptsLeft)
 
-                return .invalid
+                return .invalid(isAnonUser: false)
             }
 
         } catch {
             // If we cant check it, false it
             Logger.log(error: error)
 
-            return .invalid
+            return .invalid(isAnonUser: false)
+        }
+    }
+
+    /*
+     Anon users can input their pin infinite times wrong, since we can't log out them because they would lose their
+     funds.
+     */
+    private func isValidForAnonUser(pin: String) -> PinCheck {
+        do {
+            let isValid = try sessionRepository.getPin() == pin
+
+            if isValid {
+                return .valid
+            } else {
+                return .invalid(isAnonUser: true)
+            }
+        } catch {
+            // If we cant check it, false it
+            Logger.log(error: error)
+            return .invalid(isAnonUser: true)
         }
     }
 

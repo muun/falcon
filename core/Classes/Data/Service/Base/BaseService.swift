@@ -174,19 +174,6 @@ public class BaseService {
 
             if let httpResp = response as? HTTPURLResponse {
 
-                let dataToParse: Data?
-                if httpResp.statusCode == 204 {
-                    dataToParse = "{}".data(using: .utf8)
-                } else {
-                    dataToParse = data
-                }
-
-                if let parsedResponse: T = self.parseData(data: dataToParse, model: model) {
-                    success(parsedResponse)
-                } else {
-                    failure(MuunError(ServiceError.codableError))
-                }
-
                 do {
                     _ = try self.sessionRepository.getAuthToken()
                 } catch {
@@ -201,6 +188,18 @@ public class BaseService {
                     self.sessionRepository.setStatus(sessionStatus)
                 }
 
+                let dataToParse: Data?
+                if httpResp.statusCode == 204 {
+                    dataToParse = "{}".data(using: .utf8)
+                } else {
+                    dataToParse = data
+                }
+
+                if let parsedResponse: T = self.parseData(data: dataToParse, model: model) {
+                    success(parsedResponse)
+                } else {
+                    failure(MuunError(ServiceError.codableError))
+                }
             }
         }
 
@@ -236,8 +235,26 @@ public class BaseService {
             }
         }
 
-        if let e = error as? URLError, e.code == .timedOut {
-            return MuunError(ServiceError.timeOut)
+        if let e = error as? URLError {
+            switch e.code {
+            case .timedOut:
+                return MuunError(ServiceError.timeOut)
+
+            case .cannotFindHost,
+                 .cannotConnectToHost,
+                 .notConnectedToInternet,
+                 .dataNotAllowed,
+                 .networkConnectionLost,
+                 .resourceUnavailable,
+                 .secureConnectionFailed:
+                return MuunError(ServiceError.internetError)
+
+            default:
+                return MuunError(e)
+            }
+
+        } else if let e = error {
+            return MuunError(e)
         }
 
         guard let data = data else {
@@ -335,16 +352,6 @@ public class BaseService {
 
         }
 
-    }
-
-    func data<T: APIConvertible> (from model: T) -> Data {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .customISO8601
-
-        guard let jsonData = try? encoder.encode(model.toJson()) else {
-            fatalError("ERROR")
-        }
-        return jsonData
     }
 
 }

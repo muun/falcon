@@ -1,14 +1,16 @@
 #if os(Linux)
-    import Glibc
+import Glibc
 #endif
 #if SWIFT_PACKAGE
-    import CSQLite
+import CSQLite
+#elseif GRDBCIPHER
+import SQLCipher
 #elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-    import SQLite3
+import SQLite3
 #endif
 
 /// A protocol around sqlite3_set_authorizer
-protocol StatementAuthorizer : class {
+protocol StatementAuthorizer: AnyObject {
     func authorize(
         _ actionCode: Int32,
         _ cString1: UnsafePointer<Int8>?,
@@ -19,7 +21,7 @@ protocol StatementAuthorizer : class {
 }
 
 /// A class that gathers information about one statement during its compilation.
-final class StatementCompilationAuthorizer : StatementAuthorizer {
+final class StatementCompilationAuthorizer: StatementAuthorizer {
     /// What this statements reads
     var databaseRegion = DatabaseRegion()
     
@@ -45,7 +47,11 @@ final class StatementCompilationAuthorizer : StatementAuthorizer {
         _ cString4: UnsafePointer<Int8>?)
         -> Int32
     {
-        // print("StatementCompilationAuthorizer: \(actionCode) \([cString1, cString2, cString3, cString4].flatMap { $0.map({ String(cString: $0) }) })")
+//        print("""
+//            StatementCompilationAuthorizer: \
+//            \(AuthorizerActionCode(rawValue: actionCode)) \
+//            \([cString1, cString2, cString3, cString4].compactMap { $0.map(String.init) })
+//            """)
         
         switch actionCode {
         case SQLITE_DROP_TABLE, SQLITE_DROP_VTABLE, SQLITE_DROP_TEMP_TABLE,
@@ -60,13 +66,14 @@ final class StatementCompilationAuthorizer : StatementAuthorizer {
              SQLITE_CREATE_INDEX, SQLITE_CREATE_TABLE,
              SQLITE_CREATE_TEMP_INDEX, SQLITE_CREATE_TEMP_TABLE,
              SQLITE_CREATE_TEMP_TRIGGER, SQLITE_CREATE_TEMP_VIEW,
-             SQLITE_CREATE_TRIGGER, SQLITE_CREATE_VIEW:
+             SQLITE_CREATE_TRIGGER, SQLITE_CREATE_VIEW,
+             SQLITE_CREATE_VTABLE:
             invalidatesDatabaseSchemaCache = true
             return SQLITE_OK
             
         case SQLITE_READ:
-            guard let tableName = cString1.map({ String(cString: $0) }) else { return SQLITE_OK }
-            guard let columnName = cString2.map({ String(cString: $0) }) else { return SQLITE_OK }
+            guard let tableName = cString1.map(String.init) else { return SQLITE_OK }
+            guard let columnName = cString2.map(String.init) else { return SQLITE_OK }
             if columnName.isEmpty {
                 // SELECT COUNT(*) FROM table
                 databaseRegion.formUnion(DatabaseRegion(table: tableName))
@@ -77,7 +84,7 @@ final class StatementCompilationAuthorizer : StatementAuthorizer {
             return SQLITE_OK
             
         case SQLITE_INSERT:
-            guard let tableName = cString1.map({ String(cString: $0) }) else { return SQLITE_OK }
+            guard let tableName = cString1.map(String.init) else { return SQLITE_OK }
             databaseEventKinds.append(.insert(tableName: tableName))
             return SQLITE_OK
             
@@ -98,8 +105,8 @@ final class StatementCompilationAuthorizer : StatementAuthorizer {
             return SQLITE_IGNORE
             
         case SQLITE_UPDATE:
-            guard let tableName = cString1.map({ String(cString: $0) }) else { return SQLITE_OK }
-            guard let columnName = cString2.map({ String(cString: $0) }) else { return SQLITE_OK }
+            guard let tableName = cString1.map(String.init) else { return SQLITE_OK }
+            guard let columnName = cString2.map(String.init) else { return SQLITE_OK }
             insertUpdateEventKind(tableName: tableName, columnName: columnName)
             return SQLITE_OK
             
@@ -116,7 +123,7 @@ final class StatementCompilationAuthorizer : StatementAuthorizer {
             
         case SQLITE_SAVEPOINT:
             guard let cString1 = cString1 else { return SQLITE_OK }
-            guard let name = cString2.map({ String(cString: $0) }) else { return SQLITE_OK }
+            guard let name = cString2.map(String.init) else { return SQLITE_OK }
             if strcmp(cString1, "BEGIN") == 0 {
                 transactionEffect = .beginSavepoint(name)
             } else if strcmp(cString1, "RELEASE") == 0 {
@@ -166,7 +173,7 @@ final class StatementCompilationAuthorizer : StatementAuthorizer {
 //
 /// Warning: to perform well, this authorizer must be used during statement
 /// execution, not during statement compilation.
-final class TruncateOptimizationBlocker : StatementAuthorizer {
+final class TruncateOptimizationBlocker: StatementAuthorizer {
     func authorize(
         _ actionCode: Int32,
         _ cString1: UnsafePointer<Int8>?,
@@ -175,8 +182,58 @@ final class TruncateOptimizationBlocker : StatementAuthorizer {
         _ cString4: UnsafePointer<Int8>?)
         -> Int32
     {
-        // print("TruncateOptimizationBlocker: \(actionCode) \([cString1, cString2, cString3, cString4].flatMap { $0.map({ String(cString: $0) }) })")
+//        print("""
+//            TruncateOptimizationBlocker: \
+//            \(AuthorizerActionCode(rawValue: actionCode)) \
+//            \([cString1, cString2, cString3, cString4].compactMap { $0.map(String.init) })
+//            """)
         return (actionCode == SQLITE_DELETE) ? SQLITE_IGNORE : SQLITE_OK
     }
 }
 
+private struct AuthorizerActionCode: RawRepresentable, CustomStringConvertible {
+    let rawValue: Int32
+    init(rawValue: Int32) {
+        self.rawValue = rawValue
+    }
+    
+    var description: String {
+        switch rawValue {
+        case 1: return "SQLITE_CREATE_INDEX"
+        case 2: return "SQLITE_CREATE_TABLE"
+        case 3: return "SQLITE_CREATE_TEMP_INDEX"
+        case 4: return "SQLITE_CREATE_TEMP_TABLE"
+        case 5: return "SQLITE_CREATE_TEMP_TRIGGER"
+        case 6: return "SQLITE_CREATE_TEMP_VIEW"
+        case 7: return "SQLITE_CREATE_TRIGGER"
+        case 8: return "SQLITE_CREATE_VIEW"
+        case 9: return "SQLITE_DELETE"
+        case 10: return "SQLITE_DROP_INDEX"
+        case 11: return "SQLITE_DROP_TABLE"
+        case 12: return "SQLITE_DROP_TEMP_INDEX"
+        case 13: return "SQLITE_DROP_TEMP_TABLE"
+        case 14: return "SQLITE_DROP_TEMP_TRIGGER"
+        case 15: return "SQLITE_DROP_TEMP_VIEW"
+        case 16: return "SQLITE_DROP_TRIGGER"
+        case 17: return "SQLITE_DROP_VIEW"
+        case 18: return "SQLITE_INSERT"
+        case 19: return "SQLITE_PRAGMA"
+        case 20: return "SQLITE_READ"
+        case 21: return "SQLITE_SELECT"
+        case 22: return "SQLITE_TRANSACTION"
+        case 23: return "SQLITE_UPDATE"
+        case 24: return "SQLITE_ATTACH"
+        case 25: return "SQLITE_DETACH"
+        case 26: return "SQLITE_ALTER_TABLE"
+        case 27: return "SQLITE_REINDEX"
+        case 28: return "SQLITE_ANALYZE"
+        case 29: return "SQLITE_CREATE_VTABLE"
+        case 30: return "SQLITE_DROP_VTABLE"
+        case 31: return "SQLITE_FUNCTION"
+        case 32: return "SQLITE_SAVEPOINT"
+        case 0: return "SQLITE_COPY"
+        case 33: return "SQLITE_RECURSIVE"
+        default: return "\(rawValue)"
+        }
+    }
+}

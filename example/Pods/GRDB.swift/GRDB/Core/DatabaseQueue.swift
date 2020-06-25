@@ -41,6 +41,8 @@ public final class DatabaseQueue: DatabaseWriter {
             configuration: configuration,
             schemaCache: SimpleDatabaseSchemaCache(),
             defaultLabel: "GRDB.DatabaseQueue")
+        
+        setupSuspension()
     }
     
     /// Opens an in-memory SQLite database.
@@ -59,7 +61,6 @@ public final class DatabaseQueue: DatabaseWriter {
             defaultLabel: "GRDB.DatabaseQueue")
     }
     
-    #if os(iOS)
     deinit {
         // Undo job done in setupMemoryManagement()
         //
@@ -67,13 +68,12 @@ public final class DatabaseQueue: DatabaseWriter {
         // Explicit unregistration is required before iOS 9 and OS X 10.11.
         NotificationCenter.default.removeObserver(self)
     }
-    #endif
 }
 
 extension DatabaseQueue {
-
+    
     // MARK: - Memory management
-
+    
     /// Free as much memory as possible.
     ///
     /// This method blocks the current thread until all database accesses are completed.
@@ -94,27 +94,26 @@ extension DatabaseQueue {
     public func setupMemoryManagement(in application: UIApplication) {
         self.application = application
         let center = NotificationCenter.default
-        #if swift(>=4.2)
-        center.addObserver(self, selector: #selector(DatabaseQueue.applicationDidReceiveMemoryWarning(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
-        center.addObserver(self, selector: #selector(DatabaseQueue.applicationDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        #else
-        center.addObserver(self, selector: #selector(DatabaseQueue.applicationDidReceiveMemoryWarning(_:)), name: .UIApplicationDidReceiveMemoryWarning, object: nil)
-        center.addObserver(self, selector: #selector(DatabaseQueue.applicationDidEnterBackground(_:)), name: .UIApplicationDidEnterBackground, object: nil)
-        #endif
+        center.addObserver(
+            self,
+            selector: #selector(DatabaseQueue.applicationDidReceiveMemoryWarning(_:)),
+            name: UIApplication.didReceiveMemoryWarningNotification,
+            object: nil)
+        center.addObserver(
+            self,
+            selector: #selector(DatabaseQueue.applicationDidEnterBackground(_:)),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
     }
     
-    @objc private func applicationDidEnterBackground(_ notification: NSNotification) {
+    @objc
+    private func applicationDidEnterBackground(_ notification: NSNotification) {
         guard let application = application else {
             return
         }
         
         let task: UIBackgroundTaskIdentifier = application.beginBackgroundTask(expirationHandler: nil)
-        #if swift(>=4.2)
-        let taskIsInvalid = task == UIBackgroundTaskIdentifier.invalid
-        #else
-        let taskIsInvalid = task == UIBackgroundTaskInvalid
-        #endif
-        if taskIsInvalid {
+        if task == .invalid {
             // Perform releaseMemory() synchronously.
             releaseMemory()
         } else {
@@ -126,7 +125,8 @@ extension DatabaseQueue {
         }
     }
     
-    @objc private func applicationDidReceiveMemoryWarning(_ notification: NSNotification) {
+    @objc
+    private func applicationDidReceiveMemoryWarning(_ notification: NSNotification) {
         DispatchQueue.global().async {
             self.releaseMemory()
         }
@@ -135,18 +135,61 @@ extension DatabaseQueue {
 }
 
 #if SQLITE_HAS_CODEC
-    extension DatabaseQueue {
-
-        // MARK: - Encryption
-
-        /// Changes the passphrase of an encrypted database
-        public func change(passphrase: String) throws {
-            try writer.sync { try $0.change(passphrase: passphrase) }
-        }
+extension DatabaseQueue {
+    
+    // MARK: - Encryption
+    
+    /// Changes the passphrase of an encrypted database
+    @available(*, deprecated, message: "Use Database.changePassphrase(_:) instead")
+    public func change(passphrase: String) throws {
+        try writer.sync { try $0.changePassphrase(passphrase) }
     }
+}
 #endif
 
 extension DatabaseQueue {
+    
+    // MARK: - Interrupting Database Operations
+    
+    public func interrupt() {
+        writer.interrupt()
+    }
+    
+    // MARK: - Database Suspension
+    
+    func suspend() {
+        writer.suspend()
+    }
+    
+    func resume() {
+        writer.resume()
+    }
+    
+    private func setupSuspension() {
+        if configuration.observesSuspensionNotifications {
+            let center = NotificationCenter.default
+            center.addObserver(
+                self,
+                selector: #selector(DatabaseQueue.suspend(_:)),
+                name: Database.suspendNotification,
+                object: nil)
+            center.addObserver(
+                self,
+                selector: #selector(DatabaseQueue.resume(_:)),
+                name: Database.resumeNotification,
+                object: nil)
+        }
+    }
+    
+    @objc
+    private func suspend(_ notification: Notification) {
+        suspend()
+    }
+    
+    @objc
+    private func resume(_ notification: Notification) {
+        resume()
+    }
     
     // MARK: - Reading from Database
     
@@ -160,7 +203,7 @@ extension DatabaseQueue {
     /// This method is *not* reentrant.
     ///
     /// Starting SQLite 3.8.0 (iOS 8.2+, OSX 10.10+, custom SQLite builds and
-    /// SQLCipher), attempts to write in the database from this meethod throw a
+    /// SQLCipher), attempts to write in the database from this method throw a
     /// DatabaseError of resultCode `SQLITE_READONLY`.
     ///
     /// - parameter block: A block that accesses the database.
@@ -170,6 +213,40 @@ extension DatabaseQueue {
             try db.readOnly { try block(db) }
         }
     }
+    
+    #if compiler(>=5.0)
+    /// Asynchronously executes a read-only block in a protected dispatch queue.
+    ///
+    ///     let players = try dbQueue.asyncRead { result in
+    ///         do {
+    ///             let db = try result.get()
+    ///             let count = try Player.fetchCount(db)
+    ///         } catch {
+    ///             // Handle error
+    ///         }
+    ///     }
+    ///
+    /// Starting SQLite 3.8.0 (iOS 8.2+, OSX 10.10+, custom SQLite builds and
+    /// SQLCipher), attempts to write in the database from this method throw a
+    /// DatabaseError of resultCode `SQLITE_READONLY`.
+    ///
+    /// - parameter block: A block that accesses the database.
+    public func asyncRead(_ block: @escaping (Result<Database, Error>) -> Void) {
+        writer.async { db in
+            do {
+                try db.beginReadOnly()
+            } catch {
+                block(.failure(error))
+                return
+            }
+            
+            block(.success(db))
+            
+            // Ignore error because we can not notify it.
+            try? db.endReadOnly()
+        }
+    }
+    #endif
     
     /// Synchronously executes a block in a protected dispatch queue, and
     /// returns its result.
@@ -203,34 +280,14 @@ extension DatabaseQueue {
         return try writer.reentrantSync(block)
     }
     
-    /// This method is deprecated. Use concurrentRead instead.
-    ///
-    /// Synchronously executes *block*.
-    ///
-    /// This method must be called from the protected database dispatch queue,
-    /// outside of a transaction. You'll get a fatal error otherwise.
-    ///
-    /// Starting SQLite 3.8.0 (iOS 8.2+, OSX 10.10+, custom SQLite builds and
-    /// SQLCipher), attempts to write in the database from this meethod throw a
-    /// DatabaseError of resultCode `SQLITE_READONLY`.
-    @available(*, deprecated, message: "Use concurrentRead instead")
-    public func readFromCurrentState(_ block: @escaping (Database) -> Void) {
-        // Check that we're on the correct queue...
-        writer.execute { db in
-            // ... and that no transaction is opened.
-            GRDBPrecondition(!db.isInsideTransaction, "readFromCurrentState must not be called from inside a transaction.")
-            db.readOnly { block(db) }
-        }
-    }
-    
-    public func concurrentRead<T>(_ block: @escaping (Database) throws -> T) -> Future<T> {
+    public func concurrentRead<T>(_ block: @escaping (Database) throws -> T) -> DatabaseFuture<T> {
         // DatabaseQueue can't perform parallel reads.
         // Perform a blocking read instead.
-        return Future(Result {
+        return DatabaseFuture(DatabaseResult {
             // Check that we're on the writer queue...
             try writer.execute { db in
                 // ... and that no transaction is opened.
-                GRDBPrecondition(!db.isInsideTransaction, "concurrentRead must not be called from inside a transaction.")
+                GRDBPrecondition(!db.isInsideTransaction, "must not be called from inside a transaction.")
                 return try db.readOnly {
                     try block(db)
                 }
@@ -238,82 +295,86 @@ extension DatabaseQueue {
         })
     }
     
-    // MARK: - Writing in Database
-    
-    /// Synchronously executes a block in a protected dispatch queue, wrapped
-    /// inside a transaction.
+    #if compiler(>=5.0)
+    /// Performs the same job as asyncConcurrentRead.
     ///
-    /// If the block throws an error, the transaction is rollbacked and the
-    /// error is rethrown.
-    ///
-    ///     try dbQueue.write { db in
-    ///         try Player(...).insert(db)
-    ///     }
-    ///
-    /// This method is *not* reentrant.
-    ///
-    /// - parameter block: A block that executes SQL statements.
-    /// - throws: An eventual database error, or the error thrown by the block.
-    public func write<T>(_ block: (Database) throws -> T) throws -> T {
-        return try writer.sync { db in
-            var result: T? = nil
-            try db.inTransaction {
-                result = try block(db)
-                return .commit
+    /// :nodoc:
+    public func spawnConcurrentRead(_ block: @escaping (Result<Database, Error>) -> Void) {
+        // Check that we're on the writer queue...
+        writer.execute { db in
+            // ... and that no transaction is opened.
+            GRDBPrecondition(!db.isInsideTransaction, "must not be called from inside a transaction.")
+            
+            do {
+                try db.beginReadOnly()
+            } catch {
+                block(.failure(error))
+                return
             }
-            return result!
+            
+            block(.success(db))
+            
+            // Ignore error because we can not notify it.
+            try? db.endReadOnly()
         }
     }
+    #endif
     
-    /// Synchronously executes a block in a protected dispatch queue, wrapped
-    /// inside a transaction.
+    // MARK: - Writing in Database
+    
+    /// Synchronously executes database updates in a protected dispatch queue,
+    /// wrapped inside a transaction, and returns the result.
     ///
-    /// If the block throws an error, the transaction is rollbacked and the
-    /// error is rethrown. If the block returns .rollback, the transaction is
+    /// If the updates throws an error, the transaction is rollbacked and the
+    /// error is rethrown. If the updates return .rollback, the transaction is
     /// also rollbacked, but no error is thrown.
     ///
-    ///     try dbQueue.inTransaction { db in
-    ///         try Player(...).insert(db)
-    ///         return .commit
-    ///     }
+    /// Eventual concurrent database accesses are postponed until the
+    /// transaction has completed.
     ///
     /// This method is *not* reentrant.
+    ///
+    ///     try dbQueue.writeInTransaction { db in
+    ///         db.execute(...)
+    ///         return .commit
+    ///     }
     ///
     /// - parameters:
     ///     - kind: The transaction type (default nil). If nil, the transaction
     ///       type is configuration.defaultTransactionKind, which itself
     ///       defaults to .deferred. See https://www.sqlite.org/lang_transaction.html
     ///       for more information.
-    ///     - block: A block that executes SQL statements and return either
-    ///       .commit or .rollback.
-    /// - throws: The error thrown by the block.
-    public func inTransaction(_ kind: Database.TransactionKind? = nil, _ block: (Database) throws -> Database.TransactionCompletion) throws {
+    ///     - updates: The updates to the database.
+    /// - throws: The error thrown by the updates, or by the
+    ///   wrapping transaction.
+    public func inTransaction(
+        _ kind: Database.TransactionKind? = nil,
+        _ updates: (Database) throws -> Database.TransactionCompletion)
+        throws
+    {
         try writer.sync { db in
             try db.inTransaction(kind) {
-                try block(db)
+                try updates(db)
             }
         }
     }
     
-    /// Synchronously executes a block in a protected dispatch queue, and
-    /// returns its result.
+    /// Synchronously executes database updates in a protected dispatch queue,
+    /// outside of any transaction, and returns the result.
     ///
-    ///     let players = try dbQueue.writeWithoutTransaction { db in
-    ///         try Player(...).insert(db)
-    ///     }
+    /// Eventual concurrent database accesses are postponed until the updates
+    /// are completed.
     ///
     /// This method is *not* reentrant.
     ///
-    /// - parameter block: A block that accesses the database.
-    /// - throws: The error thrown by the block.
-    ///
-    /// :nodoc:
-    public func writeWithoutTransaction<T>(_ block: (Database) throws -> T) rethrows -> T {
-        return try writer.sync(block)
+    /// - parameter updates: The updates to the database.
+    /// - throws: The error thrown by the updates.
+    public func writeWithoutTransaction<T>(_ updates: (Database) throws -> T) rethrows -> T {
+        return try writer.sync(updates)
     }
-
-    /// Synchronously executes a block in a protected dispatch queue, and
-    /// returns its result.
+    
+    /// Synchronously executes database updates in a protected dispatch queue,
+    /// outside of any transaction, and returns the result.
     ///
     ///     // INSERT INTO player ...
     ///     let players = try dbQueue.inDatabase { db in
@@ -324,12 +385,12 @@ extension DatabaseQueue {
     ///
     /// - parameter block: A block that accesses the database.
     /// - throws: The error thrown by the block.
-    public func inDatabase<T>(_ block: (Database) throws -> T) rethrows -> T {
-        return try writer.sync(block)
+    public func inDatabase<T>(_ updates: (Database) throws -> T) rethrows -> T {
+        return try writer.sync(updates)
     }
     
-    /// Synchronously executes a block in a protected dispatch queue, and
-    /// returns its result.
+    /// Synchronously executes database updates in a protected dispatch queue, and
+    /// returns the result.
     ///
     ///     // INSERT INTO player ...
     ///     try dbQueue.unsafeReentrantWrite { db in
@@ -338,8 +399,14 @@ extension DatabaseQueue {
     ///
     /// This method is reentrant. It is unsafe because it fosters dangerous
     /// concurrency practices.
-    public func unsafeReentrantWrite<T>(_ block: (Database) throws -> T) rethrows -> T {
-        return try writer.reentrantSync(block)
+    public func unsafeReentrantWrite<T>(_ updates: (Database) throws -> T) rethrows -> T {
+        return try writer.reentrantSync(updates)
+    }
+    
+    /// Asynchronously executes database updates in a protected dispatch queue,
+    /// outside of any transaction.
+    public func asyncWriteWithoutTransaction(_ updates: @escaping (Database) -> Void) {
+        writer.async(updates)
     }
     
     // MARK: - Functions
@@ -354,7 +421,7 @@ extension DatabaseQueue {
     ///     }
     ///     dbQueue.add(function: fn)
     ///     try dbQueue.read { db in
-    ///         try Int.fetchOne(db, "SELECT succ(1)") // 2
+    ///         try Int.fetchOne(db, sql: "SELECT succ(1)") // 2
     ///     }
     public func add(function: DatabaseFunction) {
         writer.sync { $0.add(function: function) }
@@ -374,7 +441,7 @@ extension DatabaseQueue {
     ///     }
     ///     dbQueue.add(collation: collation)
     ///     try dbQueue.write { db in
-    ///         try db.execute("CREATE TABLE file (name TEXT COLLATE LOCALIZED_STANDARD")
+    ///         try db.execute(sql: "CREATE TABLE file (name TEXT COLLATE LOCALIZED_STANDARD")
     ///     }
     public func add(collation: DatabaseCollation) {
         writer.sync { $0.add(collation: collation) }

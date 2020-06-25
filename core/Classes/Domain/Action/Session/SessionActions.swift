@@ -55,12 +55,24 @@ public class SessionActions {
             .ignoreElements()
     }
 
+    public func watchUser() -> Observable<User?> {
+        return userRepository.watchUser()
+    }
+
+    public func isEmailAuthorized() -> Bool {
+        // TODO: This not compatible with non-recoverable users
+        return hasPermissionFor(status: .LOGGED_IN)
+    }
+
     func emailAuthorized() -> Completable {
         return Completable.deferred({
-            self.sessionRepository.setStatus(.AUTHORIZED_BY_EMAIL)
-
+            self.setEmailAuthorized(true)
             return Completable.empty()
         })
+    }
+
+    public func unauthorizeEmail() {
+        setEmailAuthorized(false)
     }
 
     func hasPermissionFor(status: SessionStatus) -> Bool {
@@ -102,11 +114,63 @@ public class SessionActions {
         }
     }
 
+    public func isAnonUser() -> Bool {
+        return userRepository.isAnonUser()
+    }
+
+    public func getUser() -> User? {
+        return userRepository.getUser()
+    }
+
+    public func setUser(_ user: User) {
+        userRepository.setUser(user)
+    }
+
+    private func setEmailAuthorized(_ isAuthorized: Bool) {
+        guard let user = getUser() else {
+            return
+        }
+
+        var updatedUser = user
+        updatedUser.isEmailVerified = isAuthorized
+        userRepository.setUser(updatedUser)
+    }
+
+    public func updateUserEmail() {
+        if var updatedUser = getUser(), let email = userRepository.getUserEmail() {
+            // Update user email for sign ups
+            updatedUser.email = email
+            setUser(updatedUser)
+        }
+    }
+
     public func watchHasRecoveryCode() -> Observable<Bool?> {
         return sessionRepository.watchHasRecoveryCode()
     }
 
     public func getPrimaryCurrency() -> String {
         return userRepository.getUser()?.primaryCurrency ?? "BTC"
+    }
+
+    public func setDisplayFiatAsMain(for user: User) {
+        userRepository.setDisplayFiatAsMain(for: user)
+    }
+
+    func setHasExportedKeys() {
+        guard let user = getUser() else {
+            return
+        }
+
+        var updatedUser = user
+        updatedUser.hasExportedKeys = true
+        userRepository.setUser(updatedUser)
+    }
+
+    public func hasExportedKeys() -> Bool {
+        guard let user = getUser() else {
+            return false
+        }
+
+        return user.hasExportedKeys ?? false
     }
 }

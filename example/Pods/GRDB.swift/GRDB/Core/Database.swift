@@ -1,8 +1,10 @@
 import Foundation
 #if SWIFT_PACKAGE
-    import CSQLite
+import CSQLite
+#elseif GRDBCIPHER
+import SQLCipher
 #elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-    import SQLite3
+import SQLite3
 #endif
 
 /// A raw SQLite connection, suitable for the SQLite C API.
@@ -34,7 +36,7 @@ public final class Database {
     public let sqliteConnection: SQLiteConnection
     
     // MARK: - Configuration
-
+    
     /// The error logging function.
     ///
     /// Quoting https://www.sqlite.org/errlog.html:
@@ -51,7 +53,7 @@ public final class Database {
             if logError != nil {
                 registerErrorLogCallback { (_, code, message) in
                     guard let logError = Database.logError else { return }
-                    guard let message = message.map({ String(cString: $0) }) else { return }
+                    guard let message = message.map(String.init) else { return }
                     let resultCode = ResultCode(rawValue: code)
                     logError(resultCode, message)
                 }
@@ -112,7 +114,7 @@ public final class Database {
         // > connection while this routine is running, then the return value
         // > is undefined.
         SchedulingWatchdog.preconditionValidQueue(self)
-        if isClosed { return false } // Support for SerializedDatabasae.deinit
+        if isClosed { return false } // Support for SerializedDatabase.deinit
         return sqlite3_get_autocommit(sqliteConnection) == 0
     }
     
@@ -123,36 +125,37 @@ public final class Database {
     lazy var internalStatementCache = StatementCache(database: self)
     lazy var publicStatementCache = StatementCache(database: self)
     
-    // Errors
-    var lastErrorCode: ResultCode { return ResultCode(rawValue: sqlite3_errcode(sqliteConnection)) }
-    var lastErrorMessage: String? { return String(cString: sqlite3_errmsg(sqliteConnection)) }
+    /// The last error code
+    public var lastErrorCode: ResultCode { return ResultCode(rawValue: sqlite3_errcode(sqliteConnection)) }
     
-    // Statement authorizer
-    var authorizer: StatementAuthorizer? {
-        didSet {
-            switch (oldValue, authorizer) {
-            case (.some, nil):
-                sqlite3_set_authorizer(sqliteConnection, nil, nil)
-            case (nil, .some):
-                let dbPointer = Unmanaged.passUnretained(self).toOpaque()
-                sqlite3_set_authorizer(sqliteConnection, { (dbPointer, actionCode, cString1, cString2, cString3, cString4) -> Int32 in
-                    guard let dbPointer = dbPointer else { return SQLITE_OK }
-                    let db = Unmanaged<Database>.fromOpaque(dbPointer).takeUnretainedValue()
-                    return db.authorizer!.authorize(actionCode, cString1, cString2, cString3, cString4)
-                }, dbPointer)
-            default:
-                break
-            }
-        }
-    }
+    /// The last error message
+    public var lastErrorMessage: String? { return String(cString: sqlite3_errmsg(sqliteConnection)) }
+    
+    /// Statement authorizer. Use withAuthorizer(_:_:).
+    fileprivate var _authorizer: StatementAuthorizer?
     
     // Transaction observers management
     lazy var observationBroker = DatabaseObservationBroker(self)
     
     /// The list of compile options used when building SQLite
     static let sqliteCompileOptions: Set<String> = DatabaseQueue().inDatabase {
-        try! Set(String.fetchCursor($0, "PRAGMA COMPILE_OPTIONS"))
+        try! Set(String.fetchCursor($0, sql: "PRAGMA COMPILE_OPTIONS"))
     }
+    
+    /// If true, select statement execution is recorded.
+    /// Use recordingSelectedRegion(_:), see `selectStatementWillExecute(_:)`
+    var _isRecordingSelectedRegion: Bool = false
+    var _selectedRegion = DatabaseRegion()
+    
+    /// Support for checkForAbortedTransaction()
+    var isInsideTransactionBlock = false
+    
+    /// Support for checkForSuspensionViolation(from:)
+    var isSuspended = LockedBox<Bool>(value: false)
+    
+    /// Support for checkForSuspensionViolation(from:)
+    /// This cache is never cleared: we assume journal mode never changes.
+    var journalModeCache: String?
     
     // MARK: - Private properties
     
@@ -160,41 +163,21 @@ public final class Database {
     
     private var functions = Set<DatabaseFunction>()
     private var collations = Set<DatabaseCollation>()
-    
+    private var _readOnlyDepth = 0 // Modify with beginReadOnly/endReadOnly
     private var isClosed: Bool = false
-
+    
     // MARK: - Initializer
-
+    
     init(path: String, configuration: Configuration, schemaCache: DatabaseSchemaCache) throws {
-        let sqliteConnection = try Database.openConnection(path: path, flags: configuration.SQLiteOpenFlags)
-        do {
-            try Database.activateExtendedCodes(sqliteConnection)
-            #if SQLITE_HAS_CODEC
-                try Database.validateSQLCipher(sqliteConnection)
-                if let passphrase = configuration.passphrase {
-                    try Database.set(passphrase: passphrase, forConnection: sqliteConnection)
-                }
-            #endif
-            try Database.validateDatabaseFormat(sqliteConnection)
-        } catch {
-            Database.closeConnection(sqliteConnection)
-            throw error
-        }
-        
-        self.sqliteConnection = sqliteConnection
+        self.sqliteConnection = try Database.openConnection(path: path, flags: configuration.SQLiteOpenFlags)
         self.configuration = configuration
         self.schemaCache = schemaCache
-        
-        configuration.SQLiteConnectionDidOpen?()
     }
     
     deinit {
         assert(isClosed)
     }
-}
-
-extension Database {
-
+    
     // MARK: - Database Opening
     
     private static func openConnection(path: String, flags: Int32) throws -> SQLiteConnection {
@@ -220,99 +203,67 @@ extension Database {
         throw DatabaseError(resultCode: .SQLITE_INTERNAL) // WTF SQLite?
     }
     
-    private static func activateExtendedCodes(_ sqliteConnection: SQLiteConnection) throws {
-        let code = sqlite3_extended_result_codes(sqliteConnection, 1)
-        guard code == SQLITE_OK else {
-            throw DatabaseError(resultCode: code, message: String(cString: sqlite3_errmsg(sqliteConnection)))
-        }
-    }
-    
-    #if SQLITE_HAS_CODEC
-    private static func validateSQLCipher(_ sqliteConnection: SQLiteConnection) throws {
-        // https://discuss.zetetic.net/t/important-advisory-sqlcipher-with-xcode-8-and-new-sdks/1688
-        //
-        // > In order to avoid situations where SQLite might be used
-        // > improperly at runtime, we strongly recommend that
-        // > applications institute a runtime test to ensure that the
-        // > application is actually using SQLCipher on the active
-        // > connection.
-        var sqliteStatement: SQLiteStatement? = nil
-        let code = sqlite3_prepare_v2(sqliteConnection, "PRAGMA cipher_version", -1, &sqliteStatement, nil)
-        guard code == SQLITE_OK else {
-            throw DatabaseError(resultCode: code, message: String(cString: sqlite3_errmsg(sqliteConnection)))
-        }
-        defer {
-            sqlite3_finalize(sqliteStatement)
-        }
-        if sqlite3_step(sqliteStatement) != SQLITE_ROW || (sqlite3_column_text(sqliteStatement, 0) == nil) {
-            throw DatabaseError(resultCode: .SQLITE_MISUSE, message: """
-                GRDB is not linked against SQLCipher. \
-                Check https://discuss.zetetic.net/t/important-advisory-sqlcipher-with-xcode-8-and-new-sdks/1688
-                """)
-        }
-    }
-    
-    private static func set(passphrase: String, forConnection sqliteConnection: SQLiteConnection) throws {
-        let data = passphrase.data(using: .utf8)!
-        let code = data.withUnsafeBytes { bytes in
-            sqlite3_key(sqliteConnection, bytes, Int32(data.count))
-        }
-        guard code == SQLITE_OK else {
-            throw DatabaseError(resultCode: code, message: String(cString: sqlite3_errmsg(sqliteConnection)))
-        }
-    }
-    #endif
-    
-    private static func validateDatabaseFormat(_ sqliteConnection: SQLiteConnection) throws {
-        // Users are surprised when they open a picture as a database and
-        // see no error (https://github.com/groue/GRDB.swift/issues/54).
-        //
-        // So let's fail early if file is not a database, or encrypted with
-        // another passphrase.
-        let code = sqlite3_exec(sqliteConnection, "SELECT * FROM sqlite_master LIMIT 1", nil, nil, nil)
-        guard code == SQLITE_OK else {
-            throw DatabaseError(resultCode: code, message: String(cString: sqlite3_errmsg(sqliteConnection)))
-        }
-    }
-}
-
-extension Database {
-
     // MARK: - Database Setup
     
     /// This method must be called after database initialization
     func setup() throws {
         // Setup trace first, so that setup queries are traced.
         setupTrace()
+        setupDoubleQuotedStringLiterals()
         try setupForeignKeys()
         setupBusyMode()
         setupDefaultFunctions()
         setupDefaultCollations()
+        setupAuthorizer()
         observationBroker.installCommitAndRollbackHooks()
+        try activateExtendedCodes()
+        
+        #if SQLITE_HAS_CODEC
+        try validateSQLCipher()
+        if let passphrase = configuration._passphrase {
+            try _usePassphrase(passphrase)
+        }
+        #endif
+        
+        // Last step before we can start accessing the database.
+        try configuration.prepareDatabase?(self)
+        
+        try validateFormat()
+        configuration.SQLiteConnectionDidOpen?()
     }
     
     private func setupTrace() {
         guard configuration.trace != nil else {
             return
         }
-        // sqlite3_trace_v2 and sqlite3_expanded_sql were introduced in SQLite 3.14.0 http://www.sqlite.org/changes.html#version_3_14
-        // It is available from iOS 10.0 and OS X 10.12 https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
+        // sqlite3_trace_v2 and sqlite3_expanded_sql were introduced in SQLite 3.14.0
+        // http://www.sqlite.org/changes.html#version_3_14
+        // It is available from iOS 10.0 and OS X 10.12
+        // https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
         #if GRDBCUSTOMSQLITE || GRDBCIPHER
-            let dbPointer = Unmanaged.passUnretained(self).toOpaque()
-            sqlite3_trace_v2(sqliteConnection, UInt32(SQLITE_TRACE_STMT), { (mask, dbPointer, stmt, unexpandedSQL) -> Int32 in
-                return Database.trace_v2(mask, dbPointer, stmt, unexpandedSQL, sqlite3_expanded_sql)
-            }, dbPointer)
+        let dbPointer = Unmanaged.passUnretained(self).toOpaque()
+        sqlite3_trace_v2(
+            sqliteConnection,
+            UInt32(SQLITE_TRACE_STMT),
+            { (mask, dbPointer, stmt, unexpandedSQL) -> Int32 in
+                Database.trace_v2(mask, dbPointer, stmt, unexpandedSQL, sqlite3_expanded_sql)
+        },
+            dbPointer)
         #elseif os(Linux)
-            setupTrace_v1()
+        setupTrace_v1()
         #else
-            if #available(iOS 10.0, OSX 10.12, watchOS 3.0, *) {
-                let dbPointer = Unmanaged.passUnretained(self).toOpaque()
-                sqlite3_trace_v2(sqliteConnection, UInt32(SQLITE_TRACE_STMT), { (mask, dbPointer, stmt, unexpandedSQL) -> Int32 in
-                    return Database.trace_v2(mask, dbPointer, stmt, unexpandedSQL, sqlite3_expanded_sql)
-                }, dbPointer)
-            } else {
-                setupTrace_v1()
-            }
+        if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
+            let dbPointer = Unmanaged.passUnretained(self).toOpaque()
+            sqlite3_trace_v2(
+                sqliteConnection,
+                UInt32(SQLITE_TRACE_STMT),
+                { (mask, dbPointer, stmt, unexpandedSQL) -> Int32 in
+                    Database.trace_v2(mask, dbPointer, stmt, unexpandedSQL, sqlite3_expanded_sql)
+            },
+                dbPointer)
+        } else {
+            setupTrace_v1()
+        }
         #endif
     }
     
@@ -320,7 +271,7 @@ extension Database {
     private func setupTrace_v1() {
         let dbPointer = Unmanaged.passUnretained(self).toOpaque()
         sqlite3_trace(sqliteConnection, { (dbPointer, sql) in
-            guard let sql = sql.map({ String(cString: $0) }) else { return }
+            guard let sql = sql.map(String.init) else { return }
             let db = Unmanaged<Database>.fromOpaque(dbPointer!).takeUnretainedValue()
             db.configuration.trace!(sql)
         }, dbPointer)
@@ -343,11 +294,19 @@ extension Database {
         db.configuration.trace!(sql)
         return SQLITE_OK
     }
-
+    
+    private func setupDoubleQuotedStringLiterals() {
+        if configuration.acceptsDoubleQuotedStringLiterals {
+            enableDoubleQuotedStringLiterals(sqliteConnection)
+        } else {
+            disableDoubleQuotedStringLiterals(sqliteConnection)
+        }
+    }
+    
     private func setupForeignKeys() throws {
         // Foreign keys are disabled by default with SQLite3
         if configuration.foreignKeysEnabled {
-            try execute("PRAGMA foreign_keys = ON")
+            try execute(sql: "PRAGMA foreign_keys = ON")
         }
     }
     
@@ -393,10 +352,64 @@ extension Database {
         add(collation: .localizedCompare)
         add(collation: .localizedStandardCompare)
     }
-}
-
-extension Database {
-
+    
+    private func setupAuthorizer() {
+        // SQLite authorizer is set only once per database connection.
+        //
+        // This is because authorizer changes have SQLite invalidate statements,
+        // with undesired side effects. See:
+        //
+        // - DatabaseCursorTests.testIssue583()
+        // - http://sqlite.1065341.n5.nabble.com/Issue-report-sqlite3-set-authorizer-triggers-error-4-516-SQLITE-ABORT-ROLLBACK-during-statement-itern-td107972.html
+        // swiftlint:disable:previous line_length
+        let dbPointer = Unmanaged.passUnretained(self).toOpaque()
+        sqlite3_set_authorizer(
+            sqliteConnection,
+            { (dbPointer, actionCode, cString1, cString2, cString3, cString4) -> Int32 in
+                let db = Unmanaged<Database>.fromOpaque(dbPointer.unsafelyUnwrapped).takeUnretainedValue()
+                guard let authorizer = db._authorizer else {
+                    return SQLITE_OK
+                }
+                return authorizer.authorize(actionCode, cString1, cString2, cString3, cString4)
+        },
+            dbPointer)
+    }
+    
+    
+    private func activateExtendedCodes() throws {
+        let code = sqlite3_extended_result_codes(sqliteConnection, 1)
+        guard code == SQLITE_OK else {
+            throw DatabaseError(resultCode: code, message: String(cString: sqlite3_errmsg(sqliteConnection)))
+        }
+    }
+    
+    #if SQLITE_HAS_CODEC
+    private func validateSQLCipher() throws {
+        // https://discuss.zetetic.net/t/important-advisory-sqlcipher-with-xcode-8-and-new-sdks/1688
+        //
+        // > In order to avoid situations where SQLite might be used
+        // > improperly at runtime, we strongly recommend that
+        // > applications institute a runtime test to ensure that the
+        // > application is actually using SQLCipher on the active
+        // > connection.
+        if try String.fetchOne(self, sql: "PRAGMA cipher_version") == nil {
+            throw DatabaseError(resultCode: .SQLITE_MISUSE, message: """
+                GRDB is not linked against SQLCipher. \
+                Check https://discuss.zetetic.net/t/important-advisory-sqlcipher-with-xcode-8-and-new-sdks/1688
+                """)
+        }
+    }
+    #endif
+    
+    private func validateFormat() throws {
+        // Users are surprised when they open a picture as a database and
+        // see no error (https://github.com/groue/GRDB.swift/issues/54).
+        //
+        // So let's fail early if file is not a database, or encrypted with
+        // another passphrase.
+        try makeSelectStatement(sql: "SELECT * FROM sqlite_master LIMIT 1").makeCursor().next()
+    }
+    
     // MARK: - Database Closing
     
     /// This method must be called before database deallocation
@@ -414,18 +427,19 @@ extension Database {
     
     private static func closeConnection(_ sqliteConnection: SQLiteConnection) {
         // sqlite3_close_v2 was added in SQLite 3.7.14 http://www.sqlite.org/changes.html#version_3_7_14
-        // It is available from iOS 8.2 and OS X 10.10 https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
+        // It is available from iOS 8.2 and OS X 10.10
+        // https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
         #if GRDBCUSTOMSQLITE || GRDBCIPHER
-            closeConnection_v2(sqliteConnection, sqlite3_close_v2)
+        closeConnection_v2(sqliteConnection, sqlite3_close_v2)
         #else
-            if #available(iOS 8.2, OSX 10.10, OSXApplicationExtension 10.10, *) {
-                closeConnection_v2(sqliteConnection, sqlite3_close_v2)
-            } else {
-                closeConnection_v1(sqliteConnection)
-            }
+        if #available(iOS 8.2, OSX 10.10, OSXApplicationExtension 10.10, *) {
+            closeConnection_v2(sqliteConnection, sqlite3_close_v2)
+        } else {
+            closeConnection_v1(sqliteConnection)
+        }
         #endif
     }
-
+    
     private static func closeConnection_v1(_ sqliteConnection: SQLiteConnection) {
         // https://www.sqlite.org/c3ref/close.html
         // > If the database connection is associated with unfinalized prepared
@@ -468,10 +482,7 @@ extension Database {
             log(ResultCode(rawValue: code), "could not close database: \(message)")
         }
     }
-}
-
-extension Database {
-
+    
     // MARK: - Functions
     
     /// Add or redefine an SQL function.
@@ -483,7 +494,7 @@ extension Database {
     ///         return int + 1
     ///     }
     ///     db.add(function: fn)
-    ///     try Int.fetchOne(db, "SELECT succ(1)")! // 2
+    ///     try Int.fetchOne(db, sql: "SELECT succ(1)")! // 2
     public func add(function: DatabaseFunction) {
         functions.update(with: function)
         function.install(in: self)
@@ -494,10 +505,7 @@ extension Database {
         functions.remove(function)
         function.uninstall(in: self)
     }
-}
-
-extension Database {
-
+    
     // MARK: - Collations
     
     /// Add or redefine a collation.
@@ -506,7 +514,7 @@ extension Database {
     ///         return (string1 as NSString).localizedStandardCompare(string2)
     ///     }
     ///     db.add(collation: collation)
-    ///     try db.execute("CREATE TABLE files (name TEXT COLLATE localized_standard")
+    ///     try db.execute(sql: "CREATE TABLE files (name TEXT COLLATE localized_standard")
     public func add(collation: DatabaseCollation) {
         collations.update(with: collation)
         let collationPointer = Unmanaged.passUnretained(collation).toOpaque()
@@ -534,36 +542,249 @@ extension Database {
             SQLITE_UTF8,
             nil, nil, nil)
     }
-}
-
-extension Database {
     
     // MARK: - Read-Only Access
     
-    /// Grants read-only access, starting SQLite 3.8.0
-    func readOnly<T>(_ block: () throws -> T) rethrows -> T {
-        if configuration.readonly {
-            return try block()
+    func beginReadOnly() throws {
+        if configuration.readonly { return }
+        if _readOnlyDepth == 0 {
+            // PRAGMA query_only was added in SQLite 3.8.0 http://www.sqlite.org/changes.html#version_3_8_0
+            // It is available from iOS 8.2 and OS X 10.10
+            // https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
+            try internalCachedUpdateStatement(sql: "PRAGMA query_only = 1").execute()
         }
-        
-        // query_only pragma was added in SQLite 3.8.0 http://www.sqlite.org/changes.html#version_3_8_0
-        // It is available from iOS 8.2 and OS X 10.10 https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
-        // Assume those pragmas never fail
-        try! internalCachedUpdateStatement("PRAGMA query_only = 1").execute()
-        defer { try! internalCachedUpdateStatement("PRAGMA query_only = 0").execute() }
+        _readOnlyDepth += 1
+    }
+    
+    func endReadOnly() throws {
+        if configuration.readonly { return }
+        _readOnlyDepth -= 1
+        if _readOnlyDepth == 0 {
+            // PRAGMA query_only was added in SQLite 3.8.0 http://www.sqlite.org/changes.html#version_3_8_0
+            // It is available from iOS 8.2 and OS X 10.10
+            // https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
+            try internalCachedUpdateStatement(sql: "PRAGMA query_only = 0").execute()
+        }
+    }
+    
+    /// Grants read-only access, starting SQLite 3.8.0
+    func readOnly<T>(_ block: () throws -> T) throws -> T {
+        try beginReadOnly()
+        return try throwingFirstError(
+            execute: block,
+            finally: endReadOnly)
+    }
+    
+    // MARK: - Authorizer
+    
+    func withAuthorizer<T>(_ authorizer: StatementAuthorizer?, _ block: () throws -> T) rethrows -> T {
+        SchedulingWatchdog.preconditionValidQueue(self)
+        let old = self._authorizer
+        self._authorizer = authorizer
+        defer { self._authorizer = old }
         return try block()
     }
-}
-
-extension Database {
-
+    
+    // MARK: - Recording of the selected region
+    
+    func recordingSelectedRegion<T>(_ block: () throws -> T) rethrows -> (T, DatabaseRegion) {
+        SchedulingWatchdog.preconditionValidQueue(self)
+        let oldFlag = self._isRecordingSelectedRegion
+        let oldRegion = self._selectedRegion
+        self._isRecordingSelectedRegion = true
+        self._selectedRegion = DatabaseRegion()
+        defer {
+            self._isRecordingSelectedRegion = oldFlag
+            if self._isRecordingSelectedRegion {
+                self._selectedRegion = oldRegion.union(self._selectedRegion)
+            } else {
+                self._selectedRegion = oldRegion
+            }
+        }
+        return try (block(), _selectedRegion)
+    }
+    
+    // MARK: - Checkpoints
+    
+    func checkpoint(_ kind: Database.CheckpointMode) throws {
+        let code = sqlite3_wal_checkpoint_v2(sqliteConnection, nil, kind.rawValue, nil, nil)
+        guard code == SQLITE_OK else {
+            throw DatabaseError(resultCode: code, message: lastErrorMessage)
+        }
+    }
+    
+    // MARK: - Interrupt
+    
+    // See https://www.sqlite.org/c3ref/interrupt.html
+    func interrupt() {
+        sqlite3_interrupt(sqliteConnection)
+    }
+    
+    // MARK: - Database Suspension
+    
+    /// When this notification is posted, databases which were opened with the
+    /// `Configuration.observesSuspensionNotifications` flag are suspended.
+    ///
+    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
+    public static let suspendNotification = Notification.Name("GRDB.Database.Suspend")
+    
+    /// When this notification is posted, databases which were opened with the
+    /// `Configuration.observesSuspensionNotifications` flag are resumed.
+    ///
+    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
+    public static let resumeNotification = Notification.Name("GRDB.Database.Resume")
+    
+    /// Suspends the database. A suspended database prevents database locks in
+    /// order to avoid the [`0xdead10cc`
+    /// exception](https://developer.apple.com/library/archive/technotes/tn2151/_index.html).
+    ///
+    /// This method can be called from any thread.
+    ///
+    /// During suspension, any lock is released as soon as possible, and
+    /// lock acquisition is prevented. All database accesses may throw a
+    /// DatabaseError of code `SQLITE_INTERRUPT`, or `SQLITE_ABORT`, except
+    /// reads in WAL mode.
+    ///
+    /// Suspension ends with resume().
+    func suspend() {
+        isSuspended.write { isSuspended in
+            if isSuspended {
+                return
+            }
+            
+            // Prevent future lock acquisition
+            isSuspended = true
+            
+            // Interrupt the database because this may trigger an
+            // SQLITE_INTERRUPT error which may itself abort a transaction and
+            // release a lock. See https://www.sqlite.org/c3ref/interrupt.html
+            interrupt()
+            
+            // Now what about the eventual remaining lock? We'll issue a
+            // rollback on next database access which requires a lock, in
+            // checkForSuspensionViolation(from:).
+        }
+    }
+    
+    /// Resumes the database. A resumed database stops preventing database locks
+    /// in order to avoid the [`0xdead10cc`
+    /// exception](https://developer.apple.com/library/archive/technotes/tn2151/_index.html).
+    ///
+    /// This method can be called from any thread.
+    ///
+    /// See suspend().
+    func resume() {
+        isSuspended.write { isSuspended in
+            isSuspended = false
+        }
+    }
+    
+    /// Support for checkForSuspensionViolation(from:)
+    private func journalMode() throws -> String {
+        if let journalMode = journalModeCache {
+            return journalMode
+        }
+        
+        // Don't return String.fetchOne(self, sql: "PRAGMA journal_mode"), so
+        // that we don't create an infinite loop in checkForSuspensionViolation(from:)
+        var statement: SQLiteStatement? = nil
+        let sql = "PRAGMA journal_mode"
+        sqlite3_prepare_v2(sqliteConnection, sql, -1, &statement, nil)
+        defer { sqlite3_finalize(statement) }
+        sqlite3_step(statement)
+        guard let cString = sqlite3_column_text(statement, 0) else {
+            throw DatabaseError(resultCode: lastErrorCode, message: lastErrorMessage, sql: sql)
+        }
+        let journalMode = String(cString: cString)
+        journalModeCache = journalMode
+        return journalMode
+    }
+    
+    /// Throws SQLITE_ABORT for suspended databases, if statement would lock
+    /// the database, in order to avoid the [`0xdead10cc`
+    /// exception](https://developer.apple.com/library/archive/technotes/tn2151/_index.html).
+    func checkForSuspensionViolation(from statement: Statement) throws {
+        try isSuspended.read { isSuspended in
+            guard isSuspended else {
+                return
+            }
+            
+            if try journalMode() == "wal" && statement.isReadonly {
+                // In WAL mode, accept read-only statements:
+                // - SELECT ...
+                // - BEGIN DEFERRED TRANSACTION
+                //
+                // Those are not read-only:
+                // - INSERT ...
+                // - BEGIN IMMEDIATE TRANSACTION
+                return
+            }
+            
+            if
+                let updateStatement = statement as? UpdateStatement,
+                updateStatement.releasesDatabaseLock
+            {
+                // Accept statements that release locks:
+                // - COMMIT
+                // - ROLLBACK
+                // - ROLLBACK TRANSACTION TO SAVEPOINT
+                // - RELEASE SAVEPOINT
+                return
+            }
+            
+            // Attempt at releasing an eventual lock with ROLLBACk,
+            // as explained in Database.suspend().
+            //
+            // Use sqlite3_exec instead of `try? rollback()` in order to avoid
+            // an infinite loop in checkForSuspensionViolation(from:)
+            _ = sqlite3_exec(sqliteConnection, "ROLLBACK", nil, nil, nil)
+            
+            throw DatabaseError(
+                resultCode: .SQLITE_ABORT,
+                message: "Database is suspended",
+                sql: statement.sql,
+                arguments: statement.arguments)
+        }
+    }
+    
     // MARK: - Transactions & Savepoint
+    
+    /// Throws SQLITE_ABORT if called from a transaction-wrapping method and
+    /// transaction has been aborted (for example, by `sqlite3_interrupt`, or a
+    /// `ON CONFLICT ROLLBACK` clause.
+    ///
+    ///     try db.inTransaction {
+    ///         do {
+    ///             // Aborted by sqlite3_interrupt or any other
+    ///             // SQLite error which leaves transaction
+    ///             ...
+    ///         } catch { ... }
+    ///
+    ///         // <- Here we're inside an aborted transaction.
+    ///         try checkForAbortedTransaction(...) // throws
+    ///         ...
+    ///
+    ///         return .commit
+    ///     }
+    func checkForAbortedTransaction(
+        sql: @autoclosure () -> String? = nil,
+        arguments: @autoclosure () -> StatementArguments? = nil)
+        throws
+    {
+        if isInsideTransactionBlock && !isInsideTransaction {
+            throw DatabaseError(
+                resultCode: .SQLITE_ABORT,
+                message: "Transaction was aborted",
+                sql: sql(),
+                arguments: arguments())
+        }
+    }
     
     /// Executes a block inside a database transaction.
     ///
     ///     try dbQueue.inDatabase do {
     ///         try db.inTransaction {
-    ///             try db.execute("INSERT ...")
+    ///             try db.execute(sql: "INSERT ...")
     ///             return .commit
     ///         }
     ///     }
@@ -585,6 +806,12 @@ extension Database {
         // Begin transaction
         try beginTransaction(kind)
         
+        let wasInsideTransactionBlock = isInsideTransactionBlock
+        isInsideTransactionBlock = true
+        defer {
+            isInsideTransactionBlock = wasInsideTransactionBlock
+        }
+        
         // Now that transaction has begun, we'll rollback in case of error.
         // But we'll throw the first caught error, so that user knows
         // what happened.
@@ -594,6 +821,15 @@ extension Database {
             let completion = try block()
             switch completion {
             case .commit:
+                // In case of aborted transaction, throw SQLITE_ABORT instead
+                // of the generic SQLITE_ERROR "cannot commit - no transaction is active"
+                try checkForAbortedTransaction()
+                
+                // Leave transaction block now, so that transaction observers
+                // can execute statements without getting errors from
+                // checkForAbortedTransaction().
+                isInsideTransactionBlock = wasInsideTransactionBlock
+                
                 try commit()
                 needsRollback = false
             case .rollback:
@@ -613,7 +849,7 @@ extension Database {
                 }
             }
         }
-
+        
         if let firstError = firstError {
             throw firstError
         }
@@ -623,7 +859,7 @@ extension Database {
     ///
     ///     try dbQueue.inDatabase do {
     ///         try db.inSavepoint {
-    ///             try db.execute("INSERT ...")
+    ///             try db.execute(sql: "INSERT ...")
     ///             return .commit
     ///         }
     ///     }
@@ -645,9 +881,10 @@ extension Database {
         // So when the default GRDB transaction kind is not deferred, we open a
         // transaction instead
         if !isInsideTransaction && configuration.defaultTransactionKind != .deferred {
-            return try inTransaction(configuration.defaultTransactionKind, block)
+            try inTransaction(configuration.defaultTransactionKind, block)
+            return
         }
-
+        
         // If the savepoint is top-level, we'll use ROLLBACK TRANSACTION in
         // order to perform the special error handling of rollbacks (see
         // the rollback method).
@@ -659,7 +896,13 @@ extension Database {
         // using unique savepoint names. User could still mess with them
         // with raw SQL queries, but let's assume that it is unlikely that
         // the user uses "grdb" as a savepoint name.
-        try execute("SAVEPOINT grdb")
+        try execute(sql: "SAVEPOINT grdb")
+        
+        let wasInsideTransactionBlock = isInsideTransactionBlock
+        isInsideTransactionBlock = true
+        defer {
+            isInsideTransactionBlock = wasInsideTransactionBlock
+        }
         
         // Now that savepoint has begun, we'll rollback in case of error.
         // But we'll throw the first caught error, so that user knows
@@ -670,7 +913,16 @@ extension Database {
             let completion = try block()
             switch completion {
             case .commit:
-                try execute("RELEASE SAVEPOINT grdb")
+                // In case of aborted transaction, throw SQLITE_ABORT instead
+                // of the generic SQLITE_ERROR "cannot commit - no transaction is active"
+                try checkForAbortedTransaction()
+                
+                // Leave transaction block now, so that transaction observers
+                // can execute statements without getting errors from
+                // checkForAbortedTransaction().
+                isInsideTransactionBlock = wasInsideTransactionBlock
+                
+                try execute(sql: "RELEASE SAVEPOINT grdb")
                 assert(!topLevelSavepoint || !isInsideTransaction)
                 needsRollback = false
             case .rollback:
@@ -689,8 +941,8 @@ extension Database {
                     // Rollback, and release the savepoint.
                     // Rollback alone is not enough to clear the savepoint from
                     // the SQLite savepoint stack.
-                    try execute("ROLLBACK TRANSACTION TO SAVEPOINT grdb")
-                    try execute("RELEASE SAVEPOINT grdb")
+                    try execute(sql: "ROLLBACK TRANSACTION TO SAVEPOINT grdb")
+                    try execute(sql: "RELEASE SAVEPOINT grdb")
                 }
             } catch {
                 if firstError == nil {
@@ -713,13 +965,13 @@ extension Database {
     /// - throws: The error thrown by the block.
     public func beginTransaction(_ kind: TransactionKind? = nil) throws {
         let kind = kind ?? configuration.defaultTransactionKind
-        try execute("BEGIN \(kind.rawValue) TRANSACTION")
+        try execute(sql: "BEGIN \(kind.rawValue) TRANSACTION")
         assert(isInsideTransaction)
     }
     
     /// Begins a database transaction and take a snapshot of the last committed
     /// database state.
-    func beginSnapshotIsolation() throws {
+    func beginSnapshotTransaction() throws {
         // https://www.sqlite.org/isolation.html
         //
         // > In WAL mode, SQLite exhibits "snapshot isolation". When a read
@@ -763,7 +1015,7 @@ extension Database {
         //                                  UPDATE ...
         //     Here the change is not visible by GRDB user
         try beginTransaction(.deferred)
-        try internalCachedSelectStatement("SELECT rootpage FROM sqlite_master LIMIT 1").makeCursor().next()
+        try internalCachedSelectStatement(sql: "SELECT rootpage FROM sqlite_master LIMIT 1").makeCursor().next()
     }
     
     /// Rollbacks a database transaction.
@@ -807,22 +1059,18 @@ extension Database {
         // The second technique is more robust, because we don't have to guess
         // which rollback errors should be ignored, and which rollback errors
         // should be exposed to the library user.
-        SchedulingWatchdog.preconditionValidQueue(self) // guard sqlite3_get_autocommit
-        if sqlite3_get_autocommit(sqliteConnection) == 0 {
-            try execute("ROLLBACK TRANSACTION")
+        if isInsideTransaction {
+            try execute(sql: "ROLLBACK TRANSACTION")
         }
         assert(!isInsideTransaction)
     }
     
     /// Commits a database transaction.
     public func commit() throws {
-        try execute("COMMIT TRANSACTION")
+        try execute(sql: "COMMIT TRANSACTION")
         assert(!isInsideTransaction)
     }
-}
-
-extension Database {
-
+    
     // MARK: - Memory Management
     
     func releaseMemory() {
@@ -831,18 +1079,21 @@ extension Database {
         internalStatementCache.clear()
         publicStatementCache.clear()
     }
-}
-
-extension Database {
     
     // MARK: - Backup
     
-    static func backup(from dbFrom: Database, to dbDest: Database, afterBackupInit: (() -> ())? = nil, afterBackupStep: (() -> ())? = nil) throws {
+    static func backup(
+        from dbFrom: Database,
+        to dbDest: Database,
+        afterBackupInit: (() -> Void)? = nil,
+        afterBackupStep: (() -> Void)? = nil)
+        throws
+    {
         guard let backup = sqlite3_backup_init(dbDest.sqliteConnection, "main", dbFrom.sqliteConnection, "main") else {
             throw DatabaseError(resultCode: dbDest.lastErrorCode, message: dbDest.lastErrorMessage)
         }
         guard Int(bitPattern: backup) != Int(SQLITE_ERROR) else {
-            throw DatabaseError(resultCode: .SQLITE_ERROR)
+            throw DatabaseError()
         }
         
         afterBackupInit?()
@@ -877,29 +1128,72 @@ extension Database {
 }
 
 #if SQLITE_HAS_CODEC
-    extension Database {
-
-        // MARK: - Encryption
-        
-        func change(passphrase: String) throws {
-            // FIXME: sqlite3_rekey is discouraged.
-            //
-            // https://github.com/ccgus/fmdb/issues/547#issuecomment-259219320
-            //
-            // > We (Zetetic) have been discouraging the use of sqlite3_rekey in
-            // > favor of attaching a new database with the desired encryption
-            // > options and using sqlcipher_export() to migrate the contents and
-            // > schema of the original db into the new one:
-            // > https://discuss.zetetic.net/t/how-to-encrypt-a-plaintext-sqlite-database-to-use-sqlcipher-and-avoid-file-is-encrypted-or-is-not-a-database-errors/
-            let data = passphrase.data(using: .utf8)!
-            let code = data.withUnsafeBytes { bytes in
-                sqlite3_rekey(sqliteConnection, bytes, Int32(data.count))
-            }
-            guard code == SQLITE_OK else {
-                throw DatabaseError(resultCode: code, message: lastErrorMessage)
-            }
+extension Database {
+    
+    // MARK: - Encryption
+    
+    /// Sets the passphrase used to crypt and decrypt an SQLCipher database.
+    ///
+    /// Call this method from Configuration.prepareDatabase, as in the example below:
+    ///
+    ///     var config = Configuration()
+    ///     config.prepareDatabase = { db in
+    ///         try db.usePassphrase("secret")
+    ///     }
+    public func usePassphrase(_ passphrase: String) throws {
+        // Support for the deprecated method change(passphrase:).
+        // After it has been called, the passphrase used for opening the
+        // database must be ignored.
+        if configuration._passphrase != nil {
+            return
+        }
+        try _usePassphrase(passphrase)
+    }
+    
+    /// See usePassphrase(_:)
+    private func _usePassphrase(_ passphrase: String) throws {
+        let data = passphrase.data(using: .utf8)!
+        #if swift(>=5.0)
+        let code = data.withUnsafeBytes {
+            sqlite3_key(sqliteConnection, $0.baseAddress, Int32($0.count))
+        }
+        #else
+        let code = data.withUnsafeBytes {
+            sqlite3_key(sqliteConnection, $0, Int32(data.count))
+        }
+        #endif
+        guard code == SQLITE_OK else {
+            throw DatabaseError(resultCode: code, message: String(cString: sqlite3_errmsg(sqliteConnection)))
         }
     }
+    
+    /// Changes the passphrase used by an SQLCipher encrypted database.
+    public func changePassphrase(_ passphrase: String) throws {
+        // FIXME: sqlite3_rekey is discouraged.
+        //
+        // https://github.com/ccgus/fmdb/issues/547#issuecomment-259219320
+        //
+        // > We (Zetetic) have been discouraging the use of sqlite3_rekey in
+        // > favor of attaching a new database with the desired encryption
+        // > options and using sqlcipher_export() to migrate the contents and
+        // > schema of the original db into the new one:
+        // > https://discuss.zetetic.net/t/how-to-encrypt-a-plaintext-sqlite-database-to-use-sqlcipher-and-avoid-file-is-encrypted-or-is-not-a-database-errors/
+        // swiftlint:disable:previous line_length
+        let data = passphrase.data(using: .utf8)!
+        #if swift(>=5.0)
+        let code = data.withUnsafeBytes {
+            sqlite3_rekey(sqliteConnection, $0.baseAddress, Int32($0.count))
+        }
+        #else
+        let code = data.withUnsafeBytes {
+            sqlite3_rekey(sqliteConnection, $0, Int32(data.count))
+        }
+        #endif
+        guard code == SQLITE_OK else {
+            throw DatabaseError(resultCode: code, message: lastErrorMessage)
+        }
+    }
+}
 #endif
 
 extension Database {
@@ -923,6 +1217,7 @@ extension Database {
     ///
     /// To set the busy mode of a database, use Configuration:
     ///
+    ///     // Wait 1 second before failing with SQLITE_BUSY
     ///     let configuration = Configuration(busyMode: .timeout(1))
     ///     let dbQueue = DatabaseQueue(path: "...", configuration: configuration)
     ///
@@ -938,7 +1233,7 @@ extension Database {
         case immediateError
         
         /// The SQLITE_BUSY error will be returned only if the database remains
-        /// locked for more than the specified duration.
+        /// locked for more than the specified duration (in seconds).
         case timeout(TimeInterval)
         
         /// A custom callback that is called when a database is locked.
@@ -957,7 +1252,7 @@ extension Database {
     /// A built-in SQLite collation.
     ///
     /// See https://www.sqlite.org/datatype3.html#collation
-    public struct CollationName : RawRepresentable, Hashable {
+    public struct CollationName: RawRepresentable, Hashable {
         /// :nodoc:
         public let rawValue: String
         
@@ -988,7 +1283,7 @@ extension Database {
     ///     }
     ///
     /// See https://www.sqlite.org/datatype3.html
-    public struct ColumnType : RawRepresentable, Hashable {
+    public struct ColumnType: RawRepresentable, Hashable {
         /// :nodoc:
         public let rawValue: String
         
@@ -1029,7 +1324,7 @@ extension Database {
     /// An SQLite conflict resolution.
     ///
     /// See https://www.sqlite.org/lang_conflict.html.
-    public enum ConflictResolution : String {
+    public enum ConflictResolution: String {
         case rollback = "ROLLBACK"
         case abort = "ABORT"
         case fail = "FAIL"
@@ -1040,7 +1335,7 @@ extension Database {
     /// A foreign key action.
     ///
     /// See https://www.sqlite.org/foreignkeys.html
-    public enum ForeignKeyAction : String {
+    public enum ForeignKeyAction: String {
         case cascade = "CASCADE"
         case restrict = "RESTRICT"
         case setNull = "SET NULL"
@@ -1057,7 +1352,7 @@ extension Database {
     }
     
     /// An SQLite transaction kind. See https://www.sqlite.org/lang_transaction.html
-    public enum TransactionKind : String {
+    public enum TransactionKind: String {
         case deferred = "DEFERRED"
         case immediate = "IMMEDIATE"
         case exclusive = "EXCLUSIVE"

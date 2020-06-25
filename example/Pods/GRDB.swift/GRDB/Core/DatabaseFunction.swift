@@ -1,7 +1,9 @@
 #if SWIFT_PACKAGE
-    import CSQLite
+import CSQLite
+#elseif GRDBCIPHER
+import SQLCipher
 #elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-    import SQLite3
+import SQLite3
 #endif
 
 /// An SQL function or aggregate.
@@ -27,7 +29,7 @@ public final class DatabaseFunction: Hashable {
     ///         return int + 1
     ///     }
     ///     db.add(function: fn)
-    ///     try Int.fetchOne(db, "SELECT succ(1)")! // 2
+    ///     try Int.fetchOne(db, sql: "SELECT succ(1)")! // 2
     ///
     /// - parameters:
     ///     - name: The function name.
@@ -42,7 +44,12 @@ public final class DatabaseFunction: Hashable {
     ///       as Int, String, NSDate, etc. The array is guaranteed to have
     ///       exactly *argumentCount* elements, provided *argumentCount* is
     ///       not nil.
-    public init(_ name: String, argumentCount: Int32? = nil, pure: Bool = false, function: @escaping ([DatabaseValue]) throws -> DatabaseValueConvertible?) {
+    public init(
+        _ name: String,
+        argumentCount: Int32? = nil,
+        pure: Bool = false,
+        function: @escaping ([DatabaseValue]) throws -> DatabaseValueConvertible?)
+    {
         self.identity = Identity(name: name, nArg: argumentCount ?? -1)
         self.pure = pure
         self.kind = .function{ (argc, argv) in
@@ -73,10 +80,10 @@ public final class DatabaseFunction: Hashable {
     ///     let fn = DatabaseFunction("mysum", argumentCount: 1, aggregate: MySum.self)
     ///     dbQueue.add(function: fn)
     ///     try dbQueue.write { db in
-    ///         try db.execute("CREATE TABLE test(i)")
-    ///         try db.execute("INSERT INTO test(i) VALUES (1)")
-    ///         try db.execute("INSERT INTO test(i) VALUES (2)")
-    ///         try Int.fetchOne(db, "SELECT mysum(i) FROM test")! // 3
+    ///         try db.execute(sql: "CREATE TABLE test(i)")
+    ///         try db.execute(sql: "INSERT INTO test(i) VALUES (1)")
+    ///         try db.execute(sql: "INSERT INTO test(i) VALUES (2)")
+    ///         try Int.fetchOne(db, sql: "SELECT mysum(i) FROM test")! // 3
     ///     }
     ///
     /// - parameters:
@@ -92,10 +99,15 @@ public final class DatabaseFunction: Hashable {
     ///       an array of DatabaseValue arguments. The array is guaranteed to
     ///       have exactly *argumentCount* elements, provided *argumentCount* is
     ///       not nil.
-    public init<Aggregate: DatabaseAggregate>(_ name: String, argumentCount: Int32? = nil, pure: Bool = false, aggregate: Aggregate.Type) {
+    public init<Aggregate: DatabaseAggregate>(
+        _ name: String,
+        argumentCount: Int32? = nil,
+        pure: Bool = false,
+        aggregate: Aggregate.Type)
+    {
         self.identity = Identity(name: name, nArg: argumentCount ?? -1)
         self.pure = pure
-        self.kind = .aggregate { return Aggregate() }
+        self.kind = .aggregate { Aggregate() }
     }
     
     /// Calls sqlite3_create_function_v2
@@ -195,7 +207,9 @@ public final class DatabaseFunction: Hashable {
         var xFunc: (@convention(c) (OpaquePointer?, Int32, UnsafeMutablePointer<OpaquePointer?>?) -> Void)? {
             guard case .function = self else { return nil }
             return { (sqliteContext, argc, argv) in
-                let definition = Unmanaged<FunctionDefinition>.fromOpaque(sqlite3_user_data(sqliteContext)).takeUnretainedValue()
+                let definition = Unmanaged<FunctionDefinition>
+                    .fromOpaque(sqlite3_user_data(sqliteContext))
+                    .takeUnretainedValue()
                 do {
                     try DatabaseFunction.report(
                         result: definition.compute(argc, argv),
@@ -213,7 +227,7 @@ public final class DatabaseFunction: Hashable {
             return { (sqliteContext, argc, argv) in
                 let aggregateContextU = DatabaseFunction.unmanagedAggregateContext(sqliteContext)
                 let aggregateContext = aggregateContextU.takeUnretainedValue()
-                assert(!aggregateContext.hasErrored)
+                assert(!aggregateContext.hasErrored) // assert SQLite behavior
                 do {
                     let arguments = (0..<Int(argc)).map { index in
                         DatabaseValue(sqliteValue: argv.unsafelyUnwrapped[index]!)
@@ -258,16 +272,24 @@ public final class DatabaseFunction: Hashable {
     /// See https://sqlite.org/c3ref/context.html
     /// See https://sqlite.org/c3ref/aggregate_context.html
     private static func unmanagedAggregateContext(_ sqliteContext: OpaquePointer?) -> Unmanaged<AggregateContext> {
-        // The current aggregate buffer
+        // > The first time the sqlite3_aggregate_context(C,N) routine is called
+        // > for a particular aggregate function, SQLite allocates N of memory,
+        // > zeroes out that memory, and returns a pointer to the new memory.
+        // > On second and subsequent calls to sqlite3_aggregate_context() for
+        // > the same aggregate function instance, the same buffer is returned.
         let stride = MemoryLayout<Unmanaged<AggregateContext>>.stride
-        let aggregateContextBufferP = UnsafeMutableRawBufferPointer(start: sqlite3_aggregate_context(sqliteContext, Int32(stride))!, count: stride)
+        let aggregateContextBufferP = UnsafeMutableRawBufferPointer(
+            start: sqlite3_aggregate_context(sqliteContext, Int32(stride))!,
+            count: stride)
         
         if aggregateContextBufferP.contains(where: { $0 != 0 }) {
-            // Buffer contains non-null pointer: load aggregate context
-            let aggregateContextP = aggregateContextBufferP.baseAddress!.assumingMemoryBound(to: Unmanaged<AggregateContext>.self)
+            // Buffer contains non-zero byte: load aggregate context
+            let aggregateContextP = aggregateContextBufferP
+                .baseAddress!
+                .assumingMemoryBound(to: Unmanaged<AggregateContext>.self)
             return aggregateContextP.pointee
         } else {
-            // Buffer contains null pointer: create aggregate context...
+            // Buffer contains null pointer: create aggregate context.
             let aggregate = Unmanaged<AggregateDefinition>.fromOpaque(sqlite3_user_data(sqliteContext))
                 .takeUnretainedValue()
                 .makeAggregate()
@@ -275,8 +297,8 @@ public final class DatabaseFunction: Hashable {
             
             // retain and store in SQLite's buffer
             let aggregateContextU = Unmanaged.passRetained(aggregateContext)
-            var aggregateContextP = aggregateContextU.toOpaque()
-            withUnsafeBytes(of: &aggregateContextP) {
+            let aggregateContextP = aggregateContextU.toOpaque()
+            withUnsafeBytes(of: aggregateContextP) {
                 aggregateContextBufferP.copyMemory(from: $0)
             }
             return aggregateContextU
@@ -294,9 +316,15 @@ public final class DatabaseFunction: Hashable {
         case .string(let string):
             sqlite3_result_text(sqliteContext, string, -1, SQLITE_TRANSIENT)
         case .blob(let data):
-            data.withUnsafeBytes { bytes in
-                sqlite3_result_blob(sqliteContext, bytes, Int32(data.count), SQLITE_TRANSIENT)
+            #if swift(>=5.0)
+            data.withUnsafeBytes {
+                sqlite3_result_blob(sqliteContext, $0.baseAddress, Int32($0.count), SQLITE_TRANSIENT)
             }
+            #else
+            data.withUnsafeBytes {
+                sqlite3_result_blob(sqliteContext, $0, Int32(data.count), SQLITE_TRANSIENT)
+            }
+            #endif
         }
     }
     
@@ -313,17 +341,10 @@ public final class DatabaseFunction: Hashable {
 }
 
 extension DatabaseFunction {
-    #if swift(>=4.2)
     /// :nodoc:
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identity)
     }
-    #else
-    /// :nodoc:
-    public var hashValue: Int {
-        return identity.hashValue
-    }
-    #endif
     
     /// Two functions are equal if they share the same name and arity.
     /// :nodoc:
@@ -354,10 +375,10 @@ extension DatabaseFunction {
 ///     let fn = DatabaseFunction("mysum", argumentCount: 1, aggregate: MySum.self)
 ///     dbQueue.add(function: fn)
 ///     try dbQueue.write { db in
-///         try db.execute("CREATE TABLE test(i)")
-///         try db.execute("INSERT INTO test(i) VALUES (1)")
-///         try db.execute("INSERT INTO test(i) VALUES (2)")
-///         try Int.fetchOne(db, "SELECT mysum(i) FROM test")! // 3
+///         try db.execute(sql: "CREATE TABLE test(i)")
+///         try db.execute(sql: "INSERT INTO test(i) VALUES (1)")
+///         try db.execute(sql: "INSERT INTO test(i) VALUES (2)")
+///         try Int.fetchOne(db, sql: "SELECT mysum(i) FROM test")! // 3
 ///     }
 public protocol DatabaseAggregate {
     /// Creates an aggregate.

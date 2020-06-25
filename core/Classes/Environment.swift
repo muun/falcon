@@ -9,6 +9,7 @@ import Foundation
 
 public enum Environment: String, RawRepresentable {
     case debug
+    case regtest
     case dev
     case stg
     case prod
@@ -23,6 +24,8 @@ extension Environment {
         switch self {
         case .debug:
             return "debug"
+        case .regtest:
+            return "regtest"
         case .dev:
             return "developmentDebug"
         case .stg:
@@ -36,6 +39,8 @@ extension Environment {
         switch self {
         case .debug:
             return "http://localhost:8080"
+        case .regtest:
+            return "https://pub.reg.api.muun.wtf/houston"
         case .dev:
             return "https://dev.api.muun.wtf/houston"
         case .stg:
@@ -49,6 +54,8 @@ extension Environment {
         switch self {
         case .debug:
             return "http://localhost:3000"
+        case .regtest:
+            return "https://reg.muun.com"
         case .dev:
             return "https://dev.muun.com"
         case .stg:

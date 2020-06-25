@@ -170,6 +170,29 @@ public class DatabaseCoordinator {
             })
         }
 
+        migrator.registerMigration("add debt to swap model") { db in
+            try db.alter(table: "submarineSwapDB", body: { t in
+                t.add(column: "outputDebtType", .text)
+                    .defaults(to: DebtType.NONE.rawValue)
+                    .notNull()
+
+                t.add(column: "outputDebtAmount", .numeric)
+                    .defaults(to: 0)
+                    .notNull()
+            })
+        }
+
+        // We need to store it there so the notification extension can access it
+        migrator.registerMigration("move base key path to secure storage") { _ in
+            if let path = self.preferences.string(forKey: .baseKeyDerivationPath) {
+                do {
+                    try self.secureStorage.store(path, at: .baseKeyDerivationPath)
+                } catch {
+                    Logger.log(error: error)
+                }
+            }
+        }
+
         return migrator
     }
     // swiftlint:enable function_body_length

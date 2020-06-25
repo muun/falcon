@@ -29,13 +29,11 @@ struct ChallengeSetup {
 public enum ChallengeType: String {
     case PASSWORD
     case RECOVERY_CODE
+    case ANON
 
     func getVersion() -> Int {
         switch self {
-        case .PASSWORD:
-            return 1
-        case .RECOVERY_CODE:
-            return 1
+        case .PASSWORD, .RECOVERY_CODE, .ANON: return 1
         }
     }
 }

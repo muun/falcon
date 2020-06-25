@@ -14,6 +14,7 @@ public class SupportAction: AsyncAction<()> {
         case feedback
         case help
         case support
+        case anonSupport
     }
 
     private let houstonService: HoustonService

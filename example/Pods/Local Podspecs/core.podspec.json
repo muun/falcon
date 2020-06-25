@@ -11,6 +11,7 @@
     "git": "https://github.com/muun/muun.git",
     "tag": "0.1.0"
   },
+  "swift_versions": "5",
   "platforms": {
     "ios": "11.0"
   },
@@ -32,6 +33,13 @@
       "execution_position": "before_compile"
     }
   ],
+  "testspecs": [
+    {
+      "name": "Tests",
+      "test_type": "unit",
+      "source_files": "Tests/**/*"
+    }
+  ],
   "subspecs": [
     {
       "name": "all",
@@ -41,32 +49,24 @@
           "7.0.1"
         ],
         "GRDB.swift": [
-          "3.6.1"
+          "4.9.0"
         ],
         "RxGRDB": [
-          "0.13.0"
+          "0.18.0"
         ],
         "RxSwift": [
-          "4.4.2"
+          "5.0.1"
         ],
         "RxBlocking": [
-          "4.4.2"
+          "5.0.1"
         ]
       },
       "vendored_frameworks": "Libwallet.framework"
     },
     {
       "name": "notifications",
-      "source_files": [
-        "Classes/Environment.swift",
-        "Classes/Data/Errors/Logger.swift",
-        "Classes/Data/Service/Base/BaseRequest.swift",
-        "Classes/Data/Service/DTO/**/*",
-        "Classes/Domain/Model/Operations/MonetaryAmount.swift",
-        "Classes/Data/Errors/MuunError.swift",
-        "Classes/Constant.swift",
-        "Classes/Extension/JSONDecoder+Extension.swift"
-      ]
+      "vendored_frameworks": "Libwallet.framework"
     }
-  ]
+  ],
+  "swift_version": "5"
 }

@@ -1,11 +1,13 @@
 import Foundation
 #if SWIFT_PACKAGE
-    import CSQLite
+import CSQLite
+#elseif GRDBCIPHER
+import SQLCipher
 #elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-    import SQLite3
+import SQLite3
 #endif
 
-public struct ResultCode : RawRepresentable, Equatable, CustomStringConvertible {
+public struct ResultCode: RawRepresentable, Equatable, CustomStringConvertible {
     public let rawValue: Int32
     
     public init(rawValue: Int32) {
@@ -46,6 +48,7 @@ public struct ResultCode : RawRepresentable, Equatable, CustomStringConvertible 
     // Primary Result codes
     // https://www.sqlite.org/rescode.html#primary_result_code_list
     
+    // swiftlint:disable operator_usage_whitespace
     public static let SQLITE_OK           = ResultCode(rawValue: 0)   // Successful result
     public static let SQLITE_ERROR        = ResultCode(rawValue: 1)   // SQL error or missing database
     public static let SQLITE_INTERNAL     = ResultCode(rawValue: 2)   // Internal logic error in SQLite
@@ -77,10 +80,15 @@ public struct ResultCode : RawRepresentable, Equatable, CustomStringConvertible 
     public static let SQLITE_WARNING      = ResultCode(rawValue: 28)  // Warnings from sqlite3_log()
     public static let SQLITE_ROW          = ResultCode(rawValue: 100) // sqlite3_step() has another row ready
     public static let SQLITE_DONE         = ResultCode(rawValue: 101) // sqlite3_step() has finished executing
+    // swiftlint:enable operator_usage_whitespace
     
     // Extended Result Code
     // https://www.sqlite.org/rescode.html#extended_result_code_list
     
+    // swiftlint:disable operator_usage_whitespace line_length
+    public static let SQLITE_ERROR_MISSING_COLLSEQ   = ResultCode(rawValue: (SQLITE_ERROR.rawValue | (1<<8)))
+    public static let SQLITE_ERROR_RETRY             = ResultCode(rawValue: (SQLITE_ERROR.rawValue | (2<<8)))
+    public static let SQLITE_ERROR_SNAPSHOT          = ResultCode(rawValue: (SQLITE_ERROR.rawValue | (3<<8)))
     public static let SQLITE_IOERR_READ              = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (1<<8)))
     public static let SQLITE_IOERR_SHORT_READ        = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (2<<8)))
     public static let SQLITE_IOERR_WRITE             = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (3<<8)))
@@ -109,18 +117,26 @@ public struct ResultCode : RawRepresentable, Equatable, CustomStringConvertible 
     public static let SQLITE_IOERR_CONVPATH          = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (26<<8)))
     public static let SQLITE_IOERR_VNODE             = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (27<<8)))
     public static let SQLITE_IOERR_AUTH              = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (28<<8)))
+    public static let SQLITE_IOERR_BEGIN_ATOMIC      = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (29<<8)))
+    public static let SQLITE_IOERR_COMMIT_ATOMIC     = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (30<<8)))
+    public static let SQLITE_IOERR_ROLLBACK_ATOMIC   = ResultCode(rawValue: (SQLITE_IOERR.rawValue | (31<<8)))
     public static let SQLITE_LOCKED_SHAREDCACHE      = ResultCode(rawValue: (SQLITE_LOCKED.rawValue |  (1<<8)))
+    public static let SQLITE_LOCKED_VTAB             = ResultCode(rawValue: (SQLITE_LOCKED.rawValue |  (2<<8)))
     public static let SQLITE_BUSY_RECOVERY           = ResultCode(rawValue: (SQLITE_BUSY.rawValue |  (1<<8)))
     public static let SQLITE_BUSY_SNAPSHOT           = ResultCode(rawValue: (SQLITE_BUSY.rawValue |  (2<<8)))
     public static let SQLITE_CANTOPEN_NOTEMPDIR      = ResultCode(rawValue: (SQLITE_CANTOPEN.rawValue | (1<<8)))
     public static let SQLITE_CANTOPEN_ISDIR          = ResultCode(rawValue: (SQLITE_CANTOPEN.rawValue | (2<<8)))
     public static let SQLITE_CANTOPEN_FULLPATH       = ResultCode(rawValue: (SQLITE_CANTOPEN.rawValue | (3<<8)))
     public static let SQLITE_CANTOPEN_CONVPATH       = ResultCode(rawValue: (SQLITE_CANTOPEN.rawValue | (4<<8)))
+    public static let SQLITE_CANTOPEN_DIRTYWAL       = ResultCode(rawValue: (SQLITE_CANTOPEN.rawValue | (5<<8))) /* Not Used */
     public static let SQLITE_CORRUPT_VTAB            = ResultCode(rawValue: (SQLITE_CORRUPT.rawValue | (1<<8)))
+    public static let SQLITE_CORRUPT_SEQUENCE        = ResultCode(rawValue: (SQLITE_CORRUPT.rawValue | (2<<8)))
     public static let SQLITE_READONLY_RECOVERY       = ResultCode(rawValue: (SQLITE_READONLY.rawValue | (1<<8)))
     public static let SQLITE_READONLY_CANTLOCK       = ResultCode(rawValue: (SQLITE_READONLY.rawValue | (2<<8)))
     public static let SQLITE_READONLY_ROLLBACK       = ResultCode(rawValue: (SQLITE_READONLY.rawValue | (3<<8)))
     public static let SQLITE_READONLY_DBMOVED        = ResultCode(rawValue: (SQLITE_READONLY.rawValue | (4<<8)))
+    public static let SQLITE_READONLY_CANTINIT       = ResultCode(rawValue: (SQLITE_READONLY.rawValue | (5<<8)))
+    public static let SQLITE_READONLY_DIRECTORY      = ResultCode(rawValue: (SQLITE_READONLY.rawValue | (6<<8)))
     public static let SQLITE_ABORT_ROLLBACK          = ResultCode(rawValue: (SQLITE_ABORT.rawValue | (2<<8)))
     public static let SQLITE_CONSTRAINT_CHECK        = ResultCode(rawValue: (SQLITE_CONSTRAINT.rawValue | (1<<8)))
     public static let SQLITE_CONSTRAINT_COMMITHOOK   = ResultCode(rawValue: (SQLITE_CONSTRAINT.rawValue | (2<<8)))
@@ -137,21 +153,23 @@ public struct ResultCode : RawRepresentable, Equatable, CustomStringConvertible 
     public static let SQLITE_WARNING_AUTOINDEX       = ResultCode(rawValue: (SQLITE_WARNING.rawValue | (1<<8)))
     public static let SQLITE_AUTH_USER               = ResultCode(rawValue: (SQLITE_AUTH.rawValue | (1<<8)))
     public static let SQLITE_OK_LOAD_PERMANENTLY     = ResultCode(rawValue: (SQLITE_OK.rawValue | (1<<8)))
+    // swiftlint:enable operator_usage_whitespace line_length
 }
 
 // CustomStringConvertible
 extension ResultCode {
     var errorString: String? {
         // sqlite3_errstr was added in SQLite 3.7.15 http://www.sqlite.org/changes.html#version_3_7_15
-        // It is available from iOS 8.2 and OS X 10.10 https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
+        // It is available from iOS 8.2 and OS X 10.10
+        // https://github.com/yapstudios/YapDatabase/wiki/SQLite-version-(bundled-with-OS)
         #if GRDBCUSTOMSQLITE || GRDBCIPHER
-            return String(cString: sqlite3_errstr(rawValue))
+        return String(cString: sqlite3_errstr(rawValue))
         #else
-            if #available(iOS 8.2, OSX 10.10, OSXApplicationExtension 10.10, iOSApplicationExtension 8.2, *) {
-                return String(cString: sqlite3_errstr(rawValue))
-            } else {
-                return nil
-            }
+        if #available(iOS 8.2, OSX 10.10, OSXApplicationExtension 10.10, *) {
+            return String(cString: sqlite3_errstr(rawValue))
+        } else {
+            return nil
+        }
         #endif
     }
     
@@ -166,7 +184,7 @@ extension ResultCode {
 }
 
 /// DatabaseError wraps an SQLite error.
-public struct DatabaseError : Error, CustomStringConvertible, CustomNSError {
+public struct DatabaseError: Error, CustomStringConvertible, CustomNSError {
     
     /// The SQLite error code (see
     /// https://www.sqlite.org/rescode.html#primary_result_code_list).
@@ -205,7 +223,12 @@ public struct DatabaseError : Error, CustomStringConvertible, CustomNSError {
     public let sql: String?
     
     /// Creates a Database Error
-    public init(resultCode: ResultCode = .SQLITE_ERROR, message: String? = nil, sql: String? = nil, arguments: StatementArguments? = nil) {
+    public init(
+        resultCode: ResultCode = .SQLITE_ERROR,
+        message: String? = nil,
+        sql: String? = nil,
+        arguments: StatementArguments? = nil)
+    {
         self.extendedResultCode = resultCode
         self.message = message ?? resultCode.errorString
         self.sql = sql
@@ -225,6 +248,25 @@ public struct DatabaseError : Error, CustomStringConvertible, CustomNSError {
     /// The query arguments that yielded the error (if relevant).
     /// Not public because the StatementArguments class has no public method.
     let arguments: StatementArguments?
+}
+
+extension DatabaseError {
+    // TODO: test
+    /// Returns true if the error has code `SQLITE_ABORT` or `SQLITE_INTERRUPT`.
+    ///
+    /// Such an error can be thrown when a database has been interrupted, or
+    /// when the database is suspended.
+    ///
+    /// See `DatabaseReader.interrupt()` and `DatabaseReader.suspend()` for
+    /// more information.
+    public var isInterruptionError: Bool {
+        switch resultCode {
+        case .SQLITE_ABORT, .SQLITE_INTERRUPT:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 // CustomStringConvertible
@@ -262,7 +304,7 @@ extension DatabaseError {
     
     /// NSError bridging: the user-info dictionary.
     /// :nodoc:
-    public var errorUserInfo: [String : Any] {
+    public var errorUserInfo: [String: Any] {
         return [NSLocalizedDescriptionKey: description]
     }
 }

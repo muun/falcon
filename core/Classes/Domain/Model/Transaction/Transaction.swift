@@ -14,6 +14,11 @@ public struct Transaction {
 struct NextTransactionSize: Codable {
     let sizeProgression: [SizeForAmount]
     let validAtOperationHid: Double?
+    let _expectedDebt: Satoshis?
+
+    var expectedDebt: Satoshis {
+        return _expectedDebt ?? Satoshis(value: 0)
+    }
 }
 
 public struct SizeForAmount: Codable {
@@ -27,6 +32,6 @@ struct RawTransaction {
 }
 
 struct RawTransactionResponse {
-    let hex: String
+    let hex: String?
     let nextTransactionSize: NextTransactionSize
 }

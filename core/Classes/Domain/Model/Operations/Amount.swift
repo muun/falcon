@@ -92,13 +92,22 @@ extension Satoshis {
     }
 
     public func toBTC() -> MonetaryAmount {
-        return MonetaryAmount(amount: toBTCDecimal(),
-                              currency: "BTC")
+        return MonetaryAmount(amount: toBTCDecimal(), currency: "BTC")
     }
 
     public func valuation(at exchangeRate: Decimal, currency: String) -> MonetaryAmount {
         return MonetaryAmount(amount: toBTCDecimal() * exchangeRate,
                               currency: currency)
+    }
+
+    // This method creates a bitcoin amount model from a Satoshis model with a reference BitcoinAmount model
+    // It uses the reference to apply a rule of three and calculates how much $ are worth those sats in the primary
+    // currency of the reference.
+    // This method should only be used for display purposes.
+    public func toBitcoinAmount(reference: BitcoinAmount) -> BitcoinAmount {
+        let amountInPrimary = self.asDecimal() * reference.inPrimaryCurrency.amount / reference.inSatoshis.asDecimal()
+        let inPrimary = MonetaryAmount(amount: amountInPrimary, currency: reference.inPrimaryCurrency.currency)
+        return BitcoinAmount(inSatoshis: self, inInputCurrency: toBTC(), inPrimaryCurrency: inPrimary)
     }
 
     public static func from(amount: Decimal, at rate: Decimal) -> Satoshis {
@@ -137,6 +146,10 @@ extension Satoshis {
         let decimalSatoshis = (feePerVByte * decimalSize).round(scale: 0, roundingMode: .up) as NSDecimalNumber
 
         return Satoshis(value: decimalSatoshis.int64Value)
+    }
+
+    public static func += (lhs: inout Satoshis, rhs: Satoshis) {
+        lhs = Satoshis(value: lhs.value + rhs.value)
     }
 }
 

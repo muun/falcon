@@ -7,12 +7,17 @@
 //
 
 import CoreFoundation
-
+import Foundation
 import RxSwift
 
 #if os(Linux)
     import Foundation
-    let runLoopMode: RunLoopMode = RunLoopMode.defaultRunLoopMode
+    #if compiler(>=5.0) 
+    let runLoopMode: RunLoop.Mode = .default
+    #else
+    let runLoopMode: RunLoopMode = .defaultRunLoopMode
+    #endif
+
     let runLoopModeRaw: CFString = unsafeBitCast(runLoopMode.rawValue._bridgeToObjectiveC(), to: CFString.self)
 #else
     let runLoopMode: CFRunLoopMode = CFRunLoopMode.defaultMode
@@ -22,11 +27,11 @@ import RxSwift
 final class RunLoopLock {
     let _currentRunLoop: CFRunLoop
 
-    var _calledRun = AtomicInt(0)
-    var _calledStop = AtomicInt(0)
-    var _timeout: RxTimeInterval?
+    let _calledRun = AtomicInt(0)
+    let _calledStop = AtomicInt(0)
+    var _timeout: TimeInterval?
 
-    init(timeout: RxTimeInterval?) {
+    init(timeout: TimeInterval?) {
         self._timeout = timeout
         self._currentRunLoop = CFRunLoopGetCurrent()
     }
@@ -47,7 +52,7 @@ final class RunLoopLock {
     }
 
     func stop() {
-        if decrement(&self._calledStop) > 1 {
+        if decrement(self._calledStop) > 1 {
             return
         }
         CFRunLoopPerformBlock(self._currentRunLoop, runLoopModeRaw) {
@@ -57,7 +62,7 @@ final class RunLoopLock {
     }
 
     func run() throws {
-        if increment(&self._calledRun) != 0 {
+        if increment(self._calledRun) != 0 {
             fatalError("Run can be only called once")
         }
         if let timeout = self._timeout {
@@ -84,6 +89,8 @@ final class RunLoopLock {
                     return
                 case .timedOut:
                     throw RxError.timeout
+                default:
+                    return
                 }
             #endif
         }

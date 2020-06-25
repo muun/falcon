@@ -209,7 +209,9 @@ public class NotificationProcessor {
             return FutureCompatNotificationHandler()
 
         case .verifiedEmail:
-            return FutureCompatNotificationHandler()
+            return CallbackNotificationHandler(.LOGGED_IN) {
+                return self.sessionActions.emailAuthorized()
+            }
 
         case .completePairingAck:
             return FutureCompatNotificationHandler()

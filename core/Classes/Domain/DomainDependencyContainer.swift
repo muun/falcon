@@ -24,7 +24,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: CreateSessionAction.init)
             container.register(.singleton, factory: LogInAction.init)
             container.register(.singleton, factory: RequestChallengeAction.init)
-            container.register(.singleton, factory: SignUpAction.init)
+            container.register(.singleton, factory: SetUpPasswordAction.init)
             container.register(.singleton, factory: SessionActions.init)
             container.register(.singleton, factory: AddressActions.init)
             container.register(.singleton, factory: OperationActions.init)
@@ -41,6 +41,11 @@ public extension DependencyContainer {
             container.register(.singleton, factory: SubmarineSwapAction.init)
             container.register(.singleton, factory: BIP70Action.init)
             container.register(.singleton, factory: SendEncryptedKeysEmailAction.init)
+            container.register(.singleton, factory: CreateFirstSessionAction.init)
+            container.register(.singleton, factory: StartEmailSetupAction.init)
+            container.register(.singleton, factory: OperationMetadataDecrypter.init)
+            container.register(.singleton, factory: SignAnonChallengeAction.init)
+            container.register(.singleton, factory: ReportKeysExportedAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EncryptedUserKeySelector.init)
@@ -53,7 +58,8 @@ public extension DependencyContainer {
                            userRepository: $3,
                            realTimeDataAction: $4,
                            nextTransactionSizeRepository: $5,
-                           fetchNotificationsAction: try container.resolve())
+                           fetchNotificationsAction: try container.resolve(),
+                           createFirstSessionAction: try container.resolve())
             }
         }
     }

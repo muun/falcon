@@ -24,8 +24,7 @@ struct PartiallySignedTransaction {
 extension PartiallySignedTransaction {
 
     func sign(key: WalletPrivateKey, muunKey: WalletPublicKey, expectations: Expectations)
-        throws -> LibwalletTransaction
-    {
+        throws -> LibwalletTransaction {
 
         let partial = try doWithError({ error in
             LibwalletNewPartiallySignedTransaction(hexTransaction, error)

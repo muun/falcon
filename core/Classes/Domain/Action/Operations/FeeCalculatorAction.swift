@@ -30,10 +30,12 @@ public class FeeCalculatorAction: AsyncAction<FeeCalculatorResult> {
 
         let single = realTimeDataAction.getValue()
             .map({ data -> FeeCalculatorResult in
+                let nts = self.nextTransactionSizeRepository.getNextTransactionSize()!
                 let calculator = FeeCalculator(
                     targetedFees: data.feeWindow.targetedFees,
                     // FIXME: This should consume some action to get the next transaction size
-                    sizeProgression: self.nextTransactionSizeRepository.getNextTransactionSize()!.sizeProgression
+                    sizeProgression: nts.sizeProgression,
+                    expectedDebt: nts.expectedDebt
                 )
 
                 return FeeCalculatorResult(feeCalculator: calculator,

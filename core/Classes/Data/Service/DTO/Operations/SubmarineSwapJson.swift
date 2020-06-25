@@ -53,6 +53,9 @@ struct SubmarineSwapFundingOutputJson: Codable {
     // v2 only
     let userPublicKey: PublicKeyJson?
     let muunPublicKey: PublicKeyJson?
+
+    let debtType: String
+    let debtAmountInSats: Int64
 }
 
 struct SubmarineSwapRequestJson: Codable {

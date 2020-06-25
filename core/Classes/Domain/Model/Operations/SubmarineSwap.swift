@@ -45,6 +45,24 @@ public class SubmarineSwap: NSObject {
         _payedAt = payedAt
         _preimageInHex = preimageInHex
     }
+
+    public func getDebtType() -> DebtType {
+        return _fundingOutput._debtType
+    }
+
+    /*
+    Lightning fee is calculated in this way:
+    1. For lend swaps: Only the routing fee
+    2. For 0-conf, 1-conf and top-ups: routing fee + on-chain fee + sweep fee
+    */
+    public func getLightningFeeInSats(onChainFee: BitcoinAmount) -> Satoshis {
+
+        if getDebtType() == .LEND {
+            return _fees._lightning
+        }
+
+        return _fees._lightning + onChainFee.inSatoshis + _fees._sweep
+    }
 }
 
 public class SubmarineSwapFees: NSObject {
@@ -96,6 +114,9 @@ public class SubmarineSwapFundingOutput: NSObject {
     let _userPublicKey: WalletPublicKey?
     let _muunPublicKey: WalletPublicKey?
 
+    public let _debtType: DebtType
+    public let _debtAmount: Satoshis
+
     init(scriptVersion: Int,
          outputAddress: String,
          outputAmount: Satoshis,
@@ -106,20 +127,24 @@ public class SubmarineSwapFundingOutput: NSObject {
          serverPublicKeyInHex: String,
          expirationTimeInBlocks: Int?,
          userPublicKey: WalletPublicKey?,
-         muunPublicKey: WalletPublicKey?) {
+         muunPublicKey: WalletPublicKey?,
+         debtType: DebtType,
+         debtAmount: Satoshis) {
 
-        self._scriptVersion = scriptVersion
-        self._outputAddress = outputAddress
-        self._outputAmount = outputAmount
-        self._confirmationsNeeded = confirmationsNeeded
-        self._userLockTime = userLockTime
-        self._userRefundAddress = userRefundAddress
-        self._serverPaymentHashInHex = serverPaymentHashInHex
-        self._serverPublicKeyInHex = serverPublicKeyInHex
-        self._expirationInBlocks = expirationTimeInBlocks
-        self._userPublicKey = userPublicKey
-        self._muunPublicKey = muunPublicKey
+        _scriptVersion = scriptVersion
+        _outputAddress = outputAddress
+        _outputAmount = outputAmount
+        _confirmationsNeeded = confirmationsNeeded
+        _userLockTime = userLockTime
+        _userRefundAddress = userRefundAddress
+        _serverPaymentHashInHex = serverPaymentHashInHex
+        _serverPublicKeyInHex = serverPublicKeyInHex
+        _expirationInBlocks = expirationTimeInBlocks
+        _userPublicKey = userPublicKey
+        _muunPublicKey = muunPublicKey
 
+        _debtType = debtType
+        _debtAmount = debtAmount
     }
 }
 

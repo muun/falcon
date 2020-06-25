@@ -28,7 +28,6 @@ public struct OperationJson: Codable {
     let fee: BitcoinAmountJson
     let confirmations: Int?
     let exchangeRatesWindowId: Int
-    let description: String?
     let status: OperationStatusJson
     let transaction: TransactionJson?
     let creationDate: Date
@@ -39,6 +38,16 @@ public struct OperationJson: Codable {
     let swapUuid: String?
     // This one is returned by houston
     let swap: SubmarineSwapJson?
+
+    @available(*, deprecated: 0, message: "The encrypted variant sender_metadata must be used")
+    var description: String?
+
+    var senderMetadata: String?
+    var receiverMetadata: String?
+}
+
+public struct OperationMetadataJson: Codable {
+    let description: String?
 }
 
 public enum OperationDirectionJson: String, Codable {

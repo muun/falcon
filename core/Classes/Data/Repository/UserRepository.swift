@@ -31,6 +31,14 @@ public class UserRepository {
         return preferences.object(forKey: .user)
     }
 
+    public func isAnonUser() -> Bool {
+        guard let user = getUser() else {
+            return true
+        }
+
+        return user.email == nil
+    }
+
     // FIXME: This shouldn't be public
     public func watchAppState() -> Observable<Bool?> {
         return preferences.watchBool(key: .appInForeground).asObservable()
@@ -38,6 +46,10 @@ public class UserRepository {
 
     public func setDisplayFiatAsMain(for user: User) {
         preferences.set(value: (user.primaryCurrency != "BTC"), forKey: .displayFiatCurrencyAsMain)
+    }
+
+    func getUserEmail() -> String? {
+        return preferences.string(forKey: .email)
     }
 
 }

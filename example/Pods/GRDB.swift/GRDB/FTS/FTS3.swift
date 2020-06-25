@@ -4,7 +4,26 @@
 ///     try db.create(virtualTable: "document", using: FTS3()) { t in
 ///         t.column("content")
 ///     }
-public struct FTS3 : VirtualTableModule {
+public struct FTS3: VirtualTableModule {
+    /// Options for Latin script characters. Matches the raw "remove_diacritics"
+    /// tokenizer argument.
+    ///
+    /// See https://www.sqlite.org/fts3.html
+    public enum Diacritics {
+        /// Do not remove diacritics from Latin script characters. This
+        /// option matches the raw "remove_diacritics=0" tokenizer argument.
+        case keep
+        /// Remove diacritics from Latin script characters. This
+        /// option matches the raw "remove_diacritics=1" tokenizer argument.
+        case removeLegacy
+        #if GRDBCUSTOMSQLITE
+        /// Remove diacritics from Latin script characters. This
+        /// option matches the raw "remove_diacritics=2" tokenizer argument,
+        /// available from SQLite 3.27.0
+        case remove
+        #endif
+    }
+    
     /// Creates a FTS3 module suitable for the Database
     /// `create(virtualTable:using:)` method.
     ///
@@ -36,7 +55,10 @@ public struct FTS3 : VirtualTableModule {
             if tokenizer.arguments.isEmpty {
                 arguments.append("tokenize=\(tokenizer.name)")
             } else {
-                arguments.append("tokenize=\(tokenizer.name) " + tokenizer.arguments.map { "\"\($0)\"" as String }.joined(separator: " "))
+                arguments.append(
+                    "tokenize=\(tokenizer.name) " + tokenizer.arguments
+                        .map { "\"\($0)\"" as String }
+                        .joined(separator: " "))
             }
         }
         return arguments

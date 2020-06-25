@@ -18,13 +18,17 @@ public class SecureStorage {
     enum Keys: String, CaseIterable {
         case privateKey
         case muunPrivateKey
+        case baseKeyDerivationPath
         case pin
         case authToken
         case pinAttemptsLeft
         case passwordSalt
         case recoveryCodeSalt
+        case anonSalt
         case passwordPublicKey
         case recoveryCodePublicKey
+        case anonPublicKey
+        case anonSecret
     }
 
     private let keyPrefix: String

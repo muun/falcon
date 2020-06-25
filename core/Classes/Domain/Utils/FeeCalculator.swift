@@ -24,10 +24,12 @@ public class FeeCalculator {
 
     let targetedFees: [UInt: FeeRate]
     let sizeProgression: [SizeForAmount]
+    let expectedDebt: Satoshis
 
-    public init(targetedFees: [UInt: FeeRate], sizeProgression: [SizeForAmount]) {
+    public init(targetedFees: [UInt: FeeRate], sizeProgression: [SizeForAmount], expectedDebt: Satoshis) {
         self.targetedFees = targetedFees
         self.sizeProgression = sizeProgression
+        self.expectedDebt = expectedDebt
     }
 
     public func calculateMinimumFee() -> Satoshis {
@@ -43,40 +45,40 @@ public class FeeCalculator {
 
     public func totalBalance() -> Satoshis {
         if let lastItem = sizeProgression.last {
-            return lastItem.amountInSatoshis
-        } else {
-            return Satoshis(value: 0)
+            // The total balance is calculated by substracting the expectedDebt from the last item in the NTS
+            return lastItem.amountInSatoshis - expectedDebt
         }
+
+        return Satoshis(value: 0)
     }
 
-    public func feeFor(amount: Satoshis, confirmationTarget: UInt) throws -> Result {
+    private func utxoBalance() -> Satoshis {
+        return sizeProgression.last?.amountInSatoshis ?? Satoshis(value: 0)
+    }
+
+    public func feeFor(amount: Satoshis, confirmationTarget: UInt, debtType: DebtType = .NONE) throws -> Result {
         let feeRate = getMinimumFeeRate(confirmationTarget: confirmationTarget)
-        return try feeFor(amount: amount, rate: feeRate)
+        return try feeFor(amount: amount, rate: feeRate, debtType: debtType)
     }
 
-    public func feeFor(amount: Satoshis, rate feeRate: FeeRate) throws -> Result {
+    // swiftlint:disable cyclomatic_complexity
+    public func feeFor(amount: Satoshis, rate feeRate: FeeRate, debtType: DebtType = .NONE) throws -> Result {
+
+        if debtType == .LEND {
+            // If it's a lend swap, then the 'on-chain' fee won't exist
+            let zeroFee = Satoshis(value: 0)
+            if isAmountPayable(amount, fee: zeroFee) {
+                return .valid(zeroFee, rate: FeeRate(satsPerVByte: 0))
+            }
+
+            throw MuunError(FeeError.insufficientBalance)
+        }
 
         if amount < Satoshis.dust {
             throw MuunError(FeeError.amountTooSmall)
         }
 
-        if shouldTakeFeeFromAmount(amount) {
-
-            if let biggestSize = sizeProgression.last {
-
-                let fee = feeRate.calculateFee(sizeInWeightUnit: biggestSize.sizeInBytes)
-
-                if biggestSize.amountInSatoshis > fee + Satoshis.dust  {
-                    return .valid(fee, rate: feeRate)
-                } else {
-                    return .invalid(fee, rate: feeRate)
-                }
- 
-            } else {
-
-                throw MuunError(FeeError.insufficientBalance)
-            }
-        }
+        let takeFeeFromAmount = shouldTakeFeeFromAmount(amount)
 
         for size in sizeProgression {
             if amount > size.amountInSatoshis {
@@ -85,25 +87,50 @@ public class FeeCalculator {
 
             let fee = feeRate.calculateFee(sizeInWeightUnit: size.sizeInBytes)
 
+            if takeFeeFromAmount {
+                if size.amountInSatoshis - expectedDebt >= fee + Satoshis.dust {
+                    // We need to make sure we have enough sats to cover the fee and one output of at least dust
+                    return .valid(fee, rate: feeRate)
+                } else if size.amountInSatoshis - expectedDebt - calculateMinimumFee() >= Satoshis.dust {
+                    // We need to make sure that the payment can produce one output >= dust with the minimum fee
+                    return .invalid(fee, rate: feeRate)
+                }
+
+                throw MuunError(FeeError.insufficientBalance)
+            }
+
             // We need to have enough to cover the fee too
             if amount + fee <= size.amountInSatoshis {
-                return .valid(fee, rate: feeRate)
+                if isAmountPayable(amount, fee: fee, debtType) {
+                    return .valid(fee, rate: feeRate)
+                } else if isAmountPayableWithMinimumFee(amount, debtType) {
+                    return .invalid(fee, rate: feeRate)
+                }
             }
         }
 
-        if let biggestSize = sizeProgression.last,
-            isAmountPayable(amount) {
-
-            return .invalid(feeRate.calculateFee(sizeInWeightUnit: biggestSize.sizeInBytes),
-                            rate: feeRate)
-        } else {
-
-            throw MuunError(FeeError.insufficientBalance)
+        if let biggestSize = sizeProgression.last, isAmountPayableWithMinimumFee(amount, debtType) {
+            return .invalid(feeRate.calculateFee(sizeInWeightUnit: biggestSize.sizeInBytes), rate: feeRate)
         }
+
+        throw MuunError(FeeError.insufficientBalance)
+    }
+    // swiftlint:enable cyclomatic_complexity
+
+    // FIXME: minimum fee it's not always the final fee for swaps
+    // We should somehow check the confs needed and the routing fee 🤷‍♂️
+    private func isAmountPayable(_ sats: Satoshis, fee: Satoshis? = nil, _ debtType: DebtType = .NONE) -> Bool {
+        let finalFee = fee ?? calculateMinimumFee()
+
+        if debtType == .COLLECT {
+            return sats + finalFee <= utxoBalance()
+        }
+
+        return sats + finalFee <= totalBalance()
     }
 
-    public func isAmountPayable(_ amount: Satoshis) -> Bool {
-        return amount + calculateMinimumFee() <= totalBalance()
+    public func isAmountPayableWithMinimumFee(_ sats: Satoshis, _ debtType: DebtType = .NONE) -> Bool {
+        return isAmountPayable(sats, debtType)
     }
 
     public func shouldTakeFeeFromAmount(_ amount: Satoshis) -> Bool {
@@ -153,7 +180,7 @@ extension FeeCalculator {
 
 extension FeeCalculator.Result: Equatable {
 
-    public static func ==(lhs: FeeCalculator.Result, rhs: FeeCalculator.Result) -> Bool {
+    public static func == (lhs: FeeCalculator.Result, rhs: FeeCalculator.Result) -> Bool {
         switch (lhs, rhs) {
         case (.valid(let lhsFee, let lhsRate), .valid(let rhsFee, let rhsRate)):
             return lhsFee == rhsFee && lhsRate == rhsRate

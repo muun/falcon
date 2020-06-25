@@ -13,10 +13,12 @@ class KeysRepository {
 
     private let preferences: Preferences
     private let secureStorage: SecureStorage
+    private let userRepository: UserRepository
 
-    init(preferences: Preferences, secureStorage: SecureStorage) {
+    init(preferences: Preferences, secureStorage: SecureStorage, userRepository: UserRepository) {
         self.preferences = preferences
         self.secureStorage = secureStorage
+        self.userRepository = userRepository
     }
 
     func updateMaxWatchingIndex(_ index: Int) {
@@ -42,18 +44,14 @@ class KeysRepository {
         // Restart the usage index
         self.updateMaxUsedIndex(-1)
 
-        preferences.set(value: key.path, forKey: .baseKeyDerivationPath)
-
+        try secureStorage.store(key.path, at: .baseKeyDerivationPath)
         try secureStorage.store(encodedKey, at: .privateKey)
     }
 
     func getBasePrivateKey() throws -> WalletPrivateKey {
 
-        let privateKey = try self.secureStorage.get(.privateKey)
-
-        guard let path = self.preferences.string(forKey: .baseKeyDerivationPath) else {
-            throw MuunError(KeyStorageError.missingKey)
-        }
+        let privateKey = try secureStorage.get(.privateKey)
+        let path = try secureStorage.get(.baseKeyDerivationPath)
 
         return WalletPrivateKey.fromBase58(privateKey, on: path)
     }
@@ -87,6 +85,10 @@ class KeysRepository {
         return try secureStorage.get(.muunPrivateKey)
     }
 
+    func getAnonSecret() throws -> String {
+        return try secureStorage.get(.anonSecret)
+    }
+
     private func saltKey(for type: ChallengeType) -> SecureStorage.Keys {
 
         switch type {
@@ -94,6 +96,8 @@ class KeysRepository {
             return .passwordSalt
         case .RECOVERY_CODE:
             return .recoveryCodeSalt
+        case .ANON:
+            return .anonSalt
         }
     }
 
@@ -104,15 +108,22 @@ class KeysRepository {
             return .passwordPublicKey
         case .RECOVERY_CODE:
             return .recoveryCodePublicKey
+        case .ANON:
+            return .anonPublicKey
         }
     }
 
     func store(challengeKey: ChallengeKey, type: ChallengeType) throws {
         try secureStorage.store(challengeKey.salt.toHexString(), at: saltKey(for: type))
         try secureStorage.store(challengeKey.publicKey.toHexString(), at: publicKeyKey(for: type))
+
         if type == .RECOVERY_CODE {
             preferences.set(value: true, forKey: .hasRecoveryCode)
         }
+    }
+
+    func store(anonSecret: String) throws {
+        try secureStorage.store(anonSecret, at: .anonSecret)
     }
 
     func hasChallengeKey(type: ChallengeType) throws -> Bool {

@@ -1,154 +1,155 @@
-#if USING_SQLCIPHER
-    import GRDBCipher
-#else
-    import GRDB
-#endif
+import GRDB
 import RxSwift
 
+/// We want the `rx` joiner on DatabaseWriter.
+/// Normally we'd use ReactiveCompatible. But ReactiveCompatible is unable to
+/// define `rx` on existentials as well:
+///
+///     let writer: DatabaseWriter
+///     writer.rx...
+///
+/// :nodoc:
+extension DatabaseWriter {
+    public var rx: Reactive<AnyDatabaseWriter> {
+        return Reactive(AnyDatabaseWriter(self))
+    }
+}
+
 extension Reactive where Base: DatabaseWriter {
-    /// Returns an Observable that emits a database connection after each
-    /// committed database transaction that has modified the tables, columns,
-    /// and rows defined by the *regions*.
+    /// Returns an Observable that asynchronously writes into the database.
     ///
-    /// All elements are emitted in a protected database dispatch queue,
-    /// serialized with all database updates. If you set *startImmediately* to
-    /// true (the default value), the first element is emitted synchronously
-    /// upon subscription. See [GRDB Concurrency Guide](https://github.com/groue/GRDB.swift/blob/master/README.md#concurrency)
-    /// for more information.
+    /// For example:
+    ///
+    ///     // Observable<Int>
+    ///     let newPlayerCount = dbQueue.rx.flatMapWrite { db in
+    ///         try Player(...).insert(db)
+    ///         let newPlayerCount = try Player.fetchAll(db)
+    ///         return Observable.just(newPlayerCount)
+    ///     }
+    ///
+    /// The database updates are executed inside a database transaction. If the
+    /// transaction completes successfully, the observable returned from the
+    /// closure is subscribed, from a database protected dispatch queue,
+    /// immediately after the transaction has been committed.
+    ///
+    /// - parameter scheduler: The scheduler on which the observable completes.
+    ///   Defaults to MainScheduler.instance.
+    /// - parameter updates: A closure which writes in the database.
+    func flatMapWrite<T>(
+        observeOn scheduler: ImmediateSchedulerType = MainScheduler.instance,
+        updates: @escaping (Database) throws -> Observable<T>)
+        -> Observable<T>
+    {
+        let writer = base
+        return Observable
+            .create { observer in
+                var disposable: Disposable?
+                writer.asyncWriteWithoutTransaction { db in
+                    var observable: Observable<T>?
+                    do {
+                        try db.inTransaction {
+                            observable = try updates(db)
+                            return .commit
+                        }
+                        // Subscribe after transaction
+                        disposable = observable!.subscribe(observer)
+                    } catch {
+                        observer.onError(error)
+                    }
+                }
+                return Disposables.create {
+                    disposable?.dispose()
+                }
+            }
+            .observeOn(scheduler)
+    }
+    
+    /// Returns a Completable that asynchronously writes into the database.
     ///
     ///     let dbQueue = DatabaseQueue()
-    ///     try dbQueue.inDatabase { db in
-    ///         try db.create(table: "persons") { t in
-    ///             t.column("id", .integer).primaryKey()
-    ///             t.column("name", .text)
-    ///         }
+    ///     let completable: Completable = dbQueue.rx.write { db in
+    ///         try Player(...).insert(db)
     ///     }
     ///
-    ///     let request = SQLRequest("SELECT * FROM persons")
-    ///     dbQueue.changes(in: [request])
-    ///         .subscribe(onNext: { db in
-    ///             let count = try! request.fetchCount(db)
-    ///             print("Number of persons: \(count)")
-    ///         })
-    ///     // Prints "Number of persons: 0"
+    /// By default, the completable completes on the main dispatch queue. If
+    /// you give a *scheduler*, is completes on that scheduler.
     ///
-    ///     try dbQueue.inDatabase { db in
-    ///         try db.execute("INSERT INTO persons (name) VALUES (?)", arguments: ["Arthur"])
-    ///         // Prints "Number of persons: 1"
-    ///         try db.execute("INSERT INTO persons (name) VALUES (?)", arguments: ["Barbara"])
-    ///         // Prints "Number of persons: 2"
-    ///     }
-    ///
-    ///     try dbQueue.inTransaction { db in
-    ///         try db.execute("INSERT INTO persons (name) VALUES (?)", arguments: ["Craig"])
-    ///         try db.execute("INSERT INTO persons (name) VALUES (?)", arguments: ["David"])
-    ///         return .commit
-    ///     }
-    ///     // Prints "Number of persons: 4"
-    ///
-    /// - parameter regions: The observed regions.
-    /// - parameter startImmediately: When true (the default), the first
-    ///   element is emitted synchronously, on subscription.
-    public func changes(
-        in regions: [DatabaseRegionConvertible],
-        startImmediately: Bool = true)
-        -> Observable<Database>
+    /// - parameter scheduler: The scheduler on which the completable completes.
+    ///   Defaults to MainScheduler.instance.
+    /// - parameter updates: A closure which writes in the database.
+    public func write(
+        observeOn scheduler: ImmediateSchedulerType = MainScheduler.instance,
+        updates: @escaping (Database) throws -> Void)
+        -> Completable
     {
-        return ChangesObservable(
-            writer: base,
-            startImmediately: startImmediately,
-            observedRegion: { db in try regions.map { try $0.databaseRegion(db) }.union() })
-            .asObservable()
+        return flatMapWrite(
+            observeOn: scheduler,
+            updates: { db in
+                try updates(db)
+                return .empty()
+        })
+            .asCompletable()
     }
-}
-
-private class ChangesObservable : ObservableType {
-    typealias E = Database
-    let writer: DatabaseWriter
-    let startImmediately: Bool
-    let observedRegion: (Database) throws -> DatabaseRegion
     
-    /// Creates an observable that emits writer database connections on their
-    /// dedicated dispatch queue when a transaction has modified the database
-    /// in a way that impacts some requests' selections.
+    /// Returns a Single that asynchronously writes into the database.
     ///
-    /// When the `startImmediately` argument is true, the observable also emits
-    /// a database connection, synchronously.
-    init(
-        writer: DatabaseWriter,
-        startImmediately: Bool,
-        observedRegion: @escaping (Database) throws -> DatabaseRegion)
+    ///     let newPlayerCount: Single<Int> = dbQueue.rx.writeAndReturn { db in
+    ///         try Player(...).insert(db)
+    ///         return try Player.fetchCount(db)
+    ///     }
+    ///
+    /// By default, the single completes on the main dispatch queue. If
+    /// you give a *scheduler*, is completes on that scheduler.
+    ///
+    /// - parameter scheduler: The scheduler on which the observable completes.
+    ///   Defaults to MainScheduler.instance.
+    /// - parameter updates: A closure which writes in the database.
+    public func writeAndReturn<T>(
+        observeOn scheduler: ImmediateSchedulerType = MainScheduler.instance,
+        updates: @escaping (Database) throws -> T)
+        -> Single<T>
     {
-        self.writer = writer
-        self.startImmediately = startImmediately
-        self.observedRegion = observedRegion
+        return flatMapWrite(
+            observeOn: scheduler,
+            updates: { db in try .just(updates(db)) })
+            .asSingle()
     }
     
-    func subscribe<O>(_ observer: O) -> Disposable where O : ObserverType, O.E == Database {
-        do {
-            let writer = self.writer
-            
-            let transactionObserver = try writer.unsafeReentrantWrite { db -> DatabaseRegionObserver in
-                if startImmediately {
-                    observer.onNext(db)
+    /// Returns a Single that asynchronously writes into the database.
+    ///
+    ///     let newPlayerCount: Single<Int> = dbQueue.rx.write(
+    ///         updates: { db in try Player(...).insert(db) },
+    ///         thenRead: { db, _ in try Player.fetchCount(db) })
+    ///
+    /// By default, the single completes on the main dispatch queue. If
+    /// you give a *scheduler*, is completes on that scheduler.
+    ///
+    /// - parameter scheduler: The scheduler on which the observable completes.
+    ///   Defaults to MainScheduler.instance.
+    /// - parameter updates: A closure which writes in the database.
+    /// - parameter value: A closure which reads from the database.
+    public func write<T, U>(
+        observeOn scheduler: ImmediateSchedulerType = MainScheduler.instance,
+        updates: @escaping (Database) throws -> T,
+        thenRead value: @escaping (Database, T) throws -> U)
+        -> Single<U>
+    {
+        return flatMapWrite(
+            observeOn: scheduler,
+            updates: { db in
+                let updatesValue = try updates(db)
+                return Observable.create { observer in
+                    self.base.spawnConcurrentRead { db in
+                        do {
+                            try observer.onNext(value(db.get(), updatesValue))
+                            observer.onCompleted()
+                        } catch {
+                            observer.onError(error)
+                        }
+                    }
+                    return Disposables.create { }
                 }
-                
-                let transactionObserver = try DatabaseRegionObserver(
-                    observedRegion: observedRegion(db),
-                    onChange: { observer.onNext(db) })
-                db.add(transactionObserver: transactionObserver)
-                return transactionObserver
-            }
-            
-            return Disposables.create {
-                writer.unsafeReentrantWrite { db in
-                    db.remove(transactionObserver: transactionObserver)
-                }
-            }
-        } catch {
-            observer.onError(error)
-            return Disposables.create()
-        }
+        })
+            .asSingle()
     }
-}
-
-private class DatabaseRegionObserver : TransactionObserver {
-    var changed: Bool = false
-    let observedRegion: DatabaseRegion
-    let change: () -> Void
-    
-    init(observedRegion: DatabaseRegion, onChange change: @escaping () -> Void) {
-        self.observedRegion = observedRegion
-        self.change = change
-    }
-    
-    func observes(eventsOfKind eventKind: DatabaseEventKind) -> Bool {
-        return observedRegion.isModified(byEventsOfKind:eventKind)
-    }
-    
-    func databaseDidChange(with event: DatabaseEvent) {
-        if observedRegion.isModified(by: event) {
-            changed = true
-            stopObservingDatabaseChangesUntilNextTransaction()
-        }
-    }
-    
-    func databaseWillCommit() { }
-    
-    func databaseDidCommit(_ db: Database) {
-        // Avoid reentrancy bugs
-        let changed = self.changed
-        self.changed = false
-        if changed {
-            change()
-        }
-    }
-    
-    func databaseDidRollback(_ db: Database) {
-        changed = false
-    }
-    
-    #if SQLITE_ENABLE_PREUPDATE_HOOK
-    func databaseWillChange(with event: DatabasePreUpdateEvent) { }
-    #endif
 }

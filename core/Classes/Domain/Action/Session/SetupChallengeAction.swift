@@ -49,10 +49,10 @@ public class SetupChallengeAction: AsyncAction<()> {
         runCompletable(action)
     }
 
-    private func buildChallengeSetup(type: ChallengeType,
-                                     challengePublicKey: String,
-                                     userInput: String,
-                                     salt: [UInt8]) throws -> ChallengeSetup {
+    func buildChallengeSetup(type: ChallengeType,
+                             challengePublicKey: String,
+                             userInput: String,
+                             salt: [UInt8]) throws -> ChallengeSetup {
 
         let encryptedKey = KeyCrypter.encrypt(try keysRepository.getBasePrivateKey(), passphrase: userInput)
 
