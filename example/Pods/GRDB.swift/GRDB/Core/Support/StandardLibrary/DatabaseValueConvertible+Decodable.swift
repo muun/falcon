@@ -13,7 +13,8 @@ private struct DatabaseValueDecodingContainer: SingleValueDecodingContainer {
     ///
     /// - parameter type: The type to decode as.
     /// - returns: A value of the requested type.
-    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value cannot be converted to the requested type.
+    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value
+    ///   cannot be converted to the requested type.
     /// - throws: `DecodingError.valueNotFound` if the encountered encoded value is null.
     func decode(_ type: Bool.Type) throws -> Bool {
         if let result = Bool.fromDatabaseValue(dbValue) {
@@ -131,9 +132,10 @@ private struct DatabaseValueDecodingContainer: SingleValueDecodingContainer {
     ///
     /// - parameter type: The type to decode as.
     /// - returns: A value of the requested type.
-    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value cannot be converted to the requested type.
+    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value
+    ///   cannot be converted to the requested type.
     /// - throws: `DecodingError.valueNotFound` if the encountered encoded value is null.
-    func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+    func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         if let type = T.self as? DatabaseValueConvertible.Type {
             // Prefer DatabaseValueConvertible decoding over Decodable.
             // This allows custom database decoding, such as decoding Date from
@@ -159,7 +161,7 @@ private struct DatabaseValueDecoder: Decoder {
     
     // Decoder
     let codingPath: [CodingKey]
-    var userInfo: [CodingUserInfoKey : Any] { return [:] }
+    var userInfo: [CodingUserInfoKey: Any] { return [:] }
     
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
         throw DecodingError.typeMismatch(
@@ -178,13 +180,13 @@ private struct DatabaseValueDecoder: Decoder {
     }
 }
 
-public extension DatabaseValueConvertible where Self: Decodable {
+extension DatabaseValueConvertible where Self: Decodable {
     public static func fromDatabaseValue(_ databaseValue: DatabaseValue) -> Self? {
         return try? self.init(from: DatabaseValueDecoder(dbValue: databaseValue, codingPath: []))
     }
 }
 
-public extension DatabaseValueConvertible where Self: Decodable & RawRepresentable, Self.RawValue: DatabaseValueConvertible {
+extension DatabaseValueConvertible where Self: Decodable & RawRepresentable, Self.RawValue: DatabaseValueConvertible {
     public static func fromDatabaseValue(_ databaseValue: DatabaseValue) -> Self? {
         // Preserve custom database decoding
         return RawValue.fromDatabaseValue(databaseValue).flatMap { self.init(rawValue: $0) }

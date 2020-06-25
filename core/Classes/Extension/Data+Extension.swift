@@ -11,7 +11,7 @@ import Foundation
 extension Data {
 
     public init(hex: String) {
-        self.init(bytes: [UInt8](hex: hex))
+        self.init([UInt8](hex: hex))
     }
 
     public var bytes: [UInt8] {

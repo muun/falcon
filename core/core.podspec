@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Juan Pablo Civile' => 'champo@muun.com', 'Manu Herrera' => 'manu@muun.com' }
   s.source           = { :git => 'https://github.com/muun/muun.git', :tag => s.version.to_s }
 
+  s.swift_version = '5'
   s.ios.deployment_target = '11.0'
   s.static_framework = true
 
@@ -20,18 +21,22 @@ Pod::Spec.new do |s|
     sp.dependency 'Dip', '7.0.1'
 
     # Local DB
-    sp.dependency 'GRDB.swift', '3.6.1'
-    sp.dependency 'RxGRDB', '0.13.0'
+    sp.dependency 'GRDB.swift', '4.9.0'
+    sp.dependency 'RxGRDB', '0.18.0'
 
     # React
-    sp.dependency 'RxSwift', '4.4.2'
-    sp.dependency 'RxBlocking', '4.4.2'
+    sp.dependency 'RxSwift', '5.0.1'
+    sp.dependency 'RxBlocking', '5.0.1'
 
     sp.vendored_framework = 'Libwallet.framework'
   end
 
   s.subspec 'notifications' do |sp|
-    sp.source_files = 'Classes/Environment.swift', 'Classes/Data/Errors/Logger.swift', 'Classes/Data/Service/Base/BaseRequest.swift', 'Classes/Data/Service/DTO/**/*', 'Classes/Domain/Model/Operations/MonetaryAmount.swift', 'Classes/Data/Errors/MuunError.swift', 'Classes/Constant.swift', 'Classes/Extension/JSONDecoder+Extension.swift'
+    sp.vendored_framework = 'Libwallet.framework'
+  end
+
+  s.test_spec 'Tests' do |ts|
+    ts.source_files = 'Tests/**/*'
   end
 
   s.script_phases = [{ 

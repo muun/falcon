@@ -1,7 +1,9 @@
 #if SWIFT_PACKAGE
-    import CSQLite
+import CSQLite
+#elseif GRDBCIPHER
+import SQLCipher
 #elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-    import SQLite3
+import SQLite3
 #endif
 
 /// The protocol for all types that can fetch values from a database.
@@ -19,7 +21,71 @@
 /// connection to the database. Should you have to cope with external
 /// connections, protect yourself with transactions, and be ready to setup a
 /// [busy handler](https://www.sqlite.org/c3ref/busy_handler.html).
-public protocol DatabaseReader : class {
+public protocol DatabaseReader: AnyObject {
+    
+    /// The database configuration
+    var configuration: Configuration { get }
+    
+    // MARK: - Interrupting Database Operations
+    
+    /// This method causes any pending database operation to abort and return at
+    /// its earliest opportunity.
+    ///
+    /// It can be called from any thread.
+    ///
+    /// A call to `interrupt()` that occurs when there are no running SQL
+    /// statements is a no-op and has no effect on SQL statements that are
+    /// started after `interrupt()` returns.
+    ///
+    /// A database operation that is interrupted will throw a DatabaseError with
+    /// code SQLITE_INTERRUPT. If the interrupted SQL operation is an INSERT,
+    /// UPDATE, or DELETE that is inside an explicit transaction, then the
+    /// entire transaction will be rolled back automatically. If the rolled back
+    /// transaction was started by a transaction-wrapping method such as
+    /// `DatabaseWriter.write` or `Database.inTransaction`, then all database
+    /// accesses will throw a DatabaseError with code SQLITE_ABORT until the
+    /// wrapping method returns.
+    ///
+    /// For example:
+    ///
+    ///     try dbQueue.write { db in
+    ///         // interrupted:
+    ///         try Player(...).insert(db)     // throws SQLITE_INTERRUPT
+    ///         // not executed:
+    ///         try Player(...).insert(db)
+    ///     }                                  // throws SQLITE_INTERRUPT
+    ///
+    ///     try dbQueue.write { db in
+    ///         do {
+    ///             // interrupted:
+    ///             try Player(...).insert(db) // throws SQLITE_INTERRUPT
+    ///         } catch { }
+    ///         try Player(...).insert(db)     // throws SQLITE_ABORT
+    ///     }                                  // throws SQLITE_ABORT
+    ///
+    ///     try dbQueue.write { db in
+    ///         do {
+    ///             // interrupted:
+    ///             try Player(...).insert(db) // throws SQLITE_INTERRUPT
+    ///         } catch { }
+    ///     }                                  // throws SQLITE_ABORT
+    ///
+    /// When an application creates transaction without a transaction-wrapping
+    /// method, no SQLITE_ABORT error warns of aborted transactions:
+    ///
+    ///     try dbQueue.inDatabase { db in // or dbPool.writeWithoutTransaction
+    ///         try db.beginTransaction()
+    ///         do {
+    ///             // interrupted:
+    ///             try Player(...).insert(db) // throws SQLITE_INTERRUPT
+    ///         } catch { }
+    ///         try Player(...).insert(db)     // success
+    ///         try db.commit()                // throws SQLITE_ERROR "cannot commit - no transaction is active"
+    ///     }
+    ///
+    /// Both SQLITE_ABORT and SQLITE_INTERRUPT errors can be checked with the
+    /// `DatabaseError.isInterruptionError` property.
+    func interrupt()
     
     // MARK: - Read From Database
     
@@ -31,14 +97,14 @@ public protocol DatabaseReader : class {
     ///
     ///     try reader.read { db in
     ///         // Those two values are guaranteed to be equal, even if the
-    ///         // `wine` table is modified between the two requests:
-    ///         let count1 = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
-    ///         let count2 = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
+    ///         // `player` table is modified between the two requests:
+    ///         let count1 = try Player.fetchCount(db)
+    ///         let count2 = try Player.fetchCount(db)
     ///     }
     ///
     ///     try reader.read { db in
     ///         // Now this value may be different:
-    ///         let count = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
+    ///         let count = try Player.fetchCount(db)
     ///     }
     ///
     /// Guarantee 2: Starting iOS 8.2, OSX 10.10, and with custom SQLite builds
@@ -50,6 +116,33 @@ public protocol DatabaseReader : class {
     ///   happen while establishing the read access to the database.
     func read<T>(_ block: (Database) throws -> T) throws -> T
     
+    #if compiler(>=5.0)
+    /// Asynchronously executes a read-only block that takes a
+    /// database connection.
+    ///
+    /// Guarantee 1: the block argument is isolated. Eventual concurrent
+    /// database updates are not visible inside the block:
+    ///
+    ///     try reader.asyncRead { result in
+    ///         do (
+    ///             let db = try result.get()
+    ///             // Those two values are guaranteed to be equal, even if the
+    ///             // `player` table is modified between the two requests:
+    ///             let count1 = try Player.fetchCount(db)
+    ///             let count2 = try Player.fetchCount(db)
+    ///         } catch {
+    ///             // handle error
+    ///         }
+    ///     }
+    ///
+    /// Guarantee 2: Starting iOS 8.2, OSX 10.10, and with custom SQLite builds
+    /// and SQLCipher, attempts to write in the database throw a DatabaseError
+    /// whose resultCode is `SQLITE_READONLY`.
+    ///
+    /// - parameter block: A block that accesses the database.
+    func asyncRead(_ block: @escaping (Result<Database, Error>) -> Void)
+    #endif
+    
     /// Synchronously executes a read-only block that takes a database
     /// connection, and returns its result.
     ///
@@ -60,16 +153,16 @@ public protocol DatabaseReader : class {
     ///
     ///     try reader.unsafeRead { db in
     ///         // Those two values may be different because some other thread
-    ///         // may have inserted or deleted a wine between the two requests:
-    ///         let count1 = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
-    ///         let count2 = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
+    ///         // may have inserted or deleted a player between the two requests:
+    ///         let count1 = try Player.fetchCount(db)
+    ///         let count2 = try Player.fetchCount(db)
     ///     }
     ///
     /// Cursor iterations are isolated, though:
     ///
     ///     try reader.unsafeRead { db in
     ///         // No concurrent update can mess with this iteration:
-    ///         let rows = try Row.fetchCursor(db, "SELECT ...")
+    ///         let rows = try Row.fetchCursor(db, sql: "SELECT ...")
     ///         while let row = try rows.next() { ... }
     ///     }
     ///
@@ -91,16 +184,16 @@ public protocol DatabaseReader : class {
     ///
     ///     try reader.unsafeReentrantRead { db in
     ///         // Those two values may be different because some other thread
-    ///         // may have inserted or deleted a wine between the two requests:
-    ///         let count1 = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
-    ///         let count2 = try Int.fetchOne(db, "SELECT COUNT(*) FROM wine")!
+    ///         // may have inserted or deleted a player between the two requests:
+    ///         let count1 = try Player.fetchCount(db)
+    ///         let count2 = try Player.fetchCount(db)
     ///     }
     ///
     /// Cursor iterations are isolated, though:
     ///
     ///     try reader.unsafeReentrantRead { db in
     ///         // No concurrent update can mess with this iteration:
-    ///         let rows = try Row.fetchCursor(db, "SELECT ...")
+    ///         let rows = try Row.fetchCursor(db, sql: "SELECT ...")
     ///         while let row = try rows.next() { ... }
     ///     }
     ///
@@ -128,7 +221,7 @@ public protocol DatabaseReader : class {
     ///     }
     ///     reader.add(function: fn)
     ///     try reader.read { db in
-    ///         try Int.fetchOne(db, "SELECT succ(1)")! // 2
+    ///         try Int.fetchOne(db, sql: "SELECT succ(1)")! // 2
     ///     }
     func add(function: DatabaseFunction)
     
@@ -144,7 +237,7 @@ public protocol DatabaseReader : class {
     ///         return (string1 as NSString).localizedStandardCompare(string2)
     ///     }
     ///     reader.add(collation: collation)
-    ///     try reader.execute("SELECT * FROM file ORDER BY name COLLATE localized_standard")
+    ///     try reader.execute(sql: "SELECT * FROM file ORDER BY name COLLATE localized_standard")
     func add(collation: DatabaseCollation)
     
     /// Remove a collation.
@@ -164,9 +257,9 @@ public protocol DatabaseReader : class {
     /// - returns: a TransactionObserver
     func add<Reducer: ValueReducer>(
         observation: ValueObservation<Reducer>,
-        onError: ((Error) -> Void)?,
+        onError: @escaping (Error) -> Void,
         onChange: @escaping (Reducer.Value) -> Void)
-        throws -> TransactionObserver
+        -> TransactionObserver
     
     /// Remove a transaction observer.
     func remove(transactionObserver: TransactionObserver)
@@ -188,10 +281,14 @@ extension DatabaseReader {
         try backup(to: writer, afterBackupInit: nil, afterBackupStep: nil)
     }
     
-    func backup(to writer: DatabaseWriter, afterBackupInit: (() -> ())?, afterBackupStep: (() -> ())?) throws {
+    func backup(to writer: DatabaseWriter, afterBackupInit: (() -> Void)?, afterBackupStep: (() -> Void)?) throws {
         try read { dbFrom in
             try writer.writeWithoutTransaction { dbDest in
-                try Database.backup(from: dbFrom, to: dbDest, afterBackupInit: afterBackupInit, afterBackupStep: afterBackupStep)
+                try Database.backup(
+                    from: dbFrom,
+                    to: dbDest,
+                    afterBackupInit: afterBackupInit,
+                    afterBackupStep: afterBackupStep)
             }
         }
     }
@@ -201,12 +298,24 @@ extension DatabaseReader {
 ///
 /// Instances of AnyDatabaseReader forward their methods to an arbitrary
 /// underlying database reader.
-public final class AnyDatabaseReader : DatabaseReader {
+public final class AnyDatabaseReader: DatabaseReader {
     private let base: DatabaseReader
     
     /// Creates a database reader that wraps a base database reader.
     public init(_ base: DatabaseReader) {
         self.base = base
+    }
+    
+    /// :nodoc:
+    public var configuration: Configuration {
+        return base.configuration
+    }
+    
+    // MARK: - Interrupting Database Operations
+    
+    /// :nodoc:
+    public func interrupt() {
+        base.interrupt()
     }
     
     // MARK: - Reading from Database
@@ -215,6 +324,13 @@ public final class AnyDatabaseReader : DatabaseReader {
     public func read<T>(_ block: (Database) throws -> T) throws -> T {
         return try base.read(block)
     }
+    
+    #if compiler(>=5.0)
+    /// :nodoc:
+    public func asyncRead(_ block: @escaping (Result<Database, Error>) -> Void) {
+        base.asyncRead(block)
+    }
+    #endif
     
     /// :nodoc:
     public func unsafeRead<T>(_ block: (Database) throws -> T) throws -> T {
@@ -255,11 +371,11 @@ public final class AnyDatabaseReader : DatabaseReader {
     /// :nodoc:
     public func add<Reducer: ValueReducer>(
         observation: ValueObservation<Reducer>,
-        onError: ((Error) -> Void)?,
+        onError: @escaping (Error) -> Void,
         onChange: @escaping (Reducer.Value) -> Void)
-        throws -> TransactionObserver
+        -> TransactionObserver
     {
-        return try base.add(observation: observation, onError: onError, onChange: onChange)
+        return base.add(observation: observation, onError: onError, onChange: onChange)
     }
     
     /// :nodoc:

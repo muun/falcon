@@ -11,7 +11,15 @@ import RxSwift
 
 public class HoustonService: BaseService {
 
-    init(preferences: Preferences, urlSession: URLSession, sessionRepository: SessionRepository) {
+    private let decrypter: OperationMetadataDecrypter
+
+    init(preferences: Preferences,
+         urlSession: URLSession,
+         sessionRepository: SessionRepository,
+         decrypter: OperationMetadataDecrypter) {
+
+        self.decrypter = decrypter
+
         super.init(preferences: preferences,
                    urlSession: urlSession,
                    sessionRepository: sessionRepository,
@@ -25,31 +33,45 @@ public class HoustonService: BaseService {
     // ---------------------------------------------------------------------------------------------
     // Authentication and Sessions:
 
-    func createSession(session: Session) -> Single<CreateSessionOk> {
-        let jsonData = data(from: session)
+    func createSession(session: CreateLoginSession) -> Single<CreateSessionOk> {
+        let jsonData = JSONEncoder.data(from: session)
 
-        return post("sessions", body: jsonData, andReturn: CreateSessionOkJson.self)
+        return post("sessions-v2/login", body: jsonData, andReturn: CreateSessionOkJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func createFirstSession(firstSession: CreateFirstSession) -> Single<CreateFirstSessionOk> {
+        let jsonData = JSONEncoder.data(from: firstSession)
+
+        return post("sessions-v2/first", body: jsonData, andReturn: CreateFirstSessionOkJson.self)
             .map({ $0.toModel() })
     }
 
     func resendVerificationCode(verificationType: VerificationType) -> Single<()> {
-        let jsonData = data(from: verificationType)
+        let jsonData = JSONEncoder.data(from: verificationType)
 
         return post("sessions/current/resend-code", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
     }
 
     func confirmPhone(phoneConfirmation: PhoneConfirmation) -> Single<PhoneConfirmation> {
-        let jsonData = data(from: phoneConfirmation)
+        let jsonData = JSONEncoder.data(from: phoneConfirmation)
 
         return put("sessions/current/confirm-phone", body: jsonData, andReturn: PhoneConfirmationJson.self)
             .map({ $0.toModel() })
     }
 
-    func signup(signupObject: Signup) -> Single<SignupOk> {
-        let jsonData = data(from: signupObject)
+    func setUpPassword(_ passwordSetup: PasswordSetup) -> Single<()> {
+        let jsonData = JSONEncoder.data(from: passwordSetup)
 
-        return post("sign-up", body: jsonData, andReturn: SignupOkJson.self)
+        return post("sessions-v2/password", body: jsonData, andReturn: EmptyJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func startEmailSetup(_ emailSetup: StartEmailSetup) -> Single<()> {
+        let jsonData = JSONEncoder.data(from: emailSetup)
+
+        return post("sessions-v2/email/start", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
     }
 
@@ -70,7 +92,7 @@ public class HoustonService: BaseService {
         }
 
         return get("sessions/notifications", queryParams: queryParams, andReturn: [NotificationJson].self)
-            .map({ $0.toModel() })
+            .map({ $0.toModel(decrypter: self.decrypter) })
     }
 
     func confirmNotificationsDeliveryUntil(notificationId: Int) -> Completable {
@@ -91,14 +113,14 @@ public class HoustonService: BaseService {
     }
 
     func setupChallenge(challengeSetup: ChallengeSetup) -> Single<SetupChallengeResponse> {
-        let jsonData = data(from: challengeSetup)
+        let jsonData = JSONEncoder.data(from: challengeSetup)
 
         return post("user/challenge/setup", body: jsonData, andReturn: SetupChallengeResponseJson.self)
             .map({ $0.toModel() })
     }
 
     func logIn(challengeSignature: ChallengeSignature) -> Single<KeySet> {
-        let jsonData = data(from: challengeSignature)
+        let jsonData = JSONEncoder.data(from: challengeSignature)
 
         return post("sessions/current/login", body: jsonData, andReturn: KeySetJson.self)
             .map({ $0.toModel() })
@@ -109,14 +131,21 @@ public class HoustonService: BaseService {
     }
 
     func authorizeSession(linkAction: LinkAction) -> Single<()> {
-        let jsonData = data(from: linkAction)
+        let jsonData = JSONEncoder.data(from: linkAction)
 
         return post("sessions/current/authorize", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
     }
 
+    func verifySignUp(linkAction: LinkAction) -> Single<()> {
+        let jsonData = JSONEncoder.data(from: linkAction)
+
+        return post("sessions-v2/email/finish", body: jsonData, andReturn: EmptyJson.self)
+            .map({ $0.toModel() })
+    }
+
     func sendEncryptedKeysEmail(encryptedKey: SendEncryptedKeys) -> Single<()> {
-        let jsonData = data(from: encryptedKey)
+        let jsonData = JSONEncoder.data(from: encryptedKey)
 
         return post("user/export-keys", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
@@ -139,7 +168,7 @@ public class HoustonService: BaseService {
     }
 
     func updatePublicKeySet(publicKey: WalletPublicKey) -> Single<PublicKeySet> {
-        let jsonData = data(from: PublicKeySet(basePublicKey: publicKey))
+        let jsonData = JSONEncoder.data(from: PublicKeySet(basePublicKey: publicKey))
 
         return put("user/public-key-set", body: jsonData, andReturn: PublicKeySetJson.self)
             .map({ $0.toModel() })
@@ -152,35 +181,35 @@ public class HoustonService: BaseService {
 
     func update(externalAddressesRecord: ExternalAddressesRecord)
         -> Single<ExternalAddressesRecord> {
-        let jsonData = data(from: externalAddressesRecord)
+        let jsonData = JSONEncoder.data(from: externalAddressesRecord)
 
         return put("user/external-addresses-record", body: jsonData, andReturn: ExternalAddressesRecordJson.self)
             .map({ $0.toModel() })
     }
 
     func updateUser(user: User) -> Single<User> {
-        let jsonData = data(from: user)
+        let jsonData = JSONEncoder.data(from: user)
 
         return patch("user", body: jsonData, andReturn: UserJson.self)
             .map({ $0.toModel() })
     }
 
     func updateCurrency(user: User) -> Single<User> {
-        let jsonData = data(from: user)
+        let jsonData = JSONEncoder.data(from: user)
 
         return post("user/currency", body: jsonData, andReturn: UserJson.self)
             .map({ $0.toModel() })
     }
 
     func beginPasswordChange(challengeSignature: ChallengeSignature) -> Single<PendingChallengeUpdate> {
-        let jsonData = data(from: challengeSignature)
+        let jsonData = JSONEncoder.data(from: challengeSignature)
 
         return post("user/password", body: jsonData, andReturn: PendingChallengeUpdateJson.self)
             .map({ $0.toModel() })
     }
 
     func finishPasswordChange(challengeUpdate: ChallengeUpdate) -> Single<SetupChallengeResponse> {
-        let jsonData = data(from: challengeUpdate)
+        let jsonData = JSONEncoder.data(from: challengeUpdate)
 
         return post("user/password/finish", body: jsonData, andReturn: SetupChallengeResponseJson.self)
             .map({ $0.toModel() })
@@ -193,6 +222,11 @@ public class HoustonService: BaseService {
         }
 
         return post("user/feedback", body: jsonData, andReturn: EmptyJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func setHasExportedKeys() -> Single<()> {
+        return post("user/keys/exported", andReturn: EmptyJson.self)
             .map({ $0.toModel() })
     }
 
@@ -213,25 +247,33 @@ public class HoustonService: BaseService {
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Real-time data and Operations:
+    // Real-time data:
 
     func fetchRealTimeData() -> Single<RealTimeData> {
         return get("realtime", andReturn: RealTimeDataJson.self)
             .map({ $0.toModel() })
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // Operations:
+
     func fetchOperations() -> Single<[Operation]> {
         return get("operations", andReturn: [OperationJson].self)
-            .map({ $0.toModel() })
+            .map({
+                $0.map({ operationJson in operationJson.toModel(decrypter: self.decrypter) })
+            })
     }
 
-    func newOperation(operation: Operation) -> Single<OperationCreated> {
-        return post("operations", body: data(from: operation), andReturn: OperationCreatedJson.self)
-            .map({ $0.toModel() })
+    func newOperation(operation: OperationJson) -> Single<OperationCreated> {
+        return post("operations", body: JSONEncoder.data(json: operation), andReturn: OperationCreatedJson.self)
+            .map({ $0.toModel(decrypter: self.decrypter) })
     }
 
-    func pushTransaction(rawTransaction: RawTransaction, operationId: Int) -> Single<RawTransactionResponse> {
-        let jsonData = data(from: rawTransaction)
+    func pushTransaction(rawTransaction: RawTransaction?, operationId: Int) -> Single<RawTransactionResponse> {
+        var jsonData: Data?
+        if let rawTx = rawTransaction {
+            jsonData = JSONEncoder.data(from: rawTx)
+        }
 
         let path = "operations/{operationId}/raw-transaction"
         let finalPath = path.replacingOccurrences(of: "{operationId}", with: String(describing: operationId))
@@ -249,7 +291,7 @@ public class HoustonService: BaseService {
     // Submarine swaps:
 
     func createSubmarineSwap(submarineSwapRequest: SubmarineSwapRequest) -> Single<SubmarineSwap> {
-        let jsonData = data(from: submarineSwapRequest)
+        let jsonData = JSONEncoder.data(from: submarineSwapRequest)
 
         return post("operations/sswap/create", body: jsonData, andReturn: SubmarineSwapJson.self)
             .map({ $0.toModel() })
@@ -259,7 +301,7 @@ public class HoustonService: BaseService {
     // Other endpoints:
 
     func checkIntegrity(request: IntegrityCheck) -> Single<IntegrityStatus> {
-        return post("integrity/check", body: data(from: request), andReturn: IntegrityStatusJson.self)
+        return post("integrity/check", body: JSONEncoder.data(from: request), andReturn: IntegrityStatusJson.self)
             .map({ $0.toModel() })
     }
 

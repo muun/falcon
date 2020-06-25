@@ -9,6 +9,11 @@
 import Foundation
 import RxSwift
 
+public enum SignFlow: String {
+    case recover
+    case create
+}
+
 public class SyncAction: AsyncAction<()> {
 
     private let houstonService: HoustonService
@@ -18,6 +23,7 @@ public class SyncAction: AsyncAction<()> {
     private let realTimeDataAction: RealTimeDataAction
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
     private let fetchNotificationsAction: FetchNotificationsAction
+    private let createFirstSessionAction: CreateFirstSessionAction
 
     init(houstonService: HoustonService,
          addressActions: AddressActions,
@@ -25,13 +31,15 @@ public class SyncAction: AsyncAction<()> {
          userRepository: UserRepository,
          realTimeDataAction: RealTimeDataAction,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
-         fetchNotificationsAction: FetchNotificationsAction) {
+         fetchNotificationsAction: FetchNotificationsAction,
+         createFirstSessionAction: CreateFirstSessionAction) {
 
         self.houstonService = houstonService
         self.addressActions = addressActions
         self.operationActions = operationActions
         self.realTimeDataAction = realTimeDataAction
         self.fetchNotificationsAction = fetchNotificationsAction
+        self.createFirstSessionAction = createFirstSessionAction
 
         self.userRepository = userRepository
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
@@ -39,8 +47,35 @@ public class SyncAction: AsyncAction<()> {
         super.init(name: "SyncAction")
     }
 
-    public func run() {
-        let comp = Completable.merge(
+    public func run(signFlow: SignFlow, gcmToken: String) {
+
+        do {
+            if signFlow == .create { // is anon user
+                _ = try createFirstSessionAction.run(gcmToken: gcmToken)
+
+                runCompletable(createFirstSessionAction.getValue().asCompletable()
+                    .andThen(
+                        Completable.deferred({
+                            self.runActions()
+                            return self.buildAndRunSyncCompletable()
+                        })
+                ))
+            } else {
+                runActions()
+                runCompletable(buildAndRunSyncCompletable())
+            }
+        } catch {
+            fatalError()
+        }
+    }
+
+    private func runActions() {
+        realTimeDataAction.run()
+        fetchNotificationsAction.run()
+    }
+
+    private func buildAndRunSyncCompletable() -> Completable {
+        return Completable.zip(
             realTimeDataAction.getValue().asCompletable(),
             operationActions.updateOperations(),
             fetchNextTransactionSize(),
@@ -48,10 +83,6 @@ public class SyncAction: AsyncAction<()> {
             addressActions.syncPublicKeySet(),
             fetchNotificationsAction.getValue().asCompletable()
         )
-
-        fetchNotificationsAction.run()
-        realTimeDataAction.run()
-        runCompletable(comp)
     }
 
     func fetchUserInfo() -> Completable {

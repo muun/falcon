@@ -35,6 +35,9 @@ struct SubmarineSwapDB: Codable, FetchableRecord, PersistableRecord {
     let outputAmount: Int64
     let confirmationsNeeded: Int
 
+    let outputDebtType: String
+    let outputDebtAmount: Int64
+
     let userLockTime: Int
     let expirationInBlocks: Int?
 
@@ -74,6 +77,8 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
                   outputAddress: from._fundingOutput._outputAddress,
                   outputAmount: from._fundingOutput._outputAmount.value,
                   confirmationsNeeded: from._fundingOutput._confirmationsNeeded,
+                  outputDebtType: from.getDebtType().rawValue,
+                  outputDebtAmount: from._fundingOutput._debtAmount.value,
                   userLockTime: from._fundingOutput._userLockTime ?? -1,
                   expirationInBlocks: from._fundingOutput._expirationInBlocks,
                   userRefundAddress: from._fundingOutput._userRefundAddress?.address(),
@@ -89,6 +94,7 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
                   muunPublicKeyPath: from._fundingOutput._muunPublicKey?.path)
     }
 
+    // swiftlint:disable function_body_length
     func to(using db: Database) throws -> SubmarineSwap {
         let networkAddress = serializedNetworkAddresses?.split(separator: "-").map(String.init) ?? []
         let sswapUserRefundAddress: MuunAddress?
@@ -128,6 +134,8 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
             realUserLockTime = userLockTime
         }
 
+        let debtType = DebtType.init(rawValue: outputDebtType) ?? .NONE
+
         return SubmarineSwap(swapUuid: swapUuid,
                              invoice: invoice,
                              receiver: SubmarineSwapReceiver(alias: alias,
@@ -143,7 +151,9 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
                                                                        serverPublicKeyInHex: serverPublicKeyInHex,
                                                                        expirationTimeInBlocks: expirationInBlocks,
                                                                        userPublicKey: userPublicKey,
-                                                                       muunPublicKey: muunPublicKey),
+                                                                       muunPublicKey: muunPublicKey,
+                                                                       debtType: debtType,
+                                                                       debtAmount: Satoshis(value: outputDebtAmount)),
                              fees: SubmarineSwapFees(lightning: Satoshis(value: lightningFee),
                                                      sweep: Satoshis(value: sweepFee),
                                                      channelOpen: Satoshis(value: channelOpenFee),
@@ -153,5 +163,6 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
                              payedAt: payedAt,
                              preimageInHex: preimageInHex)
     }
+    // swiftlint:enable function_body_length
 
 }

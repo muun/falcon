@@ -24,6 +24,18 @@ public struct WalletPrivateKey {
     func walletPublicKey() -> WalletPublicKey {
         return WalletPublicKey(key.publicKey()!)
     }
+
+    func encrypter() -> LibwalletEncrypterProtocol {
+        return key.encrypter()!
+    }
+
+    func decrypter() -> LibwalletDecrypterProtocol {
+        return key.decrypter()!
+    }
+
+    func decrypter(from publicKey: LibwalletPublicKey?) -> LibwalletDecrypterProtocol {
+        return key.decrypter(from: publicKey)!
+    }
 }
 
 extension WalletPrivateKey {
@@ -31,7 +43,7 @@ extension WalletPrivateKey {
     static func createRandom() -> WalletPrivateKey {
 
         let key = LibwalletHDPrivateKey(
-            Data(bytes: Hashes.randomBytes(count: 32)),
+            Data(Hashes.randomBytes(count: 32)),
             network: Environment.current.network
         )!
 
@@ -50,6 +62,16 @@ extension WalletPrivateKey {
 }
 
 extension WalletPrivateKey {
+
+    func deriveRandom() throws -> WalletPrivateKey {
+        // In iOS 10+ this generator uses /dev/urandom and is considered crypto safe
+        var rng = SystemRandomNumberGenerator()
+
+        // Make sure the upper bit is off cause that means it's hardened
+        let childIndex = rng.next(upperBound: UInt32(1) << 31)
+
+        return WalletPrivateKey(try key.derived(at: Int64(childIndex), hardened: false))
+    }
 
     func derive(to newPath: String) throws -> WalletPrivateKey {
         return WalletPrivateKey(try key.derive(to: newPath))

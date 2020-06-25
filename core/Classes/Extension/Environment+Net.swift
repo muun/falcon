@@ -11,7 +11,7 @@ import Libwallet
 extension Environment {
     public var network: LibwalletNetwork {
         switch self {
-        case .debug:
+        case .debug, .regtest:
             return LibwalletRegtest()!
         case .dev:
             return LibwalletTestnet()!

@@ -1,8 +1,6 @@
 framework module GRDB {
-    umbrella header "GRDB.h"
-    
-    export *
-    module * { export * }
-    
-    header "grdb_config.h"
+  umbrella header "GRDB.swift-umbrella.h"
+
+  export *
+  module * { export * }
 }

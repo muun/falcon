@@ -27,7 +27,17 @@ struct ChallengeSetupJson: Codable {
 }
 
 enum ChallengeTypeJson: String, Codable {
+    /**
+     * Client-generated public key before any other key was set up.
+     */
+    case ANON
+    /**
+     * User-provided password public key will be used to sign Challenge.
+     */
     case PASSWORD
+    /**
+     * User-provided recovery code public key will be used to sign Challenge.
+     */
     case RECOVERY_CODE
 }
 

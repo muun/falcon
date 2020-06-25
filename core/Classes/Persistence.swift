@@ -27,7 +27,9 @@ public enum Persistence: String, CaseIterable {
     case maxWatchingIndex
     case maxUsedIndex
 
+    // baseKeyDerivationPath is deprecated: Use baseKeyDerivationPath in SecureStorage
     case baseKeyDerivationPath
+
     case basePublicKey
     case basePrivateKey
 
@@ -43,11 +45,12 @@ public enum Persistence: String, CaseIterable {
     case displayBTCasSAT
 
     case hasRecoveryCode
-    case rcSetupInProcess
 
     case syncStatus
 
     case currentEnvironment
 
     case blockchainHeight
+
+    case welcomeMessageSeen
 }

@@ -41,10 +41,19 @@ public class OperationActions {
         generateBalanceCache()
     }
 
+    /*
+     UI Balance is calculated by substracting the debt from the last item in the next transaction size
+     */
     func watchBalanceInSatoshis() -> Observable<Satoshis> {
+        var utxoBalance: Satoshis = Satoshis(value: 0)
+        var debt: Satoshis = Satoshis(value: 0)
+
         return nextTransactionSizeRepository.watchNextTransactionSize()
-            .map({ nextSize in nextSize?.sizeProgression.last?.amountInSatoshis })
-            .map({ amount in amount ?? Satoshis(value: 0) })
+            .map({ nts in
+                utxoBalance = nts?.sizeProgression.last?.amountInSatoshis ?? Satoshis(value: 0)
+                debt = nts?.expectedDebt ?? Satoshis(value: 0)
+                return utxoBalance - debt
+            })
     }
 
     private func generateBalanceCache() {
@@ -105,34 +114,68 @@ public class OperationActions {
         })
     }
 
+    private func generateMetadata(description: String?) throws -> String {
+
+        // Derive a key for metadata in it's tree on two random indexes to make it reasonably unique
+        let encrypter = try keysRepository.getBasePrivateKey()
+            .derive(to: .metadata)
+            .deriveRandom()
+            .deriveRandom()
+            .encrypter()
+
+        let metadata = JSONEncoder.data(json: OperationMetadataJson(description: description))
+        return try doWithError({ err in
+            encrypter.encrypt(metadata, error: err)
+        })
+    }
+
     public func newOperation(_ operation: core.Operation) -> Single<core.Operation> {
 
         guard let destinationAddress = operation.receiverAddress else {
             Logger.fatal("Tried to create new operation without a destination address")
         }
 
-        return houstonService.newOperation(operation: operation)
+        var json = operation.toJson()
+        do {
+            json.senderMetadata = try generateMetadata(description: operation.description)
+            json.description = nil
+        } catch {
+            Logger.log(error: error)
+        }
+
+        return houstonService.newOperation(operation: json)
             .flatMap({ created in
-                let privateKey = try self.keysRepository.getBasePrivateKey()
-                let muunKey = try self.keysRepository.getCosigningKey()
 
-                let expectations = PartiallySignedTransaction.Expectations(
-                    destination: destinationAddress,
-                    amount: operation.outputAmount,
-                    fee: operation.fee.inSatoshis,
-                    change: created.change)
-
-                let signedTransaction = try created.partiallySignedTransaction.sign(
-                    key: privateKey,
-                    muunKey: muunKey,
-                    expectations: expectations)
-
+                let rawTransaction: RawTransaction?
                 var operationUpdated = created.operation
-                operationUpdated.transaction?.hash = signedTransaction.hash
-                operationUpdated.status = .SIGNED
+
+                if let swap = operation.submarineSwap, swap.getDebtType() == .LEND {
+                    // If we are on a lend swap we don't need to sign anything because there wont be a transaction
+                    rawTransaction = nil
+                } else {
+                    // Sign the transaction
+                    let privateKey = try self.keysRepository.getBasePrivateKey()
+                    let muunKey = try self.keysRepository.getCosigningKey()
+
+                    let expectations = PartiallySignedTransaction.Expectations(
+                        destination: destinationAddress,
+                        amount: operation.outputAmount,
+                        fee: operation.fee.inSatoshis,
+                        change: created.change)
+
+                    let signedTransaction = try created.partiallySignedTransaction.sign(
+                        key: privateKey,
+                        muunKey: muunKey,
+                        expectations: expectations)
+
+                    operationUpdated.transaction?.hash = signedTransaction.hash
+                    operationUpdated.status = .SIGNED
+
+                    rawTransaction = RawTransaction(hex: signedTransaction.bytes!.toHexString())
+                }
 
                 return self.houstonService.pushTransaction(
-                    rawTransaction: RawTransaction(hex: signedTransaction.bytes!.toHexString()),
+                    rawTransaction: rawTransaction,
                     operationId: operationUpdated.id!)
                     .do(onSuccess: { completedOp in
                         self.nextTransactionSizeRepository.setNextTransactionSize(completedOp.nextTransactionSize)

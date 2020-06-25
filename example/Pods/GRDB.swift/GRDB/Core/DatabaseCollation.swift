@@ -1,8 +1,10 @@
 import Foundation
 #if SWIFT_PACKAGE
-    import CSQLite
+import CSQLite
+#elseif GRDBCIPHER
+import SQLCipher
 #elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-    import SQLite3
+import SQLite3
 #endif
 
 /// A Collation is a string comparison function used by SQLite.
@@ -16,7 +18,7 @@ public final class DatabaseCollation {
     ///         return (string1 as NSString).localizedStandardCompare(string2)
     ///     }
     ///     db.add(collation: collation)
-    ///     try db.execute("CREATE TABLE file (name TEXT COLLATE localized_standard")
+    ///     try db.execute(sql: "CREATE TABLE file (name TEXT COLLATE localized_standard")
     ///
     /// - parameters:
     ///     - name: The function name.
@@ -25,8 +27,16 @@ public final class DatabaseCollation {
         self.name = name
         self.function = { (length1, buffer1, length2, buffer2) in
             // Buffers are not C strings: they do not end with \0.
-            let string1 = String(bytesNoCopy: UnsafeMutableRawPointer(mutating: buffer1.unsafelyUnwrapped), length: Int(length1), encoding: .utf8, freeWhenDone: false)!
-            let string2 = String(bytesNoCopy: UnsafeMutableRawPointer(mutating: buffer2.unsafelyUnwrapped), length: Int(length2), encoding: .utf8, freeWhenDone: false)!
+            let string1 = String(
+                bytesNoCopy: UnsafeMutableRawPointer(mutating: buffer1.unsafelyUnwrapped),
+                length: Int(length1),
+                encoding: .utf8,
+                freeWhenDone: false)!
+            let string2 = String(
+                bytesNoCopy: UnsafeMutableRawPointer(mutating: buffer2.unsafelyUnwrapped),
+                length: Int(length2),
+                encoding: .utf8,
+                freeWhenDone: false)!
             return function(string1, string2)
         }
     }
@@ -39,22 +49,15 @@ extension DatabaseCollation: Hashable {
     // implies hash equality) is thus non trivial. But it's not that
     // important, since this hashValue is only used when one adds
     // or removes a collation from a database connection.
-    #if swift(>=4.2)
     /// :nodoc:
     public func hash(into hasher: inout Hasher) {
         hasher.combine(0)
     }
-    #else
-    /// :nodoc:
-    public var hashValue: Int {
-        return 0
-    }
-    #endif
     
     /// Two collations are equal if they share the same name (case insensitive)
     /// :nodoc:
     public static func == (lhs: DatabaseCollation, rhs: DatabaseCollation) -> Bool {
         // See https://www.sqlite.org/c3ref/create_collation.html
-        return sqlite3_stricmp(lhs.name, lhs.name) == 0
+        return sqlite3_stricmp(lhs.name, rhs.name) == 0
     }
 }

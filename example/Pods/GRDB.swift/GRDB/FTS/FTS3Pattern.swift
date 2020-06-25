@@ -19,12 +19,12 @@ public struct FTS3Pattern {
         // that pattern.
         do {
             try DatabaseQueue().inDatabase { db in
-                try db.execute("CREATE VIRTUAL TABLE documents USING fts3()")
-                try db.execute("SELECT * FROM documents WHERE content MATCH ?", arguments: [rawPattern])
+                try db.execute(sql: "CREATE VIRTUAL TABLE documents USING fts3()")
+                try db.execute(sql: "SELECT * FROM documents WHERE content MATCH ?", arguments: [rawPattern])
             }
         } catch let error as DatabaseError {
             // Remove private SQL & arguments from the thrown error
-            throw DatabaseError(resultCode: error.extendedResultCode, message: error.message, sql: nil, arguments: nil)
+            throw DatabaseError(resultCode: error.extendedResultCode, message: error.message)
         }
         
         // Pattern is valid
@@ -78,7 +78,7 @@ public struct FTS3Pattern {
     ///     FTS3Pattern(matchingAnyTokenIn: "foo bar") // foo OR bar
     ///
     /// - parameter string: The string to turn into an FTS3 pattern
-    @available(iOS 8.2, OSX 10.10, *)
+    @available(OSX 10.10, *)
     public init?(matchingAnyTokenIn string: String) {
         let tokens = FTS3TokenizerDescriptor.simple.tokenize(string)
         guard !tokens.isEmpty else { return nil }
@@ -92,7 +92,7 @@ public struct FTS3Pattern {
     ///     FTS3Pattern(matchingAllTokensIn: "foo bar") // foo bar
     ///
     /// - parameter string: The string to turn into an FTS3 pattern
-    @available(iOS 8.2, OSX 10.10, *)
+    @available(OSX 10.10, *)
     public init?(matchingAllTokensIn string: String) {
         let tokens = FTS3TokenizerDescriptor.simple.tokenize(string)
         guard !tokens.isEmpty else { return nil }
@@ -106,7 +106,7 @@ public struct FTS3Pattern {
     ///     FTS3Pattern(matchingPhrase: "foo bar") // "foo bar"
     ///
     /// - parameter string: The string to turn into an FTS3 pattern
-    @available(iOS 8.2, OSX 10.10, *)
+    @available(OSX 10.10, *)
     public init?(matchingPhrase string: String) {
         let tokens = FTS3TokenizerDescriptor.simple.tokenize(string)
         guard !tokens.isEmpty else { return nil }
@@ -115,7 +115,7 @@ public struct FTS3Pattern {
     #endif
 }
 
-extension FTS3Pattern : DatabaseValueConvertible {
+extension FTS3Pattern: DatabaseValueConvertible {
     /// Returns a value that can be stored in the database.
     public var databaseValue: DatabaseValue {
         return rawPattern.databaseValue

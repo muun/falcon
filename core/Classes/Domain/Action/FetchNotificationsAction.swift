@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 public class FetchNotificationsAction: AsyncAction<()>, Runnable {
 
@@ -27,10 +28,8 @@ public class FetchNotificationsAction: AsyncAction<()>, Runnable {
 
     public func run() {
         let notifId = sessionRepository.getLastNotificationId()
-        let fetch = houstonService.fetchNotificationsAfter(notificationId: notifId)
-            .flatMapCompletable(notificationProcessor.process)
-
-        runCompletable(fetch)
+        runCompletable(houstonService.fetchNotificationsAfter(notificationId: notifId)
+            .flatMapCompletable(notificationProcessor.process))
     }
 
 }

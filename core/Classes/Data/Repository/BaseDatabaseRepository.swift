@@ -40,7 +40,7 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     func watchObjects() -> Observable<[M]> {
         return T.all()
             .rx
-            .fetchAll(in: coordinator.queue)
+            .observeAll(in: coordinator.queue)
             .map({ [weak self] objects in
 
                 guard let self = self else {
@@ -56,7 +56,7 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     func watchObject(with id: T.PrimaryKeyType) -> Observable<M> {
         return T.filter(key: id)
             .rx
-            .fetchOne(in: coordinator.queue)
+            .observeFirst(in: coordinator.queue)
             .map({ [weak self] object in
                 guard let self = self,
                     let object = object else {

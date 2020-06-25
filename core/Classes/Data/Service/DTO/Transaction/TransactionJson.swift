@@ -23,6 +23,7 @@ struct SignatureJson: Codable {
 struct NextTransactionSizeJson: Codable {
     let sizeProgression: [SizeForAmountJson]
     let validAtOperationHid: Double?
+    let expectedDebtInSat: Int64
 }
 
 struct SizeForAmountJson: Codable {
@@ -36,6 +37,6 @@ struct RawTransactionJson: Codable {
 }
 
 struct RawTransactionResponseJson: Codable {
-    let hex: String
+    let hex: String?
     let nextTransactionSize: NextTransactionSizeJson
 }

@@ -1,7 +1,44 @@
+// MARK: - PreparedRequest
+
+/// A PreparedRequest is a request that is ready to be executed.
+public struct PreparedRequest {
+    /// A prepared statement
+    public var statement: SelectStatement
+    
+    /// An eventual adapter for rows fetched by the select statement
+    public var adapter: RowAdapter?
+    
+    /// Support for eager loading of hasMany associations.
+    var supplementaryFetch: (([Row]) throws -> Void)?
+    
+    /// Creates a PreparedRequest.
+    ///
+    /// - parameter statement: A prepared statement that is ready to
+    ///   be executed.
+    /// - parameter adapter: An eventual adapter for rows fetched by the
+    ///   select statement.
+    public init(
+        statement: SelectStatement,
+        adapter: RowAdapter? = nil)
+    {
+        self.init(statement: statement, adapter: adapter, supplementaryFetch: nil)
+    }
+    
+    init(
+        statement: SelectStatement,
+        adapter: RowAdapter?,
+        supplementaryFetch: (([Row]) throws -> Void)?)
+    {
+        self.statement = statement
+        self.adapter = adapter
+        self.supplementaryFetch = supplementaryFetch
+    }
+}
+
 // MARK: - FetchRequest
 
-/// The protocol for all requests that run from a single select statement, and
-/// tell how fetched rows should be interpreted.
+/// The protocol for all requests that fetch database rows, and tell how those
+/// rows should be interpreted.
 ///
 ///     struct Player: FetchableRecord { ... }
 ///     let request: ... // Some FetchRequest that fetches Player
@@ -12,12 +49,28 @@ public protocol FetchRequest: DatabaseRegionConvertible {
     /// The type that tells how fetched database rows should be interpreted.
     associatedtype RowDecoder
     
+    // TODO: remove when we remove the deprecated prepare(_:forSingleResult:) method
+    /// This method is deprecated. Use
+    /// `makePreparedRequest(_:forSingleResult:)` instead.
+    ///
     /// Returns a tuple that contains a prepared statement that is ready to be
     /// executed, and an eventual row adapter.
     ///
     /// - parameter db: A database connection.
+    /// - parameter singleResult: A hint that a single result row will be
+    ///   consumed. Implementations can optionally use this to optimize the
+    ///   prepared statement.
     /// - returns: A prepared statement and an eventual row adapter.
-    func prepare(_ db: Database) throws -> (SelectStatement, RowAdapter?)
+    func prepare(_ db: Database, forSingleResult singleResult: Bool) throws -> (SelectStatement, RowAdapter?)
+    
+    /// Returns a PreparedRequest that is ready to be executed.
+    ///
+    /// - parameter db: A database connection.
+    /// - parameter singleResult: A hint that a single result row will be
+    ///   consumed. Implementations can optionally use this to optimize the
+    ///   prepared statement.
+    /// - returns: A prepared request.
+    func makePreparedRequest(_ db: Database, forSingleResult singleResult: Bool) throws -> PreparedRequest
     
     /// Returns the number of rows fetched by the request.
     ///
@@ -33,6 +86,7 @@ public protocol FetchRequest: DatabaseRegionConvertible {
 }
 
 extension FetchRequest {
+    
     /// Returns an adapted request.
     public func adapted(_ adapter: @escaping (Database) throws -> RowAdapter) -> AdaptedFetchRequest<Self> {
         return AdaptedFetchRequest(self, adapter)
@@ -45,9 +99,9 @@ extension FetchRequest {
     ///
     /// - parameter db: A database connection.
     public func fetchCount(_ db: Database) throws -> Int {
-        let (statement, _) = try prepare(db)
-        let sql = "SELECT COUNT(*) FROM (\(statement.sql))"
-        return try Int.fetchOne(db, sql, arguments: statement.arguments)!
+        let request = try makePreparedRequest(db, forSingleResult: false)
+        let sql = "SELECT COUNT(*) FROM (\(request.statement.sql))"
+        return try Int.fetchOne(db, sql: sql, arguments: request.statement.arguments)!
     }
     
     /// Returns the database region that the request looks into.
@@ -57,15 +111,30 @@ extension FetchRequest {
     ///
     /// - parameter db: A database connection.
     public func databaseRegion(_ db: Database) throws -> DatabaseRegion {
-        let (statement, _) = try prepare(db)
-        return statement.databaseRegion
+        let request = try makePreparedRequest(db, forSingleResult: false)
+        return request.statement.databaseRegion
+    }
+    
+    // Support for legacy requests which only define prepare(_:forSingleResult:)
+    // TODO: remove when we remove the deprecated prepare(_:forSingleResult:) method
+    /// :nodoc:
+    public func makePreparedRequest(_ db: Database, forSingleResult singleResult: Bool) throws -> PreparedRequest {
+        let (statement, adapter) = try prepare(db, forSingleResult: singleResult)
+        return PreparedRequest(statement: statement, adapter: adapter)
+    }
+    
+    // TODO: remove when we remove the deprecated prepare(_:forSingleResult:) method
+    /// :nodoc:
+    public func prepare(_ db: Database, forSingleResult singleResult: Bool) throws -> (SelectStatement, RowAdapter?) {
+        let request = try makePreparedRequest(db, forSingleResult: singleResult)
+        return (request.statement, request.adapter)
     }
 }
 
 // MARK: - AdaptedFetchRequest
 
 /// An adapted request.
-public struct AdaptedFetchRequest<Base: FetchRequest> : FetchRequest {
+public struct AdaptedFetchRequest<Base: FetchRequest>: FetchRequest {
     public typealias RowDecoder = Base.RowDecoder
     
     private let base: Base
@@ -79,13 +148,14 @@ public struct AdaptedFetchRequest<Base: FetchRequest> : FetchRequest {
     }
     
     /// :nodoc:
-    public func prepare(_ db: Database) throws -> (SelectStatement, RowAdapter?) {
-        let (statement, baseAdapter) = try base.prepare(db)
-        if let baseAdapter = baseAdapter {
-            return try (statement, ChainedAdapter(first: baseAdapter, second: adapter(db)))
+    public func makePreparedRequest(_ db: Database, forSingleResult singleResult: Bool) throws -> PreparedRequest {
+        var request = try base.makePreparedRequest(db, forSingleResult: singleResult)
+        if let baseAdapter = request.adapter {
+            request.adapter = try ChainedAdapter(first: baseAdapter, second: adapter(db))
         } else {
-            return try (statement, adapter(db))
+            request.adapter = try adapter(db)
         }
+        return request
     }
     
     /// :nodoc:
@@ -105,42 +175,44 @@ public struct AdaptedFetchRequest<Base: FetchRequest> : FetchRequest {
 ///
 /// An AnyFetchRequest forwards its operations to an underlying request,
 /// hiding its specifics.
-public struct AnyFetchRequest<T> : FetchRequest {
+public struct AnyFetchRequest<T>: FetchRequest {
     public typealias RowDecoder = T
     
-    private let _prepare: (Database) throws -> (SelectStatement, RowAdapter?)
+    private let _preparedRequest: (Database, _ singleResult: Bool) throws -> PreparedRequest
     private let _fetchCount: (Database) throws -> Int
     private let _databaseRegion: (Database) throws -> DatabaseRegion
     
     /// Creates a request that wraps and forwards operations to `request`.
     public init<Request: FetchRequest>(_ request: Request) {
-        _prepare = request.prepare
+        _preparedRequest = request.makePreparedRequest
         _fetchCount = request.fetchCount
         _databaseRegion = request.databaseRegion
     }
     
     /// Creates a request whose `prepare()` method wraps and forwards
     /// operations the argument closure.
-    public init(_ prepare: @escaping (Database) throws -> (SelectStatement, RowAdapter?)) {
-        _prepare = { db in
-            try prepare(db)
+    @available(*, deprecated, message: "Define your own FetchRequest type instead.")
+    public init(_ prepare: @escaping (Database, _ singleResult: Bool) throws -> (SelectStatement, RowAdapter?)) {
+        _preparedRequest = { db, singleResult in
+            let (statement, adapter) = try prepare(db, singleResult)
+            return PreparedRequest(statement: statement, adapter: adapter)
         }
         
         _fetchCount = { db in
-            let (statement, _) = try prepare(db)
+            let (statement, _) = try prepare(db, false)
             let sql = "SELECT COUNT(*) FROM (\(statement.sql))"
-            return try Int.fetchOne(db, sql, arguments: statement.arguments)!
+            return try Int.fetchOne(db, sql: sql, arguments: statement.arguments)!
         }
         
         _databaseRegion = { db in
-            let (statement, _) = try prepare(db)
+            let (statement, _) = try prepare(db, false)
             return statement.databaseRegion
         }
     }
     
     /// :nodoc:
-    public func prepare(_ db: Database) throws -> (SelectStatement, RowAdapter?) {
-        return try _prepare(db)
+    public func makePreparedRequest(_ db: Database, forSingleResult singleResult: Bool) throws -> PreparedRequest {
+        return try _preparedRequest(db, singleResult)
     }
     
     /// :nodoc:
@@ -151,100 +223,5 @@ public struct AnyFetchRequest<T> : FetchRequest {
     /// :nodoc:
     public func databaseRegion(_ db: Database) throws -> DatabaseRegion {
         return try _databaseRegion(db)
-    }
-}
-
-// MARK: - SQLRequest
-
-/// A FetchRequest built from raw SQL.
-public struct SQLRequest<T> : FetchRequest {
-    public typealias RowDecoder = T
-    
-    public var sql: String
-    public var arguments: StatementArguments?
-    public var adapter: RowAdapter?
-    private let cache: Cache?
-    
-    /// Creates a request from an SQL string, optional arguments, and
-    /// optional row adapter.
-    ///
-    ///     let request = SQLRequest("SELECT * FROM player")
-    ///     let request = SQLRequest("SELECT * FROM player WHERE id = ?", arguments: [1])
-    ///
-    /// - parameters:
-    ///     - sql: An SQL query.
-    ///     - arguments: Optional statement arguments.
-    ///     - adapter: Optional RowAdapter.
-    ///     - cached: Defaults to false. If true, the request reuses a cached
-    ///       prepared statement.
-    /// - returns: A SQLRequest
-    public init(_ sql: String, arguments: StatementArguments? = nil, adapter: RowAdapter? = nil, cached: Bool = false) {
-        self.init(sql, arguments: arguments, adapter: adapter, fromCache: cached ? .public : nil)
-    }
-    
-    /// Creates an SQL request from any other fetch request.
-    ///
-    /// - parameters:
-    ///     - db: A database connection.
-    ///     - request: A request.
-    ///     - cached: Defaults to false. If true, the request reuses a cached
-    ///       prepared statement.
-    /// - returns: An SQLRequest
-    public init<Request: FetchRequest>(_ db: Database, request: Request, cached: Bool = false) throws where Request.RowDecoder == RowDecoder {
-        let (statement, adapter) = try request.prepare(db)
-        self.init(statement.sql, arguments: statement.arguments, adapter: adapter, cached: cached)
-    }
-    
-    /// Creates an SQL request from an SQL string, optional arguments, and
-    /// optional row adapter.
-    ///
-    ///     let request = SQLRequest("SELECT * FROM player")
-    ///     let request = SQLRequest("SELECT * FROM player WHERE id = ?", arguments: [1])
-    ///
-    /// - parameters:
-    ///     - sql: An SQL query.
-    ///     - arguments: Optional statement arguments.
-    ///     - adapter: Optional RowAdapter.
-    ///     - statementCacheName: Optional statement cache name.
-    /// - returns: A SQLRequest
-    init(_ sql: String, arguments: StatementArguments? = nil, adapter: RowAdapter? = nil, fromCache cache: Cache?) {
-        self.sql = sql
-        self.arguments = arguments
-        self.adapter = adapter
-        self.cache = cache
-    }
-    
-    /// A tuple that contains a prepared statement that is ready to be
-    /// executed, and an eventual row adapter.
-    ///
-    /// - parameter db: A database connection.
-    ///
-    /// :nodoc:
-    public func prepare(_ db: Database) throws -> (SelectStatement, RowAdapter?) {
-        let statement: SelectStatement
-        switch cache {
-        case .none:
-            statement = try db.makeSelectStatement(sql)
-        case .public?:
-            statement = try db.cachedSelectStatement(sql)
-        case .internal?:
-            statement = try db.internalCachedSelectStatement(sql)
-        }
-        if let arguments = arguments {
-            try statement.setArgumentsWithValidation(arguments)
-        }
-        return (statement, adapter)
-    }
-    
-    /// There are two statement caches: one for statements generated by the
-    /// user, and one for the statements generated by GRDB. Those are separated
-    /// so that GRDB has no opportunity to inadvertently modify the arguments of
-    /// user's cached statements.
-    enum Cache {
-        /// The public cache, for library user
-        case `public`
-        
-        /// The internal cache, for grdb
-        case `internal`
     }
 }

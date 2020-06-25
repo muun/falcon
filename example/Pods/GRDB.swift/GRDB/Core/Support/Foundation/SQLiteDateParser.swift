@@ -23,16 +23,20 @@ class SQLiteDateParser {
     func components(cString: UnsafePointer<CChar>, length: Int) -> DatabaseDateComponents? {
         assert(strlen(cString) == length)
         
+        // "HH:MM" is the shortest valid string
         guard length >= 5 else { return nil }
         
-        if cString.advanced(by: 4).pointee == 45 /* '-' */ {
+        // "YYYY-..." -> datetime
+        if cString[4] == UInt8(ascii: "-") {
             return datetimeComponents(cString: cString, length: length)
         }
         
-        if cString.advanced(by: 2).pointee == 58 /* ':' */ {
+        // "HH-:..." -> time
+        if cString[2] == UInt8(ascii: ":") {
             return timeComponents(cString: cString, length: length)
         }
         
+        // Invalid
         return nil
     }
     
@@ -54,6 +58,7 @@ class SQLiteDateParser {
                         withUnsafeMutablePointer(to: &parserComponents.minute) { minuteP in
                             withUnsafeMutablePointer(to: &parserComponents.second) { secondP in
                                 parserComponents.nanosecond.withUnsafeMutableBufferPointer { nanosecondBuffer in
+                                    // swiftlint:disable:next line_length
                                     withVaList([yearP, monthP, dayP, hourP, minuteP, secondP, nanosecondBuffer.baseAddress!]) { pointer in
                                         vsscanf(cString, "%4d-%2d-%2d%*1[ T]%2d:%2d:%2d.%9s", pointer)
                                     }

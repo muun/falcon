@@ -22,9 +22,12 @@ public class CreateSessionAction: AsyncAction<CreateSessionOk> {
         super.init(name: "CreateSessionAction")
     }
 
-    public func run(session: Session) {
+    public func run(email: String, gcmToken: String) {
         // We have to wipe everything to avoid edgy bugs with the notifications
         logoutAction.run(notifyHouston: false)
+
+        let client = Client(buildType: Environment.current.buildType, version: Int(core.Constant.buildVersion)!)
+        let session = CreateLoginSession(client: client, email: email, gcmToken: gcmToken)
 
         let single = logoutAction.getValue()
             .catchErrorJustReturn(()) // If logout fails, it's all cool

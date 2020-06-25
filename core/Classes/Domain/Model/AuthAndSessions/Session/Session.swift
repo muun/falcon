@@ -8,24 +8,11 @@
 
 import UIKit
 
-public struct Session {
+public struct CreateLoginSession {
 
-    let uuid: String?
-    let requestId: String
+    let client: Client
     let email: String
-    let buildType: String
-    let version: Int
-    let gcmRegistrationToken: String
-    let clientType: String = "FALCON"
-
-    public init(uuid: String?, requestId: String, email: String, buildType: String, version: Int, gcmToken: String) {
-        self.uuid = uuid
-        self.requestId = requestId
-        self.email = email
-        self.buildType = buildType
-        self.version = version
-        self.gcmRegistrationToken = gcmToken
-    }
+    let gcmToken: String
 
 }
 

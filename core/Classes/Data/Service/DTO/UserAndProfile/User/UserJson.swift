@@ -11,7 +11,7 @@ struct UserJson: Codable {
     let id: Int
     let firstName: String?
     let lastName: String?
-    let email: String
+    let email: String?
     let phoneNumber: PhoneNumberJson?
     let profilePictureUrl: String?
     let primaryCurrency: String
@@ -19,6 +19,8 @@ struct UserJson: Codable {
     let hasPasswordChallengeKey: Bool
     let hasRecoveryCodeChallengeKey: Bool
     let hasP2PEnabled: Bool
+    let hasExportedKeys: Bool
+    let createdAt: Date?
 
 }
 

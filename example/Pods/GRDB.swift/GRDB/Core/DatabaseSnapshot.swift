@@ -6,11 +6,11 @@ import Dispatch
 /// See DatabasePool.makeSnapshot()
 ///
 /// For more information, read about "snapshot isolation" at https://sqlite.org/isolation.html
-public class DatabaseSnapshot : DatabaseReader {
+public class DatabaseSnapshot: DatabaseReader {
     private var serializedDatabase: SerializedDatabase
     
     /// The database configuration
-    var configuration: Configuration {
+    public var configuration: Configuration {
         return serializedDatabase.configuration
     }
     
@@ -28,11 +28,11 @@ public class DatabaseSnapshot : DatabaseReader {
         
         try serializedDatabase.sync { db in
             // Assert WAL mode
-            let journalMode = try String.fetchOne(db, "PRAGMA journal_mode")
+            let journalMode = try String.fetchOne(db, sql: "PRAGMA journal_mode")
             guard journalMode == "wal" else {
                 throw DatabaseError(message: "WAL mode is not activated at path: \(path)")
             }
-            try db.beginSnapshotIsolation()
+            try db.beginSnapshotTransaction()
         }
     }
     
@@ -46,6 +46,12 @@ public class DatabaseSnapshot : DatabaseReader {
 
 // DatabaseReader
 extension DatabaseSnapshot {
+    
+    // MARK: - Interrupting Database Operations
+    
+    public func interrupt() {
+        serializedDatabase.interrupt()
+    }
     
     // MARK: - Reading from Database
     
@@ -62,18 +68,32 @@ extension DatabaseSnapshot {
         return try serializedDatabase.sync(block)
     }
     
-    /// Alias for `read`. See `DatabaseReader.unsafeRead`.
+    #if compiler(>=5.0)
+    /// Asynchronously executes a read-only block in a protected dispatch queue.
     ///
+    ///     let players = try snapshot.asyncRead { result in
+    ///         do {
+    ///             let db = try result.get()
+    ///             let count = try Player.fetchCount(db)
+    ///         } catch {
+    ///             // Handle error
+    ///         }
+    ///     }
+    ///
+    /// - parameter block: A block that accesses the database.
+    public func asyncRead(_ block: @escaping (Result<Database, Error>) -> Void) {
+        serializedDatabase.async { block(.success($0)) }
+    }
+    #endif
+    
     /// :nodoc:
     public func unsafeRead<T>(_ block: (Database) throws -> T) rethrows -> T {
         return try serializedDatabase.sync(block)
     }
     
-    /// Alias for `read`. See `DatabaseReader.unsafeReentrantRead`.
-    ///
     /// :nodoc:
     public func unsafeReentrantRead<T>(_ block: (Database) throws -> T) throws -> T {
-        return try serializedDatabase.sync(block)
+        return try serializedDatabase.reentrantSync(block)
     }
     
     // MARK: - Functions
@@ -100,36 +120,41 @@ extension DatabaseSnapshot {
     
     public func add<Reducer: ValueReducer>(
         observation: ValueObservation<Reducer>,
-        onError: ((Error) -> Void)?,
+        onError: @escaping (Error) -> Void,
         onChange: @escaping (Reducer.Value) -> Void)
-        throws -> TransactionObserver
+        -> TransactionObserver
     {
-        // Deal with initial value
-        switch observation.scheduling {
-        case .mainQueue:
-            if let value = try unsafeReentrantRead(observation.initialValue) {
-                if DispatchQueue.isMain {
-                    onChange(value)
-                } else {
-                    DispatchQueue.main.async {
+        // TODO: fetch asynchronously when possible
+        do {
+            // Deal with initial value
+            switch observation.scheduling {
+            case .mainQueue:
+                if let value = try unsafeReentrantRead(observation.fetchFirst) {
+                    if DispatchQueue.isMain {
+                        onChange(value)
+                    } else {
+                        DispatchQueue.main.async {
+                            onChange(value)
+                        }
+                    }
+                }
+            case let .async(onQueue: queue, startImmediately: startImmediately):
+                if startImmediately {
+                    if let value = try unsafeReentrantRead(observation.fetchFirst) {
+                        queue.async {
+                            onChange(value)
+                        }
+                    }
+                }
+            case let .unsafe(startImmediately: startImmediately):
+                if startImmediately {
+                    if let value = try unsafeReentrantRead(observation.fetchFirst) {
                         onChange(value)
                     }
                 }
             }
-        case let .onQueue(queue, startImmediately: startImmediately):
-            if startImmediately {
-                if let value = try unsafeReentrantRead(observation.initialValue) {
-                    queue.async {
-                        onChange(value)
-                    }
-                }
-            }
-        case let .unsafe(startImmediately: startImmediately):
-            if startImmediately {
-                if let value = try unsafeReentrantRead(observation.initialValue) {
-                    onChange(value)
-                }
-            }
+        } catch {
+            onError(error)
         }
         
         // Return a dummy observer, because snapshots never change
@@ -138,15 +163,6 @@ extension DatabaseSnapshot {
     
     public func remove(transactionObserver: TransactionObserver) {
         // Can't remove an observer which could not be added :-)
-    }
-}
-
-extension ValueObservation where Reducer: ValueReducer {
-    /// Helper method for DatabaseSnapshot.add(observation:onError:onChange:)
-    fileprivate func initialValue(_ db: Database) throws -> Reducer.Value? {
-        var reducer = try makeReducer(db)
-        let fetched = try reducer.fetch(db)
-        return reducer.value(fetched)
     }
 }
 
