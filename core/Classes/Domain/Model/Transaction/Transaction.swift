@@ -11,7 +11,7 @@ public struct Transaction {
     public var confirmations: Int
 }
 
-struct NextTransactionSize: Codable {
+public struct NextTransactionSize: Codable {
     let sizeProgression: [SizeForAmount]
     let validAtOperationHid: Double?
     let _expectedDebt: Satoshis?
@@ -25,6 +25,9 @@ public struct SizeForAmount: Codable {
     let amountInSatoshis: Satoshis
     // The sizeInBytes actually returns the size in WeightUnit, we need to divide that number by 4 to have vBytes
     let sizeInBytes: Int64
+
+    // This property can't be nullable in versions > 46
+    let outpoint: String?
 }
 
 struct RawTransaction {

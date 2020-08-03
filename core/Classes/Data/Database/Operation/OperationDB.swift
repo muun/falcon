@@ -144,7 +144,8 @@ extension OperationDB: DatabaseModelConvertible {
             status: status,
             transaction: trans,
             creationDate: creationDate,
-            submarineSwap: submarineSwap
+            submarineSwap: submarineSwap,
+            outpoints: nil // We don't need retrocompat outpoints
         )
     }
     // swiftlint:enable function_body_length

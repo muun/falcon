@@ -31,14 +31,14 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         super.init(name: "CreateFirstSessionAction")
     }
 
-    public func run(gcmToken: String) throws {
+    public func run(gcmToken: String, currencyCode: String) throws {
         // We have to wipe everything to avoid edgy bugs with the notifications
         logoutAction.run(notifyHouston: false)
 
         let single = logoutAction.getValue()
             .catchErrorJustReturn(()) // If logout fails, it's all cool
             .flatMap { _ in
-                try self.createFirstSession(gcmToken: gcmToken)
+                try self.createFirstSession(gcmToken: gcmToken, currencyCode: currencyCode)
             }
 
         runSingle(single)
@@ -48,7 +48,8 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
                                          challengePublicKey: String,
                                          userInput: String,
                                          salt: [UInt8],
-                                         gcmToken: String) throws -> CreateFirstSession {
+                                         gcmToken: String,
+                                         currencyCode: String) throws -> CreateFirstSession {
 
         let challengeSetup = try setupChallengeAction.buildChallengeSetup(type: type,
                                                                           challengePublicKey: challengePublicKey,
@@ -58,7 +59,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         let client = Client(buildType: Environment.current.buildType, version: Int(core.Constant.buildVersion)!)
         return CreateFirstSession(client: client,
                                   gcmToken: gcmToken,
-                                  primaryCurrency: Locale.current.currencyCode ?? "USD",
+                                  primaryCurrency: currencyCode,
                                   basePublicKey: try keysRepository.getBasePublicKey(),
                                   anonChallengeSetup: challengeSetup)
     }
@@ -77,7 +78,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         }
     }
 
-    public func createFirstSession(gcmToken: String) throws -> Single<CreateFirstSessionOk> {
+    public func createFirstSession(gcmToken: String, currencyCode: String) throws -> Single<CreateFirstSessionOk> {
 
         let salt = Data(Hashes.randomBytes(count: 8))
         let anonSecret = Data(Hashes.randomBytes(count: 32))
@@ -98,7 +99,8 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
                                                          challengePublicKey: challengePubKeyHex,
                                                          userInput: anonSecretHex,
                                                          salt: salt.bytes,
-                                                         gcmToken: gcmToken)
+                                                         gcmToken: gcmToken,
+                                                         currencyCode: currencyCode)
             )})
             .flatMap({
                 self.houstonService.createFirstSession(firstSession: $0)

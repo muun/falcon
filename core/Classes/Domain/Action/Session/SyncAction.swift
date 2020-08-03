@@ -47,11 +47,11 @@ public class SyncAction: AsyncAction<()> {
         super.init(name: "SyncAction")
     }
 
-    public func run(signFlow: SignFlow, gcmToken: String) {
+    public func run(signFlow: SignFlow, gcmToken: String, currencyCode: String) {
 
         do {
             if signFlow == .create { // is anon user
-                _ = try createFirstSessionAction.run(gcmToken: gcmToken)
+                _ = try createFirstSessionAction.run(gcmToken: gcmToken, currencyCode: currencyCode)
 
                 runCompletable(createFirstSessionAction.getValue().asCompletable()
                     .andThen(

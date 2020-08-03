@@ -40,12 +40,11 @@ public extension DependencyContainer {
             container.register(.singleton, factory: VerifyAuthorizeAction.init)
             container.register(.singleton, factory: SubmarineSwapAction.init)
             container.register(.singleton, factory: BIP70Action.init)
-            container.register(.singleton, factory: SendEncryptedKeysEmailAction.init)
             container.register(.singleton, factory: CreateFirstSessionAction.init)
             container.register(.singleton, factory: StartEmailSetupAction.init)
             container.register(.singleton, factory: OperationMetadataDecrypter.init)
             container.register(.singleton, factory: SignAnonChallengeAction.init)
-            container.register(.singleton, factory: ReportKeysExportedAction.init)
+            container.register(.singleton, factory: ReportEmergencyKitExportedAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EncryptedUserKeySelector.init)

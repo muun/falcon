@@ -44,6 +44,8 @@ public struct OperationJson: Codable {
 
     var senderMetadata: String?
     var receiverMetadata: String?
+
+    let outpoints: [String]? // The complete utxoSet, sorted as used for fee computation
 }
 
 public struct OperationMetadataJson: Codable {

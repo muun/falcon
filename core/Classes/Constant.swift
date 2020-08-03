@@ -15,5 +15,8 @@ public enum Constant {
     // giving Houston enough time to timeout by itself (90 seconds)
     static let requestTimeoutInterval = TimeInterval(32)
 
-    static let minimumFeePerVByte: Decimal = 1
+    public enum FeeProtocol {
+        public static let minProtocolFeeRate: FeeRate = FeeRate(satsPerVByte: 1)
+        public static let maxFeeRateAllowed: FeeRate = FeeRate(satsPerVByte: 1000) // TODO: Check this max number
+    }
 }

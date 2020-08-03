@@ -9,6 +9,27 @@ extension String {
         return String(first).uppercased() + dropFirst()
     }
     
+    #if compiler(>=5.0)
+    // Prevent inlining of functions that use `Inflections.default`, in order to
+    // make sure this global is lazily loaded, even in release builds.
+    // See https://github.com/groue/GRDB.swift/issues/755#issuecomment-612418053
+    // TODO: remove `@inline(never)` when this PR is shipped in the compiler:
+    // https://github.com/apple/swift/pull/30445
+    
+    /// "player" -> "players"
+    /// "players" -> "players"
+    @inline(never)
+    var pluralized: String {
+        return Inflections.default.pluralize(self)
+    }
+    
+    /// "player" -> "player"
+    /// "players" -> "player"
+    @inline(never)
+    var singularized: String {
+        return Inflections.default.singularize(self)
+    }
+    #else
     /// "player" -> "players"
     /// "players" -> "players"
     var pluralized: String {
@@ -20,6 +41,7 @@ extension String {
     var singularized: String {
         return Inflections.default.singularize(self)
     }
+    #endif
     
     /// "bar" -> "bar"
     /// "foo12" -> "foo"

@@ -45,12 +45,14 @@ public struct Operation {
         return amount.inSatoshis
     }
 
+    public let outpoints: [String]? // The complete utxoSet, sorted as used for fee computation
+
     public init(id: Int?, requestId: String, isExternal: Bool, direction: OperationDirection,
                 senderProfile: PublicProfile?, senderIsExternal: Bool, receiverProfile: PublicProfile?,
                 receiverIsExternal: Bool, receiverAddress: String?, receiverAddressDerivationPath: String?,
                 amount: BitcoinAmount, fee: BitcoinAmount, confirmations: Int?, exchangeRatesWindowId: Int,
                 description: String?, status: OperationStatus, transaction: Transaction?, creationDate: Date,
-                submarineSwap: SubmarineSwap?) {
+                submarineSwap: SubmarineSwap?, outpoints: [String]?) {
         self.id = id
         self.requestId = requestId
         self.isExternal = isExternal
@@ -70,6 +72,7 @@ public struct Operation {
         self.transaction = transaction
         self.creationDate = creationDate
         self.submarineSwap = submarineSwap
+        self.outpoints = outpoints
     }
 
     public func isPending() -> Bool {

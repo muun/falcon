@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
     sp.dependency 'Dip', '7.0.1'
 
     # Local DB
-    sp.dependency 'GRDB.swift', '4.9.0'
+    sp.dependency 'GRDB.swift', '4.14.0'
     sp.dependency 'RxGRDB', '0.18.0'
 
     # React

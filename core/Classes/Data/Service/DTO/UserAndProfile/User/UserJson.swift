@@ -21,6 +21,7 @@ struct UserJson: Codable {
     let hasP2PEnabled: Bool
     let hasExportedKeys: Bool
     let createdAt: Date?
+    let emergencyKitLastExportedAt: Date?
 
 }
 
@@ -32,4 +33,9 @@ struct PhoneNumberJson: Codable {
 enum VerificationTypeJson: String, Codable {
     case SMS
     case CALL
+}
+
+struct ExportEmergencyKitJson: Codable {
+    let lastExportedAt: Date
+    let verificationCode: String
 }

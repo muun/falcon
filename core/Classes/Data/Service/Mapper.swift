@@ -231,7 +231,8 @@ extension UserJson: ModelConvertible {
                     hasRecoveryCodeChallengeKey: hasRecoveryCodeChallengeKey,
                     hasP2PEnabled: hasP2PEnabled,
                     hasExportedKeys: hasExportedKeys,
-                    createdAt: createdAt)
+                    createdAt: createdAt,
+                    emergencyKitLastExportedDate: emergencyKitLastExportedAt)
     }
 
 }
@@ -251,7 +252,16 @@ extension User: APIConvertible {
                         hasRecoveryCodeChallengeKey: hasRecoveryCodeChallengeKey,
                         hasP2PEnabled: hasP2PEnabled,
                         hasExportedKeys: hasExportedKeys ?? false,
-                        createdAt: createdAt ?? nil)
+                        createdAt: createdAt ?? nil,
+                        emergencyKitLastExportedAt: emergencyKitLastExportedDate)
+    }
+
+}
+
+extension ExportEmergencyKit: APIConvertible {
+
+    func toJson() -> ExportEmergencyKitJson {
+        return ExportEmergencyKitJson(lastExportedAt: lastExportedAt, verificationCode: verificationCode)
     }
 
 }
@@ -464,8 +474,11 @@ extension NextTransactionSize: APIConvertible {
 extension SizeForAmountJson: ModelConvertible {
 
     public func toModel() -> SizeForAmount {
-        return SizeForAmount(amountInSatoshis: Satoshis(value: amountInSatoshis),
-                             sizeInBytes: sizeInBytes)
+        return SizeForAmount(
+            amountInSatoshis: Satoshis(value: amountInSatoshis),
+            sizeInBytes: sizeInBytes,
+            outpoint: outpoint
+        )
     }
 
 }
@@ -473,8 +486,11 @@ extension SizeForAmountJson: ModelConvertible {
 extension SizeForAmount: APIConvertible {
 
     func toJson() -> SizeForAmountJson {
-        return SizeForAmountJson(amountInSatoshis: amountInSatoshis.value,
-                                 sizeInBytes: sizeInBytes)
+        return SizeForAmountJson(
+            amountInSatoshis: amountInSatoshis.value,
+            sizeInBytes: sizeInBytes,
+            outpoint: outpoint ?? ""
+        )
     }
 
 }
@@ -661,7 +677,8 @@ extension Operation: APIConvertible {
                              outputAmountInSatoshis: outputAmount.value,
                              swapUuid: submarineSwap?._swapUuid,
                              swap: submarineSwap?.toJson(),
-                             description: description)
+                             description: description,
+                             outpoints: outpoints)
     }
 }
 
@@ -791,7 +808,8 @@ extension OperationJson: ModelOperationConvertible  {
                          status: status.toModel(),
                          transaction: transaction?.toModel(),
                          creationDate: creationDate,
-                         submarineSwap: swap?.toModel())
+                         submarineSwap: swap?.toModel(),
+                         outpoints: outpoints)
     }
 
 }
@@ -922,9 +940,14 @@ extension FeeWindowJson: ModelConvertible {
             newTargetedFees[UInt(value.key)] = FeeRate(satsPerWeightUnit: Decimal(value.value))
         }
 
-        return FeeWindow(id: id,
-                         fetchDate: fetchDate,
-                         targetedFees: newTargetedFees)
+        return FeeWindow(
+            id: id,
+            fetchDate: fetchDate,
+            targetedFees: newTargetedFees,
+            fastConfTarget: fastConfTarget,
+            mediumConfTarget: mediumConfTarget,
+            slowConfTarget: slowConfTarget
+        )
     }
 
 }

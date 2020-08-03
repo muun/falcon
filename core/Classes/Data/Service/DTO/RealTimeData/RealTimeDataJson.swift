@@ -22,6 +22,10 @@ struct FeeWindowJson: Codable {
 
     // Here targeted fees is in sats/WU
     let targetedFees: [Int: Double]
+
+    let fastConfTarget: UInt
+    let mediumConfTarget: UInt
+    let slowConfTarget: UInt
 }
 
 struct ExchangeRateWindowJson: Codable {

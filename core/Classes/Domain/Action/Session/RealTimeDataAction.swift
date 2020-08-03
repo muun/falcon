@@ -9,6 +9,8 @@
 import Foundation
 import RxSwift
 
+public typealias FeeConfirmationTargets = (slow: UInt, medium: UInt, fast: UInt)
+
 public class RealTimeDataAction: AsyncAction<RealTimeData> {
 
     private let houstonService: HoustonService

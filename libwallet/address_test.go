@@ -217,7 +217,7 @@ func TestGetPaymentURI(t *testing.T) {
 
 func Test_normalizeAddress(t *testing.T) {
 	type args struct {
-		rawAddress string
+		rawAddress   string
 		targetScheme string
 	}
 	tests := []struct {
@@ -228,7 +228,7 @@ func Test_normalizeAddress(t *testing.T) {
 		{
 			name: "normalAddress",
 			args: args{
-				rawAddress: address,
+				rawAddress:   address,
 				targetScheme: bitcoinScheme,
 			},
 			want: bitcoinScheme + address,
@@ -236,7 +236,7 @@ func Test_normalizeAddress(t *testing.T) {
 		{
 			name: "bitcoinAddress",
 			args: args{
-				rawAddress: bitcoinScheme + address,
+				rawAddress:   bitcoinScheme + address,
 				targetScheme: bitcoinScheme,
 			},
 			want: bitcoinScheme + address,
@@ -244,7 +244,7 @@ func Test_normalizeAddress(t *testing.T) {
 		{
 			name: "muunAddress",
 			args: args{
-				rawAddress: muunScheme + address,
+				rawAddress:   muunScheme + address,
 				targetScheme: bitcoinScheme,
 			},
 			want: bitcoinScheme + address,
@@ -252,7 +252,7 @@ func Test_normalizeAddress(t *testing.T) {
 		{
 			name: "muun to lightning",
 			args: args{
-				rawAddress: muunScheme + address,
+				rawAddress:   muunScheme + address,
 				targetScheme: lightningScheme,
 			},
 			want: lightningScheme + address,
