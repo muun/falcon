@@ -21,6 +21,12 @@ public struct FeeWindow: Codable {
     let fetchDate: Date
 
     public let targetedFees: [UInt: FeeRate]
+
+    // These properties are optional for retrocompat motives only.
+    // But they'll never be optional in build versions > 46.
+    public let fastConfTarget: UInt?
+    public let mediumConfTarget: UInt?
+    public let slowConfTarget: UInt?
 }
 
 public struct ExchangeRateWindow: Codable {

@@ -156,13 +156,13 @@ public class SessionActions {
         userRepository.setDisplayFiatAsMain(for: user)
     }
 
-    func setHasExportedKeys() {
+    func setEmergencyKitExported(date: Date) {
         guard let user = getUser() else {
             return
         }
 
         var updatedUser = user
-        updatedUser.hasExportedKeys = true
+        updatedUser.emergencyKitLastExportedDate = date
         userRepository.setUser(updatedUser)
     }
 
@@ -172,5 +172,21 @@ public class SessionActions {
         }
 
         return user.hasExportedKeys ?? false
+    }
+
+    public func hasExportedEmergencyKit() -> Bool {
+        guard let user = getUser() else {
+            return false
+        }
+
+        return user.hasExportedEmergencyKit()
+    }
+
+    public func getEmergencyExportedAt() -> Date? {
+        guard let user = getUser() else {
+            return nil
+        }
+
+        return user.emergencyKitLastExportedDate
     }
 }

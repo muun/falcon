@@ -41,7 +41,7 @@ func (p *HDPublicKey) String() string {
 // index should be uint32 but for java compat we use int64
 func (p *HDPublicKey) DerivedAt(index int64) (*HDPublicKey, error) {
 
-	if (index & hdkeychain.HardenedKeyStart != 0) {
+	if index&hdkeychain.HardenedKeyStart != 0 {
 		return nil, errors.Errorf("can't derive a hardened pub key (index %v)", index)
 	}
 

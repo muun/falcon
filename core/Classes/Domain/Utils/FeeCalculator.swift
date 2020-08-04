@@ -23,19 +23,26 @@ public class FeeCalculator {
     }
 
     let targetedFees: [UInt: FeeRate]
-    let sizeProgression: [SizeForAmount]
-    let expectedDebt: Satoshis
+    let nts: NextTransactionSize
 
-    public init(targetedFees: [UInt: FeeRate], sizeProgression: [SizeForAmount], expectedDebt: Satoshis) {
+    public init(targetedFees: [UInt: FeeRate], nts: NextTransactionSize) {
         self.targetedFees = targetedFees
-        self.sizeProgression = sizeProgression
-        self.expectedDebt = expectedDebt
+        self.nts = nts
     }
 
     public func calculateMinimumFee() -> Satoshis {
-        // Minimum fee is set to 1 sat/vByte
-        let feeRate = FeeRate(satsPerWeightUnit: Constant.minimumFeePerVByte)
-        if let last = sizeProgression.last {
+        let feeRate = getMinimumFeeRate()
+        if let last = nts.sizeProgression.last {
+            return feeRate.calculateFee(sizeInWeightUnit: last.sizeInBytes)
+        }
+        // In case the size progression is empty, we just return 0
+        // (This is going to be used in the insufficient funds screen)
+        return Satoshis(value: 0)
+    }
+
+    public func calculateMinimumFee(target: UInt) -> Satoshis {
+        let feeRate = getMinimumFeeRate(confirmationTarget: target)
+        if let last = nts.sizeProgression.last {
             return feeRate.calculateFee(sizeInWeightUnit: last.sizeInBytes)
         }
         // In case the size progression is empty, we just return 0
@@ -44,16 +51,16 @@ public class FeeCalculator {
     }
 
     public func totalBalance() -> Satoshis {
-        if let lastItem = sizeProgression.last {
+        if let lastItem = nts.sizeProgression.last {
             // The total balance is calculated by substracting the expectedDebt from the last item in the NTS
-            return lastItem.amountInSatoshis - expectedDebt
+            return lastItem.amountInSatoshis - nts.expectedDebt
         }
 
         return Satoshis(value: 0)
     }
 
     private func utxoBalance() -> Satoshis {
-        return sizeProgression.last?.amountInSatoshis ?? Satoshis(value: 0)
+        return nts.sizeProgression.last?.amountInSatoshis ?? Satoshis(value: 0)
     }
 
     public func feeFor(amount: Satoshis, confirmationTarget: UInt, debtType: DebtType = .NONE) throws -> Result {
@@ -80,7 +87,7 @@ public class FeeCalculator {
 
         let takeFeeFromAmount = shouldTakeFeeFromAmount(amount)
 
-        for size in sizeProgression {
+        for size in nts.sizeProgression {
             if amount > size.amountInSatoshis {
                 continue
             }
@@ -88,10 +95,10 @@ public class FeeCalculator {
             let fee = feeRate.calculateFee(sizeInWeightUnit: size.sizeInBytes)
 
             if takeFeeFromAmount {
-                if size.amountInSatoshis - expectedDebt >= fee + Satoshis.dust {
+                if size.amountInSatoshis - nts.expectedDebt >= fee + Satoshis.dust {
                     // We need to make sure we have enough sats to cover the fee and one output of at least dust
                     return .valid(fee, rate: feeRate)
-                } else if size.amountInSatoshis - expectedDebt - calculateMinimumFee() >= Satoshis.dust {
+                } else if size.amountInSatoshis - nts.expectedDebt - calculateMinimumFee() >= Satoshis.dust {
                     // We need to make sure that the payment can produce one output >= dust with the minimum fee
                     return .invalid(fee, rate: feeRate)
                 }
@@ -109,7 +116,7 @@ public class FeeCalculator {
             }
         }
 
-        if let biggestSize = sizeProgression.last, isAmountPayableWithMinimumFee(amount, debtType) {
+        if let biggestSize = nts.sizeProgression.last, isAmountPayableWithMinimumFee(amount, debtType) {
             return .invalid(feeRate.calculateFee(sizeInWeightUnit: biggestSize.sizeInBytes), rate: feeRate)
         }
 
@@ -139,7 +146,7 @@ public class FeeCalculator {
     }
 
     public func calculateMaximumFeePossible(amount: Satoshis) -> FeeRate {
-        guard let maxSizeProgression = sizeProgression.last else {
+        guard let maxSizeProgression = nts.sizeProgression.last else {
             Logger.fatal("No last item in progression")
         }
         let restInSatoshis = totalBalance() - amount
@@ -152,6 +159,23 @@ public class FeeCalculator {
             .filter { $0.value.satsPerVByte <= feeRate.satsPerVByte }
             .keys
             .min()
+    }
+
+    public func getMinimumFeeRate() -> FeeRate {
+        if let maxTarget = targetedFees.keys.max(), let feeRate = targetedFees[maxTarget] {
+            return feeRate
+        }
+
+        return Constant.FeeProtocol.minProtocolFeeRate
+    }
+
+    public func getOutpoints() -> [String] {
+        var outpoints: [String] = []
+        for size in nts.sizeProgression {
+            outpoints.append(size.outpoint ?? "")
+        }
+
+        return outpoints
     }
 
 }

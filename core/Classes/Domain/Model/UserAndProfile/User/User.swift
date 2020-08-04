@@ -24,7 +24,11 @@ public struct User: Codable {
     // in previous versions:
     var hasExportedKeys: Bool?
     public let createdAt: Date?
+    var emergencyKitLastExportedDate: Date?
 
+    func hasExportedEmergencyKit() -> Bool {
+        return emergencyKitLastExportedDate != nil
+    }
 }
 
 struct PhoneNumber: Codable {
@@ -35,4 +39,9 @@ struct PhoneNumber: Codable {
 enum VerificationType: String {
     case SMS
     case CALL
+}
+
+struct ExportEmergencyKit: Codable {
+    let lastExportedAt: Date
+    let verificationCode: String
 }

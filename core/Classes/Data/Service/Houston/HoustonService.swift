@@ -225,8 +225,10 @@ public class HoustonService: BaseService {
             .map({ $0.toModel() })
     }
 
-    func setHasExportedKeys() -> Single<()> {
-        return post("user/keys/exported", andReturn: EmptyJson.self)
+    func setEmergencyKitExported(exportEmergencyKit: ExportEmergencyKit) -> Single<()> {
+        let jsonData = JSONEncoder.data(from: exportEmergencyKit)
+
+        return post("user/emergency-kit/exported", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
     }
 

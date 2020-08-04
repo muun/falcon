@@ -13,7 +13,8 @@ public class BuildOperationAction {
                             amount: BitcoinAmount,
                             fee: BitcoinAmount,
                             description: String,
-                            exchangeRateWindow: ExchangeRateWindow) -> Operation {
+                            exchangeRateWindow: ExchangeRateWindow,
+                            outpoints: [String]?) -> Operation {
 
         // FIXME: We should check for the swaps validity here too
 
@@ -35,34 +36,39 @@ public class BuildOperationAction {
                               status: .CREATED,
                               transaction: nil,
                               creationDate: Date(),
-                              submarineSwap: submarineSwap)
+                              submarineSwap: submarineSwap,
+                              outpoints: outpoints)
     }
 
     public static func toAddress(_ address: String,
                                  amount: BitcoinAmount,
                                  fee: BitcoinAmount,
                                  description: String,
-                                 exchangeRateWindow: ExchangeRateWindow) -> Operation {
+                                 exchangeRateWindow: ExchangeRateWindow,
+                                 outpoints: [String]?) -> Operation {
 
-        return core.Operation(id: nil,
-                              requestId: UUID().uuidString,
-                              isExternal: true,
-                              direction: .OUTGOING,
-                              senderProfile: nil,
-                              senderIsExternal: false,
-                              receiverProfile: nil,
-                              receiverIsExternal: true,
-                              receiverAddress: address,
-                              receiverAddressDerivationPath: nil,
-                              amount: amount,
-                              fee: fee,
-                              confirmations: nil,
-                              exchangeRatesWindowId: exchangeRateWindow.id,
-                              description: description,
-                              status: .CREATED,
-                              transaction: nil,
-                              creationDate: Date(),
-                              submarineSwap: nil)
+        return core.Operation(
+            id: nil,
+            requestId: UUID().uuidString,
+            isExternal: true,
+            direction: .OUTGOING,
+            senderProfile: nil,
+            senderIsExternal: false,
+            receiverProfile: nil,
+            receiverIsExternal: true,
+            receiverAddress: address,
+            receiverAddressDerivationPath: nil,
+            amount: amount,
+            fee: fee,
+            confirmations: nil,
+            exchangeRatesWindowId: exchangeRateWindow.id,
+            description: description,
+            status: .CREATED,
+            transaction: nil,
+            creationDate: Date(),
+            submarineSwap: nil,
+            outpoints: outpoints
+        )
     }
 
 }
