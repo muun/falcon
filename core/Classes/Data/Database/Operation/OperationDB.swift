@@ -6,7 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
 import GRDB
 
 struct OperationDB: Codable, FetchableRecord, PersistableRecord {
@@ -16,10 +15,12 @@ struct OperationDB: Codable, FetchableRecord, PersistableRecord {
     static let senderProfileKey = ForeignKey(["senderProfile"])
     static let receiverProfileKey = ForeignKey(["receiverProfile"])
     static let submarineSwapKey = ForeignKey(["swapUuid"])
+    static let incomingSwapKey = ForeignKey(["incomingSwapUuid"])
 
     static let senderProfile = hasOne(PublicProfileDB.self, key: "senderProfileId", using: senderProfileKey)
     static let receiverProfile = hasOne(PublicProfileDB.self, key: "receiverProfileId", using: receiverProfileKey)
     static let submarineSwap = hasOne(SubmarineSwapDB.self, key: "swapUuid", using: submarineSwapKey)
+    static let incomingSwap = hasOne(IncomingSwapDB.self, key: "incomingSwap", using: incomingSwapKey)
 
     let id: Int
     let direction: OperationDirection
@@ -53,6 +54,7 @@ struct OperationDB: Codable, FetchableRecord, PersistableRecord {
     let exchangeRateWindowHid: Int
 
     let swapUuid: String?
+    let incomingSwapUuid: String?
 }
 
 extension OperationDB: DatabaseModelConvertible {
@@ -86,7 +88,8 @@ extension OperationDB: DatabaseModelConvertible {
                   status: from.status,
                   creationDate: from.creationDate,
                   exchangeRateWindowHid: from.exchangeRatesWindowId,
-                  swapUuid: from.submarineSwap?._swapUuid)
+                  swapUuid: from.submarineSwap?._swapUuid,
+                  incomingSwapUuid: from.incomingSwap?.uuid)
 
     }
 
@@ -120,9 +123,15 @@ extension OperationDB: DatabaseModelConvertible {
 
         let trans = Transaction(hash: hashDB, confirmations: confirmations ?? 0)
 
-        var submarineSwap: SubmarineSwap?
+        let submarineSwap: SubmarineSwap?
         if let swapUuid = swapUuid {
             submarineSwap = try SubmarineSwapDB.fetchOne(db, key: swapUuid)?.to(using: db)
+        } else {
+            submarineSwap = nil
+        }
+
+        let incomingSwap = try incomingSwapUuid.flatMap { uuid in
+            try IncomingSwapDB.fetchOne(db, key: uuid)?.to(using: db)
         }
 
         return Operation(
@@ -145,7 +154,8 @@ extension OperationDB: DatabaseModelConvertible {
             transaction: trans,
             creationDate: creationDate,
             submarineSwap: submarineSwap,
-            outpoints: nil // We don't need retrocompat outpoints
+            outpoints: nil, // We don't need retrocompat outpoints
+            incomingSwap: incomingSwap
         )
     }
     // swiftlint:enable function_body_length

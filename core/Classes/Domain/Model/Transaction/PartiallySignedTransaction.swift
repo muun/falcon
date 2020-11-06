@@ -19,34 +19,42 @@ struct PartiallySignedTransaction {
         let fee: Satoshis
         let change: MuunAddress?
     }
-}
 
-extension PartiallySignedTransaction {
+    struct SignedTransaction {
+        let hash: String
+        let bytes: Data
+    }
 
     func sign(key: WalletPrivateKey, muunKey: WalletPublicKey, expectations: Expectations)
-        throws -> LibwalletTransaction {
+        throws -> SignedTransaction {
 
-        let partial = try doWithError({ error in
-            LibwalletNewPartiallySignedTransaction(hexTransaction, error)
-        })
-
+        let inputList = LibwalletInputList()
         for input in inputs {
-            partial.add(input)
+            inputList.add(input)
         }
 
-        partial.expectations = LibwalletNewSigningExpectations(
+        let partial = try doWithError({ error in
+            LibwalletNewPartiallySignedTransaction(inputList, Data(hex: hexTransaction), error)
+        })
+
+        let expectations = LibwalletNewSigningExpectations(
             expectations.destination,
             expectations.amount.value,
             expectations.change,
             expectations.fee.value)
 
         do {
-            try partial.verify(key.walletPublicKey().key, muunPublickKey: muunKey.key)
+            try partial.verify(expectations, userPublicKey: key.walletPublicKey().key, muunPublickKey: muunKey.key)
         } catch {
             Logger.log(error: error)
         }
 
-        return try partial.sign(key.key, muunKey: muunKey.key)
+        let signedTransaction = try partial.sign(key.key, muunKey: muunKey.key)
+
+        return SignedTransaction(
+            hash: signedTransaction.hash,
+            bytes: signedTransaction.bytes!
+        )
     }
 
     enum Errors: Error {

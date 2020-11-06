@@ -43,6 +43,7 @@ public class LogoutAction: AsyncAction<Void> {
         preferences.wipeAll()
         secureStorage.wipeAll()
         try? databaseCoordinator.wipeAll()
+        try? LibwalletStorageHelper.wipe()
 
         runCompletable(completable)
     }

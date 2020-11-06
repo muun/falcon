@@ -53,4 +53,14 @@ public enum Persistence: String, CaseIterable {
     case blockchainHeight
 
     case welcomeMessageSeen
+
+    case passwordChangeVerification
+
+    case rcSignInAuthorization
+
+    case isEmailSkipped
+
+    case didSkipPushNotificationPermission
+
+    case forwardingPolicies
 }

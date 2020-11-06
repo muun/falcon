@@ -6,7 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
 import RxSwift
 
 private let authorizationHeader = "Authorization"
@@ -198,6 +197,14 @@ public class BaseService {
                 if let parsedResponse: T = self.parseData(data: dataToParse, model: model) {
                     success(parsedResponse)
                 } else {
+                    let decodedString = String(data: dataToParse ?? Data(), encoding: .utf8) ?? ""
+                    Logger.log(
+                        .warn,
+                        """
+                        Failed to decode object of type: \(model.self).
+                        Decoded String: \(decodedString))
+                        """
+                    )
                     failure(MuunError(ServiceError.codableError))
                 }
             }

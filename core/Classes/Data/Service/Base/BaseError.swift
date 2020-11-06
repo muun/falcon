@@ -25,6 +25,8 @@ public struct DeveloperError: Codable, Error {
         case 2038: return .sessionExpired
         case 2045: return .invalidChallengeSignature
         case 2052: return .invalidEmail
+        case 2062: return .recoveryCodeNotSetUp
+        case 2074: return .incomingSwapAlreadyFulfilled
 
         case 4002: return .forceUpdate
 
@@ -35,6 +37,8 @@ public struct DeveloperError: Codable, Error {
         case 8101: return .invoiceExpiresTooSoon
         case 8102: return .invoiceAlreadyUsed
         case 8105: return .noPaymentRoute
+        case 8119: return .invoiceUnreachableNode
+        case 8123: return .cyclicalSwap
 
         default: return .defaultError
         }
@@ -54,6 +58,7 @@ public enum ExactDeveloperError {
     case emailAlreadyUsed
     case nonUserFacing
     case invalidChallengeSignature
+    case recoveryCodeNotSetUp
     case exchangeRateWindowTooOld
 
     //Swaps
@@ -61,6 +66,11 @@ public enum ExactDeveloperError {
     case invoiceExpiresTooSoon
     case invoiceAlreadyUsed
     case noPaymentRoute
+    case invoiceUnreachableNode
+    case cyclicalSwap
+
+    // Incoming swaps
+    case incomingSwapAlreadyFulfilled
 }
 
 public enum ServiceError: Error {

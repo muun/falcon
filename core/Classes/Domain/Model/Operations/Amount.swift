@@ -151,6 +151,11 @@ extension Satoshis {
     public static func += (lhs: inout Satoshis, rhs: Satoshis) {
         lhs = Satoshis(value: lhs.value + rhs.value)
     }
+
+    public static func -= (lhs: inout Satoshis, rhs: Satoshis) {
+        lhs = Satoshis(value: lhs.value - rhs.value)
+    }
+
 }
 
 extension Satoshis: Codable {}

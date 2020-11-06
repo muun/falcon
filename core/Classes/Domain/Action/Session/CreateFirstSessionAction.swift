@@ -13,18 +13,15 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
 
     private let keysRepository: KeysRepository
     private let userRepository: UserRepository
-    private let setupChallengeAction: SetupChallengeAction
     private let logoutAction: LogoutAction
     private let houstonService: HoustonService
 
     init(keysRepository: KeysRepository,
          userRepository: UserRepository,
-         setupChallengeAction: SetupChallengeAction,
          logoutAction: LogoutAction,
          houstonService: HoustonService) {
         self.keysRepository = keysRepository
         self.userRepository = userRepository
-        self.setupChallengeAction = setupChallengeAction
         self.logoutAction = logoutAction
         self.houstonService = houstonService
 
@@ -44,26 +41,6 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         runSingle(single)
     }
 
-    private func createFirstSessionModel(type: ChallengeType,
-                                         challengePublicKey: String,
-                                         userInput: String,
-                                         salt: [UInt8],
-                                         gcmToken: String,
-                                         currencyCode: String) throws -> CreateFirstSession {
-
-        let challengeSetup = try setupChallengeAction.buildChallengeSetup(type: type,
-                                                                          challengePublicKey: challengePublicKey,
-                                                                          userInput: userInput,
-                                                                          salt: salt)
-
-        let client = Client(buildType: Environment.current.buildType, version: Int(core.Constant.buildVersion)!)
-        return CreateFirstSession(client: client,
-                                  gcmToken: gcmToken,
-                                  primaryCurrency: currencyCode,
-                                  basePublicKey: try keysRepository.getBasePublicKey(),
-                                  anonChallengeSetup: challengeSetup)
-    }
-
     fileprivate func createBasePrivateKey() {
         let walletPrivateKey = WalletPrivateKey.createRandom()
 
@@ -80,30 +57,17 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
 
     public func createFirstSession(gcmToken: String, currencyCode: String) throws -> Single<CreateFirstSessionOk> {
 
-        let salt = Data(Hashes.randomBytes(count: 8))
-        let anonSecret = Data(Hashes.randomBytes(count: 32))
-        let anonSecretHex = anonSecret.toHexString()
-        let challengeKey = LibwalletChallengePrivateKey(anonSecret, salt: salt)!
-        let challengePubKeyHex = challengeKey.pubKeyHex()
-
         createBasePrivateKey()
 
-        let challengeKeyModel = ChallengeKey(type: .ANON,
-                                             publicKey: Data(hex: challengePubKeyHex),
-                                             salt: salt)
-        try keysRepository.store(challengeKey: challengeKeyModel, type: .ANON)
-        try keysRepository.store(anonSecret: anonSecretHex)
+        let firstSession = CreateFirstSession(
+            client: Client.buildCurrent(),
+            gcmToken: gcmToken,
+            primaryCurrency: currencyCode,
+            basePublicKey: try keysRepository.getBasePublicKey()
+        )
 
         return Single.deferred({
-            Single.just(try self.createFirstSessionModel(type: .ANON,
-                                                         challengePublicKey: challengePubKeyHex,
-                                                         userInput: anonSecretHex,
-                                                         salt: salt.bytes,
-                                                         gcmToken: gcmToken,
-                                                         currencyCode: currencyCode)
-            )})
-            .flatMap({
-                self.houstonService.createFirstSession(firstSession: $0)
+            self.houstonService.createFirstSession(firstSession: firstSession)
             })
             .do(onSuccess: { response in
                 self.userRepository.setUser(response.user)

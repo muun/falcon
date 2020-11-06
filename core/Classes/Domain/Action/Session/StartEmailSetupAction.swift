@@ -14,16 +14,16 @@ public class StartEmailSetupAction: AsyncAction<()> {
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
     private let preferences: Preferences
-    private let signAnonChallengeAction: SignAnonChallengeAction
+    private let signChallengeAction: SignChallengeWithUserKeyAction
 
     init(houstonService: HoustonService,
          keysRepository: KeysRepository,
          preferences: Preferences,
-         signAnonChallengeAction: SignAnonChallengeAction) {
+         signChallengeAction: SignChallengeWithUserKeyAction) {
         self.houstonService = houstonService
         self.keysRepository = keysRepository
         self.preferences = preferences
-        self.signAnonChallengeAction = signAnonChallengeAction
+        self.signChallengeAction = signChallengeAction
 
         super.init(name: "StartEmailSetupAction")
     }
@@ -31,7 +31,7 @@ public class StartEmailSetupAction: AsyncAction<()> {
     public func run(email: String, challenge: Challenge) {
 
         do {
-            let challengeSignature = try signAnonChallengeAction.sign(challenge)
+            let challengeSignature = try signChallengeAction.sign(challenge)
             let emailSetup = StartEmailSetup(email: email, challengeSignature: challengeSignature)
             let single = houstonService.startEmailSetup(emailSetup)
 

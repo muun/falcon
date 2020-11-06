@@ -69,6 +69,17 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
             })
     }
 
+    func object(query: QueryInterfaceRequest<T>) -> M? {
+
+        return self.coordinator.queue.read { db in
+            do {
+                return try query.fetchOne(db)?.to(using: db)
+            } catch {
+                return nil
+            }
+        }
+    }
+
     func object(with id: T.PrimaryKeyType) -> M? {
         return self.coordinator.queue.read { db in
             do {

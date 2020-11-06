@@ -13,7 +13,6 @@ struct CreateFirstSessionJson: Codable {
     let gcmToken: String
     let primaryCurrency: String
     let basePublicKey: PublicKeyJson
-    let anonChallengeSetup: ChallengeSetupJson
 
 }
 

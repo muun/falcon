@@ -15,17 +15,24 @@ public class TaskRunner {
 
     let syncExternalAddressesAction: SyncExternalAddresses
     let fetchNotificationsAction: FetchNotificationsAction
+    let refreshInvoicesAction: RefreshInvoicesAction
 
     public init(syncExternalAddressesAction: SyncExternalAddresses,
-                fetchNotificationsAction: FetchNotificationsAction) {
+                fetchNotificationsAction: FetchNotificationsAction,
+                refreshInvoicesAction: RefreshInvoicesAction) {
         self.syncExternalAddressesAction = syncExternalAddressesAction
         self.fetchNotificationsAction = fetchNotificationsAction
+        self.refreshInvoicesAction = refreshInvoicesAction
     }
 
     public func run() {
         // This isn't a critical action so delay to avoid stepping on other requests
         schedule(after: .seconds(2)) {
             self.run(action: self.syncExternalAddressesAction)
+        }
+        // We keep a high stock of invoices, so no need to rush to refresh them
+        schedule(after: .seconds(3)) {
+            self.run(action: self.refreshInvoicesAction)
         }
 
         // We only run this once since after that FCM should do the rest
@@ -43,10 +50,13 @@ public class TaskRunner {
     private func run(action: RunnableAsyncAction, retryInterval: DispatchTimeInterval = .seconds(1), retries: Int = 3) {
 
         _ = action.getValue()
-            .do(onError: { _ in
+            .do(onError: { err in
                 if retries == 0 {
                     return
                 }
+
+                Logger.log(.warn,
+                           "Retrying action \(action.`self`().description) due to error \(err.localizedDescription)")
 
                 self.schedule(after: retryInterval) {
                     self.run(action: action, retryInterval: retryInterval.duplicate(), retries: retries - 1)

@@ -12,41 +12,53 @@ import RxSwift
 
 public class LogInAction: AsyncAction<KeySet> {
 
-    private let keysRepository: KeysRepository
     private let houstonService: HoustonService
+    private let storeKeySetAction: StoreKeySetAction
 
-    init(houstonService: HoustonService, keysRepository: KeysRepository) {
+    init(houstonService: HoustonService, storeKeySetAction: StoreKeySetAction) {
         self.houstonService = houstonService
-        self.keysRepository = keysRepository
+        self.storeKeySetAction = storeKeySetAction
 
         super.init(name: "LogInAction")
     }
 
     public func run(_ challenge: Challenge, userInput: String) {
-        let challengePrivateKey = LibwalletChallengePrivateKey(Data(userInput.stringBytes),
-                                                               salt: Data(hex: challenge.salt))!
 
-        let single = Single.deferred({
-            let signature = try challengePrivateKey.signSha(Data(hex: challenge.challenge))
-                return Single.just(ChallengeSignature(type: challenge.type, hex: signature.toHexString()))
+        do {
+            let key = try getChallengePrivateKey(challenge: challenge, userInput: userInput)
+
+            let single = Single.deferred({
+                let signature = try key.signSha(Data(hex: challenge.challenge))
+                    return Single.just(ChallengeSignature(type: challenge.type, hex: signature.toHexString()))
+                })
+                .flatMap({ payload in self.houstonService.logIn(challengeSignature: payload) })
+                .do(onSuccess: { keySet in
+                    self.storeKeySetAction.run(keySet: keySet, userInput: userInput)
+                })
+
+            runSingle(single)
+        } catch {
+            Logger.fatal(error: error)
+        }
+    }
+
+    private func getChallengePrivateKey(challenge: Challenge, userInput: String) throws -> LibwalletChallengePrivateKey {
+        switch challenge.type {
+        case .PASSWORD:
+            return LibwalletChallengePrivateKey(
+                Data(userInput.stringBytes),
+                salt: Data(hex: challenge.salt!) // Should not be null on this flow
+            )!
+
+        case .RECOVERY_CODE:
+            return try doWithError({ error in
+                // salt will be null for versions >= 2
+                LibwalletRecoveryCodeToKey(userInput, challenge.salt, error)
             })
-            .flatMap({ payload in self.houstonService.logIn(challengeSignature: payload) })
-            .do(onSuccess: { keySet in
-                if let muunKey = keySet.muunKey {
-                    try self.keysRepository.store(muunPrivateKey: muunKey)
-                }
 
-                for key in keySet.challengeKeys {
-                    try self.keysRepository.store(challengeKey: key, type: key.type)
-                }
-
-                let privateKey = try KeyCrypter.decrypt(keySet.encryptedPrivateKey, passphrase: userInput)
-                let derivedKey = try privateKey.derive(to: .base)
-
-                try self.keysRepository.store(key: derivedKey)
-            })
-
-        runSingle(single)
+        default:
+            Logger.fatal("Asking for private key for wrong challenge type: \(challenge.type)")
+        }
     }
 
 }

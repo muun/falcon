@@ -169,10 +169,16 @@ public class FeeCalculator {
         return Constant.FeeProtocol.minProtocolFeeRate
     }
 
-    public func getOutpoints() -> [String] {
+    public func getOutpoints() -> [String]? {
         var outpoints: [String] = []
         for size in nts.sizeProgression {
-            outpoints.append(size.outpoint ?? "")
+            guard let outpoint = size.outpoint, outpoint != "" else {
+                // If at least one of the outpoints is nil or empty string
+                // return nil since the server won't be able to use an empty outpoint
+                return nil
+            }
+
+            outpoints.append(outpoint)
         }
 
         return outpoints

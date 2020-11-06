@@ -24,11 +24,12 @@ public class SecureStorage {
         case pinAttemptsLeft
         case passwordSalt
         case recoveryCodeSalt
-        case anonSalt
         case passwordPublicKey
         case recoveryCodePublicKey
-        case anonPublicKey
-        case anonSecret
+        case userKeyPublicKey
+        case passwordVersionKey
+        case recoveryCodeVersionKey
+        case userVersionKey
     }
 
     private let keyPrefix: String

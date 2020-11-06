@@ -13,7 +13,6 @@ struct CreateFirstSession {
     let gcmToken: String
     let primaryCurrency: String
     let basePublicKey: WalletPublicKey
-    let anonChallengeSetup: ChallengeSetup
 
 }
 
@@ -29,5 +28,9 @@ struct Client {
     let type: String = "FALCON"
     let buildType: String
     let version: Int
+
+    static func buildCurrent() -> Client {
+        Client(buildType: Environment.current.buildType, version: Int(core.Constant.buildVersion)!)
+    }
 
 }

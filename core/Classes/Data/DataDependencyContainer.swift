@@ -43,9 +43,10 @@ public extension DependencyContainer {
             container.register(factory: TaskRunner.init)
             container.register(factory: SubmarineSwapRepository.init)
             container.register(factory: BlockchainHeightRepository.init)
+            container.register(factory: ForwardingPolicyRepository.init)
+            container.register(factory: IncomingSwapRepository.init)
 
             container.register(factory: HoustonService.init)
-            container.register(factory: MuunWebService.init)
         }
     }
 }

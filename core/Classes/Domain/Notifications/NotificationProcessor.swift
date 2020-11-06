@@ -16,17 +16,20 @@ public class NotificationProcessor {
     private let houstonService: HoustonService
     private let sessionRepository: SessionRepository
     private let sessionActions: SessionActions
+    private let fulfillIncomingSwap: FulfillIncomingSwapAction
 
     private let queue: DispatchQueue
 
     init(operationActions: OperationActions,
          houstonService: HoustonService,
          sessionRepository: SessionRepository,
-         sessionActions: SessionActions) {
+         sessionActions: SessionActions,
+         fulfillIncomingSwap: FulfillIncomingSwapAction) {
         self.operationActions = operationActions
         self.houstonService = houstonService
         self.sessionRepository = sessionRepository
         self.sessionActions = sessionActions
+        self.fulfillIncomingSwap = fulfillIncomingSwap
 
         self.queue = DispatchQueue(label: "notifications")
     }
@@ -144,7 +147,13 @@ public class NotificationProcessor {
             let newId = self.sessionRepository.getLastNotificationId()
 
             if newId != id {
-                return self.houstonService.confirmNotificationsDeliveryUntil(notificationId: newId)
+                let deviceInfo = DeviceUtils.deviceInfo()
+                return self.houstonService.confirmNotificationsDeliveryUntil(
+                    notificationId: newId,
+                    deviceModel: deviceInfo.model,
+                    osVersion: deviceInfo.osVersion,
+                    appStatus: deviceInfo.appStatus
+                )
             } else {
                 return Completable.empty()
             }
@@ -181,14 +190,24 @@ public class NotificationProcessor {
                 return self.sessionActions.emailAuthorized()
             }
 
+        case .authorizeRcSignIn:
+            return CallbackNotificationHandler(.BLOCKED_BY_EMAIL) {
+                return self.sessionActions.authorizeRcSignIn()
+            }
+
         case .newOperation(let newOperation):
             return CallbackNotificationHandler(.LOGGED_IN) {
-                self.operationActions.recieved(newOperation: newOperation)
+                self.operationActions.received(newOperation: newOperation)
             }
 
         case .operationUpdate(let operationUpdated):
             return CallbackNotificationHandler(.LOGGED_IN) {
                 self.operationActions.operationUpdated(operationUpdated)
+            }
+
+        case .fulfillIncomingSwap(let uuid):
+            return CallbackNotificationHandler(.LOGGED_IN) {
+                return self.fulfillIncomingSwap.run(uuid: uuid)
             }
 
         case .unknownMessage(let type):
@@ -206,7 +225,9 @@ public class NotificationProcessor {
             return FutureCompatNotificationHandler()
 
         case .updateAuthorizeChallenge:
-            return FutureCompatNotificationHandler()
+            return CallbackNotificationHandler(.LOGGED_IN) {
+                self.sessionActions.verifyPasswordChange(true)
+            }
 
         case .verifiedEmail:
             return CallbackNotificationHandler(.LOGGED_IN) {

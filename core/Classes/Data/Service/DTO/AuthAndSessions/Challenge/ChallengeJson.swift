@@ -6,13 +6,11 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 struct ChallengeJson: Codable {
 
     let type: ChallengeTypeJson
     let challenge: String
-    let salt: String
+    let salt: String? // Nil for USER_KEY and RECOVERY_CODE (version >= 2) types
 
 }
 
@@ -28,10 +26,6 @@ struct ChallengeSetupJson: Codable {
 
 enum ChallengeTypeJson: String, Codable {
     /**
-     * Client-generated public key before any other key was set up.
-     */
-    case ANON
-    /**
      * User-provided password public key will be used to sign Challenge.
      */
     case PASSWORD
@@ -39,10 +33,15 @@ enum ChallengeTypeJson: String, Codable {
      * User-provided recovery code public key will be used to sign Challenge.
      */
     case RECOVERY_CODE
+
+    /**
+     * Fake challenge key type used to sign/verify challenges with the user's private/public key.
+     */
+    case USER_KEY
 }
 
 struct SetupChallengeResponseJson: Codable {
-    let muunKey: String
+    let muunKey: String?
 }
 
 struct PendingChallengeUpdateJson: Codable {

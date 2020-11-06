@@ -18,6 +18,8 @@ import (
 	reflect "reflect"
 	sync "sync"
 
+	//TODO: the following lint rule will disappear when this file is re-generated. We need to upgrade.
+	//lint:ignore SA1019 this library is now located in a different repository
 	proto "github.com/golang/protobuf/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"

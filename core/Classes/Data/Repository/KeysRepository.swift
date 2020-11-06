@@ -85,10 +85,6 @@ class KeysRepository {
         return try secureStorage.get(.muunPrivateKey)
     }
 
-    func getAnonSecret() throws -> String {
-        return try secureStorage.get(.anonSecret)
-    }
-
     private func saltKey(for type: ChallengeType) -> SecureStorage.Keys {
 
         switch type {
@@ -96,8 +92,8 @@ class KeysRepository {
             return .passwordSalt
         case .RECOVERY_CODE:
             return .recoveryCodeSalt
-        case .ANON:
-            return .anonSalt
+        case .USER_KEY:
+            Logger.fatal(error: MuunError(KeyStorageError.noSaltForUserKey))
         }
     }
 
@@ -108,32 +104,62 @@ class KeysRepository {
             return .passwordPublicKey
         case .RECOVERY_CODE:
             return .recoveryCodePublicKey
-        case .ANON:
-            return .anonPublicKey
+        case .USER_KEY:
+            return .userKeyPublicKey
         }
     }
 
-    func store(challengeKey: ChallengeKey, type: ChallengeType) throws {
-        try secureStorage.store(challengeKey.salt.toHexString(), at: saltKey(for: type))
+    private func challengeVersionKey(for type: ChallengeType) -> SecureStorage.Keys {
+
+        switch type {
+        case .PASSWORD:
+            return .passwordVersionKey
+        case .RECOVERY_CODE:
+            return .recoveryCodeVersionKey
+        case .USER_KEY:
+            return .userVersionKey
+        }
+    }
+
+    func store(challengeKey: ChallengeKey) throws {
+        let type = challengeKey.type
+        if let salt = challengeKey.salt {
+            try secureStorage.store(salt.toHexString(), at: saltKey(for: type))
+        }
         try secureStorage.store(challengeKey.publicKey.toHexString(), at: publicKeyKey(for: type))
+        try secureStorage.store(
+            String(describing: challengeKey.getChallengeVersion()),
+            at: challengeVersionKey(for: type)
+        )
 
-        if type == .RECOVERY_CODE {
-            preferences.set(value: true, forKey: .hasRecoveryCode)
+        if var user = userRepository.getUser() {
+            if type == .RECOVERY_CODE {
+                user.hasRecoveryCodeChallengeKey = true
+                preferences.set(value: true, forKey: .hasRecoveryCode)
+            } else if type == .PASSWORD {
+                user.hasPasswordChallengeKey = true
+            }
+            userRepository.setUser(user)
         }
-    }
-
-    func store(anonSecret: String) throws {
-        try secureStorage.store(anonSecret, at: .anonSecret)
     }
 
     func hasChallengeKey(type: ChallengeType) throws -> Bool {
-        return try secureStorage.has(saltKey(for: type))
+        return try secureStorage.has(publicKeyKey(for: type))
     }
 
     func getChallengeKey(with type: ChallengeType) throws -> ChallengeKey {
-        return ChallengeKey(type: type,
-                            publicKey: Data(hex: try secureStorage.get(publicKeyKey(for: type))),
-                            salt: Data(hex: try secureStorage.get(saltKey(for: type))))
+
+        let saltHex: String? = try? secureStorage.get(saltKey(for: type))
+        let salt: Data? = (saltHex != nil)
+            ? Data(hex: saltHex!)
+            : nil
+
+        return ChallengeKey(
+            type: type,
+            publicKey: Data(hex: try secureStorage.get(publicKeyKey(for: type))),
+            salt: salt,
+            challengeVersion: Int(try secureStorage.get(challengeVersionKey(for: type)))
+        )
     }
 
 }
@@ -141,4 +167,5 @@ class KeysRepository {
 enum KeyStorageError: Error {
     case secureStorageError
     case missingKey
+    case noSaltForUserKey
 }

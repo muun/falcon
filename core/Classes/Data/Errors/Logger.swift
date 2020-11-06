@@ -7,9 +7,7 @@
 //
 
 import Foundation
-#if !DEBUG
-import Crashlytics
-#endif
+import FirebaseCrashlytics
 
 public enum LogLevel: String {
     case err = "[‼️]" // error
@@ -51,7 +49,7 @@ public class Logger {
         // This variant prints to NSLog
         Swift.print(log)
         #else
-        CLSLogv("%@", getVaList([log]))
+        Crashlytics.crashlytics().log(format: "%@", arguments: getVaList([log]))
         #endif
     }
 
@@ -72,7 +70,7 @@ public class Logger {
             #if DEBUG
             log(.err, error.localizedDescription, filename: filename, line: line, funcName: funcName)
             #else
-            Crashlytics.sharedInstance().recordError(error)
+            Crashlytics.crashlytics().record(error: error)
             #endif
         }
     }
@@ -102,7 +100,7 @@ public class Logger {
             let domain = "\(error.localizedDescription) - \(caller)"
             finalError = NSError(domain: domain, code: 0, userInfo: additionalInfo)
         }
-        Crashlytics.sharedInstance().recordError(finalError, withAdditionalUserInfo: additionalInfo)
+        Crashlytics.crashlytics().record(error: finalError)
         #endif
     }
 
@@ -121,7 +119,7 @@ public class Logger {
 
         } else {
             #if !DEBUG
-            Crashlytics.sharedInstance().recordError(error)
+            Crashlytics.crashlytics().record(error: error)
             #endif
         }
 

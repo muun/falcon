@@ -6,7 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
 import RxSwift
 
 public class HoustonService: BaseService {
@@ -95,8 +94,16 @@ public class HoustonService: BaseService {
             .map({ $0.toModel(decrypter: self.decrypter) })
     }
 
-    func confirmNotificationsDeliveryUntil(notificationId: Int) -> Completable {
-        let queryParams = ["until": notificationId]
+    func confirmNotificationsDeliveryUntil(notificationId: Int,
+                                           deviceModel: String,
+                                           osVersion: String,
+                                           appStatus: String) -> Completable {
+        let queryParams: [String: Any] = [
+            "until": notificationId,
+            "deviceModel": deviceModel,
+            "osVersion": osVersion,
+            "appStatus": appStatus
+        ]
 
         return put("sessions/notifications/confirm",
                    body: Data(),
@@ -123,6 +130,34 @@ public class HoustonService: BaseService {
         let jsonData = JSONEncoder.data(from: challengeSignature)
 
         return post("sessions/current/login", body: jsonData, andReturn: KeySetJson.self)
+            .map({ $0.toModel() })
+    }
+
+    // Create session for an existing user with a given recovery code.
+    func createRecoveryCodeLoginSession(_ rcLoginSession: CreateRcLoginSession) -> Single<(Challenge)> {
+        let jsonData = JSONEncoder.data(from: rcLoginSession)
+
+        return post("sessions-v2/recovery-code/start", body: jsonData, andReturn: ChallengeJson.self)
+            .map({ $0.toModel() })
+    }
+
+    // Login using recovery code only flow (may need email auth, if email setup).
+    func loginWithRecoveryCode(_ signature: ChallengeSignature) -> Single<(CreateSessionRcOk)> {
+        let jsonData = JSONEncoder.data(from: signature)
+
+        return post("sessions-v2/recovery-code/finish", body: jsonData, andReturn: CreateSessionRcOkJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func authorizeLoginWithRecoveryCode(linkAction: LinkAction) -> Single<()> {
+        let jsonData = JSONEncoder.data(from: linkAction)
+
+        return post("sessions-v2/recovery-code/authorize", body: jsonData, andReturn: EmptyJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func fetchKeySet() -> Single<KeySet> {
+        return get("sessions-v2/current/key-set", andReturn: KeySetJson.self)
             .map({ $0.toModel() })
     }
 
@@ -205,6 +240,13 @@ public class HoustonService: BaseService {
         let jsonData = JSONEncoder.data(from: challengeSignature)
 
         return post("user/password", body: jsonData, andReturn: PendingChallengeUpdateJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func verifyChangePassword(linkAction: LinkAction) -> Single<()> {
+        let jsonData = JSONEncoder.data(from: linkAction)
+
+        return post("user/password/authorize", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
     }
 
@@ -297,6 +339,29 @@ public class HoustonService: BaseService {
 
         return post("operations/sswap/create", body: jsonData, andReturn: SubmarineSwapJson.self)
             .map({ $0.toModel() })
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Incoming swaps:
+
+    func registerInvoices(_ invoices: [UserInvoiceJson]) -> Completable {
+        let jsonData = JSONEncoder.data(json: invoices)
+
+        return post("incoming-swaps/invoices", body: jsonData, andReturn: EmptyJson.self)
+            .asCompletable()
+    }
+
+    func fetchFulfillmentData(for uuid: String) -> Single<IncomingSwapFulfillmentData> {
+        return post("incoming-swaps/\(uuid)/fulfillment", andReturn: IncomingSwapFulfillmentDataJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func pushFulfillmentTransaction(rawTransaction: RawTransaction, incomingSwap: String) -> Completable {
+        let jsonData = JSONEncoder.data(from: rawTransaction)
+
+        let path = "incoming-swaps/\(incomingSwap)/fulfillment"
+        return put(path, body: jsonData, andReturn: EmptyJson.self)
+            .asCompletable()
     }
 
     // ---------------------------------------------------------------------------------------------

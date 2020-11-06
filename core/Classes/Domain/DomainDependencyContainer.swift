@@ -35,16 +35,29 @@ public extension DependencyContainer {
             container.register(.singleton, factory: FeeCalculatorAction.init)
             container.register(.singleton, factory: LogoutAction.init)
             container.register(.singleton, factory: SetupChallengeAction.init)
+            container.register(.singleton, factory: BuildChallengeSetupAction.init)
             container.register(.singleton, factory: SupportAction.init)
             container.register(.singleton, factory: ChangeCurrencyAction.init)
-            container.register(.singleton, factory: VerifyAuthorizeAction.init)
+            container.register(.singleton, factory: VerifyEmailSetupAction.init)
+            container.register(.singleton, factory: AuthorizeEmailAction.init)
+            container.register(.singleton, factory: AuthorizeRCLoginAction.init)
             container.register(.singleton, factory: SubmarineSwapAction.init)
             container.register(.singleton, factory: BIP70Action.init)
             container.register(.singleton, factory: CreateFirstSessionAction.init)
             container.register(.singleton, factory: StartEmailSetupAction.init)
             container.register(.singleton, factory: OperationMetadataDecrypter.init)
-            container.register(.singleton, factory: SignAnonChallengeAction.init)
+            container.register(.singleton, factory: SignChallengeWithUserKeyAction.init)
             container.register(.singleton, factory: ReportEmergencyKitExportedAction.init)
+            container.register(.singleton, factory: BeginPasswordChangeAction.init)
+            container.register(.singleton, factory: FinishPasswordChangeAction.init)
+            container.register(.singleton, factory: LogInWithRCAction.init)
+            container.register(.singleton, factory: CreateRCLoginSessionAction.init)
+            container.register(.singleton, factory: StoreKeySetAction.init)
+            container.register(.singleton, factory: GetKeySetAction.init)
+            container.register(.singleton, factory: CreateInvoiceAction.init)
+            container.register(.singleton, factory: RefreshInvoicesAction.init)
+            container.register(.singleton, factory: FulfillIncomingSwapAction.init)
+            container.register(.singleton, factory: ComputeSwapFeesAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EncryptedUserKeySelector.init)
@@ -58,7 +71,8 @@ public extension DependencyContainer {
                            realTimeDataAction: $4,
                            nextTransactionSizeRepository: $5,
                            fetchNotificationsAction: try container.resolve(),
-                           createFirstSessionAction: try container.resolve())
+                           createFirstSessionAction: try container.resolve(),
+                           refreshInvoices: try container.resolve())
             }
         }
     }

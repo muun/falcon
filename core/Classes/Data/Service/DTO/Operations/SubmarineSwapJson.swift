@@ -14,13 +14,29 @@ struct SubmarineSwapJson: Codable {
     let receiver: SubmarineSwapReceiverJson
     let fundingOutput: SubmarineSwapFundingOutputJson
 
-    let fees: SubmarineSwapFeesJson
+    // This field is nil if the invoice doesn't specify an amount
+    let fees: SubmarineSwapFeesJson?
 
     let expiresAt: Date
     let willPreOpenChannel: Bool
 
+    let bestRouteFees: [BestRouteFeesJson]?
+    let fundingOutputPolicies: FundingOutputPoliciesJson?
+
     let payedAt: Date?
     let preimageInHex: String?
+}
+
+struct BestRouteFeesJson: Codable {
+    let maxCapacityInSat: Int64
+    let proportionalMillionth: Int64
+    let baseInSat: Int64
+}
+
+struct FundingOutputPoliciesJson: Codable {
+    let maximumDebtInSat: Int64
+    let potentialCollectInSat: Int64
+    let maxAmountInSatFor0Conf: Int64
 }
 
 struct SubmarineSwapFeesJson: Codable {
@@ -39,8 +55,9 @@ struct SubmarineSwapReceiverJson: Codable {
 struct SubmarineSwapFundingOutputJson: Codable {
     let scriptVersion: Int
     let outputAddress: String
-    let outputAmountInSatoshis: Int64
-    let confirmationsNeeded: Int
+    // These two fields are nil if the invoice doesn't specify an amount
+    let outputAmountInSatoshis: Int64?
+    let confirmationsNeeded: Int?
     // This field is available once the funding has 1 conf
     let userLockTime: Int?
     let serverPaymentHashInHex: String
@@ -54,8 +71,9 @@ struct SubmarineSwapFundingOutputJson: Codable {
     let userPublicKey: PublicKeyJson?
     let muunPublicKey: PublicKeyJson?
 
-    let debtType: String
-    let debtAmountInSats: Int64
+    // These two fields are nil if the invoice doesn't specify an amount
+    let debtType: String?
+    let debtAmountInSats: Int64?
 }
 
 struct SubmarineSwapRequestJson: Codable {

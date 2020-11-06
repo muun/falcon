@@ -8,24 +8,22 @@
 
 import Foundation
 
-public class VerifyAuthorizeAction: AsyncAction<()> {
+public class AuthorizeEmailAction: AsyncAction<()> {
 
     private let houstonService: HoustonService
 
     public init(houstonService: HoustonService) {
         self.houstonService = houstonService
 
-        super.init(name: "VerifyAuthorizeAction")
+        super.init(name: "AuthorizeEmailAction")
     }
 
-    public func run(uuid: String, flow: SignFlow) {
-        let linkAction = LinkAction(uuid: uuid)
+    public func run(uuid: String) {
+        runSingle(houstonService.authorizeSession(linkAction: LinkAction(uuid: uuid)))
+    }
 
-        if flow == .recover {
-            runSingle(houstonService.authorizeSession(linkAction: linkAction))
-        } else if flow == .create {
-            runSingle(houstonService.verifySignUp(linkAction: linkAction))
-        }
+    public func runChangePasswordVerification(uuid: String) {
+        runSingle(houstonService.verifyChangePassword(linkAction: LinkAction(uuid: uuid)))
     }
 
 }

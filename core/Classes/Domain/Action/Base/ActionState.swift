@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 public class ActionState<T>: NSObject {
 
     public enum ActionStateType {

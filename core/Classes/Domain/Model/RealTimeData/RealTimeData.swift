@@ -13,7 +13,7 @@ public struct RealTimeData {
     let feeWindow: FeeWindow
     let exchangeRateWindow: ExchangeRateWindow
     let currentBlockchainHeight: Int
-
+    let forwardingPolicies: [ForwardingPolicy]
 }
 
 public struct FeeWindow: Codable {
