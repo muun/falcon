@@ -1,8 +1,10 @@
 package libwallet
 
 import (
+	"crypto/sha256"
 	"testing"
 
+	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/chaincfg"
 )
 
@@ -74,16 +76,6 @@ func TestNewHDPrivateKeySerialization(t *testing.T) {
 		badKey, err := NewHDPrivateKeyFromString("fooo", "m", Regtest())
 		if badKey != nil || err == nil {
 			t.Errorf("bad key should only return error returned %v, %v", badKey, err)
-		}
-
-		// Create a new key and set a random chain
-		randomKey, _ := NewHDPrivateKey(randomBytes(16), network)
-		randomKey.key.SetNet(&chaincfg.Params{HDPrivateKeyID: [4]byte{1, 2, 3, 4}})
-
-		// Parsing it should fail since we check we know the chain
-		badKey, err = NewHDPrivateKeyFromString(randomKey.String(), "m", Regtest())
-		if badKey != nil || err == nil {
-			t.Errorf("expected failure when parsing key with fake chain, got %v, %v", badKey, err)
 		}
 
 		badKey, err = NewHDPrivateKeyFromString(vector1FirstPub, "m", Regtest())
@@ -274,4 +266,29 @@ func TestSymmetricDerivation(t *testing.T) {
 	t.Run("derivation path is invalid", func(t *testing.T) {
 		testBadDerivation(t, "m/123/asd45")
 	})
+}
+
+func TestHDPrivateKeySign(t *testing.T) {
+	seed := randomBytes(32)
+	privKey, err := NewHDPrivateKey(seed, Regtest())
+	if err != nil {
+		t.Fatal(err)
+	}
+	data := []byte("foobar")
+	sigBytes, err := privKey.Sign(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	sig, err := btcec.ParseSignature(sigBytes, btcec.S256())
+	if err != nil {
+		t.Fatal(err)
+	}
+	pubKey, err := privKey.key.ECPubKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	hash := sha256.Sum256(data)
+	if ok := sig.Verify(hash[:], pubKey); !ok {
+		t.Fatal(err)
+	}
 }

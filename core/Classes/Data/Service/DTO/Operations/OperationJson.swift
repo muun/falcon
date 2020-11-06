@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 // This is public for the operation extension
 public struct OperationJson: Codable {
 
@@ -32,7 +30,7 @@ public struct OperationJson: Codable {
     let transaction: TransactionJson?
     let creationDate: Date
 
-    let outputAmountInSatoshis: Int64?
+    var outputAmountInSatoshis: Int64?
 
     // This one is used when creating a new op
     let swapUuid: String?
@@ -46,6 +44,8 @@ public struct OperationJson: Codable {
     var receiverMetadata: String?
 
     let outpoints: [String]? // The complete utxoSet, sorted as used for fee computation
+
+    let incomingSwap: IncomingSwapJson?
 }
 
 public struct OperationMetadataJson: Codable {

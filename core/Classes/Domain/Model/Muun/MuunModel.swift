@@ -20,19 +20,22 @@ class MuunInput: NSObject {
     let _muunSignature: Signature?
     let _submarineSwapV1: InputSubmarineSwapV1?
     let _submarineSwapV2: InputSubmarineSwapV2?
+    let _incomingSwap: InputIncomingSwap?
 
     init(prevOut: MuunOutput,
          address: MuunAddress,
          userSignature: Signature?,
          muunSignature: Signature?,
          submarineSwapV1: InputSubmarineSwapV1?,
-         submarineSwapV2: InputSubmarineSwapV2?) {
+         submarineSwapV2: InputSubmarineSwapV2?,
+         incomingSwap: InputIncomingSwap?) {
         self._prevOut = prevOut
         self._address = address
         self._userSignature = userSignature
         self._muunSignature = muunSignature
         self._submarineSwapV1 = submarineSwapV1
         self._submarineSwapV2 = submarineSwapV2
+        self._incomingSwap = incomingSwap
 
         super.init()
     }
@@ -103,6 +106,25 @@ class InputSubmarineSwapV2: NSObject {
     }
 }
 
+class InputIncomingSwap: NSObject {
+    let _sphinx: Data
+    let _htlcTx: Data
+    let _paymentHash256: Data
+    let _swapServerPublicKey: Data
+    let _expirationHeight: Int64
+
+    init(sphinx: Data, htlcTx: Data, paymentHash256: Data, swapServerPublicKey: Data,
+         expirationHeight: Int64) {
+        self._sphinx = sphinx
+        self._htlcTx = htlcTx
+        self._paymentHash256 = paymentHash256
+        self._swapServerPublicKey = swapServerPublicKey
+        self._expirationHeight = expirationHeight
+
+        super.init()
+    }
+}
+
 extension MuunInput: LibwalletInputProtocol {
 
     func address() -> LibwalletMuunAddressProtocol? {
@@ -140,6 +162,13 @@ extension MuunInput: LibwalletInputProtocol {
          }
          return nil
      }
+
+    func incomingSwap() -> LibwalletInputIncomingSwapProtocol? {
+        if let sw = _incomingSwap {
+            return sw
+        }
+        return nil
+    }
 
 }
 
@@ -221,4 +250,27 @@ extension InputSubmarineSwapV2: LibwalletInputSubmarineSwapV2Protocol {
         return _swapServerPublicKey
     }
 
+}
+
+extension InputIncomingSwap: LibwalletInputIncomingSwapProtocol {
+
+    func sphinx() -> Data? {
+        return _sphinx
+    }
+
+    func htlcTx() -> Data? {
+        return _htlcTx
+    }
+
+    func paymentHash256() -> Data? {
+        return _paymentHash256
+    }
+
+    func swapServerPublicKey() -> String {
+        return _swapServerPublicKey.toHexString()
+    }
+
+    func expirationHeight() -> Int64 {
+        return _expirationHeight
+    }
 }

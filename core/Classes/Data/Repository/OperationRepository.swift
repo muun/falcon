@@ -14,12 +14,15 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
 
     private let publicProfileRepository: PublicProfileRepository
     private let submarineSwapRepository: SubmarineSwapRepository
+    private let incomingSwapRepository: IncomingSwapRepository
 
     init(coordinator: DatabaseCoordinator,
          publicProfileRepository: PublicProfileRepository,
-         submarineSwapRepository: SubmarineSwapRepository) {
+         submarineSwapRepository: SubmarineSwapRepository,
+         incomingSwapRepository: IncomingSwapRepository) {
         self.publicProfileRepository = publicProfileRepository
         self.submarineSwapRepository = submarineSwapRepository
+        self.incomingSwapRepository = incomingSwapRepository
 
         super.init(coordinator: coordinator)
     }
@@ -27,6 +30,7 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
     func storeOperations(_ operations: [Operation]) -> Completable {
         var profiles: [PublicProfile] = []
         var submarineSwaps: [SubmarineSwap] = []
+        var incomingSwaps: [IncomingSwap] = []
 
         for op in operations {
             if let senderProfile = op.senderProfile {
@@ -40,9 +44,14 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
             if let submarineSwap = op.submarineSwap {
                 submarineSwaps.append(submarineSwap)
             }
+
+            if let incomingSwap = op.incomingSwap {
+                incomingSwaps.append(incomingSwap)
+            }
         }
 
-        return submarineSwapRepository.write(objects: submarineSwaps)
+        return incomingSwapRepository.write(objects: incomingSwaps)
+            .andThen(submarineSwapRepository.write(objects: submarineSwaps))
             .andThen(publicProfileRepository.write(objects: profiles))
             .andThen(write(objects: operations))
     }
@@ -51,6 +60,9 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
         return watchObjects()
     }
 
+    func findByIncomingSwap(uuid: String) -> Operation? {
+        return object(query: OperationDB.filter(Column("incomingSwapUuid") == uuid))
+    }
 }
 
 extension OperationStatus: DatabaseValueConvertible {}

@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 //We should reconsider using URLRequest instead of BaseRequest
 
 // This is public for the operation extension

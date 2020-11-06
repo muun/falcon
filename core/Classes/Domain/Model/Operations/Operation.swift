@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 public struct Operation {
 
     public let id: Int?
@@ -34,25 +32,31 @@ public struct Operation {
 
     public var submarineSwap: SubmarineSwap?
 
-    public var outputAmount: Satoshis {
-        if let sswap = submarineSwap {
-            var outputAmount = sswap._fees.total() + amount.inSatoshis
-            if sswap.getDebtType() == .COLLECT {
-                outputAmount += sswap._fundingOutput._debtAmount
-            }
-            return outputAmount
-        }
-        return amount.inSatoshis
-    }
-
     public let outpoints: [String]? // The complete utxoSet, sorted as used for fee computation
 
-    public init(id: Int?, requestId: String, isExternal: Bool, direction: OperationDirection,
-                senderProfile: PublicProfile?, senderIsExternal: Bool, receiverProfile: PublicProfile?,
-                receiverIsExternal: Bool, receiverAddress: String?, receiverAddressDerivationPath: String?,
-                amount: BitcoinAmount, fee: BitcoinAmount, confirmations: Int?, exchangeRatesWindowId: Int,
-                description: String?, status: OperationStatus, transaction: Transaction?, creationDate: Date,
-                submarineSwap: SubmarineSwap?, outpoints: [String]?) {
+    public let incomingSwap: IncomingSwap?
+
+    public init(id: Int?,
+                requestId: String,
+                isExternal: Bool,
+                direction: OperationDirection,
+                senderProfile: PublicProfile?,
+                senderIsExternal: Bool,
+                receiverProfile: PublicProfile?,
+                receiverIsExternal: Bool,
+                receiverAddress: String?,
+                receiverAddressDerivationPath: String?,
+                amount: BitcoinAmount,
+                fee: BitcoinAmount,
+                confirmations: Int?,
+                exchangeRatesWindowId: Int,
+                description: String?,
+                status: OperationStatus,
+                transaction: Transaction?,
+                creationDate: Date,
+                submarineSwap: SubmarineSwap?,
+                outpoints: [String]?,
+                incomingSwap: IncomingSwap?) {
         self.id = id
         self.requestId = requestId
         self.isExternal = isExternal
@@ -73,6 +77,7 @@ public struct Operation {
         self.creationDate = creationDate
         self.submarineSwap = submarineSwap
         self.outpoints = outpoints
+        self.incomingSwap = incomingSwap
     }
 
     public func isPending() -> Bool {

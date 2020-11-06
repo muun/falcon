@@ -24,6 +24,7 @@ public class SyncAction: AsyncAction<()> {
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
     private let fetchNotificationsAction: FetchNotificationsAction
     private let createFirstSessionAction: CreateFirstSessionAction
+    private let refreshInvoices: RefreshInvoicesAction
 
     init(houstonService: HoustonService,
          addressActions: AddressActions,
@@ -32,7 +33,8 @@ public class SyncAction: AsyncAction<()> {
          realTimeDataAction: RealTimeDataAction,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
          fetchNotificationsAction: FetchNotificationsAction,
-         createFirstSessionAction: CreateFirstSessionAction) {
+         createFirstSessionAction: CreateFirstSessionAction,
+         refreshInvoices: RefreshInvoicesAction) {
 
         self.houstonService = houstonService
         self.addressActions = addressActions
@@ -40,6 +42,7 @@ public class SyncAction: AsyncAction<()> {
         self.realTimeDataAction = realTimeDataAction
         self.fetchNotificationsAction = fetchNotificationsAction
         self.createFirstSessionAction = createFirstSessionAction
+        self.refreshInvoices = refreshInvoices
 
         self.userRepository = userRepository
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
@@ -82,7 +85,17 @@ public class SyncAction: AsyncAction<()> {
             fetchUserInfo(),
             addressActions.syncPublicKeySet(),
             fetchNotificationsAction.getValue().asCompletable()
+        ).andThen(
+            // We need the public key set before the invoices refreshing action
+            Completable.deferred({
+                self.runRefreshInvoices()
+            })
         )
+    }
+
+    private func runRefreshInvoices() -> Completable {
+        refreshInvoices.run()
+        return refreshInvoices.getValue().asCompletable()
     }
 
     func fetchUserInfo() -> Completable {

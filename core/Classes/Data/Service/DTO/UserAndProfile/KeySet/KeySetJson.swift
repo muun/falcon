@@ -18,6 +18,7 @@ struct ChallengeKeyJson: Codable {
 
     let type: ChallengeTypeJson
     let publicKey: String
-    let salt: String
+    let salt: String? // Nil for USER_KEY type
+    let challengeVersion: Int
 
 }

@@ -25,32 +25,40 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
         super.init(name: "SubmarineSwapAction")
     }
 
-    public func run(invoice: String, swapExpirationInBlocks: Int) {
+    public func run(invoice: String) {
+
+        // We used to care a lot about this number for v1 swaps since it was the refund time
+        // With swaps v2 we have collaborative refunds so we don't quite care and go for the max time
+        let swapExpirationInBlocks = 144 * 7
         let submarineSwapRequest = SubmarineSwapRequest(invoice: invoice,
                                                         swapExpirationInBlocks: swapExpirationInBlocks)
         runSingle(
             houstonService.createSubmarineSwap(submarineSwapRequest: submarineSwapRequest)
                 .map({ swap in
-                    let isValid = try doWithError({ err in
-                        LibwalletValidateSubmarineSwap(invoice,
-                                                       try self.keysRepository.getBasePublicKey().key,
-                                                       try self.keysRepository.getCosigningKey().key,
-                                                       swap,
-                                                       Int64(swapExpirationInBlocks),
-                                                       Environment.current.network,
-                                                       err)
+
+                    let userKey = try self.keysRepository.getBasePublicKey()
+                    let muunKey = try self.keysRepository.getCosigningKey()
+
+                    _ = try doWithError({ err in
+                        LibwalletValidateSubmarineSwap(
+                            invoice,
+                            userKey.key,
+                            muunKey.key,
+                            swap,
+                            Int64(swapExpirationInBlocks),
+                            Environment.current.network,
+                            err
+                        )
                     })
 
-                    if isValid {
-                        return swap
-                    } else {
-                        throw MuunError(Errors.invalidSwap)
-                    }
+                    self.verifyLockTime(swap, expirationInBlocks: swapExpirationInBlocks)
+
+                    return swap
                 })
         )
     }
 
-   public func verifyLockTime(_ submarineSwap: SubmarineSwap, expirationInBlocks: Int) {
+   func verifyLockTime(_ submarineSwap: SubmarineSwap, expirationInBlocks: Int) {
         /*
          This only applies to v1 swaps.
          Clients should check that the locktime in the funding output script for the swap is less than or equal to
@@ -70,20 +78,6 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
                 )
             }
         }
-    }
-
-    public func chooseExpirationTimeInBlocks(sats: Decimal) -> Int {
-        // For 1-conf transactions (amount > 150_000 sats) just use 24 hours (144 blocks).
-        // For 0-conf transactions scale the expiration time linearly from 1 day to 7 days.
-        if sats > 150_000 {
-            return 144
-        }
-        let value = NSDecimalNumber(decimal: 144 * (7 - 6 * sats / 150_000.0))
-        return Int(truncating: value)
-    }
-
-    enum Errors: Error {
-        case invalidSwap
     }
 
 }

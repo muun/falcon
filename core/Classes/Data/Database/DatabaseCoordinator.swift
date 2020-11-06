@@ -20,7 +20,12 @@ public class DatabaseCoordinator {
         self.preferences = preferences
         self.secureStorage = secureStorage
 
-        try migrate()
+        do {
+            try migrate()
+        } catch {
+            Logger.log(error: error)
+            throw error
+        }
     }
 
     private func migrate() throws {
@@ -192,6 +197,138 @@ public class DatabaseCoordinator {
                 }
             }
         }
+
+        // Hardwire challenge key versions on secure storage
+        migrator.registerMigration("challenge key version migration") { _ in
+            do {
+
+                if try self.secureStorage.has(.passwordPublicKey) {
+                    try self.secureStorage.store("1", at: .passwordVersionKey)
+                }
+
+                if try self.secureStorage.has(.recoveryCodePublicKey) {
+                    try self.secureStorage.store("1", at: .recoveryCodeVersionKey)
+                }
+
+            } catch {
+                Logger.log(error: error)
+            }
+        }
+
+        migrator.registerMigration("incoming swaps") { db in
+
+            try db.create(table: "incomingSwapDB", body: { table in
+
+                table.column("uuid", .text)
+                    .notNull()
+                    .primaryKey()
+
+                table.column("paymentHashHex", .text)
+                    .notNull()
+
+                table.column("sphinxPacketHex", .text)
+            })
+
+            try db.create(table: "incomingSwapHtlcDB", body: { table in
+
+                table.column("uuid", .text)
+                    .notNull()
+                    .primaryKey()
+
+                table.column("incomingSwapUuid", .text)
+                    .notNull()
+                    .indexed()
+                    .references("incomingSwapDB", column: "uuid", onDelete: .cascade)
+
+                table.column("expirationHeight", .integer)
+                    .notNull()
+
+                table.column("paymentAmountInSats", .integer)
+                    .notNull()
+
+                table.column("fulfillmentFeeSubsidyInSats", .integer)
+                    .notNull()
+
+                table.column("lentInSats", .integer)
+                    .notNull()
+
+                table.column("outputAmountInSatoshis", .integer)
+                    .notNull()
+
+                table.column("address", .text)
+                    .notNull()
+
+                table.column("swapServerPublicKeyHex", .text)
+                    .notNull()
+
+                table.column("htlcTxHex", .text)
+                    .notNull()
+
+                table.column("fulfillmentTxHex", .text)
+            })
+
+            try db.alter(table: "operationDB") { table in
+                table.add(column: "incomingSwapUuid", .text)
+                    .references("incomingSwapDB", onDelete: .setNull)
+            }
+        }
+
+        migrator.registerMigration("invoices without amount", migrate: { db in
+
+            try db.create(table: "submarineSwapDBTmp", body: { t in
+                t.column("swapUuid", .text).primaryKey()
+                t.column("invoice", .text).notNull()
+
+                t.column("sweepFee", .integer)
+                t.column("lightningFee", .integer)
+
+                t.column("expiredAt", .date).notNull()
+
+                t.column("payedAt", .date)
+                t.column("preimageInHex", .text)
+
+                t.column("alias", .text)
+                t.column("serializedNetworkAddresses", .text)
+                t.column("publicKey", .text)
+
+                t.column("outputAddress", .text).notNull()
+                t.column("outputAmount", .integer)
+                t.column("confirmationsNeeded", .integer)
+                t.column("userLockTime", .integer).notNull()
+
+                t.column("userRefundAddress", .text).notNull()
+                t.column("userRefundAddressVersion", .integer).notNull()
+                t.column("userRefundAddressPath", .text).notNull()
+
+                t.column("serverPaymentHashInHex", .text).notNull()
+                t.column("serverPublicKeyInHex", .text).notNull()
+
+                t.column("willPreOpenChannel", .boolean)
+                    .defaults(to: false)
+                    .notNull()
+                t.column("channelOpenFee", .integer)
+                t.column("channelCloseFee", .integer)
+
+                t.column("scriptVersion", .numeric)
+                    .defaults(to: 101)
+                    .notNull()
+
+                t.column("userPublicKeyHex", .text)
+                t.column("userPublicKeyPath", .text)
+                t.column("muunPublicKeyHex", .text)
+                t.column("muunPublicKeyPath", .text)
+
+                t.column("expirationInBlocks", .numeric)
+                    .defaults(to: 0)
+
+                t.column("outputDebtType", .text)
+                t.column("outputDebtAmount", .numeric)
+            })
+
+            try db.execute(sql: "INSERT INTO submarineSwapDBTmp SELECT * FROM submarineSwapDB;")
+            try db.drop(table: "submarineSwapDB")
+            try db.rename(table: "submarineSwapDBTmp", to: "submarineSwapDB")
+        })
 
         return migrator
     }

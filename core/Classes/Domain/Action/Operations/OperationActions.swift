@@ -41,18 +41,10 @@ public class OperationActions {
         generateBalanceCache()
     }
 
-    /*
-     UI Balance is calculated by substracting the debt from the last item in the next transaction size
-     */
     func watchBalanceInSatoshis() -> Observable<Satoshis> {
-        var utxoBalance: Satoshis = Satoshis(value: 0)
-        var debt: Satoshis = Satoshis(value: 0)
-
         return nextTransactionSizeRepository.watchNextTransactionSize()
             .map({ nts in
-                utxoBalance = nts?.sizeProgression.last?.amountInSatoshis ?? Satoshis(value: 0)
-                debt = nts?.expectedDebt ?? Satoshis(value: 0)
-                return utxoBalance - debt
+                return nts?.uiBalance() ?? Satoshis(value: 0)
             })
     }
 
@@ -89,7 +81,7 @@ public class OperationActions {
         return balanceCache.asObservable()
     }
 
-    func recieved(newOperation: Notification.NewOperation) -> Completable {
+    func received(newOperation: Notification.NewOperation) -> Completable {
         return operationRepository.storeOperations([newOperation.operation])
             .do(onCompleted: {
                 self.nextTransactionSizeRepository.setNextTransactionSize(newOperation.nextTransactionSize)
@@ -129,13 +121,28 @@ public class OperationActions {
         })
     }
 
-    public func newOperation(_ operation: core.Operation) -> Single<core.Operation> {
+    public func newOperation(_ operation: core.Operation, with swapParameters: SwapExecutionParameters? = nil) -> Single<core.Operation> {
 
         guard let destinationAddress = operation.receiverAddress else {
             Logger.fatal("Tried to create new operation without a destination address")
         }
 
+        let outputAmount: Satoshis
+        if let parameters = swapParameters {
+            let debtAmount: Satoshis
+            if parameters.debtType == .COLLECT {
+                debtAmount = parameters.debtAmount
+            } else {
+                debtAmount = Satoshis(value: 0)
+            }
+
+            outputAmount = parameters.offchainFee + operation.amount.inSatoshis + debtAmount
+        } else {
+            outputAmount = operation.amount.inSatoshis
+        }
+
         var json = operation.toJson()
+        json.outputAmountInSatoshis = outputAmount.value
         do {
             json.senderMetadata = try generateMetadata(description: operation.description)
             json.description = nil
@@ -149,7 +156,7 @@ public class OperationActions {
                 let rawTransaction: RawTransaction?
                 var operationUpdated = created.operation
 
-                if let swap = operation.submarineSwap, swap.getDebtType() == .LEND {
+                if case .LEND = swapParameters?.debtType {
                     // If we are on a lend swap we don't need to sign anything because there wont be a transaction
                     rawTransaction = nil
                 } else {
@@ -159,7 +166,7 @@ public class OperationActions {
 
                     let expectations = PartiallySignedTransaction.Expectations(
                         destination: destinationAddress,
-                        amount: operation.outputAmount,
+                        amount: outputAmount,
                         fee: operation.fee.inSatoshis,
                         change: created.change)
 
@@ -171,7 +178,7 @@ public class OperationActions {
                     operationUpdated.transaction?.hash = signedTransaction.hash
                     operationUpdated.status = .SIGNED
 
-                    rawTransaction = RawTransaction(hex: signedTransaction.bytes!.toHexString())
+                    rawTransaction = RawTransaction(hex: signedTransaction.bytes.toHexString())
                 }
 
                 return self.houstonService.pushTransaction(

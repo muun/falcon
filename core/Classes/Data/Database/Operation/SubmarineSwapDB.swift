@@ -17,10 +17,10 @@ struct SubmarineSwapDB: Codable, FetchableRecord, PersistableRecord {
 
     let invoice: String
 
-    let sweepFee: Int64
-    let lightningFee: Int64
-    let channelOpenFee: Int64
-    let channelCloseFee: Int64
+    let sweepFee: Int64?
+    let lightningFee: Int64?
+    let channelOpenFee: Int64?
+    let channelCloseFee: Int64?
 
     let expiredAt: Date
 
@@ -32,11 +32,11 @@ struct SubmarineSwapDB: Codable, FetchableRecord, PersistableRecord {
     let publicKey: String?
 
     let outputAddress: String
-    let outputAmount: Int64
-    let confirmationsNeeded: Int
+    let outputAmount: Int64?
+    let confirmationsNeeded: Int?
 
-    let outputDebtType: String
-    let outputDebtAmount: Int64
+    let outputDebtType: String?
+    let outputDebtAmount: Int64?
 
     let userLockTime: Int
     let expirationInBlocks: Int?
@@ -64,10 +64,10 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
     init(from: SubmarineSwap) {
         self.init(swapUuid: from._swapUuid,
                   invoice: from._invoice,
-                  sweepFee: from._fees._sweep.value,
-                  lightningFee: from._fees._lightning.value,
-                  channelOpenFee: from._fees._channelOpen.value,
-                  channelCloseFee: from._fees._channelClose.value,
+                  sweepFee: from._fees?._sweep.value,
+                  lightningFee: from._fees?._lightning.value,
+                  channelOpenFee: from._fees?._channelOpen.value,
+                  channelCloseFee: from._fees?._channelClose.value,
                   expiredAt: from._expiresAt,
                   payedAt: from._payedAt,
                   preimageInHex: from._preimageInHex,
@@ -75,10 +75,10 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
                   serializedNetworkAddresses: from._receiver._networkAddresses.joined(separator: "-"),
                   publicKey: from._receiver._publicKey,
                   outputAddress: from._fundingOutput._outputAddress,
-                  outputAmount: from._fundingOutput._outputAmount.value,
+                  outputAmount: from._fundingOutput._outputAmount?.value,
                   confirmationsNeeded: from._fundingOutput._confirmationsNeeded,
-                  outputDebtType: from.getDebtType().rawValue,
-                  outputDebtAmount: from._fundingOutput._debtAmount.value,
+                  outputDebtType: from._fundingOutput._debtType?.rawValue,
+                  outputDebtAmount: from._fundingOutput._debtAmount?.value,
                   userLockTime: from._fundingOutput._userLockTime ?? -1,
                   expirationInBlocks: from._fundingOutput._expirationInBlocks,
                   userRefundAddress: from._fundingOutput._userRefundAddress?.address(),
@@ -134,34 +134,58 @@ extension SubmarineSwapDB: DatabaseModelConvertible {
             realUserLockTime = userLockTime
         }
 
-        let debtType = DebtType.init(rawValue: outputDebtType) ?? .NONE
+        let debtType = outputDebtType.map {
+            DebtType.init(rawValue: $0) ?? .NONE
+        }
 
-        return SubmarineSwap(swapUuid: swapUuid,
-                             invoice: invoice,
-                             receiver: SubmarineSwapReceiver(alias: alias,
-                                                             networkAddresses: networkAddress,
-                                                             publicKey: publicKey),
-                             fundingOutput: SubmarineSwapFundingOutput(scriptVersion: scriptVersion,
-                                                                       outputAddress: outputAddress,
-                                                                       outputAmount: Satoshis(value: outputAmount),
-                                                                       confirmationsNeeded: confirmationsNeeded,
-                                                                       userLockTime: realUserLockTime,
-                                                                       userRefundAddress: sswapUserRefundAddress,
-                                                                       serverPaymentHashInHex: serverPaymentHashInHex,
-                                                                       serverPublicKeyInHex: serverPublicKeyInHex,
-                                                                       expirationTimeInBlocks: expirationInBlocks,
-                                                                       userPublicKey: userPublicKey,
-                                                                       muunPublicKey: muunPublicKey,
-                                                                       debtType: debtType,
-                                                                       debtAmount: Satoshis(value: outputDebtAmount)),
-                             fees: SubmarineSwapFees(lightning: Satoshis(value: lightningFee),
-                                                     sweep: Satoshis(value: sweepFee),
-                                                     channelOpen: Satoshis(value: channelOpenFee),
-                                                     channelClose: Satoshis(value: channelCloseFee)),
-                             expiresAt: expiredAt,
-                             willPreOpenChannel: willPreOpenChannel,
-                             payedAt: payedAt,
-                             preimageInHex: preimageInHex)
+        let fees: SubmarineSwapFees?
+        if let lightningFee = lightningFee,
+           let sweepFee = sweepFee,
+           let channelOpenFee = channelOpenFee,
+           let channelCloseFee = channelCloseFee {
+
+            fees = SubmarineSwapFees(
+                lightning: Satoshis(value: lightningFee),
+                sweep: Satoshis(value: sweepFee),
+                channelOpen: Satoshis(value: channelOpenFee),
+                channelClose: Satoshis(value: channelCloseFee)
+            )
+
+        } else {
+            fees = nil
+        }
+
+        return SubmarineSwap(
+            swapUuid: swapUuid,
+            invoice: invoice,
+            receiver: SubmarineSwapReceiver(
+                alias: alias,
+                networkAddresses: networkAddress,
+                publicKey: publicKey
+             ),
+            fundingOutput: SubmarineSwapFundingOutput(
+                scriptVersion: scriptVersion,
+                outputAddress: outputAddress,
+                outputAmount: outputAmount.map(Satoshis.init(value:)),
+                confirmationsNeeded: confirmationsNeeded,
+                userLockTime: realUserLockTime,
+                userRefundAddress: sswapUserRefundAddress,
+                serverPaymentHashInHex: serverPaymentHashInHex,
+                serverPublicKeyInHex: serverPublicKeyInHex,
+                expirationTimeInBlocks: expirationInBlocks,
+                userPublicKey: userPublicKey,
+                muunPublicKey: muunPublicKey,
+                debtType: debtType,
+                debtAmount: outputDebtAmount.map(Satoshis.init(value:))
+            ),
+            fees: fees,
+            expiresAt: expiredAt,
+            willPreOpenChannel: willPreOpenChannel,
+            bestRouteFees: nil, // TODO-SWAPS: map this
+            fundingOutputPolicies: nil, // TODO-SWAPS: map this
+            payedAt: payedAt,
+            preimageInHex: preimageInHex
+        )
     }
     // swiftlint:enable function_body_length
 

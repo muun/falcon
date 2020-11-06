@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 public class ApplicationLockManager {
 
     static let attempts = 3
@@ -46,6 +44,8 @@ public class ApplicationLockManager {
         secureStorage.wipeAll()
         // Preferences aren't cleared when someone transfer their data onto a new iOS device
         preferences.wipeAll()
+        // Create the data dir for libwallet
+        LibwalletStorageHelper.ensureExists()
     }
 
     public func wipeDataAndLogOut() {

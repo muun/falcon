@@ -36,7 +36,7 @@ public class UserRepository {
             return true
         }
 
-        return user.email == nil
+        return !user.hasPasswordChallengeKey && !user.hasRecoveryCodeChallengeKey
     }
 
     // FIXME: This shouldn't be public
@@ -48,8 +48,40 @@ public class UserRepository {
         preferences.set(value: (user.primaryCurrency != "BTC"), forKey: .displayFiatCurrencyAsMain)
     }
 
-    func getUserEmail() -> String? {
+    func setUserEmail(_ email: String) {
+        preferences.set(value: email, forKey: .email)
+    }
+
+    func getUserEmailInPreferences() -> String? {
         return preferences.string(forKey: .email)
+    }
+
+    func getUserEmail() -> String? {
+        return getUser()?.email
+    }
+
+    func setVerifyPasswordChange(isVerified: Bool) {
+        preferences.set(value: isVerified, forKey: .passwordChangeVerification)
+    }
+
+    func watchChangePasswordVerification() -> Observable<Bool?> {
+        return preferences.watchBool(key: .passwordChangeVerification).asObservable()
+    }
+
+    func setAuthorizeRcSignIn(isAuthorized: Bool) {
+        preferences.set(value: isAuthorized, forKey: .rcSignInAuthorization)
+    }
+
+    func watchRcSignInAuthorization() -> Observable<Bool?> {
+        return preferences.watchBool(key: .rcSignInAuthorization).asObservable()
+    }
+
+    func isEmailSkippedByPreference() -> Bool {
+        return preferences.bool(forKey: .isEmailSkipped)
+    }
+
+    func setEmailSkipped() {
+        preferences.set(value: true, forKey: .isEmailSkipped)
     }
 
 }

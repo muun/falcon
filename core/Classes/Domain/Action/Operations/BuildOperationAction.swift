@@ -37,7 +37,8 @@ public class BuildOperationAction {
                               transaction: nil,
                               creationDate: Date(),
                               submarineSwap: submarineSwap,
-                              outpoints: outpoints)
+                              outpoints: outpoints,
+                              incomingSwap: nil)
     }
 
     public static func toAddress(_ address: String,
@@ -67,7 +68,8 @@ public class BuildOperationAction {
             transaction: nil,
             creationDate: Date(),
             submarineSwap: nil,
-            outpoints: outpoints
+            outpoints: outpoints,
+            incomingSwap: nil
         )
     }
 

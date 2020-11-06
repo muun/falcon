@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct FeeCalculatorResult {
+public struct FeeInfo {
     public let feeCalculator: FeeCalculator
     public let feeWindow: FeeWindow
     public let exchangeRateWindow: ExchangeRateWindow
 }
 
-public class FeeCalculatorAction: AsyncAction<FeeCalculatorResult> {
+public class FeeCalculatorAction: AsyncAction<FeeInfo> {
 
     private let realTimeDataAction: RealTimeDataAction
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
@@ -29,14 +29,14 @@ public class FeeCalculatorAction: AsyncAction<FeeCalculatorResult> {
     public func run(isSwap: Bool) {
 
         let single = realTimeDataAction.getValue()
-            .map({ data -> FeeCalculatorResult in
+            .map({ data -> FeeInfo in
                 // FIXME: This should consume some action to get the next transaction size
                 let calculator = FeeCalculator(
                     targetedFees: data.feeWindow.targetedFees,
                     nts: self.nextTransactionSizeRepository.getNextTransactionSize()!
                 )
 
-                return FeeCalculatorResult(feeCalculator: calculator,
+                return FeeInfo(feeCalculator: calculator,
                                            feeWindow: data.feeWindow,
                                            exchangeRateWindow: data.exchangeRateWindow)
             })

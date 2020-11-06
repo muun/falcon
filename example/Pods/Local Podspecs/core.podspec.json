@@ -17,8 +17,11 @@
   },
   "static_framework": true,
   "dependencies": {
-    "Crashlytics": [
-      "3.14.0"
+    "Firebase/Crashlytics": [
+      "7"
+    ],
+    "GoogleUtilities": [
+
     ]
   },
   "script_phases": [

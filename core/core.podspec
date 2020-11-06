@@ -12,7 +12,8 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   # Only deps for notifications extension
-  s.dependency 'Crashlytics', '3.14.0'
+  s.dependency 'Firebase/Crashlytics', '7'
+  s.dependency 'GoogleUtilities'
 
   s.subspec 'all' do |sp|
     sp.source_files = 'Classes/**/*'

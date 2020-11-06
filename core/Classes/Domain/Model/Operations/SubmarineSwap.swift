@@ -15,10 +15,13 @@ public class SubmarineSwap: NSObject {
     public let _receiver: SubmarineSwapReceiver
     public let _fundingOutput: SubmarineSwapFundingOutput
 
-    public let _fees: SubmarineSwapFees
+    public let _fees: SubmarineSwapFees?
 
     let _expiresAt: Date
     public let _willPreOpenChannel: Bool
+
+    public let _bestRouteFees: [BestRouteFees]?
+    public let _fundingOutputPolicies: FundingOutputPolicies?
 
     let _payedAt: Date?
     public let _preimageInHex: String?
@@ -27,9 +30,11 @@ public class SubmarineSwap: NSObject {
          invoice: String,
          receiver: SubmarineSwapReceiver,
          fundingOutput: SubmarineSwapFundingOutput,
-         fees: SubmarineSwapFees,
+         fees: SubmarineSwapFees?,
          expiresAt: Date,
          willPreOpenChannel: Bool,
+         bestRouteFees: [BestRouteFees]?,
+         fundingOutputPolicies: FundingOutputPolicies?,
          payedAt: Date?,
          preimageInHex: String?) {
         _swapUuid = swapUuid
@@ -42,12 +47,11 @@ public class SubmarineSwap: NSObject {
         _expiresAt = expiresAt
         _willPreOpenChannel = willPreOpenChannel
 
+        _bestRouteFees = bestRouteFees
+        _fundingOutputPolicies = fundingOutputPolicies
+
         _payedAt = payedAt
         _preimageInHex = preimageInHex
-    }
-
-    public func getDebtType() -> DebtType {
-        return _fundingOutput._debtType
     }
 
     /*
@@ -55,13 +59,43 @@ public class SubmarineSwap: NSObject {
     1. For lend swaps: Only the routing fee
     2. For 0-conf, 1-conf and top-ups: routing fee + on-chain fee + sweep fee
     */
-    public func getLightningFeeInSats(onChainFee: BitcoinAmount) -> Satoshis {
+    public func getLightningFeeInSats(onChainFee: BitcoinAmount) -> Satoshis? {
 
-        if getDebtType() == .LEND {
-            return _fees._lightning
+        // If the invoice didn't have an amount, the fee information might not be available yet
+        guard let debtType = _fundingOutput._debtType,
+              let fees = _fees else {
+            return nil
         }
 
-        return _fees._lightning + onChainFee.inSatoshis + _fees._sweep
+        if debtType == .LEND {
+            return fees._lightning
+        }
+
+        return fees._lightning + onChainFee.inSatoshis + fees._sweep
+    }
+}
+
+public class BestRouteFees: NSObject {
+    public let _maxCapacityInSat: Int64
+    public let _proportionalMillionth: Int64
+    public let _baseInSat: Int64
+
+    init(_maxCapacityInSat: Int64, _proportionalMillionth: Int64, _baseInSat: Int64) {
+        self._maxCapacityInSat = _maxCapacityInSat
+        self._proportionalMillionth = _proportionalMillionth
+        self._baseInSat = _baseInSat
+    }
+}
+
+public class FundingOutputPolicies: NSObject {
+    public let _maximumDebtInSat: Int64
+    public let _potentialCollectInSat: Int64
+    public let _maxAmountInSatFor0Conf: Int64
+
+    init(_maximumDebtInSat: Int64, _potentialCollectInSat: Int64, _maxAmountInSatFor0Conf: Int64) {
+        self._maximumDebtInSat = _maximumDebtInSat
+        self._potentialCollectInSat = _potentialCollectInSat
+        self._maxAmountInSatFor0Conf = _maxAmountInSatFor0Conf
     }
 }
 
@@ -99,8 +133,8 @@ public class SubmarineSwapReceiver: NSObject {
 
 public class SubmarineSwapFundingOutput: NSObject {
     public let _outputAddress: String
-    let _outputAmount: Satoshis
-    public let _confirmationsNeeded: Int
+    let _outputAmount: Satoshis?
+    public let _confirmationsNeeded: Int?
     let _userLockTime: Int?
     let _serverPaymentHashInHex: String
     let _serverPublicKeyInHex: String
@@ -114,13 +148,13 @@ public class SubmarineSwapFundingOutput: NSObject {
     let _userPublicKey: WalletPublicKey?
     let _muunPublicKey: WalletPublicKey?
 
-    public let _debtType: DebtType
-    public let _debtAmount: Satoshis
+    public let _debtType: DebtType?
+    public let _debtAmount: Satoshis?
 
     init(scriptVersion: Int,
          outputAddress: String,
-         outputAmount: Satoshis,
-         confirmationsNeeded: Int,
+         outputAmount: Satoshis?,
+         confirmationsNeeded: Int?,
          userLockTime: Int?,
          userRefundAddress: MuunAddress?,
          serverPaymentHashInHex: String,
@@ -128,8 +162,8 @@ public class SubmarineSwapFundingOutput: NSObject {
          expirationTimeInBlocks: Int?,
          userPublicKey: WalletPublicKey?,
          muunPublicKey: WalletPublicKey?,
-         debtType: DebtType,
-         debtAmount: Satoshis) {
+         debtType: DebtType?,
+         debtAmount: Satoshis?) {
 
         _scriptVersion = scriptVersion
         _outputAddress = outputAddress
@@ -204,11 +238,11 @@ extension SubmarineSwapFundingOutput: LibwalletSubmarineSwapFundingOutputProtoco
     }
 
     public func outputAmount() -> Int64 {
-        return _outputAmount.value
+        return _outputAmount?.value ?? 0
     }
 
     public func confirmationsNeeded() -> Int {
-        return _confirmationsNeeded
+        return _confirmationsNeeded ?? 0
     }
 
     public func userLockTime() -> Int64 {
@@ -235,5 +269,30 @@ public class SubmarineSwapRequest: NSObject {
     init(invoice: String, swapExpirationInBlocks: Int) {
         _invoice = invoice
         _swapExpirationInBlocks = swapExpirationInBlocks
+    }
+}
+
+public class SwapExecutionParameters: NSObject {
+    public let sweepFee: Satoshis
+    public let routingFee: Satoshis
+    public let debtType: DebtType
+    public let debtAmount: Satoshis
+    public let confirmationsNeeded: UInt
+
+    public init(sweepFee: Satoshis,
+                routingFee: Satoshis,
+                debtType: DebtType,
+                debtAmount: Satoshis,
+                confirmationsNeeded: UInt) {
+
+        self.sweepFee = sweepFee
+        self.routingFee = routingFee
+        self.debtType = debtType
+        self.debtAmount = debtAmount
+        self.confirmationsNeeded = confirmationsNeeded
+    }
+
+    public var offchainFee: Satoshis {
+        return routingFee + sweepFee
     }
 }

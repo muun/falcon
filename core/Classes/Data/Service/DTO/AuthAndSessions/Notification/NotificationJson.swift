@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 // This is public for the notification extension
 public struct NotificationJson {
 
@@ -21,12 +19,14 @@ public struct NotificationJson {
         case operationUpdate(OperationUpdateJson)
         case sessionAuthorized
         case unknownMessage(type: String)
+        case updateAuthorizeChallenge
+        case authorizeRcSignIn
+        case fulfillIncomingSwap(uuid: String)
 
         /// These are here to make Apollo users that sign in not loose notifications
         case newContact
         case expiredSession
         case updateContact
-        case updateAuthorizeChallenge
         case verifiedEmail
         case completePairingAck
         case addHardwareWallet
@@ -46,6 +46,10 @@ public struct NotificationJson {
         let hash: String?
         let nextTransactionSize: NextTransactionSizeJson
         let swapDetails: SubmarineSwapJson?
+    }
+
+    public struct FulfillIncomingSwapJson: Decodable {
+        let uuid: String
     }
 }
 
@@ -80,6 +84,10 @@ extension NotificationJson: Decodable {
             let message = try container.decode(OperationUpdateJson.self, forKey: .message)
             self.message = .operationUpdate(message)
 
+        case "incoming_swap/fulfill":
+            let message = try container.decode(FulfillIncomingSwapJson.self, forKey: .message)
+            self.message = .fulfillIncomingSwap(uuid: message.uuid)
+
         case "sessions/authorized":
             self.message = .sessionAuthorized
 
@@ -94,6 +102,9 @@ extension NotificationJson: Decodable {
 
         case "challenge/update/authorize":
             self.message = .updateAuthorizeChallenge
+
+        case "sessions/rc-authorized":
+            self.message = .authorizeRcSignIn
 
         case "users/email_verified":
             self.message = .verifiedEmail

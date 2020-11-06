@@ -17,7 +17,27 @@ public struct NextTransactionSize: Codable {
     let _expectedDebt: Satoshis?
 
     var expectedDebt: Satoshis {
-        return _expectedDebt ?? Satoshis(value: 0)
+        guard let debt = _expectedDebt else {
+            return Satoshis(value: 0)
+        }
+
+        if debt.asDecimal() < 0 {
+            // We can't allow negative debt
+            Logger.log(.warn, "Negative debt: \(debt.asDecimal())")
+            return Satoshis(value: 0)
+        }
+
+        return debt
+    }
+
+    // UI Balance is calculated by substracting the debt from the last item in the next transaction size.
+    func uiBalance() -> Satoshis {
+        guard let utxoBalanceInSat = sizeProgression.last?.amountInSatoshis else {
+            // If the user does not have any utxo the balance should be 0
+            return Satoshis(value: 0)
+        }
+
+        return utxoBalanceInSat - expectedDebt
     }
 }
 

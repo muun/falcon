@@ -6,8 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 public struct Notification {
 
     let id: Int
@@ -20,12 +18,14 @@ public struct Notification {
         case newOperation(NewOperation)
         case operationUpdate(OperationUpdate)
         case unknownMessage(type: String)
+        case updateAuthorizeChallenge
+        case authorizeRcSignIn
+        case fulfillIncomingSwap(uuid: String)
 
         // These are here for future compatibility
         case newContact
         case expiredSession
         case updateContact
-        case updateAuthorizeChallenge
         case verifiedEmail
         case completePairingAck
         case addHardwareWallet

@@ -17,19 +17,22 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     private let feeWindowRepository: FeeWindowRepository
     private let exchangeRateWindowRepository: ExchangeRateWindowRepository
     private let blockchainHeightRepository: BlockchainHeightRepository
+    private let forwardingPoliciesRepository: ForwardingPolicyRepository
 
     private let secondsForFreshData: Double = 5 * 60
 
     init(houstonService: HoustonService,
          feeWindowRepository: FeeWindowRepository,
          exchangeRateWindowRepository: ExchangeRateWindowRepository,
-         blockchainHeightRepository: BlockchainHeightRepository) {
+         blockchainHeightRepository: BlockchainHeightRepository,
+         forwardingPoliciesRepository: ForwardingPolicyRepository) {
 
         self.houstonService = houstonService
 
         self.feeWindowRepository = feeWindowRepository
         self.exchangeRateWindowRepository = exchangeRateWindowRepository
         self.blockchainHeightRepository = blockchainHeightRepository
+        self.forwardingPoliciesRepository = forwardingPoliciesRepository
 
         super.init(name: "RealTimeDataAction")
     }
@@ -45,12 +48,14 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                     self.feeWindowRepository.setFeeWindow(data.feeWindow)
                     self.exchangeRateWindowRepository.setExchangeRateWindow(data.exchangeRateWindow)
                     self.blockchainHeightRepository.setBlockchainHeight(data.currentBlockchainHeight)
+                    self.forwardingPoliciesRepository.store(policies: data.forwardingPolicies)
                 })
         } else {
             let realData = RealTimeData(
                 feeWindow: feeWindowRepository.getFeeWindow()!,
                 exchangeRateWindow: exchangeRateWindowRepository.getExchangeRateWindow()!,
-                currentBlockchainHeight: blockchainHeightRepository.getCurrentBlockchainHeight()
+                currentBlockchainHeight: blockchainHeightRepository.getCurrentBlockchainHeight(),
+                forwardingPolicies: forwardingPoliciesRepository.fetch()
             )
             return Single.just(realData)
         }

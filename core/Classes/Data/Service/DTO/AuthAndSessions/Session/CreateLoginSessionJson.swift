@@ -6,9 +6,12 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import UIKit
-
 enum SessionStatus: String, Codable {
+    /**
+     * The session requires signing the recovery code challenge.
+     */
+    case BLOCKED_BY_RC
+
     /**
      * The session has been created with an e-mail, and has a Beam channel.
      */

@@ -71,6 +71,32 @@ public class SessionActions {
         })
     }
 
+    func verifyPasswordChange(_ isVerified: Bool) -> Completable {
+        return Completable.deferred({
+            self.setVerifyPasswordChange(isVerified)
+            return Completable.empty()
+        })
+    }
+
+    func authorizeRcSignIn() -> Completable {
+        return Completable.deferred({
+            self.setAuthorizeRcSignIn(true)
+            return Completable.empty()
+        })
+    }
+
+    public func setVerifyPasswordChange(_ isVerified: Bool) {
+        userRepository.setVerifyPasswordChange(isVerified: isVerified)
+    }
+
+    private func setAuthorizeRcSignIn(_ isAuthorized: Bool) {
+        userRepository.setAuthorizeRcSignIn(isAuthorized: isAuthorized)
+    }
+
+    public func unauthorizeRcSignIn() {
+        setAuthorizeRcSignIn(false)
+    }
+
     public func unauthorizeEmail() {
         setEmailAuthorized(false)
     }
@@ -114,6 +140,18 @@ public class SessionActions {
         }
     }
 
+    public func hasPasswordChallengeKey() -> Bool {
+        do {
+            return try keysRepository.hasChallengeKey(type: .PASSWORD)
+        } catch {
+            return false
+        }
+    }
+
+    public func getUserEmail() -> String? {
+        return userRepository.getUserEmail()
+    }
+
     public func isAnonUser() -> Bool {
         return userRepository.isAnonUser()
     }
@@ -124,6 +162,10 @@ public class SessionActions {
 
     public func setUser(_ user: User) {
         userRepository.setUser(user)
+    }
+
+    public func setUserEmail(_ email: String) {
+        userRepository.setUserEmail(email)
     }
 
     private func setEmailAuthorized(_ isAuthorized: Bool) {
@@ -137,7 +179,7 @@ public class SessionActions {
     }
 
     public func updateUserEmail() {
-        if var updatedUser = getUser(), let email = userRepository.getUserEmail() {
+        if var updatedUser = getUser(), let email = userRepository.getUserEmailInPreferences() {
             // Update user email for sign ups
             updatedUser.email = email
             setUser(updatedUser)
@@ -188,5 +230,32 @@ public class SessionActions {
         }
 
         return user.emergencyKitLastExportedDate
+    }
+
+    public func watchChangePasswordVerification() -> Observable<Bool?> {
+        return userRepository.watchChangePasswordVerification()
+    }
+
+    public func watchRcSignInAuthorization() -> Observable<Bool?> {
+        return userRepository.watchRcSignInAuthorization()
+    }
+
+    /**
+        isEmailSkipped can be true either if:
+        1. The skipped email preference is true OR
+        2. The user has the recovery code setup and doesn't have the email setup
+     */
+    public func isEmailSkipped() -> Bool {
+        if hasPasswordChallengeKey() {
+            return false
+        }
+
+        let isEmailSkippedPreference = userRepository.isEmailSkippedByPreference()
+
+        return isEmailSkippedPreference || (hasRecoveryCode() && !hasPasswordChallengeKey())
+    }
+
+    public func setEmailSkipped() {
+        userRepository.setEmailSkipped()
     }
 }

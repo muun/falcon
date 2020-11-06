@@ -13,6 +13,7 @@ struct MuunInputJson: Codable {
     let muunSignature: SignatureJson?
     let submarineSwap: InputSubmarineSwapV1Json?
     let submarineSwapV102: InputSubmarineSwapV2Json?
+    let incomingSwap: InputIncomingSwapJson?
 }
 
 struct MuunOutputJson: Codable {
@@ -43,4 +44,12 @@ struct InputSubmarineSwapV2Json: Codable {
 
     let numBlocksForExpiration: Int
     let swapServerSignature: SignatureJson?
+}
+
+struct InputIncomingSwapJson: Codable {
+    let sphinxHex: String
+    let htlcTxHex: String
+    let swapServerPublicKeyHex: String
+    let paymentHash256Hex: String
+    let expirationHeight: Int64
 }

@@ -22,7 +22,8 @@ public protocol PaymentRequestType {
     func presetAmount() -> Satoshis?
     func expiresTime() -> Double?
     func presetDescription() -> String?
-    func defaultConfirmationTarget(currentBlockchainHeight: Int) -> UInt
+
+    var allowsSpendingDust: Bool { get }
 }
 
 public struct FlowToAddress {
@@ -44,10 +45,6 @@ public struct FlowSubmarineSwap {
     public init(invoice: LibwalletInvoice, submarineSwap: SubmarineSwap) {
         self.invoice = invoice
         self.submarineSwap = submarineSwap
-    }
-
-    public func willPreOpenChannel() -> Bool {
-        return submarineSwap._willPreOpenChannel
     }
 }
 
@@ -91,8 +88,8 @@ extension FlowToAddress: PaymentRequestType {
 
     }
 
-    public func defaultConfirmationTarget(currentBlockchainHeight: Int) -> UInt {
-        return 1
+    public var allowsSpendingDust: Bool {
+        return false
     }
 
 }
@@ -122,15 +119,6 @@ extension FlowSubmarineSwap: PaymentRequestType {
         return nil
     }
 
-    public func defaultConfirmationTarget(currentBlockchainHeight: Int) -> UInt {
-        if submarineSwap._fundingOutput._confirmationsNeeded == 0 {
-            // Since refunds are instant we can use 250 all the time
-            return 250
-        }
-        // For non 0-conf, use 1 block as confirmation target:
-        return 1
-    }
-
     public func expiresTime() -> Double? {
         if invoice.expiry > 0 {
             return Double(invoice.expiry)
@@ -146,6 +134,10 @@ extension FlowSubmarineSwap: PaymentRequestType {
 
         return nil
 
+    }
+
+    public var allowsSpendingDust: Bool {
+        return true
     }
 
 }
