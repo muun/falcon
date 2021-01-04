@@ -10,6 +10,7 @@ struct KeySetJson: Codable {
 
     let encryptedPrivateKey: String
     let muunKey: String?
+    let muunKeyFingerprint: String?
     let challengeKeys: [ChallengeKeyJson]
 
 }

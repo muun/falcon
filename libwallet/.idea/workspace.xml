@@ -14,7 +14,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="/usr/local/Cellar/go/1.13.4/libexec" />
+  <component name="GOROOT" url="file:///usr/local/Cellar/go/1.15.5/libexec" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -25,16 +25,17 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="go" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="last.edited.regexp" value="\   " />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -44,163 +45,97 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="go" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestPartiallySignedTransaction_Verify in libwallet">
-    <configuration name="TestBlo in libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.TestConvertToKey in github.com/muun/libwallet/recoverycode">
+    <configuration name="TestConvertToKey in github.com/muun/libwallet/recoverycode" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="libwallet" />
-      <working_directory value="$PROJECT_DIR$" />
+      <working_directory value="$PROJECT_DIR$/recoverycode" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="libwallet" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestBlo$" />
+      <package value="github.com/muun/libwallet/recoverycode" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestConvertToKey\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestChallengePublicKey_EncryptKey in libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestFoo in github.com/muun/libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="libwallet" />
       <working_directory value="$PROJECT_DIR$" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="libwallet" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestChallengePublicKey_EncryptKey$" />
+      <package value="github.com/muun/libwallet" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestFoo\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestPartiallySignedTransaction_SignSubmarineSwapV2 in libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestFoo in github.com/muun/libwallet/addresses" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="libwallet" />
-      <working_directory value="$PROJECT_DIR$" />
+      <working_directory value="$PROJECT_DIR$/addresses" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="libwallet" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestPartiallySignedTransaction_SignSubmarineSwapV2$" />
+      <package value="github.com/muun/libwallet/addresses" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestFoo\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestPartiallySignedTransaction_Verify in libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestRecoveryCodeToKey in github.com/muun/libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="libwallet" />
       <working_directory value="$PROJECT_DIR$" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="libwallet" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestPartiallySignedTransaction_Verify$" />
+      <package value="github.com/muun/libwallet" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestRecoveryCodeToKey\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="Test_paddedSerializeBigInt in libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestVerifyAndFulfillHtlcWithCollect in github.com/muun/libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="libwallet" />
       <working_directory value="$PROJECT_DIR$" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="libwallet" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^Test_paddedSerializeBigInt$" />
+      <package value="github.com/muun/libwallet" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestVerifyAndFulfillHtlcWithCollect\E$" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.TestPartiallySignedTransaction_Verify in libwallet" />
-        <item itemvalue="Go Test.Test_paddedSerializeBigInt in libwallet" />
-        <item itemvalue="Go Test.TestChallengePublicKey_EncryptKey in libwallet" />
-        <item itemvalue="Go Test.TestPartiallySignedTransaction_SignSubmarineSwapV2 in libwallet" />
-        <item itemvalue="Go Test.TestBlo in libwallet" />
+        <item itemvalue="Go Test.TestConvertToKey in github.com/muun/libwallet/recoverycode" />
+        <item itemvalue="Go Test.TestRecoveryCodeToKey in github.com/muun/libwallet" />
+        <item itemvalue="Go Test.TestVerifyAndFulfillHtlcWithCollect in github.com/muun/libwallet" />
+        <item itemvalue="Go Test.TestFoo in github.com/muun/libwallet/addresses" />
+        <item itemvalue="Go Test.TestFoo in github.com/muun/libwallet" />
       </list>
     </recent_temporary>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="240" y="77" key="#GOROOT" timestamp="1576158566614">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state x="240" y="77" key="#GOROOT/0.23.1280.777@0.23.1280.777" timestamp="1576158566614" />
-    <state x="817" y="136" width="423" height="664" key="#xdebugger.evaluate" timestamp="1576856635990">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state x="817" y="136" width="423" height="664" key="#xdebugger.evaluate/0.23.1280.777@0.23.1280.777" timestamp="1576856635990" />
-    <state width="1238" height="221" key="GridCell.Tab.0.bottom" timestamp="1576875941373">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="221" key="GridCell.Tab.0.bottom/0.23.1280.777@0.23.1280.777" timestamp="1576875941373" />
-    <state width="1238" height="221" key="GridCell.Tab.0.center" timestamp="1576875941349">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="221" key="GridCell.Tab.0.center/0.23.1280.777@0.23.1280.777" timestamp="1576875941349" />
-    <state width="1238" height="221" key="GridCell.Tab.0.left" timestamp="1576875941348">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="221" key="GridCell.Tab.0.left/0.23.1280.777@0.23.1280.777" timestamp="1576875941348" />
-    <state width="1238" height="221" key="GridCell.Tab.0.right" timestamp="1576875941360">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="221" key="GridCell.Tab.0.right/0.23.1280.777@0.23.1280.777" timestamp="1576875941360" />
-    <state width="1238" height="2" key="GridCell.Tab.1.bottom" timestamp="1576875390932">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="2" key="GridCell.Tab.1.bottom/0.23.1280.777@0.23.1280.777" timestamp="1576875390932" />
-    <state width="1238" height="2" key="GridCell.Tab.1.center" timestamp="1576875390931">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="2" key="GridCell.Tab.1.center/0.23.1280.777@0.23.1280.777" timestamp="1576875390931" />
-    <state width="1238" height="2" key="GridCell.Tab.1.left" timestamp="1576875390931">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="2" key="GridCell.Tab.1.left/0.23.1280.777@0.23.1280.777" timestamp="1576875390931" />
-    <state width="1238" height="2" key="GridCell.Tab.1.right" timestamp="1576875390931">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state width="1238" height="2" key="GridCell.Tab.1.right/0.23.1280.777@0.23.1280.777" timestamp="1576875390931" />
-    <state x="419" y="138" key="com.goide.refactor.move.GoMoveDeclarationDialog" timestamp="1576850180497">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state x="419" y="138" key="com.goide.refactor.move.GoMoveDeclarationDialog/0.23.1280.777@0.23.1280.777" timestamp="1576850180497" />
-    <state x="306" y="173" width="667" height="476" key="find.popup" timestamp="1576856721766">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state x="306" y="173" width="667" height="476" key="find.popup/0.23.1280.777@0.23.1280.777" timestamp="1576856721766" />
-    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup" timestamp="1577290348047">
-      <screen x="0" y="23" width="1280" height="777" />
-    </state>
-    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup/0.23.1280.777@0.23.1280.777" timestamp="1577290348047" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -214,6 +149,26 @@
           <url>file://$USER_HOME$/go/pkg/mod/github.com/btcsuite/btcd@v0.0.0-20190824003749-130ea5bddde3/txscript/scriptnum.go</url>
           <line>93</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/github.com/btcsuite/btcutil@v0.0.0-20190425235716-9e5f4b9a998d/address.go</url>
+          <line>186</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/challenge_keys.go</url>
+          <line>76</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/hdpath/hdpath.go</url>
+          <line>27</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/addresses/addresses_test.go</url>
+          <line>2</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

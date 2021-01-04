@@ -19,6 +19,10 @@ public struct WalletPublicKey {
     var path: String {
         return key.path
     }
+
+    var fingerprint: Data {
+        return key.fingerprint()!
+    }
 }
 
 extension WalletPublicKey {

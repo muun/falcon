@@ -9,6 +9,7 @@
 public struct Transaction {
     public var hash: String?
     public var confirmations: Int
+    public var isReplaceableByFee: Bool
 }
 
 public struct NextTransactionSize: Codable {

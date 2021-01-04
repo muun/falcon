@@ -25,14 +25,16 @@ struct ForwardingPolicyJson: Codable {
 public struct IncomingSwapJson: Codable {
     let uuid: String
     let paymentHashHex: String
-    let htlc: IncomingSwapHtlcJson
+    let htlc: IncomingSwapHtlcJson?
     let sphinxPacketHex: String?
+    let collectInSats: Int64
+    let paymentAmountInSats: Int64
+    let preimageHex: String?
 }
 
 public struct IncomingSwapHtlcJson: Codable {
     let uuid: String
     let expirationHeight: Int64
-    let paymentAmountInSats: Int64
     let fulfillmentFeeSubsidyInSats: Int64
     let lentInSats: Int64
     let address: String

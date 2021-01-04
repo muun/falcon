@@ -73,6 +73,7 @@ extension BitcoinAmount {
 public struct Satoshis {
     public static let magnitude: Int16 = 8
     public static let dust = Satoshis(value: 3 * 182)
+    public static let zero = Satoshis(value: 0)
 
     let value: Int64
 

@@ -112,7 +112,7 @@ public class HoustonService: BaseService {
             .asCompletable()
     }
 
-    func requestChallenge(challengeType: String) -> Single<Challenge> {
+    func requestChallenge(challengeType: String) -> Single<Challenge?> {
         let queryParams = ["type": challengeType]
 
         return get("user/challenge", queryParams: queryParams, andReturn: ChallengeJson.self)
@@ -130,6 +130,11 @@ public class HoustonService: BaseService {
         let jsonData = JSONEncoder.data(from: challengeSignature)
 
         return post("sessions/current/login", body: jsonData, andReturn: KeySetJson.self)
+            .map({ $0.toModel() })
+    }
+
+    func loginCompatWithoutChallenge() -> Single<KeySet> {
+        return post("sessions/current/login/compat", andReturn: KeySetJson.self)
             .map({ $0.toModel() })
     }
 
@@ -189,9 +194,11 @@ public class HoustonService: BaseService {
     // ---------------------------------------------------------------------------------------------
     // User and Profile:
 
-    func fetchUserInfo() -> Single<User> {
+    func fetchUserInfo() -> Single<(User, UserPreferences)> {
         return get("user", andReturn: UserJson.self)
-            .map({ $0.toModel() })
+            .map({
+                ($0.toModel(), $0.preferences!)
+            })
     }
 
     func fetchKeySet(challengeType: String, signature: String) -> Single<KeySet> {
@@ -272,6 +279,13 @@ public class HoustonService: BaseService {
 
         return post("user/emergency-kit/exported", body: jsonData, andReturn: EmptyJson.self)
             .map({ $0.toModel() })
+    }
+
+    func updateUserPreferences(_ preferences: UserPreferences) -> Completable {
+        let jsonData = JSONEncoder.data(json: preferences)
+        
+        return put("user/preferences", body: jsonData, andReturn: EmptyJson.self)
+            .asCompletable()
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -370,6 +384,11 @@ public class HoustonService: BaseService {
     func checkIntegrity(request: IntegrityCheck) -> Single<IntegrityStatus> {
         return post("integrity/check", body: JSONEncoder.data(from: request), andReturn: IntegrityStatusJson.self)
             .map({ $0.toModel() })
+    }
+
+    func fetchMuunKeyFingerprint() -> Single<String> {
+        return get("migrations/fingerprints", andReturn: KeyFingerprintMigrationJson.self)
+            .map({ $0.muunKeyFingerprint })
     }
 
 }

@@ -9,15 +9,17 @@ import Foundation
 
 public struct IncomingSwap {
     let uuid: String
-    let paymentHash: Data
-    let htlc: IncomingSwapHtlc
+    public let paymentHash: Data
+    let htlc: IncomingSwapHtlc?
     let sphinxPacket: Data?
+    let collect: Satoshis
+    let paymentAmountInSats: Satoshis
+    public let preimage: Data?
 }
 
 public struct IncomingSwapHtlc {
     let uuid: String
     let expirationHeight: Int64
-    let paymentAmountInSats: Satoshis
     let fulfillmentFeeSubsidyInSats: Satoshis
     let lentInSats: Satoshis
     let address: String

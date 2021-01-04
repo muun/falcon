@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-public class UserSelector: BaseSelector<User> {
+public class UserSelector: BaseOptionalSelector<User> {
 
     init(userRepository: UserRepository) {
         super.init(userRepository.watchUser)

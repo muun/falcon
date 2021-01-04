@@ -18,7 +18,7 @@
   "static_framework": true,
   "dependencies": {
     "Firebase/Crashlytics": [
-      "7"
+      "7.1"
     ],
     "GoogleUtilities": [
 
@@ -62,6 +62,12 @@
         ],
         "RxBlocking": [
           "5.0.1"
+        ],
+        "GoogleSignIn": [
+          "5.0.2"
+        ],
+        "GoogleAPIClientForREST/Drive": [
+          "1.5.1"
         ]
       },
       "vendored_frameworks": "Libwallet.framework"

@@ -9,6 +9,7 @@
 struct TransactionJson: Codable {
     let hash: String?
     let confirmations: Int
+    let isReplaceableByFee: Bool
 }
 
 struct PartiallySignedTransactionJson: Codable {

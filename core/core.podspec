@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   # Only deps for notifications extension
-  s.dependency 'Firebase/Crashlytics', '7'
+  s.dependency 'Firebase/Crashlytics', '7.1'
   s.dependency 'GoogleUtilities'
 
   s.subspec 'all' do |sp|
@@ -28,6 +28,10 @@ Pod::Spec.new do |s|
     # React
     sp.dependency 'RxSwift', '5.0.1'
     sp.dependency 'RxBlocking', '5.0.1'
+
+    # GoogleDrive
+    sp.dependency 'GoogleSignIn', '5.0.2'
+    sp.dependency 'GoogleAPIClientForREST/Drive', '1.5.1'
 
     sp.vendored_framework = 'Libwallet.framework'
   end

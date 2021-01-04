@@ -52,9 +52,12 @@ class ComputeSwapFeesActionTests: XCTestCase {
     let computeSwapFeesAction = ComputeSwapFeesAction()
 
     private func createSubmarineSwap(
+        outputAmount: Satoshis = Satoshis(value: 1000),
         fees: SubmarineSwapFees? = nil,
         bestRouteFees: [BestRouteFees]? = nil,
-        fundingOutputPolicies: FundingOutputPolicies? = nil
+        fundingOutputPolicies: FundingOutputPolicies? = nil,
+        debtType: DebtType = .NONE,
+        debtAmount: Satoshis = Satoshis.zero
     ) -> SubmarineSwap {
         return SubmarineSwap(
             swapUuid: "1234-1234-1234",
@@ -67,7 +70,7 @@ class ComputeSwapFeesActionTests: XCTestCase {
             fundingOutput: SubmarineSwapFundingOutput(
                 scriptVersion: 3,
                 outputAddress: "1234567890",
-                outputAmount: Satoshis(value: 1000),
+                outputAmount: outputAmount,
                 confirmationsNeeded: 1,
                 userLockTime: 140,
                 userRefundAddress: MuunAddress(version: 4, derivationPath: "m/1/2/3", address: "1234567890"),
@@ -76,8 +79,8 @@ class ComputeSwapFeesActionTests: XCTestCase {
                 expirationTimeInBlocks: 360,
                 userPublicKey: WalletPublicKey.fromBase58("xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8", on: "m/"),
                 muunPublicKey: WalletPublicKey.fromBase58("xpub6ASuArnXKPbfEwhqN6e3mwBcDTgzisQN1wXN9BJcM47sSikHjJf3UFHKkNAWbWMiGj7Wf5uMash7SyYq527Hqck2AxYysAA7xmALppuCkwQ", on: "m/"),
-                debtType: DebtType.NONE,
-                debtAmount: Satoshis(value: 0)
+                debtType: debtType,
+                debtAmount: debtAmount
             ),
             fees: fees,
             expiresAt: Date(timeIntervalSinceNow: TimeInterval(1000)),
@@ -212,4 +215,93 @@ class ComputeSwapFeesActionTests: XCTestCase {
         }
     }
 
+    func testUnpayableTakeFeeFromAmount() {
+        let totalBalance = feeCalculator.totalBalance()
+        let swap = createSubmarineSwap(
+            bestRouteFees: [BestRouteFees(_maxCapacityInSat: 1_000_000_000, _proportionalMillionth: 100, _baseInSat: totalBalance.value)],
+            fundingOutputPolicies: FundingOutputPolicies(_maximumDebtInSat: 0, _potentialCollectInSat: 0, _maxAmountInSatFor0Conf: 1000)
+        )
+        let feeInfo = FeeInfo(
+            feeCalculator: feeCalculator,
+            feeWindow: feeWindow,
+            exchangeRateWindow: exchangeRateWindow
+        )
+
+        let swapFees = computeSwapFeesAction.run(swap: swap, amount: totalBalance, feeInfo: feeInfo)
+
+        switch swapFees {
+        case .invalid(let amountPlusFee):
+            XCTAssert(amountPlusFee > totalBalance)
+        default:
+            XCTFail("expected invalid swap fees")
+        }
+    }
+
+    func testPayablePartialCollect() {
+
+        let feeCalculator = FeeCalculator(
+            targetedFees: targetedFees,
+            nts: buildNts(
+                [SizeForAmount(amountInSatoshis: Satoshis(value: 21000), sizeInBytes: 209, outpoint: nil)],
+                expectedDebt: Satoshis(value: 8000)
+            )
+        )
+
+        let totalBalance = feeCalculator.totalBalance()
+        let lightningFee = Satoshis(value: 1)
+        let swap = createSubmarineSwap(
+            outputAmount: Satoshis(value: 9000) + lightningFee,
+            fees: SubmarineSwapFees(lightning: lightningFee, sweep: Satoshis.zero, channelOpen: Satoshis.zero, channelClose: Satoshis.zero),
+            debtType: .COLLECT,
+            debtAmount: Satoshis(value: 2000)
+        )
+        let feeInfo = FeeInfo(
+            feeCalculator: feeCalculator,
+            feeWindow: feeWindow,
+            exchangeRateWindow: exchangeRateWindow
+        )
+
+        let swapFees = computeSwapFeesAction.run(swap: swap, amount: totalBalance, feeInfo: feeInfo)
+        switch swapFees {
+        case .invalid(let amountPlusFee):
+            XCTAssert(amountPlusFee > totalBalance)
+        default:
+            XCTFail("expected invalid swap fees")
+
+        }
+    }
+
+    func testUnpayablePartialCollect() {
+
+        let feeCalculator = FeeCalculator(
+            targetedFees: targetedFees,
+            nts: buildNts(
+                [SizeForAmount(amountInSatoshis: Satoshis(value: 21000), sizeInBytes: 209, outpoint: nil)],
+                expectedDebt: Satoshis(value: 8000)
+            )
+        )
+
+        let totalBalance = feeCalculator.totalBalance()
+        let lightningFee = Satoshis(value: 1)
+        let swap = createSubmarineSwap(
+            outputAmount: totalBalance + lightningFee,
+            fees: SubmarineSwapFees(lightning: lightningFee, sweep: Satoshis.zero, channelOpen: Satoshis.zero, channelClose: Satoshis.zero),
+            debtType: .COLLECT,
+            debtAmount: Satoshis(value: 2000)
+        )
+        let feeInfo = FeeInfo(
+            feeCalculator: feeCalculator,
+            feeWindow: feeWindow,
+            exchangeRateWindow: exchangeRateWindow
+        )
+
+        let swapFees = computeSwapFeesAction.run(swap: swap, amount: totalBalance, feeInfo: feeInfo)
+        switch swapFees {
+        case .invalid(let amountPlusFee):
+            XCTAssert(amountPlusFee > totalBalance)
+        default:
+            XCTFail("expected invalid swap fees")
+
+        }
+    }
 }

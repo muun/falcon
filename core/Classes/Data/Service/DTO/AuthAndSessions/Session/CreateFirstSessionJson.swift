@@ -20,6 +20,7 @@ struct CreateFirstSessionOkJson: Codable {
 
     let user: User
     let cosigningPublicKey: PublicKeyJson
+    let swapServerPublicKey: PublicKeyJson
 
 }
 

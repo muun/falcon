@@ -95,6 +95,18 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
             do {
                 return try T.fetchCount(db)
             } catch {
+                Logger.log(error: error)
+                return 0
+            }
+        }
+    }
+
+    func count(query: QueryInterfaceRequest<T>) -> Int {
+        return self.coordinator.queue.read { db in
+            do {
+                return try query.fetchCount(db)
+            } catch {
+                Logger.log(error: error)
                 return 0
             }
         }

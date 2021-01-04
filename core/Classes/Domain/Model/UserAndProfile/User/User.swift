@@ -49,4 +49,20 @@ enum VerificationType: String {
 struct ExportEmergencyKit: Codable {
     let lastExportedAt: Date
     let verificationCode: String
+    let verified: Bool
+}
+
+/*
+ For instructions on adding new fields, see UserPreferences in common.
+ */
+public struct UserPreferences: Codable {
+    public let receiveStrictMode: Bool
+    public let seenNewHome: Bool
+
+    public func copy(receiveStrictMode: Bool? = nil, seenNewHome: Bool? = nil) -> UserPreferences {
+        return UserPreferences(
+            receiveStrictMode: receiveStrictMode ?? self.receiveStrictMode,
+            seenNewHome: seenNewHome ?? self.seenNewHome
+        )
+    }
 }

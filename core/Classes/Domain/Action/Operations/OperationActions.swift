@@ -70,6 +70,10 @@ public class OperationActions {
         return operationRepository.watchOperations()
     }
 
+    public func getOperationsState() -> OperationsState {
+        return operationRepository.getOperationsState()
+    }
+
     func updateOperations() -> Completable {
         return houstonService.fetchOperations()
             .asObservable()

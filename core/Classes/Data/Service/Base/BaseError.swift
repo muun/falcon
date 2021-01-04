@@ -39,6 +39,7 @@ public struct DeveloperError: Codable, Error {
         case 8105: return .noPaymentRoute
         case 8119: return .invoiceUnreachableNode
         case 8123: return .cyclicalSwap
+        case 8124: return .amountLessInvoicesNotSupported
 
         default: return .defaultError
         }
@@ -68,6 +69,7 @@ public enum ExactDeveloperError {
     case noPaymentRoute
     case invoiceUnreachableNode
     case cyclicalSwap
+    case amountLessInvoicesNotSupported
 
     // Incoming swaps
     case incomingSwapAlreadyFulfilled

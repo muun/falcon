@@ -36,6 +36,9 @@ public class SetupChallengeAction: AsyncAction<()> {
                 if let muunKey = response.muunKey {
                     try self.keysRepository.store(muunPrivateKey: muunKey)
                 }
+                if let muunKeyFingerprint = response.muunKeyFingerprint {
+                    self.keysRepository.store(muunKeyFingerprint: muunKeyFingerprint)
+                }
             })
         )
     }

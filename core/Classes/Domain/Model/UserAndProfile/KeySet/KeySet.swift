@@ -12,6 +12,7 @@ public struct KeySet {
 
     let encryptedPrivateKey: String
     let muunKey: String?
+    let muunKeyFingerprint: String?
     let challengeKeys: [ChallengeKey]
 
 }

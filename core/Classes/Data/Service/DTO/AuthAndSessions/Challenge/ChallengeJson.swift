@@ -42,6 +42,7 @@ enum ChallengeTypeJson: String, Codable {
 
 struct SetupChallengeResponseJson: Codable {
     let muunKey: String?
+    let muunKeyFingerprint: String?
 }
 
 struct PendingChallengeUpdateJson: Codable {

@@ -10,6 +10,7 @@ struct PublicKeySetJson: Codable {
 
     let basePublicKey: PublicKeyJson
     let baseCosigningPublicKey: PublicKeyJson?
+    let baseSwapServerPublicKey: PublicKeyJson?
     let externalPublicKeyIndices: ExternalAddressesRecordJson?
 
 }

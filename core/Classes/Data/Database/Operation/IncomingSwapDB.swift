@@ -15,7 +15,9 @@ struct IncomingSwapDB: Codable, FetchableRecord, PersistableRecord {
     let uuid: String
     let paymentHashHex: String
     let sphinxPacketHex: String?
-
+    let collectInSats: Int64
+    let paymentAmountInSats: Int64
+    let preimageHex: String?
 }
 
 extension IncomingSwapDB: DatabaseModelConvertible {
@@ -24,6 +26,9 @@ extension IncomingSwapDB: DatabaseModelConvertible {
         self.uuid = from.uuid
         self.paymentHashHex = from.paymentHash.toHexString()
         self.sphinxPacketHex = from.sphinxPacket?.toHexString()
+        self.collectInSats = from.collect.value
+        self.paymentAmountInSats = from.paymentAmountInSats.value
+        self.preimageHex = from.preimage?.toHexString()
     }
 
     func to(using db: Database) throws -> IncomingSwap {
@@ -32,13 +37,14 @@ extension IncomingSwapDB: DatabaseModelConvertible {
             .filter(Column("incomingSwapUuid") == uuid)
             .fetchAll(db)
 
-        precondition(htlcs.count == 1)
-
         return IncomingSwap(
             uuid: uuid,
             paymentHash: Data(hex: paymentHashHex),
-            htlc: try htlcs.first!.to(using: db),
-            sphinxPacket: sphinxPacketHex.map(Data.init(hex: ))
+            htlc: try htlcs.first?.to(using: db),
+            sphinxPacket: sphinxPacketHex.map(Data.init(hex: )),
+            collect: Satoshis(value: collectInSats),
+            paymentAmountInSats: Satoshis(value: paymentAmountInSats),
+            preimage: preimageHex.map(Data.init(hex:))
         )
     }
 

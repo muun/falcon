@@ -22,7 +22,7 @@ struct UserJson: Codable {
     let hasExportedKeys: Bool
     let createdAt: Date?
     let emergencyKitLastExportedAt: Date?
-
+    let preferences: UserPreferences?
 }
 
 struct PhoneNumberJson: Codable {
@@ -38,4 +38,5 @@ enum VerificationTypeJson: String, Codable {
 struct ExportEmergencyKitJson: Codable {
     let lastExportedAt: Date
     let verificationCode: String
+    let verified: Bool
 }

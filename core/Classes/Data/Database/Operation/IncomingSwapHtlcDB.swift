@@ -15,7 +15,6 @@ struct IncomingSwapHtlcDB: Codable, FetchableRecord, PersistableRecord {
     let uuid: String
     let incomingSwapUuid: String
     let expirationHeight: Int64
-    let paymentAmountInSats: Int64
     let fulfillmentFeeSubsidyInSats: Int64
     let lentInSats: Int64
     let address: String
@@ -32,7 +31,6 @@ extension IncomingSwapHtlcDB {
         self.uuid = from.uuid
         self.incomingSwapUuid = swap.uuid
         self.expirationHeight = from.expirationHeight
-        self.paymentAmountInSats = from.paymentAmountInSats.value
         self.fulfillmentFeeSubsidyInSats = from.fulfillmentFeeSubsidyInSats.value
         self.lentInSats = from.lentInSats.value
         self.address = from.address
@@ -46,7 +44,6 @@ extension IncomingSwapHtlcDB {
         return IncomingSwapHtlc(
             uuid: uuid,
             expirationHeight: expirationHeight,
-            paymentAmountInSats: Satoshis(value: paymentAmountInSats),
             fulfillmentFeeSubsidyInSats: Satoshis(value: fulfillmentFeeSubsidyInSats),
             lentInSats: Satoshis(value: lentInSats),
             address: address,

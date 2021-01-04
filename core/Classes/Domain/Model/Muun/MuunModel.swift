@@ -112,14 +112,16 @@ class InputIncomingSwap: NSObject {
     let _paymentHash256: Data
     let _swapServerPublicKey: Data
     let _expirationHeight: Int64
+    let _collect: Satoshis
 
     init(sphinx: Data, htlcTx: Data, paymentHash256: Data, swapServerPublicKey: Data,
-         expirationHeight: Int64) {
+         expirationHeight: Int64, collect: Satoshis) {
         self._sphinx = sphinx
         self._htlcTx = htlcTx
         self._paymentHash256 = paymentHash256
         self._swapServerPublicKey = swapServerPublicKey
         self._expirationHeight = expirationHeight
+        self._collect = collect
 
         super.init()
     }
@@ -272,5 +274,9 @@ extension InputIncomingSwap: LibwalletInputIncomingSwapProtocol {
 
     func expirationHeight() -> Int64 {
         return _expirationHeight
+    }
+
+    func collectInSats() -> Int64 {
+        return _collect.value
     }
 }

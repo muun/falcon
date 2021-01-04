@@ -47,6 +47,7 @@ struct OperationDB: Codable, FetchableRecord, PersistableRecord {
     let feeInputCurrency: String
 
     let confirmations: Int?
+    let isReplaceableByFee: Bool
     let hashDB: String? // Cant use the key: hash
     let descriptionDB: String? // Cant use the key: description
     let status: OperationStatus
@@ -83,6 +84,7 @@ extension OperationDB: DatabaseModelConvertible {
                   feeInInputCurrency: from.fee.inInputCurrency.amount.stringValue(locale: Constant.houstonLocale),
                   feeInputCurrency: from.fee.inInputCurrency.currency,
                   confirmations: from.confirmations,
+                  isReplaceableByFee: from.transaction?.isReplaceableByFee ?? false,
                   hashDB: from.transaction?.hash,
                   descriptionDB: from.description,
                   status: from.status,
@@ -121,7 +123,11 @@ extension OperationDB: DatabaseModelConvertible {
             recProfile = try PublicProfileDB.fetchOne(db, key: receiverProfileId)?.to(using: db)
         }
 
-        let trans = Transaction(hash: hashDB, confirmations: confirmations ?? 0)
+        let trans = Transaction(
+            hash: hashDB,
+            confirmations: confirmations ?? 0,
+            isReplaceableByFee: isReplaceableByFee
+        )
 
         let submarineSwap: SubmarineSwap?
         if let swapUuid = swapUuid {
@@ -154,7 +160,7 @@ extension OperationDB: DatabaseModelConvertible {
             transaction: trans,
             creationDate: creationDate,
             submarineSwap: submarineSwap,
-            outpoints: nil, // We don't need retrocompat outpoints
+            outpoints: nil, // We don't need retrocompat outpoints,
             incomingSwap: incomingSwap
         )
     }

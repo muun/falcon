@@ -18,7 +18,7 @@ public class ComputeSwapFeesAction {
     public func run(swap: SubmarineSwap, amount: Satoshis, feeInfo: FeeInfo) -> Result {
         let feeCalculator = feeInfo.feeCalculator
         var params: SwapExecutionParameters
-        var feeInSatoshis: Satoshis
+        var fee: Satoshis
         var feeRate: FeeRate
         var updatedAmount = amount
 
@@ -40,7 +40,7 @@ public class ComputeSwapFeesAction {
             let outputAmount = getFinalOutputAmountWithDebt(amount: amount, params: params)
 
             do {
-                (feeInSatoshis, feeRate) = try calculateOnchainFee(
+                (fee, feeRate) = try calculateOnchainFee(
                     outputAmount: outputAmount,
                     confirmationsNeeded: params.confirmationsNeeded,
                     debtType: params.debtType,
@@ -50,6 +50,10 @@ public class ComputeSwapFeesAction {
                 let minimumFee = getMinimumFeeInSats(confirmations: params.confirmationsNeeded,
                                                      feeCalculator: feeCalculator)
                 return .invalid(amountPlusFee: outputAmount + minimumFee)
+            }
+
+            if updatedAmount + params.offchainFee + fee > feeCalculator.totalBalance() {
+                return .invalid(amountPlusFee: updatedAmount + params.offchainFee + fee)
             }
 
         } else {
@@ -63,9 +67,12 @@ public class ComputeSwapFeesAction {
 
             if feeCalculator.shouldTakeFeeFromAmount(amount) {
 
+                // Beware future maintainer! You might say this branch doesn't consider the COLLECT amount
+                // BUT the amount is the user balance, not the UTXO balance, so it already has the collectable amount deducted
+
                 // Compute on-chain fees, subtract from amount
                 do {
-                    (feeInSatoshis, feeRate) = try calculateOnchainFee(
+                    (fee, feeRate) = try calculateOnchainFee(
                         outputAmount: amount,
                         confirmationsNeeded: 0,
                         debtType: DebtType.NONE,
@@ -77,35 +84,19 @@ public class ComputeSwapFeesAction {
                     return .invalid(amountPlusFee: amount + minimumFee)
                 }
 
-                var outputAmount = amount - feeInSatoshis
-
-                // Get a first approximation (by excess) of the off-chain fee which we will later refine
-                params = paramsForUserDefinedAmountSwap(
-                    amount: outputAmount,
+                var outputAmount: Satoshis
+                var offchainAmount: Satoshis
+                (params, outputAmount, offchainAmount) = findParams(
+                    amount: amount,
+                    fee: fee,
                     bestRouteFees: bestRouteFees,
                     fundingOutputPolicies: fundingOutputPolicies
                 )
 
-                // Find the point at which the off-chain amount (displayed to the user) plus the off-chain
-                // fee equals our output amount
-                var offchainAmount = outputAmount - params.offchainFee
-
-                while true {
-                    params = paramsForUserDefinedAmountSwap(
-                        amount: offchainAmount,
-                        bestRouteFees: bestRouteFees,
-                        fundingOutputPolicies: fundingOutputPolicies
-                    )
-                    if offchainAmount + params.offchainFee >= outputAmount {
-                        break
-                    }
-                    offchainAmount += Satoshis(value: 1)
-                }
-
                 // If we don't qualify for 0-conf, redo the computation with 1-conf
                 if params.confirmationsNeeded == 1 {
                     do {
-                        (feeInSatoshis, feeRate) = try calculateOnchainFee(
+                        (fee, feeRate) = try calculateOnchainFee(
                             outputAmount: amount,
                             confirmationsNeeded: 1,
                             debtType: DebtType.NONE,
@@ -117,31 +108,24 @@ public class ComputeSwapFeesAction {
                         return .invalid(amountPlusFee: outputAmount + minimumFee)
                     }
 
-                    outputAmount = amount - feeInSatoshis
-
-                    // Get a first approximation (by excess) of the off-chain fee which we will later refine
-                    params = paramsForUserDefinedAmountSwap(
-                        amount: outputAmount,
+                    (params, outputAmount, offchainAmount) = findParams(
+                        amount: amount,
+                        fee: fee,
                         bestRouteFees: bestRouteFees,
                         fundingOutputPolicies: fundingOutputPolicies
                     )
 
-                    offchainAmount = outputAmount - params.offchainFee
-                    while true {
-                        params = paramsForUserDefinedAmountSwap(
-                            amount: offchainAmount,
-                            bestRouteFees: bestRouteFees,
-                            fundingOutputPolicies: fundingOutputPolicies
-                        )
-                        if offchainAmount + params.offchainFee >= outputAmount {
-                            break
-                        }
-                        offchainAmount += Satoshis(value: 1)
-                    }
                 }
 
                 // Subtract the on and off-chain fees
                 updatedAmount = offchainAmount
+
+                // If the fees are really high, we might end up calculating an negative offchain amount
+                let zero = Satoshis(value: 0)
+                if offchainAmount < zero {
+                    return .invalid(amountPlusFee: zero + params.offchainFee + fee)
+                }
+
             } else {
 
                 // Compute off-chain fees
@@ -152,7 +136,7 @@ public class ComputeSwapFeesAction {
                 let outputAmount = getFinalOutputAmountWithDebt(amount: amount, params: params)
 
                 do {
-                    (feeInSatoshis, feeRate) = try calculateOnchainFee(
+                    (fee, feeRate) = try calculateOnchainFee(
                         outputAmount: outputAmount,
                         confirmationsNeeded: params.confirmationsNeeded,
                         debtType: params.debtType,
@@ -166,7 +150,7 @@ public class ComputeSwapFeesAction {
             }
         }
 
-        return .valid(params: params, totalFee: feeInSatoshis, feeRate: feeRate, updatedAmount: updatedAmount)
+        return .valid(params: params, totalFee: fee, feeRate: feeRate, updatedAmount: updatedAmount)
     }
 
     private func paramsForUserDefinedAmountSwap(amount: Satoshis,
@@ -241,5 +225,39 @@ public class ComputeSwapFeesAction {
         default:
             throw FeeError.insufficientBalance
         }
+    }
+
+    func findParams(amount: Satoshis,
+                    fee: Satoshis,
+                    bestRouteFees: [BestRouteFees],
+                    fundingOutputPolicies: FundingOutputPolicies)
+    -> (params: SwapExecutionParameters, outputAmount: Satoshis, offchainAmount: Satoshis) {
+
+        let outputAmount = amount - fee
+
+        // Get a first approximation (by excess) of the off-chain fee which we will later refine
+        var params = paramsForUserDefinedAmountSwap(
+            amount: outputAmount,
+            bestRouteFees: bestRouteFees,
+            fundingOutputPolicies: fundingOutputPolicies
+        )
+
+        // Find the point at which the off-chain amount (displayed to the user) plus the off-chain
+        // fee equals our output amount
+        var offchainAmount = outputAmount - params.offchainFee
+
+        while true {
+            params = paramsForUserDefinedAmountSwap(
+                amount: offchainAmount,
+                bestRouteFees: bestRouteFees,
+                fundingOutputPolicies: fundingOutputPolicies
+            )
+            if offchainAmount + params.offchainFee >= outputAmount {
+                break
+            }
+            offchainAmount += Satoshis(value: 1)
+        }
+
+        return (params, outputAmount, offchainAmount)
     }
 }

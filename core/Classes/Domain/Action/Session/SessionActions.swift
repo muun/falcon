@@ -194,10 +194,6 @@ public class SessionActions {
         return userRepository.getUser()?.primaryCurrency ?? "BTC"
     }
 
-    public func setDisplayFiatAsMain(for user: User) {
-        userRepository.setDisplayFiatAsMain(for: user)
-    }
-
     func setEmergencyKitExported(date: Date) {
         guard let user = getUser() else {
             return

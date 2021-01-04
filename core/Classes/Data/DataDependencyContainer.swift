@@ -45,6 +45,9 @@ public extension DependencyContainer {
             container.register(factory: BlockchainHeightRepository.init)
             container.register(factory: ForwardingPolicyRepository.init)
             container.register(factory: IncomingSwapRepository.init)
+            container.register(factory: EmergencyKitVerificationCodesRepository.init)
+            container.register(factory: ApiMigrationsVersionRepository.init)
+            container.register(factory: UserPreferencesRepository.init)
 
             container.register(factory: HoustonService.init)
         }

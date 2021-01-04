@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class RequestChallengeAction: AsyncAction<Challenge> {
+public class RequestChallengeAction: AsyncAction<Challenge?> {
 
     private let houstonService: HoustonService
 

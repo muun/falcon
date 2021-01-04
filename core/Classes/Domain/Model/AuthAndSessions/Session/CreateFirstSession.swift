@@ -20,6 +20,7 @@ public struct CreateFirstSessionOk {
 
     let user: User
     let cosigningPublicKey: WalletPublicKey
+    let swapServerPublicKey: WalletPublicKey
 
 }
 

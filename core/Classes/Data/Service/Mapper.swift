@@ -51,7 +51,11 @@ extension CreateFirstSession: APIConvertible {
 extension CreateFirstSessionOkJson: ModelConvertible {
 
     public func toModel() -> CreateFirstSessionOk {
-        return CreateFirstSessionOk(user: user, cosigningPublicKey: cosigningPublicKey.toModel())
+        return CreateFirstSessionOk(
+            user: user,
+            cosigningPublicKey: cosigningPublicKey.toModel(),
+            swapServerPublicKey: swapServerPublicKey.toModel()
+        )
     }
 
 }
@@ -282,7 +286,8 @@ extension User: APIConvertible {
                         hasP2PEnabled: hasP2PEnabled,
                         hasExportedKeys: hasExportedKeys ?? false,
                         createdAt: createdAt ?? nil,
-                        emergencyKitLastExportedAt: emergencyKitLastExportedDate)
+                        emergencyKitLastExportedAt: emergencyKitLastExportedDate,
+                        preferences: nil)
     }
 
 }
@@ -290,7 +295,11 @@ extension User: APIConvertible {
 extension ExportEmergencyKit: APIConvertible {
 
     func toJson() -> ExportEmergencyKitJson {
-        return ExportEmergencyKitJson(lastExportedAt: lastExportedAt, verificationCode: verificationCode)
+        return ExportEmergencyKitJson(
+            lastExportedAt: lastExportedAt,
+            verificationCode: verificationCode,
+            verified: verified
+        )
     }
 
 }
@@ -351,7 +360,10 @@ extension ChallengeTypeJson: ModelConvertible {
 extension SetupChallengeResponseJson: ModelConvertible {
 
     public func toModel() -> SetupChallengeResponse {
-        return SetupChallengeResponse(muunKey: muunKey)
+        return SetupChallengeResponse(
+            muunKey: muunKey,
+            muunKeyFingerprint: muunKeyFingerprint
+        )
     }
 
 }
@@ -359,7 +371,10 @@ extension SetupChallengeResponseJson: ModelConvertible {
 extension SetupChallengeResponse: APIConvertible {
 
     func toJson() -> SetupChallengeResponseJson {
-        return SetupChallengeResponseJson(muunKey: muunKey)
+        return SetupChallengeResponseJson(
+            muunKey: muunKey,
+            muunKeyFingerprint: muunKeyFingerprint
+        )
     }
 
 }
@@ -379,6 +394,7 @@ extension KeySetJson: ModelConvertible {
 
         return KeySet(encryptedPrivateKey: encryptedPrivateKey,
                       muunKey: muunKey,
+                      muunKeyFingerprint: muunKeyFingerprint,
                       challengeKeys: challengeKeys.map({ $0.toModel() }))
     }
 
@@ -460,6 +476,7 @@ extension PublicKeySet: APIConvertible {
     func toJson() -> PublicKeySetJson {
         return PublicKeySetJson(basePublicKey: basePublicKey.toJson(),
                                 baseCosigningPublicKey: baseCosigningPublicKey?.toJson(),
+                                baseSwapServerPublicKey: baseSwapServerPublicKey?.toJson(),
                                 externalPublicKeyIndices: externalPublicKeyIndices?.toJson())
     }
 
@@ -470,6 +487,7 @@ extension PublicKeySetJson: ModelConvertible {
     public func toModel() -> PublicKeySet {
         return PublicKeySet(basePublicKey: basePublicKey.toModel(),
                             baseCosigningPublicKey: baseCosigningPublicKey?.toModel(),
+                            baseSwapServerPublicKey: baseSwapServerPublicKey?.toModel(),
                             externalPublicKeyIndices: externalPublicKeyIndices?.toModel())
     }
 
@@ -691,7 +709,11 @@ extension OperationStatusJson: ModelConvertible {
 extension Transaction: APIConvertible {
 
     func toJson() -> TransactionJson {
-        return TransactionJson(hash: hash, confirmations: confirmations)
+        return TransactionJson(
+            hash: hash,
+            confirmations: confirmations,
+            isReplaceableByFee: isReplaceableByFee
+        )
     }
 
 }
@@ -699,7 +721,11 @@ extension Transaction: APIConvertible {
 extension TransactionJson: ModelConvertible {
 
     public func toModel() -> Transaction {
-        return Transaction(hash: hash, confirmations: confirmations)
+        return Transaction(
+            hash: hash,
+            confirmations: confirmations,
+            isReplaceableByFee: isReplaceableByFee
+        )
     }
 
 }
@@ -993,7 +1019,8 @@ extension InputIncomingSwapJson: ModelConvertible {
                                  htlcTx: Data(hex: htlcTxHex),
                                  paymentHash256: Data(hex: paymentHash256Hex),
                                  swapServerPublicKey: Data(hex: swapServerPublicKeyHex),
-                                 expirationHeight: expirationHeight)
+                                 expirationHeight: expirationHeight,
+                                 collect: Satoshis(value: collectInSats))
     }
 }
 
@@ -1103,8 +1130,11 @@ extension IncomingSwapJson: ModelConvertible {
         return IncomingSwap(
             uuid: uuid,
             paymentHash: Data(hex: paymentHashHex),
-            htlc: htlc.toModel(),
-            sphinxPacket: sphinxPacketHex.map(Data.init(hex:))
+            htlc: htlc?.toModel(),
+            sphinxPacket: sphinxPacketHex.map(Data.init(hex:)),
+            collect: Satoshis(value: collectInSats),
+            paymentAmountInSats: Satoshis(value: paymentAmountInSats),
+            preimage: preimageHex.map(Data.init(hex:))
         )
     }
 }
@@ -1115,7 +1145,6 @@ extension IncomingSwapHtlcJson: ModelConvertible {
         return IncomingSwapHtlc(
             uuid: uuid,
             expirationHeight: expirationHeight,
-            paymentAmountInSats: Satoshis(value: paymentAmountInSats),
             fulfillmentFeeSubsidyInSats: Satoshis(value: fulfillmentFeeSubsidyInSats),
             lentInSats: Satoshis(value: lentInSats),
             address: address,

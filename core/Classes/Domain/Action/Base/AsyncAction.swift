@@ -35,6 +35,7 @@ public class AsyncAction<T>: NSObject {
         _ = single
             .observeOn(scheduler)
             .do(onSubscribe: { self.subject.onNext(ActionState.createLoading()) })
+            .subscribeOn(Scheduler.backgroundScheduler)
             .subscribe(
                 onSuccess: {
                     self.subject.onNext(ActionState.createValue(value: $0))
@@ -59,6 +60,9 @@ public class AsyncAction<T>: NSObject {
 
             return self.subject
                 .subscribeOn(scheduler)
+                .do(onSubscribed: {
+                    observer.onNext(ActionState.createEmpty())
+                })
                 .subscribe(onNext: { [weak self] state in
                     switch state.type {
 

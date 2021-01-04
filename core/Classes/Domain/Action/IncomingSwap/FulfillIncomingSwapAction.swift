@@ -14,24 +14,35 @@ class FulfillIncomingSwapAction {
     private let keysRepository: KeysRepository
     private let houstonService: HoustonService
     private let operationRepository: OperationRepository
+    private let incomingSwapRepository: IncomingSwapRepository
 
     init(keysRepository: KeysRepository,
          houstonService: HoustonService,
-         operationRepository: OperationRepository) {
+         operationRepository: OperationRepository,
+         incomingSwapRepository: IncomingSwapRepository) {
         self.keysRepository = keysRepository
         self.houstonService = houstonService
         self.operationRepository = operationRepository
+        self.incomingSwapRepository = incomingSwapRepository
     }
 
     func run(uuid: String) -> Completable {
-        return Single.zip(fetchOperation(swapUuid: uuid), houstonService.fetchFulfillmentData(for: uuid))
+        let comp = Single.zip(fetchOperation(swapUuid: uuid), houstonService.fetchFulfillmentData(for: uuid))
             .flatMap(self.signTransaction)
-            .flatMapCompletable({ rawTx in
+            .flatMap({ (op, rawTx) in
                 self.houstonService.pushFulfillmentTransaction(
                     rawTransaction: RawTransaction(hex: rawTx.toHexString()),
                     incomingSwap: uuid
-                )
+                ).andThen(Single.just(op))
             })
+            .flatMapCompletable({ (op: Operation) in return Completable.deferred {
+                let swap = op.incomingSwap!
+                let preimage = try doWithError { err in
+                    LibwalletExposePreimage(swap.paymentHash, err)
+                }
+
+                return self.incomingSwapRepository.update(preimage: preimage, for: swap)
+            }})
             .catchError { error in
                 if error.isKindOf(.incomingSwapAlreadyFulfilled) {
                     return Completable.empty()
@@ -43,6 +54,7 @@ class FulfillIncomingSwapAction {
                 }
             }
             // TODO: RECEIVE: We should persist the signed tx in local storage too
+        return comp
     }
 
     private func fetchOperation(swapUuid: String) -> Single<Operation> {
@@ -55,9 +67,10 @@ class FulfillIncomingSwapAction {
         })
     }
 
-    private func signTransaction(op: Operation, fulfillmentData: IncomingSwapFulfillmentData) -> Single<Data> {
+    private func signTransaction(op: Operation, fulfillmentData: IncomingSwapFulfillmentData) -> Single<(Operation, Data)> {
         return Single.deferred({
-            guard let swap = op.incomingSwap else {
+            guard let swap = op.incomingSwap,
+                  let htlc = swap.htlc else {
                 return Single.error(MuunError(Errors.unknownSwap))
             }
 
@@ -68,11 +81,12 @@ class FulfillIncomingSwapAction {
             incomingSwap.outputPath = fulfillmentData.outputPath
             incomingSwap.outputVersion = fulfillmentData.outputVersion
 
-            incomingSwap.htlcTx = swap.htlc.htlcTx
+            incomingSwap.htlcTx = htlc.htlcTx
             incomingSwap.paymentHash = swap.paymentHash
             incomingSwap.sphinx = swap.sphinxPacket
-            incomingSwap.swapServerPublicKey = swap.htlc.swapServerPublicKey.toHexString()
-            incomingSwap.htlcExpiration = swap.htlc.expirationHeight
+            incomingSwap.swapServerPublicKey = htlc.swapServerPublicKey.toHexString()
+            incomingSwap.htlcExpiration = htlc.expirationHeight
+            incomingSwap.collectInSats = swap.collect.value
 
             // These are unused for now but should eventually be provided by houston
             incomingSwap.htlcBlock = Data()
@@ -83,9 +97,11 @@ class FulfillIncomingSwapAction {
             let userKey = try self.keysRepository.getBasePrivateKey()
             let muunKey = try self.keysRepository.getCosigningKey()
 
-            let signedTx = try incomingSwap.verifyAndFulfill(userKey.key, muunKey: muunKey.key, net: Environment.current.network)
+            let signedTx = try incomingSwap.verifyAndFulfill(
+                userKey.key, muunKey: muunKey.key, net: Environment.current.network
+            )
 
-            return Single.just(signedTx)
+            return Single.just((op, signedTx))
         })
     }
 

@@ -44,10 +44,6 @@ public class UserRepository {
         return preferences.watchBool(key: .appInForeground).asObservable()
     }
 
-    public func setDisplayFiatAsMain(for user: User) {
-        preferences.set(value: (user.primaryCurrency != "BTC"), forKey: .displayFiatCurrencyAsMain)
-    }
-
     func setUserEmail(_ email: String) {
         preferences.set(value: email, forKey: .email)
     }

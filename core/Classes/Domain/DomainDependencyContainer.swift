@@ -23,6 +23,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: FetchNotificationsAction.init)
             container.register(.singleton, factory: CreateSessionAction.init)
             container.register(.singleton, factory: LogInAction.init)
+            container.register(.singleton, factory: CompatLogInAction.init)
             container.register(.singleton, factory: RequestChallengeAction.init)
             container.register(.singleton, factory: SetUpPasswordAction.init)
             container.register(.singleton, factory: SessionActions.init)
@@ -58,10 +59,16 @@ public extension DependencyContainer {
             container.register(.singleton, factory: RefreshInvoicesAction.init)
             container.register(.singleton, factory: FulfillIncomingSwapAction.init)
             container.register(.singleton, factory: ComputeSwapFeesAction.init)
+            container.register(.singleton, factory: FetchSwapServerKeyAction.init)
+            container.register(.singleton, factory: MigrateFingerprintsAction.init)
+            container.register(.singleton, factory: ApiMigrationAction.init)
+            container.register(.singleton, factory: UpdateUserPreferencesAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
-            container.register(.singleton, factory: EncryptedUserKeySelector.init)
-            container.register(.singleton, factory: EncryptedMuunKeySelector.init)
+            container.register(.singleton, factory: EmergencyKitDataSelector.init)
+            container.register(.singleton, factory: UserPreferencesSelector.init)
+
+            container.register(.singleton, factory: ApiMigrationsManager.init)
 
             container.register(.singleton) {
                 SyncAction(houstonService: $0,
@@ -72,7 +79,9 @@ public extension DependencyContainer {
                            nextTransactionSizeRepository: $5,
                            fetchNotificationsAction: try container.resolve(),
                            createFirstSessionAction: try container.resolve(),
-                           refreshInvoices: try container.resolve())
+                           refreshInvoices: try container.resolve(),
+                           apiMigrationsManager: try container.resolve(),
+                           userPreferencesRepository: try container.resolve())
             }
         }
     }

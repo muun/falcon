@@ -25,6 +25,8 @@ public class SyncAction: AsyncAction<()> {
     private let fetchNotificationsAction: FetchNotificationsAction
     private let createFirstSessionAction: CreateFirstSessionAction
     private let refreshInvoices: RefreshInvoicesAction
+    private let apiMigrationsManager: ApiMigrationsManager
+    private let userPreferencesRepository: UserPreferencesRepository
 
     init(houstonService: HoustonService,
          addressActions: AddressActions,
@@ -34,7 +36,9 @@ public class SyncAction: AsyncAction<()> {
          nextTransactionSizeRepository: NextTransactionSizeRepository,
          fetchNotificationsAction: FetchNotificationsAction,
          createFirstSessionAction: CreateFirstSessionAction,
-         refreshInvoices: RefreshInvoicesAction) {
+         refreshInvoices: RefreshInvoicesAction,
+         apiMigrationsManager: ApiMigrationsManager,
+         userPreferencesRepository: UserPreferencesRepository) {
 
         self.houstonService = houstonService
         self.addressActions = addressActions
@@ -43,9 +47,11 @@ public class SyncAction: AsyncAction<()> {
         self.fetchNotificationsAction = fetchNotificationsAction
         self.createFirstSessionAction = createFirstSessionAction
         self.refreshInvoices = refreshInvoices
+        self.apiMigrationsManager = apiMigrationsManager
 
         self.userRepository = userRepository
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
+        self.userPreferencesRepository = userPreferencesRepository
 
         super.init(name: "SyncAction")
     }
@@ -84,13 +90,21 @@ public class SyncAction: AsyncAction<()> {
             fetchNextTransactionSize(),
             fetchUserInfo(),
             addressActions.syncPublicKeySet(),
-            fetchNotificationsAction.getValue().asCompletable()
+            fetchNotificationsAction.getValue().asCompletable(),
+            resetApiMigrations()
         ).andThen(
             // We need the public key set before the invoices refreshing action
             Completable.deferred({
                 self.runRefreshInvoices()
             })
         )
+    }
+
+    private func resetApiMigrations() -> Completable {
+        return Completable.deferred {
+            self.apiMigrationsManager.reset()
+            return Completable.empty()
+        }
     }
 
     private func runRefreshInvoices() -> Completable {
@@ -100,8 +114,9 @@ public class SyncAction: AsyncAction<()> {
 
     func fetchUserInfo() -> Completable {
         return houstonService.fetchUserInfo()
-            .do(onSuccess: { (user) in
+            .do(onSuccess: { (user, prefs) in
                 self.userRepository.setUser(user)
+                self.userPreferencesRepository.update(prefs)
             })
             .asCompletable()
     }

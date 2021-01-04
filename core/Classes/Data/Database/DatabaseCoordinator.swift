@@ -330,6 +330,105 @@ public class DatabaseCoordinator {
             try db.rename(table: "submarineSwapDBTmp", to: "submarineSwapDB")
         })
 
+        migrator.registerMigration("update incoming swaps to allow collects") { db in
+
+            // 1. Move paymentAmountInSats out of the HTLC to the incoming swap
+            // 2. Add collectInSats to incoming swap
+
+            try db.alter(table: "incomingSwapDB", body: { t in
+                t.add(column: "paymentAmountInSats", .numeric)
+                    .defaults(to: 0)
+                    .notNull()
+
+                t.add(column: "collectInSats", .numeric)
+                    .defaults(to: 0)
+                    .notNull()
+            })
+
+            try Row.fetchAll(db, sql: "SELECT incomingSwapUuid, paymentAmountInSats FROM incomingSwapHtlcDB")
+                .forEach { row in
+                    try db.execute(sql: """
+                            UPDATE incomingSwapDb
+                            SET paymentAmountInSats = :amount
+                            WHERE uuid = :uuid
+                         """, arguments: [
+                            "amount": row["paymentAmountInSats"] as Int,
+                            "uuid": row["incomingSwapUuid"] as String
+                         ])
+                }
+
+            // Remove the paymentAmountInSats column from incomingSwapHtlcDB
+
+            try db.create(table: "incomingSwapHtlcDBTmp", body: { table in
+
+                table.column("uuid", .text)
+                    .notNull()
+                    .primaryKey()
+
+                table.column("incomingSwapUuid", .text)
+                    .notNull()
+                    .indexed()
+                    .references("incomingSwapDB", column: "uuid", onDelete: .cascade)
+
+                table.column("expirationHeight", .integer)
+                    .notNull()
+
+                table.column("fulfillmentFeeSubsidyInSats", .integer)
+                    .notNull()
+
+                table.column("lentInSats", .integer)
+                    .notNull()
+
+                table.column("outputAmountInSatoshis", .integer)
+                    .notNull()
+
+                table.column("address", .text)
+                    .notNull()
+
+                table.column("swapServerPublicKeyHex", .text)
+                    .notNull()
+
+                table.column("htlcTxHex", .text)
+                    .notNull()
+
+                table.column("fulfillmentTxHex", .text)
+            })
+
+            try db.execute(sql: """
+                        INSERT INTO incomingSwapHtlcDBTmp
+                        SELECT
+                            uuid,
+                            incomingSwapUuid,
+                            expirationHeight,
+                            fulfillmentFeeSubsidyInSats,
+                            lentInSats,
+                            outputAmountInSatoshis,
+                            address,
+                            swapServerPublicKeyHex,
+                            htlcTxHex,
+                            fulfillmentTxHex
+                        FROM incomingSwapHtlcDB
+            """)
+
+            try db.drop(table: "incomingSwapHtlcDB")
+
+            try db.rename(table: "incomingSwapHtlcDBTmp", to: "incomingSwapHtlcDB")
+        }
+
+        migrator.registerMigration("add rbf column to operations db") { db in
+            try db.alter(table: "operationDB", body: { t in
+                t.add(column: "isReplaceableByFee", .boolean)
+                    .defaults(to: false)
+                    .notNull()
+            })
+        }
+
+        migrator.registerMigration("add preimage to incoming swaps") { db in
+            try db.alter(table: "incomingSwapDB", body: { t in
+                t.add(column: "preimageHex", .text)
+            })
+        }
+
         return migrator
     }
     // swiftlint:enable function_body_length

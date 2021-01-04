@@ -46,7 +46,6 @@ public class Preferences {
     }
 
     public func wipeAll() {
-        let isDarkMode = bool(forKey: .isDarkMode)
         let currentToken = string(forKey: .gcmToken)
         let environment = string(forKey: .currentEnvironment)
 
@@ -57,9 +56,6 @@ public class Preferences {
 
         // At this point the app is still in foreground
         set(value: true, forKey: .appInForeground)
-
-        // We save the dark mode preference
-        set(value: isDarkMode, forKey: .isDarkMode)
 
         // Push notification token remains the same, as it is associated to the instance, not the user
         set(value: currentToken, forKey: .gcmToken)

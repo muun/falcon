@@ -80,13 +80,31 @@ public struct Operation {
         self.incomingSwap = incomingSwap
     }
 
-    public func isPending() -> Bool {
-        let pendingStates: [OperationStatus] = [
-            .CREATED, .SIGNING, .SIGNED, .BROADCASTED,
-            .SWAP_PENDING, .SWAP_OPENING_CHANNEL, .SWAP_WAITING_CHANNEL, .SWAP_ROUTING
-        ]
+    // We will define `cancelable` operations with (`isReplaceableByFee` == true && 0 confirmations).
+    public func isCancelable() -> Bool {
+        return transaction?.isReplaceableByFee ?? false
+            && isPending()
+    }
 
-        return pendingStates.contains(status)
+    public func isPending() -> Bool {
+        return OperationStatus.pendingStates.contains(status)
+    }
+
+    // This method returns the sum of the on-chain fee and all the off-chain fees
+    public func totalFeeInSatoshis() -> Satoshis {
+        return fee.inSatoshis + offChainFeeInSatoshis()
+    }
+
+    private func offChainFeeInSatoshis() -> Satoshis {
+        if let swap = submarineSwap {
+            if let debtType = swap._fundingOutput._debtType, debtType == .LEND {
+                return swap._fees?._lightning ?? Satoshis(value: 0) // Lightning off-chain fee or zero for lend swaps
+            } else {
+                return swap._fees?.total() ?? Satoshis(value: 0) // Sum of all lightning fees or zero
+            }
+        }
+
+        return Satoshis(value: 0)
     }
 
 }
@@ -193,4 +211,11 @@ public enum OperationStatus: String, Codable {
      * Operation's transaction was rejected by the network.
      */
     case FAILED
+
+    static let pendingStates: [OperationStatus] = [
+        .CREATED, .SIGNING, .SIGNED, .BROADCASTED,
+        .SWAP_PENDING, .SWAP_OPENING_CHANNEL,
+        .SWAP_WAITING_CHANNEL, .SWAP_ROUTING
+    ]
+
 }

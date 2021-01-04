@@ -8,6 +8,8 @@
 
 public enum Persistence: String, CaseIterable {
 
+    case apiMigrationsVersion
+
     case email
     case gcmToken
     case isBiometricIdSet
@@ -36,15 +38,18 @@ public enum Persistence: String, CaseIterable {
     case muunPublicKey
     case muunPublicKeyPath
 
+    case swapServerPublicKey
+    case swapServerPublicKeyPath
+
+    case muunKeyFingerprint
+    case userKeyFingerprint
+
     case lastOwnAddressCopied
 
-    case isDarkMode
+    case isBalanceHidden // Bool
+    case displayBTCasSAT // Bool
 
-    case isBalanceHidden
-    case displayFiatCurrencyAsMain
-    case displayBTCasSAT
-
-    case hasRecoveryCode
+    case hasRecoveryCode // Bool
 
     case syncStatus
 
@@ -63,4 +68,8 @@ public enum Persistence: String, CaseIterable {
     case didSkipPushNotificationPermission
 
     case forwardingPolicies
+
+    case emergencyKitVerificationCodes // [String]
+
+    case userPreferences
 }

@@ -42,7 +42,8 @@ public class LogInAction: AsyncAction<KeySet> {
         }
     }
 
-    private func getChallengePrivateKey(challenge: Challenge, userInput: String) throws -> LibwalletChallengePrivateKey {
+    private func getChallengePrivateKey(challenge: Challenge, userInput: String) throws
+    -> LibwalletChallengePrivateKey {
         switch challenge.type {
         case .PASSWORD:
             return LibwalletChallengePrivateKey(

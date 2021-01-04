@@ -72,6 +72,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
             .do(onSuccess: { response in
                 self.userRepository.setUser(response.user)
                 self.keysRepository.store(cosigningKey: response.cosigningPublicKey)
+                self.keysRepository.store(swapServerKey: response.swapServerPublicKey)
             })
     }
 }

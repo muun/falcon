@@ -15,7 +15,9 @@ class IncomingSwapRepository: BaseDatabaseRepository<IncomingSwapDB, IncomingSwa
         let writeHtlcs = Completable.deferred({
             try self.coordinator.queue.write { (db) in
                 for swap in objects {
-                    try IncomingSwapHtlcDB(from: swap.htlc, swap: swap).save(db)
+                    if let htlc = swap.htlc {
+                        try IncomingSwapHtlcDB(from: htlc, swap: swap).save(db)
+                    }
                 }
             }
 
@@ -24,6 +26,18 @@ class IncomingSwapRepository: BaseDatabaseRepository<IncomingSwapDB, IncomingSwa
 
         return super.write(objects: objects)
             .andThen(writeHtlcs)
+    }
+
+    func update(preimage: Data, for swap: IncomingSwap) -> Completable {
+        return Completable.deferred {
+            _ = try self.coordinator.queue.write { db in
+                try IncomingSwapDB
+                    .filter(Column("uuid") == swap.uuid)
+                    .updateAll(db, Column("preimageHex").set(to: preimage.toHexString()))
+            }
+
+            return Completable.empty()
+        }
     }
 
 }

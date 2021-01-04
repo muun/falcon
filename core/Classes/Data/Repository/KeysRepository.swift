@@ -46,6 +46,11 @@ class KeysRepository {
 
         try secureStorage.store(key.path, at: .baseKeyDerivationPath)
         try secureStorage.store(encodedKey, at: .privateKey)
+
+        preferences.set(
+            value: key.walletPublicKey().fingerprint.toHexString(),
+            forKey: .userKeyFingerprint
+        )
     }
 
     func getBasePrivateKey() throws -> WalletPrivateKey {
@@ -63,6 +68,12 @@ class KeysRepository {
     func store(cosigningKey: WalletPublicKey) {
         preferences.set(value: cosigningKey.toBase58(), forKey: .muunPublicKey)
         preferences.set(value: cosigningKey.path, forKey: .muunPublicKeyPath)
+        preferences.set(value: cosigningKey.fingerprint.toHexString(), forKey: .muunKeyFingerprint)
+    }
+
+    func store(swapServerKey: WalletPublicKey) {
+        preferences.set(value: swapServerKey.toBase58(), forKey: .swapServerPublicKey)
+        preferences.set(value: swapServerKey.path, forKey: .swapServerPublicKeyPath)
     }
 
     func getCosigningKey() throws -> WalletPublicKey {
@@ -83,6 +94,28 @@ class KeysRepository {
 
     func getMuunPrivateKey() throws -> String {
         return try secureStorage.get(.muunPrivateKey)
+    }
+
+    func store(muunKeyFingerprint: String) {
+        preferences.set(value: muunKeyFingerprint, forKey: .muunKeyFingerprint)
+    }
+
+    func getMuunKeyFingerprint() throws -> String {
+        guard let fingerprint = preferences.string(forKey: .muunKeyFingerprint) else {
+            throw MuunError(KeyStorageError.missingKey)
+        }
+        return fingerprint
+    }
+
+    func store(userKeyFingerprint: String) {
+        preferences.set(value: userKeyFingerprint, forKey: .userKeyFingerprint)
+    }
+
+    func getUserKeyFingerprint() throws -> String {
+        guard let fingerprint = preferences.string(forKey: .userKeyFingerprint) else {
+            throw MuunError(KeyStorageError.missingKey)
+        }
+        return fingerprint
     }
 
     private func saltKey(for type: ChallengeType) -> SecureStorage.Keys {

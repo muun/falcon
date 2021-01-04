@@ -42,6 +42,7 @@ public enum ChallengeType: String {
 
 struct SetupChallengeResponse {
     let muunKey: String?
+    let muunKeyFingerprint: String?
 }
 
 struct PendingChallengeUpdate {

@@ -38,7 +38,7 @@ extension Error {
     }
 
     public func contains<T: Error & Equatable>(_ expected: T) -> Bool {
-        
+
         if let err = self as? T {
             return err == expected
         } else if let muunError = self as? MuunError {
@@ -46,7 +46,7 @@ extension Error {
                 return err == expected
             }
         }
-        
+
         return false
     }
 }

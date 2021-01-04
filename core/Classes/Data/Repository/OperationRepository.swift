@@ -10,6 +10,12 @@ import Foundation
 import RxSwift
 import GRDB
 
+public enum OperationsState {
+    case confirmed
+    case pending
+    case cancelable
+}
+
 class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
 
     private let publicProfileRepository: PublicProfileRepository
@@ -62,6 +68,30 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
 
     func findByIncomingSwap(uuid: String) -> Operation? {
         return object(query: OperationDB.filter(Column("incomingSwapUuid") == uuid))
+    }
+
+    func getOperationsState() -> OperationsState {
+        let pendingStates = OperationStatus.pendingStates.map { $0.rawValue }
+        let incomingDirection = OperationDirection.INCOMING.rawValue
+
+        let cancelableQuery = OperationDB
+            .filter(Column("isReplaceableByFee") == true)
+            .filter(pendingStates.contains(Column("status")))
+            .filter(Column("direction") == incomingDirection)
+
+        if count(query: cancelableQuery) > 0 {
+            return .cancelable
+        }
+
+        let pendingQuery = OperationDB
+            .filter(pendingStates.contains(Column("status")))
+            .filter(Column("direction") == incomingDirection)
+
+        if count(query: pendingQuery) > 0 {
+            return .pending
+        }
+
+        return .confirmed
     }
 }
 

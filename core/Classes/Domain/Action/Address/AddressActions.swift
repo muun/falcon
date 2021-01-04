@@ -45,6 +45,9 @@ public class AddressActions {
                 if let muunPublicKey = keySet.baseCosigningPublicKey {
                     self.keysRepository.store(cosigningKey: muunPublicKey)
                 }
+                if let swapServerPublicKey = keySet.baseSwapServerPublicKey {
+                    self.keysRepository.store(swapServerKey: swapServerPublicKey)
+                }
 
             })
             .asCompletable()
