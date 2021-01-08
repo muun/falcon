@@ -16,14 +16,17 @@ public class ApiMigrationsManager {
 
     private var maxVersion: Int = 0
 
-    public init(apiMigrationsVersionRepository: ApiMigrationsVersionRepository,
-         fetchSwapServerKeyAction: FetchSwapServerKeyAction,
-         migrateFingerprintsAction: MigrateFingerprintsAction) {
+    public init(
+        apiMigrationsVersionRepository: ApiMigrationsVersionRepository,
+        fetchSwapServerKeyAction: FetchSwapServerKeyAction,
+        migrateFingerprintsAction: MigrateFingerprintsAction) {
 
         self.apiMigrationsVersionRepository = apiMigrationsVersionRepository
 
         registerMigration(version: 1, action: fetchSwapServerKeyAction.run)
         registerMigration(version: 2, action: migrateFingerprintsAction.run)
+        // redo migrate fingerprints migration because it did not have proper error handling the first time
+        registerMigration(version: 3, action: migrateFingerprintsAction.run)
     }
 
     private func registerMigration(version: Int, action: @escaping () throws -> ()) {

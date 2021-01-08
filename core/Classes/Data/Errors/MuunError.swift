@@ -8,18 +8,21 @@
 
 import Foundation
 
-public struct MuunError: Error {
+public struct MuunError: Error, LocalizedError {
 
-    let stackSymbols: [String]
+    let stacktrace: [NSNumber]
+    let callsite: String
+    let shortCallsite: String
     public let kind: Error
 
     public init(_ kind: Error, filename: StaticString = #file, line: UInt = #line, funcName: StaticString = #function) {
         self.kind = kind
-        let callsite = "[\(MuunError.sourceFileName(filePath: filename))]:\(line) \(funcName)"
-        self.stackSymbols = [callsite] + Thread.callStackSymbols
+        self.callsite = "[\(MuunError.sourcePath(filePath: filename))]:\(line) \(funcName)"
+        self.shortCallsite = "\(MuunError.sourceFileName(filePath: filename)) \(funcName)"
+        self.stacktrace = Thread.callStackReturnAddresses
     }
 
-    static func sourceFileName(filePath: StaticString) -> String {
+    static func sourcePath(filePath: StaticString) -> String {
 
         let string = filePath.description
         let components = string.components(separatedBy: "/")
@@ -30,7 +33,18 @@ public struct MuunError: Error {
         return components.suffix(from: start.advanced(by: 1)).joined(separator: "/")
     }
 
-    public var kindDescription: String {
-        return kind.localizedDescription
+    static func sourceFileName(filePath: StaticString) -> String {
+
+        let string = filePath.description
+        let components = string.components(separatedBy: "/")
+        return components.last ?? "<unknown>"
+    }
+
+    public var errorDescription: String? {
+        return "\(callsite): \(kind)"
+    }
+
+    public var shortDescription: String {
+        return "\(shortCallsite): \(kind)"
     }
 }

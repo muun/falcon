@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct DeveloperError: Codable, Error {
+public struct DeveloperError: Codable, LocalizedError {
     public let developerMessage: String?
     let errorCode: Int
     public let message: String
@@ -45,6 +45,10 @@ public struct DeveloperError: Codable, Error {
         }
     }
     // swiftlint:enable cyclomatic_complexity
+
+    public var errorDescription: String? {
+        return developerMessage
+    }
 }
 
 public enum ExactDeveloperError {

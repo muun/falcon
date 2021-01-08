@@ -13,6 +13,7 @@ require (
 	github.com/pdfcpu/pdfcpu v0.3.8
 	github.com/pkg/errors v0.9.1
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
+	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
 	golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 // indirect
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/gormigrate.v1 v1.6.0

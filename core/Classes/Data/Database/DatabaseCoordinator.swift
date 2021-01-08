@@ -23,8 +23,7 @@ public class DatabaseCoordinator {
         do {
             try migrate()
         } catch {
-            Logger.log(error: error)
-            throw error
+            throw MuunError(error)
         }
     }
 

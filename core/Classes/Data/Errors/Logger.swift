@@ -58,50 +58,15 @@ public class Logger {
                            line: UInt = #line,
                            funcName: StaticString = #function) {
 
-        if let muunError = error as? MuunError {
-
-            Logger.log(error: muunError.kind,
-                       stacktrace: muunError.stackSymbols,
-                       filename: filename,
-                       line: line,
-                       funcName: funcName)
-
-        } else {
-            #if DEBUG
-            log(.err, error.localizedDescription, filename: filename, line: line, funcName: funcName)
-            #else
-            Crashlytics.crashlytics().record(error: error)
-            #endif
-        }
-    }
-
-    public static func log(error: Error,
-                           stacktrace: [String],
-                           filename: StaticString = #file,
-                           line: UInt = #line,
-                           funcName: StaticString = #function) {
-
         #if DEBUG
         log(.err, error.localizedDescription, filename: filename, line: line, funcName: funcName)
-        for trace in stacktrace {
-            log(.err, trace, filename: filename, line: line, funcName: funcName)
-        }
         #else
-        var additionalInfo: [String: Any] = ["stack_trace": stacktrace.joined(separator: "\n")]
-        let finalError: NSError
-        let caller = "\(filename) \(line) \(funcName)"
-        if let muunError = error as? MuunError {
-            let domain = "\(muunError.kindDescription) - \(caller)"
-            additionalInfo["muun_error"] = muunError
-            additionalInfo["muun_error_kind"] = muunError.kind
-            additionalInfo["muun_error_stack"] = muunError.stackSymbols.joined(separator: "\n")
-            finalError = NSError(domain: domain, code: 0, userInfo: additionalInfo)
-        } else {
-            let domain = "\(error.localizedDescription) - \(caller)"
-            finalError = NSError(domain: domain, code: 0, userInfo: additionalInfo)
-        }
-        Crashlytics.crashlytics().record(error: finalError)
+        reportToCrashlytics(error: error,
+                            filename: filename,
+                            line: line,
+                            funcName: funcName)
         #endif
+
     }
 
     public static func fatal(error: Error,
@@ -109,19 +74,10 @@ public class Logger {
                              line: UInt = #line,
                              funcName: StaticString = #function) -> Never {
 
-        if let muunError = error as? MuunError {
-
-            Logger.log(error: muunError.kind,
-                       stacktrace: muunError.stackSymbols,
-                       filename: filename,
-                       line: line,
-                       funcName: funcName)
-
-        } else {
-            #if !DEBUG
-            Crashlytics.crashlytics().record(error: error)
-            #endif
-        }
+        reportToCrashlytics(error: error,
+                            filename: filename,
+                            line: line,
+                            funcName: funcName)
 
         fatalError(file: filename, line: line)
     }
@@ -138,6 +94,54 @@ public class Logger {
                    funcName: funcName)
 
         fatalError(file: filename, line: line)
+    }
+
+    private static func reportToCrashlytics(error: Error,
+                                            filename: StaticString = #file,
+                                            line: UInt = #line,
+                                            funcName: StaticString = #function) {
+
+        // It is quite important that this method be called in one level of nesting inside the Logger
+        // We do a hack of dropping the first 2 lines of the trace to make sure the report caught site is
+        // outside the logger.
+
+        if let muunError = error as? MuunError {
+            let exception = ExceptionModel(name: String(describing: muunError.kind), reason: muunError.localizedDescription)
+
+            var trace = [StackFrame]()
+            trace.append(StackFrame(symbol: "<<<<<<<<<< Caught at >>>>>>>>>>", file: "", line: 0))
+            trace.append(contentsOf: Thread.callStackReturnAddresses.dropFirst(2).map { StackFrame(address: $0.uintValue) })
+
+            trace.append(StackFrame(symbol: "<<<<<<<<<< Original callsite >>>>>>>>>>", file: "", line: 0))
+            trace.append(contentsOf: muunError.stacktrace.dropFirst().map { StackFrame(address: $0.uintValue) })
+
+            exception.stackTrace = trace
+
+            Crashlytics.crashlytics().record(exceptionModel: exception)
+            Crashlytics.crashlytics().sendUnsentReports()
+        } else {
+            Crashlytics.crashlytics().record(error: transformError(
+                error: error,
+                filename: filename,
+                line: line,
+                funcName: funcName
+            ))
+        }
+    }
+
+    private static func transformError(error: Error,
+                                       filename: StaticString = #file,
+                                       line: UInt = #line,
+                                       funcName: StaticString = #function) -> Error {
+
+        let caller = "\(MuunError.sourceFileName(filePath: filename)) \(line) \(funcName)"
+        let additionalInfo: [String: Any] = [
+            NSLocalizedDescriptionKey: error.localizedDescription,
+            "caught_at": caller
+        ]
+
+        let domain = "\(error.localizedDescription) - \(caller)"
+        return NSError(domain: domain, code: 0, userInfo: additionalInfo)
     }
 
 }

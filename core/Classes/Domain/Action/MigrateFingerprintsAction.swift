@@ -17,14 +17,14 @@ public class MigrateFingerprintsAction {
         self.houstonService = houstonService
     }
 
-    public func run() {
-        _ = Single.zip(
+    public func run() throws {
+        _ = try Single.zip(
             getUserKeyFingerprint(),
             getMuunKeyFingerprint()
         ).do(onSuccess: {
             self.keysRepository.store(userKeyFingerprint: $0)
             self.keysRepository.store(muunKeyFingerprint: $1)
-        }).toBlocking().materialize()
+        }).toBlocking().first()
     }
 
     fileprivate func getMuunKeyFingerprint() -> Single<String> {

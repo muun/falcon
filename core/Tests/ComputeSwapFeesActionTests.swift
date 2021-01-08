@@ -304,4 +304,34 @@ class ComputeSwapFeesActionTests: XCTestCase {
 
         }
     }
+
+    func testAllFundsIsNeverLend() {
+        let totalBalance = feeCalculator.totalBalance()
+
+        let swap: SubmarineSwap = createSubmarineSwap(
+            bestRouteFees: [BestRouteFees(_maxCapacityInSat: 10000, _proportionalMillionth: 100, _baseInSat: 1000)],
+            fundingOutputPolicies: FundingOutputPolicies(
+                _maximumDebtInSat: totalBalance.value + 1,
+                _potentialCollectInSat: 0,
+                _maxAmountInSatFor0Conf: totalBalance.value + 1
+            )
+        )
+        let feeInfo = FeeInfo(
+            feeCalculator: feeCalculator,
+            feeWindow: feeWindow,
+            exchangeRateWindow: exchangeRateWindow
+        )
+
+        let swapFees = computeSwapFeesAction.run(swap: swap, amount: totalBalance, feeInfo: feeInfo)
+        switch swapFees {
+        case .valid(let params, let totalFee, _, let updatedAmount):
+            XCTAssertEqual(totalBalance, updatedAmount + totalFee + params.offchainFee)
+            XCTAssertEqual(.NONE, params.debtType)
+            XCTAssertEqual(0, params.confirmationsNeeded)
+            XCTAssertLessThan(updatedAmount, totalBalance)
+        default:
+            XCTFail("expected invalid swap fees")
+
+        }
+    }
 }

@@ -86,7 +86,7 @@ public class ComputeSwapFeesAction {
 
                 var outputAmount: Satoshis
                 var offchainAmount: Satoshis
-                (params, outputAmount, offchainAmount) = findParams(
+                (params, outputAmount, offchainAmount) = findParamsForAllFunds(
                     amount: amount,
                     fee: fee,
                     bestRouteFees: bestRouteFees,
@@ -108,7 +108,7 @@ public class ComputeSwapFeesAction {
                         return .invalid(amountPlusFee: outputAmount + minimumFee)
                     }
 
-                    (params, outputAmount, offchainAmount) = findParams(
+                    (params, outputAmount, offchainAmount) = findParamsForAllFunds(
                         amount: amount,
                         fee: fee,
                         bestRouteFees: bestRouteFees,
@@ -223,23 +223,28 @@ public class ComputeSwapFeesAction {
         case .valid(let fee, let rate):
             return (fee, rate)
         default:
-            throw FeeError.insufficientBalance
+            throw MuunError(FeeError.insufficientBalance)
         }
     }
 
-    func findParams(amount: Satoshis,
-                    fee: Satoshis,
-                    bestRouteFees: [BestRouteFees],
-                    fundingOutputPolicies: FundingOutputPolicies)
+    func findParamsForAllFunds(amount: Satoshis,
+                               fee: Satoshis,
+                               bestRouteFees: [BestRouteFees],
+                               fundingOutputPolicies: FundingOutputPolicies)
     -> (params: SwapExecutionParameters, outputAmount: Satoshis, offchainAmount: Satoshis) {
 
+        let lendlessPolicies = FundingOutputPolicies(
+            _maximumDebtInSat: 0, // No lend for use all funds
+            _potentialCollectInSat: fundingOutputPolicies._potentialCollectInSat,
+            _maxAmountInSatFor0Conf: fundingOutputPolicies._maxAmountInSatFor0Conf
+        )
         let outputAmount = amount - fee
 
         // Get a first approximation (by excess) of the off-chain fee which we will later refine
         var params = paramsForUserDefinedAmountSwap(
             amount: outputAmount,
             bestRouteFees: bestRouteFees,
-            fundingOutputPolicies: fundingOutputPolicies
+            fundingOutputPolicies: lendlessPolicies
         )
 
         // Find the point at which the off-chain amount (displayed to the user) plus the off-chain
@@ -250,7 +255,7 @@ public class ComputeSwapFeesAction {
             params = paramsForUserDefinedAmountSwap(
                 amount: offchainAmount,
                 bestRouteFees: bestRouteFees,
-                fundingOutputPolicies: fundingOutputPolicies
+                fundingOutputPolicies: lendlessPolicies
             )
             if offchainAmount + params.offchainFee >= outputAmount {
                 break
