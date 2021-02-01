@@ -1,0 +1,41 @@
+{
+  "images" : [
+    {
+      "filename" : "l.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "n.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "icloudlight.pdf",
+      "idiom" : "universal",
+      "locale" : "es"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "iclouddark.pdf",
+      "idiom" : "universal",
+      "locale" : "es"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

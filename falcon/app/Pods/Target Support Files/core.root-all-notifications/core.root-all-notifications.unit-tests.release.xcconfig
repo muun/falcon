@@ -1,0 +1,15 @@
+CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AppAuth" "${PODS_CONFIGURATION_BUILD_DIR}/Dip" "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore" "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics" "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCrashlytics" "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations" "${PODS_CONFIGURATION_BUILD_DIR}/GRDB.swift" "${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth" "${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher" "${PODS_CONFIGURATION_BUILD_DIR}/GoogleAPIClientForREST" "${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport" "${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities" "${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC" "${PODS_CONFIGURATION_BUILD_DIR}/RxBlocking" "${PODS_CONFIGURATION_BUILD_DIR}/RxGRDB" "${PODS_CONFIGURATION_BUILD_DIR}/RxSwift" "${PODS_CONFIGURATION_BUILD_DIR}/core.root-all-notifications" "${PODS_CONFIGURATION_BUILD_DIR}/nanopb" "${PODS_ROOT}/../../core" "${PODS_ROOT}/GoogleSignIn/Frameworks"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public"
+LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
+OTHER_LDFLAGS = $(inherited) -ObjC -l"c++" -l"sqlite3" -l"z" -framework "AppAuth" -framework "CoreGraphics" -framework "CoreTelephony" -framework "CoreText" -framework "Dip" -framework "FBLPromises" -framework "FirebaseCore" -framework "FirebaseCoreDiagnostics" -framework "FirebaseCrashlytics" -framework "FirebaseInstallations" -framework "Foundation" -framework "GRDB" -framework "GTMAppAuth" -framework "GTMSessionFetcher" -framework "GoogleAPIClientForREST" -framework "GoogleDataTransport" -framework "GoogleSignIn" -framework "GoogleUtilities" -framework "Libwallet" -framework "LocalAuthentication" -framework "RxBlocking" -framework "RxGRDB" -framework "RxSwift" -framework "SafariServices" -framework "Security" -framework "SystemConfiguration" -framework "UIKit" -framework "core" -framework "nanopb" -weak_framework "AuthenticationServices"
+OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_ROOT = ${SRCROOT}
+PODS_TARGET_SRCROOT = ${PODS_ROOT}/../../core
+PODS_XCFRAMEWORKS_BUILD_DIR = $(PODS_CONFIGURATION_BUILD_DIR)/XCFrameworkIntermediates
+PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
+SKIP_INSTALL = YES
+USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES

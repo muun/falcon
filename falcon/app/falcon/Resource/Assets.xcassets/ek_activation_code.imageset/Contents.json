@@ -1,0 +1,41 @@
+{
+  "images" : [
+    {
+      "filename" : "light-en.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "dark-en.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "light-s.pdf",
+      "idiom" : "universal",
+      "locale" : "es"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "dark-es.pdf",
+      "idiom" : "universal",
+      "locale" : "es"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "change_password.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

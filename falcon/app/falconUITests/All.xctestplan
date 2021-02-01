@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "05D9A970-D6EA-4933-8A46-E951108BBFEF",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:falcon.xcodeproj",
+        "identifier" : "A0E0F76B220C74BF001B99AC",
+        "name" : "falconUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

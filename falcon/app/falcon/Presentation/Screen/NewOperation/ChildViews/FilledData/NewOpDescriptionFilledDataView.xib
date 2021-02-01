@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewOpDescriptionFilledDataView" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="descriptionLabel" destination="wvR-9I-Oks" id="EsS-rD-zwB"/>
+                <outlet property="noteLabel" destination="Cer-uI-yC2" id="Lgh-tk-5Ba"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cer-uI-yC2">
+                    <rect key="frame" x="24" y="68" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wvR-9I-Oks">
+                    <rect key="frame" x="24" y="97" width="327" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Cer-uI-yC2" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="9hy-KJ-EsV"/>
+                <constraint firstItem="Cer-uI-yC2" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="24" id="NYo-Ry-r5G"/>
+                <constraint firstItem="wvR-9I-Oks" firstAttribute="top" secondItem="Cer-uI-yC2" secondAttribute="bottom" constant="8" id="e6O-PW-V7G"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="wvR-9I-Oks" secondAttribute="trailing" constant="24" id="fxV-pL-Mll"/>
+                <constraint firstItem="wvR-9I-Oks" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="pp3-Uz-2oM"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="wvR-9I-Oks" secondAttribute="bottom" priority="249" constant="24" id="w9W-6e-nft"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="140" y="89"/>
+        </view>
+    </objects>
+</document>

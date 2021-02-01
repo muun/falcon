@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewOperationView" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="buttonBottomConstraint" destination="Cae-M3-Jia" id="HmM-nn-2Vw"/>
+                <outlet property="buttonView" destination="tWo-a1-Jcw" id="mvp-VL-qVM"/>
+                <outlet property="containerView" destination="PsP-Ab-g9m" id="3bt-ix-Sn5"/>
+                <outlet property="filledDataHeightConstraint" destination="n4Z-2P-6gZ" id="pOY-eo-1Tt"/>
+                <outlet property="filledDataView" destination="qnp-i8-yux" id="wrx-wB-gpy"/>
+                <outlet property="moreInfoLabel" destination="Kbh-TH-ZUT" id="FZN-fb-BsI"/>
+                <outlet property="oneConfNoticeView" destination="04l-bP-YcZ" id="guf-W3-vpJ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kQz-Dc-5d8">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="587"/>
+                    <subviews>
+                        <stackView contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" axis="vertical" distribution="equalSpacing" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="qnp-i8-yux">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="n4Z-2P-6gZ"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="qnp-i8-yux" firstAttribute="top" secondItem="kQz-Dc-5d8" secondAttribute="top" id="2KK-CS-54Z"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="qnp-i8-yux" secondAttribute="bottom" constant="8" id="U6e-eI-C7T"/>
+                        <constraint firstAttribute="trailing" secondItem="qnp-i8-yux" secondAttribute="trailing" id="pg8-ck-fFe"/>
+                        <constraint firstItem="qnp-i8-yux" firstAttribute="width" secondItem="kQz-Dc-5d8" secondAttribute="width" id="rm6-Kr-gay"/>
+                        <constraint firstItem="qnp-i8-yux" firstAttribute="leading" secondItem="kQz-Dc-5d8" secondAttribute="leading" id="u47-Bf-fuZ"/>
+                    </constraints>
+                </scrollView>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PsP-Ab-g9m">
+                    <rect key="frame" x="24" y="45" width="327" height="733"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <stackView contentMode="center" insetsLayoutMarginsFromSafeArea="NO" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="QyY-S9-cAm">
+                    <rect key="frame" x="24" y="778" width="327" height="0.0"/>
+                    <subviews>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expires in 00:00" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kbh-TH-ZUT">
+                            <rect key="frame" x="0.0" y="0.0" width="279" height="0.0"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="04l-bP-YcZ" customClass="NoticeView" customModule="falcon" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="279" height="0.0"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tWo-a1-Jcw" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="279" height="80"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="CMg-O7-K46"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <constraints>
+                <constraint firstItem="QyY-S9-cAm" firstAttribute="top" secondItem="kQz-Dc-5d8" secondAttribute="bottom" constant="8" id="0ka-NX-Dxk"/>
+                <constraint firstItem="QyY-S9-cAm" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="24" id="3t5-Ff-phb"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="QyY-S9-cAm" secondAttribute="trailing" constant="24" id="839-1X-RFt"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="QyY-S9-cAm" secondAttribute="bottom" id="Cae-M3-Jia"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="kQz-Dc-5d8" secondAttribute="trailing" id="ICH-68-IKX"/>
+                <constraint firstItem="kQz-Dc-5d8" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Vih-8t-NBB"/>
+                <constraint firstItem="QyY-S9-cAm" firstAttribute="top" secondItem="PsP-Ab-g9m" secondAttribute="bottom" id="cCk-G4-MgX"/>
+                <constraint firstItem="kQz-Dc-5d8" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="fGg-OM-Ynh"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="PsP-Ab-g9m" secondAttribute="trailing" constant="24" id="hgu-oa-BJ5"/>
+                <constraint firstItem="PsP-Ab-g9m" firstAttribute="top" secondItem="qnp-i8-yux" secondAttribute="bottom" id="kSf-zg-qYO"/>
+                <constraint firstItem="PsP-Ab-g9m" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="24" id="nLH-LW-lC7"/>
+            </constraints>
+            <point key="canvasLocation" x="138.40000000000001" y="153.37331334332833"/>
+        </view>
+    </objects>
+</document>

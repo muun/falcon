@@ -1,0 +1,19 @@
+itc_team_name "Muun Wallet, Inc."
+
+for_platform :ios do
+
+  for_lane :prd do
+    app_identifier("com.muun.falcon")
+  end
+
+  for_lane :stg do
+    app_identifier("com.muun.falcon.stg")
+  end
+
+  for_lane :dev do
+    app_identifier("com.muun.falcon.dev")
+  end
+
+
+end
+

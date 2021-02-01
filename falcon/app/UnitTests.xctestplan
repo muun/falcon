@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "C44A8FCC-DDE7-43D9-887B-FB90B49477A3",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en",
+    "region" : "US"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Pods\/core.xcodeproj",
+        "identifier" : "4A208F9F1AC5EE61FE968B79EF775F24",
+        "name" : "core.root-all-notifications-Unit-Tests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:falcon.xcodeproj",
+        "identifier" : "0F18C6C92130993500BC5BFE",
+        "name" : "falconTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -5,7 +5,15 @@ set -e
 repo_root=$(git rev-parse --show-toplevel)
 build_dir="$repo_root/libwallet/.build"
 
-falcon_root="$repo_root/example"
+falcon_root="$repo_root/falcon/app"
+
+calc_sha1sum() {
+    files=$(find "$1" -xdev -type f -name "*.go" -print \
+            | grep -v "_test.go$" | grep -v "/build/" \
+            | grep -v ".build/" | sort -z)
+    shaeach=$(for file in $files; do sha1sum "$file"; done)
+    echo "$shaeach" | sha1sum | awk \{'print $1'\}
+}
 
 if ! which gobind > /dev/null; then
     if [ ! -f "$falcon_root/.gopath" ]; then
@@ -20,12 +28,14 @@ fi
 
 cd "$repo_root"
 
-libwallet="$repo_root/core/Libwallet.framework"
+libwallet="$repo_root/falcon/core/Libwallet.framework"
 
 # if there is an existing build, check if it is up-to-date
-if [ -e "$libwallet" ]; then
-    last_modified=$(find libwallet/ -xdev -type f -name "*.go" -print | grep -v "_test.go$" | grep -v "/build/" | xargs stat -f "%m%t%Sm %N" "${libwallet}/" | sort -nr | head -n 1)
-    if [[ $last_modified == *"$libwallet"* ]]; then
+if [ -e "$libwallet/libwallet.sha1sum" ]; then
+    current_sha1sum=$(calc_sha1sum "libwallet/")
+    previous_sha1sum=$(cat "${libwallet}/libwallet.sha1sum")
+
+    if [[ "$current_sha1sum" == "$previous_sha1sum" ]]; then
         echo "no rebuild needed"
         exit
     fi
@@ -47,5 +57,9 @@ CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
     go run golang.org/x/mobile/cmd/gomobile bind -target=ios -o "$libwallet" -cache "$build_dir/ios" .
 
 st=$?
-echo "rebuilt gomobile with status $? to $libwallet"
+
+sha1sum=$(calc_sha1sum "libwallet/")
+echo "$sha1sum" > "${libwallet}/libwallet.sha1sum"
+
+echo "rebuilt gomobile with status $? to $libwallet. source files sha1sum: $sha1sum"
 exit $st

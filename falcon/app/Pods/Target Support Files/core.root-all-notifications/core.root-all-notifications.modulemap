@@ -1,0 +1,6 @@
+framework module core {
+  umbrella header "core.root-all-notifications-umbrella.h"
+
+  export *
+  module * { export * }
+}

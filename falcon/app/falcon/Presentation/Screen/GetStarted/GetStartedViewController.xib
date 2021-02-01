@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GetStartedViewController" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="createWalletButton" destination="flC-UV-xXM" id="PUx-g4-Whf"/>
+                <outlet property="descriptionLabel" destination="q2N-Yh-WT3" id="n7O-K8-zEF"/>
+                <outlet property="muunLogo" destination="EKt-iG-eGr" id="aKP-CQ-Ddf"/>
+                <outlet property="recoverWalletButton" destination="vY9-WM-pCA" id="aQS-lH-bkL"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A simpleeeeee, secure and reliable bitcoin wallet, built for day-to-day use" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q2N-Yh-WT3">
+                    <rect key="frame" x="0.0" y="290.5" width="375" height="86"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EKt-iG-eGr" customClass="AnimationView" customModule="Lottie">
+                    <rect key="frame" x="77.5" y="305" width="220" height="57"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="57" id="YWF-TD-sFw"/>
+                        <constraint firstAttribute="width" constant="220" id="eld-u6-TxA"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flC-UV-xXM" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="587" width="375" height="80"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="xw7-KB-81y"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vY9-WM-pCA" customClass="LinkButtonView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="531" width="375" height="56"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="56" id="18C-zC-G0y"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="vY9-WM-pCA" secondAttribute="trailing" id="3T6-xM-0uO"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="flC-UV-xXM" secondAttribute="bottom" id="430-dr-u8T"/>
+                <constraint firstItem="EKt-iG-eGr" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="5pp-TE-5SK"/>
+                <constraint firstItem="q2N-Yh-WT3" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="7UL-T1-T8f"/>
+                <constraint firstItem="flC-UV-xXM" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="DYB-8z-cDW"/>
+                <constraint firstItem="flC-UV-xXM" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="IQn-P4-0v9"/>
+                <constraint firstItem="EKt-iG-eGr" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="JUa-Js-UEb"/>
+                <constraint firstItem="vY9-WM-pCA" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="YJc-CL-Qxf"/>
+                <constraint firstItem="q2N-Yh-WT3" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="ZUT-ln-ymB"/>
+                <constraint firstItem="flC-UV-xXM" firstAttribute="top" secondItem="vY9-WM-pCA" secondAttribute="bottom" id="fGj-q8-Tq3"/>
+                <constraint firstItem="q2N-Yh-WT3" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="jAm-pX-fv2"/>
+                <constraint firstItem="q2N-Yh-WT3" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="pHz-Xq-6Aj"/>
+            </constraints>
+            <point key="canvasLocation" x="142" y="154"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LogOutViewController" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="buttonView" destination="Mex-Zn-IwO" id="azC-01-Q6r"/>
+                <outlet property="descriptionLabel" destination="md2-7t-VtX" id="YXt-5k-MiW"/>
+                <outlet property="titleLabel" destination="fXt-h4-Rrh" id="otn-fz-35f"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KaF-nW-CvJ">
+                    <rect key="frame" x="0.0" y="305" width="375" height="57"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXt-h4-Rrh">
+                            <rect key="frame" x="18" y="0.0" width="339" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="md2-7t-VtX">
+                            <rect key="frame" x="0.0" y="36.5" width="375" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="fXt-h4-Rrh" firstAttribute="leading" secondItem="KaF-nW-CvJ" secondAttribute="leading" constant="18" id="Cqq-Ol-D7n"/>
+                        <constraint firstAttribute="trailing" secondItem="fXt-h4-Rrh" secondAttribute="trailing" constant="18" id="Slb-fH-Lxh"/>
+                        <constraint firstItem="md2-7t-VtX" firstAttribute="top" secondItem="fXt-h4-Rrh" secondAttribute="bottom" constant="16" id="X6r-xB-pDk"/>
+                        <constraint firstAttribute="trailing" secondItem="md2-7t-VtX" secondAttribute="trailing" id="XN5-bf-xa3"/>
+                        <constraint firstItem="fXt-h4-Rrh" firstAttribute="top" secondItem="KaF-nW-CvJ" secondAttribute="top" id="jeZ-5q-24S"/>
+                        <constraint firstAttribute="bottom" secondItem="md2-7t-VtX" secondAttribute="bottom" id="vRm-2H-bYl"/>
+                        <constraint firstItem="md2-7t-VtX" firstAttribute="leading" secondItem="KaF-nW-CvJ" secondAttribute="leading" id="xtp-SR-mOd"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mex-Zn-IwO" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="587" width="375" height="80"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="ViH-qF-WFC"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="KaF-nW-CvJ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="0WT-Ka-uyO"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Mex-Zn-IwO" secondAttribute="trailing" id="61j-WA-XaJ"/>
+                <constraint firstItem="KaF-nW-CvJ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="6tF-Pq-CMg"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="KaF-nW-CvJ" secondAttribute="trailing" id="I4K-Zt-9Ul"/>
+                <constraint firstItem="Mex-Zn-IwO" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="JYT-jj-yUY"/>
+                <constraint firstItem="KaF-nW-CvJ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="cyo-g5-3Pi"/>
+                <constraint firstItem="Mex-Zn-IwO" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="qVg-hd-y4Y"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="TargetedFeeTableViewCell" customModule="falcon" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="89"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="88.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tqX-s7-Dgh">
+                        <rect key="frame" x="0.0" y="8" width="320" height="72.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PRN-Dt-pL1">
+                                <rect key="frame" x="16" y="16" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNO-QJ-bj2">
+                                <rect key="frame" x="16" y="34.5" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XgY-fa-Bfq" customClass="AmountLabel" customModule="falcon" customModuleProvider="target">
+                                <rect key="frame" x="262" y="16" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tnU-Mq-voY" customClass="AmountLabel" customModule="falcon" customModuleProvider="target">
+                                <rect key="frame" x="262" y="35.5" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="tNO-QJ-bj2" firstAttribute="top" secondItem="PRN-Dt-pL1" secondAttribute="bottom" constant="6" id="0bI-lq-t22"/>
+                            <constraint firstItem="PRN-Dt-pL1" firstAttribute="leading" secondItem="tqX-s7-Dgh" secondAttribute="leading" constant="16" id="14L-di-YkV"/>
+                            <constraint firstItem="XgY-fa-Bfq" firstAttribute="top" secondItem="tqX-s7-Dgh" secondAttribute="top" constant="16" id="8k5-XA-nrF"/>
+                            <constraint firstItem="tNO-QJ-bj2" firstAttribute="leading" secondItem="tqX-s7-Dgh" secondAttribute="leading" constant="16" id="Ens-bp-JFs"/>
+                            <constraint firstAttribute="trailing" secondItem="XgY-fa-Bfq" secondAttribute="trailing" constant="16" id="XjC-iu-OzG"/>
+                            <constraint firstAttribute="bottom" secondItem="tnU-Mq-voY" secondAttribute="bottom" constant="16" id="ZN9-hf-VH4"/>
+                            <constraint firstItem="PRN-Dt-pL1" firstAttribute="top" secondItem="tqX-s7-Dgh" secondAttribute="top" constant="16" id="b2n-dx-5wU"/>
+                            <constraint firstAttribute="bottom" secondItem="tNO-QJ-bj2" secondAttribute="bottom" constant="16" id="dDZ-JN-cN5"/>
+                            <constraint firstAttribute="trailing" secondItem="tnU-Mq-voY" secondAttribute="trailing" constant="16" id="vqe-Dv-Y0R"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="tqX-s7-Dgh" secondAttribute="trailing" id="Gbx-26-ogv"/>
+                    <constraint firstItem="tqX-s7-Dgh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="t0Y-Nf-QP0"/>
+                    <constraint firstItem="tqX-s7-Dgh" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="tlT-A0-0gT"/>
+                    <constraint firstAttribute="bottom" secondItem="tqX-s7-Dgh" secondAttribute="bottom" constant="8" id="yIQ-eX-naJ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="bitcoinValueLabel" destination="XgY-fa-Bfq" id="mVq-hk-6OP"/>
+                <outlet property="cardView" destination="tqX-s7-Dgh" id="NsD-aH-Smx"/>
+                <outlet property="inputValueLabel" destination="tnU-Mq-voY" id="uZv-0f-ea5"/>
+                <outlet property="targetLabel" destination="tNO-QJ-bj2" id="IMe-qs-s3p"/>
+                <outlet property="timeLabel" destination="PRN-Dt-pL1" id="gex-Ay-crz"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

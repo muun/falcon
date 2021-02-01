@@ -1,0 +1,444 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3389AED2508C673F8C8C9DA631322DFD /* pb_encode.h in Headers */ = {isa = PBXBuildFile; fileRef = 09C3D42B5ECC4F95993439B6D214D72D /* pb_encode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		431EF66B7C81D2E5026C86F6F7A86431 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EEAE7624461F33106F37782E51FA0B /* Foundation.framework */; };
+		4387367E4B8245620D7A4F34D01B1363 /* pb_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DA72771481AAB39AE67677EE6BC24C2 /* pb_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B9C77D62F6C78A226671CB6E7EE19B0 /* pb.h in Headers */ = {isa = PBXBuildFile; fileRef = C23770FD73366AF1D6177F3899AE86B2 /* pb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DE6F4CB4E5E0FF536DEDB9721FF8A7B /* nanopb-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E54F9B86ABC44957D19247DCDA533832 /* nanopb-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A9AAD8BED2CC13E3E4EE65F85769E645 /* pb_common.c in Sources */ = {isa = PBXBuildFile; fileRef = 058DF425825B5F1DC2089A406D143B7A /* pb_common.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc -fno-objc-arc"; }; };
+		B9AF5EEEA7CF112E59000B9C1576881A /* pb_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 12CB2DA051AA4B89974A4329448469BF /* pb_decode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E9313440A4C4AF7F8F0B3CFA071895B2 /* pb_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 233FD935744FC63C6DF85011F36A3ED0 /* pb_encode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
+		EBB01760C3F98CE368C710B5A9CD4A70 /* pb_decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E3116B9215487873018E938ACE6B641 /* pb_decode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
+		F639ED24A2E9A094B8692C7A5CDE2407 /* nanopb-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FAB8B7EDECD6DBBAF8C15FD989D109 /* nanopb-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		058DF425825B5F1DC2089A406D143B7A /* pb_common.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_common.c; sourceTree = "<group>"; };
+		09C3D42B5ECC4F95993439B6D214D72D /* pb_encode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_encode.h; sourceTree = "<group>"; };
+		12CB2DA051AA4B89974A4329448469BF /* pb_decode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_decode.h; sourceTree = "<group>"; };
+		228162EFDDFD463681B75C9EF5FC91C4 /* nanopb-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-prefix.pch"; sourceTree = "<group>"; };
+		233FD935744FC63C6DF85011F36A3ED0 /* pb_encode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_encode.c; sourceTree = "<group>"; };
+		30FAB8B7EDECD6DBBAF8C15FD989D109 /* nanopb-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "nanopb-dummy.m"; sourceTree = "<group>"; };
+		38052B55B944853122E9CA78D2F5C003 /* nanopb.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = nanopb.modulemap; sourceTree = "<group>"; };
+		3DA72771481AAB39AE67677EE6BC24C2 /* pb_common.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_common.h; sourceTree = "<group>"; };
+		3E3116B9215487873018E938ACE6B641 /* pb_decode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_decode.c; sourceTree = "<group>"; };
+		66EEAE7624461F33106F37782E51FA0B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		8A119B9B29B772A0F39BBCAB324D45CE /* nanopb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.debug.xcconfig; sourceTree = "<group>"; };
+		A6892B5C92F47F30D6517BCBC6CAA1DF /* nanopb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.release.xcconfig; sourceTree = "<group>"; };
+		C23770FD73366AF1D6177F3899AE86B2 /* pb.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb.h; sourceTree = "<group>"; };
+		C58372B0D687F6B2181CDAEB75639664 /* nanopb-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "nanopb-Info.plist"; sourceTree = "<group>"; };
+		DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = nanopb.framework; path = nanopb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E54F9B86ABC44957D19247DCDA533832 /* nanopb-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-umbrella.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F567C475E5A7E5DD69B3A6709329843E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				431EF66B7C81D2E5026C86F6F7A86431 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D69EDB79C4D6234DD82A347682D8B7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		37DCDADFF345416EC1D2C27F88D1271A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				38052B55B944853122E9CA78D2F5C003 /* nanopb.modulemap */,
+				30FAB8B7EDECD6DBBAF8C15FD989D109 /* nanopb-dummy.m */,
+				C58372B0D687F6B2181CDAEB75639664 /* nanopb-Info.plist */,
+				228162EFDDFD463681B75C9EF5FC91C4 /* nanopb-prefix.pch */,
+				E54F9B86ABC44957D19247DCDA533832 /* nanopb-umbrella.h */,
+				8A119B9B29B772A0F39BBCAB324D45CE /* nanopb.debug.xcconfig */,
+				A6892B5C92F47F30D6517BCBC6CAA1DF /* nanopb.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/nanopb";
+			sourceTree = "<group>";
+		};
+		3BDBF09E807B38AA4A564027D5EDD8F4 /* encode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = encode;
+			sourceTree = "<group>";
+		};
+		79A5F9300E4092C36D0917C0505A28E1 /* decode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = decode;
+			sourceTree = "<group>";
+		};
+		8F91B7AA8BC321A97395F00DF87DAD4A /* nanopb */ = {
+			isa = PBXGroup;
+			children = (
+				C23770FD73366AF1D6177F3899AE86B2 /* pb.h */,
+				058DF425825B5F1DC2089A406D143B7A /* pb_common.c */,
+				3DA72771481AAB39AE67677EE6BC24C2 /* pb_common.h */,
+				3E3116B9215487873018E938ACE6B641 /* pb_decode.c */,
+				12CB2DA051AA4B89974A4329448469BF /* pb_decode.h */,
+				233FD935744FC63C6DF85011F36A3ED0 /* pb_encode.c */,
+				09C3D42B5ECC4F95993439B6D214D72D /* pb_encode.h */,
+				79A5F9300E4092C36D0917C0505A28E1 /* decode */,
+				3BDBF09E807B38AA4A564027D5EDD8F4 /* encode */,
+				37DCDADFF345416EC1D2C27F88D1271A /* Support Files */,
+			);
+			name = nanopb;
+			path = nanopb;
+			sourceTree = "<group>";
+		};
+		F2DB4CF37E2E32D2131A0B7792811734 = {
+			isa = PBXGroup;
+			children = (
+				FC532DF073BD3AB5B72D6F9D8A9020A8 /* Frameworks */,
+				8F91B7AA8BC321A97395F00DF87DAD4A /* nanopb */,
+				1D69EDB79C4D6234DD82A347682D8B7C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F300FFE0D568955D5B40F13387124330 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				66EEAE7624461F33106F37782E51FA0B /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		FC532DF073BD3AB5B72D6F9D8A9020A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F300FFE0D568955D5B40F13387124330 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		149897B8F544C5984BBC151E90DC0B60 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DE6F4CB4E5E0FF536DEDB9721FF8A7B /* nanopb-umbrella.h in Headers */,
+				5B9C77D62F6C78A226671CB6E7EE19B0 /* pb.h in Headers */,
+				4387367E4B8245620D7A4F34D01B1363 /* pb_common.h in Headers */,
+				B9AF5EEEA7CF112E59000B9C1576881A /* pb_decode.h in Headers */,
+				3389AED2508C673F8C8C9DA631322DFD /* pb_encode.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		052B66B57BF269A4B160A5659F7D46D4 /* nanopb */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D57C4A92596D078043ECFBC50679308C /* Build configuration list for PBXNativeTarget "nanopb" */;
+			buildPhases = (
+				149897B8F544C5984BBC151E90DC0B60 /* Headers */,
+				687C21D6F75B40380E2F9DA98158A341 /* Sources */,
+				F567C475E5A7E5DD69B3A6709329843E /* Frameworks */,
+				FE15C6451B81A43D4F538747A33FC37F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = nanopb;
+			productName = nanopb;
+			productReference = DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		71F8533AE75309759041404D25E534DE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+			};
+			buildConfigurationList = 2A9D98A90AF7FA09325E25E198DA7FED /* Build configuration list for PBXProject "nanopb" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F2DB4CF37E2E32D2131A0B7792811734;
+			productRefGroup = 1D69EDB79C4D6234DD82A347682D8B7C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				052B66B57BF269A4B160A5659F7D46D4 /* nanopb */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FE15C6451B81A43D4F538747A33FC37F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		687C21D6F75B40380E2F9DA98158A341 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F639ED24A2E9A094B8692C7A5CDE2407 /* nanopb-dummy.m in Sources */,
+				A9AAD8BED2CC13E3E4EE65F85769E645 /* pb_common.c in Sources */,
+				EBB01760C3F98CE368C710B5A9CD4A70 /* pb_decode.c in Sources */,
+				E9313440A4C4AF7F8F0B3CFA071895B2 /* pb_encode.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		62F3CA93FD890DB5E7BB3AD1B1F46371 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		B3F8C13AFF8E8E2487D879E9FA2CE06E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		C06EDBA25B2FF0B56C4AF6DD07B78725 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6892B5C92F47F30D6517BCBC6CAA1DF /* nanopb.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/nanopb/nanopb-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/nanopb/nanopb-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/nanopb/nanopb.modulemap";
+				PRODUCT_MODULE_NAME = nanopb;
+				PRODUCT_NAME = nanopb;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DE53D8C68AA81A936C1A551099AEBC2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A119B9B29B772A0F39BBCAB324D45CE /* nanopb.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/nanopb/nanopb-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/nanopb/nanopb-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/nanopb/nanopb.modulemap";
+				PRODUCT_MODULE_NAME = nanopb;
+				PRODUCT_NAME = nanopb;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2A9D98A90AF7FA09325E25E198DA7FED /* Build configuration list for PBXProject "nanopb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3F8C13AFF8E8E2487D879E9FA2CE06E /* Debug */,
+				62F3CA93FD890DB5E7BB3AD1B1F46371 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D57C4A92596D078043ECFBC50679308C /* Build configuration list for PBXNativeTarget "nanopb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE53D8C68AA81A936C1A551099AEBC2F /* Debug */,
+				C06EDBA25B2FF0B56C4AF6DD07B78725 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 71F8533AE75309759041404D25E534DE /* Project object */;
+}

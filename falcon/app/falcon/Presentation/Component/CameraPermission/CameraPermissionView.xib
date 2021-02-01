@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraPermissionView" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="buttonView" destination="mrw-ke-yuL" id="ggJ-Pt-mMv"/>
+                <outlet property="contentLabel" destination="LoU-cy-2cI" id="Dht-yT-9nK"/>
+                <outlet property="titleLabel" destination="6NG-kA-2N2" id="BF9-IG-tdJ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="46d-2x-EHr">
+                    <rect key="frame" x="24" y="188" width="327" height="291"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera_priming" translatesAutoresizingMaskIntoConstraints="NO" id="dpD-PB-WMH">
+                            <rect key="frame" x="52" y="0.0" width="223" height="137"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="224" id="AqI-RB-wYb"/>
+                                <constraint firstAttribute="width" secondItem="dpD-PB-WMH" secondAttribute="height" multiplier="111:68" id="Bqf-SA-rQB"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send maney by scanning a QR code with your camera." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6NG-kA-2N2">
+                            <rect key="frame" x="0.0" y="153" width="327" height="38.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mrw-ke-yuL" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                            <rect key="frame" x="73.5" y="219" width="180" height="72"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="180" id="4Ms-O4-BUS"/>
+                            </constraints>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LoU-cy-2cI">
+                            <rect key="frame" x="0.0" y="199.5" width="327" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="dpD-PB-WMH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="46d-2x-EHr" secondAttribute="leading" constant="52" id="3jB-Ua-dA3"/>
+                        <constraint firstItem="mrw-ke-yuL" firstAttribute="centerX" secondItem="46d-2x-EHr" secondAttribute="centerX" id="BYE-TQ-oBb"/>
+                        <constraint firstItem="6NG-kA-2N2" firstAttribute="top" secondItem="dpD-PB-WMH" secondAttribute="bottom" constant="16" id="CFX-SO-P9x"/>
+                        <constraint firstItem="dpD-PB-WMH" firstAttribute="top" secondItem="46d-2x-EHr" secondAttribute="top" id="FjO-aR-b83"/>
+                        <constraint firstAttribute="bottom" secondItem="mrw-ke-yuL" secondAttribute="bottom" id="Ocu-La-P3f"/>
+                        <constraint firstItem="LoU-cy-2cI" firstAttribute="top" secondItem="6NG-kA-2N2" secondAttribute="bottom" constant="8" id="RNL-1k-DbY"/>
+                        <constraint firstAttribute="trailing" secondItem="6NG-kA-2N2" secondAttribute="trailing" id="ZnD-W1-ZaY"/>
+                        <constraint firstItem="dpD-PB-WMH" firstAttribute="centerX" secondItem="46d-2x-EHr" secondAttribute="centerX" id="knS-46-wed"/>
+                        <constraint firstItem="LoU-cy-2cI" firstAttribute="leading" secondItem="46d-2x-EHr" secondAttribute="leading" id="lce-sI-PcQ"/>
+                        <constraint firstItem="dpD-PB-WMH" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="46d-2x-EHr" secondAttribute="trailing" constant="-52" id="nmb-n3-1Mc"/>
+                        <constraint firstAttribute="trailing" secondItem="LoU-cy-2cI" secondAttribute="trailing" id="sGP-zn-S2d"/>
+                        <constraint firstItem="mrw-ke-yuL" firstAttribute="top" secondItem="LoU-cy-2cI" secondAttribute="bottom" id="vNA-AS-FwO"/>
+                        <constraint firstItem="6NG-kA-2N2" firstAttribute="leading" secondItem="46d-2x-EHr" secondAttribute="leading" id="zCb-eH-6jH"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="46d-2x-EHr" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="71e-LL-P2H"/>
+                <constraint firstItem="46d-2x-EHr" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="qym-rF-iaF"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="46d-2x-EHr" secondAttribute="trailing" constant="24" id="s8h-5M-sxb"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <point key="canvasLocation" x="138" y="154"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="camera_priming" width="666" height="408"/>
+    </resources>
+</document>

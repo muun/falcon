@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FinishRecoveryCodeSetupViewController" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="buttonView" destination="aNu-cK-LQB" id="i6W-tR-bin"/>
+                <outlet property="firstCheckView" destination="R6a-8z-4Dn" id="64d-EY-CqL"/>
+                <outlet property="secondCheckView" destination="gyD-Dt-Gby" id="bz8-8p-WLO"/>
+                <outlet property="titleAndDescriptionView" destination="UQ0-oc-Zrs" id="jvU-Uu-bg6"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQ0-oc-Zrs" customClass="TitleAndDescriptionView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="130.5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R6a-8z-4Dn" customClass="CheckView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="146.5" width="375" height="52.5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gyD-Dt-Gby" customClass="CheckView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="207" width="375" height="52.5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aNu-cK-LQB" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="587" width="375" height="80"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="opA-ds-bvE"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="aNu-cK-LQB" secondAttribute="bottom" id="69M-bc-96p"/>
+                <constraint firstItem="aNu-cK-LQB" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="9t2-kO-2FH"/>
+                <constraint firstItem="R6a-8z-4Dn" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="MHO-qj-OjI"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="aNu-cK-LQB" secondAttribute="trailing" id="U4C-ft-VBM"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="UQ0-oc-Zrs" secondAttribute="trailing" id="YJk-UG-91k"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="R6a-8z-4Dn" secondAttribute="trailing" id="a4F-tE-uZt"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="gyD-Dt-Gby" secondAttribute="trailing" id="cdQ-c7-oFe"/>
+                <constraint firstItem="gyD-Dt-Gby" firstAttribute="top" secondItem="R6a-8z-4Dn" secondAttribute="bottom" constant="8" id="hKl-s0-vqh"/>
+                <constraint firstItem="UQ0-oc-Zrs" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="l9q-bT-wx5"/>
+                <constraint firstItem="R6a-8z-4Dn" firstAttribute="top" secondItem="UQ0-oc-Zrs" secondAttribute="bottom" constant="16" id="q7k-SA-FpR"/>
+                <constraint firstItem="gyD-Dt-Gby" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="taq-DW-E1m"/>
+                <constraint firstItem="UQ0-oc-Zrs" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="zP2-Sr-F8l"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="138" y="154"/>
+        </view>
+    </objects>
+</document>

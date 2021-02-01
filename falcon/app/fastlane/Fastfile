@@ -1,0 +1,184 @@
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "publish to testflight beta"
+  lane :prd do
+
+    version_number = get_version_number(target: "falcon")
+
+    # Make sure we're on the right intial state
+    ensure_git_branch(branch: "^falcon-#{version_number}$")
+    ensure_git_status_clean
+
+    upload_testflight(env: "prod")
+  end
+
+  desc "publish to testflight staging"
+  lane :stg do
+
+    ensure_git_status_clean
+    upload_testflight(env: "stg")
+  end
+
+  desc "publish to testflight dev"
+  lane :dev do
+    ensure_git_status_clean
+    upload_testflight(env: "dev")
+  end
+
+  private_lane :set_env do |params|
+    env = params[:env]
+    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{env}/", "../../core/Classes/Environment.swift")
+    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{env}/", "../../app/falconPushNotifications/Environment.swift")
+  end
+
+  private_lane :upload_testflight do |params|
+    env = params[:env]
+
+    muun_email = prompt(text: "Your muun email: ")
+
+    is_prod = env == "prod"
+    git_prefix = is_prod ? "" : "-#{env}"
+    if is_prod then
+      app_identifier = "com.muun.falcon"
+    else 
+      app_identifier = "com.muun.falcon.#{env}"
+    end
+
+    extension_identifier = "#{app_identifier}.falconPushNotifications"
+
+    sigh(app_identifier: app_identifier, username: muun_email)
+    sigh(app_identifier: extension_identifier, username: muun_email)
+
+    set_env(env: env)
+
+    sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
+
+    if !is_prod then
+      # Change the display name
+      update_info_plist(
+        plist_path: "falcon/Info.plist",
+        display_name: "(#{env.upcase}) Muun",
+      )
+
+      # Change the app id
+      update_app_identifier(
+        plist_path: "falcon/Info.plist",
+        app_identifier: app_identifier
+      )
+
+      # Update the extensions id
+      update_app_identifier(
+        plist_path: "falconPushNotifications/Info.plist",
+        app_identifier: extension_identifier
+      )
+    end
+
+    increment_build_number
+
+    version_number = get_version_number(target: "falcon")
+
+    build_app(
+      scheme: "falcon", 
+      workspace: "falcon.xcworkspace", 
+      include_symbols: true,
+      export_method: "app-store"
+    )
+
+    upload_to_testflight(
+      username: muun_email,
+      app_identifier: app_identifier
+    )
+
+    # Download latest dsyms
+    download_dsyms(
+      username: muun_email,
+      app_identifier: app_identifier, 
+      build_number: get_build_number
+    )
+
+    # Upload them to crashlytics
+    upload_symbols_to_crashlytics(
+      gsp_path:"falcon/GoogleService-Info-#{env}.plist",
+      dsym_worker_threads: 10
+    )
+
+    # Clean up preparing for the tag
+    clean_build_artifacts
+    reset_git_repo(
+      force: true,
+      files: [
+        "../core/Classes/Environment.swift",
+        "../app/falconPushNotifications/Environment.swift"
+      ]
+    )
+
+    # Revert the visual name changes
+    if !is_prod then
+      update_info_plist(
+        plist_path: "falcon/Info.plist",
+        display_name: "Muun",
+      )
+
+      # Change the app id
+      update_app_identifier(
+        plist_path: "falcon/Info.plist",
+        app_identifier: "com.muun.falcon"
+      )
+
+      # Update the extensions id
+      update_app_identifier(
+        plist_path: "falconPushNotifications/Info.plist",
+        app_identifier: "com.muun.falcon.falconPushNotifications"
+      )
+    end
+
+    # We're done, tag it
+    commit_version_bump(
+      message: "falcon: Bump version #{get_build_number}",
+      xcodeproj: "falcon.xcodeproj"
+    )
+    add_git_tag(tag: "falcon#{git_prefix}-#{version_number}-#{get_build_number}")
+    push_to_git_remote
+
+  end
+
+  desc "Upload symbols to crashlytics"
+  lane :upload_crashlytics do
+
+    muun_email = prompt(text: "Your muun email: ")
+    app_identifier = "com.muun.falcon"
+    build_number = prompt(text: "Build number (ie: 45): ")
+
+    # Download latest dsyms
+    download_dsyms(
+      username: muun_email,
+      app_identifier: app_identifier, 
+      build_number: build_number
+    )
+
+    # Upload them to crashlytics
+    upload_symbols_to_crashlytics(
+    	gsp_path:"falcon/GoogleService-Info-prod.plist",
+    	dsym_worker_threads: 10
+    )
+
+    # Clean up preparing for the tag
+    clean_build_artifacts
+  end
+
+  desc "set regtest as env"
+  lane :regtest do
+    set_env(env: "regtest")
+  end
+
+  lane :refresh_dsyms do
+    
+    download_dsyms                  # Download dSYM files from iTC
+    upload_symbols_to_crashlytics   # Upload them to Crashlytics
+    clean_build_artifacts           # Delete the local dSYM files
+  end
+
+end

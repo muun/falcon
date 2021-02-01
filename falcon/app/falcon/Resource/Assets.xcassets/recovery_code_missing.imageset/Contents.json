@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "missing_recovery_code.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

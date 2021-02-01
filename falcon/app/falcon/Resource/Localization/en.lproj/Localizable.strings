@@ -1,0 +1,671 @@
+/* Extension/UIBarButtonItem+Extension.swift */
+"UIBarButtonItem.s1" = "%s of %s";
+/* Presentation/Component/ActionCard/ActionCardView.swift */
+"ActionCardView.s1" = "Skipped";
+/* Presentation/Component/CameraPermission/CameraPermissionView.swift */
+"CameraPermissionView.s1" = "ENABLE CAMERA";
+/* Presentation/Component/NewOpError/NewOpErrorView.swift */
+"NewOpErrorView.s1" = "GO TO HOME";
+"NewOpErrorView.s2" = "This is not a BTC address";
+"NewOpErrorView.s3" = "This invoice has expired";
+"NewOpErrorView.s4" = "The bitcoin rates changed";
+"NewOpErrorView.s5" = "Unable to pay this invoice";
+"NewOpErrorView.s6" = "This payment needs a longer expiration time";
+"NewOpErrorView.s7" = "This invoice has already been used";
+"NewOpErrorView.s8" = "There is no available route";
+"NewOpErrorView.s9" = "You don't have enough funds";
+"NewOpErrorView.s10" = "This payment is too small";
+"NewOpErrorView.s11" = "This invoice is missing a valid amount";
+"NewOpErrorView.s12" = "An unexpected error occurred";
+"NewOpErrorView.s13" = "This invoice can't be paid";
+"NewOpErrorView.s15" = "This invoice expired before the payment was made. Please, create or request a new one.";
+"NewOpErrorView.s16" = "Please try with another invoice";
+"NewOpErrorView.s17" = "support team";
+"NewOpErrorView.s18" = "You don’t have enough funds to cover this payment and the network fee.";
+"NewOpErrorView.s19" = "Invoices must have an amount of at least 1 satoshi. Please, create or request a new one.";
+"NewOpErrorView.s21" = "You can't pay an invoice to yourself.";
+"NewOpErrorView.s22" = "Scanned text";
+"NewOpErrorView.s23" = "Total (Amount + Minimum Fee)";
+"NewOpErrorView.s24" = "Your balance";
+"NewOpErrorView.s25" = "This is not a BTC address or a lightning invoice. Double-check its source and make sure the address is properly formatted.";
+"NewOpErrorView.s26" = "Your payment was not completed because bitcoin exchange rates changed since you started. Please start a new payment.";
+"NewOpErrorView.s27" = "This payment requires an invoice with a longer expiration time. Please, create or request a new invoice (suggested expiration time: 1 hour or more).";
+"NewOpErrorView.s28" = "This invoice has already been scanned or paid by another wallet. Please, create or request a new one.";
+"NewOpErrorView.s29" = "There's no route with enough capacity to make this payment. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
+"NewOpErrorView.s30" = "The amount you are trying too send is too small. It must be greater than %s satoshis.";
+"NewOpErrorView.s31" = "Something went wrong, but we don’t know what. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
+"NewOpErrorView.s32" = "This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.";
+/* Presentation/Component/PopUp/WelcomePopUpView.swift */
+"WelcomePopUpView.message" = "You created a new wallet.
+Welcome to Muun!";
+"WelcomePopUpView.button" = "LET'S GO";
+/* Presentation/Component/Receive/NotificationsPrimingView.swift */
+"NotificationsPrimingView.s1" = "Never miss a payment";
+"NotificationsPrimingView.s2" = "Please enable notifications to know when you receive bitcoin.";
+"NotificationsPrimingView.s3" = "ENABLE NOTIFICATIONS";
+"NotificationsPrimingView.s4" = "SKIP";
+"NotificationsPrimingView.s5" = "Please enable notifications";
+"NotificationsPrimingView.s6" = "Lightning payments require you to get notifications.";
+/* Presentation/Component/Receive/ReceiveInLightningView.swift */
+"ReceiveInLightningView.s1" = "This invoice will expire in %s.";
+"ReceiveInLightningView.s2" = "Create another";
+"ReceiveInLightningView.s3" = "Share";
+"ReceiveInLightningView.s4" = "Copy";
+"ReceiveInLightningView.s5" = "This invoice expired before the payment was made. Please, create or request a new one.";
+"ReceiveInLightningView.s6" = "CREATE INVOICE";
+"ReceiveInLightningView.s7" = "Loading your invoice";
+/* Presentation/Component/Receive/ReceiveOnChainView.swift */
+"ReceiveOnChainView.s1" = "Bitcoin legacy address";
+"ReceiveOnChainView.s2" = "Share";
+"ReceiveOnChainView.s3" = "Copy";
+"ReceiveOnChainView.s4" = "Switch to legacy addresses";
+"ReceiveOnChainView.s5" = "Switch to Segwit addresses";
+"ReceiveOnChainView.s6" = "Having trouble using this address?
+Switch to legacy addresses";
+/* Presentation/OperationFormatter.swift */
+"OperationFormatter.s1" = "You paid yourself";
+"OperationFormatter.s2" = "You received";
+"OperationFormatter.s3" = "You paid";
+"OperationFormatter.s4" = "Confirming";
+"OperationFormatter.s5" = "Failed";
+"OperationFormatter.s9" = "Confirmed";
+"OperationFormatter.cancelable" = "Cancelable";
+/* Presentation/Screen/Base/BasePresenter.swift */
+"BasePresenter.s1" = "Please try again";
+"BasePresenter.s2" = "An error ocurred";
+"BasePresenter.s3" = "Can't connect to Muun's server";
+"BasePresenter.s6" = "Your phone's secure storage has been corrupted or compromised. For security reasons, Muun has logged out. Please contact support@muun.com for help.";
+/* Presentation/Screen/Detail/DetailPresenter.swift */
+"DetailPresenter.s1" = "%s hours";
+"DetailPresenter.s2" = "(%s blocks)";
+/* Presentation/Screen/Detail/DetailRowView.swift */
+"DetailRowView.s1" = "Copied to clipboard";
+/* Presentation/Screen/Detail/DetailViewController.swift */
+"DetailViewController.s1" = "This payment failed. You received a refund.";
+"DetailViewController.s2" = "Payment detail";
+"DetailViewController.s3" = "Transaction ID";
+"DetailViewController.s4" = "Description";
+"DetailViewController.s5" = "When";
+"DetailViewController.s6" = "Amount";
+"DetailViewController.s7" = "Confirmations";
+"DetailViewController.s8" = "Network fee";
+"DetailViewController.s9" = "Sent to address";
+"DetailViewController.s10" = "Received in address";
+"DetailViewController.s11" = "URL copied.";
+"DetailViewController.s13" = "Lightning invoice";
+"DetailViewController.s14" = "Receiving node";
+"DetailViewController.preimage" = "Payment preimage";
+"DetailViewController.s15" = "Payment preimage";
+"DetailViewController.s16" = "Waiting for the recipient to accept the payment.";
+"DetailViewController.s19" = "This payment is waiting for an on-chain confirmation.";
+"DetailViewController.s20" = "Why?";
+"DetailViewController.s22" = "There was no available route for this payment. You will get the refund in approximately %s %s.";
+"DetailViewController.incomingTxFee" = "Fee (from sender to miners)";
+"DetailViewController.outgoingTxFee" = "Fee paid to miners";
+"DetailViewController.rbfNotice" = "Until confirmed, this transaction can be canceled by the sender. How?";
+"DetailViewController.rbfCta" = "How?";
+"DetailViewController.rbfInfoTitle" = "How can this be canceled?";
+"DetailViewController.rbfInfoDesc" = "This transaction has RBF (replace-by-fee) enabled. This allows the sender to raise the original fee for faster confirmation, but can also be used to cancel transactions.
+
+Unless you know and trust the sender, consider this a risk until the transaction is confirmed.";
+"DetailViewController.paymentHash" = "Payment hash";
+/* Presentation/Screen/GetStarted/GetStartedViewController.swift */
+"GetStartedViewController.s1" = "Self-custodial wallet
+for bitcoin and lightning.";
+"GetStartedViewController.s5" = "CREATE A NEW WALLET";
+"GetStartedViewController.s6" = "I ALREADY HAVE A WALLET";
+/* Presentation/Screen/Home/Cell/Operation/OperationTableViewCell.swift */
+"OperationTableViewCell.s1" = "From the bitcoin network";
+"OperationTableViewCell.s2" = "From the lightning network";
+/* Presentation/Screen/Home/Help/SupportViewController.swift */
+"SupportViewController.s1" = "Please include this support code";
+"SupportViewController.s2" = "Choose Email";
+"SupportViewController.s3" = "Cancel";
+"SupportViewController.s4" = "Support code copied to clipboard";
+"SupportViewController.s5" = "Let's make Muun even better together";
+"SupportViewController.s6" = "Report a problem";
+"SupportViewController.s7" = "Help and Feedback";
+"SupportViewController.s8" = "Share your ideas and comments. Your feedback is important to us.";
+"SupportViewController.s9" = "Please describe your problem in detail. We'll come back to you as soon as possible.";
+"SupportViewController.s10" = "If you have any ideas, comments or problems write us at support@muun.com.";
+"SupportViewController.s11" = "Your comments";
+"SupportViewController.s12" = "Problem description";
+"SupportViewController.s13" = "SEND FEEDBACK";
+"SupportViewController.s14" = "REPORT PROBLEM";
+"SupportViewController.s15" = "OPEN EMAIL CLIENT";
+/* Presentation/Screen/Home/Home+ActionCard.swift */
+"Home.boldBackUp" = "Back up your wallet";
+"Home.backUp" = "Back up your wallet. Create a backup to never lose access to your wallet.";
+"Home.receiveCTA" = "RECEIVE";
+"Home.sendCTA" = "SEND";
+"Home.transactionListTooltip" = "Welcome to your new homescreen!
+Tap or swipe up to see your transactions.";
+/* Presentation/Screen/Home/HomeViewController.swift */
+"HomeViewController.s1" = "Report a problem";
+"HomeViewController.s2" = "Send feedback";
+"HomeViewController.s3" = "Cancel";
+/* Presentation/Screen/BalanceView.swift */
+"BalanceView.hiddenBalance" = "﹡﹡﹡";
+"BalanceView.tapToRevealBalance" = "Tap to reveal balance";
+/* Presentation/Screen/NewOperation/ChildViews/Amount/NewOpAmountView.swift */
+"NewOpAmountView.s1" = "CONFIRM AMOUNT";
+"NewOpAmountView.s2" = "Balance: %s %s";
+"NewOpAmountView.s3" = "Use all funds";
+"NewOpAmountView.s4" = "NOT ENOUGH FUNDS";
+"NewOpAmountView.s5" = "AMOUNT IS TOO SMALL";
+/* Presentation/Screen/NewOperation/ChildViews/Confirm/NewOpConfirmView.swift */
+"NewOpConfirmView.s1" = "SEND";
+/* Presentation/Screen/NewOperation/ChildViews/Description/NewOpDescriptionView.swift */
+"NewOpDescriptionView.s1" = "CONFIRM NOTE";
+"NewOpDescriptionView.s2" = "Write a note";
+/* Presentation/Screen/NewOperation/ChildViews/EditFee/FeeEditorPresenter.swift */
+"FeeEditorPresenter.s1" = "15 days";
+/* Presentation/Screen/NewOperation/ChildViews/EditFee/ManuallyEnterFee/ManuallyEnterFeeViewController.swift */
+"ManuallyEnterFeeViewController.s1" = "Edit network fee";
+"ManuallyEnterFeeViewController.s2" = "Enter a fee manually. What's this?";
+"ManuallyEnterFeeViewController.s3" = "What's this?";
+"ManuallyEnterFeeViewController.s4" = "sat/vbyte";
+"ManuallyEnterFeeViewController.s5" = "CONFIRM FEE";
+"ManuallyEnterFeeViewController.s6" = "USE MAXIMUM FEE";
+"ManuallyEnterFeeViewController.s7" = "Less than %s";
+"ManuallyEnterFeeViewController.s8" = "Fee is too low. Enter a fee of at least %s sat/vbyte";
+"ManuallyEnterFeeViewController.s9" = "Fee is too high. Enter a fee lower than %s sat/vbyte";
+"ManuallyEnterFeeViewController.s10" = "Not enough funds. You can pay up to %s sat/vbyte";
+"ManuallyEnterFeeViewController.s11" = "Not enough funds.";
+"ManuallyEnterFeeViewController.s12" = "Fee is very low. This transaction may take days to confirm.";
+"ManuallyEnterFeeViewController.s13" = "Fee is too low. The bitcoin network is experiencing unusually high traffic and rejecting transactions with fee rates below %s sat/vbyte.";
+/* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/EnterFeeManuallyTableViewCell.swift */
+"EnterFeeManuallyTableViewCell.s1" = "MANUALLY SELECTED FEE";
+"EnterFeeManuallyTableViewCell.s2" = "ENTER FEE MANUALLY";
+/* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/TargetedFeeTableViewCell.swift */
+"TargetedFeeTableViewCell.s1" = "Less than %s";
+/* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/TitleTableViewCell.swift */
+"TitleTableViewCell.s1" = "What’s this?";
+/* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/SelectFeeViewController.swift */
+"SelectFeeViewController.s1" = "Edit network fee";
+"SelectFeeViewController.s2" = "CONFIRM FEE";
+"SelectFeeViewController.s3" = "Notice:";
+"SelectFeeViewController.s4" = "Select a confirmation time. What's this?";
+"SelectFeeViewController.s5" = "Notice: Because you are using all your funds, the fee is deducted from the total amount you are sending.";
+/* Presentation/Screen/NewOperation/ChildViews/FilledData/NewOpAmountFilledDataView.swift */
+"NewOpAmountFilledDataView.s1" = "Amount";
+"NewOpAmountFilledDataView.s2" = "Network fee";
+"NewOpAmountFilledDataView.s3" = "Total";
+/* Presentation/Screen/NewOperation/ChildViews/FilledData/NewOpDescriptionFilledDataView.swift */
+"NewOpDescriptionFilledDataView.s1" = "Note";
+/* Presentation/Screen/NewOperation/ChildViews/FilledData/NewOpDestinationFilledDataView.swift */
+"NewOpDestinationFilledDataView.s1" = "To";
+/* Presentation/Screen/NewOperation/ChildViews/Loading/NewOpLoadingView.swift */
+"NewOpLoadingView.s1" = "Loading payment details";
+/* Presentation/Screen/NewOperation/NewOp+MoreInfo.swift */
+"NewOp.s1" = "Full Address";
+"NewOp.s2" = "Receiving node details";
+"NewOp.s3" = "OPEN IN NODE EXPLORER";
+"NewOp.s4" = "Confirmation needed";
+"NewOp.s5" = "Network fee and confirmation times";
+"NewOp.s6" = "Manual fee and confirmation times";
+"NewOp.s7" = "This lightning payment involves an on-chain transaction.
+To complete the payment, the transaction must be confirmed.";
+"NewOp.s8" = "Muun calculates and suggests the optimal fee needed to confirm your transaction in less than 30 minutes.
+
+A higher fee gives more priority to your transaction, while a transaction with a lower fee may take hours to confirm.
+
+Optimal fees rise when there is more activity on the network. If fees increase while your transaction is still unconfirmed, it may take longer to get confirmed.";
+"NewOp.s9" = "Satoshis per virtual byte (sat/vbyte) is the unit to measure the priority of a transaction.
+
+A higher fee gives more priority to your transaction, while a payment with a lower fee may take hours to confirm.
+
+Fees rise when there is more activity on the network. If fees increase while your payment is still unconfirmed, it may take longer to get confirmed.";
+"NewOp.s10" = "Why will this payment take longer?";
+"NewOp.s11" = "This lightning payment requires a confirmed on-chain transaction. It takes an average of 10 minutes to confirm";
+/* Presentation/Screen/NewOperation/NewOperationConfiguration.swift */
+"NewOperationConfiguration.s1" = "GO TO HOME";
+/* Presentation/Screen/NewOperation/NewOperationView.swift */
+"NewOperationView.s1" = "This invoice expires in %s";
+"NewOperationView.s2" = "This payment will take longer than most lightning payments. Why?";
+"NewOperationView.s3" = "Why?";
+/* Presentation/Screen/NewOperation/NewOperationViewController.swift */
+"NewOperationViewController.s1" = "Send bitcoin";
+"NewOperationViewController.s2" = "Pay via lightning";
+"NewOperationViewController.s3" = "Cancel payment?";
+"NewOperationViewController.s4" = "You are about to cancel this payment and go back to the home screen";
+"NewOperationViewController.s5" = "Cancel";
+"NewOperationViewController.s6" = "Abort";
+/* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
+"ManuallyEnterQRViewController.s1" = "Text address";
+"ManuallyEnterQRViewController.s2" = "CONTINUE";
+"ManuallyEnterQRViewController.s3" = "PASTE FROM CLIPBOARD";
+"ManuallyEnterQRViewController.s4" = "Send bitcoin";
+"ManuallyEnterQRViewController.s5" = "Invalid address";
+/* Presentation/Screen/NewOperation/ScanQR/ScanQRViewController.swift */
+"ScanQRViewController.s1" = "ENTER TEXT ADDRESS";
+"ScanQRViewController.s2" = "SEND TO ADDRESS IN CLIPBOARD";
+"ScanQRViewController.s3" = "Send bitcoin";
+"ScanQRViewController.s4" = "Scan a bitcoin or lightning QR code";
+"ScanQRViewController.s5" = "Enable your camera to scan QR codes with addresses or invoices";
+"ScanQRViewController.s6" = "Scan a bitcoin or
+lightning QR code";
+/* Presentation/Screen/NewOperation/SubmarineSwaps/OpSubmarineSwapViewBuilder.swift */
+"OpSubmarineSwapViewBuilder.s1" = "Public key";
+"OpSubmarineSwapViewBuilder.s2" = "IP Addresses";
+/* Presentation/Screen/NewOperation/ToAddress/OpToAddressViewBuilder.swift */
+"OpToAddressViewBuilder.s1" = "Notice:";
+"OpToAddressViewBuilder.s2" = "Notice: Not enough funds to pay for the optimal network fee. Select a network fee to continue.";
+"OpToAddressViewBuilder.s4" = "Notice: Because you are using all your funds, the fee is deducted from the total amount you are sending.";
+/* Presentation/Screen/Pin/PinPresenter.swift */
+"PinPresenter.s1" = "Create your PIN";
+"PinPresenter.s2" = "Confirm your PIN";
+"PinPresenter.s3" = "Enter your PIN";
+"PinPresenter.s4" = "Keep your wallet safe";
+"PinPresenter.s5" = "Enter it again to confirm";
+/* Presentation/Screen/Pin/PinViewController.swift */
+"PinViewController.s1" = "Use your face to unlock Muun";
+"PinViewController.s2" = "Use your fingerprint to unlock Muun";
+"PinViewController.s3" = "Unlock muun";
+"PinViewController.s4" = "Invalid PIN.";
+"PinViewController.s5" = "Invalid PIN. After %s more failed attempts, you'll be logged out of your wallet.";
+"PinViewController.s6" = "Pin did not match";
+/* Presentation/Screen/Receive/Receive+MoreInfo.swift */
+"Receive.s1" = "Your bitcoin address";
+"Receive.s2" = "Your lightning network invoice";
+"Receive.s3" = "Segwit and legacy addresses
+
+Segwit and legacy are two different types of bitcoin addresses.
+Legacy addresses are more widely adopted but create larger transactions. Using them will result in higher fees on your future transactions.
+
+To make your transactions more cost-effective, Muun displays Segwit addresses by default. Some services haven't upgraded to Segwit yet. If you are having trouble using a Segwit address, try a legacy address instead.";
+/* Presentation/Screen/Receive/ReceivePresenter.swift */
+"ReceivePresenter.s1" = "%s received";
+/* Presentation/Screen/Receive/ReceiveViewController.swift */
+"ReceiveViewController.s1" = "Bitcoin";
+"ReceiveViewController.s2" = "Lightning";
+"ReceiveViewController.s3" = "Receive";
+"ReceiveViewController.s4" = "Copied to clipboard";
+/* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
+"SignInEmailViewController.s1" = "Recover your wallet";
+"SignInEmailViewController.s2" = "Enter your email";
+"SignInEmailViewController.s3" = "You chose it when you set up wallet.";
+"SignInEmailViewController.s4" = "Your email";
+"SignInEmailViewController.s5" = "you@example.com";
+"SignInEmailViewController.s6" = "ENTER EMAIL";
+"SignInEmailViewController.s7" = "RECOVER WITH RECOVERY CODE";
+"SignInEmailViewController.s8" = "This email is not registered";
+/* Presentation/Screen/RecoverWallet/Password/SignInPasswordViewController.swift */
+"SignInPasswordViewController.s1" = "Recover your wallet";
+"SignInPasswordViewController.s2" = "Enter your password";
+"SignInPasswordViewController.s3" = "Password";
+"SignInPasswordViewController.s4" = "At least 8 characters long";
+"SignInPasswordViewController.s6" = "ENTER PASSWORD";
+"SignInPasswordViewController.s7" = "I FORGOT MY PASSWORD";
+"SignInPasswordViewController.s8" = "Cancel wallet recovery?";
+"SignInPasswordViewController.s9" = "You haven't finished recovering your wallet. You can do this later.";
+"SignInPasswordViewController.s10" = "Continue";
+"SignInPasswordViewController.s11" = "Cancel";
+"SignInPasswordViewController.s12" = "Wrong password";
+/* Presentation/Screen/RecoverWallet/Recover+MoreInfo.swift */
+"Recover.s1" = "What is the Recovery Code?";
+"Recover.s2" = "Forgotten passwords";
+"Recover.s3" = "It is a set of randomly-generated characters and the only way to log in if you forgot your password.
+You set it up on %s and most likely wrote it on a paper.";
+"Recover.s4" = "It is a set of randomly-generated characters and the only way to log in if you forgot your password.";
+"Recover.s5" = "Muun doesn't keep a copy of your password, so it can't be reset.
+Try to remember it. You chose it on %s";
+"Recover.s6" = "Muun doesn't keep a copy of your password, so it can't be reset.
+Try to remember it.";
+/* Presentation/Screen/RecoverWallet/RecoveryCode/SignInEmailAndRCViewController.swift */
+"SignInEmailAndRCViewController.s1" = "Recover your wallet";
+"SignInEmailAndRCViewController.s2" = "Enter your Recovery Code";
+"SignInEmailAndRCViewController.s3" = "You set it up on %s and most likely wrote it on a paper. What's this?";
+"SignInEmailAndRCViewController.s4" = "What's this?";
+"SignInEmailAndRCViewController.s5" = "You most likely wrote it on a paper. What's this?";
+"SignInEmailAndRCViewController.s7" = "Wrong Recovery Code. Please try again.";
+"SignInEmailAndRCViewController.s8" = "ENTER RECOVERY CODE";
+/* Presentation/Screen/RecoverWallet/VerifyEmail/SignInAuthorizeEmailViewController.swift */
+"SignInAuthorizeEmailViewController.s1" = "Authorize wallet recovery";
+"SignInAuthorizeEmailViewController.s2" = "Recover your wallet";
+"SignInAuthorizeEmailViewController.s3" = "Choose Email";
+"SignInAuthorizeEmailViewController.s4" = "You will receive an authorization email at %s. Please click the link in the email to continue.";
+/* Presentation/Screen/RecoverWithRC/InputRC/SignInWithRCView.swift */
+"SignInWithRCView.s1" = "ENTER RECOVERY CODE";
+"SignInWithRCView.s2" = "Enter your recovery code";
+"SignInWithRCView.s3" = "What's this?";
+"SignInWithRCView.s4" = "Wrong Recovery Code. Please try again.";
+"SignInWithRCView.s5" = "entering your email first";
+"SignInWithRCView.s6" = "This Recovery Code can't be used without entering your email first.";
+/* Presentation/Screen/RecoverWithRC/InputRC/SignInWithRCViewController.swift */
+"SignInWithRCViewController.s1" = "Recover your wallet";
+/* Presentation/Screen/RecoverWithRC/VerifyEmail/SignInWithRCVerifyEmailPresenter.swift */
+"SignInWithRCVerifyEmailPresenter.s1" = "Something went wrong";
+/* Presentation/Screen/RecoverWithRC/VerifyEmail/SignInWithRCVerifyEmailViewController.swift */
+"SignInWithRCVerifyEmailViewController.s1" = "Authorize wallet recovery";
+"SignInWithRCVerifyEmailViewController.s2" = "Recover your wallet";
+"SignInWithRCVerifyEmailViewController.s3" = "Choose Email";
+"SignInWithRCVerifyEmailViewController.s4" = "You will receive an authorization email at %s. Please click the link in the email to continue.";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Activate/ActivateEmergencyKitView.swift */
+"ActivateEmergencyKitView.s1" = "Verify your Emergency Kit";
+"ActivateEmergencyKitView.s4" = "Verification code";
+"ActivateEmergencyKitView.s6" = "Can't find it?";
+"ActivateEmergencyKitView.s8" = "Wrong code";
+"ActivateEmergencyKitView.activationDescription" = "Enter the 6-digit verification code located in the top-right corner of the document, just to ensure everything went right.";
+"ActivateEmergencyKitView.boldDescription" = "6-digit verification code";
+"ActivateEmergencyKitView.oldCodeError" = "This is an old code. Check your latest Emergency Kit (your code starts with %s)";
+"ActivateEmergencyKitView.oldCodeErrorRed" = "This is an old code.";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Activate/ActivateEmergencyKitViewController.swift */
+"ActivateEmergencyKitViewController.s1" = "Emergency Kit";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Help/HelpEmergencyKitView.swift */
+"HelpEmergencyKitView.s1" = "Can’t find the verification code?";
+"HelpEmergencyKitView.s2" = "6-digit number";
+"HelpEmergencyKitView.s5" = "The verification code is a 6-digit number, located at the top-right corner of your Emergency Kit.";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/RecoveryTool/RecoveryToolViewController.swift */
+"RecoveryToolViewController.s1" = "Recover your funds";
+"RecoveryToolViewController.s2" = "Use the Recovery Tool to retrieve your money";
+"RecoveryToolViewController.s3" = "In a scenario where Muun is unavailable, this is the way to reclaim all your money without the collaboration of our servers.";
+"RecoveryToolViewController.s4" = "Use your encrypted Private Keys, your Recovery Code and the Recovery Tool to retrieve your funds.";
+"RecoveryToolViewController.s5" = "You can find our Recovery Tool and the instructions for this process at https://github.com/muun/recovery";
+/* SaveEmergencyKitOptionView.swift */
+"SaveEmergencyKitOptionView.driveTitle" = "Save to Drive";
+"SaveEmergencyKitOptionView.driveDescription" = "Use your Google account to save and access your kit.";
+"SaveEmergencyKitOptionView.icloudTitle" = "Save to iCloud";
+"SaveEmergencyKitOptionView.icloudDescription" = "Use your Apple account to save and access your kit.";
+"SaveEmergencyKitOptionView.icloudDisabledDescription" = "Enable iCloud on your phone settings to export your kit.";
+"SaveEmergencyKitOptionView.manuallyTitle" = "Save manually";
+"SaveEmergencyKitOptionView.manuallyDescription" = "Choose an application to save and access your kit.";
+"SaveEmergencyKitOptionView.recommended" = "Recommended";
+"SaveEmergencyKitOptionView.notEnabled" = "Not enabled";
+"SaveEmergencyKitOptionView.openInDrive" = "OPEN IN DRIVE";
+"SaveEmergencyKitOptionView.openInICloud" = "OPEN ICLOUD";
+"SaveEmergencyKitOptionView.verifyTitle" = "Verify your Emergency Kit";
+"SaveEmergencyKitOptionView.verifyDescriptionDrive" = "You saved your kit to Google Drive. Before you go, find it and take a good look inside. Make sure you can do this in the future.";
+"SaveEmergencyKitOptionView.verifyDescriptionICloud" = "You saved your kit to iCloud. Before you go, find it and take a good look inside. Make sure you can do this in the future.";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitView.swift */
+"ShareEmergencyKitView.title" = "Save your Emergency Kit";
+"ShareEmergencyKitView.description" = "We recommend using cloud storage, to ensure your kit is never lost. Is that safe?";
+"ShareEmergencyKitView.descriptionCTA" = "Is that safe?";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitViewController.swift */
+"ShareEmergencyKitViewController.s1" = "Emergency Kit";
+"ShareEmergencyKitViewController.uploading" = "Uploading your Emergency Kit";
+"ShareEmergencyKitViewController.ekUploadErrorTitle" = "Your Emergency Kit could not be saved";
+"ShareEmergencyKitViewController.ekUploadErrorDescription" = "We couldn’t upload your Emergency Kit to the cloud. Please, check your connection and try again.";
+"ShareEmergencyKitViewController.alertRetry" = "Retry";
+"ShareEmergencyKitViewController.alertCancel" = "Cancel";
+"ShareEmergencyKitViewController.fileName" = "Muun - Emergency Kit.pdf";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Verify/VerifyEmergencyKitView.swift */
+"VerifyEmergencyKitView.done" = "DONE";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Slides/EmergencyKitSlidesViewController.swift */
+"EmergencyKitSlidesViewController.s1" = "Emergency Kit";
+"EmergencyKitSlidesViewController.s2" = "CREATE YOUR EMERGENCY KIT";
+"EmergencyKitSlidesViewController.s3" = "Swipe to continue";
+"EmergencyKitSlidesViewController.s4" = "One document";
+"EmergencyKitSlidesViewController.s5" = "Your private keys are securely encrypted with your Recovery Code, so you can save it online.";
+"EmergencyKitSlidesViewController.s6" = "Stored online";
+"EmergencyKitSlidesViewController.s7" = "Complete Ownership";
+"EmergencyKitSlidesViewController.s8" = "You haven’t finished exporting up your Emergency Kit. You can restart this setup later.";
+"EmergencyKitSlidesViewController.s9" = "Abort Emergency Kit export?";
+"EmergencyKitSlidesViewController.s10" = "Continue";
+"EmergencyKitSlidesViewController.s11" = "Abort";
+"EmergencyKitSlidesViewController.s12" = "Your Emergency Kit is a PDF document with information and instructions to independently transfer your funds.";
+"EmergencyKitSlidesViewController.s13" = "By combining the Emergency Kit and your Recovery Code, you will have total, undisputed control over your funds.";
+/* Presentation/Screen/SecurityCenter/SecurityCenter+ActionCard.swift */
+"SecurityCenter.s1" = "You exported your keys";
+"SecurityCenter.s2" = "Recovery tool";
+"SecurityCenter.s3" = "Create an Emergency Kit";
+"SecurityCenter.s4" = "Download the data you need to recover your money without using Muun.";
+"SecurityCenter.s5" = "You created an Emergency Kit";
+"SecurityCenter.s6" = "Follow the instructions in the kit you saved to recover your money without using Muun.";
+"SecurityCenter.s7" = "You wrote down your Private Keys. Use them with your Recovery Code and the Recovery Tool to recover your money without using Muun.";
+/* Presentation/Screen/SecurityCenter/SecurityCenter+Feedback.swift */
+"SecurityCenter.s8" = "EXCELLENT";
+"SecurityCenter.s9" = "Something went wrong";
+"SecurityCenter.s10" = "There was a connectivity issue and the operation timed out. Please try again.";
+"SecurityCenter.s11" = "GO BACK TO HOME";
+"SecurityCenter.s12" = "Success!";
+"SecurityCenter.EKSuccessDescription" = "You have complete, undisputed ownership of your bitcoin.";
+/* Presentation/Screen/SecurityCenter/SecurityCenter+MoreInfo.swift */
+"SecurityCenter.s13" = "Why can't the password be reset?";
+"SecurityCenter.s14" = "What is the Recovery Code?";
+"SecurityCenter.s15" = "Muun doesn't keep a copy of this code";
+"SecurityCenter.s16" = "How will Muun use my email?";
+"SecurityCenter.s17" = "Your password is used to encrypt your wallet backup, so nobody without the password can access it — not even Muun. If you lose your original password, the backup is impossible to decrypt and restore.";
+"SecurityCenter.s18" = "It is a set of randomly-generated characters.
+
+We use the Recovery Code to create an encrypted backup of your Personal Key in case you forget your password. You can access your wallet using this backup and your code.
+
+We do not keep a copy of this code, so write it down on paper and keep it safe.";
+"SecurityCenter.s19" = "Muun will send you an email every time somebody tries to access your wallet, asking for your authorization. This protects you from people (or computers) attempting to guess your password, and alerts you if somebody tries.";
+"SecurityCenter.s20" = "Is cloud storage safe?";
+"SecurityCenter.s21" = "Data inside your Emergency Kit is securely encrypted with your Recovery Code. Without access to that code, the kit is harmless.
+
+Since your Recovery Code is written in paper, you can save your Emergency Kit in the cloud without risk. It will be safe and available in the long term.";
+/* Presentation/Screen/SecurityCenter/SecurityCenterPresenter.swift */
+"SecurityCenterPresenter.s1" = "Your wallet is not backed up";
+"SecurityCenterPresenter.s2" = "You're one step away from a complete setup";
+"SecurityCenterPresenter.s3" = "Your wallet has a basic backup";
+/* Presentation/Screen/SecurityCenter/SecurityCenterViewController.swift */
+"SecurityCenterViewController.s1" = "Security Center";
+"SecurityCenterViewController.s2" = "You completed your setup";
+"SecurityCenterViewController.s3" = "Create another Emergency Kit";
+"SecurityCenterViewController.s4" = "Export private keys again";
+/* Presentation/Screen/SecurityCenter/SetupEmail/Email/EmailAlreadyUsedView.swift */
+"EmailAlreadyUsedView.s1" = "Another wallet is already using this email";
+"EmailAlreadyUsedView.s2" = "support team";
+"EmailAlreadyUsedView.s3" = "If you need help with your wallet please reach out to our support team and let us know what happened. We'll be happy to help.";
+/* Presentation/Screen/SecurityCenter/SetupEmail/Email/SignUpEmailViewController.swift */
+"SignUpEmailViewController.s1" = "Need help?";
+"SignUpEmailViewController.s2" = "Email";
+"SignUpEmailViewController.s3" = "example@you.com";
+"SignUpEmailViewController.s4" = "CONFIRM EMAIL";
+"SignUpEmailViewController.s5" = "Another wallet is already using this email";
+/* Presentation/Screen/SecurityCenter/SetupEmail/FinishEmailSetup/FinishEmailSetupViewController.swift */
+"FinishEmailSetupViewController.s1" = "Two things you must understand";
+"FinishEmailSetupViewController.s2" = "FINISH";
+"FinishEmailSetupViewController.s3" = "Why can't the password be reset?";
+"FinishEmailSetupViewController.s4" = "You haven’t finished setting up your recovery method. You can restart this setup later.";
+"FinishEmailSetupViewController.s5" = "Abort recovery setup?";
+"FinishEmailSetupViewController.s6" = "Cancel";
+"FinishEmailSetupViewController.s7" = "Abort";
+/* Presentation/Screen/SecurityCenter/SetupEmail/Password/SignUpPasswordViewController.swift */
+"SignUpPasswordViewController.s1" = "Create your password";
+"SignUpPasswordViewController.s2" = "Choose something memorable. If possible, avoid old passwords you're already using.";
+"SignUpPasswordViewController.s3" = "At least 8 characters";
+"SignUpPasswordViewController.s4" = "Your password";
+"SignUpPasswordViewController.s5" = "Eg.: correct horse battery staple";
+"SignUpPasswordViewController.s6" = "Passwords must match";
+"SignUpPasswordViewController.s7" = "Confirm your password";
+"SignUpPasswordViewController.s9" = "CREATE PASSWORD";
+"SignUpPasswordViewController.s10" = "You haven’t finished setting up your recovery method. You can restart this setup later.";
+"SignUpPasswordViewController.s11" = "Abort recovery setup?";
+"SignUpPasswordViewController.s12" = "Cancel";
+"SignUpPasswordViewController.s13" = "Abort";
+"SignUpPasswordViewController.s14" = "CONFIRM PASSWORD";
+/* Presentation/Screen/SecurityCenter/SetupEmail/Priming/EmailPrimingViewController.swift */
+"EmailPrimingViewController.s1" = "START";
+"EmailPrimingViewController.s2" = "I DON'T WANT TO USE MY EMAIL";
+"EmailPrimingViewController.s3" = "Are you sure you don't want email recovery?";
+"EmailPrimingViewController.s4" = "You can come back if you change your mind later.";
+"EmailPrimingViewController.s5" = "Cancel";
+"EmailPrimingViewController.s6" = "I'm sure";
+/* Presentation/Screen/SecurityCenter/SetupEmail/SetupEmailWording.swift */
+"SetupEmailWording.s1" = "Back up your wallet";
+"SetupEmailWording.s2" = "Use your email and a password to recover your wallet.";
+"SetupEmailWording.s3" = "Create a recovery method in case you change your phone or reinstall Muun.";
+"SetupEmailWording.s4" = "Use your email and a password to recover your wallet.";
+"SetupEmailWording.s5" = "You backed up your wallet";
+"SetupEmailWording.s6" = "Use %s and your password to recover your wallet.";
+"SetupEmailWording.s8" = "Back up with password";
+"SetupEmailWording.s10" = "Improve your security";
+"SetupEmailWording.s11" = "Enter a recovery email";
+"SetupEmailWording.s12" = "How will Muun use my email?";
+"SetupEmailWording.s13" = "You will receive a verification link. How will Muun use my email?";
+"SetupEmailWording.s14" = "I understand I will need my password and access to my email to recover my wallet.";
+"SetupEmailWording.s15" = "I understand that Muun can't reset my password if I forget it.";
+"SetupEmailWording.s16" = "Success!";
+"SetupEmailWording.s17" = "You backed up your wallet, and can now recover it using your email and password.";
+"SetupEmailWording.s18" = "Use your email and a password to conveniently recover your wallet if you change your phone or reinstall Muun.";
+"SetupEmailWording.s19" = "Use your email and a password to conveniently recover your wallet if you change your phone or reinstall Muun.
+
+This enables multi-factor authentication, improving security when you use your Recovery Code.";
+/* Presentation/Screen/SecurityCenter/SetupEmail/VerifyEmail/EmailClientsPicker.swift */
+"EmailClientsPicker.s1" = "Cancel";
+/* Presentation/Screen/SecurityCenter/SetupEmail/VerifyEmail/SignUpVerifyEmailViewController.swift */
+"SignUpVerifyEmailViewController.s1" = "Verify your recovery email";
+"SignUpVerifyEmailViewController.s2" = "Choose Email";
+"SignUpVerifyEmailViewController.s3" = "You will receive a verification email at %s. Please click the link in the email to continue.";
+/* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Confirm/FinishRecoveryCodeSetupViewController.swift */
+"FinishRecoveryCodeSetupViewController.s1" = "Two things you must understand";
+"FinishRecoveryCodeSetupViewController.s2" = "FINISH";
+/* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Generate/GenerateRecoveryCodeViewController.swift */
+"GenerateRecoveryCodeViewController.s1" = "Write down your Recovery Code";
+"GenerateRecoveryCodeViewController.s2" = "Use pen and paper. For security, don't save this on your phone or in the cloud.";
+"GenerateRecoveryCodeViewController.s3" = "CONTINUE";
+"GenerateRecoveryCodeViewController.s4" = "Abort Recovery Code setup?";
+"GenerateRecoveryCodeViewController.s5" = "Cancel";
+"GenerateRecoveryCodeViewController.s6" = "Abort";
+"GenerateRecoveryCodeViewController.s7" = "Your Recovery Code won't work unless you finish.";
+/* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Priming/RecoveryCodePrimingViewController.swift */
+"RecoveryCodePrimingViewController.s1" = "START";
+/* Presentation/Screen/SecurityCenter/SetupRecoveryCode/SetUpRecoveryCodeWording.swift */
+"SetUpRecoveryCodeWording.s1" = "Create an alternative backup";
+"SetUpRecoveryCodeWording.s2" = "Write down a code on paper to recover your wallet.";
+"SetUpRecoveryCodeWording.s3" = "Write down a code on paper for additional security.";
+"SetUpRecoveryCodeWording.s4" = "Write down a code on paper in case you forget your password.";
+"SetUpRecoveryCodeWording.s5" = "You created an alternative backup";
+"SetUpRecoveryCodeWording.s6" = "You can use the code you wrote down to recover your wallet.";
+"SetUpRecoveryCodeWording.s7" = "Use your email and the code you wrote down to recover your wallet.";
+"SetUpRecoveryCodeWording.s8" = "Back up your wallet";
+"SetUpRecoveryCodeWording.s10" = "Write down a code on paper to recover your wallet if you change your phone or reinstall Muun.";
+"SetUpRecoveryCodeWording.s11" = "Write down a code on paper to recover your wallet if you forget your password.";
+"SetUpRecoveryCodeWording.s13" = "Improve your security";
+"SetUpRecoveryCodeWording.s14" = "I understand I will need my Recovery Code if I forget my password.";
+"SetUpRecoveryCodeWording.s15" = "I understand I will need my Recovery Code to recover my wallet.";
+"SetUpRecoveryCodeWording.s16" = "I understand Muun doesn't keep a copy of my Recovery Code, and it can't be changed.";
+"SetUpRecoveryCodeWording.s17" = "Success!";
+"SetUpRecoveryCodeWording.s18" = "You backed up your wallet, and can now recover it using your Recovery Code.";
+"SetUpRecoveryCodeWording.s19" = "You can now recover your wallet using your email and Recovery Code.";
+/* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Verify/VerifyRecoveryCodeViewController.swift */
+"VerifyRecoveryCodeViewController.s1" = "Confirm your Recovery Code";
+"VerifyRecoveryCodeViewController.s2" = "Wrong Recovery Code. Please try again.";
+"VerifyRecoveryCodeViewController.s3" = "CONFIRM RECOVERY CODE";
+/* Presentation/Screen/SessionExpired/SessionExpiredViewController.swift */
+"SessionExpiredViewController.s1" = "You were logged out";
+"SessionExpiredViewController.s2" = "Your session has expired. Please restart Muun to recover your wallet.";
+"SessionExpiredViewController.s3" = "RESTART";
+/* Presentation/Screen/Settings/ChangePassword/EnterCurrent/ChangePasswordEnterCurrentView.swift */
+"ChangePasswordEnterCurrentView.s1" = "Enter your password";
+"ChangePasswordEnterCurrentView.s2" = "Current password";
+"ChangePasswordEnterCurrentView.s3" = "At least 8 characters long";
+"ChangePasswordEnterCurrentView.s4" = "CONFIRM CURRENT PASSWORD";
+"ChangePasswordEnterCurrentView.s5" = "I FORGOT MY PASSWORD";
+"ChangePasswordEnterCurrentView.s6" = "Invalid password";
+"ChangePasswordEnterCurrentView.s7" = "Verify you own this wallet.";
+/* Presentation/Screen/Settings/ChangePassword/EnterCurrent/ChangePasswordEnterCurrentViewController.swift */
+"ChangePasswordEnterCurrentViewController.s1" = "Change password";
+/* Presentation/Screen/Settings/ChangePassword/EnterNew/ChangePasswordEnterNewView.swift */
+"ChangePasswordEnterNewView.s1" = "Create your new password";
+"ChangePasswordEnterNewView.s2" = "Your new password must be different from your previous password.";
+"ChangePasswordEnterNewView.s3" = "New password";
+"ChangePasswordEnterNewView.s4" = "At least 8 characters long";
+"ChangePasswordEnterNewView.s6" = "Passwords must match";
+"ChangePasswordEnterNewView.s7" = "CONFIRM NEW PASSWORD";
+/* Presentation/Screen/Settings/ChangePassword/EnterNew/ChangePasswordEnterNewViewController.swift */
+"ChangePasswordEnterNewViewController.s1" = "Change password";
+"ChangePasswordEnterNewViewController.s2" = "Abort change password?";
+"ChangePasswordEnterNewViewController.s3" = "Your new password won't work unless you finish.";
+"ChangePasswordEnterNewViewController.s4" = "Cancel";
+"ChangePasswordEnterNewViewController.s5" = "Abort";
+/* Presentation/Screen/Settings/ChangePassword/EnterRecoveryCode/ChangePasswordEnterRecoveryCodeView.swift */
+"ChangePasswordEnterRecoveryCodeView.s1" = "CONFIRM RECOVERY CODE";
+"ChangePasswordEnterRecoveryCodeView.s2" = "Enter your recovery code";
+"ChangePasswordEnterRecoveryCodeView.s3" = "Wrong Recovery Code. Please try again.";
+/* Presentation/Screen/Settings/ChangePassword/EnterRecoveryCode/ChangePasswordEnterRecoveryCodeViewController.swift */
+"ChangePasswordEnterRecoveryCodeViewController.s1" = "Change password";
+/* Presentation/Screen/Settings/ChangePassword/Priming/ChangePasswordPrimingView.swift */
+"ChangePasswordPrimingView.s1" = "START PASSWORD CHANGE";
+"ChangePasswordPrimingView.s2" = "Change your password";
+"ChangePasswordPrimingView.s3" = "Your password is used for security. To change it, you need access to your email and your current password or Recovery Code.";
+/* Presentation/Screen/Settings/ChangePassword/Priming/ChangePasswordPrimingViewController.swift */
+"ChangePasswordPrimingViewController.s1" = "Change password";
+/* Presentation/Screen/Settings/ChangePassword/RecoveryCodeMissing/RecoveryCodeMissingView.swift */
+"RecoveryCodeMissingView.s1" = "SET UP RECOVERY CODE";
+"RecoveryCodeMissingView.s2" = "Recovery code missing";
+"RecoveryCodeMissingView.s3" = "To change your password you first need to set up your Recovery Code.";
+/* Presentation/Screen/Settings/ChangePassword/VerifyEmail/ChangePasswordVerifyViewController.swift */
+"ChangePasswordVerifyViewController.s1" = "Confirm Password change";
+"ChangePasswordVerifyViewController.s2" = "You will receive a verification email at %s";
+"ChangePasswordVerifyViewController.s3" = "Change password";
+"ChangePasswordVerifyViewController.s4" = "Choose Email";
+/* Presentation/Screen/Settings/ChangePassword/VerifyEmail/WaitForEmailView.swift */
+"WaitForEmailView.s1" = "Verifying...";
+"WaitForEmailView.s2" = "Open your latest email.";
+"WaitForEmailView.s3" = "OPEN EMAIL CLIENT";
+"WaitForEmailView.s4" = "Open your latest email. The email verification failed because the link you used expired. Click the link in the latest email you received.";
+/* Presentation/Screen/Settings/CurrencyPicker/BitcoinUnitPicker/BitcoinUnitPickerViewController.swift */
+"BitcoinUnitPickerViewController.s1" = "Bitcoin Unit";
+/* Presentation/Screen/Settings/CurrencyPicker/CurrencyPickerViewController.swift */
+"CurrencyPickerViewController.s1" = "Currencies";
+"CurrencyPickerViewController.s2" = "Search";
+"CurrencyPickerViewController.s3" = "MOST USED";
+"CurrencyPickerViewController.s4" = "ALPHABETICALLY ORDERED BY COUNTRY";
+/* Presentation/Screen/Settings/LogOut/LogOutViewController.swift */
+"LogOutViewController.s1" = "You were logged out";
+"LogOutViewController.s2" = "RESTART";
+"LogOutViewController.s3" = "You entered a wrong pin 3 times in a row. As a security measure, you were logged out. Please restart Muun to recover your wallet.";
+/* Presentation/Screen/Settings/Settings+Feedback.swift */
+"Settings.s1" = "You deleted your wallet";
+"Settings.s2" = "FINISH";
+"Settings.s3" = "You succesfully changed your password";
+"Settings.s4" = "support team";
+"Settings.s5" = "We are sorry to see you go. We would love to know what we could have done better. Reach out to our support team and let us know!";
+/* Presentation/Screen/Settings/SettingsViewController.swift */
+"SettingsViewController.s1" = "Settings";
+"SettingsViewController.s2" = "GENERAL";
+"SettingsViewController.s3" = "SECURITY";
+"SettingsViewController.s4" = "Log out";
+"SettingsViewController.s5" = "Delete wallet";
+"SettingsViewController.s6" = "Version ";
+"SettingsViewController.s7" = "Bitcoin Unit";
+"SettingsViewController.s8" = "Main Currency";
+"SettingsViewController.s9" = "Change password";
+"SettingsViewController.s10" = "You can’t delete your wallet at this moment";
+"SettingsViewController.ok" = "OK";
+"SettingsViewController.s12" = "You can't log out at this moment";
+"SettingsViewController.s13" = "Some your payments have pending confirmations. Before logging out, wait for them to confirm.";
+"SettingsViewController.s15" = "Are you sure you want to log out?";
+"SettingsViewController.s16" = "You will need your password or Recovery Code to regain access.";
+"SettingsViewController.cancel" = "Cancel";
+"SettingsViewController.s19" = "Are you sure?";
+"SettingsViewController.s20" = "You will lose your transaction history.";
+"SettingsViewController.s22" = "Delete";
+"SettingsViewController.s23" = "You need to empty your wallet. Make a payment using all your funds, and try again when the transaction has 6 confirmations.";
+"SettingsViewController.advanced" = "ADVANCED SETTINGS";
+"SettingsViewController.lightningNetwork" = "Lightning Network";
+/* Presentation/Screen/Sync/SyncViewController.swift */
+"SyncViewController.s1" = "Loading your wallet";
+"SyncViewController.s2" = "Creating your wallet";
+/* Presentation/Screen/ApiMigrations/ApiMigrationsViewController.swift */
+"ApiMigrationsViewController.loading" = "Loading your wallet";
+"ApiMigrationsViewController.failedAlertTitle" = "Error loading wallet";
+"ApiMigrationsViewController.failedAlertMessage" = "Please retry.";
+"ApiMigrationsViewController.failedAlertRetry" = "Retry";
+/* Presentation/Screen/UpdateApp/UpdateAppViewController.swift */
+"UpdateAppViewController.s1" = "Update Required";
+"UpdateAppViewController.s2" = "This version is too old. You need to update your Muun app.";
+"UpdateAppViewController.s3" = "UPDATE APP";
+/* Presentation/Screen/TransactionListViewController.swift */
+"TransactionListViewController.vcTitle" = "Transactions";
+/* Presentation/Screen/TransactionListEmptyView.swift */
+"TransactionListEmptyView.title" = "Your payment history will appear here";
+"TransactionListEmptyView.descriptionCta" = "Receive";
+"TransactionListEmptyView.description" = "Receive your first payment and get it started!";
+/* AppDelegate */
+"AppDelegate.walletTab" = "Wallet";
+"AppDelegate.securityTab" = "Security Center";
+"AppDelegate.settingsTab" = "Settings";
+/* LightningNetworkSettings */
+"LightningNetworkSettings.title" = "Lightning Network";
+"LightningNetworkSettings.confirmTitle" = "Disable turbo channels?";
+"LightningNetworkSettings.confirmDescription" = "Receiving some lightning payments will take much longer.";
+"LightningNetworkSettings.turboChannels" = "Turbo channels";
+"LightningNetworkSettings.learnMore" = "Learn more about the trade-offs of turbo channels.";
+"LightningNetworkSettings.learnMoreUnderline" = "Learn more";
+"LightningNetworkSettings.disable" = "Disable";
+"LightningNetworkSettings.blogPost" = "https://blog.muun.com/turbo-channels/";

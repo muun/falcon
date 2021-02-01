@@ -12,7 +12,7 @@ This is the source code repository for muun's iOS wallet. Muun is a non-custodia
 4. Install [cocoapods](https://guides.cocoapods.org/using/getting-started.html)
 5. Make sure you have Xcode command line tools installed. You can check this in Xcode  > Preferences > Locations > Command Line tools
 6. Run `tools/bootstrap-gomobile.sh`. This will install gomobile and bind libwallet to your GOPATH.
-7. Run `cd example && pod install`
+7. Run `cd falcon/app && pod install`
 8. You're done! Open the workspace file and try building the project.
 
 ## Structure
@@ -21,7 +21,7 @@ The app has three layers:
 
 * **Data:** handles the data backends, such as the database, the operating system, or the network.
 * **Domain:** contains the models and business logic (use cases in clean architecture lingo).
-* **Presentation:** contains the UI code, not included in this repository.
+* **Presentation:** contains the UI code
 * **libwallet:** contains the crypto and bitcoin specific code. It's written in golang and bridged using gomobile.
 
 ## Auditing

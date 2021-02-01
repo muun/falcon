@@ -1,0 +1,41 @@
+{
+  "images" : [
+    {
+      "filename" : "ek_drive_l.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "ek_drive_n.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "drivelight.pdf",
+      "idiom" : "universal",
+      "locale" : "es"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "drivedark.pdf",
+      "idiom" : "universal",
+      "locale" : "es"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LinkButtonView" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="button" destination="M0d-XM-Wan" id="83z-Rz-4NJ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M0d-XM-Wan">
+                    <rect key="frame" x="0.0" y="12" width="375" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="iYA-4K-8Y8"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                    <state key="normal" title="SOME BUTTON TEXT">
+                        <color key="titleColor" red="0.97254901959999995" green="0.1647058824" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="SGO-0a-ATz"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="M0d-XM-Wan" secondAttribute="bottom" constant="12" id="Btp-39-a0f"/>
+                <constraint firstItem="M0d-XM-Wan" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="QeD-1W-noo"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="M0d-XM-Wan" secondAttribute="trailing" id="bLM-yA-1QS"/>
+                <constraint firstItem="M0d-XM-Wan" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="iLP-lU-OzL"/>
+                <constraint firstItem="M0d-XM-Wan" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="12" id="lpg-IV-r8P"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="138" y="155"/>
+        </view>
+    </objects>
+</document>

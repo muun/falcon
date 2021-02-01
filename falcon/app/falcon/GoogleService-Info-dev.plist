@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>880007565849-1li9etmo362duqoai9h1pgcf72e1068c.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.880007565849-1li9etmo362duqoai9h1pgcf72e1068c</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBvcCbsOkm-aMp-kUstAantJHHXZNql4RQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>880007565849</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.muun.falcon.dev</string>
+	<key>PROJECT_ID</key>
+	<string>muun-debug</string>
+	<key>STORAGE_BUCKET</key>
+	<string>muun-debug.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:880007565849:ios:9b93df87ae1b2088b6d088</string>
+	<key>DATABASE_URL</key>
+	<string>https://muun-debug.firebaseio.com</string>
+</dict>
+</plist>

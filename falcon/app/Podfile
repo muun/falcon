@@ -1,0 +1,46 @@
+source 'https://cdn.cocoapods.org/'
+
+install! 'cocoapods',
+         :generate_multiple_pod_projects => true
+
+platform :ios, '11.0'
+
+target 'falcon' do
+  use_frameworks! :linkage => :static
+
+  pod 'core', :path => '../core', :testspecs => ['Tests'] 
+
+  # Animations
+  pod 'lottie-ios', '3.0.6'
+
+  # Firebase
+  pod 'GoogleUtilities'
+  pod 'Firebase/Core', '7.1.0'
+  pod 'Firebase/Messaging', '7.1.0'
+  pod 'Firebase/Analytics', '7.1.0'
+  pod 'Firebase/Crashlytics', '7.1.0'
+
+  # GoogleDrive
+  pod 'GoogleSignIn', '5.0.2'
+  pod 'GoogleAPIClientForREST/Drive', '1.5.1'
+
+  pod 'SwiftGen', '~> 6.0'
+  
+  target 'falconTests' do
+      inherit! :search_paths
+  end
+  
+end
+
+target 'falconPushNotifications' do
+  use_frameworks! :linkage => :static
+
+  pod 'core/notifications', :path => '../core'
+end
+
+pre_install do |installer|
+    # XCode runs scripts in a custom env where GOPATH is missing, so we store it in a file the build script can find
+    File.open('.gopath', 'w') {|f| f.write(ENV["GOPATH"]) }
+
+    `../../tools/libwallet-ios.sh`
+end

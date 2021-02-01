@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PinViewController" customModule="falcon" customModuleProvider="target">
+            <connections>
+                <outlet property="backButton" destination="7t1-0b-UYa" id="rSt-OL-vDI"/>
+                <outlet property="descriptionLabel" destination="QuK-EP-vsk" id="PBV-IB-Bte"/>
+                <outlet property="hintLabel" destination="UIP-4a-qwE" id="ocs-rp-B8z"/>
+                <outlet property="keyboardView" destination="mhS-nU-ULn" id="BXl-yL-ogG"/>
+                <outlet property="pinView" destination="N8h-Yf-ghC" id="DQz-m0-DCs"/>
+                <outlet property="titleLabel" destination="bYn-Nc-sKe" id="Yga-9a-Log"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wjx-gS-ti9">
+                    <rect key="frame" x="0.0" y="44" width="375" height="409.33333333333331"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xeH-JG-fYH">
+                            <rect key="frame" x="24" y="151" width="327" height="107.33333333333331"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose ya PIN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYn-Nc-sKe">
+                                    <rect key="frame" x="0.0" y="0.0" width="327" height="24"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Re enter ya PIN" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QuK-EP-vsk">
+                                    <rect key="frame" x="0.0" y="40" width="327" height="19.333333333333329"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N8h-Yf-ghC" customClass="PinView" customModule="falcon" customModuleProvider="target">
+                                    <rect key="frame" x="83.666666666666686" y="75.333333333333314" width="160" height="32"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="160" id="7yZ-xV-3El"/>
+                                        <constraint firstAttribute="height" constant="32" id="LzN-ti-xKU"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="QuK-EP-vsk" secondAttribute="trailing" id="20D-fL-D8y"/>
+                                <constraint firstItem="N8h-Yf-ghC" firstAttribute="centerX" secondItem="xeH-JG-fYH" secondAttribute="centerX" id="F3H-NO-Vfy"/>
+                                <constraint firstItem="bYn-Nc-sKe" firstAttribute="centerX" secondItem="xeH-JG-fYH" secondAttribute="centerX" id="FNm-Lc-KPV"/>
+                                <constraint firstItem="N8h-Yf-ghC" firstAttribute="top" secondItem="QuK-EP-vsk" secondAttribute="bottom" constant="16" id="JLE-GW-WO2"/>
+                                <constraint firstItem="bYn-Nc-sKe" firstAttribute="top" secondItem="xeH-JG-fYH" secondAttribute="top" id="L5U-Om-zkt"/>
+                                <constraint firstItem="QuK-EP-vsk" firstAttribute="top" secondItem="bYn-Nc-sKe" secondAttribute="bottom" constant="16" id="LJ5-5E-wM4"/>
+                                <constraint firstItem="QuK-EP-vsk" firstAttribute="leading" secondItem="xeH-JG-fYH" secondAttribute="leading" id="Roi-7Q-ChH"/>
+                                <constraint firstAttribute="trailing" secondItem="bYn-Nc-sKe" secondAttribute="trailing" id="Zoh-lM-kBR"/>
+                                <constraint firstItem="N8h-Yf-ghC" firstAttribute="top" secondItem="bYn-Nc-sKe" secondAttribute="bottom" priority="500" constant="16" id="alz-gY-748"/>
+                                <constraint firstAttribute="bottom" secondItem="N8h-Yf-ghC" secondAttribute="bottom" id="i1b-F3-t3f"/>
+                                <constraint firstItem="bYn-Nc-sKe" firstAttribute="leading" secondItem="xeH-JG-fYH" secondAttribute="leading" id="wL8-Qc-9cy"/>
+                            </constraints>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PIN did nat match" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UIP-4a-qwE">
+                            <rect key="frame" x="16" y="272.33333333333331" width="343" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7t1-0b-UYa">
+                            <rect key="frame" x="16" y="16" width="24" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="Hq3-xd-r5U"/>
+                                <constraint firstAttribute="height" constant="24" id="KBe-jC-cbM"/>
+                            </constraints>
+                            <color key="tintColor" name="muunGrayDark"/>
+                            <state key="normal" image="nav_back"/>
+                            <connections>
+                                <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="Z6j-yC-fBf"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="UIP-4a-qwE" secondAttribute="trailing" constant="16" id="0UX-md-Hxo"/>
+                        <constraint firstItem="UIP-4a-qwE" firstAttribute="leading" secondItem="wjx-gS-ti9" secondAttribute="leading" constant="16" id="2sB-7Q-iDw"/>
+                        <constraint firstItem="xeH-JG-fYH" firstAttribute="centerY" secondItem="wjx-gS-ti9" secondAttribute="centerY" id="6dA-jP-p5K"/>
+                        <constraint firstItem="UIP-4a-qwE" firstAttribute="centerX" secondItem="wjx-gS-ti9" secondAttribute="centerX" id="BPc-L5-qs7"/>
+                        <constraint firstAttribute="trailing" secondItem="xeH-JG-fYH" secondAttribute="trailing" constant="24" id="RTq-Dw-Shc"/>
+                        <constraint firstItem="xeH-JG-fYH" firstAttribute="leading" secondItem="wjx-gS-ti9" secondAttribute="leading" constant="24" id="TcD-nF-xFe"/>
+                        <constraint firstItem="7t1-0b-UYa" firstAttribute="leading" secondItem="wjx-gS-ti9" secondAttribute="leading" constant="16" id="anG-b3-ISU"/>
+                        <constraint firstItem="UIP-4a-qwE" firstAttribute="top" secondItem="xeH-JG-fYH" secondAttribute="bottom" constant="14" id="cQy-rN-avK"/>
+                        <constraint firstItem="7t1-0b-UYa" firstAttribute="top" secondItem="wjx-gS-ti9" secondAttribute="top" constant="16" id="xKc-hU-RfA"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mhS-nU-ULn" customClass="KeyboardView" customModule="falcon" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="453.33333333333326" width="375" height="324.66666666666674"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="mhS-nU-ULn" firstAttribute="top" secondItem="wjx-gS-ti9" secondAttribute="bottom" id="2y7-8w-X8E"/>
+                <constraint firstItem="wjx-gS-ti9" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="DBM-27-yr7"/>
+                <constraint firstItem="mhS-nU-ULn" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="IpX-ds-3Md"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="mhS-nU-ULn" secondAttribute="trailing" id="M8h-Zo-kvR"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="wjx-gS-ti9" secondAttribute="trailing" id="PLQ-9f-6BI"/>
+                <constraint firstItem="mhS-nU-ULn" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.4" id="WcA-ad-VOU"/>
+                <constraint firstItem="wjx-gS-ti9" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="YNV-2V-HiN"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="mhS-nU-ULn" secondAttribute="bottom" id="wKw-gf-zDV"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="140" y="104"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="nav_back" width="16" height="16"/>
+        <namedColor name="muunGrayDark">
+            <color red="0.3411764705882353" green="0.396078431372549" blue="0.43529411764705883" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
