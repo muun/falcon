@@ -25,12 +25,18 @@ public class CurrencyActions {
                 exchangeRateRepository.watchExchangeRateWindow()
             ).map({ (user, exchangeRate) in
 
-                guard let user = user,
-                    let rate = try exchangeRate?.rate(for: user.primaryCurrency) else {
+                guard let user = user, let window = exchangeRate else {
                     return nil
                 }
 
-                return (user.primaryCurrency, rate)
+                let primaryCurrency = user.primaryCurrencyWithValidExchangeRate(window: window)
+
+                guard let rate = try? window.rate(for: primaryCurrency) else {
+                    return nil
+                }
+
+                // we already know there is a valid value for rate here
+                return (primaryCurrency, rate)
             })
     }
 

@@ -29,6 +29,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: SessionActions.init)
             container.register(.singleton, factory: AddressActions.init)
             container.register(.singleton, factory: OperationActions.init)
+            container.register(.singleton, factory: BalanceActions.init)
             container.register(.singleton, factory: CurrencyActions.init)
             container.register(.singleton, factory: RealTimeDataAction.init)
             container.register(.singleton, factory: FCMTokenAction.init)
@@ -63,6 +64,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: MigrateFingerprintsAction.init)
             container.register(.singleton, factory: ApiMigrationAction.init)
             container.register(.singleton, factory: UpdateUserPreferencesAction.init)
+            container.register(.singleton, factory: VerifyFulfillableAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EmergencyKitDataSelector.init)

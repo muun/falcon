@@ -29,8 +29,4 @@ class FeeWindowRepository {
         return preferences.object(forKey: .feeWindow)
     }
 
-    func isSet() -> Bool {
-        return getFeeWindow() != nil
-    }
-
 }

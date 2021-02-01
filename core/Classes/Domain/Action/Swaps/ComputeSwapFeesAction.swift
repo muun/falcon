@@ -49,7 +49,7 @@ public class ComputeSwapFeesAction {
             } catch {
                 let minimumFee = getMinimumFeeInSats(confirmations: params.confirmationsNeeded,
                                                      feeCalculator: feeCalculator)
-                return .invalid(amountPlusFee: outputAmount + minimumFee)
+                return .invalid(amountPlusFee: amount + params.offchainFee + minimumFee)
             }
 
             if updatedAmount + params.offchainFee + fee > feeCalculator.totalBalance() {
@@ -238,6 +238,7 @@ public class ComputeSwapFeesAction {
             _potentialCollectInSat: fundingOutputPolicies._potentialCollectInSat,
             _maxAmountInSatFor0Conf: fundingOutputPolicies._maxAmountInSatFor0Conf
         )
+
         let outputAmount = amount - fee
 
         // Get a first approximation (by excess) of the off-chain fee which we will later refine

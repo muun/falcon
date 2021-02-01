@@ -23,7 +23,7 @@ public class UpdateUserPreferencesAction: AsyncAction<Void> {
         runCompletable(
             userPreferencesRepository
                 .watch()
-                .first()
+                .take(1)
                 .asSingle()
                 .map(mutator)
                 .flatMap { prefs -> Single<UserPreferences> in

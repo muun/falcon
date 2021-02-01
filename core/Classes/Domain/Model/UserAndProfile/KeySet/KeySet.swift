@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Libwallet
 
 public struct KeySet {
 
@@ -30,6 +31,22 @@ public struct ChallengeKey {
     // Use this method to access the version
     func getChallengeVersion() -> Int {
         return challengeVersion ?? 0
+    }
+
+    func encryptKey(_ privateKey: WalletPrivateKey) throws -> String {
+
+        let challengePublicKey = try doWithError({ error in
+            LibwalletNewChallengePublicKeyFromSerialized(publicKey, error)
+        })
+
+        return try doWithError({ error in
+            challengePublicKey.encryptKey(
+                privateKey.key,
+                recoveryCodeSalt: salt,
+                birthday: 0xFFFF, // The birthday for the user key isn't used
+                error: error
+            )
+        })
     }
 
 }

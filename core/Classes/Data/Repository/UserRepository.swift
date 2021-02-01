@@ -41,7 +41,7 @@ public class UserRepository {
 
     // FIXME: This shouldn't be public
     public func watchAppState() -> Observable<Bool?> {
-        return preferences.watchBool(key: .appInForeground).asObservable()
+        return preferences.watchBool(key: .appInForeground)
     }
 
     func setUserEmail(_ email: String) {
@@ -61,7 +61,7 @@ public class UserRepository {
     }
 
     func watchChangePasswordVerification() -> Observable<Bool?> {
-        return preferences.watchBool(key: .passwordChangeVerification).asObservable()
+        return preferences.watchBool(key: .passwordChangeVerification)
     }
 
     func setAuthorizeRcSignIn(isAuthorized: Bool) {
@@ -69,7 +69,7 @@ public class UserRepository {
     }
 
     func watchRcSignInAuthorization() -> Observable<Bool?> {
-        return preferences.watchBool(key: .rcSignInAuthorization).asObservable()
+        return preferences.watchBool(key: .rcSignInAuthorization)
     }
 
     func isEmailSkippedByPreference() -> Bool {

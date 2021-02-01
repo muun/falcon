@@ -8,14 +8,12 @@
 import Foundation
 import RxSwift
 
-public class StoreKeySetAction: AsyncAction<()> {
+public class StoreKeySetAction {
 
     private let keysRepository: KeysRepository
 
     init(keysRepository: KeysRepository) {
         self.keysRepository = keysRepository
-
-        super.init(name: "StoreKeySetAction")
     }
 
     public func run(keySet: KeySet, userInput: String) {

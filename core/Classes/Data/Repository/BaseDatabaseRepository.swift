@@ -19,15 +19,15 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
         case readFailed
     }
 
-    let coordinator: DatabaseCoordinator
+    let queue: DatabaseQueue
 
-    public init(coordinator: DatabaseCoordinator) {
-        self.coordinator = coordinator
+    public init(queue: DatabaseQueue) {
+        self.queue = queue
     }
 
     func write(objects: [M]) -> Completable {
         return Completable.deferred({
-            try self.coordinator.queue.write { (db) in
+            try self.queue.write { (db) in
                 for object in objects {
                     try T(from: object).save(db)
                 }
@@ -40,14 +40,14 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     func watchObjects() -> Observable<[M]> {
         return T.all()
             .rx
-            .observeAll(in: coordinator.queue)
+            .observeAll(in: queue)
             .map({ [weak self] objects in
 
                 guard let self = self else {
                     throw MuunError(Errors.readFailed)
                 }
 
-                return try self.coordinator.queue.read { db in
+                return try self.queue.read { db in
                     try objects.map({ try $0.to(using: db) })
                 }
             })
@@ -56,22 +56,33 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     func watchObject(with id: T.PrimaryKeyType) -> Observable<M> {
         return T.filter(key: id)
             .rx
-            .observeFirst(in: coordinator.queue)
+            .observeFirst(in: queue)
             .map({ [weak self] object in
                 guard let self = self,
                     let object = object else {
                     throw MuunError(Errors.readFailed)
                 }
 
-                return try self.coordinator.queue.read { db in
+                return try self.queue.read { db in
                     try object.to(using: db)
                 }
             })
     }
 
-    func object(query: QueryInterfaceRequest<T>) -> M? {
+    func objects(query: QueryInterfaceRequest<T>) -> [M]? {
+        return queue.read { db in
+            do {
+                return try query.fetchAll(db).map {
+                    try $0.to(using: db)
+                }
+            } catch {
+                return nil
+            }
+        }
+    }
 
-        return self.coordinator.queue.read { db in
+    func object(query: QueryInterfaceRequest<T>) -> M? {
+        return queue.read { db in
             do {
                 return try query.fetchOne(db)?.to(using: db)
             } catch {
@@ -81,7 +92,7 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     }
 
     func object(with id: T.PrimaryKeyType) -> M? {
-        return self.coordinator.queue.read { db in
+        return queue.read { db in
             do {
                 return try T.fetchOne(db, key: id)?.to(using: db)
             } catch {
@@ -91,7 +102,7 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     }
 
     func count() -> Int {
-        return self.coordinator.queue.read { db in
+        return queue.read { db in
             do {
                 return try T.fetchCount(db)
             } catch {
@@ -102,12 +113,23 @@ class BaseDatabaseRepository<T, M> where T: DatabaseModel, T.Model == M {
     }
 
     func count(query: QueryInterfaceRequest<T>) -> Int {
-        return self.coordinator.queue.read { db in
+        return queue.read { db in
             do {
                 return try query.fetchCount(db)
             } catch {
                 Logger.log(error: error)
                 return 0
+            }
+        }
+    }
+
+    func exists(query: QueryInterfaceRequest<T>) -> Bool {
+        return queue.read { db in
+            do {
+                return try query.limit(1).fetchOne(db) != nil
+            } catch {
+                Logger.log(error: error)
+                return false
             }
         }
     }

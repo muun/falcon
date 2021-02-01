@@ -43,7 +43,7 @@ extension WalletPrivateKey {
     static func createRandom() -> WalletPrivateKey {
 
         let key = LibwalletHDPrivateKey(
-            Data(Hashes.randomBytes(count: 32)),
+            SecureRandom.randomBytes(count: 32),
             network: Environment.current.network
         )!
 

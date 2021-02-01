@@ -91,6 +91,14 @@ public class BaseService {
         return doRequest(.put, path, body: body, queryParams: queryParams, andReturn: model, maxRetries: maxRetries)
     }
 
+    func delete<T: Decodable>(_ path: String,
+                              body: Data? = nil,
+                              queryParams: [String: Any]? = [:],
+                              andReturn model: T.Type,
+                              maxRetries: Int = BaseService.maxRetries) -> Single<T> {
+        return doRequest(.delete, path, body: body, queryParams: queryParams, andReturn: model, maxRetries: maxRetries)
+    }
+
     fileprivate func log(_ request: BaseRequest, _ response: URLResponse?, _ data: Data?) {
 
         #if DEBUG
@@ -130,19 +138,16 @@ public class BaseService {
             }
         }
 
-        return Single.deferred({
-            let subject = PublishSubject<T>()
+        return Single.create { single in
 
             self.performHTTPRequest(request: request, model: model, maxRetries: maxRetries, success: { (response) in
-                subject.onNext(response)
-                subject.onCompleted()
+                single(.success(response))
             }, failure: { (error) in
-                subject.onError(error)
+                single(.error(error))
             })
 
-            return subject.asSingle()
-        })
-
+            return Disposables.create()
+        }
     }
 
     private func performHTTPRequest<T: Decodable>(request: BaseRequest,

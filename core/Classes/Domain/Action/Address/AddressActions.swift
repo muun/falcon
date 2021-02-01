@@ -53,8 +53,7 @@ public class AddressActions {
             .asCompletable()
     }
 
-    public func generateExternalAddresses() throws
-        -> (segwit: LibwalletMuunAddressProtocol, legacy: LibwalletMuunAddressProtocol) {
+    public func generateExternalAddresses() throws -> (segwit: String, legacy: String) {
 
         let maxUsedIndex = keysRepository.getMaxUsedIndex()
         let maxWatchingIndex = keysRepository.getMaxWatchingIndex()
@@ -93,6 +92,6 @@ public class AddressActions {
             syncExternalAddresses.run()
         }
 
-        return (segwitAddress, legacyAddress)
+        return (segwitAddress.address(), legacyAddress.address())
     }
 }

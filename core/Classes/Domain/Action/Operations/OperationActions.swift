@@ -13,61 +13,32 @@ public class OperationActions {
 
     private let operationRepository: OperationRepository
     private let houstonService: HoustonService
-    private let currencyActions: CurrencyActions
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
     private let feeWindowRepository: FeeWindowRepository
     private let keysRepository: KeysRepository
-
-    private let balanceCache: BehaviorSubject<MonetaryAmount>
-    private let disposeBag: DisposeBag
+    private let verifyFulfillable: VerifyFulfillableAction
 
     init(operationRepository: OperationRepository,
          houstonService: HoustonService,
-         currencyActions: CurrencyActions,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
          feeWindowRepository: FeeWindowRepository,
-         keysRepository: KeysRepository) {
+         keysRepository: KeysRepository,
+         verifyFulfillable: VerifyFulfillableAction) {
 
         self.operationRepository = operationRepository
         self.houstonService = houstonService
-        self.currencyActions = currencyActions
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
         self.feeWindowRepository = feeWindowRepository
         self.keysRepository = keysRepository
-
-        self.disposeBag = DisposeBag()
-        self.balanceCache = BehaviorSubject(value: MonetaryAmount(amount: 0, currency: "BTC"))
-
-        generateBalanceCache()
+        self.verifyFulfillable = verifyFulfillable
     }
 
-    func watchBalanceInSatoshis() -> Observable<Satoshis> {
-        return nextTransactionSizeRepository.watchNextTransactionSize()
-            .map({ nts in
-                return nts?.uiBalance() ?? Satoshis(value: 0)
-            })
+    public func getOperationsChange() -> Observable<OperationsChange> {
+        return operationRepository.watchOperationsChange()
     }
 
-    private func generateBalanceCache() {
-
-        let satoshisObservable = watchBalanceInSatoshis()
-
-        let disposable = Observable.combineLatest(satoshisObservable, currencyActions.watchPrimaryExchangeRate())
-            .map({ (inSatoshis: Satoshis, exchangeRate: (String, Decimal)?) -> MonetaryAmount in
-                guard let exchangeRate = exchangeRate else {
-                    return MonetaryAmount(amount: 0, currency: "BTC")
-                }
-
-                let (currency, rate) = exchangeRate
-                return inSatoshis.valuation(at: rate, currency: currency)
-            })
-            .subscribe(onNext: self.balanceCache.onNext)
-
-        disposeBag.insert(disposable)
-    }
-
-    public func getOperations() -> Observable<[core.Operation]> {
-        return operationRepository.watchOperations()
+    public func getOperationsLazy() -> Observable<LazyLoadedList<core.Operation>> {
+        return operationRepository.watchOperationsLazy()
     }
 
     public func getOperationsState() -> OperationsState {
@@ -81,14 +52,17 @@ public class OperationActions {
             .asCompletable()
     }
 
-    public func watchBalance() -> Observable<MonetaryAmount> {
-        return balanceCache.asObservable()
-    }
-
     func received(newOperation: Notification.NewOperation) -> Completable {
         return operationRepository.storeOperations([newOperation.operation])
             .do(onCompleted: {
                 self.nextTransactionSizeRepository.setNextTransactionSize(newOperation.nextTransactionSize)
+            })
+            .andThen(Completable.deferred {
+                if let swap = newOperation.operation.incomingSwap {
+                    return self.verifyFulfillable.action(swap: swap)
+                } else {
+                    return Completable.empty()
+                }
             })
     }
 
@@ -199,8 +173,20 @@ public class OperationActions {
             })
     }
 
-    func hasOperations() -> Bool {
+    public func hasOperations() -> Bool {
         return operationRepository.count() > 0
+    }
+
+    public func hasPendingOperations(includeUnsettled: Bool = true) -> Bool {
+        return operationRepository.hasPendingOperations(includeUnsettled: includeUnsettled)
+    }
+
+    public func hasPendingSwaps() -> Bool {
+        return operationRepository.hasPendingSwaps()
+    }
+
+    public func hasPendingIncomingSwaps() -> Bool {
+        return operationRepository.hasPendingIncomingSwaps()
     }
 
     public func watch(operation: core.Operation) -> Observable<core.Operation> {

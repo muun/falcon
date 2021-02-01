@@ -7,6 +7,7 @@
 
 import Foundation
 import Dip
+import GRDB
 
 public extension DependencyContainer {
 
@@ -18,13 +19,13 @@ public extension DependencyContainer {
 
     static func dataContainer() -> DependencyContainer {
         return DependencyContainer { container in
-            container.register(.singleton) {
-                try DatabaseCoordinator(
-                    url: try container.resolve(tag: DataTags.databaseUrl),
-                    preferences: try container.resolve(),
-                    secureStorage: try container.resolve()
-                )
+
+            container.register(.singleton) { () -> DatabaseQueue in
+                let url: URL = try container.resolve(tag: DataTags.databaseUrl)
+                return try DatabaseQueue(path: url.path)
             }
+
+            container.register(.singleton, factory: DatabaseCoordinator.init)
 
             container.register {
                 SecureStorage(keyPrefix: try container.resolve(tag: DataTags.secureStoragePrefix),

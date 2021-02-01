@@ -378,6 +378,17 @@ public class HoustonService: BaseService {
             .asCompletable()
     }
 
+    func expireInvoice(_ invoiceHex: String) -> Completable {
+        return delete("incoming-swaps/invoices/\(invoiceHex)", andReturn: EmptyJson.self)
+            .asCompletable()
+    }
+
+    func fulfill(incomingSwap: String, preimage: Data) -> Completable {
+        let jsonData = JSONEncoder.data(json: PreimageJson(hex: preimage.toHexString()))
+        return put("incoming-swaps/\(incomingSwap)", body: jsonData, andReturn: EmptyJson.self)
+            .asCompletable()
+    }
+
     // ---------------------------------------------------------------------------------------------
     // Other endpoints:
 

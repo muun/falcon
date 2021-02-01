@@ -10,13 +10,10 @@ import Foundation
 
 extension Formatter {
 
+    @available(iOS 12, *)
     public static let iso8601: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
-        if #available(iOS 12, *) {
-            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        } else {
-            formatter.formatOptions = [.withInternetDateTime]
-        }
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter
     }()
 
@@ -25,6 +22,10 @@ extension Formatter {
     fileprivate static let compatDecoder: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        // Use a fixed locale cause otherwise DateFormatter ignores the modifers above and
+        // transforms them according to the users settings, breaking date formatting.
+        // https://developer.apple.com/library/archive/qa/qa1480/_index.html
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.timeZone = TimeZone.init(abbreviation: "UTC")
         return dateFormatter
     }()
@@ -61,7 +62,7 @@ extension JSONEncoder.DateEncodingStrategy {
     public static let customISO8601 = custom { date, encoder throws in
         var container = encoder.singleValueContainer()
 
-        if #available(iOS 13, *) {
+        if #available(iOS 12, *) {
             try container.encode(Formatter.iso8601.string(from: date))
         } else {
             try container.encode(Formatter.compatDecoder.string(from: date))

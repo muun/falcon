@@ -19,7 +19,7 @@ public struct User: Codable {
     public var email: String?
     let phoneNumber: PhoneNumber?
     let profilePictureUrl: String?
-    public var primaryCurrency: String
+    var primaryCurrency: String
     public var isEmailVerified: Bool
     var hasPasswordChallengeKey: Bool
     var hasRecoveryCodeChallengeKey: Bool
@@ -33,6 +33,22 @@ public struct User: Codable {
 
     func hasExportedEmergencyKit() -> Bool {
         return emergencyKitLastExportedDate != nil
+    }
+
+    public func primaryCurrencyWithValidExchangeRate(window: ExchangeRateWindow) -> String {
+        if primaryCurrency != "BTC" && window.rates[primaryCurrency] != nil {
+            return primaryCurrency
+        }
+        return "BTC"
+    }
+
+    // This currency may not have a valid rate associated, use carefully.
+    public func unsafeGetPrimaryCurrency() -> String {
+        return primaryCurrency
+    }
+
+    public mutating func setPrimaryCurrency(_ currency: String) {
+        primaryCurrency = currency
     }
 }
 

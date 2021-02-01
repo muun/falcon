@@ -14,13 +14,13 @@ struct OperationDB: Codable, FetchableRecord, PersistableRecord {
 
     static let senderProfileKey = ForeignKey(["senderProfile"])
     static let receiverProfileKey = ForeignKey(["receiverProfile"])
-    static let submarineSwapKey = ForeignKey(["swapUuid"])
-    static let incomingSwapKey = ForeignKey(["incomingSwapUuid"])
+    static let submarineSwapKey = ForeignKey(["swapUuid"], to: ["swapUuid"])
+    static let incomingSwapKey = ForeignKey(["uuid"], to: ["incomingSwapUuid"])
 
     static let senderProfile = hasOne(PublicProfileDB.self, key: "senderProfileId", using: senderProfileKey)
     static let receiverProfile = hasOne(PublicProfileDB.self, key: "receiverProfileId", using: receiverProfileKey)
     static let submarineSwap = hasOne(SubmarineSwapDB.self, key: "swapUuid", using: submarineSwapKey)
-    static let incomingSwap = hasOne(IncomingSwapDB.self, key: "incomingSwap", using: incomingSwapKey)
+    static let incomingSwap = hasOne(IncomingSwapDB.self, key: "incomingSwapUuid", using: incomingSwapKey)
 
     let id: Int
     let direction: OperationDirection

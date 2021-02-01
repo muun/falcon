@@ -7,7 +7,6 @@
 
 import Foundation
 import RxSwift
-import Libwallet
 
 public struct EmergencyKitData {
     public let userKey: String
@@ -24,18 +23,9 @@ public class EmergencyKitDataSelector: BaseOptionalSelector<EmergencyKitData> {
                 let muunKey = try keysRepository.getMuunPrivateKey()
 
                 let privateKey = try keysRepository.getBasePrivateKey()
-                let rawChallengeKey = try keysRepository.getChallengeKey(with: .RECOVERY_CODE)
+                let challengeKey = try keysRepository.getChallengeKey(with: .RECOVERY_CODE)
 
-                let challengePublicKey = try doWithError({ error in
-                    LibwalletNewChallengePublicKeyFromSerialized(rawChallengeKey.publicKey, error)
-                })
-
-                let encryptedKey = try doWithError({ error in
-                    challengePublicKey.encryptKey(privateKey.key,
-                                                  recoveryCodeSalt: rawChallengeKey.salt,
-                                                  birthday: 0xFFFF, // The birthday for the user key isn't used
-                                                  error: error)
-                })
+                let encryptedKey = try challengeKey.encryptKey(privateKey)
 
                 let data = EmergencyKitData(
                     userKey: encryptedKey,

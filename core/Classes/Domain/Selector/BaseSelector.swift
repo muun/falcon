@@ -19,7 +19,7 @@ public class BaseSelector<T> {
 
     public func get() -> Single<T> {
         return producer()
-            .first()
+            .take(1)
             .asSingle()
     }
 

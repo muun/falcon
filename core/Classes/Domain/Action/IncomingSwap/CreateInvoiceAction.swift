@@ -38,13 +38,19 @@ public class CreateInvoiceAction {
         let options = LibwalletInvoiceOptions()
         options.amountSat = 0
 
-        return try doWithError { err in
+        let invoice = try doWithError { err in
             LibwalletCreateInvoice(Environment.current.network,
                                    userPrivateKey.key,
                                    routeHints,
                                    options,
                                    err)
         }
+
+        if invoice.isEmpty {
+            throw MuunError(Errors.noInvoicesLeft)
+        }
+
+        return invoice
     }
 
     public func run() -> Single<String> {
@@ -62,12 +68,16 @@ public class CreateInvoiceAction {
                 return Single.deferred({
                     Single.just(try create(with: policy, userPrivateKey: userPrivateKey))
                 })
-                .catchError { _ in
-                    return refreshInvoices.getValue()
-                        .map { () in
-                            try create(with: policy, userPrivateKey: userPrivateKey)
-                        }
-                        .do(onSubscribe: refreshInvoices.run)
+                .catchError { err in
+                    if err.contains(Errors.noInvoicesLeft) {
+                        return refreshInvoices.getValue()
+                            .map { () in
+                                try create(with: policy, userPrivateKey: userPrivateKey)
+                            }
+                            .do(onSubscribe: refreshInvoices.run)
+                    } else {
+                        return Single.error(err)
+                    }
                 }
             }
 
@@ -96,6 +106,7 @@ public class CreateInvoiceAction {
 
     enum Errors: String, Error, RawRepresentable {
         case noPolicies
+        case noInvoicesLeft
     }
 
 }

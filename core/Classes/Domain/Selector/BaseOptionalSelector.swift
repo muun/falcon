@@ -20,7 +20,7 @@ public class BaseOptionalSelector<T> {
 
     public func get() -> Single<T> {
         return producer()
-            .first()
+            .take(1)
             .map(unwrap)
             .asSingle()
     }

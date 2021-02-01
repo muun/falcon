@@ -66,9 +66,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
             basePublicKey: try keysRepository.getBasePublicKey()
         )
 
-        return Single.deferred({
-            self.houstonService.createFirstSession(firstSession: firstSession)
-            })
+        return houstonService.createFirstSession(firstSession: firstSession)
             .do(onSuccess: { response in
                 self.userRepository.setUser(response.user)
                 self.keysRepository.store(cosigningKey: response.cosigningPublicKey)

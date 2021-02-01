@@ -15,6 +15,7 @@ public struct MuunError: Error, LocalizedError {
     let shortCallsite: String
     public let kind: Error
 
+    @inline(never)
     public init(_ kind: Error, filename: StaticString = #file, line: UInt = #line, funcName: StaticString = #function) {
         self.kind = kind
         self.callsite = "[\(MuunError.sourcePath(filePath: filename))]:\(line) \(funcName)"
@@ -46,5 +47,13 @@ public struct MuunError: Error, LocalizedError {
 
     public var shortDescription: String {
         return "\(shortCallsite): \(kind)"
+    }
+
+}
+
+extension MuunError: CustomStringConvertible {
+
+    public var description: String {
+        return "MuunError(\(shortDescription))"
     }
 }

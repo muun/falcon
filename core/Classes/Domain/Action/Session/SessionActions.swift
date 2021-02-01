@@ -14,16 +14,22 @@ public class SessionActions {
     private let sessionRepository: SessionRepository
     private let userRepository: UserRepository
     private let keysRepository: KeysRepository
+    private let exchangeRateWindowRepository: ExchangeRateWindowRepository
     private let secureStorage: SecureStorage
+    private let preferences: Preferences
 
     init(repository: SessionRepository,
          userRepository: UserRepository,
          keysRepository: KeysRepository,
-         secureStorage: SecureStorage) {
+         exchangeRateWindowRepository: ExchangeRateWindowRepository,
+         secureStorage: SecureStorage,
+         preferences: Preferences) {
         self.sessionRepository = repository
         self.userRepository = userRepository
         self.keysRepository = keysRepository
+        self.exchangeRateWindowRepository = exchangeRateWindowRepository
         self.secureStorage = secureStorage
+        self.preferences = preferences
     }
 
     public func isLoggedIn() -> Bool {
@@ -51,7 +57,7 @@ public class SessionActions {
     public func watchEmailAuthorization() -> Completable {
         return sessionRepository.watchStatus()
             .filter { $0 == SessionStatus.AUTHORIZED_BY_EMAIL }
-            .first()
+            .take(1)
             .ignoreElements()
     }
 
@@ -191,7 +197,13 @@ public class SessionActions {
     }
 
     public func getPrimaryCurrency() -> String {
-        return userRepository.getUser()?.primaryCurrency ?? "BTC"
+        guard let user = userRepository.getUser() else {
+            return "BTC"
+        }
+        guard let window = exchangeRateWindowRepository.getExchangeRateWindow() else {
+            return "BTC"
+        }
+        return user.primaryCurrencyWithValidExchangeRate(window: window)
     }
 
     func setEmergencyKitExported(date: Date) {

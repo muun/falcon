@@ -53,6 +53,7 @@ public class Logger {
         #endif
     }
 
+    @inline(never)
     public static func log(error: Error,
                            filename: StaticString = #file,
                            line: UInt = #line,
@@ -69,6 +70,7 @@ public class Logger {
 
     }
 
+    @inline(never)
     public static func fatal(error: Error,
                              filename: StaticString = #file,
                              line: UInt = #line,
@@ -82,6 +84,7 @@ public class Logger {
         fatalError(file: filename, line: line)
     }
 
+    @inline(never)
     public static func fatal(_ string: String,
                              filename: StaticString = #file,
                              line: UInt = #line,
@@ -96,6 +99,7 @@ public class Logger {
         fatalError(file: filename, line: line)
     }
 
+    @inline(never)
     private static func reportToCrashlytics(error: Error,
                                             filename: StaticString = #file,
                                             line: UInt = #line,
@@ -110,9 +114,11 @@ public class Logger {
 
             var trace = [StackFrame]()
             trace.append(StackFrame(symbol: "<<<<<<<<<< Caught at >>>>>>>>>>", file: "", line: 0))
+            // First two frames are the caller to the logger and this own method
             trace.append(contentsOf: Thread.callStackReturnAddresses.dropFirst(2).map { StackFrame(address: $0.uintValue) })
 
             trace.append(StackFrame(symbol: "<<<<<<<<<< Original callsite >>>>>>>>>>", file: "", line: 0))
+            // First line is the constructor of MuunError
             trace.append(contentsOf: muunError.stacktrace.dropFirst().map { StackFrame(address: $0.uintValue) })
 
             exception.stackTrace = trace

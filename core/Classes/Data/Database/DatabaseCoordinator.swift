@@ -15,8 +15,8 @@ public class DatabaseCoordinator {
     let preferences: Preferences
     let secureStorage: SecureStorage
 
-    public init(url: URL, preferences: Preferences, secureStorage: SecureStorage) throws {
-        self.queue = try DatabaseQueue(path: url.path)
+    public init(queue: DatabaseQueue, preferences: Preferences, secureStorage: SecureStorage) throws {
+        self.queue = queue
         self.preferences = preferences
         self.secureStorage = secureStorage
 

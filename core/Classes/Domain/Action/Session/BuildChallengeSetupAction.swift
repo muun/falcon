@@ -22,7 +22,7 @@ public class BuildChallengeSetupAction: AsyncAction<()> {
     // Returns a Challenge Key to be stored in the phone and a Challenge Setup prepared to be sent to the backend
     func run(type: ChallengeType, userInput: String) -> (challengeKey: ChallengeKey, challengeSetup: ChallengeSetup) {
 
-        let salt = Hashes.randomBytes(count: 8)
+        let salt = SecureRandom.randomBytes(count: 8)
 
         do {
             let privKey = try getPrivateChallengeKey(type: type, userInput: userInput, salt: salt)
@@ -47,11 +47,11 @@ public class BuildChallengeSetupAction: AsyncAction<()> {
         }
     }
 
-    private func getPrivateChallengeKey(type: ChallengeType, userInput: String, salt: [UInt8]) throws
+    private func getPrivateChallengeKey(type: ChallengeType, userInput: String, salt: Data) throws
         -> LibwalletChallengePrivateKey {
         switch type {
         case .PASSWORD:
-            return LibwalletChallengePrivateKey(Data(userInput.stringBytes), salt: Data(salt))!
+            return LibwalletChallengePrivateKey(Data(userInput.stringBytes), salt: salt)!
         case .RECOVERY_CODE:
             return try doWithError({ error in
                 LibwalletRecoveryCodeToKey(userInput, nil, error)
@@ -61,13 +61,13 @@ public class BuildChallengeSetupAction: AsyncAction<()> {
         }
     }
 
-    private func buildChallengeKey(type: ChallengeType, pubKey: String, salt: [UInt8]) -> ChallengeKey {
+    private func buildChallengeKey(type: ChallengeType, pubKey: String, salt: Data) -> ChallengeKey {
         switch type {
         case .PASSWORD:
             return ChallengeKey(
                 type: type,
                 publicKey: Data(hex: pubKey),
-                salt: Data(salt),
+                salt: salt,
                 challengeVersion: type.getVersion()
             )
         case .RECOVERY_CODE:
