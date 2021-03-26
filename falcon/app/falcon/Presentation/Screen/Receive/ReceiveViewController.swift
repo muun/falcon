@@ -8,13 +8,23 @@
 
 import UIKit
 import CoreImage
+import core
+
+enum ReceiveType {
+    case onChain
+    case lightning
+}
 
 class ReceiveViewController: MUViewController {
 
+    private var scrollView = UIScrollView()
     private var segmentControlView: UISegmentedControl!
     private var receiveOnChainView: ReceiveOnChainView!
     private var receiveInLightningView: ReceiveInLightningView!
     private var notificationsPrimingView: NotificationsPrimingView!
+
+    private var receiveInLightningViewConstraints: [NSLayoutConstraint] = []
+    private var receiveOnChainViewConstraints: [NSLayoutConstraint] = []
 
     fileprivate lazy var presenter = instancePresenter(ReceivePresenter.init, delegate: self)
     fileprivate lazy var typeLogParams = segwitLogParams
@@ -26,6 +36,17 @@ class ReceiveViewController: MUViewController {
 
     fileprivate let receiveLogName = "receive"
     fileprivate var origin: String
+
+    private var receiveType: ReceiveType = .onChain {
+        didSet {
+            presenter.setCustomAmount(nil)
+            if oldValue != receiveType {
+                showViewForCurrentReceiveType()
+            }
+        }
+    }
+
+    private var invoice: IncomingInvoiceInfo?
 
     override func customLoggingParameters() -> [String: Any]? {
         return getLogParams()
@@ -54,6 +75,7 @@ class ReceiveViewController: MUViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUpNavigation()
+        additionalSafeAreaInsets = .zero
 
         presenter.setUp()
     }
@@ -67,18 +89,29 @@ class ReceiveViewController: MUViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // For some reason, the QR does not load correctly unless it's called here
-        receiveOnChainView.displaySegwit()
-        // First screen is on-chain
-        showOnChain()
+        showViewForCurrentReceiveType()
     }
 
     private func setUpView() {
         self.view = UIView()
+
+        setUpScrollView()
         setUpSegmentedControl()
         setUpOnChainView()
         setUpLightningView()
         setUpNotificationsPrimingView()
+    }
+
+    private func setUpScrollView() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 
     private func setUpSegmentedControl() {
@@ -89,12 +122,13 @@ class ReceiveViewController: MUViewController {
         segmentControlView.selectedSegmentIndex = 0
         segmentControlView.translatesAutoresizingMaskIntoConstraints = false
         segmentControlView.tintColor = Asset.Colors.muunBlue.color
-        view.addSubview(segmentControlView)
+        scrollView.addSubview(segmentControlView)
 
         NSLayoutConstraint.activate([
-            segmentControlView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: .sideMargin),
-            segmentControlView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -.sideMargin),
-            segmentControlView.topAnchor.constraint(equalTo: view.topAnchor, constant: .sideMargin)
+            segmentControlView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: .sideMargin),
+            segmentControlView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -.sideMargin),
+            segmentControlView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: .sideMargin),
+            segmentControlView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -2 * .sideMargin)
         ])
     }
 
@@ -102,30 +136,29 @@ class ReceiveViewController: MUViewController {
         let addresses = presenter.getOnChainAddresses()
         receiveOnChainView = ReceiveOnChainView(segwit: addresses.segwit, legacy: addresses.legacy, delegate: self)
         receiveOnChainView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(receiveOnChainView)
+        scrollView.addSubview(receiveOnChainView)
 
-        NSLayoutConstraint.activate([
-            receiveOnChainView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            receiveOnChainView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        receiveOnChainViewConstraints = [
+            receiveOnChainView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            receiveOnChainView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             receiveOnChainView.topAnchor.constraint(equalTo: segmentControlView.bottomAnchor),
-            receiveOnChainView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+            receiveOnChainView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        ]
 
-        receiveOnChainView.displaySegwit()
         receiveOnChainView.alpha = 0
     }
 
     private func setUpLightningView() {
         receiveInLightningView = ReceiveInLightningView(delegate: self)
         receiveInLightningView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(receiveInLightningView)
+        scrollView.addSubview(receiveInLightningView)
 
-        NSLayoutConstraint.activate([
-            receiveInLightningView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            receiveInLightningView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        receiveInLightningViewConstraints = [
+            receiveInLightningView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            receiveInLightningView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             receiveInLightningView.topAnchor.constraint(equalTo: segmentControlView.bottomAnchor),
-            receiveInLightningView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+            receiveInLightningView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        ]
 
         receiveInLightningView.isHidden = true
     }
@@ -165,9 +198,9 @@ class ReceiveViewController: MUViewController {
         let index = sender.selectedSegmentIndex
 
         if index == 0 {
-            showOnChain()
+            receiveType = .onChain
         } else {
-            showLightning()
+            receiveType = .lightning
         }
     }
 
@@ -183,10 +216,20 @@ class ReceiveViewController: MUViewController {
         logScreen(receiveLogName, parameters: getLogParams())
     }
 
+    private func showViewForCurrentReceiveType() {
+        switch receiveType {
+        case .onChain:
+            showOnChain()
+        case .lightning:
+            showLightning()
+        }
+    }
+
     // We only display the push notifications priming view for on-chain addresses if we have never asked before
     private func showOnChain() {
 
         receiveInLightningView.isHidden = true
+        NSLayoutConstraint.deactivate(receiveInLightningViewConstraints)
 
         func displayPermissionsView() {
             notificationsPrimingView.isHidden = false
@@ -198,7 +241,9 @@ class ReceiveViewController: MUViewController {
             logScreen(receiveLogName, parameters: getLogParams())
 
             notificationsPrimingView.isHidden = true
+            receiveOnChainView.resetOptions()
             receiveOnChainView.isHidden = false
+            NSLayoutConstraint.activate(receiveOnChainViewConstraints)
             receiveOnChainView.alpha = 0
             receiveOnChainView.animate(direction: .topToBottom, duration: .short)
         }
@@ -222,6 +267,7 @@ class ReceiveViewController: MUViewController {
     private func showLightning() {
 
         receiveOnChainView.isHidden = true
+        NSLayoutConstraint.deactivate(receiveOnChainViewConstraints)
 
         func displayPermissionsView() {
             notificationsPrimingView.isHidden = false
@@ -233,10 +279,12 @@ class ReceiveViewController: MUViewController {
             logScreen(receiveLogName, parameters: getLogParams())
 
             // Always update the invoice before displaying the view
-            presenter.refreshLightningInvoice()
+            presenter.refreshLightningInvoice(delay: false)
 
             notificationsPrimingView.isHidden = true
+            receiveInLightningView.setAmount(nil)
             receiveInLightningView.isHidden = false
+            NSLayoutConstraint.activate(receiveInLightningViewConstraints)
             receiveInLightningView.alpha = 0
             receiveInLightningView.animate(direction: .topToBottom, duration: .short)
         }
@@ -262,6 +310,7 @@ extension ReceiveViewController: ReceivePresenterDelegate {
     }
 
     func show(invoice: IncomingInvoiceInfo?) {
+        self.invoice = invoice
         receiveInLightningView.displayInvoice(invoice)
     }
 
@@ -269,14 +318,11 @@ extension ReceiveViewController: ReceivePresenterDelegate {
 
 extension ReceiveViewController: ReceiveOnChainViewDelegate {
 
-    func didSwitchToLegacy() {
-        typeLogParams = legacyLogParams
-        logScreen(receiveLogName, parameters: getLogParams())
-    }
+    func didTapOnAddressTypeControl() {
+        let vc = ReceiveAddressTypeSelectViewController(
+            delegate: self, addressType: receiveOnChainView.addressType)
 
-    func didSwitchToSegwit() {
-        typeLogParams = segwitLogParams
-        logScreen(receiveLogName, parameters: getLogParams())
+        present(vc, animated: true)
     }
 
     func didTapOnCompatibilityAddressInfo() {
@@ -303,12 +349,53 @@ extension ReceiveViewController: ReceiveOnChainViewDelegate {
         UIPasteboard.general.string = copyText
         presenter.saveOwnAddress(copyText)
 
+        if receiveType == .lightning {
+
+            if let expirationTime = invoice?.formattedExpirationTime {
+
+                let message = NSMutableAttributedString(string: L10n.ReceiveViewController.s5(expirationTime))
+                    .set(bold: L10n.ReceiveViewController.s4, color: Asset.Colors.background.color)
+
+                showToast(message: message)
+
+                return
+            }
+
+        }
+
         showToast(message: L10n.ReceiveViewController.s4)
     }
 
     func didTapOnAddress(address: String) {
         let overlayVc = BottomDrawerOverlayViewController(info: BottomDrawerInfo.onChainAddress(address))
         self.present(overlayVc, animated: true)
+    }
+
+    func didTapOnAddAmount() {
+        let customAmount = presenter.getCustomAmount()
+        let vc = ReceiveAmountInputViewController(
+            delegate: self,
+            amount: customAmount?.inInputCurrency,
+            receiveType: receiveType
+        )
+        let nc = UINavigationController(rootViewController: vc)
+        present(nc, animated: true)
+    }
+
+    func didToggleOptions(visible: Bool) {
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+
+        if visible {
+            // Scroll to bottom
+            let bottomOffset = CGPoint(
+                x: 0,
+                y: max(0, self.scrollView.contentSize.height
+                    - self.scrollView.bounds.height
+                    + self.scrollView.contentInset.bottom)
+            )
+            self.scrollView.setContentOffset(bottomOffset, animated: true)
+        }
     }
 
 }
@@ -353,14 +440,44 @@ extension ReceiveViewController: NotificationsPrimingViewDelegate {
 
     func didTapOnSkipButton() {
         presenter.skipPushNotificationsPermission()
-        showOnChain()
+        receiveType = .onChain
     }
 
     func permissionGranted() {
-        if segmentControlView.selectedSegmentIndex == 0 {
-            showOnChain()
+        showViewForCurrentReceiveType()
+    }
+
+}
+
+extension ReceiveViewController: ReceiveAmountInputViewControllerDelegate {
+
+    func didConfirm(bitcoinAmount: BitcoinAmount?) {
+        presenter.setCustomAmount(bitcoinAmount)
+
+        if receiveType == .onChain {
+            receiveOnChainView.setAmount(bitcoinAmount)
         } else {
-            showLightning()
+            presenter.refreshLightningInvoice()
+            receiveInLightningView.setAmount(bitcoinAmount)
+        }
+    }
+
+}
+
+extension ReceiveViewController: ReceiveAddressTypeSelectViewControllerDelegate {
+
+    func didSelect(addressType: AddressType) {
+        receiveOnChainView.addressType = addressType
+
+        switch addressType {
+        case .segwit:
+            typeLogParams = segwitLogParams
+            logScreen(receiveLogName, parameters: getLogParams())
+        case .legacy:
+            typeLogParams = legacyLogParams
+            logScreen(receiveLogName, parameters: getLogParams())
+        default:
+            fatalError()
         }
     }
 

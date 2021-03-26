@@ -90,7 +90,7 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
         return DatabaseRegionObservation(tracking: OperationDB.all())
             .rx
             .changes(in: queue)
-            .map { [weak self] _ in
+            .map { [weak self] db in
 
                 guard let self = self else {
                     throw MuunError(Errors.readFailed)
@@ -99,8 +99,13 @@ class OperationRepository: BaseDatabaseRepository<OperationDB, Operation> {
                 let query = OperationDB.all()
                     .order(Column("creationDate").desc)
 
+                let initialElements = try query.limit(50).fetchAll(db).map {
+                    try $0.to(using: db)
+                }
+
                 return LazyLoadedList<Operation>(
-                    total: { self.count(query: query) },
+                    total: try OperationDB.fetchCount(db),
+                    initialElements: initialElements,
                     onLoadMore: { (limit: Int, offset: Int) in
                         return self.objects(query: query.limit(limit, offset: offset)) ?? []
                     }

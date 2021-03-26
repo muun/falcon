@@ -10,8 +10,7 @@ import Foundation
 
 final class ReceivePage: UIElementPage<UIElements.Pages.ReceivePage> {
 
-    private lazy var addressLabel = label(.address)
-    private lazy var invoiceLabel = label(.invoice)
+    private lazy var qrCodeWithActions = QRCodeWithActions(Root.qrCodeWithActions)
     private lazy var enablePushButton = ButtonViewPage(Root.enablePush)
     private lazy var segmentControl = segmentedControl(.segmentedControl)
 
@@ -25,23 +24,23 @@ final class ReceivePage: UIElementPage<UIElements.Pages.ReceivePage> {
     func address() -> String {
         segmentControl.buttons[L10n.ReceiveViewController.s1].tap()
 
-        _ = addressLabel.waitForExistence(timeout: 2)
-        if !addressLabel.isHittable {
+        _ = qrCodeWithActions.exists()
+        if !qrCodeWithActions.displayed {
             enablePushButton.mainButtonTap()
             falconTests.allowNotifications(true)
         }
 
-        return addressLabel.label
+        return qrCodeWithActions.address()
     }
 
     func invoice() -> String {
         segmentControl.buttons[L10n.ReceiveViewController.s2].tap()
-        _ = invoiceLabel.waitForExistence(timeout: 2)
-        if !invoiceLabel.isHittable {
+        _ = qrCodeWithActions.exists()
+        if !qrCodeWithActions.displayed {
             enablePushButton.mainButtonTap()
             falconTests.allowNotifications(true)
         }
-        return invoiceLabel.label
+        return qrCodeWithActions.address()
     }
 
 }

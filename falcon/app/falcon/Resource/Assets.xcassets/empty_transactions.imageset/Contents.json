@@ -3,6 +3,16 @@
     {
       "filename" : "Group 238.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "tx_history.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

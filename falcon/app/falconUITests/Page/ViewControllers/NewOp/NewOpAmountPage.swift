@@ -11,10 +11,8 @@ import XCTest
 
 final class NewOpAmountPage: UIElementPage<UIElements.Pages.NewOp.AmountView> {
 
-    private lazy var input = self.textField(.input)
-    private lazy var currency = self.button(.currency)
+    private lazy var input = AmountInputPage(Root.input)
     private lazy var useAllFundsButton = LinkButtonPage(Root.useAllFunds)
-    private lazy var allFundsLabel = self.label(Root.allFunds)
 
     init() {
         super.init(root: Root.root)
@@ -25,43 +23,32 @@ final class NewOpAmountPage: UIElementPage<UIElements.Pages.NewOp.AmountView> {
     }
 
     func allFundsValue() -> String {
-        return String(allFundsLabel.label.split(separator: " ")[1])
+        return String(input.subtitle().split(separator: " ")[1])
     }
 
     func isCurrencyVisible() -> Bool {
-        return currency.isHittable
+        return input.isCurrencyVisible()
     }
 
     func clearText() {
-        guard let stringValue = input.value as? String else {
-            return
-        }
-
-        var deleteString = String()
-        for _ in stringValue {
-            deleteString += XCUIKeyboardKey.delete.rawValue
-        }
-        input.typeText(deleteString)
+        input.clearText()
     }
 
     func enter(amount: String) {
-        clearText()
-        input.typeText(amount)
+        input.enter(amount: amount)
     }
 
     func amount() -> String {
-        // swiftlint:disable force_cast
-        return input.value as! String
-        // swiftlint:enable force_cast
+        return input.amount()
     }
 
     func tapCurrency() -> CurrencyPickerPage {
-        currency.tap()
+        input.tapCurrency()
         return CurrencyPickerPage()
     }
 
     func assertCurrencyText(_ text: String) {
-        XCTAssert(currency.label.contains(text))
+        input.assertCurrencyText(text)
     }
 
 }

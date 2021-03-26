@@ -152,7 +152,13 @@ class DetailViewController: MUViewController {
         // Only display the cancelable notice for incoming rbf transactions
         if operation.isCancelable() && operation.direction == .INCOMING {
             let noticeView = NoticeView(frame: .zero)
-            noticeView.setUp(.rbf)
+            noticeView.style = .warning
+            noticeView.text = L10n.DetailViewController.rbfNotice
+                .set(font: Constant.Fonts.system(size: .opHelper),
+                     lineSpacing: Constant.FontAttributes.lineSpacing,
+                     kerning: Constant.FontAttributes.kerning,
+                     alignment: .left)
+                .set(underline: L10n.DetailViewController.rbfCta, color: Asset.Colors.muunBlue.color)
             noticeView.delegate = self
             stackView.addArrangedSubview(noticeView)
         }

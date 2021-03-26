@@ -104,7 +104,7 @@ final class TransactionListView: UIView {
 
     func updateOperations(_ ops: LazyLoadedList<core.Operation>) {
         self.operations = ops
-        loadMore()
+        decideView()
     }
 
     private func loadMore() {

@@ -26,7 +26,8 @@ public class CreateInvoiceAction {
         self.realTimeDataAction = realTimeDataAction
     }
 
-    fileprivate func create(with policy: ForwardingPolicy,
+    fileprivate func create(amount: Satoshis?,
+                            policy: ForwardingPolicy,
                             userPrivateKey: WalletPrivateKey) throws -> String {
 
         let routeHints = LibwalletRouteHints()
@@ -36,7 +37,7 @@ public class CreateInvoiceAction {
         routeHints.pubkey = policy.identityKeyHex
 
         let options = LibwalletInvoiceOptions()
-        options.amountSat = 0
+        options.amountSat = amount?.value ?? 0
 
         let invoice = try doWithError { err in
             LibwalletCreateInvoice(Environment.current.network,
@@ -53,7 +54,7 @@ public class CreateInvoiceAction {
         return invoice
     }
 
-    public func run() -> Single<String> {
+    public func run(amount: Satoshis?) -> Single<String> {
 
         return Single.deferred { [self] () in
 
@@ -66,13 +67,22 @@ public class CreateInvoiceAction {
                 let userPrivateKey = try keysRepository.getBasePrivateKey()
 
                 return Single.deferred({
-                    Single.just(try create(with: policy, userPrivateKey: userPrivateKey))
+                    let invoice = try create(
+                        amount: amount,
+                        policy: policy,
+                        userPrivateKey: userPrivateKey
+                    )
+                    return Single.just(invoice)
                 })
                 .catchError { err in
                     if err.contains(Errors.noInvoicesLeft) {
                         return refreshInvoices.getValue()
                             .map { () in
-                                try create(with: policy, userPrivateKey: userPrivateKey)
+                                return try create(
+                                    amount: amount,
+                                    policy: policy,
+                                    userPrivateKey: userPrivateKey
+                                )
                             }
                             .do(onSubscribe: refreshInvoices.run)
                     } else {

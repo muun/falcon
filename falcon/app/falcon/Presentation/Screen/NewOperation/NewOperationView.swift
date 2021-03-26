@@ -219,7 +219,14 @@ class NewOperationView: MUView {
     }
 
     func displayOneConfNotice() {
-        oneConfNoticeView.setUp(.oneConf)
+        oneConfNoticeView.style = .notice
+        oneConfNoticeView.text = L10n.NewOperationView.s2
+            .set(font: Constant.Fonts.system(size: .opHelper),
+                 lineSpacing: Constant.FontAttributes.lineSpacing,
+                 kerning: Constant.FontAttributes.kerning,
+                 alignment: .left)
+            .set(underline: L10n.NewOperationView.s3, color: Asset.Colors.muunBlue.color)
+
         oneConfNoticeView.delegate = self
         oneConfNoticeView.isHidden = false
     }

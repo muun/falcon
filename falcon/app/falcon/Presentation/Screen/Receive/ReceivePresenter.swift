@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 import core
 
 protocol ReceivePresenterDelegate: BasePresenterDelegate {
@@ -25,6 +26,8 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     private let segwitAddress: String
     private let legacyAddress: String
     private var numberOfOperations: Int?
+
+    private var customAmount: BitcoinAmount?
 
     init(delegate: Delegate,
          addressActions: AddressActions,
@@ -62,10 +65,27 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         return (segwitAddress, legacyAddress)
     }
 
-    func refreshLightningInvoice() {
+    func getCustomAmount() -> BitcoinAmount? {
+        return customAmount
+    }
+
+    func setCustomAmount(_ amount: BitcoinAmount?) {
+        customAmount = amount
+    }
+
+    func refreshLightningInvoice(delay: Bool = true) {
+
         self.delegate.show(invoice: nil)
 
-        subscribeTo(createInvoiceAction.run()) { rawInvoice in
+        let amount = customAmount?.inSatoshis
+
+        var action = createInvoiceAction.run(amount: amount)
+        if delay {
+            // TODO: review scheduler for this
+            action = action.delay(.seconds(1), scheduler: MainScheduler.instance)
+        }
+
+        subscribeTo(action) { rawInvoice in
             let unixExpiration = self.getUnixExpirationTime(rawInvoice)
             let info = IncomingInvoiceInfo(rawInvoice: rawInvoice, expiresAt: unixExpiration)
             self.delegate.show(invoice: info)

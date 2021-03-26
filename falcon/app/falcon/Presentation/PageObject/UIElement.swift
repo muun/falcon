@@ -159,9 +159,7 @@ enum UIElements {
             enum AmountView: String, UIElement {
                 case root
                 case input
-                case currency
                 case useAllFunds
-                case allFunds
             }
 
             enum DescriptionView: String, UIElement {
@@ -184,9 +182,8 @@ enum UIElements {
 
         enum ReceivePage: String, UIElement {
             case root
-            case address
+            case qrCodeWithActions
             case enablePush
-            case invoice
             case segmentedControl
         }
 
@@ -350,6 +347,18 @@ enum UIElements {
 
         enum CameraPermissionPage: String, UIElement {
             case enable
+        }
+
+        enum AmountInput: String, UIElement {
+            case root
+            case input
+            case currency
+            case subtitle
+        }
+
+        enum QRCodeWithActions: String, UIElement {
+            case root
+            case address
         }
     }
 

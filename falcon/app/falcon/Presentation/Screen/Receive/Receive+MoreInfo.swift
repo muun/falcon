@@ -29,8 +29,8 @@ extension BottomDrawerInfo {
     }
 
     static let segwitLegacyInfo = MoreInfo(
-        title: "",
-        description: L10n.Receive.s3.attributedForDescription(),
+        title: L10n.Receive.s3,
+        description: L10n.Receive.s4.attributedForDescription(),
         type: .segwitLegacyInfo,
         action: nil
     )

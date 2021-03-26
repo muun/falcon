@@ -19,6 +19,10 @@ protocol DisplayableToast: class {
 extension DisplayableToast {
 
     func showToast(message: String, duration: Double? = nil) {
+        showToast(message: NSAttributedString(string: message), duration: duration)
+    }
+
+    func showToast(message: NSAttributedString, duration: Double? = nil) {
         view.endEditing(true)
 
         toast?.removeFromSuperview()

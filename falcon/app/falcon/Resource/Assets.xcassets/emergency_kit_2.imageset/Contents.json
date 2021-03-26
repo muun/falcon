@@ -3,6 +3,16 @@
     {
       "filename" : "ek2.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "stored_online.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

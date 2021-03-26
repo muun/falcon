@@ -26,18 +26,8 @@ class VerifyFulfillableAction {
             let userKey = try self.keysRepository.getBasePrivateKey()
 
             do {
-
-                _ = try doWithError { err in LibwalletIsInvoiceFulfillable(
-                    swap.paymentHash,
-                    swap.sphinxPacket,
-                    swap.paymentAmountInSats.value,
-                    userKey.key,
-                    Environment.current.network,
-                    err
-                ) }
-
+                try swap.verifyFulfillable(userKey: userKey)
             } catch {
-
                 Logger.log(error: error)
                 return self.houstonService.expireInvoice(swap.paymentHash.toHexString())
             }

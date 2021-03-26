@@ -75,9 +75,9 @@ extension NSMutableAttributedString {
     }
 
     private func getFont() -> UIFont {
-        let attrs = attributes(at: 0, effectiveRange: nil)
-        for att in attrs where att.key == .font {
-            if let font = att.value as? UIFont {
+        if length > 0 {
+            let attrs = attributes(at: 0, effectiveRange: nil)
+            if let font = attrs[.font] as? UIFont {
                 return font
             }
         }

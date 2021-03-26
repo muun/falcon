@@ -7,27 +7,21 @@
 
 public class LazyLoadedList<Element>: Collection {
 
-    typealias TotalFunction = () -> Int
     typealias LoadMoreFunction = (_ limit: Int, _ offset: Int) -> [Element]
 
+    public let total: Int
     private var elements: [Element]
-    private let totalFactory: TotalFunction
     private let onLoadMore: LoadMoreFunction?
-
-    public lazy var total = totalFactory()
-
-    private let queue = DispatchQueue(label: "LazyLoadedList")
 
     public init() {
         self.elements = []
-        self.totalFactory = { 0 }
+        self.total = 0
         self.onLoadMore = nil
     }
 
-    init(total: @escaping TotalFunction, onLoadMore: @escaping LoadMoreFunction) {
-        Logger.log(.info, "memo: new list")
-        self.elements = []
-        self.totalFactory = total
+    init(total: Int, initialElements: [Element], onLoadMore: @escaping LoadMoreFunction) {
+        self.total = total
+        self.elements = initialElements
         self.onLoadMore = onLoadMore
     }
 

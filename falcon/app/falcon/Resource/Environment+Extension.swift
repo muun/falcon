@@ -22,7 +22,7 @@ extension Environment {
         case .debug, .regtest:
             return "http://totally-explorer/tx/"
         case .stg, .prod:
-            return "https://blockstream.info/tx/"
+            return "https://mempool.space/tx/"
         }
     }
 
@@ -33,7 +33,7 @@ extension Environment {
         case .debug, .regtest:
             return "http://totally-explorer/address/"
         case .stg, .prod:
-            return "https://blockstream.info/address/"
+            return "https://mempool.space/address/"
         }
     }
 

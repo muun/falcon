@@ -55,6 +55,9 @@ class FalconUITests: XCTestCase {
     }
 
     private func sendTo(_ address: String, in homePage: HomePage, utxos: [Decimal]) {
+
+        XCTAssert(!address.isEmpty, "expected address to be non-empty")
+
         _ = homePage.openOperationsList()
         // Pre generate to make sure regtest has funds to send
         generate(blocks: 10)
@@ -78,12 +81,12 @@ class FalconUITests: XCTestCase {
         }
     }
 
-    func waitForOperations(count: Int, home: HomePage) {
+    func waitForOperations(count: Int, home: HomePage, timeout: TimeInterval = 30) {
         let transactionsPage = home.openOperationsList()
 
         waitUntil(condition: { () -> Bool in
             transactionsPage.operationCells.count == count
-        }, timeout: 30, description: "waiting for \(count) operations")
+        }, timeout: timeout, description: "waiting for \(count) operations")
 
         backTo(page: home)
     }

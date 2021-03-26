@@ -30,6 +30,7 @@ enum Constant {
         case opHelper = 13
         case notice = 12
         case tabBar = 10
+        case amountInput = 48
     }
 
     enum Fonts {

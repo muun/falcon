@@ -34,7 +34,7 @@ class LightButtonView: MUView {
         button.titleLabel?.font = Constant.Fonts.system(size: .helper, weight: .semibold)
         button.backgroundColor = Asset.Colors.muunBluePale.color
 
-        button.roundCorners(cornerRadius: button.bounds.height / 2)
+        button.roundCorners()
     }
 
     @IBAction fileprivate func buttonPressed(_ sender: Any) {

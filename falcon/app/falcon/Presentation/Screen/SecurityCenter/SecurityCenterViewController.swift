@@ -23,7 +23,7 @@ class SecurityCenterViewController: MUViewController {
 
     fileprivate let stepEmail = ActionCardView()
     fileprivate let stepRecoveryCode = ActionCardView()
-    fileprivate let stepEmergecyKit = ActionCardView()
+    fileprivate let stepEmergencyKit = ActionCardView()
     fileprivate let exportAgainButton = LightButtonView()
     fileprivate var origin: String
 
@@ -125,21 +125,34 @@ class SecurityCenterViewController: MUViewController {
         stackView.addArrangedSubview(stepRecoveryCode)
         stackView.setCustomSpacing(0, after: stepRecoveryCode)
 
-        stepEmergecyKit.delegate = self
-        stackView.addArrangedSubview(stepEmergecyKit)
-        stackView.setCustomSpacing(0, after: stepEmergecyKit)
+        stepEmergencyKit.delegate = self
+        stackView.addArrangedSubview(stepEmergencyKit)
+        stackView.setCustomSpacing(0, after: stepEmergencyKit)
     }
 
     private func setUpStepViewsContent() {
         stepEmail.setUp(actionCard: presenter.getEmailCard())
         stepRecoveryCode.setUp(actionCard: presenter.getRecoveryCodeCard())
-        stepEmergecyKit.setUp(actionCard: presenter.getEmergencyKitCard())
+        stepEmergencyKit.setUp(actionCard: presenter.getEmergencyKitCard())
     }
 
     private func setUpExportKeysAgainButton() {
-        stackView.addArrangedSubview(exportAgainButton)
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(container)
+
+        exportAgainButton.translatesAutoresizingMaskIntoConstraints = false
         exportAgainButton.delegate = self
         exportAgainButton.isHidden = true
+        container.addSubview(exportAgainButton)
+
+        NSLayoutConstraint.activate([
+            exportAgainButton.topAnchor.constraint(equalTo: container.topAnchor),
+            exportAgainButton.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            exportAgainButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            container.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            container.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
+        ])
     }
 
     private func updateProgressBar() {
@@ -213,11 +226,11 @@ extension SecurityCenterViewController: UITestablePage {
         makeViewTestable(view, using: .root)
         makeViewTestable(stepEmail, using: .emailSetup)
         makeViewTestable(stepRecoveryCode, using: .recoveryCodeSetup)
-        makeViewTestable(stepEmergecyKit, using: .emergencyKit)
+        makeViewTestable(stepEmergencyKit, using: .emergencyKit)
         makeViewTestable(exportAgainButton, using: .exportEmergencyKitAgainButton)
 
         if presenter.didExportEmergencyKit() {
-            makeViewTestable(stepEmergecyKit, using: .recoveryTool)
+            makeViewTestable(stepEmergencyKit, using: .recoveryTool)
         }
 
     }

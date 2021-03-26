@@ -3,6 +3,16 @@
     {
       "filename" : "ekit1.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "one_document.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -51,8 +51,8 @@ class ToastView: MUView {
         toastCardView.clipsToBounds = true
     }
 
-    func presentIn(_ view: UIView, text: String, duration: Double) {
-        toastLabel.text = text
+    func presentIn(_ view: UIView, text: NSAttributedString, duration: Double) {
+        toastLabel.attributedText = text
 
         self.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(self)

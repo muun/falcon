@@ -209,18 +209,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false
         }
 
+        // Use the first window to avoid hitting the pin lock screen if the users been gone of the app for a while
+        let rootViewController = UIApplication.shared.windows[0].rootViewController
+        let topViewController = UIApplication.topViewController(base: rootViewController)
+
         if components.path.contains("confirm") {
             // Check for change password
-            if let vc = UIApplication.topViewController() as? ChangePasswordVerifyViewController {
+            if let vc = topViewController as? ChangePasswordVerifyViewController {
                 vc.runVerification(uuid: verificationUuid)
             }
-        } else if let vc = UIApplication.topViewController() as? SignInAuthorizeEmailViewController {
+        } else if let vc = topViewController as? SignInAuthorizeEmailViewController {
             // Check for sign in
             vc.runVerification(uuid: verificationUuid)
-        } else if let vc = UIApplication.topViewController() as? SignUpVerifyEmailViewController {
+        } else if let vc = topViewController as? SignUpVerifyEmailViewController {
             // Check for create wallet
             vc.runVerification(uuid: verificationUuid)
-        } else if let vc = UIApplication.topViewController() as? SignInWithRCVerifyEmailViewController {
+        } else if let vc = topViewController as? SignInWithRCVerifyEmailViewController {
             // Check for sign in with rc flow
             vc.runVerification(uuid: verificationUuid)
         } else {

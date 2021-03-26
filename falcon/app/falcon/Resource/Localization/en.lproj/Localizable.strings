@@ -47,21 +47,20 @@ Welcome to Muun!";
 "NotificationsPrimingView.s5" = "Please enable notifications";
 "NotificationsPrimingView.s6" = "Lightning payments require you to get notifications.";
 /* Presentation/Component/Receive/ReceiveInLightningView.swift */
-"ReceiveInLightningView.s1" = "This invoice will expire in %s.";
+"ReceiveInLightningView.s1" = "This invoice will expire in %s. Create another";
 "ReceiveInLightningView.s2" = "Create another";
-"ReceiveInLightningView.s3" = "Share";
-"ReceiveInLightningView.s4" = "Copy";
 "ReceiveInLightningView.s5" = "This invoice expired before the payment was made. Please, create or request a new one.";
 "ReceiveInLightningView.s6" = "CREATE INVOICE";
-"ReceiveInLightningView.s7" = "Loading your invoice";
+"ReceiveInLightningView.loading" = "Generating invoice";
 /* Presentation/Component/Receive/ReceiveOnChainView.swift */
 "ReceiveOnChainView.s1" = "Bitcoin legacy address";
-"ReceiveOnChainView.s2" = "Share";
-"ReceiveOnChainView.s3" = "Copy";
 "ReceiveOnChainView.s4" = "Switch to legacy addresses";
 "ReceiveOnChainView.s5" = "Switch to Segwit addresses";
 "ReceiveOnChainView.s6" = "Having trouble using this address?
 Switch to legacy addresses";
+/* Presentation/Component/Receive/QRCodeWithActionsView.swift */
+"QRCodeWithActionsView.share" = "SHARE";
+"QRCodeWithActionsView.copy" = "COPY";
 /* Presentation/OperationFormatter.swift */
 "OperationFormatter.s1" = "You paid yourself";
 "OperationFormatter.s2" = "You received";
@@ -95,7 +94,6 @@ Switch to legacy addresses";
 "DetailViewController.s13" = "Lightning invoice";
 "DetailViewController.s14" = "Receiving node";
 "DetailViewController.preimage" = "Payment preimage";
-"DetailViewController.s15" = "Payment preimage";
 "DetailViewController.s16" = "Waiting for the recipient to accept the payment.";
 "DetailViewController.s19" = "This payment is waiting for an on-chain confirmation.";
 "DetailViewController.s20" = "Why?";
@@ -227,10 +225,10 @@ Fees rise when there is more activity on the network. If fees increase while you
 /* Presentation/Screen/NewOperation/NewOperationViewController.swift */
 "NewOperationViewController.s1" = "Send bitcoin";
 "NewOperationViewController.s2" = "Pay via lightning";
-"NewOperationViewController.s3" = "Cancel payment?";
-"NewOperationViewController.s4" = "You are about to cancel this payment and go back to the home screen";
-"NewOperationViewController.s5" = "Cancel";
-"NewOperationViewController.s6" = "Abort";
+"NewOperationViewController.s3" = "Quit without finishing?";
+"NewOperationViewController.s4" = "You are about to quit this payment and go back to the home screen.";
+"NewOperationViewController.s5" = "Continue";
+"NewOperationViewController.s6" = "Yes, quit";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
 "ManuallyEnterQRViewController.s1" = "Text address";
 "ManuallyEnterQRViewController.s2" = "CONTINUE";
@@ -268,9 +266,9 @@ lightning QR code";
 /* Presentation/Screen/Receive/Receive+MoreInfo.swift */
 "Receive.s1" = "Your bitcoin address";
 "Receive.s2" = "Your lightning network invoice";
-"Receive.s3" = "Segwit and legacy addresses
+"Receive.s3" = "Segwit and legacy addresses";
+"Receive.s4" = "Segwit and legacy are two different types of bitcoin addresses.
 
-Segwit and legacy are two different types of bitcoin addresses.
 Legacy addresses are more widely adopted but create larger transactions. Using them will result in higher fees on your future transactions.
 
 To make your transactions more cost-effective, Muun displays Segwit addresses by default. Some services haven't upgraded to Segwit yet. If you are having trouble using a Segwit address, try a legacy address instead.";
@@ -281,6 +279,30 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 "ReceiveViewController.s2" = "Lightning";
 "ReceiveViewController.s3" = "Receive";
 "ReceiveViewController.s4" = "Copied to clipboard";
+"ReceiveViewController.s5" = "Copied to clipboard. This invoice expires in %s.";
+/* Presentation/Screen/Receive/AddressTypeSelectViewController.swift */
+"AddressTypeSelectViewController.title" = "Choose your address type";
+/* Presentation/Component/Receive/OnChain/OnChainAdvancedOptionsView.swift */
+"OnChainAdvancedOptionsView.header" = "Address settings";
+"OnChainAdvancedOptionsView.hide" = "Hide settings";
+/* Presentation/Component/Receive/OnChain/AddressTypeOptionView.swift */
+"AddressTypeOptionView.label" = "Address type";
+"AddressTypeOptionView.segwit" = "SegWit";
+"AddressTypeOptionView.legacy" = "Legacy";
+/* Presentation/Component/Receive/Lightning/LightningAdvancedOptionsView.swift */
+"LightningAdvancedOptionsView.header" = "Invoice settings";
+"LightningAdvancedOptionsView.hide" = "Hide settings";
+/* Presentation/Component/Receive/Lightning/ExpirationTimeOptionView.swift */
+"ExpirationTimeOptionView.label" = "Expiration time";
+/* Presentation/Component/Receive/AmountOptionView.swift */
+"AmountOptionView.label" = "Amount";
+"AmountOptionView.addButton" = "Add +";
+/* Presentation/Screen/Receive/ReceiveAmountInputViewController.swift */
+"ReceiveAmountInputViewController.titleLightning" = "Edit Invoice Amount";
+"ReceiveAmountInputViewController.titleOnChain" = "Edit Address Amount";
+"ReceiveAmountInputViewController.confirm" = "CONFIRM AMOUNT";
+"ReceiveAmountInputViewController.remove" = "REMOVE AMOUNT";
+"ReceiveAmountInputViewController.tooSmall" = "AMOUNT IS TOO SMALL";
 /* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
 "SignInEmailViewController.s1" = "Recover your wallet";
 "SignInEmailViewController.s2" = "Enter your email";

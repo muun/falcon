@@ -47,21 +47,20 @@
 "NotificationsPrimingView.s5" = "Por favor habilita las notificationes";
 "NotificationsPrimingView.s6" = "Los pagos en lightning requieren que te lleguen las notificaciones";
 /* Presentation/Component/Receive/ReceiveInLightningView.swift */
-"ReceiveInLightningView.s1" = "Esta factura expirará en %s.";
+"ReceiveInLightningView.s1" = "Esta factura expirará en %s. Crear otra";
 "ReceiveInLightningView.s2" = "Crear otra";
-"ReceiveInLightningView.s3" = "Compartir";
-"ReceiveInLightningView.s4" = "Copiar";
 "ReceiveInLightningView.s5" = "Esta factura expiró. Creá una nueva.";
 "ReceiveInLightningView.s6" = "CREAR FACTURA";
-"ReceiveInLightningView.s7" = "Cargando tu factura";
+"ReceiveInLightningView.loading" = "Generando factura";
 /* Presentation/Component/Receive/ReceiveOnChainView.swift */
 "ReceiveOnChainView.s1" = "Dirección de compatibilidad";
-"ReceiveOnChainView.s2" = "Compartir";
-"ReceiveOnChainView.s3" = "Copiar";
 "ReceiveOnChainView.s4" = "Cambiar a dirección de compatibilidad";
 "ReceiveOnChainView.s5" = "Cambiar a dirección Segwit";
 "ReceiveOnChainView.s6" = "Problemas usando esta dirección?
 Cambiar a dirección de compatibilidad";
+/* Presentation/Component/Receive/QRCodeWithActionsView.swift */
+"QRCodeWithActionsView.share" = "COMPARTIR";
+"QRCodeWithActionsView.copy" = "COPIAR";
 /* Presentation/OperationFormatter.swift */
 "OperationFormatter.s1" = "Te pagaste";
 "OperationFormatter.s2" = "Recibiste";
@@ -226,10 +225,10 @@ El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si est
 /* Presentation/Screen/NewOperation/NewOperationViewController.swift */
 "NewOperationViewController.s1" = "Enviar bitcoin";
 "NewOperationViewController.s2" = "Pagar por lightning";
-"NewOperationViewController.s3" = "¿Cancelar pago?";
-"NewOperationViewController.s4" = "Estás a punto de cancelar el pago y volver a la pantalla de inicio.";
-"NewOperationViewController.s5" = "Abortar";
-"NewOperationViewController.s6" = "Cancelar";
+"NewOperationViewController.s3" = "¿Salir sin terminar?";
+"NewOperationViewController.s4" = "Estás a punto de salirte de este pago y volver a la pantalla de inicio.";
+"NewOperationViewController.s5" = "Continuar";
+"NewOperationViewController.s6" = "Sí, salir";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
 "ManuallyEnterQRViewController.s1" = "Texto de dirección";
 "ManuallyEnterQRViewController.s2" = "CONTINUAR";
@@ -267,9 +266,9 @@ de lightning network";
 /* Presentation/Screen/Receive/Receive+MoreInfo.swift */
 "Receive.s1" = "Tu dirección de bitcoin";
 "Receive.s2" = "Tu factura de lightning network";
-"Receive.s3" = "Direcciones de Segwit y compatibilidad
+"Receive.s3" = "Direcciones de Segwit y compatibilidad";
+"Receive.s4" = "Segwit y compatibilidad son dos tipos distintos de direcciones de bitcoin.
 
-Segwit y compatibilidad son dos tipos distintos de direcciones de bitcoin.
 Las direcciones de compatibilidad son ampliamente aceptadas en el ecosistema, pero crean transacciones más pesadas que las direcciones de Segwit. Usarlas resultará en comisiones más altas en tus futuras transacciones.
 
 Para que tus transacciones sean más eficientes, Muun muestra las direcciones de Segwit en primer lugar. Algunos servicios aún no se han actualizado a Segwit. Si tienes problemas para utilizar Segwit, utiliza direcciones de compatibilidad en su lugar.";
@@ -280,6 +279,30 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "ReceiveViewController.s2" = "Lightning";
 "ReceiveViewController.s3" = "Recibir";
 "ReceiveViewController.s4" = "Copiado al portapapeles";
+"ReceiveViewController.s5" = "Copiado al portapapeles. Esta factura expirará en %s.";
+/* Presentation/Screen/Receive/AddressTypeSelectViewController.swift */
+"AddressTypeSelectViewController.title" = "Elige un tipo de dirección";
+/* Presentation/Screen/Receive/OnChain/OnChainAdvancedOptionsView.swift */
+"OnChainAdvancedOptionsView.header" = "Configuración de dirección";
+"OnChainAdvancedOptionsView.hide" = "Ocultar configuración";
+/* Presentation/Screen/Receive/OnChain/AddressTypeOptionView.swift */
+"AddressTypeOptionView.label" = "Tipo de dirección";
+"AddressTypeOptionView.segwit" = "SegWit";
+"AddressTypeOptionView.legacy" = "Legacy";
+/* Presentation/Screen/Receive/Lightning/LightningAdvancedOptionsView.swift */
+"LightningAdvancedOptionsView.header" = "Configuración de factura";
+"LightningAdvancedOptionsView.hide" = "Ocultar configuración";
+/* Presentation/Screen/Receive/Lightning/ExpirationTimeOptionView.swift */
+"ExpirationTimeOptionView.label" = "Tiempo de expiración";
+/* Presentation/Screen/Receive/AmountOptionView.swift */
+"AmountOptionView.label" = "Monto";
+"AmountOptionView.addButton" = "Añadir +";
+/* Presentation/Screen/Receive/ReceiveAmountInputViewController.swift */
+"ReceiveAmountInputViewController.titleLightning" = "Editar monto de factura";
+"ReceiveAmountInputViewController.titleOnChain" = "Editar monto de dirección";
+"ReceiveAmountInputViewController.confirm" = "CONFIRMAR MONTO";
+"ReceiveAmountInputViewController.remove" = "ELIMINAR MONTO";
+"ReceiveAmountInputViewController.tooSmall" = "MONTO DEMASIADO PEQUEÑO";
 /* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
 "SignInEmailViewController.s1" = "Recupera tu monedero";
 "SignInEmailViewController.s2" = "Ingresa tu email";
@@ -658,7 +681,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 /* AppDelegate */
 "AppDelegate.walletTab" = "Monedero";
 "AppDelegate.securityTab" = "Centro de Seguridad";
-"AppDelegate.settingsTab" = "Configuración";
+"AppDelegate.settingsTab" = "Ajustes";
 /* LightningNetworkSettings */
 "LightningNetworkSettings.title" = "Lightning Network";
 "LightningNetworkSettings.confirmTitle" = "¿Apagar turbo channels?";

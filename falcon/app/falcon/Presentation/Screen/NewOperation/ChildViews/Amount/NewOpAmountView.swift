@@ -16,28 +16,16 @@ protocol OpAmountTransitions: NewOperationTransitions {
 
 class NewOpAmountView: MUView {
 
-    @IBOutlet private weak var textField: UITextField!
-    @IBOutlet private weak var currencyLabel: UILabel!
-    @IBOutlet private weak var maxAmountLabel: UILabel!
+    @IBOutlet private weak var inputContainerView: UIView!
     @IBOutlet private weak var allFundsButton: LinkButtonView!
-    /* This text field is hidden and mirrors all relevant properties from the visible
-     * field. It's used to avoid a crazy bug that made the textField shrink when
-     * the first character was entered (even though it had space to grow).
-     * Since this one has no constraints limiting it's width, it can grow as it pleases.
-     * And a constraint with priority 999 matches both fields width + 1.
-     * This makes the field the right size at all times.
-     */
-    @IBOutlet private weak var mirrorTextField: UITextField!
+    private var amountInputView: AmountInputView!
 
     weak var delegate: NewOpViewDelegate?
     weak var transitionsDelegate: OpAmountTransitions?
     private let data: NewOperationStateLoaded
-    private var currency: String = "BTC"
     private var useAllFunds = false
-    private var amount: String {
-        return textField.text != "" && textField.text != nil
-            ? textField.text!
-            : "0"
+    private var currency: String {
+        return amountInputView?.currency ?? presenter.getUserPrimaryCurrency()
     }
 
     fileprivate lazy var presenter = instancePresenter(NewOpAmountPresenter.init, delegate: self, state: data)
@@ -52,18 +40,17 @@ class NewOpAmountView: MUView {
 
         super.init(frame: CGRect.zero)
 
-        self.currency = presenter.getUserPrimaryCurrency()
+        amountInputView.currency = presenter.getUserPrimaryCurrency()
 
         if let preset = preset {
-            textField.text = LocaleAmountFormatter.string(from: preset)
-            mirrorTextField.text = textField.text
-            currency = preset.currency
+            amountInputView.value = LocaleAmountFormatter.string(from: preset)
+            amountInputView.currency = preset.currency
         }
 
-        presenter.validityCheck(amount, currency: currency)
-        delegate?.update(buttonText: L10n.NewOpAmountView.s1)
-
         setUp()
+
+        validate(amount: amountInputView.value)
+        delegate?.update(buttonText: L10n.NewOpAmountView.s1)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,7 +61,7 @@ class NewOpAmountView: MUView {
         super.willMove(toWindow: newWindow)
 
         if newWindow != nil {
-            textField.becomeFirstResponder()
+            _ = amountInputView.becomeFirstResponder()
         }
     }
 
@@ -86,32 +73,29 @@ class NewOpAmountView: MUView {
     }
 
     private func setUpView() {
-        setUpTextField()
         setUpMaxAmountLabel()
         setUpAllFundsButton()
-        setUpCurrencyLabel()
-    }
+        if inputContainerView.subviews.isEmpty {
 
-    private func setUpTextField() {
-        textField.textColor = Asset.Colors.muunBlue.color
-        textField.tintColor = Asset.Colors.muunBlue.color
-        textField.attributedPlaceholder = NSAttributedString(
-            string: "0",
-            attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.muunGrayLight.color]
-        )
+            amountInputView = AmountInputView(delegate: self, converter: presenter.convert)
+            amountInputView.translatesAutoresizingMaskIntoConstraints = false
+            inputContainerView.addSubview(amountInputView)
 
-        mirrorTextField.font = textField.font
+            NSLayoutConstraint.activate([
+                amountInputView.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+                amountInputView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+                amountInputView.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
+                amountInputView.topAnchor.constraint(equalTo: inputContainerView.topAnchor)
+            ])
+        }
     }
 
     private func setUpMaxAmountLabel() {
         let amount = presenter.totalBalance(in: currency)
-        maxAmountLabel.text = L10n.NewOpAmountView.s2(
+        amountInputView?.subtitle = L10n.NewOpAmountView.s2(
             LocaleAmountFormatter.string(from: amount),
             CurrencyHelper.string(for: amount.currency)
         )
-
-        maxAmountLabel.font = Constant.Fonts.system(size: .helper)
-        maxAmountLabel.textColor = Asset.Colors.muunGrayDark.color
     }
 
     private func setUpAllFundsButton() {
@@ -121,32 +105,30 @@ class NewOpAmountView: MUView {
         allFundsButton.isEnabled = (presenter.allFunds(in: currency).inSatoshis.asDecimal() > 0)
     }
 
-    private func setUpCurrencyLabel() {
-        currencyLabel.text = CurrencyHelper.string(for: currency)
-        currencyLabel.font = Constant.Fonts.system(size: .h1)
-        currencyLabel.textColor = Asset.Colors.muunGrayDark.color
-        currencyLabel.isUserInteractionEnabled = true
-
-        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .currencyTouched))
-    }
-
-    @IBAction fileprivate func currencyTouched(_ sender: Any) {
-        transitionsDelegate?.requestCurrencyPicker(data: data, currencyCode: currency)
-    }
-
     func updateInfo(newCurrency: Currency) {
-        let newAmount = presenter.convert(value: amount, in: currency, to: newCurrency.code)
-        var newAmountString: String? = LocaleAmountFormatter.string(from: newAmount)
-        if amount == "0" {
-            // Clear amount input if amount were 0
-            newAmountString = nil
-        }
+        amountInputView.currency = newCurrency.code
 
-        currency = newCurrency.code
-        textField.text = newAmountString
-        mirrorTextField.text = textField.text
         setUpView()
-        presenter.validityCheck(newAmountString ?? "0", currency: currency)
+        validate(amount: amountInputView.value)
+    }
+
+    func validate(amount: String) {
+        let newState = presenter.validityCheck(amount, currency: currency)
+
+        amountInputView.state = newState
+        switch newState {
+        case .zero:
+            delegate?.readyForNextState(false, error: nil)
+
+        case .tooBig:
+            delegate?.readyForNextState(false, error: L10n.NewOpAmountView.s4)
+
+        case .tooSmall:
+            delegate?.readyForNextState(false, error: L10n.NewOpAmountView.s5)
+
+        case .valid:
+            delegate?.readyForNextState(true, error: nil)
+        }
     }
 }
 
@@ -162,8 +144,7 @@ extension NewOpAmountView: LinkButtonViewDelegate {
 
     func linkButton(didPress linkButton: LinkButtonView) {
         let allFundsString = LocaleAmountFormatter.string(from: presenter.totalBalance(in: currency))
-        textField.text = allFundsString
-        mirrorTextField.text = textField.text
+        amountInputView.value = allFundsString
         useAllFunds = true
 
         pushNextState()
@@ -171,111 +152,23 @@ extension NewOpAmountView: LinkButtonViewDelegate {
 
 }
 
-extension NewOpAmountView: UITextFieldDelegate {
+extension NewOpAmountView: AmountInputViewDelegate {
 
-    // swiftlint:disable function_body_length
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String)
-        -> Bool {
-
+    func didInput(amount: String, currency: String) {
         useAllFunds = false
-
-        if let text = textField.text,
-            let textRange = Range(range, in: text) {
-
-            if LocaleAmountFormatter.isSeparator(string) && text.contains(string) {
-                // Allow only one separator
-                return false
-            }
-
-            let replacedString = text.replacingCharacters(in: textRange, with: string)
-            let updatedText = LocaleAmountFormatter.format(string: replacedString, in: currency)
-
-            if updatedText.count >= 20 {
-                return false
-            }
-
-            presenter.validityCheck(updatedText, currency: currency)
-            presenter.setLastAmountEntered(LocaleAmountFormatter.number(from: updatedText, in: currency))
-
-            if updatedText == "" {
-                mirrorTextField.text = ""
-                return true
-            }
-            textField.text = updatedText
-            mirrorTextField.text = updatedText
-
-            var indexInOriginal = text.startIndex
-            var indexInNew = updatedText.startIndex
-
-            guard let rangeStart = text.index(text.startIndex, offsetBy: range.lowerBound, limitedBy: text.endIndex)
-                else { return false }
-
-            func advance(index: String.Index, in text: String, by offset: Int) -> String.Index {
-
-                var nextIndex = index
-                var consumed = 0
-
-                while consumed < offset && nextIndex < text.endIndex {
-
-                    // We usually advance once more than the string can take (since the caret might reach the end)
-                    // so check before subscripting
-                    if nextIndex < text.endIndex && !LocaleAmountFormatter.isSeparator(String(text[nextIndex])) {
-                        consumed += 1
-                    }
-
-                    nextIndex = text.index(after: nextIndex)
-                }
-
-                return nextIndex
-            }
-
-            while true {
-
-                if indexInOriginal < rangeStart {
-
-                    // Consume the next character in the new string and skip over any seperator
-                    indexInNew = advance(index: indexInNew, in: updatedText, by: 1)
-
-                    // Advance in the original string
-                    indexInOriginal = advance(index: indexInOriginal, in: text, by: 1)
-                } else {
-                    break
-                }
-
-                if indexInNew >= updatedText.endIndex {
-                    break
-                }
-
-            }
-
-            // indexInNew now has the updated index of the range start so we offset it by the changed text
-            if string.isEmpty {
-                // The previous code leaves us one char after for deletions, so back up
-                indexInNew = advance(index: indexInNew, in: updatedText, by: -1)
-            } else {
-                indexInNew = advance(index: indexInNew, in: updatedText, by: string.count)
-            }
-
-            let distance = updatedText.distance(from: updatedText.startIndex, to: indexInNew)
-
-            guard let newPosition = textField.position(from: textField.beginningOfDocument,
-                                                       offset: distance) else {
-                                                        return false
-            }
-
-            textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
-        }
-
-        return false
+        validate(amount: amount)
     }
-    // swiftlint:enable function_body_length
+
+    func didTapCurrency() {
+        transitionsDelegate?.requestCurrencyPicker(data: data, currencyCode: currency)
+    }
 
 }
 
 extension NewOpAmountView: NewOperationChildViewDelegate {
 
     func pushNextState() {
-        let input = textField.text ?? ""
+        let input = amountInputView.value
         let amount: BitcoinAmount
         let isUsingAllFunds = useAllFunds || presenter.isSendingAllFundsManually(value: input, currency: currency)
 
@@ -292,54 +185,14 @@ extension NewOpAmountView: NewOperationChildViewDelegate {
 
 }
 
-extension NewOpAmountView: NewOpAmountPresenterDelegate {
-
-    func userDidChangeAmount(state: AmountState) {
-
-        switch state {
-        case .zero:
-            delegate?.readyForNextState(false, error: nil)
-            maxAmountLabel.textColor = Asset.Colors.muunGrayDark.color
-            textField.textColor = Asset.Colors.muunBlue.color
-            textField.tintColor = Asset.Colors.muunBlue.color
-
-        case .tooBig:
-            delegate?.readyForNextState(false, error: L10n.NewOpAmountView.s4)
-            textField.textColor = Asset.Colors.muunRed.color
-            textField.tintColor = Asset.Colors.muunRed.color
-            maxAmountLabel.textColor = Asset.Colors.muunRed.color
-
-        case .tooSmall:
-            delegate?.readyForNextState(false, error: L10n.NewOpAmountView.s5)
-            textField.textColor = Asset.Colors.muunRed.color
-            textField.tintColor = Asset.Colors.muunRed.color
-            maxAmountLabel.textColor = Asset.Colors.muunGrayDark.color
-
-        case .valid:
-            maxAmountLabel.textColor = Asset.Colors.muunGrayDark.color
-            textField.textColor = Asset.Colors.muunBlue.color
-            textField.tintColor = Asset.Colors.muunBlue.color
-            delegate?.readyForNextState(true, error: nil)
-        }
-
-    }
-
-}
-
-fileprivate extension Selector {
-
-    static let currencyTouched = #selector(NewOpAmountView.currencyTouched)
-
-}
+extension NewOpAmountView: NewOpAmountPresenterDelegate {}
 
 extension NewOpAmountView: UITestablePage {
     typealias UIElementType = UIElements.Pages.NewOp.AmountView
 
     func makeViewTestable() {
         makeViewTestable(self, using: .root)
-        makeViewTestable(textField, using: .input)
-        makeViewTestable(currencyLabel, using: .currency)
         makeViewTestable(allFundsButton, using: .useAllFunds)
-        makeViewTestable(maxAmountLabel, using: .allFunds)
+        makeViewTestable(amountInputView, using: .input)
     }
 }

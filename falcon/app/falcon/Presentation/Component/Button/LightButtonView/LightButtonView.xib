@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,9 +19,9 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yKk-9C-fEb">
-                    <rect key="frame" x="123.5" y="0.0" width="128" height="32"/>
-                    <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yKk-9C-fEb">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+                    <color key="backgroundColor" systemColor="systemTealColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="9EZ-HW-zrQ"/>
                     </constraints>
@@ -32,15 +33,21 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="yKk-9C-fEb" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ASh-Zc-aql"/>
                 <constraint firstItem="yKk-9C-fEb" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="AcU-GU-G43"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="yKk-9C-fEb" secondAttribute="bottom" id="CJO-WQ-CMM"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="yKk-9C-fEb" secondAttribute="trailing" id="kXx-7r-pd0"/>
+                <constraint firstItem="yKk-9C-fEb" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="pa2-q6-9ps"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <point key="canvasLocation" x="141" y="154"/>
+            <point key="canvasLocation" x="140" y="153.82308845577214"/>
         </view>
     </objects>
+    <resources>
+        <systemColor name="systemTealColor">
+            <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

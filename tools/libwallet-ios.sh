@@ -58,6 +58,8 @@ CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
 
 st=$?
 
+cd "$repo_root"
+
 sha1sum=$(calc_sha1sum "libwallet/")
 echo "$sha1sum" > "${libwallet}/libwallet.sha1sum"
 

@@ -12,61 +12,45 @@ protocol NoticeViewDelegate: class {
     func didTapOnMessage()
 }
 
-enum NoticeType {
-    case oneConf, rbf
-
-    func getBackgroundColor() -> UIColor {
-        switch self {
-        case .oneConf:
-            return Asset.Colors.noticeBackground.color
-        case .rbf:
-            return Asset.Colors.muunWarningRBF.color.withAlphaComponent(0.03)
-        }
-    }
-
-    func getBorderColor() -> UIColor {
-        switch self {
-        case .oneConf:
-            return Asset.Colors.noticeBorder.color
-        case .rbf:
-            return Asset.Colors.muunWarningRBF.color
-        }
-    }
-
-    func getIcon() -> UIImage {
-        switch self {
-        case .oneConf:
-            return Asset.Assets.notice.image
-        case .rbf:
-            return Asset.Assets.rbfNotice.image
-        }
-    }
-
-    func getMessage() -> NSAttributedString {
-        switch self {
-        case .oneConf:
-            return L10n.NewOperationView.s2
-                .set(font: Constant.Fonts.system(size: .opHelper),
-                     lineSpacing: Constant.FontAttributes.lineSpacing,
-                     kerning: Constant.FontAttributes.kerning,
-                     alignment: .left)
-                .set(underline: L10n.NewOperationView.s3, color: Asset.Colors.muunBlue.color)
-        case .rbf:
-            return L10n.DetailViewController.rbfNotice
-                .set(font: Constant.Fonts.system(size: .opHelper),
-                     lineSpacing: Constant.FontAttributes.lineSpacing,
-                     kerning: Constant.FontAttributes.kerning,
-                     alignment: .left)
-                .set(underline: L10n.DetailViewController.rbfCta, color: Asset.Colors.muunBlue.color)
-        }
-    }
-}
-
 class NoticeView: UIView {
+
+    struct Style {
+        let backgroundColor: UIColor
+        let borderColor: UIColor
+        let icon: UIImage
+
+        static let notice = Style(
+            backgroundColor: Asset.Colors.noticeBackground.color,
+            borderColor: Asset.Colors.noticeBorder.color,
+            icon: Asset.Assets.notice.image
+        )
+
+        static let warning = Style(
+            backgroundColor: Asset.Colors.muunWarningRBF.color.withAlphaComponent(0.03),
+            borderColor: Asset.Colors.muunWarningRBF.color,
+            icon: Asset.Assets.rbfNotice.image
+        )
+    }
 
     private let card: UIView! = UIView()
     private let helperImageView: UIImageView! = UIImageView()
     private let messageLabel: UILabel! = UILabel()
+
+    var style: Style = .notice {
+        didSet {
+            helperImageView.image = style.icon
+            card.backgroundColor = style.backgroundColor
+            card.layer.borderColor = style.borderColor.cgColor
+        }
+    }
+
+    var text: NSAttributedString? {
+        didSet {
+            messageLabel.font = Constant.Fonts.system(size: .opHelper)
+            messageLabel.textColor = Asset.Colors.muunGrayDark.color
+            messageLabel.attributedText = text
+        }
+    }
 
     weak var delegate: NoticeViewDelegate?
 
@@ -116,16 +100,6 @@ class NoticeView: UIView {
 
         messageLabel.isUserInteractionEnabled = true
         messageLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .messageTapped))
-    }
-
-    public func setUp(_ type: NoticeType) {
-        helperImageView.image = type.getIcon()
-        card.backgroundColor = type.getBackgroundColor()
-        card.layer.borderColor = type.getBorderColor().cgColor
-
-        messageLabel.font = Constant.Fonts.system(size: .opHelper)
-        messageLabel.textColor = Asset.Colors.muunGrayDark.color
-        messageLabel.attributedText = type.getMessage()
     }
 
     @objc fileprivate func messageTapped() {

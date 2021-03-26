@@ -3,6 +3,16 @@
     {
       "filename" : "change_password.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "change-password.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

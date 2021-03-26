@@ -35,10 +35,6 @@ class IncomingSwapUITests: FalconUITests {
         let secondInvoice = receivePage.invoice()
         XCTAssertNotEqual(firstInvoice, secondInvoice)
 
-        // This test *used* to be possible until FCM deprecated the direct notification channel.
-        // The simulator now only receives notifications if it's polling for them :(
-        // The receive screen doesnt do so yet so this next case is impossible to test for
-        /*
         var paid = false
         payWithLapp(invoice: secondInvoice, amountInSats: 100) {
             paid = true
@@ -52,12 +48,10 @@ class IncomingSwapUITests: FalconUITests {
         // Receiving a payment should change the QR too
         waitUntil(condition: {
                     receivePage.invoice() != secondInvoice
-        }, description: "wait for the invoice to change after a payment arrives")
+        }, timeout: 60, description: "wait for the invoice to change after a payment arrives")
 
-        assert1Conf(isPaid: {
-            paid
-        })
-        */
+        waitUntil(condition: { mempoolCount() == 2 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
+        assertPaid(isPaid: { paid })
     }
 
     public func testIncomingSwap() {
@@ -87,7 +81,7 @@ class IncomingSwapUITests: FalconUITests {
         let isPaid = receive(homePage, amount: 100_000, balance: expectedBalance, operations: 4, oneConf: true)
 
         sweepWallet(homePage, amount: 0.00299577, fee: 0.00000523)
-        waitUntil(condition: isPaid, timeout: 30, description: "waiting until LND sees last payment")
+        waitUntil(condition: isPaid, timeout: 60, description: "waiting until LND sees last payment")
     }
 
     public func testFullDebt() {
@@ -151,7 +145,7 @@ class IncomingSwapUITests: FalconUITests {
 
         addSection("confirm swap and logout")
         generate(blocks: 1)
-        waitUntil(condition: { mempoolCount() == 1 }, description: "waiting for fulfillment to be broadcast")
+        waitUntil(condition: { mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
 
         assertPaid(isPaid: isPaid)
 
@@ -177,11 +171,11 @@ class IncomingSwapUITests: FalconUITests {
             paid = true
         }
 
-        waitForOperations(count: operations, home: homePage)
+        waitForOperations(count: operations, home: homePage, timeout: 60)
         homePage.assert(balance: balance)
 
         if fullDebt {
-            waitUntil(condition: { paid }, description: "waiting for LND to see payment for full debt")
+            waitUntil(condition: { paid }, timeout: 60, description: "waiting for LND to see payment for full debt")
             XCTAssertEqual(0, mempoolCount())
         } else if oneConf {
             // Wait a bit to ensure the node has seen updates
@@ -190,8 +184,8 @@ class IncomingSwapUITests: FalconUITests {
             XCTAssertFalse(paid, "LND shouldn't see payment yet")
             XCTAssertEqual(1, mempoolCount())
         } else {
-            waitUntil(condition: { mempoolCount() == 2 }, description: "waiting for the fulfillment to be broadcast")
-            waitUntil(condition: { paid }, description: "waiting for LND to see payment for zero conf")
+            waitUntil(condition: { mempoolCount() == 2 }, timeout: 60, description: "waiting for the fulfillment to be broadcast")
+            waitUntil(condition: { paid }, timeout: 60, description: "waiting for LND to see payment for zero conf")
         }
 
         return { paid }
@@ -199,7 +193,7 @@ class IncomingSwapUITests: FalconUITests {
 
     fileprivate func assertPaid(isPaid: @escaping IncomingSwapUITests.isPaid) {
         // Wait for LND to see the payment
-        waitUntil(condition: isPaid, timeout: 30, description: "waiting for LND to see payment")
+        waitUntil(condition: isPaid, timeout: 60, description: "waiting for LND to see payment")
 
         // Settle the swap
         generate(blocks: 6)
@@ -238,7 +232,7 @@ class IncomingSwapUITests: FalconUITests {
         let isPaid = receive(homePage, amount: amount, balance: balance, operations: operations, oneConf: true)
 
         generate(blocks: 1)
-        waitUntil(condition: { mempoolCount() == 1 }, description: "waiting for fulfillment to be broadcast")
+        waitUntil(condition: { mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
 
         assertPaid(isPaid: isPaid)
     }

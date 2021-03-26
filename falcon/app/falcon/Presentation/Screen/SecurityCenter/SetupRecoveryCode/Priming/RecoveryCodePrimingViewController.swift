@@ -87,7 +87,7 @@ class RecoveryCodePrimingViewController: MUViewController {
 extension RecoveryCodePrimingViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
-        navigationController!.pushViewController(GenerateRecoveryCodeViewController(wording: wording), animated: true)
+        navigationController?.pushViewController(GenerateRecoveryCodeViewController(wording: wording), animated: true)
     }
 
 }

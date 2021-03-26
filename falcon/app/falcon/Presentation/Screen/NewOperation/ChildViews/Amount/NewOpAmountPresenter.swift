@@ -16,15 +16,12 @@ enum AmountState {
     case tooBig
 }
 
-protocol NewOpAmountPresenterDelegate: BasePresenterDelegate {
-    func userDidChangeAmount(state: AmountState)
-}
+protocol NewOpAmountPresenterDelegate: BasePresenterDelegate {}
 
 class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresenter<Delegate> {
 
     private let data: NewOperationStateLoaded
     private let totalBalance: Satoshis
-    fileprivate var lastAmountEntered: MonetaryAmount?
 
     init(delegate: Delegate, state: NewOperationStateLoaded) {
         self.totalBalance = state.feeInfo.feeCalculator.totalBalance()
@@ -33,26 +30,23 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         super.init(delegate: delegate)
     }
 
-    func validityCheck(_ value: String, currency: String) {
+    func validityCheck(_ value: String, currency: String) -> AmountInputView.State {
         let amount = LocaleAmountFormatter.number(from: value, in: currency)
         let satoshiAmount = Satoshis.from(amount: amount.amount, at: rate(for: currency))
 
         if satoshiAmount == Satoshis(value: 0) {
-            delegate.userDidChangeAmount(state: .zero)
-            return
+            return .zero
         }
 
         // This is weird, but the int64Value of a really big NSDecimalNumber returns a really low int
         // So we return amount too big when satoshi amount is a negative value
         // stackoverflow.com/questions/36322336/positive-nsdecimalnumber-returns-unexpected-64-bit-integer-values
         if satoshiAmount < Satoshis(value: 0) {
-            delegate.userDidChangeAmount(state: .tooBig)
-            return
+            return .tooBig
         }
 
         if !data.type.allowsSpendingDust && satoshiAmount < Satoshis.dust {
-            delegate.userDidChangeAmount(state: .tooSmall)
-            return
+            return .tooSmall
         }
 
         let validAmount =
@@ -60,11 +54,10 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
                 || isSendingAllFundsManually(value: value, currency: currency)
 
         if !validAmount {
-            delegate.userDidChangeAmount(state: .tooBig)
-            return
+            return .tooBig
         }
 
-        delegate.userDidChangeAmount(state: .valid)
+        return .valid
     }
 
     func getUserPrimaryCurrency() -> String {
@@ -100,16 +93,7 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
 
     func convert(value: String, in currency: String, to newCurrency: String) -> MonetaryAmount {
 
-        var satoshis = Satoshis(value: 0)
-
-        if let lastAmount = lastAmountEntered {
-            satoshis = amount(
-                from: LocaleAmountFormatter.string(from: lastAmount),
-                in: lastAmount.currency
-            ).inSatoshis
-        } else {
-            satoshis = amount(from: value, in: currency).inSatoshis
-        }
+        var satoshis = amount(from: value, in: currency).inSatoshis
 
         if isSendingAllFundsManually(value: value, currency: currency) {
             satoshis = totalBalance
@@ -125,10 +109,6 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         // the flow will be interrupted.
         let totalBalanceAmountString = LocaleAmountFormatter.string(from: totalBalance(in: currency))
         return totalBalanceAmountString == value
-    }
-
-    func setLastAmountEntered(_ amount: MonetaryAmount?) {
-        lastAmountEntered = amount
     }
 
 }

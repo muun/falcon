@@ -42,6 +42,27 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "ActivateEmergencyKitViewController.s1")
   }
 
+  internal enum AddressTypeOptionView {
+    /// Address type
+    internal static let label = L10n.tr("Localizable", "AddressTypeOptionView.label")
+    /// Legacy
+    internal static let legacy = L10n.tr("Localizable", "AddressTypeOptionView.legacy")
+    /// SegWit
+    internal static let segwit = L10n.tr("Localizable", "AddressTypeOptionView.segwit")
+  }
+
+  internal enum AddressTypeSelectViewController {
+    /// Choose your address type
+    internal static let title = L10n.tr("Localizable", "AddressTypeSelectViewController.title")
+  }
+
+  internal enum AmountOptionView {
+    /// Add +
+    internal static let addButton = L10n.tr("Localizable", "AmountOptionView.addButton")
+    /// Amount
+    internal static let label = L10n.tr("Localizable", "AmountOptionView.label")
+  }
+
   internal enum ApiMigrationsViewController {
     /// Please retry.
     internal static let failedAlertMessage = L10n.tr("Localizable", "ApiMigrationsViewController.failedAlertMessage")
@@ -235,8 +256,6 @@ internal enum L10n {
     internal static let s13 = L10n.tr("Localizable", "DetailViewController.s13")
     /// Receiving node
     internal static let s14 = L10n.tr("Localizable", "DetailViewController.s14")
-    /// Payment preimage
-    internal static let s15 = L10n.tr("Localizable", "DetailViewController.s15")
     /// Waiting for the recipient to accept the payment.
     internal static let s16 = L10n.tr("Localizable", "DetailViewController.s16")
     /// This payment is waiting for an on-chain confirmation.
@@ -330,6 +349,11 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "EnterFeeManuallyTableViewCell.s2")
   }
 
+  internal enum ExpirationTimeOptionView {
+    /// Expiration time
+    internal static let label = L10n.tr("Localizable", "ExpirationTimeOptionView.label")
+  }
+
   internal enum FeeEditorPresenter {
     /// 15 days
     internal static let s1 = L10n.tr("Localizable", "FeeEditorPresenter.s1")
@@ -414,6 +438,13 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "HomeViewController.s2")
     /// Cancel
     internal static let s3 = L10n.tr("Localizable", "HomeViewController.s3")
+  }
+
+  internal enum LightningAdvancedOptionsView {
+    /// Invoice settings
+    internal static let header = L10n.tr("Localizable", "LightningAdvancedOptionsView.header")
+    /// Hide settings
+    internal static let hide = L10n.tr("Localizable", "LightningAdvancedOptionsView.hide")
   }
 
   internal enum LightningNetworkSettings {
@@ -658,13 +689,13 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "NewOperationViewController.s1")
     /// Pay via lightning
     internal static let s2 = L10n.tr("Localizable", "NewOperationViewController.s2")
-    /// Cancel payment?
+    /// Quit without finishing?
     internal static let s3 = L10n.tr("Localizable", "NewOperationViewController.s3")
-    /// You are about to cancel this payment and go back to the home screen
+    /// You are about to quit this payment and go back to the home screen.
     internal static let s4 = L10n.tr("Localizable", "NewOperationViewController.s4")
-    /// Cancel
+    /// Continue
     internal static let s5 = L10n.tr("Localizable", "NewOperationViewController.s5")
-    /// Abort
+    /// Yes, quit
     internal static let s6 = L10n.tr("Localizable", "NewOperationViewController.s6")
   }
 
@@ -681,6 +712,13 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "NotificationsPrimingView.s5")
     /// Lightning payments require you to get notifications.
     internal static let s6 = L10n.tr("Localizable", "NotificationsPrimingView.s6")
+  }
+
+  internal enum OnChainAdvancedOptionsView {
+    /// Address settings
+    internal static let header = L10n.tr("Localizable", "OnChainAdvancedOptionsView.header")
+    /// Hide settings
+    internal static let hide = L10n.tr("Localizable", "OnChainAdvancedOptionsView.hide")
   }
 
   internal enum OpSubmarineSwapViewBuilder {
@@ -753,41 +791,55 @@ internal enum L10n {
     internal static let s6 = L10n.tr("Localizable", "PinViewController.s6")
   }
 
+  internal enum QRCodeWithActionsView {
+    /// COPY
+    internal static let copy = L10n.tr("Localizable", "QRCodeWithActionsView.copy")
+    /// SHARE
+    internal static let share = L10n.tr("Localizable", "QRCodeWithActionsView.share")
+  }
+
   internal enum Receive {
     /// Your bitcoin address
     internal static let s1 = L10n.tr("Localizable", "Receive.s1")
     /// Your lightning network invoice
     internal static let s2 = L10n.tr("Localizable", "Receive.s2")
-    /// Segwit and legacy addresses\n\nSegwit and legacy are two different types of bitcoin addresses.\nLegacy addresses are more widely adopted but create larger transactions. Using them will result in higher fees on your future transactions.\n\nTo make your transactions more cost-effective, Muun displays Segwit addresses by default. Some services haven't upgraded to Segwit yet. If you are having trouble using a Segwit address, try a legacy address instead.
+    /// Segwit and legacy addresses
     internal static let s3 = L10n.tr("Localizable", "Receive.s3")
+    /// Segwit and legacy are two different types of bitcoin addresses.\n\nLegacy addresses are more widely adopted but create larger transactions. Using them will result in higher fees on your future transactions.\n\nTo make your transactions more cost-effective, Muun displays Segwit addresses by default. Some services haven't upgraded to Segwit yet. If you are having trouble using a Segwit address, try a legacy address instead.
+    internal static let s4 = L10n.tr("Localizable", "Receive.s4")
+  }
+
+  internal enum ReceiveAmountInputViewController {
+    /// CONFIRM AMOUNT
+    internal static let confirm = L10n.tr("Localizable", "ReceiveAmountInputViewController.confirm")
+    /// REMOVE AMOUNT
+    internal static let remove = L10n.tr("Localizable", "ReceiveAmountInputViewController.remove")
+    /// Edit Invoice Amount
+    internal static let titleLightning = L10n.tr("Localizable", "ReceiveAmountInputViewController.titleLightning")
+    /// Edit Address Amount
+    internal static let titleOnChain = L10n.tr("Localizable", "ReceiveAmountInputViewController.titleOnChain")
+    /// AMOUNT IS TOO SMALL
+    internal static let tooSmall = L10n.tr("Localizable", "ReceiveAmountInputViewController.tooSmall")
   }
 
   internal enum ReceiveInLightningView {
-    /// This invoice will expire in %s.
+    /// Generating invoice
+    internal static let loading = L10n.tr("Localizable", "ReceiveInLightningView.loading")
+    /// This invoice will expire in %s. Create another
     internal static func s1(_ p1: UnsafePointer<CChar>) -> String {
       return L10n.tr("Localizable", "ReceiveInLightningView.s1", p1)
     }
     /// Create another
     internal static let s2 = L10n.tr("Localizable", "ReceiveInLightningView.s2")
-    /// Share
-    internal static let s3 = L10n.tr("Localizable", "ReceiveInLightningView.s3")
-    /// Copy
-    internal static let s4 = L10n.tr("Localizable", "ReceiveInLightningView.s4")
     /// This invoice expired before the payment was made. Please, create or request a new one.
     internal static let s5 = L10n.tr("Localizable", "ReceiveInLightningView.s5")
     /// CREATE INVOICE
     internal static let s6 = L10n.tr("Localizable", "ReceiveInLightningView.s6")
-    /// Loading your invoice
-    internal static let s7 = L10n.tr("Localizable", "ReceiveInLightningView.s7")
   }
 
   internal enum ReceiveOnChainView {
     /// Bitcoin legacy address
     internal static let s1 = L10n.tr("Localizable", "ReceiveOnChainView.s1")
-    /// Share
-    internal static let s2 = L10n.tr("Localizable", "ReceiveOnChainView.s2")
-    /// Copy
-    internal static let s3 = L10n.tr("Localizable", "ReceiveOnChainView.s3")
     /// Switch to legacy addresses
     internal static let s4 = L10n.tr("Localizable", "ReceiveOnChainView.s4")
     /// Switch to Segwit addresses
@@ -812,6 +864,10 @@ internal enum L10n {
     internal static let s3 = L10n.tr("Localizable", "ReceiveViewController.s3")
     /// Copied to clipboard
     internal static let s4 = L10n.tr("Localizable", "ReceiveViewController.s4")
+    /// Copied to clipboard. This invoice expires in %s.
+    internal static func s5(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "ReceiveViewController.s5", p1)
+    }
   }
 
   internal enum Recover {

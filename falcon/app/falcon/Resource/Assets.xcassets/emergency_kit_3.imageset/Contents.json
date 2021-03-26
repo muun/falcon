@@ -3,6 +3,16 @@
     {
       "filename" : "ek3.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "complete_ownership.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

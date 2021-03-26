@@ -77,39 +77,16 @@ class FulfillIncomingSwapAction {
 
         return houstonService.fetchFulfillmentData(for: swap.uuid)
             .map { fulfillmentData in
-                guard let htlc = swap.htlc else {
+                if swap.htlc == nil {
                     throw MuunError(Errors.unknownSwap)
                 }
-
-                let incomingSwap = LibwalletIncomingSwap()
-
-                incomingSwap.fulfillmentTx = fulfillmentData.fulfillmentTx
-                incomingSwap.muunSignature = fulfillmentData.muunSignature
-                incomingSwap.outputPath = fulfillmentData.outputPath
-                incomingSwap.outputVersion = fulfillmentData.outputVersion
-
-                incomingSwap.htlcTx = htlc.htlcTx
-                incomingSwap.paymentHash = swap.paymentHash
-                incomingSwap.sphinx = swap.sphinxPacket
-                incomingSwap.swapServerPublicKey = htlc.swapServerPublicKey.toHexString()
-                incomingSwap.htlcExpiration = htlc.expirationHeight
-                incomingSwap.collectInSats = swap.collect.value
-
-                // These are unused for now but should eventually be provided by houston
-                incomingSwap.htlcBlock = Data()
-                incomingSwap.confirmationTarget = 0
-                incomingSwap.blockHeight = 0
-                incomingSwap.merkleTree = Data()
 
                 let userKey = try self.keysRepository.getBasePrivateKey()
                 let muunKey = try self.keysRepository.getCosigningKey()
 
                 do {
-                    let signedTx = try incomingSwap.verifyAndFulfill(
-                        userKey.key, muunKey: muunKey.key, net: Environment.current.network
-                    )
-
-                    return signedTx
+                    return try swap.fulfill(
+                        fulfillmentData, userKey: userKey, muunKey: muunKey)
                 } catch {
 
                     if error.localizedDescription.contains("payment is multipart") {
@@ -120,35 +97,34 @@ class FulfillIncomingSwapAction {
                 }
 
             }
-            .flatMapCompletable { (signedTx: Data) in self.houstonService.pushFulfillmentTransaction(
-                    rawTransaction: RawTransaction(hex: signedTx.toHexString()),
+            .flatMapCompletable { (result: IncomingSwapFulfillmentResult) in
+                let fullfillmentTx = RawTransaction(hex: result.fullfillmentTx.toHexString())
+
+                return self.houstonService.pushFulfillmentTransaction(
+                    rawTransaction: fullfillmentTx,
                     incomingSwap: swap.uuid
                 )
-
             }
     }
 
     private func fulfillFullDebt(swap: IncomingSwap) -> Completable {
         return Completable.deferred {
-            let preimage = try self.exposePreimage(for: swap.paymentHash)
-            return self.houstonService.fulfill(incomingSwap: swap.uuid, preimage: preimage)
-        }
-    }
-
-    private func exposePreimage(for paymentHash: Data) throws -> Data {
-
-        do {
-            return try doWithError { err in
-                LibwalletExposePreimage(paymentHash, err)
+            let preimage: Data
+            do {
+                preimage = try swap.fulfillFullDebt()
+            } catch {
+                throw MuunError(Errors.unknownSwap)
             }
-        } catch {
-            throw MuunError(Errors.unknownSwap)
+
+            return self.houstonService.fulfill(incomingSwap: swap.uuid, preimage: preimage)
         }
     }
 
     private func persistPreimage(for swap: IncomingSwap) -> Completable {
         return Completable.deferred {
-            let preimage = try self.exposePreimage(for: swap.paymentHash)
+            guard let preimage = swap.preimage else {
+                fatalError("expected swap to contain preimage after fulfillment")
+            }
             return self.incomingSwapRepository.update(preimage: preimage, for: swap)
         }
     }
@@ -158,16 +134,7 @@ class FulfillIncomingSwapAction {
         let userKey = try self.keysRepository.getBasePrivateKey()
 
         do {
-
-            _ = try doWithError { err in LibwalletIsInvoiceFulfillable(
-                swap.paymentHash,
-                swap.sphinxPacket,
-                swap.paymentAmountInSats.value,
-                userKey.key,
-                Environment.current.network,
-                err
-            ) }
-
+            try swap.verifyFulfillable(userKey: userKey)
         } catch {
             throw MuunError(Errors.unfulfillable)
         }
