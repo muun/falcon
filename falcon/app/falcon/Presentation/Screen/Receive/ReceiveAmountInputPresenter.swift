@@ -66,7 +66,13 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
                        for receiveType: ReceiveType) -> AmountInputView.State {
 
         let amount = LocaleAmountFormatter.number(from: value, in: currency)
-        let satoshiAmount = Satoshis.from(amount: amount.amount, at: rate(for: currency))
+
+        let satoshiAmount: Satoshis
+        do {
+            satoshiAmount = try Satoshis.bounded(amount: amount.amount, at: rate(for: currency))
+        } catch {
+            return .tooBig
+        }
 
         if satoshiAmount == Satoshis(value: 0) {
             if amount.amount > 0 {

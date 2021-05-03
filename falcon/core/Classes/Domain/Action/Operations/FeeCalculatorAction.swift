@@ -18,10 +18,15 @@ public class FeeCalculatorAction: AsyncAction<FeeInfo> {
 
     private let realTimeDataAction: RealTimeDataAction
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
+    private let minFeeRateRepository: MinFeeRateRepository
 
-    init(realTimeDataAction: RealTimeDataAction, nextTransactionSizeRepository: NextTransactionSizeRepository) {
+    init(realTimeDataAction: RealTimeDataAction,
+         nextTransactionSizeRepository: NextTransactionSizeRepository,
+         minFeeRateRepository: MinFeeRateRepository) {
+
         self.realTimeDataAction = realTimeDataAction
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
+        self.minFeeRateRepository = minFeeRateRepository
 
         super.init(name: "FeeCalculatorAction")
     }
@@ -33,7 +38,8 @@ public class FeeCalculatorAction: AsyncAction<FeeInfo> {
                 // FIXME: This should consume some action to get the next transaction size
                 let calculator = FeeCalculator(
                     targetedFees: data.feeWindow.targetedFees,
-                    nts: self.nextTransactionSizeRepository.getNextTransactionSize()!
+                    nts: self.nextTransactionSizeRepository.getNextTransactionSize()!,
+                    minFeeRate: self.minFeeRateRepository.fetch()
                 )
 
                 return FeeInfo(feeCalculator: calculator,

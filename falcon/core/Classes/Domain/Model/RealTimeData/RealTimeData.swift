@@ -14,6 +14,7 @@ public struct RealTimeData {
     let exchangeRateWindow: ExchangeRateWindow
     let currentBlockchainHeight: Int
     let forwardingPolicies: [ForwardingPolicy]
+    let minFeeRateInWeightUnits: Double
 }
 
 public struct FeeWindow: Codable {

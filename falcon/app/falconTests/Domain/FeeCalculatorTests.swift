@@ -66,32 +66,38 @@ class FeeCalculatorTests: MuunTestCase {
 
     lazy var emptyCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts([], expectedDebt: zeroDebt)
+        nts: buildNts([], expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     lazy var defaultCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(defaultProgression, expectedDebt: zeroDebt)
+        nts: buildNts(defaultProgression, expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     lazy var negativeCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(negativeProgression, expectedDebt: zeroDebt)
+        nts: buildNts(negativeProgression, expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     lazy var singleNegativeCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(singleNegativeProgression, expectedDebt: zeroDebt)
+        nts: buildNts(singleNegativeProgression, expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     lazy var edgeCaseCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(edgeCaseProgression, expectedDebt: zeroDebt)
+        nts: buildNts(edgeCaseProgression, expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     lazy var dustDrivenCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(dustDrivenProgression, expectedDebt: zeroDebt)
+        nts: buildNts(dustDrivenProgression, expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     private func buildNts(_ sizeProgression: [SizeForAmount], expectedDebt: Satoshis) -> NextTransactionSize {
@@ -172,7 +178,8 @@ class FeeCalculatorTests: MuunTestCase {
         let sizeProgression = [SizeForAmount(amountInSatoshis: max, sizeInBytes: 400, outpoint: "max:0")]
         let calculator = FeeCalculator(
             targetedFees: targetedFees,
-            nts: buildNts(sizeProgression, expectedDebt: zeroDebt)
+            nts: buildNts(sizeProgression, expectedDebt: zeroDebt),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let spendableAmount = calculator.totalBalance()
@@ -248,7 +255,8 @@ class FeeCalculatorTests: MuunTestCase {
         let amount = Satoshis(value: 2_042)
         let calculator = FeeCalculator(
             targetedFees: highTargetedFees,
-            nts: buildNts(defaultProgression, expectedDebt: zeroDebt)
+            nts: buildNts(defaultProgression, expectedDebt: zeroDebt),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let feeFor1BlockConfTarget = try calculator.feeFor(amount: amount, confirmationTarget: 1)
@@ -282,7 +290,8 @@ class FeeCalculatorTests: MuunTestCase {
         let amount = Satoshis(value: 9_000)
         let calc = FeeCalculator(
             targetedFees: targetedFees,
-            nts: buildNts(lendProgression, expectedDebt: Satoshis(value: 2_000))
+            nts: buildNts(lendProgression, expectedDebt: Satoshis(value: 2_000)),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         AssertThrowsError(try calc.feeFor(amount: amount, confirmationTarget: 15, debtType: .LEND), Errors) { err in
@@ -296,7 +305,8 @@ class FeeCalculatorTests: MuunTestCase {
         let amount = Satoshis(value: 11_000)
         let calculator = FeeCalculator(
             targetedFees: targetedFees,
-            nts: buildNts(collectProgression, expectedDebt: debtInSats)
+            nts: buildNts(collectProgression, expectedDebt: debtInSats),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let fee = try calculator.feeFor(amount: amount, confirmationTarget: 15, debtType: .COLLECT)
@@ -312,7 +322,8 @@ class FeeCalculatorTests: MuunTestCase {
         let amount = Satoshis(value: 20_000)
         let calc = FeeCalculator(
             targetedFees: targetedFees,
-            nts: buildNts(collectProgression, expectedDebt: debtInSats)
+            nts: buildNts(collectProgression, expectedDebt: debtInSats),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         AssertThrowsError(try calc.feeFor(amount: amount, confirmationTarget: 15, debtType: .COLLECT), Errors) { err in
@@ -325,7 +336,8 @@ class FeeCalculatorTests: MuunTestCase {
         let amount = Satoshis(value: 7_000)
         let calc = FeeCalculator(
             targetedFees: targetedFees,
-            nts: buildNts(collectProgression, expectedDebt: debtInSats)
+            nts: buildNts(collectProgression, expectedDebt: debtInSats),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let fee = try calc.feeFor(amount: amount, confirmationTarget: 15)
@@ -343,7 +355,8 @@ class FeeCalculatorTests: MuunTestCase {
 
         let calc = FeeCalculator(
             targetedFees: highTargetedFees,
-            nts: buildNts(progression, expectedDebt: debtInSats)
+            nts: buildNts(progression, expectedDebt: debtInSats),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let fee = try calc.feeFor(amount: amount, confirmationTarget: 1)
@@ -360,7 +373,8 @@ class FeeCalculatorTests: MuunTestCase {
 
         let calc = FeeCalculator(
             targetedFees: targetedFees,
-            nts: buildNts(progression, expectedDebt: debtInSats)
+            nts: buildNts(progression, expectedDebt: debtInSats),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         AssertThrowsError(try calc.feeFor(amount: amount, confirmationTarget: 1), Errors) { err in
@@ -407,7 +421,8 @@ class FeeCalculatorTests: MuunTestCase {
             nts: buildNts(
                 [SizeForAmount(amountInSatoshis: Satoshis(value: 1000), sizeInBytes: 10, outpoint: nil)],
                 expectedDebt: zeroDebt
-            )
+            ),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         XCTAssert(

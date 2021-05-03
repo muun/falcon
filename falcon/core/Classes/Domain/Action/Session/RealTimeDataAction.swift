@@ -18,6 +18,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     private let exchangeRateWindowRepository: ExchangeRateWindowRepository
     private let blockchainHeightRepository: BlockchainHeightRepository
     private let forwardingPoliciesRepository: ForwardingPolicyRepository
+    private let minFeeRateRepository: MinFeeRateRepository
 
     private let secondsForFreshData: Double = 5 * 60
 
@@ -25,7 +26,8 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
          feeWindowRepository: FeeWindowRepository,
          exchangeRateWindowRepository: ExchangeRateWindowRepository,
          blockchainHeightRepository: BlockchainHeightRepository,
-         forwardingPoliciesRepository: ForwardingPolicyRepository) {
+         forwardingPoliciesRepository: ForwardingPolicyRepository,
+         minFeeRateRepository: MinFeeRateRepository) {
 
         self.houstonService = houstonService
 
@@ -33,6 +35,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
         self.exchangeRateWindowRepository = exchangeRateWindowRepository
         self.blockchainHeightRepository = blockchainHeightRepository
         self.forwardingPoliciesRepository = forwardingPoliciesRepository
+        self.minFeeRateRepository = minFeeRateRepository
 
         super.init(name: "RealTimeDataAction")
     }
@@ -49,13 +52,15 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                     self.exchangeRateWindowRepository.setExchangeRateWindow(data.exchangeRateWindow)
                     self.blockchainHeightRepository.setBlockchainHeight(data.currentBlockchainHeight)
                     self.forwardingPoliciesRepository.store(policies: data.forwardingPolicies)
+                    self.minFeeRateRepository.store(satsPerWeightUnit: data.minFeeRateInWeightUnits)
                 })
         } else {
             let realData = RealTimeData(
                 feeWindow: feeWindowRepository.getFeeWindow()!,
                 exchangeRateWindow: exchangeRateWindowRepository.getExchangeRateWindow()!,
                 currentBlockchainHeight: blockchainHeightRepository.getCurrentBlockchainHeight(),
-                forwardingPolicies: forwardingPoliciesRepository.fetch()
+                forwardingPolicies: forwardingPoliciesRepository.fetch(),
+                minFeeRateInWeightUnits: NSDecimalNumber(decimal: minFeeRateRepository.fetch().satsPerWeightUnit).doubleValue
             )
             return Single.just(realData)
         }

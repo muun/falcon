@@ -135,13 +135,20 @@ class ReceiveAmountInputViewController: MUViewController {
         case .tooSmall:
             confirmButton.isEnabled = false
             confirmButton.buttonText = L10n.ReceiveAmountInputViewController.tooSmall
+        case .tooBig:
+            confirmButton.isEnabled = false
+            confirmButton.buttonText = L10n.ReceiveAmountInputViewController.tooBig
         default:
             confirmButton.isEnabled = true
             confirmButton.buttonText = L10n.ReceiveAmountInputViewController.confirm
         }
 
         let secondaryAmount = presenter.getSecondaryAmount(amount: amount, currency: currency)
-        amountInput.subtitle = secondaryAmount?.toString() ?? ""
+        if state == .tooBig {
+            amountInput.subtitle = ""
+        } else {
+            amountInput.subtitle = secondaryAmount?.toString() ?? ""
+        }
     }
 
     func updateInfo(newCurrency: Currency) {

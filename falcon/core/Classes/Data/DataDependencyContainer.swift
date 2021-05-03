@@ -49,6 +49,7 @@ public extension DependencyContainer {
             container.register(factory: EmergencyKitVerificationCodesRepository.init)
             container.register(factory: ApiMigrationsVersionRepository.init)
             container.register(factory: UserPreferencesRepository.init)
+            container.register(factory: MinFeeRateRepository.init)
 
             container.register(factory: HoustonService.init)
         }

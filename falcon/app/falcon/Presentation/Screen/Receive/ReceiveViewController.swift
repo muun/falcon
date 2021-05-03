@@ -72,12 +72,19 @@ class ReceiveViewController: MUViewController {
         makeViewTestable()
     }
 
+    override func viewDidLoad() {
+        showViewForCurrentReceiveType()
+        additionalSafeAreaInsets = .zero
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUpNavigation()
-        additionalSafeAreaInsets = .zero
 
         presenter.setUp()
+        if receiveType == .lightning {
+            presenter.refreshLightningInvoice()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -86,15 +93,10 @@ class ReceiveViewController: MUViewController {
         presenter.tearDown()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        showViewForCurrentReceiveType()
-    }
-
     private func setUpView() {
         self.view = UIView()
 
+        view.backgroundColor = Asset.Colors.background.color
         setUpScrollView()
         setUpSegmentedControl()
         setUpOnChainView()
@@ -279,7 +281,7 @@ class ReceiveViewController: MUViewController {
             logScreen(receiveLogName, parameters: getLogParams())
 
             // Always update the invoice before displaying the view
-            presenter.refreshLightningInvoice(delay: false)
+            presenter.refreshLightningInvoice()
 
             notificationsPrimingView.isHidden = true
             receiveInLightningView.setAmount(nil)
@@ -457,7 +459,15 @@ extension ReceiveViewController: ReceiveAmountInputViewControllerDelegate {
         if receiveType == .onChain {
             receiveOnChainView.setAmount(bitcoinAmount)
         } else {
-            presenter.refreshLightningInvoice()
+            if #available(iOS 13, *) {
+                // in iOS 13+ the modal presentation style changes and doesn't actually *cover* everything
+                // that means that viewWillDisappear/viewWillAppear won't trigger for this VC when showing
+                // the amount modal. So we need to trigger a refresh of the invoice manually.
+                // For older versions, the viewWillAppear will take care of it. And we actually want that, since
+                // this method requires the view to be fully shown and will crash otherwise.
+                presenter.refreshLightningInvoice()
+            }
+
             receiveInLightningView.setAmount(bitcoinAmount)
         }
     }

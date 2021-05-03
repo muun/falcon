@@ -303,6 +303,7 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 "ReceiveAmountInputViewController.confirm" = "CONFIRM AMOUNT";
 "ReceiveAmountInputViewController.remove" = "REMOVE AMOUNT";
 "ReceiveAmountInputViewController.tooSmall" = "AMOUNT IS TOO SMALL";
+"ReceiveAmountInputViewController.tooBig" = "AMOUNT IS TOO BIG";
 /* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
 "SignInEmailViewController.s1" = "Recover your wallet";
 "SignInEmailViewController.s2" = "Enter your email";

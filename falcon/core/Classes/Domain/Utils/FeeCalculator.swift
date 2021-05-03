@@ -24,10 +24,12 @@ public class FeeCalculator {
 
     let targetedFees: [UInt: FeeRate]
     let nts: NextTransactionSize
+    let minFeeRate: FeeRate
 
-    public init(targetedFees: [UInt: FeeRate], nts: NextTransactionSize) {
+    public init(targetedFees: [UInt: FeeRate], nts: NextTransactionSize, minFeeRate: FeeRate) {
         self.targetedFees = targetedFees
         self.nts = nts
+        self.minFeeRate = minFeeRate
     }
 
     public func calculateMinimumFee() -> Satoshis {
@@ -162,11 +164,7 @@ public class FeeCalculator {
     }
 
     public func getMinimumFeeRate() -> FeeRate {
-        if let maxTarget = targetedFees.keys.max(), let feeRate = targetedFees[maxTarget] {
-            return feeRate
-        }
-
-        return Constant.FeeProtocol.minProtocolFeeRate
+        return minFeeRate
     }
 
     public func getOutpoints() -> [String]? {

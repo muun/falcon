@@ -29,12 +29,14 @@ class ComputeSwapFeesActionTests: XCTestCase {
 
     lazy var feeCalculator = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(defaultProgression, expectedDebt: zeroDebt)
+        nts: buildNts(defaultProgression, expectedDebt: zeroDebt),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     lazy var feeCalculatorWithDebt = FeeCalculator(
         targetedFees: targetedFees,
-        nts: buildNts(defaultProgression, expectedDebt: Satoshis(value: 500))
+        nts: buildNts(defaultProgression, expectedDebt: Satoshis(value: 500)),
+        minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
     )
 
     private func buildNts(_ sizeProgression: [SizeForAmount], expectedDebt: Satoshis) -> NextTransactionSize {
@@ -244,7 +246,8 @@ class ComputeSwapFeesActionTests: XCTestCase {
             nts: buildNts(
                 [SizeForAmount(amountInSatoshis: Satoshis(value: 21000), sizeInBytes: 209, outpoint: nil)],
                 expectedDebt: Satoshis(value: 8000)
-            )
+            ),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let totalBalance = feeCalculator.totalBalance()
@@ -278,7 +281,8 @@ class ComputeSwapFeesActionTests: XCTestCase {
             nts: buildNts(
                 [SizeForAmount(amountInSatoshis: Satoshis(value: 21000), sizeInBytes: 209, outpoint: nil)],
                 expectedDebt: Satoshis(value: 8000)
-            )
+            ),
+            minFeeRate: Constant.FeeProtocol.minProtocolFeeRate
         )
 
         let totalBalance = feeCalculator.totalBalance()

@@ -1080,7 +1080,8 @@ extension RealTimeDataJson: ModelConvertible {
         return RealTimeData(feeWindow: feeWindow.toModel(),
                             exchangeRateWindow: exchangeRateWindow.toModel(),
                             currentBlockchainHeight: currentBlockchainHeight,
-                            forwardingPolicies: forwardingPolicies.toModel())
+                            forwardingPolicies: forwardingPolicies.toModel(),
+                            minFeeRateInWeightUnits: minFeeRateInWeightUnits)
     }
 
 }

@@ -20,6 +20,18 @@ public struct BitcoinAmount {
     }
 }
 
+extension BitcoinAmount: Comparable {
+
+    public static func < (lhs: BitcoinAmount, rhs: BitcoinAmount) -> Bool {
+        return lhs.inSatoshis < rhs.inSatoshis
+    }
+
+    public static func == (lhs: BitcoinAmount, rhs: BitcoinAmount) -> Bool {
+        return lhs.inSatoshis == rhs.inSatoshis
+    }
+
+}
+
 extension BitcoinAmount {
 
     public static func from(inputCurrency inInputCurrency: MonetaryAmount,
@@ -111,6 +123,22 @@ extension Satoshis {
         return BitcoinAmount(inSatoshis: self, inInputCurrency: toBTC(), inPrimaryCurrency: inPrimary)
     }
 
+    public static func bounded(amount: Decimal, at rate: Decimal) throws -> Satoshis {
+        let decimalValue = (amount / rate).multiplyByPowerOf10(power: Satoshis.magnitude)
+
+        // We multiply by 1000 to account for millisat convertions
+        if decimalValue * 1000 > Decimal(Int64.max) {
+            throw MuunError(Errors.amountNotRepresentable)
+        }
+
+        // We HAVE to round before converting, otherwise some strange things happen
+        // Rounding down makes sense for satoshi amounts: 1 satoshi is too small a number to complain about
+        let rounded = decimalValue.round(scale: 0, roundingMode: .bankers)
+
+        return Satoshis(value: NSDecimalNumber(decimal: rounded).int64Value)
+    }
+
+    @available(*, deprecated, message: "Use bounded(amount:at:) to prevent silent overflows")
     public static func from(amount: Decimal, at rate: Decimal) -> Satoshis {
         let decimalValue = (amount / rate).multiplyByPowerOf10(power: Satoshis.magnitude)
 
@@ -157,6 +185,10 @@ extension Satoshis {
         lhs = Satoshis(value: lhs.value - rhs.value)
     }
 
+    enum Errors: Error {
+        case amountNotRepresentable
+    }
+
 }
 
 extension Satoshis: Codable {}
@@ -171,6 +203,10 @@ extension Satoshis: Comparable {
 
 public struct FeeRate: Codable, Equatable {
     public let satsPerVByte: Decimal
+
+    public var satsPerWeightUnit: Decimal {
+        return satsPerVByte / 4
+    }
 
     public init(satsPerWeightUnit: Decimal) {
         // 1 sat/WU is equal to 4 sat/vByte

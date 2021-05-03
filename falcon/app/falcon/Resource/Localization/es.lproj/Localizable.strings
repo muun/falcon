@@ -303,6 +303,7 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "ReceiveAmountInputViewController.confirm" = "CONFIRMAR MONTO";
 "ReceiveAmountInputViewController.remove" = "ELIMINAR MONTO";
 "ReceiveAmountInputViewController.tooSmall" = "MONTO DEMASIADO PEQUEÑO";
+"ReceiveAmountInputViewController.tooBig" = "MONTO DEMASIADO GRANDE";
 /* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
 "SignInEmailViewController.s1" = "Recupera tu monedero";
 "SignInEmailViewController.s2" = "Ingresa tu email";

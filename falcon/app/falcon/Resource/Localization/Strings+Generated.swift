@@ -818,6 +818,8 @@ internal enum L10n {
     internal static let titleLightning = L10n.tr("Localizable", "ReceiveAmountInputViewController.titleLightning")
     /// Edit Address Amount
     internal static let titleOnChain = L10n.tr("Localizable", "ReceiveAmountInputViewController.titleOnChain")
+    /// AMOUNT IS TOO BIG
+    internal static let tooBig = L10n.tr("Localizable", "ReceiveAmountInputViewController.tooBig")
     /// AMOUNT IS TOO SMALL
     internal static let tooSmall = L10n.tr("Localizable", "ReceiveAmountInputViewController.tooSmall")
   }

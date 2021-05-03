@@ -28,6 +28,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     private var numberOfOperations: Int?
 
     private var customAmount: BitcoinAmount?
+    private var amountChanged: Bool = false
 
     init(delegate: Delegate,
          addressActions: AddressActions,
@@ -70,19 +71,21 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     }
 
     func setCustomAmount(_ amount: BitcoinAmount?) {
+        amountChanged = customAmount != amount
         customAmount = amount
     }
 
-    func refreshLightningInvoice(delay: Bool = true) {
+    func refreshLightningInvoice() {
 
         self.delegate.show(invoice: nil)
 
         let amount = customAmount?.inSatoshis
 
         var action = createInvoiceAction.run(amount: amount)
-        if delay {
+        if amountChanged {
             // TODO: review scheduler for this
             action = action.delay(.seconds(1), scheduler: MainScheduler.instance)
+            amountChanged = false
         }
 
         subscribeTo(action) { rawInvoice in
