@@ -37,10 +37,6 @@ class AnalyticsHelper {
 
     // MARK: User properties
 
-    static func setUserProperty(email: String) {
-        setUserProperty(email, forName: "email")
-    }
-
     static func setUserProperty(id: String?) {
         Analytics.setUserID(id)
     }
@@ -63,10 +59,6 @@ class AnalyticsHelper {
 
     static func setCrashlyticsUserId(_ id: String?) {
         crashlytics.setUserID(id ?? "")
-    }
-
-    static func setCrashlyticsEmail(_ email: String) {
-        crashlytics.setCustomValue(email, forKey: "email")
     }
 
     static func recordErrorToCrashlytics(_ err: Error, additionalInfo: [AnyHashable: Any]? = nil) {

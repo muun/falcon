@@ -93,10 +93,6 @@ extension AppDelegate {
             AnalyticsHelper.setCrashlyticsUserId(userId)
             AnalyticsHelper.setUserProperty(id: userId)
             AnalyticsHelper.setUserProperty(user.unsafeGetPrimaryCurrency(), forName: "currency")
-            if let email = user.email {
-                AnalyticsHelper.setCrashlyticsEmail(email)
-                AnalyticsHelper.setUserProperty(email: email)
-            }
         } else {
             AnalyticsHelper.setCrashlyticsUserId(nil)
             AnalyticsHelper.setUserProperty(id: nil)

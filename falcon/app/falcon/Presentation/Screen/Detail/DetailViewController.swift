@@ -190,11 +190,13 @@ class DetailViewController: MUViewController {
     }
 
     fileprivate func addNetworkFee() {
-        let title = operation.direction == .INCOMING
-            ? L10n.DetailViewController.incomingTxFee
-            : L10n.DetailViewController.outgoingTxFee
-
-        stackView.addArrangedSubview(DetailRowView.copyableAmount(operation.fee, title: title, controller: self))
+        if operation.direction != .INCOMING {
+            stackView.addArrangedSubview(DetailRowView.copyableAmount(
+                operation.fee,
+                title: L10n.DetailViewController.outgoingTxFee,
+                controller: self
+            ))
+        }
     }
 
     fileprivate func addRelevantAddress() {

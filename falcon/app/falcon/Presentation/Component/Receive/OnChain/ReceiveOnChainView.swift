@@ -128,9 +128,10 @@ final class ReceiveOnChainView: UIView {
         } else {
             // Uppercase segwit addresses to trigger alphanumeric mode in
             // the QR code, which reduces QR density
+            // TODO: Bring back the uppercase once all wallets support it
             let stringData: Data?
             if addressType == .segwit {
-                stringData = segwitAddress.uppercased().data(using: .utf8)
+                stringData = segwitAddress.data(using: .utf8)
             } else {
                 stringData = legacyAddress.data(using: .utf8)
             }

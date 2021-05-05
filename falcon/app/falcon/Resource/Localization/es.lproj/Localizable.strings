@@ -98,7 +98,6 @@ Cambiar a dirección de compatibilidad";
 "DetailViewController.s19" = "Este pago está esperando una confirmación on-chain. ¿Por qué?";
 "DetailViewController.s20" = "¿Por qué?";
 "DetailViewController.s22" = "No hay ruta disponible para realizar este pago. Recibirás un reembolso en aproximadamente %s %s.";
-"DetailViewController.incomingTxFee" = "Comisión (del remitente a mineros)";
 "DetailViewController.outgoingTxFee" = "Comisión pagada a mineros";
 "DetailViewController.rbfNotice" = "Hasta que se confirme, esta transacción puede ser cancelada por el remitente. ¿Cómo?";
 "DetailViewController.rbfCta" = "¿Cómo?";
@@ -681,7 +680,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "TransactionListEmptyView.description" = "Recibe tu primer pago y comienza.";
 /* AppDelegate */
 "AppDelegate.walletTab" = "Monedero";
-"AppDelegate.securityTab" = "Centro de Seguridad";
+"AppDelegate.securityTab" = "Seguridad";
 "AppDelegate.settingsTab" = "Ajustes";
 /* LightningNetworkSettings */
 "LightningNetworkSettings.title" = "Lightning Network";

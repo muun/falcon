@@ -252,12 +252,10 @@ class ReceiveViewController: MUViewController {
 
         if !presenter.hasSkippedPushNotificationsPermission() {
             PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
-                DispatchQueue.main.async {
-                    if status == .notDetermined {
-                        self.showNotificationsPriming(isLightning: false)
-                    } else {
-                        displayOnChainAddressesView()
-                    }
+                if status == .notDetermined {
+                    self.showNotificationsPriming(isLightning: false)
+                } else {
+                    displayOnChainAddressesView()
                 }
             }
         } else {
@@ -292,12 +290,10 @@ class ReceiveViewController: MUViewController {
         }
 
         PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
-            DispatchQueue.main.async {
-                if status == .notDetermined || status == .denied {
-                    self.showNotificationsPriming(isLightning: true)
-                } else {
-                    displayInvoiceView()
-                }
+            if status == .notDetermined || status == .denied {
+                self.showNotificationsPriming(isLightning: true)
+            } else {
+                displayInvoiceView()
             }
         }
 
@@ -442,7 +438,7 @@ extension ReceiveViewController: NotificationsPrimingViewDelegate {
 
     func didTapOnSkipButton() {
         presenter.skipPushNotificationsPermission()
-        receiveType = .onChain
+        showViewForCurrentReceiveType()
     }
 
     func permissionGranted() {

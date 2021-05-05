@@ -75,7 +75,7 @@ internal enum L10n {
   }
 
   internal enum AppDelegate {
-    /// Security Center
+    /// Security
     internal static let securityTab = L10n.tr("Localizable", "AppDelegate.securityTab")
     /// Settings
     internal static let settingsTab = L10n.tr("Localizable", "AppDelegate.settingsTab")
@@ -230,8 +230,6 @@ internal enum L10n {
   }
 
   internal enum DetailViewController {
-    /// Fee (from sender to miners)
-    internal static let incomingTxFee = L10n.tr("Localizable", "DetailViewController.incomingTxFee")
     /// Fee paid to miners
     internal static let outgoingTxFee = L10n.tr("Localizable", "DetailViewController.outgoingTxFee")
     /// Payment hash

@@ -111,7 +111,7 @@ class QRCodeWithActionsView: UIView {
             qrCodeView.heightAnchor.constraint(equalTo: qrCodeView.widthAnchor)
         ])
 
-        stackView.setCustomSpacing(8, after: qrCodeView)
+        stackView.setCustomSpacing(16, after: qrCodeView)
     }
 
     fileprivate func setUpAddressLabel() {

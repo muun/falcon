@@ -74,7 +74,7 @@ public class SyncAction: AsyncAction<()> {
                 runCompletable(buildAndRunSyncCompletable())
             }
         } catch {
-            fatalError()
+            Logger.fatal(error: error)
         }
     }
 

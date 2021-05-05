@@ -12,7 +12,11 @@ enum PushNotificationsHelper {
 
     static func getPushNotificationAuthorizationStatus(status: @escaping (UNAuthorizationStatus) -> Void) {
         UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { (settings) in
-            status(settings.authorizationStatus)
+
+            // We almost always use this from UI code so push to the main thread always
+            DispatchQueue.main.async {
+                status(settings.authorizationStatus)
+            }
         })
     }
 

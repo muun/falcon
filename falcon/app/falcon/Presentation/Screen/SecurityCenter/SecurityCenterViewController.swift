@@ -80,7 +80,7 @@ class SecurityCenterViewController: MUViewController {
     fileprivate func setUpNavigation() {
         navigationController!.setNavigationBarHidden(false, animated: true)
 
-        title = L10n.SecurityCenterViewController.s1
+        navigationItem.title = L10n.SecurityCenterViewController.s1
     }
 
     private func setUpView() {

@@ -12,7 +12,7 @@ calc_sha1sum() {
             | grep -v "_test.go$" | grep -v "/build/" \
             | grep -v ".build/" | sort -z)
     shaeach=$(for file in $files; do sha1sum "$file"; done)
-    echo "$shaeach" | sha1sum | awk \{'print $1'\}
+    echo "$shaeach $(sha1sum "$1/go.mod")" | sha1sum | awk \{'print $1'\}
 }
 
 if ! which gobind > /dev/null; then

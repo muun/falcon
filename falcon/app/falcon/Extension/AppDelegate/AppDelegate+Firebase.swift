@@ -24,11 +24,9 @@ extension AppDelegate {
 
         PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
             if status == .authorized {
-                // Attempt registration for remote notifications on the main thread
-                DispatchQueue.main.async {
-                    if !UIApplication.shared.isRegisteredForRemoteNotifications {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
+                // Attempt registration for remote notifications
+                if !UIApplication.shared.isRegisteredForRemoteNotifications {
+                    UIApplication.shared.registerForRemoteNotifications()
                 }
             }
         }

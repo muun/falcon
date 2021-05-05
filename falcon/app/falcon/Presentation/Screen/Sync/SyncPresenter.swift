@@ -49,6 +49,7 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
                 syncAttemptsLeft -= 1
                 runSyncAction()
             } else {
+                Logger.log(error: result.error!)
                 delegate.syncFailed()
             }
 

@@ -37,7 +37,7 @@ class AddressTypeOptionView: UIStackView {
         axis = .horizontal
         alignment = .center
         isLayoutMarginsRelativeArrangement = true
-        layoutMargins = UIEdgeInsets(top: .verticalRowMargin, left: .sideMargin, bottom: .verticalRowMargin, right: .sideMargin)
+        layoutMargins = UIEdgeInsets(top: .verticalRowMargin, left: 8, bottom: .verticalRowMargin, right: 8)
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 56)

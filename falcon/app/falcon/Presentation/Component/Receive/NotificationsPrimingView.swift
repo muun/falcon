@@ -141,9 +141,7 @@ extension NotificationsPrimingView: ButtonViewDelegate {
                 self.delegate?.permissionGranted()
             case .denied:
                 // Open settings
-                DispatchQueue.main.async {
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                }
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             default:
                 return
             }

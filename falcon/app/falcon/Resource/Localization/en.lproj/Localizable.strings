@@ -98,7 +98,6 @@ Switch to legacy addresses";
 "DetailViewController.s19" = "This payment is waiting for an on-chain confirmation.";
 "DetailViewController.s20" = "Why?";
 "DetailViewController.s22" = "There was no available route for this payment. You will get the refund in approximately %s %s.";
-"DetailViewController.incomingTxFee" = "Fee (from sender to miners)";
 "DetailViewController.outgoingTxFee" = "Fee paid to miners";
 "DetailViewController.rbfNotice" = "Until confirmed, this transaction can be canceled by the sender. How?";
 "DetailViewController.rbfCta" = "How?";
@@ -681,7 +680,7 @@ This enables multi-factor authentication, improving security when you use your R
 "TransactionListEmptyView.description" = "Receive your first payment and get it started!";
 /* AppDelegate */
 "AppDelegate.walletTab" = "Wallet";
-"AppDelegate.securityTab" = "Security Center";
+"AppDelegate.securityTab" = "Security";
 "AppDelegate.settingsTab" = "Settings";
 /* LightningNetworkSettings */
 "LightningNetworkSettings.title" = "Lightning Network";

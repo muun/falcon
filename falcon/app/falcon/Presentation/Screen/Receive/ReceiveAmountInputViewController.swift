@@ -130,7 +130,6 @@ class ReceiveAmountInputViewController: MUViewController {
             } else {
                 confirmButton.isEnabled = false
                 confirmButton.buttonText = L10n.ReceiveAmountInputViewController.confirm
-                return
             }
         case .tooSmall:
             confirmButton.isEnabled = false

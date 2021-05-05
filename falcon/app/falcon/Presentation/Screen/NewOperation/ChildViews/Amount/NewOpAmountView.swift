@@ -43,8 +43,10 @@ class NewOpAmountView: MUView {
         amountInputView.currency = presenter.getUserPrimaryCurrency()
 
         if let preset = preset {
-            amountInputView.value = LocaleAmountFormatter.string(from: preset)
+            // NOTE: it's important that we set the currency before the value to avoid
+            // unwanted currency conversions.
             amountInputView.currency = preset.currency
+            amountInputView.value = LocaleAmountFormatter.string(from: preset, btcCurrencyFormat: .short)
         }
 
         setUp()
