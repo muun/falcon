@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol ReceiveAmountInputViewControllerDelegate: class {
+protocol ReceiveAmountInputViewControllerDelegate: AnyObject {
     func didConfirm(bitcoinAmount: BitcoinAmount?)
 }
 
@@ -203,7 +203,7 @@ extension ReceiveAmountInputViewController: CurrencyPickerDelegate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension ReceiveAmountInputViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol ReceiveDelegate: class {
+protocol ReceiveDelegate: AnyObject {
     func didTapOnShare(_ shareText: String)
     func didTapOnCopy(_ copyText: String)
     func didTapOnAddAmount()
@@ -155,7 +155,6 @@ final class ReceiveInLightningView: UIView {
             NSLayoutConstraint.activate(constraintsWhenNoticeIsVisible)
         }
     }
-
 
     fileprivate func setUpAdvancedOptionsView() {
         advancedOptionsView.translatesAutoresizingMaskIntoConstraints = false

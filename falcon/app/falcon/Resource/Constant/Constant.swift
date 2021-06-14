@@ -58,6 +58,8 @@ enum Constant {
         static let appStoreLink = "https://apps.apple.com/app/muun-wallet/id1482037683"
     }
 
+    static let supportEmail = "support@muun.com"
+
     static let leftBarButtonItemInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
 
     enum Images {

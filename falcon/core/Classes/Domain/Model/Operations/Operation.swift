@@ -25,7 +25,7 @@ public struct Operation {
     public let fee: BitcoinAmount
     public var confirmations: Int?
     public let exchangeRatesWindowId: Int
-    public let description: String?
+    public var description: String?
     public var status: OperationStatus
     public var transaction: Transaction?
     public let creationDate: Date
@@ -35,6 +35,8 @@ public struct Operation {
     public let outpoints: [String]? // The complete utxoSet, sorted as used for fee computation
 
     public let incomingSwap: IncomingSwap?
+
+    public var metadata: OperationMetadataJson?
 
     public init(id: Int?,
                 requestId: String,
@@ -56,7 +58,8 @@ public struct Operation {
                 creationDate: Date,
                 submarineSwap: SubmarineSwap?,
                 outpoints: [String]?,
-                incomingSwap: IncomingSwap?) {
+                incomingSwap: IncomingSwap?,
+                metadata: OperationMetadataJson?) {
         self.id = id
         self.requestId = requestId
         self.isExternal = isExternal
@@ -78,6 +81,7 @@ public struct Operation {
         self.submarineSwap = submarineSwap
         self.outpoints = outpoints
         self.incomingSwap = incomingSwap
+        self.metadata = metadata
     }
 
     // We will define `cancelable` operations with (`isReplaceableByFee` == true && 0 confirmations).

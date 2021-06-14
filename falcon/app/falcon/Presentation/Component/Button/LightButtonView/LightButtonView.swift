@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol LightButtonViewDelegate: class {
+protocol LightButtonViewDelegate: AnyObject {
     func lightButton(didPress lightButton: LightButtonView)
 }
 

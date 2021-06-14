@@ -18,6 +18,11 @@ class LoadingView: MUView {
         set { titleLabel.text = newValue }
     }
 
+    public var attributedTitleText: NSAttributedString? {
+        get { return titleLabel.attributedText }
+        set { titleLabel.attributedText = newValue }
+    }
+
     override func setUp() {
         backgroundColor = Asset.Colors.background.color
         setUpLabel()

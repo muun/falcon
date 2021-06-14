@@ -49,7 +49,25 @@ public struct OperationJson: Codable {
 }
 
 public struct OperationMetadataJson: Codable {
-    let description: String?
+    public let lnurlSender: String?
+    public let description: String?
+    public let invoice: String?
+
+    public init(lnurlSender: String?, description: String?, invoice: String?) {
+        self.lnurlSender = lnurlSender
+        self.description = description
+        self.invoice = invoice
+    }
+
+    public init(description: String?) {
+        self.lnurlSender = nil
+        self.description = description
+        self.invoice = nil
+    }
+}
+
+public struct UpdateOperationMetadataJson: Codable {
+    let receiverMetadata: String
 }
 
 public enum OperationDirectionJson: String, Codable {

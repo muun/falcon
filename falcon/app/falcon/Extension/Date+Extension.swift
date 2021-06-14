@@ -63,17 +63,4 @@ extension Date {
         return Calendar.current.isDate(self, equalTo: date, toGranularity: .year)
     }
 
-    // This is used to transform the creation date of an user to a Support Identifier
-    func getSupportId() -> String {
-        // Convert the date to epoch and remove the miliseconds
-        let epoch = Int(self.timeIntervalSince1970).description
-
-        // Get the last 8 characters
-        var customId = String(epoch.suffix(8))
-
-        // Insert a "-" in the middle to get two 4 characters chunks (1234-5678)
-        customId.insert("-", at: customId.index(customId.startIndex, offsetBy: 4))
-        return customId
-    }
-
 }

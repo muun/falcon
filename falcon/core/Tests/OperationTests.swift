@@ -82,7 +82,8 @@ class OperationTests: XCTestCase {
             creationDate: Date(),
             submarineSwap: submarineSwap,
             outpoints: nil,
-            incomingSwap: nil
+            incomingSwap: nil,
+            metadata: nil
         )
     }
 

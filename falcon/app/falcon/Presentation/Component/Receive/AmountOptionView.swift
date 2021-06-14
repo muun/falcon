@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol AmountOptionViewDelegate: class {
+protocol AmountOptionViewDelegate: AnyObject {
     func didTapAddAmount()
 }
 

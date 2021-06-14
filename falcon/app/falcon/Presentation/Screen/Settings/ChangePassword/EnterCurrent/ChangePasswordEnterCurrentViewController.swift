@@ -54,7 +54,7 @@ class ChangePasswordEnterCurrentViewController: MUViewController {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension ChangePasswordEnterCurrentViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

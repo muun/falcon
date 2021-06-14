@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TransactionListEmptyViewDelegate: class {
+protocol TransactionListEmptyViewDelegate: AnyObject {
     func didTapOnLoadWallet()
 }
 

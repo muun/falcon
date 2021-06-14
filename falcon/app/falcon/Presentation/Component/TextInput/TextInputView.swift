@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TextInputViewDelegate: class {
+protocol TextInputViewDelegate: AnyObject {
     func onTextChange(textInputView: TextInputView, text: String)
 }
 

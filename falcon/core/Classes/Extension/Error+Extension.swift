@@ -10,6 +10,19 @@ import Foundation
 
 extension Error {
 
+    public func isNetworkError() -> Bool {
+
+        if let muunError = self as? MuunError {
+
+            if let error = muunError.kind as? ServiceError {
+
+                return error.isNetworkError()
+            }
+        }
+
+        return false
+    }
+
     public func isKindOf(_ exactError: ExactDeveloperError) -> Bool {
 
         if let muunError = self as? MuunError {

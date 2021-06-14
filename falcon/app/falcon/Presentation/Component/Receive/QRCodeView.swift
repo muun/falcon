@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol QRCodeViewDelegate: class {
+protocol QRCodeViewDelegate: AnyObject {
     func didTapQRCode()
 }
 
@@ -38,6 +38,11 @@ class QRCodeView: UIImageView {
     private func setUpView() {
         isUserInteractionEnabled = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTap))
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        generate()
     }
 
     private func generate() {

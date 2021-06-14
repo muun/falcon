@@ -149,7 +149,7 @@ class SignUpPasswordViewController: MUViewController {
 
 extension SignUpPasswordViewController: SignUpPasswordPresenterDelegate {}
 
-//Keyboard actions
+// Keyboard actions
 extension SignUpPasswordViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

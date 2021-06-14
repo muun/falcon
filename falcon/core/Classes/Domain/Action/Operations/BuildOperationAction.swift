@@ -38,7 +38,8 @@ public class BuildOperationAction {
                               creationDate: Date(),
                               submarineSwap: submarineSwap,
                               outpoints: outpoints,
-                              incomingSwap: nil)
+                              incomingSwap: nil,
+                              metadata: OperationMetadataJson(description: description))
     }
 
     public static func toAddress(_ address: String,
@@ -69,7 +70,8 @@ public class BuildOperationAction {
             creationDate: Date(),
             submarineSwap: nil,
             outpoints: outpoints,
-            incomingSwap: nil
+            incomingSwap: nil,
+            metadata: OperationMetadataJson(description: description)
         )
     }
 

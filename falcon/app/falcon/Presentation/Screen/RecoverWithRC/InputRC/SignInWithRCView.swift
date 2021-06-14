@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol SignInWithRCViewDelegate: class {
+protocol SignInWithRCViewDelegate: AnyObject {
     func didConfirmRecoveryCode(_ code: String)
     func moreInfoTouched()
     func tapOnIncorrectRecoveryCodeLabel()

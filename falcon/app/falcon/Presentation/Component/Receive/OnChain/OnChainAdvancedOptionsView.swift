@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol OnChainAdvancedOptionsViewDelegate: class {
+protocol OnChainAdvancedOptionsViewDelegate: AnyObject {
     func didTapOnCompatibilityAddressInfo()
     func didTapOnAddressTypeControl()
     func didTapAddAmount()

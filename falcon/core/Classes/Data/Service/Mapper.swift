@@ -908,7 +908,8 @@ extension OperationJson: ModelOperationConvertible {
                          creationDate: creationDate,
                          submarineSwap: swap?.toModel(),
                          outpoints: outpoints,
-                         incomingSwap: incomingSwap?.toModel())
+                         incomingSwap: incomingSwap?.toModel(),
+                         metadata: metadata)
     }
 
 }

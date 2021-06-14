@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ChangePasswordEnterCurrentViewDelegate: class {
+protocol ChangePasswordEnterCurrentViewDelegate: AnyObject {
     func didConfirm(_ password: String)
     func didTapForgotPasswordButton()
 }

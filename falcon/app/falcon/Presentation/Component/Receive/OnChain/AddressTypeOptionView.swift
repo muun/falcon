@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol AddressTypeOptionViewDelegate: class {
+protocol AddressTypeOptionViewDelegate: AnyObject {
     func didTapHelp()
     func didTapControl()
 }

@@ -4,37 +4,10 @@
 "ActionCardView.s1" = "Omitido";
 /* Presentation/Component/CameraPermission/CameraPermissionView.swift */
 "CameraPermissionView.s1" = "HABILITAR";
-/* Presentation/Component/NewOpError/NewOpErrorView.swift */
-"NewOpErrorView.s1" = "VOLVER AL INICIO";
-"NewOpErrorView.s2" = "Esta no es una dirección de bitcoin";
-"NewOpErrorView.s3" = "Esta factura expiró";
-"NewOpErrorView.s4" = "La cotización de bitcoin cambió";
-"NewOpErrorView.s5" = "No es posible pagar esta factura";
-"NewOpErrorView.s6" = "Este pago requiere un tiempo de expiración más largo";
-"NewOpErrorView.s7" = "Esta factura fue utilizada";
-"NewOpErrorView.s8" = "No hay una ruta disponible";
-"NewOpErrorView.s9" = "No tienes suficientes fondos";
-"NewOpErrorView.s10" = "Este pago es demasiado pequeño";
-"NewOpErrorView.s11" = "Esta factura no tiene un monto válido";
-"NewOpErrorView.s12" = "Ha ocurrido un error inesperado";
-"NewOpErrorView.s13" = "Esta factura no se puede pagar";
-"NewOpErrorView.s15" = "Esta factura expiró antes de que se realizara el pago. Por favor, crea o solicita una nueva.";
-"NewOpErrorView.s16" = "Intenta con otra factura";
-"NewOpErrorView.s17" = "equipo de soporte";
-"NewOpErrorView.s18" = "No tienes suficientes fondos para cubrir este pago y la comisión de la red";
-"NewOpErrorView.s19" = "La factura debe tener un monto de al menos 1 satoshi. Por favor, crea o solicita una nueva.";
-"NewOpErrorView.s21" = "No puedes pagarte una factura a ti mismo.";
-"NewOpErrorView.s22" = "Texto escaneado";
-"NewOpErrorView.s23" = "Total (monto + comisión mínima)";
-"NewOpErrorView.s24" = "Tu balance";
-"NewOpErrorView.s25" = "Esto no es una dirección de BTC ni una factura de lightning. Verifica su origen y asegúrate de que la dirección esté formateada correctamente.";
-"NewOpErrorView.s26" = "Tu pago no se completó porque el tipo de cambio de bitcoin cambió desde que comenzaste. Por favor inicia un nuevo pago.";
-"NewOpErrorView.s27" = "Este pago requiere más tiempo restante antes de que expire la factura. Por favor, crea o solicita una nueva factura. Sugerimos un tiempo de expiración de 1 hora o más.";
-"NewOpErrorView.s28" = "Esta factura ya ha sido escaneada o pagada por otro monedero. Por favor crea o solicita una nueva factura.";
-"NewOpErrorView.s29" = "No existe una ruta con suficiente capacidad para hacer este pago. Por favor, contacta a nuestro equipo de soporte y cuéntanos que ocurrió.";
-"NewOpErrorView.s30" = "El monto que estás intentando enviar es demasiado pequeño para completar esta transacción. Debe superar los %s satoshis.";
-"NewOpErrorView.s31" = "Algo salió mal, pero no sabemos qué. Se generó un reporte de error que ayudará a resolverlo. Por favor, envíanoslo por email.";
-"NewOpErrorView.s32" = "Esta factura fue creada por un nodo privado al que no se puede acceder. Para poder accederlo, la factura debe incluir datos adicionales (RouteHints). Sólo el creador de la factura puede solucionar este problema.";
+/* Presentation/Component/NewOpError/ErrorView.swift */
+"ErrorView.goToHome" = "VOLVER AL INICIO";
+"ErrorView.retry" = "REINTENTAR";
+"ErrorView.sendReport" = "ENVIAR REPORTE";
 /* Presentation/Component/PopUp/WelcomePopUpView.swift */
 "WelcomePopUpView.message" = "Creaste tu monedero.
 ¡Bienvenido a Muun!";
@@ -68,6 +41,7 @@ Cambiar a dirección de compatibilidad";
 "OperationFormatter.s4" = "Confirmando";
 "OperationFormatter.s5" = "Falló";
 "OperationFormatter.s9" = "Confirmado";
+"OperationFormatter.s10" = "%s te pagó";
 "OperationFormatter.cancelable" = "Cancelable";
 /* Presentation/Screen/Base/BasePresenter.swift */
 "BasePresenter.s1" = "Por favor, intenta de nuevo";
@@ -157,6 +131,36 @@ Haz clic o desliza para ver tus pagos.";
 "NewOpDescriptionView.s2" = "Escribe una nota";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/FeeEditorPresenter.swift */
 "FeeEditorPresenter.s1" = "15 días";
+/* Presentation/Screen/NewOperation/NewOpError.swift */
+"NewOpError.s2" = "Esta no es una dirección de bitcoin";
+"NewOpError.s3" = "Esta factura expiró";
+"NewOpError.s4" = "La cotización de bitcoin cambió";
+"NewOpError.s5" = "No es posible pagar esta factura";
+"NewOpError.s6" = "Este pago requiere un tiempo de expiración más largo";
+"NewOpError.s7" = "Esta factura fue utilizada";
+"NewOpError.s8" = "No hay una ruta disponible";
+"NewOpError.s9" = "No tienes suficientes fondos";
+"NewOpError.s10" = "Este pago es demasiado pequeño";
+"NewOpError.s11" = "Esta factura no tiene un monto válido";
+"NewOpError.s12" = "Ha ocurrido un error inesperado";
+"NewOpError.s13" = "Esta factura no se puede pagar";
+"NewOpError.s15" = "Esta factura expiró antes de que se realizara el pago. Por favor, crea o solicita una nueva.";
+"NewOpError.s16" = "Intenta con otra factura";
+"NewOpError.s17" = "equipo de soporte";
+"NewOpError.s18" = "No tienes suficientes fondos para cubrir este pago y la comisión de la red";
+"NewOpError.s19" = "La factura debe tener un monto de al menos 1 satoshi. Por favor, crea o solicita una nueva.";
+"NewOpError.s21" = "No puedes pagarte una factura a ti mismo.";
+"NewOpError.s22" = "Texto escaneado";
+"NewOpError.s23" = "Total (monto + comisión mínima)";
+"NewOpError.s24" = "Tu balance";
+"NewOpError.s25" = "Esto no es una dirección de BTC ni una factura de lightning. Verifica su origen y asegúrate de que la dirección esté formateada correctamente.";
+"NewOpError.s26" = "Tu pago no se completó porque el tipo de cambio de bitcoin cambió desde que comenzaste. Por favor inicia un nuevo pago.";
+"NewOpError.s27" = "Este pago requiere más tiempo restante antes de que expire la factura. Por favor, crea o solicita una nueva factura. Sugerimos un tiempo de expiración de 1 hora o más.";
+"NewOpError.s28" = "Esta factura ya ha sido escaneada o pagada por otro monedero. Por favor crea o solicita una nueva factura.";
+"NewOpError.s29" = "No existe una ruta con suficiente capacidad para hacer este pago. Por favor, contacta a nuestro equipo de soporte y cuéntanos que ocurrió.";
+"NewOpError.s30" = "El monto que estás intentando enviar es demasiado pequeño para completar esta transacción. Debe superar los %s satoshis.";
+"NewOpError.s31" = "Algo salió mal, pero no sabemos qué. Se generó un reporte de error que ayudará a resolverlo. Por favor, envíanoslo por email.";
+"NewOpError.s32" = "Esta factura fue creada por un nodo privado al que no se puede acceder. Para poder accederlo, la factura debe incluir datos adicionales (RouteHints). Sólo el creador de la factura puede solucionar este problema.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/ManuallyEnterFee/ManuallyEnterFeeViewController.swift */
 "ManuallyEnterFeeViewController.s1" = "Editar la comisión de la red";
 "ManuallyEnterFeeViewController.s2" = "Ingresa la comisión manualmente. ¿Qué es esto?";
@@ -215,8 +219,6 @@ Una comisión alta le da mayor prioridad a tu transacción, mientras que una tra
 El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si este aumento se produce mientras tu transacción está en proceso de confirmación, la transacción puede demorar más tiempo en ser validada.";
 "NewOp.s10" = "¿Por qué puede demorarse este pago?";
 "NewOp.s11" = "Este pago de Lightning requiere una transacción en cadena (on-chain) confirmada. Este pago puede demorar aproximadamente 10 minutos en confirmarse.";
-/* Presentation/Screen/NewOperation/NewOperationConfiguration.swift */
-"NewOperationConfiguration.s1" = "VOLVER AL INICIO";
 /* Presentation/Screen/NewOperation/NewOperationView.swift */
 "NewOperationView.s1" = "Esta factura vence en %s";
 "NewOperationView.s2" = "Este pago puede demorar más que la mayoría de los pagos en lightning. ¿Por qué?";
@@ -242,6 +244,7 @@ El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si est
 "ScanQRViewController.s5" = "Habilita tu cámara para escanear códigos QR con direcciones o facturas";
 "ScanQRViewController.s6" = "Escanea un código QR de bitcoin o
 de lightning network";
+"ScanQRViewController.s7" = "USAR LNURL EN PORTAPAPELES";
 /* Presentation/Screen/NewOperation/SubmarineSwaps/OpSubmarineSwapViewBuilder.swift */
 "OpSubmarineSwapViewBuilder.s1" = "Clave pública";
 "OpSubmarineSwapViewBuilder.s2" = "Direcciones IP";
@@ -303,6 +306,51 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "ReceiveAmountInputViewController.remove" = "ELIMINAR MONTO";
 "ReceiveAmountInputViewController.tooSmall" = "MONTO DEMASIADO PEQUEÑO";
 "ReceiveAmountInputViewController.tooBig" = "MONTO DEMASIADO GRANDE";
+/* Presentation/Screen/LNURL/FirstTime/LNURLFirstTimeViewController.swift */
+"LNURLFirstTimeViewController.title" = "Escanea y recibe pagos
+en lightning";
+"LNURLFirstTimeViewController.description" = "Usa LNURL para recibir pagos sin tener que compartir facturas. Solo puedes usarlo con otros servicios que lo soporten.";
+/* Presentation/Screen/LNURL/ScanQR/LNURLScanQRViewController.swift */
+"LNURLScanQRViewController.title" = "Recibir";
+"LNURLScanQRViewController.helper" = "Escanea un enlace LNURL para
+recibir bitcoin";
+"LNURLScanQRViewController.enterManually" = "INGRESAR ENLACE LNURL";
+"LNURLScanQRViewController.useClipboard" = "USAR ENLACE LNURL DEL PORTAPAPELES";
+/* Presentation/Screen/LNURL/ScanQR/ManuallyEnter/LNURLScanQRViewController.swift */
+"LNURLManuallyEnterQRViewController.title" = "Recibir";
+"LNURLManuallyEnterQRViewController.inputLabel" = "Enlace LNURL";
+"LNURLManuallyEnterQRViewController.confirm" = "CONFIRMAR ENLACE";
+"LNURLManuallyEnterQRViewController.pasteFromClipboard" = "PEGAR DEL PORTAPAPELES";
+"LNURLManuallyEnterQRViewController.invalid" = "Enlace LNURL inválido";
+/* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawViewController.swift */
+"LNURLWithdrawViewController.title" = "Recibir";
+"LNURLWithdrawViewController.loading" = "Cargando...";
+"LNURLWithdrawViewController.contacting" = "Contactando %s...";
+"LNURLWithdrawViewController.receiving" = "Recibiendo de %s...";
+"LNURLWithdrawViewController.tooLong" = "%s está tardando mucho en pagar";
+"LNURLWithdrawViewController.tooLongDescription" = "Puedes esperar aquí o irte, y recibir una notificación cuando se complete el pago. Si el pago no se completa, comunícate con %s.";
+"LNURLWithdrawViewController.copyToClipboard" = "Copiar al portapapeles";
+/* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawPresenter.swift */
+"LNURLWithdrawPresenter.invalidCodeTitle" = "¿Es un código LNURL?";
+"LNURLWithdrawPresenter.unresponsiveTitle" = "%s no responde";
+"LNURLWithdrawPresenter.wrongTagTitle" = "¿Es esto un LNURL para retirar?";
+"LNURLWithdrawPresenter.unknownErrorTitle" = "Algo salió mal";
+"LNURLWithdrawPresenter.invalidCodeDescription" = "No parece ser uno. Por favor, vuelve a verificar su fuente. Ten en cuenta que solo puedes usar LNURL con servicios que lo soporten.";
+"LNURLWithdrawPresenter.wrongTagDescription" = "Esto es un LNURL válido, pero no para esta operación. Por favor, vuelve a verificar su fuente.";
+"LNURLWithdrawPresenter.unresponsiveDescription" = "El servicio que creó el código LNURL no está disponible. Por favor, inténtalo de nuevo más tarde.";
+"LNURLWithdrawPresenter.unknownErrorDescription" = "Algo falló y no estamos seguros de qué fue. Envíanos un reporte para ayudarnos a averiguar qué sucedió.";
+"LNURLWithdrawPresenter.expiredInvoice" = "Tu pago falló";
+"LNURLWithdrawPresenter.expiredInvoiceDescription" = "Tu factura de lightning venció y %s no completó el pago. Por favor, contáctalos para obtener más información.";
+"LNURLWithdrawPresenter.pendingNotificationTitle" = "Tu pago está en camino";
+"LNURLWithdrawPresenter.pendingNotificationBody" = "Recibirás tu pago tan pronto como %s lo complete.";
+"LNURLWithdrawPresenter.failedNotificationTitle" = "Tu pago falló";
+"LNURLWithdrawPresenter.failedNotificationBody" = "Tu factura de lightning venció y %s no completó el pago.";
+"LNURLWithdrawPresenter.invoice" = "Factura";
+/* Presentation/Screen/LNURL/FromSend/LNURLFromSendViewController.swift */
+"LNURLFromSendViewController.title" = "¿Quieres recibir por lightning?";
+"LNURLFromSendViewController.description" = "Esto parece ser un código LNURL. Te permite recibir bitcoins a través de lightning, en lugar de enviarlos. ¿Quieres usarlo?";
+"LNURLFromSendViewController.receiveBitcoin" = "RECIBIR BITCOIN";
+"LNURLFromSendViewController.goBack" = "VOLVER A ENVIAR";
 /* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
 "SignInEmailViewController.s1" = "Recupera tu monedero";
 "SignInEmailViewController.s2" = "Ingresa tu email";

@@ -277,7 +277,7 @@ extension ManuallyEnterFeeViewController: ButtonViewDelegate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension ManuallyEnterFeeViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

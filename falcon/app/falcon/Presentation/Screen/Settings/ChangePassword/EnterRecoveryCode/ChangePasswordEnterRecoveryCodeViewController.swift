@@ -53,7 +53,7 @@ class ChangePasswordEnterRecoveryCodeViewController: MUViewController {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension ChangePasswordEnterRecoveryCodeViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

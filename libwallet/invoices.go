@@ -64,7 +64,8 @@ type OperationMetadata struct {
 // creating a new invoice.
 type InvoiceOptions struct {
 	Description string
-	AmountSat   int64
+	AmountSat   int64 // deprecated
+	AmountMSat  int64
 	Metadata    *OperationMetadata
 }
 
@@ -235,8 +236,12 @@ func CreateInvoice(net *Network, userKey *HDPrivateKey, routeHints *RouteHints, 
 		// description or description hash must be non-empty, adding a placeholder for now
 		iopts = append(iopts, zpay32.Description(""))
 	}
+	// AmountSat is deprecated: remove after apps have migrated
 	if opts.AmountSat != 0 {
 		msat := lnwire.NewMSatFromSatoshis(btcutil.Amount(opts.AmountSat))
+		iopts = append(iopts, zpay32.Amount(msat))
+	} else if opts.AmountMSat != 0 {
+		msat := lnwire.MilliSatoshi(opts.AmountMSat)
 		iopts = append(iopts, zpay32.Amount(msat))
 	}
 
@@ -249,7 +254,11 @@ func CreateInvoice(net *Network, userKey *HDPrivateKey, routeHints *RouteHints, 
 	}
 
 	// recreate the client identity privkey
-	identityKeyPath := hdpath.MustParse(dbInvoice.KeyPath).Child(identityKeyChildIndex)
+	parentKeyPath, err := hdpath.Parse(dbInvoice.KeyPath)
+	if err != nil {
+		return "", err
+	}
+	identityKeyPath := parentKeyPath.Child(identityKeyChildIndex)
 	identityHDKey, err := userKey.DeriveTo(identityKeyPath.String())
 	if err != nil {
 		return "", err

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ActionCardDelegate: class {
+protocol ActionCardDelegate: AnyObject {
     func push(nextViewController: UIViewController)
 }
 

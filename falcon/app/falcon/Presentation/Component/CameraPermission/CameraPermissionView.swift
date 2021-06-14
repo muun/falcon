@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CameraPermissionViewDelegate: class {
+protocol CameraPermissionViewDelegate: AnyObject {
     func userDidRequestPermission()
 }
 

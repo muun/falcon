@@ -59,7 +59,7 @@ protocol NewOpStateMachineDelegate: BasePresenterDelegate {
     func cancel()
 }
 
-protocol NewOperationTransitions: class {
+protocol NewOperationTransitions: AnyObject {
     func back()
 }
 

@@ -55,7 +55,14 @@ public class TaskRunner {
                     return
                 }
 
-                Logger.log(.warn,
+                let level: LogLevel
+                if err.isNetworkError() {
+                    level = .info
+                } else {
+                    level = .warn
+                }
+
+                Logger.log(level,
                            "Retrying action \(action.`self`().description) due to error \(err.localizedDescription)")
 
                 self.schedule(after: retryInterval) {

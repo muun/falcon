@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol ChangePasswordEnterRecoveryCodeViewDelegate: class {
+protocol ChangePasswordEnterRecoveryCodeViewDelegate: AnyObject {
     func didConfirmRecoveryCode(_ code: String)
 }
 

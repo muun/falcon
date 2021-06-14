@@ -85,6 +85,11 @@ class ReceiveViewController: MUViewController {
         if receiveType == .lightning {
             presenter.refreshLightningInvoice()
         }
+
+        let buttonItem = UIBarButtonItem(image: Asset.Assets.scan.image, style: .plain, target: self, action: #selector(ReceiveViewController.didTapLNURL))
+        buttonItem.tintColor = Asset.Colors.muunBlue.color
+        buttonItem.accessibilityIdentifier = "Receive with LNURL"
+        navigationItem.rightBarButtonItem = buttonItem
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -299,6 +304,16 @@ class ReceiveViewController: MUViewController {
 
     }
 
+    @objc func didTapLNURL() {
+        let vc: UIViewController
+        if presenter.isLNURLFirstTimeUser() {
+            vc = LNURLFirstTimeViewController()
+        } else {
+            vc = LNURLScanQRViewController()
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
 }
 
 extension ReceiveViewController: ReceivePresenterDelegate {
@@ -482,8 +497,6 @@ extension ReceiveViewController: ReceiveAddressTypeSelectViewControllerDelegate 
         case .legacy:
             typeLogParams = legacyLogParams
             logScreen(receiveLogName, parameters: getLogParams())
-        default:
-            fatalError()
         }
     }
 

@@ -10,7 +10,7 @@ import UIKit
 import Lottie
 import core
 
-protocol ChevronViewDelegate: class {
+protocol ChevronViewDelegate: AnyObject {
     func chevronTap()
 }
 

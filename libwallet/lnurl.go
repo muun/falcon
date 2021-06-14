@@ -1,13 +1,19 @@
 package libwallet
 
 import (
+	"github.com/lightningnetwork/lnd/lnwire"
 	"github.com/muun/libwallet/lnurl"
 )
 
 type LNURLEvent struct {
 	Code     int
 	Message  string
-	Metadata string
+	Metadata *LNURLEventMetadata
+}
+
+type LNURLEventMetadata struct {
+	Host    string
+	Invoice string
 }
 
 const (
@@ -17,10 +23,10 @@ const (
 	LNURLErrInvalidResponse   = lnurl.ErrInvalidResponse
 	LNURLErrResponse          = lnurl.ErrResponse
 	LNURLErrUnknown           = lnurl.ErrUnknown
+	LNURLErrWrongTag          = lnurl.ErrWrongTag
 	LNURLStatusContacting     = lnurl.StatusContacting
 	LNURLStatusInvoiceCreated = lnurl.StatusInvoiceCreated
 	LNURLStatusReceiving      = lnurl.StatusReceiving
-	LNURLStatusSuccess        = lnurl.StatusSuccess
 )
 
 type LNURLListener interface {
@@ -37,9 +43,9 @@ func LNURLValidate(qr string) bool {
 func LNURLWithdraw(net *Network, userKey *HDPrivateKey, routeHints *RouteHints, qr string, listener LNURLListener) {
 	// TODO: consider making a struct out of the (net, userKey, routeHints) data
 	// that can be used for creating invoices
-	createInvoiceFunc := func(amt int64, desc string, host string) (string, error) {
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
 		opts := &InvoiceOptions{
-			AmountSat:   amt,
+			AmountMSat:  int64(amt),
 			Description: desc,
 			Metadata: &OperationMetadata{
 				LnurlSender: host,
@@ -52,9 +58,12 @@ func LNURLWithdraw(net *Network, userKey *HDPrivateKey, routeHints *RouteHints, 
 
 	lnurl.Withdraw(qr, createInvoiceFunc, allowUnsafe, func(e *lnurl.Event) {
 		event := &LNURLEvent{
-			Code:     e.Code,
-			Message:  e.Message,
-			Metadata: e.Metadata,
+			Code:    e.Code,
+			Message: e.Message,
+			Metadata: &LNURLEventMetadata{
+				Host:    e.Metadata.Host,
+				Invoice: e.Metadata.Invoice,
+			},
 		}
 		if event.Code < 100 {
 			listener.OnError(event)

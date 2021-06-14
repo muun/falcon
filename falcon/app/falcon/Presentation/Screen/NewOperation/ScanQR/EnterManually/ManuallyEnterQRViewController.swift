@@ -148,7 +148,7 @@ extension ManuallyEnterQRViewController: ScanQRPresenterDelegate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension ManuallyEnterQRViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

@@ -70,7 +70,11 @@ func (s *IncomingSwap) VerifyFulfillable(userKey *HDPrivateKey, net *Network) er
 		return fmt.Errorf("VerifyFulfillable: could not find invoice data for payment hash: %w", err)
 	}
 
-	identityKeyPath := hdpath.MustParse(invoice.KeyPath).Child(identityKeyChildIndex)
+	parentPath, err := hdpath.Parse(invoice.KeyPath)
+	if err != nil {
+		return fmt.Errorf("VerifyFulfillable: invoice key path is not valid: %v", invoice.KeyPath)
+	}
+	identityKeyPath := parentPath.Child(identityKeyChildIndex)
 
 	nodeHDKey, err := userKey.DeriveTo(identityKeyPath.String())
 	if err != nil {
@@ -224,9 +228,14 @@ func (c *coinIncomingSwap) SignInput(index int, tx *wire.MsgTx, userKey *HDPriva
 		return fmt.Errorf("could not find invoice data for payment hash: %w", err)
 	}
 
+	parentPath, err := hdpath.Parse(secrets.KeyPath)
+	if err != nil {
+		return fmt.Errorf("invalid invoice key path: %w", err)
+	}
+
 	// Recreate the HTLC script to verify it matches the transaction. For this
 	// we must derive the keys used in the HTLC script
-	htlcKeyPath := hdpath.MustParse(secrets.KeyPath).Child(htlcKeyChildIndex)
+	htlcKeyPath := parentPath.Child(htlcKeyChildIndex)
 
 	// Derive first the private key, which we are going to use for signing later
 	userPrivateKey, err := userKey.DeriveTo(htlcKeyPath.String())
@@ -253,7 +262,7 @@ func (c *coinIncomingSwap) SignInput(index int, tx *wire.MsgTx, userKey *HDPriva
 
 	// Next, we must validate the sphinx data. We derive the client identity
 	// key used by this invoice with the key path stored in the db.
-	identityKeyPath := hdpath.MustParse(secrets.KeyPath).Child(identityKeyChildIndex)
+	identityKeyPath := parentPath.Child(identityKeyChildIndex)
 
 	nodeHDKey, err := userKey.DeriveTo(identityKeyPath.String())
 	if err != nil {

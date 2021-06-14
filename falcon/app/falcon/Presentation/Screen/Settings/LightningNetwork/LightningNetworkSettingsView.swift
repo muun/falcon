@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol LightningNetworkSettingsViewDelegate: class {
+protocol LightningNetworkSettingsViewDelegate: AnyObject {
     func didTapLearnMore()
     func toggle()
 }

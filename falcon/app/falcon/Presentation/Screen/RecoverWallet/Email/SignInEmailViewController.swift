@@ -102,7 +102,7 @@ class SignInEmailViewController: MUViewController {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension SignInEmailViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

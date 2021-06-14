@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol BalanceViewDelegate: class {
+protocol BalanceViewDelegate: AnyObject {
     func balanceTap()
     func receiveTap()
     func sendTap()

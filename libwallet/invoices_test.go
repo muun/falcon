@@ -133,3 +133,12 @@ func TestInvoiceSecrets(t *testing.T) {
 	}
 
 }
+
+func TestGetInvoiceMetadataMissingHash(t *testing.T) {
+	setup()
+
+	_, err := GetInvoiceMetadata(randomBytes(32))
+	if err == nil {
+		t.Fatal("expected GetInvoiceMetadata to fail")
+	}
+}

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol RadioGroupViewDelegate: class {
+protocol RadioGroupViewDelegate: AnyObject {
     func didSelect(choice: String)
 }
 

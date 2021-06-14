@@ -140,7 +140,7 @@ extension SignInEmailAndRCViewController: TitleAndDescriptionViewDelegate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension SignInEmailAndRCViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol LightningAdvancedOptionsViewDelegate: class {
+protocol LightningAdvancedOptionsViewDelegate: AnyObject {
     func didTapAddAmount()
     func didToggleOptions(visible: Bool)
 }

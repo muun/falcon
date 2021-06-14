@@ -43,6 +43,10 @@ public enum AddressHelper {
         return false
     }
 
+    public static func isValid(lnurl: String) -> Bool {
+        return LibwalletLNURLValidate(lnurl)
+    }
+
     static func parse(rawAddress: String) throws -> PaymentIntent {
         let muunUri = try doWithError { error in
             LibwalletGetPaymentURI(rawAddress, Environment.current.network, error)

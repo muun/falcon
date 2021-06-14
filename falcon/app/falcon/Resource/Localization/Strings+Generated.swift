@@ -347,6 +347,15 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "EnterFeeManuallyTableViewCell.s2")
   }
 
+  internal enum ErrorView {
+    /// GO TO HOME
+    internal static let goToHome = L10n.tr("Localizable", "ErrorView.goToHome")
+    /// RETRY
+    internal static let retry = L10n.tr("Localizable", "ErrorView.retry")
+    /// SEND REPORT
+    internal static let sendReport = L10n.tr("Localizable", "ErrorView.sendReport")
+  }
+
   internal enum ExpirationTimeOptionView {
     /// Expiration time
     internal static let label = L10n.tr("Localizable", "ExpirationTimeOptionView.label")
@@ -436,6 +445,114 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "HomeViewController.s2")
     /// Cancel
     internal static let s3 = L10n.tr("Localizable", "HomeViewController.s3")
+  }
+
+  internal enum LNURLFirstTimeViewController {
+    /// Use LNURL to receive payments without having to share invoices. You can only use it with other services that support it.
+    internal static let description = L10n.tr("Localizable", "LNURLFirstTimeViewController.description")
+    /// Scan and receive\nlightning payments
+    internal static let title = L10n.tr("Localizable", "LNURLFirstTimeViewController.title")
+  }
+
+  internal enum LNURLFromSendViewController {
+    /// This seems like a LNURL code. It allows you to receive bitcoin via lightning, instead of sending it. Do you want to use it?
+    internal static let description = L10n.tr("Localizable", "LNURLFromSendViewController.description")
+    /// GO BACK TO SEND
+    internal static let goBack = L10n.tr("Localizable", "LNURLFromSendViewController.goBack")
+    /// RECEIVE BITCOIN
+    internal static let receiveBitcoin = L10n.tr("Localizable", "LNURLFromSendViewController.receiveBitcoin")
+    /// Looking to receive via lightning?
+    internal static let title = L10n.tr("Localizable", "LNURLFromSendViewController.title")
+  }
+
+  internal enum LNURLManuallyEnterQRViewController {
+    /// CONFIRM LINK
+    internal static let confirm = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.confirm")
+    /// LNURL link
+    internal static let inputLabel = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.inputLabel")
+    /// Invalid LNURL link
+    internal static let invalid = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.invalid")
+    /// PASTE FROM CLIPBOARD
+    internal static let pasteFromClipboard = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.pasteFromClipboard")
+    /// Receive
+    internal static let title = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.title")
+  }
+
+  internal enum LNURLScanQRViewController {
+    /// ENTER LNURL LINK
+    internal static let enterManually = L10n.tr("Localizable", "LNURLScanQRViewController.enterManually")
+    /// Scan an LNURL QR to\nreceive bitcoin
+    internal static let helper = L10n.tr("Localizable", "LNURLScanQRViewController.helper")
+    /// Receive
+    internal static let title = L10n.tr("Localizable", "LNURLScanQRViewController.title")
+    /// USE LNURL LINK IN CLIPBOARD
+    internal static let useClipboard = L10n.tr("Localizable", "LNURLScanQRViewController.useClipboard")
+  }
+
+  internal enum LNURLWithdrawPresenter {
+    /// Your lightning invoice expired, and %s didn't complete the payment. Please, contact them for more information.
+    internal static func expiredInvoiceDescription(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.expiredInvoiceDescription", p1)
+    }
+    /// Your payment failed
+    internal static let expiredInvoiceTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.expiredInvoiceTitle")
+    /// Your lightning invoice expired, and %s didn't complete the payment.
+    internal static func failedNotificationBody(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.failedNotificationBody", p1)
+    }
+    /// Your payment failed
+    internal static let failedNotificationTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.failedNotificationTitle")
+    /// It doesn't seem to be one. Please, double-check its source. Keep in mind you can only use LNURL with services that support it.
+    internal static let invalidCodeDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.invalidCodeDescription")
+    /// Is it a LNURL code?
+    internal static let invalidCodeTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.invalidCodeTitle")
+    /// Invoice
+    internal static let invoice = L10n.tr("Localizable", "LNURLWithdrawPresenter.invoice")
+    /// You'll receive your payment as soon as %s completes it.
+    internal static func pendingNotificationBody(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationBody", p1)
+    }
+    /// Your payment is on the way
+    internal static let pendingNotificationTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationTitle")
+    /// Something failed and we aren't sure what it was. Please send us a report to help us find out what happened.
+    internal static let unknownErrorDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.unknownErrorDescription")
+    /// Something went wrong
+    internal static let unknownErrorTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.unknownErrorTitle")
+    /// The service that created the LNURL code is unavailable. Please, try again later.
+    internal static let unresponsiveDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.unresponsiveDescription")
+    /// %s is not responding
+    internal static func unresponsiveTitle(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.unresponsiveTitle", p1)
+    }
+    /// This is a valid LNURL, but not for this operation. Please, double-check its source. Keep in mind you can only use LNURL to withdraw funds.
+    internal static let wrongTagDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.wrongTagDescription")
+    /// Is it a LNURL withdraw?
+    internal static let wrongTagTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.wrongTagTitle")
+  }
+
+  internal enum LNURLWithdrawViewController {
+    /// Contacting %s...
+    internal static func contacting(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.contacting", p1)
+    }
+    /// Copy to clipboard
+    internal static let copyToClipboard = L10n.tr("Localizable", "LNURLWithdrawViewController.copyToClipboard")
+    /// Loading...
+    internal static let loading = L10n.tr("Localizable", "LNURLWithdrawViewController.loading")
+    /// Receiving from %s...
+    internal static func receiving(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.receiving", p1)
+    }
+    /// Receive
+    internal static let title = L10n.tr("Localizable", "LNURLWithdrawViewController.title")
+    /// %s is taking too long to pay
+    internal static func tooLong(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.tooLong", p1)
+    }
+    /// You can choose to wait here or leave, and receive a notification when the payment completes. If the payment doesn't complete, please contact %s
+    internal static func tooLongDescription(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.tooLongDescription", p1)
+    }
   }
 
   internal enum LightningAdvancedOptionsView {
@@ -596,79 +713,72 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "NewOpDestinationFilledDataView.s1")
   }
 
-  internal enum NewOpErrorView {
-    /// GO TO HOME
-    internal static let s1 = L10n.tr("Localizable", "NewOpErrorView.s1")
+  internal enum NewOpError {
     /// This payment is too small
-    internal static let s10 = L10n.tr("Localizable", "NewOpErrorView.s10")
+    internal static let s10 = L10n.tr("Localizable", "NewOpError.s10")
     /// This invoice is missing a valid amount
-    internal static let s11 = L10n.tr("Localizable", "NewOpErrorView.s11")
+    internal static let s11 = L10n.tr("Localizable", "NewOpError.s11")
     /// An unexpected error occurred
-    internal static let s12 = L10n.tr("Localizable", "NewOpErrorView.s12")
+    internal static let s12 = L10n.tr("Localizable", "NewOpError.s12")
     /// This invoice can't be paid
-    internal static let s13 = L10n.tr("Localizable", "NewOpErrorView.s13")
+    internal static let s13 = L10n.tr("Localizable", "NewOpError.s13")
     /// This invoice expired before the payment was made. Please, create or request a new one.
-    internal static let s15 = L10n.tr("Localizable", "NewOpErrorView.s15")
+    internal static let s15 = L10n.tr("Localizable", "NewOpError.s15")
     /// Please try with another invoice
-    internal static let s16 = L10n.tr("Localizable", "NewOpErrorView.s16")
+    internal static let s16 = L10n.tr("Localizable", "NewOpError.s16")
     /// support team
-    internal static let s17 = L10n.tr("Localizable", "NewOpErrorView.s17")
+    internal static let s17 = L10n.tr("Localizable", "NewOpError.s17")
     /// You don’t have enough funds to cover this payment and the network fee.
-    internal static let s18 = L10n.tr("Localizable", "NewOpErrorView.s18")
+    internal static let s18 = L10n.tr("Localizable", "NewOpError.s18")
     /// Invoices must have an amount of at least 1 satoshi. Please, create or request a new one.
-    internal static let s19 = L10n.tr("Localizable", "NewOpErrorView.s19")
+    internal static let s19 = L10n.tr("Localizable", "NewOpError.s19")
     /// This is not a BTC address
-    internal static let s2 = L10n.tr("Localizable", "NewOpErrorView.s2")
+    internal static let s2 = L10n.tr("Localizable", "NewOpError.s2")
     /// You can't pay an invoice to yourself.
-    internal static let s21 = L10n.tr("Localizable", "NewOpErrorView.s21")
+    internal static let s21 = L10n.tr("Localizable", "NewOpError.s21")
     /// Scanned text
-    internal static let s22 = L10n.tr("Localizable", "NewOpErrorView.s22")
+    internal static let s22 = L10n.tr("Localizable", "NewOpError.s22")
     /// Total (Amount + Minimum Fee)
-    internal static let s23 = L10n.tr("Localizable", "NewOpErrorView.s23")
+    internal static let s23 = L10n.tr("Localizable", "NewOpError.s23")
     /// Your balance
-    internal static let s24 = L10n.tr("Localizable", "NewOpErrorView.s24")
+    internal static let s24 = L10n.tr("Localizable", "NewOpError.s24")
     /// This is not a BTC address or a lightning invoice. Double-check its source and make sure the address is properly formatted.
-    internal static let s25 = L10n.tr("Localizable", "NewOpErrorView.s25")
+    internal static let s25 = L10n.tr("Localizable", "NewOpError.s25")
     /// Your payment was not completed because bitcoin exchange rates changed since you started. Please start a new payment.
-    internal static let s26 = L10n.tr("Localizable", "NewOpErrorView.s26")
+    internal static let s26 = L10n.tr("Localizable", "NewOpError.s26")
     /// This payment requires an invoice with a longer expiration time. Please, create or request a new invoice (suggested expiration time: 1 hour or more).
-    internal static let s27 = L10n.tr("Localizable", "NewOpErrorView.s27")
+    internal static let s27 = L10n.tr("Localizable", "NewOpError.s27")
     /// This invoice has already been scanned or paid by another wallet. Please, create or request a new one.
-    internal static let s28 = L10n.tr("Localizable", "NewOpErrorView.s28")
+    internal static let s28 = L10n.tr("Localizable", "NewOpError.s28")
     /// There's no route with enough capacity to make this payment. Please, reach out to our support team and let us know what happened. We'll be happy to help.
-    internal static let s29 = L10n.tr("Localizable", "NewOpErrorView.s29")
+    internal static let s29 = L10n.tr("Localizable", "NewOpError.s29")
     /// This invoice has expired
-    internal static let s3 = L10n.tr("Localizable", "NewOpErrorView.s3")
+    internal static let s3 = L10n.tr("Localizable", "NewOpError.s3")
     /// The amount you are trying too send is too small. It must be greater than %s satoshis.
     internal static func s30(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "NewOpErrorView.s30", p1)
+      return L10n.tr("Localizable", "NewOpError.s30", p1)
     }
     /// Something went wrong, but we don’t know what. Please, reach out to our support team and let us know what happened. We'll be happy to help.
-    internal static let s31 = L10n.tr("Localizable", "NewOpErrorView.s31")
+    internal static let s31 = L10n.tr("Localizable", "NewOpError.s31")
     /// This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.
-    internal static let s32 = L10n.tr("Localizable", "NewOpErrorView.s32")
+    internal static let s32 = L10n.tr("Localizable", "NewOpError.s32")
     /// The bitcoin rates changed
-    internal static let s4 = L10n.tr("Localizable", "NewOpErrorView.s4")
+    internal static let s4 = L10n.tr("Localizable", "NewOpError.s4")
     /// Unable to pay this invoice
-    internal static let s5 = L10n.tr("Localizable", "NewOpErrorView.s5")
+    internal static let s5 = L10n.tr("Localizable", "NewOpError.s5")
     /// This payment needs a longer expiration time
-    internal static let s6 = L10n.tr("Localizable", "NewOpErrorView.s6")
+    internal static let s6 = L10n.tr("Localizable", "NewOpError.s6")
     /// This invoice has already been used
-    internal static let s7 = L10n.tr("Localizable", "NewOpErrorView.s7")
+    internal static let s7 = L10n.tr("Localizable", "NewOpError.s7")
     /// There is no available route
-    internal static let s8 = L10n.tr("Localizable", "NewOpErrorView.s8")
+    internal static let s8 = L10n.tr("Localizable", "NewOpError.s8")
     /// You don't have enough funds
-    internal static let s9 = L10n.tr("Localizable", "NewOpErrorView.s9")
+    internal static let s9 = L10n.tr("Localizable", "NewOpError.s9")
   }
 
   internal enum NewOpLoadingView {
     /// Loading payment details
     internal static let s1 = L10n.tr("Localizable", "NewOpLoadingView.s1")
-  }
-
-  internal enum NewOperationConfiguration {
-    /// GO TO HOME
-    internal static let s1 = L10n.tr("Localizable", "NewOperationConfiguration.s1")
   }
 
   internal enum NewOperationView {
@@ -740,6 +850,10 @@ internal enum L10n {
     internal static let cancelable = L10n.tr("Localizable", "OperationFormatter.cancelable")
     /// You paid yourself
     internal static let s1 = L10n.tr("Localizable", "OperationFormatter.s1")
+    /// %s paid you
+    internal static func s10(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "OperationFormatter.s10", p1)
+    }
     /// You received
     internal static let s2 = L10n.tr("Localizable", "OperationFormatter.s2")
     /// You paid
@@ -960,6 +1074,8 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "ScanQRViewController.s5")
     /// Scan a bitcoin or\nlightning QR code
     internal static let s6 = L10n.tr("Localizable", "ScanQRViewController.s6")
+    /// USE LNURL LINK IN CLIPBOARD
+    internal static let s7 = L10n.tr("Localizable", "ScanQRViewController.s7")
   }
 
   internal enum SecurityCenter {
@@ -1428,7 +1544,7 @@ internal enum L10n {
   }
 
   internal enum TitleTableViewCell {
-    /// What’s this?
+    /// What's this?
     internal static let s1 = L10n.tr("Localizable", "TitleTableViewCell.s1")
   }
 

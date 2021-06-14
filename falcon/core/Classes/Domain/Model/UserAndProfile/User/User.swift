@@ -50,6 +50,23 @@ public struct User: Codable {
     public mutating func setPrimaryCurrency(_ currency: String) {
         primaryCurrency = currency
     }
+
+    // This is used to transform the creation date of an user to a Support Identifier
+    public func getSupportId() -> String? {
+        guard let date = createdAt else {
+            return nil
+        }
+
+        // Convert the date to epoch and remove the miliseconds
+        let epoch = Int(date.timeIntervalSince1970).description
+
+        // Get the last 8 characters
+        var customId = String(epoch.suffix(8))
+
+        // Insert a "-" in the middle to get two 4 characters chunks (1234-5678)
+        customId.insert("-", at: customId.index(customId.startIndex, offsetBy: 4))
+        return customId
+    }
 }
 
 struct PhoneNumber: Codable {
@@ -74,11 +91,16 @@ struct ExportEmergencyKit: Codable {
 public struct UserPreferences: Codable {
     public let receiveStrictMode: Bool
     public let seenNewHome: Bool
+    public let seenLnurlFirstTime: Bool
 
-    public func copy(receiveStrictMode: Bool? = nil, seenNewHome: Bool? = nil) -> UserPreferences {
+    public func copy(receiveStrictMode: Bool? = nil,
+                     seenNewHome: Bool? = nil,
+                     seenLnurlFirstTime: Bool? = nil) -> UserPreferences {
+
         return UserPreferences(
             receiveStrictMode: receiveStrictMode ?? self.receiveStrictMode,
-            seenNewHome: seenNewHome ?? self.seenNewHome
+            seenNewHome: seenNewHome ?? self.seenNewHome,
+            seenLnurlFirstTime: seenLnurlFirstTime ?? self.seenLnurlFirstTime
         )
     }
 }

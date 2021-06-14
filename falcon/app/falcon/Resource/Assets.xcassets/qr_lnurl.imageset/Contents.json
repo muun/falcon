@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "qr-lnurl.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -25,6 +25,8 @@ public extension DependencyContainer {
                 return try DatabaseQueue(path: url.path)
             }
 
+            container.register(factory: { UNUserNotificationCenter.current() })
+
             container.register(.singleton, factory: DatabaseCoordinator.init)
 
             container.register {
@@ -50,6 +52,9 @@ public extension DependencyContainer {
             container.register(factory: ApiMigrationsVersionRepository.init)
             container.register(factory: UserPreferencesRepository.init)
             container.register(factory: MinFeeRateRepository.init)
+
+            container.register(factory: NotificationScheduler.init)
+            container.register(.singleton, factory: ErrorReporter.init)
 
             container.register(factory: HoustonService.init)
         }

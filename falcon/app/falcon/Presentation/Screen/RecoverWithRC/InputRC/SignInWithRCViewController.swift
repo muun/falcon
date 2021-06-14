@@ -50,7 +50,7 @@ class SignInWithRCViewController: MUViewController {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension SignInWithRCViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

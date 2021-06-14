@@ -428,6 +428,12 @@ public class DatabaseCoordinator {
             })
         }
 
+        migrator.registerMigration("add metadata to operation") { db in
+            try db.alter(table: "operationDB", body: { t in
+                t.add(column: "metadata", .text)
+            })
+        }
+
         return migrator
     }
     // swiftlint:enable function_body_length

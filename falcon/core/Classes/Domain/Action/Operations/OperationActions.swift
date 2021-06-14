@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import Libwallet
 
 public class OperationActions {
 
@@ -17,13 +18,16 @@ public class OperationActions {
     private let feeWindowRepository: FeeWindowRepository
     private let keysRepository: KeysRepository
     private let verifyFulfillable: VerifyFulfillableAction
+    private let notificationScheduler: NotificationScheduler
+    private let operationMetadataDecrypter: OperationMetadataDecrypter
 
     init(operationRepository: OperationRepository,
          houstonService: HoustonService,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
          feeWindowRepository: FeeWindowRepository,
          keysRepository: KeysRepository,
-         verifyFulfillable: VerifyFulfillableAction) {
+         verifyFulfillable: VerifyFulfillableAction,
+         notificationScheduler: NotificationScheduler) {
 
         self.operationRepository = operationRepository
         self.houstonService = houstonService
@@ -31,6 +35,8 @@ public class OperationActions {
         self.feeWindowRepository = feeWindowRepository
         self.keysRepository = keysRepository
         self.verifyFulfillable = verifyFulfillable
+        self.notificationScheduler = notificationScheduler
+        self.operationMetadataDecrypter = OperationMetadataDecrypter(keysRepository: keysRepository)
     }
 
     public func getOperationsChange() -> Observable<OperationsChange> {
@@ -53,17 +59,73 @@ public class OperationActions {
     }
 
     func received(newOperation: Notification.NewOperation) -> Completable {
-        return operationRepository.storeOperations([newOperation.operation])
-            .do(onCompleted: {
-                self.nextTransactionSizeRepository.setNextTransactionSize(newOperation.nextTransactionSize)
-            })
-            .andThen(Completable.deferred {
-                if let swap = newOperation.operation.incomingSwap {
+
+        return applyMetadata(newOperation.operation)
+            .flatMap { operation in
+                self.operationRepository.storeOperations([operation])
+                    .andThen(.just(operation))
+            }
+            .do(onSuccess: self.cleanupNotifications)
+            .flatMapCompletable({ operation in
+                if let swap = operation.incomingSwap {
                     return self.verifyFulfillable.action(swap: swap)
                 } else {
                     return Completable.empty()
                 }
             })
+            .do(onCompleted: {
+                let nts = newOperation.nextTransactionSize
+                self.nextTransactionSizeRepository.setNextTransactionSize(nts)
+            })
+
+    }
+
+    private func applyMetadata(_ operation: Operation) -> Single<Operation> {
+        return Single.deferred {
+            if let swap = operation.incomingSwap,
+               let metadata = self.getInvoiceMetadata(swap) {
+
+                let metadataJson = try self.operationMetadataDecrypter.decrypt(metadata: metadata)
+
+                var op = operation
+                op.metadata = metadataJson
+
+                if let invoice = metadataJson?.invoice {
+                    let parsedInvoice = try doWithError { error in
+                        LibwalletParseInvoice(invoice, Environment.current.network, error)
+                    }
+                    op.description = parsedInvoice.description
+                }
+
+                return self.houstonService.updateOperationMetadata(
+                    operationId: op.id!,
+                    metadata: metadata
+                ).andThen(.just(op))
+            }
+            return .just(operation)
+        }
+    }
+
+    func getInvoiceMetadata(_ swap: IncomingSwap) -> String? {
+        do {
+            let metadata = try doWithError({ error in
+                LibwalletGetInvoiceMetadata(swap.paymentHash, error)
+            })
+            if metadata == "" {
+                return nil
+            }
+            return metadata
+        } catch {
+            Logger.log(.warn, "failed to obtain invoice metadata: \(error)")
+        }
+        return nil
+    }
+
+    func cleanupNotifications(_ operation: Operation) {
+        if let paymentHash = operation.incomingSwap?.paymentHash,
+           operation.metadata?.lnurlSender != nil {
+            notificationScheduler.cancelNotifications(paymentHash: paymentHash)
+        }
     }
 
     func operationUpdated(_ update: Notification.OperationUpdate) -> Completable {

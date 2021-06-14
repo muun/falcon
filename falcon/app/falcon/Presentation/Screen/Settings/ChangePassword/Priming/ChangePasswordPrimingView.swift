@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ChangePasswordPrimingViewDelegate: class {
+protocol ChangePasswordPrimingViewDelegate: AnyObject {
     func continueButtonTap()
 }
 

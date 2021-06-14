@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DeletableTextFieldDelegate: class {
+protocol DeletableTextFieldDelegate: AnyObject {
     func textFieldDidDelete(_ textField: DeletableTextField)
 }
 

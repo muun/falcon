@@ -9,7 +9,7 @@
 import RxSwift
 import core
 
-protocol BasePresenterDelegate: class {
+protocol BasePresenterDelegate: AnyObject {
     func showMessage(_ message: String)
     func pushTo(_ vc: MUViewController)
 }

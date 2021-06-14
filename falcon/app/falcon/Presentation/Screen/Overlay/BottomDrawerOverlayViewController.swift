@@ -125,7 +125,6 @@ extension BottomDrawerOverlayViewController: UIViewControllerTransitioningDelega
 
 }
 
-
 fileprivate extension Selector {
 
     static let overlayViewTouched =

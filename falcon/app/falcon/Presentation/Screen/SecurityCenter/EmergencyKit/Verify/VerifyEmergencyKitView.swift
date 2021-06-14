@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol VerifyEmergencyKitViewDelegate: class {
+protocol VerifyEmergencyKitViewDelegate: AnyObject {
     func didTapOnOpenLink()
     func didTapOnContinue()
 }

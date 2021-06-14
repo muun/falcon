@@ -50,6 +50,10 @@ struct OperationFormatter {
         case .CYCLICAL:
             return L10n.OperationFormatter.s1
         case .INCOMING:
+            if let metadata = operation.metadata,
+               let sender = metadata.lnurlSender {
+                return L10n.OperationFormatter.s10(sender)
+            }
             return L10n.OperationFormatter.s2
         case .OUTGOING:
             var text = L10n.OperationFormatter.s3

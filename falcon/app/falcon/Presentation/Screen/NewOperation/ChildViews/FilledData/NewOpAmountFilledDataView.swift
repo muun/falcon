@@ -38,12 +38,12 @@ struct NewOpFilledAmount {
     }
 }
 
-protocol NewOpFilledAmountDelegate: class {
+protocol NewOpFilledAmountDelegate: AnyObject {
     func didPressAmount()
     func didPressMoreInfo(info: MoreInfo)
 }
 
-protocol NewOpFilledAmountTransitions: class {
+protocol NewOpFilledAmountTransitions: AnyObject {
     func requestFeeEditor()
 }
 

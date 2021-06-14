@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PinViewDelegate: class {
+protocol PinViewDelegate: AnyObject {
     func setDelete(enabled: Bool)
     func animationStarted()
     func animationEnded()

@@ -100,6 +100,12 @@ func payWithLapp(invoice: String, amountInSats: Int64, onComplete: @escaping () 
     }
 }
 
+func lnurlWithdraw(variant: String = "normal") -> String {
+    return request("lnurl/withdrawStart?variant=\(variant)", { body in
+        return String(data: body, encoding: .utf8)!
+    })
+}
+
 
 extension String {
     func slice(from: String, to: String) -> String? {

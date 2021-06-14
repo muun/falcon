@@ -141,7 +141,7 @@ extension VerifyRecoveryCodeViewController: ButtonViewDelegate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension VerifyRecoveryCodeViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

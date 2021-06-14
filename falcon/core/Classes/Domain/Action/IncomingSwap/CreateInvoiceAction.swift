@@ -91,6 +91,7 @@ public class CreateInvoiceAction {
                 }
             }
 
+            // TODO: perform an API migration?
             let policies = forwardingPolicyRepository.fetch()
             let single: Single<String>
             if policies.isEmpty {

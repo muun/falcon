@@ -80,7 +80,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             Logger.log(.info, "Message ID: \(messageID)")
         }
 
-        completionHandler([])
+        // Allow the alert to show if this is a locally produced notification
+        if notification.request.identifier.starts(with: "local:") {
+            completionHandler([.alert, .sound])
+        } else {
+            completionHandler([])
+        }
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,

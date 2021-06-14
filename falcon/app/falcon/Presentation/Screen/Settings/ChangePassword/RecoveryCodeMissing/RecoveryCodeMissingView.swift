@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol RecoveryCodeMissingViewDelegate: class {
+protocol RecoveryCodeMissingViewDelegate: AnyObject {
     func continueButtonTap()
 }
 

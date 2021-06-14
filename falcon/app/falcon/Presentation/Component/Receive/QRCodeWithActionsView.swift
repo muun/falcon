@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol QRCodeWithActionsViewDelegate: class {
+protocol QRCodeWithActionsViewDelegate: AnyObject {
     func didTapQRCode()
     func didTapLabel()
     func didTapOnCopy()

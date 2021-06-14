@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ActivateEmergencyKitViewDelegate: class {
+protocol ActivateEmergencyKitViewDelegate: AnyObject {
     func helpLabelTap()
     func verifyCode(_ code: String)
 }

@@ -8,11 +8,11 @@
 
 import XCTest
 
-final class NewOpErrorPage: UIElementPage<UIElements.Pages.NewOp.ErrorView> {
+final class NewOpErrorPage: UIElementPage<UIElements.Pages.ErrorPage> {
 
     private lazy var titleLabel = label(.titleLabel)
     private lazy var descriptionLabel = label(.descriptionLabel)
-    private lazy var backToHomeButton = LinkButtonPage(Root.button)
+    private lazy var backToHomeButton = LinkButtonPage(Root.secondaryButton)
 
     init() {
         super.init(root: Root.root)
@@ -28,11 +28,11 @@ final class NewOpErrorPage: UIElementPage<UIElements.Pages.NewOp.ErrorView> {
     }
 
     func assertInsufficientFunds() {
-        assert(title: L10n.NewOpErrorView.s9)
+        assert(title: L10n.NewOpError.s9)
     }
 
     func assertDustError() {
-        assert(title: L10n.NewOpErrorView.s10)
+        assert(title: L10n.NewOpError.s10)
     }
 
 }

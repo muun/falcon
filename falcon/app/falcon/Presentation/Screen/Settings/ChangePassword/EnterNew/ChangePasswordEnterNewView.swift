@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ChangePasswordEnterNewViewDelegate: class {
+protocol ChangePasswordEnterNewViewDelegate: AnyObject {
     func didEnterNewPassword(_ password: String)
 }
 

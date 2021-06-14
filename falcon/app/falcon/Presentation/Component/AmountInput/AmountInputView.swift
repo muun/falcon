@@ -158,7 +158,7 @@ class AmountInputView: UIView {
 
 extension AmountInputView: UITextFieldDelegate {
 
-    // swiftlint:disable function_body_length cyclomatic_complexity
+    // swiftlint:disable function_body_length
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String)
         -> Bool {
 
@@ -356,12 +356,9 @@ fileprivate extension AmountInputView {
         textField.adjustsFontSizeToFitWidth = true
 
         // We want to be exactly the size we want, no more no less
-        //textField.setContentHuggingPriority(.required, for: .horizontal)
-        textField.setContentCompressionResistancePriority(.required - 2, for: .horizontal)
-        //textField.setContentHuggingPriority(.required, for: .vertical)
-        textField.setContentCompressionResistancePriority(.required - 1, for: .vertical)
 
-        textField.intrinsicContentSize
+        textField.setContentCompressionResistancePriority(.required - 2, for: .horizontal)
+        textField.setContentCompressionResistancePriority(.required - 1, for: .vertical)
 
         return textField
     }
@@ -427,7 +424,6 @@ fileprivate extension AmountInputView {
         return chevron
     }
 }
-
 
 extension AmountInputView: UITestablePage {
     typealias UIElementType = UIElements.CustomViews.AmountInput

@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol HomeViewDelegate: class {
+protocol HomeViewDelegate: AnyObject {
     func sendButtonTap()
     func receiveButtonTap()
     func chevronTap()

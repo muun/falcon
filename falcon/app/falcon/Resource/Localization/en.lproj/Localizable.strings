@@ -4,37 +4,10 @@
 "ActionCardView.s1" = "Skipped";
 /* Presentation/Component/CameraPermission/CameraPermissionView.swift */
 "CameraPermissionView.s1" = "ENABLE CAMERA";
-/* Presentation/Component/NewOpError/NewOpErrorView.swift */
-"NewOpErrorView.s1" = "GO TO HOME";
-"NewOpErrorView.s2" = "This is not a BTC address";
-"NewOpErrorView.s3" = "This invoice has expired";
-"NewOpErrorView.s4" = "The bitcoin rates changed";
-"NewOpErrorView.s5" = "Unable to pay this invoice";
-"NewOpErrorView.s6" = "This payment needs a longer expiration time";
-"NewOpErrorView.s7" = "This invoice has already been used";
-"NewOpErrorView.s8" = "There is no available route";
-"NewOpErrorView.s9" = "You don't have enough funds";
-"NewOpErrorView.s10" = "This payment is too small";
-"NewOpErrorView.s11" = "This invoice is missing a valid amount";
-"NewOpErrorView.s12" = "An unexpected error occurred";
-"NewOpErrorView.s13" = "This invoice can't be paid";
-"NewOpErrorView.s15" = "This invoice expired before the payment was made. Please, create or request a new one.";
-"NewOpErrorView.s16" = "Please try with another invoice";
-"NewOpErrorView.s17" = "support team";
-"NewOpErrorView.s18" = "You don’t have enough funds to cover this payment and the network fee.";
-"NewOpErrorView.s19" = "Invoices must have an amount of at least 1 satoshi. Please, create or request a new one.";
-"NewOpErrorView.s21" = "You can't pay an invoice to yourself.";
-"NewOpErrorView.s22" = "Scanned text";
-"NewOpErrorView.s23" = "Total (Amount + Minimum Fee)";
-"NewOpErrorView.s24" = "Your balance";
-"NewOpErrorView.s25" = "This is not a BTC address or a lightning invoice. Double-check its source and make sure the address is properly formatted.";
-"NewOpErrorView.s26" = "Your payment was not completed because bitcoin exchange rates changed since you started. Please start a new payment.";
-"NewOpErrorView.s27" = "This payment requires an invoice with a longer expiration time. Please, create or request a new invoice (suggested expiration time: 1 hour or more).";
-"NewOpErrorView.s28" = "This invoice has already been scanned or paid by another wallet. Please, create or request a new one.";
-"NewOpErrorView.s29" = "There's no route with enough capacity to make this payment. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
-"NewOpErrorView.s30" = "The amount you are trying too send is too small. It must be greater than %s satoshis.";
-"NewOpErrorView.s31" = "Something went wrong, but we don’t know what. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
-"NewOpErrorView.s32" = "This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.";
+/* Presentation/Component/NewOpError/ErrorView.swift */
+"ErrorView.goToHome" = "GO TO HOME";
+"ErrorView.retry" = "RETRY";
+"ErrorView.sendReport" = "SEND REPORT";
 /* Presentation/Component/PopUp/WelcomePopUpView.swift */
 "WelcomePopUpView.message" = "You created a new wallet.
 Welcome to Muun!";
@@ -68,6 +41,7 @@ Switch to legacy addresses";
 "OperationFormatter.s4" = "Confirming";
 "OperationFormatter.s5" = "Failed";
 "OperationFormatter.s9" = "Confirmed";
+"OperationFormatter.s10" = "%s paid you";
 "OperationFormatter.cancelable" = "Cancelable";
 /* Presentation/Screen/Base/BasePresenter.swift */
 "BasePresenter.s1" = "Please try again";
@@ -157,6 +131,36 @@ Tap or swipe up to see your transactions.";
 "NewOpDescriptionView.s2" = "Write a note";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/FeeEditorPresenter.swift */
 "FeeEditorPresenter.s1" = "15 days";
+/* Presentation/Screen/NewOperation/NewOpError.swift */
+"NewOpError.s2" = "This is not a BTC address";
+"NewOpError.s3" = "This invoice has expired";
+"NewOpError.s4" = "The bitcoin rates changed";
+"NewOpError.s5" = "Unable to pay this invoice";
+"NewOpError.s6" = "This payment needs a longer expiration time";
+"NewOpError.s7" = "This invoice has already been used";
+"NewOpError.s8" = "There is no available route";
+"NewOpError.s9" = "You don't have enough funds";
+"NewOpError.s10" = "This payment is too small";
+"NewOpError.s11" = "This invoice is missing a valid amount";
+"NewOpError.s12" = "An unexpected error occurred";
+"NewOpError.s13" = "This invoice can't be paid";
+"NewOpError.s15" = "This invoice expired before the payment was made. Please, create or request a new one.";
+"NewOpError.s16" = "Please try with another invoice";
+"NewOpError.s17" = "support team";
+"NewOpError.s18" = "You don’t have enough funds to cover this payment and the network fee.";
+"NewOpError.s19" = "Invoices must have an amount of at least 1 satoshi. Please, create or request a new one.";
+"NewOpError.s21" = "You can't pay an invoice to yourself.";
+"NewOpError.s22" = "Scanned text";
+"NewOpError.s23" = "Total (Amount + Minimum Fee)";
+"NewOpError.s24" = "Your balance";
+"NewOpError.s25" = "This is not a BTC address or a lightning invoice. Double-check its source and make sure the address is properly formatted.";
+"NewOpError.s26" = "Your payment was not completed because bitcoin exchange rates changed since you started. Please start a new payment.";
+"NewOpError.s27" = "This payment requires an invoice with a longer expiration time. Please, create or request a new invoice (suggested expiration time: 1 hour or more).";
+"NewOpError.s28" = "This invoice has already been scanned or paid by another wallet. Please, create or request a new one.";
+"NewOpError.s29" = "There's no route with enough capacity to make this payment. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
+"NewOpError.s30" = "The amount you are trying too send is too small. It must be greater than %s satoshis.";
+"NewOpError.s31" = "Something went wrong, but we don’t know what. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
+"NewOpError.s32" = "This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/ManuallyEnterFee/ManuallyEnterFeeViewController.swift */
 "ManuallyEnterFeeViewController.s1" = "Edit network fee";
 "ManuallyEnterFeeViewController.s2" = "Enter a fee manually. What's this?";
@@ -177,7 +181,7 @@ Tap or swipe up to see your transactions.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/TargetedFeeTableViewCell.swift */
 "TargetedFeeTableViewCell.s1" = "Less than %s";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/TitleTableViewCell.swift */
-"TitleTableViewCell.s1" = "What’s this?";
+"TitleTableViewCell.s1" = "What's this?";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/SelectFeeViewController.swift */
 "SelectFeeViewController.s1" = "Edit network fee";
 "SelectFeeViewController.s2" = "CONFIRM FEE";
@@ -215,8 +219,6 @@ A higher fee gives more priority to your transaction, while a payment with a low
 Fees rise when there is more activity on the network. If fees increase while your payment is still unconfirmed, it may take longer to get confirmed.";
 "NewOp.s10" = "Why will this payment take longer?";
 "NewOp.s11" = "This lightning payment requires a confirmed on-chain transaction. It takes an average of 10 minutes to confirm";
-/* Presentation/Screen/NewOperation/NewOperationConfiguration.swift */
-"NewOperationConfiguration.s1" = "GO TO HOME";
 /* Presentation/Screen/NewOperation/NewOperationView.swift */
 "NewOperationView.s1" = "This invoice expires in %s";
 "NewOperationView.s2" = "This payment will take longer than most lightning payments. Why?";
@@ -242,6 +244,7 @@ Fees rise when there is more activity on the network. If fees increase while you
 "ScanQRViewController.s5" = "Enable your camera to scan QR codes with addresses or invoices";
 "ScanQRViewController.s6" = "Scan a bitcoin or
 lightning QR code";
+"ScanQRViewController.s7" = "USE LNURL LINK IN CLIPBOARD";
 /* Presentation/Screen/NewOperation/SubmarineSwaps/OpSubmarineSwapViewBuilder.swift */
 "OpSubmarineSwapViewBuilder.s1" = "Public key";
 "OpSubmarineSwapViewBuilder.s2" = "IP Addresses";
@@ -303,6 +306,51 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 "ReceiveAmountInputViewController.remove" = "REMOVE AMOUNT";
 "ReceiveAmountInputViewController.tooSmall" = "AMOUNT IS TOO SMALL";
 "ReceiveAmountInputViewController.tooBig" = "AMOUNT IS TOO BIG";
+/* Presentation/Screen/LNURL/FirstTime/LNURLFirstTimeViewController.swift */
+"LNURLFirstTimeViewController.title" = "Scan and receive
+lightning payments";
+"LNURLFirstTimeViewController.description" = "Use LNURL to receive payments without having to share invoices. You can only use it with other services that support it.";
+/* Presentation/Screen/LNURL/ScanQR/LNURLScanQRViewController.swift */
+"LNURLScanQRViewController.title" = "Receive";
+"LNURLScanQRViewController.helper" = "Scan an LNURL QR to
+receive bitcoin";
+"LNURLScanQRViewController.enterManually" = "ENTER LNURL LINK";
+"LNURLScanQRViewController.useClipboard" = "USE LNURL LINK IN CLIPBOARD";
+/* Presentation/Screen/LNURL/ScanQR/ManuallyEnter/LNURLScanQRViewController.swift */
+"LNURLManuallyEnterQRViewController.title" = "Receive";
+"LNURLManuallyEnterQRViewController.inputLabel" = "LNURL link";
+"LNURLManuallyEnterQRViewController.confirm" = "CONFIRM LINK";
+"LNURLManuallyEnterQRViewController.pasteFromClipboard" = "PASTE FROM CLIPBOARD";
+"LNURLManuallyEnterQRViewController.invalid" = "Invalid LNURL link";
+/* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawViewController.swift */
+"LNURLWithdrawViewController.title" = "Receive";
+"LNURLWithdrawViewController.loading" = "Loading...";
+"LNURLWithdrawViewController.contacting" = "Contacting %s...";
+"LNURLWithdrawViewController.receiving" = "Receiving from %s...";
+"LNURLWithdrawViewController.tooLong" = "%s is taking too long to pay";
+"LNURLWithdrawViewController.tooLongDescription" = "You can choose to wait here or leave, and receive a notification when the payment completes. If the payment doesn't complete, please contact %s";
+"LNURLWithdrawViewController.copyToClipboard" = "Copy to clipboard";
+/* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawPresenter.swift */
+"LNURLWithdrawPresenter.invalidCodeTitle" = "Is it a LNURL code?";
+"LNURLWithdrawPresenter.unresponsiveTitle" = "%s is not responding";
+"LNURLWithdrawPresenter.wrongTagTitle" = "Is it a LNURL withdraw?";
+"LNURLWithdrawPresenter.unknownErrorTitle" = "Something went wrong";
+"LNURLWithdrawPresenter.invalidCodeDescription" = "It doesn't seem to be one. Please, double-check its source. Keep in mind you can only use LNURL with services that support it.";
+"LNURLWithdrawPresenter.unresponsiveDescription" = "The service that created the LNURL code is unavailable. Please, try again later.";
+"LNURLWithdrawPresenter.wrongTagDescription" = "This is a valid LNURL, but not for this operation. Please, double-check its source. Keep in mind you can only use LNURL to withdraw funds.";
+"LNURLWithdrawPresenter.unknownErrorDescription" = "Something failed and we aren't sure what it was. Please send us a report to help us find out what happened.";
+"LNURLWithdrawPresenter.expiredInvoiceTitle" = "Your payment failed";
+"LNURLWithdrawPresenter.expiredInvoiceDescription" = "Your lightning invoice expired, and %s didn't complete the payment. Please, contact them for more information.";
+"LNURLWithdrawPresenter.pendingNotificationTitle" = "Your payment is on the way";
+"LNURLWithdrawPresenter.pendingNotificationBody" = "You'll receive your payment as soon as %s completes it.";
+"LNURLWithdrawPresenter.failedNotificationTitle" = "Your payment failed";
+"LNURLWithdrawPresenter.failedNotificationBody" = "Your lightning invoice expired, and %s didn't complete the payment.";
+"LNURLWithdrawPresenter.invoice" = "Invoice";
+/* Presentation/Screen/LNURL/FromSend/LNURLFromSendViewController.swift */
+"LNURLFromSendViewController.title" = "Looking to receive via lightning?";
+"LNURLFromSendViewController.description" = "This seems like a LNURL code. It allows you to receive bitcoin via lightning, instead of sending it. Do you want to use it?";
+"LNURLFromSendViewController.receiveBitcoin" = "RECEIVE BITCOIN";
+"LNURLFromSendViewController.goBack" = "GO BACK TO SEND";
 /* Presentation/Screen/RecoverWallet/Email/SignInEmailViewController.swift */
 "SignInEmailViewController.s1" = "Recover your wallet";
 "SignInEmailViewController.s2" = "Enter your email";

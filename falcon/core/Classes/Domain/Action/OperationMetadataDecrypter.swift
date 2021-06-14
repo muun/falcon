@@ -37,4 +37,9 @@ public struct OperationMetadataDecrypter {
         return JSONDecoder.model(from: try decrypter.decrypt(metadata))
     }
 
+    func decrypt(metadata: String) throws -> OperationMetadataJson? {
+        let decrypter = try keysRepository.getBasePrivateKey().decrypter()
+        return JSONDecoder.model(from: try decrypter.decrypt(metadata))
+    }
+
 }

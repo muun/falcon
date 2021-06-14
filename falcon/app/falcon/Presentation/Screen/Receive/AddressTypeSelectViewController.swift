@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ReceiveAddressTypeSelectViewControllerDelegate: class {
+protocol ReceiveAddressTypeSelectViewControllerDelegate: AnyObject {
     func didSelect(addressType: AddressType)
 }
 

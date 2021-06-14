@@ -58,11 +58,7 @@ class SupportPresenter<Delegate: SupportPresenterDelegeate>: BasePresenter<Deleg
     }
 
     func getSupportId() -> String? {
-        guard let u = sessionActions.getUser(), let date = u.createdAt else {
-            return nil
-        }
-
-        return date.getSupportId()
+        return sessionActions.getUser()?.getSupportId()
     }
 
 }

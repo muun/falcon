@@ -22,7 +22,7 @@ enum TitleAndDescriptionStyle {
     }
 }
 
-protocol TitleAndDescriptionViewDelegate: class {
+protocol TitleAndDescriptionViewDelegate: AnyObject {
     func descriptionTouched()
 }
 

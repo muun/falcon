@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CheckViewDelegate: class {
+protocol CheckViewDelegate: AnyObject {
     func onCheckChanged(checked: Bool)
 }
 

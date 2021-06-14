@@ -83,9 +83,21 @@ class ScanQRViewController: MUViewController {
     }
 
     fileprivate func checkClipboard() {
-        if let theString = UIPasteboard.general.string, !presenter.isOwnAddress(theString) {
-            sendToAddressView.isHidden = !presenter.isValid(rawAddress: theString)
-            addressLabel.text = theString
+        if let theString = UIPasteboard.general.string {
+
+            if !presenter.isOwnAddress(theString) && presenter.isValid(rawAddress: theString) {
+                sendToAddressView.isHidden = false
+                sendToAddressLabel.text = L10n.ScanQRViewController.s2
+                addressLabel.text = theString
+
+            } else if presenter.isValid(lnurl: theString) {
+                sendToAddressView.isHidden = false
+                sendToAddressLabel.text = L10n.ScanQRViewController.s7
+                addressLabel.text = theString
+
+            } else {
+                sendToAddressView.isHidden = true
+            }
         }
     }
 
@@ -106,7 +118,6 @@ class ScanQRViewController: MUViewController {
         sendToAddressView.backgroundColor = Asset.Colors.cellBackground.color
         sendToAddressLabel.textColor = Asset.Colors.muunBlue.color
         sendToAddressLabel.font = Constant.Fonts.system(size: .opTitle, weight: .semibold)
-        sendToAddressLabel.text = L10n.ScanQRViewController.s2
 
         addressLabel.style = .description
 
@@ -213,7 +224,18 @@ class ScanQRViewController: MUViewController {
     }
 
     @objc func sendToAddress() {
-        pushToNewOp(addressLabel.text!, origin: .clipboard)
+        let address = addressLabel.text!
+
+        if presenter.isValid(rawAddress: address) {
+            pushToNewOp(address, origin: .clipboard)
+
+        } else if presenter.isValid(lnurl: address) {
+            navigationController!.pushViewController(
+                LNURLFromSendViewController(qr: address),
+                animated: true
+            )
+        }
+
     }
 
     override func viewDidLayoutSubviews() {
@@ -237,7 +259,7 @@ extension ScanQRViewController: ScanQRPresenterDelegate {
     }
 }
 
-extension ScanQRViewController: NewOpErrorViewDelegate {
+extension ScanQRViewController: ErrorViewDelegate {
 
     func logErrorView(_ name: String, params: [String: Any]?) {
         logScreen(name, parameters: params)

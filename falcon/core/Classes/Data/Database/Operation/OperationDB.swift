@@ -56,12 +56,22 @@ struct OperationDB: Codable, FetchableRecord, PersistableRecord {
 
     let swapUuid: String?
     let incomingSwapUuid: String?
+
+    let metadata: String?
 }
 
 extension OperationDB: DatabaseModelConvertible {
 
     init(from: Operation) {
         precondition(from.id != nil, "Operation must have an id to be stored")
+
+        let metadata: String?
+        let data = try? JSONEncoder().encode(from.metadata)
+        if let data = data {
+            metadata = String(data: data, encoding: .utf8)
+        } else {
+            metadata = nil
+        }
 
         self.init(id: from.id!,
                   direction: from.direction,
@@ -91,7 +101,8 @@ extension OperationDB: DatabaseModelConvertible {
                   creationDate: from.creationDate,
                   exchangeRateWindowHid: from.exchangeRatesWindowId,
                   swapUuid: from.submarineSwap?._swapUuid,
-                  incomingSwapUuid: from.incomingSwap?.uuid)
+                  incomingSwapUuid: from.incomingSwap?.uuid,
+                  metadata: metadata)
 
     }
 
@@ -140,6 +151,16 @@ extension OperationDB: DatabaseModelConvertible {
             try IncomingSwapDB.fetchOne(db, key: uuid)?.to(using: db)
         }
 
+        var metadataJson: OperationMetadataJson?
+        do {
+            if let data = metadata?.data(using: .utf8) {
+                metadataJson = try JSONDecoder().decode(
+                    OperationMetadataJson.self, from: data)
+            }
+        } catch {
+            // ignore
+        }
+
         return Operation(
             id: id,
             requestId: "", // This will remain empty Forever
@@ -161,7 +182,8 @@ extension OperationDB: DatabaseModelConvertible {
             creationDate: creationDate,
             submarineSwap: submarineSwap,
             outpoints: nil, // We don't need retrocompat outpoints,
-            incomingSwap: incomingSwap
+            incomingSwap: incomingSwap,
+            metadata: metadataJson
         )
     }
     // swiftlint:enable function_body_length

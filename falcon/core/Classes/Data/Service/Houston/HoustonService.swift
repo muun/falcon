@@ -327,6 +327,16 @@ public class HoustonService: BaseService {
             .map({ $0.toModel(decrypter: self.decrypter) })
     }
 
+    func updateOperationMetadata(operationId: Int, metadata: String) -> Completable {
+        let path = "operations/{operationId}/metadata"
+            .replacingOccurrences(of: "{operationId}", with: String(describing: operationId))
+
+        let json = UpdateOperationMetadataJson(receiverMetadata: metadata)
+
+        return put(path, body: JSONEncoder.data(json: json), andReturn: EmptyJson.self)
+            .asCompletable()
+    }
+
     func pushTransaction(rawTransaction: RawTransaction?, operationId: Int) -> Single<RawTransactionResponse> {
         var jsonData: Data?
         if let rawTx = rawTransaction {

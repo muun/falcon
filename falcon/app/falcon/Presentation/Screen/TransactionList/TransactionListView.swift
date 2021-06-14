@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol TransactionListViewDelegate: class {
+protocol TransactionListViewDelegate: AnyObject {
     func didTapLoadWallet()
     func didTapOperation(_ operation: core.Operation)
 }

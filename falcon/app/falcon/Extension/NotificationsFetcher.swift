@@ -9,7 +9,7 @@
 import core
 import RxSwift
 
-protocol NotificationsFetcher: class {
+protocol NotificationsFetcher: AnyObject {
     var fetchNotificationsAction: FetchNotificationsAction { get }
 
     func buildFetchNotificationsPeriodicAction(intervalInSeconds: Int) -> Observable<Int>

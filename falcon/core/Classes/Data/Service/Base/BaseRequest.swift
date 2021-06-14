@@ -6,7 +6,7 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-//We should reconsider using URLRequest instead of BaseRequest
+// We should reconsider using URLRequest instead of BaseRequest
 
 // This is public for the operation extension
 public class BaseRequest {

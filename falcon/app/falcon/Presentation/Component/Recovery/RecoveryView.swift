@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol RecoveryViewDelegate: class {
+protocol RecoveryViewDelegate: AnyObject {
     func recoveryViewDidChange(_ recoveryView: RecoveryView, code: RecoveryCode?)
 }
 

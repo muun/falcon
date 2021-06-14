@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EmailAlreadyUsedViewDelegate: class {
+protocol EmailAlreadyUsedViewDelegate: AnyObject {
     func descriptionTouched()
 }
 

@@ -9,7 +9,7 @@
 import UIKit
 
 @objc
-protocol DisplayableToast: class {
+protocol DisplayableToast: AnyObject {
     var toast: ToastView? { get set }
     var view: UIView! { get }
 

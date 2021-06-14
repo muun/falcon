@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol NoticeViewDelegate: class {
+protocol NoticeViewDelegate: AnyObject {
     func didTapOnMessage()
 }
 

@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol NewOpDestinationViewDelegate: class {
+protocol NewOpDestinationViewDelegate: AnyObject {
     func showMoreInfo(info: MoreInfo)
 }
 

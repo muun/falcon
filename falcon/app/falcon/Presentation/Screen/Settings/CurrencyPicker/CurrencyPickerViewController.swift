@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol CurrencyPickerDelegate: class {
+protocol CurrencyPickerDelegate: AnyObject {
     func didSelectCurrency(_ currency: Currency)
 }
 

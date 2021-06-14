@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TitleTableViewCellDelegate: class {
+protocol TitleTableViewCellDelegate: AnyObject {
     func didTouchTitle()
 }
 

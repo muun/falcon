@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol KeyboardViewDelegate: class {
+protocol KeyboardViewDelegate: AnyObject {
     func onNumberPressed(number: String)
     func onErasePressed()
 }

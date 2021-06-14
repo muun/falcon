@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol NotificationsPrimingViewDelegate: class {
+protocol NotificationsPrimingViewDelegate: AnyObject {
     func didTapOnSkipButton()
     func permissionGranted()
     func askForPushNotificationPermission()

@@ -102,6 +102,7 @@ class DetailViewController: MUViewController {
     private func setUp(incomingSwap: IncomingSwap) {
         addSummary()
         addStatus()
+        addDescription()
         addWhen()
         addAmount()
 
@@ -402,7 +403,7 @@ extension DetailViewController: NoticeViewDelegate {
 }
 
 extension DetailViewController: UITestablePage {
-    typealias UIElementType = UIElements.Pages.NewOp.ErrorView
+    typealias UIElementType = UIElements.Pages.DetailPage
 
     func makeViewTestable() {
         makeViewTestable(view, using: .root)

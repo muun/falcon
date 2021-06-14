@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SmallButtonViewDelegate: class {
+protocol SmallButtonViewDelegate: AnyObject {
     func button(didPress button: SmallButtonView)
 }
 

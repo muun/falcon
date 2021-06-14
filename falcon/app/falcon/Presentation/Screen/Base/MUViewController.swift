@@ -181,7 +181,7 @@ extension MUViewController: DisplayablePopUp {
     }
 }
 
-//Keyboard extension
+// Keyboard extension
 extension MUViewController {
 
     internal func addKeyboardObservers() {

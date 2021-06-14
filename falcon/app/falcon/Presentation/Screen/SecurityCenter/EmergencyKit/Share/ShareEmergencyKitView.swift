@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ShareEmergencyKitViewDelegate: class {
+protocol ShareEmergencyKitViewDelegate: AnyObject {
     func didTapOnOption(_ option: EKOption)
     func didTapOnCloudStorageInfo()
 }

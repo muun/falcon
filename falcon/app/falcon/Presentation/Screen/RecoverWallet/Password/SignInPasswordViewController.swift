@@ -136,7 +136,7 @@ class SignInPasswordViewController: MUViewController {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension SignInPasswordViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

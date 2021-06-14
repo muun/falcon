@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import core
 
-protocol NewOperationViewDelegate: class {
+protocol NewOperationViewDelegate: AnyObject {
     func invoiceJustExpired()
     func didPressInfoButton(info: MoreInfo)
     func oneConfNoticeTapped()

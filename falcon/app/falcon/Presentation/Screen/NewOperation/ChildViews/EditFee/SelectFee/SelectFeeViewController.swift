@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol SelectFeeDelegate: class {
+protocol SelectFeeDelegate: AnyObject {
     func selected(fee: BitcoinAmount, rate: FeeRate)
 }
 

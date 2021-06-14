@@ -149,7 +149,7 @@ public class Preferences {
             do {
                 return try self?.decoder.decode(Container<T>.self, from: data).value
             } catch {
-                fatalError("Can't decode object for key \(key.rawValue)")
+                fatalError("Can't decode object for key \(key.rawValue): \(error)")
             }
         }
     }

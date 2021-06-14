@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol LinkButtonViewDelegate: class {
+protocol LinkButtonViewDelegate: AnyObject {
     func linkButton(didPress linkButton: LinkButtonView)
 }
 

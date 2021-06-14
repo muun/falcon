@@ -41,6 +41,10 @@ class ScanQRPresenter<Delegate: ScanQRPresenterDelegate>: BasePresenter<Delegate
         return AddressHelper.isValid(rawAddress: rawAddress)
     }
 
+    func isValid(lnurl: String) -> Bool {
+        return AddressHelper.isValid(lnurl: lnurl)
+    }
+
     func getPaymentIntent(for raw: String) throws -> PaymentIntent {
         return try AddressHelper.parse(raw)
     }

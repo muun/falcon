@@ -9,13 +9,13 @@
 import UIKit
 import core
 
-protocol NewOpViewDelegate: class {
+protocol NewOpViewDelegate: AnyObject {
     func readyForNextState(_ isReady: Bool, error: String?)
 
     func update(buttonText: String)
 }
 
-protocol NewOperationChildViewDelegate: class {
+protocol NewOperationChildViewDelegate: AnyObject {
     func pushNextState()
 }
 
@@ -161,12 +161,9 @@ class NewOperationViewController: MUViewController {
     private func displayErrorView(type: NewOpError, buttonText: String? = nil) {
         navigationController?.setNavigationBarHidden(true, animated: true)
 
-        let view = NewOpErrorView()
+        let view = ErrorView()
         view.delegate = self
-        view.type = type
-        if let text = buttonText {
-            view.setButtonText(text)
-        }
+        view.model = type
         view.addTo(self.view)
 
         forceHideKeyboard()
@@ -262,7 +259,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
     }
 
     func swapError(_ error: NewOpError) {
-        displayErrorView(type: error, buttonText: configuration.errorButtonText)
+        displayErrorView(type: error)
     }
 
     func invalidAddress() {
@@ -276,7 +273,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
     }
 
     func expiredInvoice() {
-        displayErrorView(type: .expiredInvoice, buttonText: configuration.errorButtonText)
+        displayErrorView(type: .expiredInvoice)
     }
 
     func notEnoughBalance(amountPlusFee: String, totalBalance: String) {
@@ -358,7 +355,7 @@ extension NewOperationViewController {
 
 }
 
-extension NewOperationViewController: NewOpErrorViewDelegate {
+extension NewOperationViewController: ErrorViewDelegate {
 
     func logErrorView(_ name: String, params: [String: Any]?) {
         logScreen(name, parameters: params)
@@ -368,7 +365,11 @@ extension NewOperationViewController: NewOpErrorViewDelegate {
         navigationController!.popToRootViewController(animated: true)
     }
 
-    func descriptionTouched(type: NewOpError) {
+    func descriptionTouched(type: ErrorViewModel) {
+        guard let type = type as? NewOpError else {
+            return
+        }
+
         switch type {
         case .unexpected, .noPaymentRoute:
             pushToSupportScreen()

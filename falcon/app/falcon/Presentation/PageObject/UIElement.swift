@@ -166,13 +166,6 @@ enum UIElements {
                 case root
                 case input
             }
-
-            enum ErrorView: String, UIElement {
-                case root
-                case titleLabel
-                case descriptionLabel
-                case button
-            }
         }
 
         enum CurrencyPicker: String, UIElement {
@@ -256,6 +249,14 @@ enum UIElements {
             case finishButton
         }
 
+        enum ErrorPage: String, UIElement {
+            case root
+            case titleLabel
+            case descriptionLabel
+            case primaryButton
+            case secondaryButton
+        }
+
         enum EmergencyKit {
 
             enum SharePDF: String, UIElement {
@@ -287,6 +288,23 @@ enum UIElements {
         enum LightningNetworkSettingsPage: String, UIElement {
             case root
             case turboChannels
+        }
+
+        enum LNURLFirstTimePage: String, UIElement {
+            case root
+            case continueButton
+        }
+
+        enum LNURLScanQRPage: String, UIElement {
+            case root
+            case cameraPermissionView
+            case enterManually
+        }
+
+        enum LNURLManuallyEnterQRPage: String, UIElement {
+            case root
+            case input
+            case submit
         }
     }
 

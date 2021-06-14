@@ -9,7 +9,7 @@
 import UIKit
 import LocalAuthentication
 
-protocol LockDelegate: class {
+protocol LockDelegate: AnyObject {
     func unlockApp()
     func logOut()
 }

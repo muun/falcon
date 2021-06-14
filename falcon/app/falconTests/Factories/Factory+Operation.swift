@@ -34,7 +34,8 @@ extension Factory {
             creationDate: Date(),
             submarineSwap: submarineSwap(),
             outpoints: nil,
-            incomingSwap: nil
+            incomingSwap: nil,
+            metadata: nil
         )
     }
 
@@ -72,7 +73,8 @@ extension Factory {
             creationDate: Date(),
             submarineSwap: nil,
             outpoints: nil,
-            incomingSwap: incomingSwap
+            incomingSwap: incomingSwap,
+            metadata: nil
         )
     }
 

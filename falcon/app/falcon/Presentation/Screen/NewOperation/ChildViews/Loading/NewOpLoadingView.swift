@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-protocol OpLoadingTransitions: class {
+protocol OpLoadingTransitions: AnyObject {
     func didLoad(feeInfo: FeeInfo,
                  user: User,
                  paymentRequestType: PaymentRequestType)

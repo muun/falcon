@@ -66,7 +66,7 @@ public enum ExactDeveloperError {
     case recoveryCodeNotSetUp
     case exchangeRateWindowTooOld
 
-    //Swaps
+    // Swaps
     case invalidInvoice
     case invoiceExpiresTooSoon
     case invoiceAlreadyUsed
@@ -86,4 +86,13 @@ public enum ServiceError: Error {
     case customError(_ error: DeveloperError)
     case serviceFailure
     case timeOut
+
+    public func isNetworkError() -> Bool {
+        switch self {
+        case .internetError, .timeOut:
+            return true
+        default:
+            return false
+        }
+    }
 }

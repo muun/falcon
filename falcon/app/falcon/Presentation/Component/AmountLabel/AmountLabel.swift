@@ -15,7 +15,7 @@ enum AmountLabelType {
     case inPrimary
 }
 
-protocol AmountLabelDelegate: class {
+protocol AmountLabelDelegate: AnyObject {
     func didTouchBitcoinLabel()
 }
 

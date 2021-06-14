@@ -28,7 +28,15 @@ public extension DependencyContainer {
             container.register(.singleton, factory: SetUpPasswordAction.init)
             container.register(.singleton, factory: SessionActions.init)
             container.register(.singleton, factory: AddressActions.init)
-            container.register(.singleton, factory: OperationActions.init)
+            container.register(.singleton) {
+                OperationActions(operationRepository: $0,
+                                 houstonService: $1,
+                                 nextTransactionSizeRepository: $2,
+                                 feeWindowRepository: $3,
+                                 keysRepository: $4,
+                                 verifyFulfillable: $5,
+                                 notificationScheduler: try container.resolve())
+            }
             container.register(.singleton, factory: BalanceActions.init)
             container.register(.singleton, factory: CurrencyActions.init)
             container.register(.singleton, factory: RealTimeDataAction.init)
@@ -65,6 +73,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: ApiMigrationAction.init)
             container.register(.singleton, factory: UpdateUserPreferencesAction.init)
             container.register(.singleton, factory: VerifyFulfillableAction.init)
+            container.register(.singleton, factory: LNURLWithdrawAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EmergencyKitDataSelector.init)

@@ -22,6 +22,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     private let createInvoiceAction: CreateInvoiceAction
     private let preferences: Preferences
     internal let fetchNotificationsAction: FetchNotificationsAction
+    private let userPreferencesSelector: UserPreferencesSelector
 
     private let segwitAddress: String
     private let legacyAddress: String
@@ -35,12 +36,14 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
          preferences: Preferences,
          operationActions: OperationActions,
          createInvoiceAction: CreateInvoiceAction,
-         fetchNotificationsAction: FetchNotificationsAction) {
+         fetchNotificationsAction: FetchNotificationsAction,
+         userPreferencesSelector: UserPreferencesSelector) {
         self.addressActions = addressActions
         self.preferences = preferences
         self.operationActions = operationActions
         self.createInvoiceAction = createInvoiceAction
         self.fetchNotificationsAction = fetchNotificationsAction
+        self.userPreferencesSelector = userPreferencesSelector
         do {
             let (segwit, legacy) = try addressActions.generateExternalAddresses()
             self.segwitAddress = segwit
@@ -142,6 +145,14 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
 
     func hasSkippedPushNotificationsPermission() -> Bool {
         return preferences.bool(forKey: .didSkipPushNotificationPermission)
+    }
+
+    func isLNURLFirstTimeUser() -> Bool {
+        let preferences = try? userPreferencesSelector.get()
+            .toBlocking()
+            .first()
+
+        return !(preferences?.seenLnurlFirstTime ?? false)
     }
 
 }

@@ -38,8 +38,9 @@ public class UserPreferencesRepository {
  For complete instructions, see UserPreferences in common.
  */
 private struct StoredUserPreferences: Codable {
-    var receiveStrictMode: Bool = false
-    var seenNewHome: Bool = false
+    var receiveStrictMode: Bool?
+    var seenNewHome: Bool?
+    var seenLnurlFirstTime: Bool?
 
     init() {
     }
@@ -47,12 +48,14 @@ private struct StoredUserPreferences: Codable {
     init(prefs: UserPreferences) {
         self.receiveStrictMode = prefs.receiveStrictMode
         self.seenNewHome = prefs.seenNewHome
+        self.seenLnurlFirstTime = prefs.seenLnurlFirstTime
     }
 
     func toModel() -> UserPreferences {
         return UserPreferences(
-            receiveStrictMode: receiveStrictMode,
-            seenNewHome: seenNewHome
+            receiveStrictMode: receiveStrictMode ?? false,
+            seenNewHome: seenNewHome ?? false,
+            seenLnurlFirstTime: seenLnurlFirstTime ?? false
         )
     }
 }

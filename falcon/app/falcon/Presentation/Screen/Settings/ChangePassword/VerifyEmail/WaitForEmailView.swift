@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol WaitForEmailViewDelegate: class {
+protocol WaitForEmailViewDelegate: AnyObject {
     func didTapOpenEmailClient()
 }
 

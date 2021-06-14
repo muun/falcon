@@ -87,7 +87,7 @@ extension ScanQRViewController {
             videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
             videoLayer.frame = cameraView.bounds
             cameraView.layer.addSublayer(videoLayer)
-            
+
             self.videoLayer = videoLayer
 
         } catch {
@@ -133,10 +133,10 @@ extension ScanQRViewController: CameraPermissionViewDelegate {
 extension ScanQRViewController: AVCaptureMetadataOutputObjectsDelegate {
 
     fileprivate func showInvalidAddressView(_ address: String) {
-        let view = NewOpErrorView()
+        let view = ErrorView()
 
         view.delegate = self
-        view.type = .invalidAddress(address)
+        view.model = NewOpError.invalidAddress(address)
 
         view.addTo(self.view)
         self.view.gestureRecognizers?.removeAll()
@@ -162,6 +162,11 @@ extension ScanQRViewController: AVCaptureMetadataOutputObjectsDelegate {
 
             if presenter.isValid(rawAddress: address) {
                 pushToNewOp(address, origin: .qr)
+            } else if presenter.isValid(lnurl: address) {
+                navigationController!.pushViewController(
+                    LNURLFromSendViewController(qr: address),
+                    animated: true
+                )
             } else {
                 showInvalidAddressView(address)
             }
