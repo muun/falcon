@@ -140,6 +140,7 @@ class ErrorView: UIView {
             imageView.topAnchor.constraint(equalTo: labelsStackView.topAnchor, constant: 120)
         ])
 
+        titleLabel.textAlignment = .center
         titleLabel.textColor = Asset.Colors.title.color
         titleLabel.font = Constant.Fonts.system(size: .h2, weight: .medium)
         titleLabel.numberOfLines = 0

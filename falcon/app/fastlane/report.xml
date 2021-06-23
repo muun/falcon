@@ -5,32 +5,32 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000447">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000809">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: prompt" time="3.687984">
+      <testcase classname="fastlane.lanes" name="1: prompt" time="19.395774">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: prompt" time="1.749521">
+      <testcase classname="fastlane.lanes" name="2: prompt" time="8.698812">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: download_dsyms" time="23.927204">
+      <testcase classname="fastlane.lanes" name="3: download_dsyms" time="17.982609">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: upload_symbols_to_crashlytics" time="16.354274">
+      <testcase classname="fastlane.lanes" name="4: upload_symbols_to_crashlytics" time="17.900776">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: clean_build_artifacts" time="0.001748">
+      <testcase classname="fastlane.lanes" name="5: clean_build_artifacts" time="0.00338">
         
       </testcase>
     

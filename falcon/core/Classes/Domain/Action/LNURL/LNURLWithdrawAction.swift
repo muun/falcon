@@ -24,6 +24,9 @@ public class LNURLWithdrawAction {
         case invalidCode(message: String)
         case unresponsive(message: String, domain: String)
         case wrongTag(message: String)
+        case requestExpired(message: String)
+        case noAvailableBalance(message: String, domain: String)
+        case noRoute(message: String, domain: String)
         case unknown(message: String)
         case expiredInvoice(domain: String)
     }
@@ -145,6 +148,12 @@ public class LNURLWithdrawAction {
                     error = .wrongTag(message: event.message)
                 case LibwalletLNURLErrUnreachable:
                     error = .unresponsive(message: event.message, domain: event.metadata!.host)
+                case LibwalletLNURLErrRequestExpired:
+                    error = .requestExpired(message: event.message)
+                case LibwalletLNURLErrNoAvailableBalance:
+                    error = .noAvailableBalance(message: event.message, domain: event.metadata!.host)
+                case LibwalletLNURLErrNoRoute:
+                    error = .noRoute(message: event.message, domain: event.metadata!.host)
                 default:
                     error = .unknown(message: event.message)
                 }

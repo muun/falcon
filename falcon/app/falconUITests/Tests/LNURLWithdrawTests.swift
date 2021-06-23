@@ -40,7 +40,7 @@ class LNURLWithdrawTests: FalconUITests {
         homePage.wait(15)
 
         waitForOperations(count: 1, home: homePage, timeout: 60)
-        homePage.assert(balance: "0.00000003")
+        homePage.assert(balance: "0.00003")
     }
 
     func testWithdrawFail() {

@@ -183,6 +183,12 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return L10n.LNURLWithdrawPresenter.unresponsiveTitle(domain)
         case .wrongTag:
             return L10n.LNURLWithdrawPresenter.wrongTagTitle
+        case .requestExpired:
+            return L10n.LNURLWithdrawPresenter.requestExpiredTitle
+        case .noAvailableBalance:
+            return L10n.LNURLWithdrawPresenter.noAvailableBalanceTitle
+        case .noRoute:
+            return L10n.LNURLWithdrawPresenter.noRouteTitle
         case .unknown:
             return L10n.LNURLWithdrawPresenter.unknownErrorTitle
         case .expiredInvoice:
@@ -201,6 +207,17 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
         case .wrongTag:
             return L10n.LNURLWithdrawPresenter.wrongTagDescription
                 .attributedForDescription(alignment: .center)
+        case .requestExpired:
+            return L10n.LNURLWithdrawPresenter.requestExpiredDescription
+                .attributedForDescription(alignment: .center)
+        case .noAvailableBalance(_, let domain):
+            return L10n.LNURLWithdrawPresenter.noAvailableBalanceDescription(domain)
+                .attributedForDescription(alignment: .center)
+                .set(bold: domain, color: Asset.Colors.muunGrayDark.color)
+        case .noRoute(_, let domain):
+            return L10n.LNURLWithdrawPresenter.noRouteDescription(domain)
+                .attributedForDescription(alignment: .center)
+                .set(bold: domain, color: Asset.Colors.muunGrayDark.color)
         case .unknown:
             return L10n.LNURLWithdrawPresenter.unknownErrorDescription
                 .attributedForDescription(alignment: .center)
@@ -219,6 +236,12 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return "lnurl_unresponsive"
         case .wrongTag:
             return "lnurl_wrong_tag"
+        case .requestExpired:
+            return "lnurl_request_expired"
+        case .noAvailableBalance:
+            return "lnurl_no_balance"
+        case .noRoute:
+            return "lnurl_no_route"
         case .unknown:
             return "lnurl_unknown_error"
         case .expiredInvoice:
@@ -238,6 +261,16 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
     }
 
     func firstBoxTexts() -> (title: String, content: NSAttributedString)? {
+        if case .unknown(var message) = error {
+            if message.count > 280 {
+                message = message.truncate(maxLength: 280) + "..."
+            }
+            return (
+                L10n.LNURLWithdrawPresenter.receivedMessage,
+                message.attributedForDescription(alignment: .center)
+            )
+        }
+
         if let invoice = invoice {
             return (
                 L10n.LNURLWithdrawPresenter.invoice,

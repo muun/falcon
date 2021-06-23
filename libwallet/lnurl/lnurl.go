@@ -24,27 +24,30 @@ type Response struct {
 
 type WithdrawResponse struct {
 	Response
-	Tag                string `json:"tag"`
-	K1                 string `json:"k1"`
-	Callback           string `json:"callback"`
-	MaxWithdrawable    float64  `json:"maxWithdrawable"`
-	MinWithdrawable    float64  `json:"minWithdrawable"`
-	DefaultDescription string `json:"defaultDescription"`
+	Tag                string  `json:"tag"`
+	K1                 string  `json:"k1"`
+	Callback           string  `json:"callback"`
+	MaxWithdrawable    float64 `json:"maxWithdrawable"`
+	MinWithdrawable    float64 `json:"minWithdrawable"`
+	DefaultDescription string  `json:"defaultDescription"`
 }
 
 // After adding new codes here, remember to export them in the root libwallet
 // module so that the apps can consume them.
 const (
-	ErrDecode            int = 1
-	ErrUnsafeURL         int = 2
-	ErrUnreachable       int = 3
-	ErrInvalidResponse   int = 4
-	ErrResponse          int = 5
-	ErrUnknown           int = 6
-	ErrWrongTag          int = 7
-	StatusContacting     int = 100
-	StatusInvoiceCreated int = 101
-	StatusReceiving      int = 102
+	ErrDecode             int = 1
+	ErrUnsafeURL          int = 2
+	ErrUnreachable        int = 3
+	ErrInvalidResponse    int = 4
+	ErrResponse           int = 5
+	ErrUnknown            int = 6
+	ErrWrongTag           int = 7
+	ErrNoAvailableBalance int = 8
+	ErrRequestExpired     int = 9
+	ErrNoRoute            int = 10
+	StatusContacting      int = 100
+	StatusInvoiceCreated  int = 101
+	StatusReceiving       int = 102
 )
 
 type Event struct {
@@ -114,7 +117,11 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 		return
 	}
 	if wr.Status == StatusError {
-		notifier.Errorf(ErrResponse, wr.Reason)
+		if strings.Contains(strings.ToLower(wr.Reason), "expired") {
+			notifier.Errorf(ErrRequestExpired, wr.Reason)
+		} else {
+			notifier.Errorf(ErrResponse, wr.Reason)
+		}
 		return
 	}
 	if wr.Tag != "withdrawRequest" {
@@ -122,7 +129,7 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 		return
 	}
 	if wr.MaxWithdrawable <= 0 {
-		notifier.Errorf(ErrInvalidResponse, "invalid maxWithdrawable amount: %f", wr.MaxWithdrawable)
+		notifier.Errorf(ErrNoAvailableBalance, "no available balance to withdraw")
 		return
 	}
 	callbackURL, err := url.Parse(wr.Callback)
@@ -149,7 +156,8 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 	notifier.SetInvoice(invoice)
 	notifier.Status(StatusInvoiceCreated)
 
-	query := url.Values{}
+	// Mutate the query params so we keep those the original URL had
+	query := callbackURL.Query()
 	query.Add("k1", wr.K1)
 	query.Add("pr", invoice)
 
@@ -168,7 +176,11 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 		return
 	}
 	if fr.Status == StatusError {
-		notifier.Errorf(ErrResponse, fr.Reason)
+		if strings.Contains(strings.ToLower(fr.Reason), "route") {
+			notifier.Errorf(ErrNoRoute, fr.Reason)
+		} else {
+			notifier.Errorf(ErrResponse, fr.Reason)
+		}
 		return
 	}
 	notifier.Status(StatusReceiving)

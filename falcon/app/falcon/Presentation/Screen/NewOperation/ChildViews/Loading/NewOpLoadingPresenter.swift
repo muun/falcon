@@ -63,7 +63,8 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
 
         case .fromHardwareWallet,
              .toHardwareWallet,
-             .toContact:
+             .toContact,
+             .lnurlWithdraw:
             preconditionFailure()
         }
 

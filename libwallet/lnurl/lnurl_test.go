@@ -226,6 +226,150 @@ func TestWrongTagInQR(t *testing.T) {
 	})
 }
 
+func TestExpiredCheck(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(&Response{
+			Status: "ERROR",
+			Reason: "something something Expired blabla",
+		})
+	})
+	mux.HandleFunc("/withdraw/complete", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(&Response{
+			Status: StatusOK,
+		})
+	})
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
+
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
+		panic("should not reach here")
+	}
+
+	Withdraw(qr, createInvoiceFunc, true, func(e *Event) {
+		if e.Code < 100 && e.Code != ErrRequestExpired {
+			t.Fatalf("unexpected error code: %v", e.Code)
+		}
+		if e.Code == StatusInvoiceCreated {
+			t.Fatal("should not create invoice")
+		}
+	})
+}
+
+func TestNoAvailableBalance(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(&WithdrawResponse{
+			K1:                 "foobar",
+			Callback:           "http://" + r.Host + "/withdraw/complete",
+			MaxWithdrawable:    0,
+			MinWithdrawable:    0,
+			DefaultDescription: "Withdraw from Lapp",
+			Tag:                "withdrawRequest",
+		})
+	})
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
+
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
+		panic("should not reach here")
+	}
+
+	Withdraw(qr, createInvoiceFunc, true, func(e *Event) {
+		if e.Code < 100 && e.Code != ErrNoAvailableBalance {
+			t.Fatalf("unexpected error code: %d", e.Code)
+		}
+		if e.Code == StatusInvoiceCreated {
+			t.Fatalf("should not create invoice")
+		}
+	})
+}
+
+func TestNoRouteCheck(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(&WithdrawResponse{
+			K1:                 "foobar",
+			Callback:           "http://" + r.Host + "/withdraw/complete",
+			MaxWithdrawable:    1_000_000,
+			DefaultDescription: "Withdraw from Lapp",
+			Tag:                "withdrawRequest",
+		})
+	})
+	mux.HandleFunc("/withdraw/complete", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(&Response{
+			Status: StatusError,
+			Reason: "Unable to pay LN Invoice: FAILURE_REASON_NO_ROUTE",
+		})
+	})
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
+
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
+		return "12345", nil
+	}
+
+	Withdraw(qr, createInvoiceFunc, true, func(e *Event) {
+		if e.Code < 100 && e.Code != ErrNoRoute {
+			t.Fatalf("unexpected error code: %d", e.Code)
+		}
+	})
+}
+
+func TestExtraQueryParams(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(&WithdrawResponse{
+			K1:                 "foobar",
+			Callback:           "http://" + r.Host + "/withdraw/complete?foo=bar",
+			MaxWithdrawable:    1_000_000,
+			DefaultDescription: "Withdraw from Lapp",
+			Tag:                "withdrawRequest",
+		})
+	})
+	mux.HandleFunc("/withdraw/complete", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("foo") != "bar" {
+			t.Fatalf("Expected foo=bar in query params. Got URL: %v", r.URL.String())
+		}
+		json.NewEncoder(w).Encode(&Response{
+			Status: StatusOK,
+		})
+	})
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
+
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
+		if amt != 1_000_000 {
+			t.Fatalf("unexpected invoice amount: %v", amt)
+		}
+		if desc != "Withdraw from Lapp" {
+			t.Fatalf("unexpected invoice description: %v", desc)
+		}
+		if host != "127.0.0.1" {
+			t.Fatalf("unexpected host: %v", host)
+		}
+		return "12345", nil
+	}
+
+	var err string
+	Withdraw(qr, createInvoiceFunc, true, func(e *Event) {
+		if e.Code < 100 {
+			err = e.Message
+		}
+	})
+	if err != "" {
+		t.Fatalf("expected withdraw to succeed, got: %v", err)
+	}
+}
+
 func TestValidate(t *testing.T) {
 	link := "lightning:LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"
 

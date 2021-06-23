@@ -508,12 +508,30 @@ internal enum L10n {
     internal static let invalidCodeTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.invalidCodeTitle")
     /// Invoice
     internal static let invoice = L10n.tr("Localizable", "LNURLWithdrawPresenter.invoice")
+    /// It seems you don't have any funds to withdraw from %s. Please, check that your balance isn't empty.
+    internal static func noAvailableBalanceDescription(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noAvailableBalanceDescription", p1)
+    }
+    /// There are no funds to withdraw
+    internal static let noAvailableBalanceTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.noAvailableBalanceTitle")
+    /// It seems %s couldn't find a route to send you the payment. We suggest you contact <service> to let them know.
+    internal static func noRouteDescription(_ p1: UnsafePointer<CChar>) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteDescription", p1)
+    }
+    /// There's no available route
+    internal static let noRouteTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteTitle")
     /// You'll receive your payment as soon as %s completes it.
     internal static func pendingNotificationBody(_ p1: UnsafePointer<CChar>) -> String {
       return L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationBody", p1)
     }
     /// Your payment is on the way
     internal static let pendingNotificationTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationTitle")
+    /// Received message
+    internal static let receivedMessage = L10n.tr("Localizable", "LNURLWithdrawPresenter.receivedMessage")
+    /// The LNURL expired before the payment was made. Please, request a new one.
+    internal static let requestExpiredDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.requestExpiredDescription")
+    /// This withdrawal request has expired
+    internal static let requestExpiredTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.requestExpiredTitle")
     /// Something failed and we aren't sure what it was. Please send us a report to help us find out what happened.
     internal static let unknownErrorDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.unknownErrorDescription")
     /// Something went wrong

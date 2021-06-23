@@ -166,26 +166,26 @@ extension AppDelegate {
 // Force touch stuff
 extension AppDelegate {
 
-    internal func handleShortcut(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
-        let shortcutType = shortcutItem.type
-        guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
+    internal func handleShortcut(_ application: UIApplication, item: UIApplicationShortcutItem) -> Bool {
+        guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: item.type) else {
             return false
         }
-        return pushToVc(shortcutIdentifier: shortcutIdentifier)
-    }
 
-    internal func pushToVc(shortcutIdentifier: ShortcutIdentifier) -> Bool {
-        if userRepository.getUser() != nil {
-            switch shortcutIdentifier {
-            case .receiveMoney:
-                navController.pushViewController(ReceiveViewController(origin: .forcePush), animated: true)
-                return true
-            case .sendMoney:
-                navController.pushViewController(ScanQRViewController(), animated: true)
-                return true
-            }
+        if userRepository.getUser() == nil {
+            return false
         }
-        return false
+
+        guard let navController = getRootNavigationController(application) else {
+            return false
+        }
+
+        switch shortcutIdentifier {
+        case .receiveMoney:
+            navController.pushViewController(ReceiveViewController(origin: .forcePush), animated: true)
+        case .sendMoney:
+            navController.pushViewController(ScanQRViewController(), animated: true)
+        }
+        return true
     }
 
 }

@@ -15,6 +15,7 @@ public enum PaymentIntent {
     case submarineSwap(invoice: LibwalletInvoice)
     case toHardwareWallet
     case fromHardwareWallet
+    case lnurlWithdraw(lnurl: String)
 }
 
 public protocol PaymentRequestType {

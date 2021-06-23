@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // This is to handle the app being open with a force touch action
         if let item = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
-            return handleShortcut(item)
+            return handleShortcut(application, item: item)
         }
 
         return true
@@ -139,7 +139,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DeviceUtils.appState = application.applicationState
     }
 
-    // Deep/Unirversal links
+    func getRootNavigationController(_ application: UIApplication) -> UINavigationController? {
+        // Since we might be presenting the PIN, we don't want active. We want the first.
+        let rootController = application.windows[0].rootViewController
+
+        if let rootNav = rootController as? UINavigationController {
+            return rootNav
+        }
+
+        if let rootNav = rootController as? UITabBarController {
+            if let rootNav = rootNav.selectedViewController as? UINavigationController {
+                return rootNav
+            }
+        }
+
+        Logger.log(.err, "failed to find a nav controller to open a URI: root \(String(describing: rootController))")
+        return nil
+    }
+
+    // Deep/Universal links
     func application(_ application: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
@@ -152,28 +170,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         do {
-            let paymentRequest = try AddressHelper.parse(url.absoluteString)
+            let paymentIntent = try AddressHelper.parse(url.absoluteString)
 
-            // Since we might be presenting the PIN, we don't want active. We want the first.
-            let rootController = application.windows[0].rootViewController
-            let navController: UINavigationController
-
-            if let rootNav = rootController as? UINavigationController {
-                navController = rootNav
-            } else if let rootNav = rootController?.navigationController {
-                navController = rootNav
-            } else {
-                Logger.log(.err,
-                           "failed to find a nav controller to open a URI: root \(String(describing: rootController))")
+            guard let navController = getRootNavigationController(application) else {
                 return false
             }
 
-            navController.pushViewController(
-                NewOperationViewController(
-                    configuration: .standard(paymentIntent: paymentRequest, origin: .externalLink)
-                ),
-                animated: true
-            )
+            switch paymentIntent {
+            case .lnurlWithdraw(let lnurl):
+                navController.pushViewController(
+                    LNURLWithdrawViewController(qr: lnurl),
+                    animated: true
+                )
+            default:
+                navController.pushViewController(
+                    NewOperationViewController(
+                        configuration: .standard(paymentIntent: paymentIntent, origin: .externalLink)
+                    ),
+                    animated: true
+                )
+            }
 
             return true
         } catch {
@@ -258,7 +274,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      performActionFor shortcutItem: UIApplicationShortcutItem,
                      completionHandler: (Bool) -> Void) {
-        completionHandler(handleShortcut(shortcutItem))
+        completionHandler(handleShortcut(application, item: shortcutItem))
     }
 
 }

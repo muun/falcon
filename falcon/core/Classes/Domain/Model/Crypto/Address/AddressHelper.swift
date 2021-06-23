@@ -27,11 +27,16 @@ public enum AddressHelper {
     static let bitcoinScheme = "bitcoin:"
 
     public static func parse(_ raw: String) throws -> PaymentIntent {
-        do {
-            return try parse(rawAddress: raw)
-        } catch {
-            return try parse(rawInvoice: raw)
+        if let address = try? parse(rawAddress: raw) {
+            return address
         }
+        if let invoice = try? parse(rawInvoice: raw) {
+            return invoice
+        }
+        if let lnurl = parse(lnurl: raw) {
+            return lnurl
+        }
+        throw MuunError(ParseError.addressError)
     }
 
     public static func isValid(rawAddress: String) -> Bool {
@@ -84,6 +89,13 @@ public enum AddressHelper {
         }
 
         return .submarineSwap(invoice: invoice)
+    }
+
+    static func parse(lnurl: String) -> PaymentIntent? {
+        if LibwalletLNURLValidate(lnurl) {
+            return .lnurlWithdraw(lnurl: lnurl)
+        }
+        return nil
     }
 
     private enum ParseError: Error {

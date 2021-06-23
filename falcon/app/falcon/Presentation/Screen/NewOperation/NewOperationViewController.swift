@@ -75,7 +75,9 @@ class NewOperationViewController: MUViewController {
             title = L10n.NewOperationViewController.s2
 
         case .fromHardwareWallet, .toContact, .toHardwareWallet:
-            Logger.fatal("These intents are not implemented yet")
+            Logger.fatal("Intent is not implemented yet: \(configuration.paymentIntent)")
+        case .lnurlWithdraw:
+            Logger.fatal("Intent is not handled by this view controller: \(configuration.paymentIntent)")
         }
 
         logEvent("\(screenLoggingName)_started", parameters: newOpParams)
