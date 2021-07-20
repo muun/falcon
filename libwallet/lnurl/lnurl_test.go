@@ -226,6 +226,23 @@ func TestWrongTagInQR(t *testing.T) {
 	})
 }
 
+func TestOnionLinkNotSupported(t *testing.T) {
+	qr := "LNURL1DP68GUP69UHKVMM0VFSHYTN0DE5K7MSHXU8YD"
+
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
+		panic("should not reach here")
+	}
+
+	Withdraw(qr, createInvoiceFunc, true, func(e *Event) {
+		if e.Code < 100 && e.Code != ErrTorNotSupported {
+			t.Fatalf("unexpected error code: %v", e.Code)
+		}
+		if e.Code == StatusContacting {
+			t.Fatal("should not contact server")
+		}
+	})
+}
+
 func TestExpiredCheck(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
@@ -376,6 +393,15 @@ func TestValidate(t *testing.T) {
 	ok := Validate(link)
 	if !ok {
 		t.Fatal("expected to validate link")
+	}
+}
+
+func TestValidateFallbackScheme(t *testing.T) {
+	link := "https://example.com/?lightning=LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"
+
+	ok := Validate(link)
+	if !ok {
+		t.Fatal("expected to validate link with fallback scheme")
 	}
 }
 

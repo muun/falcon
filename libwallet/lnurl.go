@@ -27,6 +27,7 @@ const (
 	LNURLErrNoAvailableBalance = lnurl.ErrNoAvailableBalance
 	LNURLErrRequestExpired     = lnurl.ErrRequestExpired
 	LNURLErrNoRoute            = lnurl.ErrNoRoute
+	LNURLErrTorNotSupported    = lnurl.ErrTorNotSupported
 	LNURLStatusContacting      = lnurl.StatusContacting
 	LNURLStatusInvoiceCreated  = lnurl.StatusInvoiceCreated
 	LNURLStatusReceiving       = lnurl.StatusReceiving
