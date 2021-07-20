@@ -18,28 +18,26 @@ public struct OperationMetadataDecrypter {
 
     func decrypt(operation: OperationJson) throws -> OperationMetadataJson? {
 
-        let metadata: String
-        let decrypter: LibwalletDecrypterProtocol
+        let decrypted: Data
 
         if let sender = operation.senderMetadata {
-            metadata = sender
-            decrypter = try keysRepository.getBasePrivateKey().decrypter()
+
+            decrypted = try keysRepository.getBasePrivateKey().decrypt(payload: sender)
 
         } else if let receiver = operation.receiverMetadata {
             // TODO: Eventually extract the public key from a known place
-            metadata = receiver
-            decrypter = try keysRepository.getBasePrivateKey().decrypter(from: nil)
+            decrypted = try keysRepository.getBasePrivateKey().decrypt(payload: receiver, from: nil)
 
         } else {
             return nil
         }
 
-        return JSONDecoder.model(from: try decrypter.decrypt(metadata))
+        return JSONDecoder.model(from: decrypted)
     }
 
     func decrypt(metadata: String) throws -> OperationMetadataJson? {
-        let decrypter = try keysRepository.getBasePrivateKey().decrypter()
-        return JSONDecoder.model(from: try decrypter.decrypt(metadata))
+        let key = try keysRepository.getBasePrivateKey()
+        return JSONDecoder.model(from: try key.decrypt(payload: metadata))
     }
 
 }

@@ -85,14 +85,14 @@ class ScanQRViewController: MUViewController {
     fileprivate func checkClipboard() {
         if let theString = UIPasteboard.general.string {
 
-            if !presenter.isOwnAddress(theString) && presenter.isValid(rawAddress: theString) {
-                sendToAddressView.isHidden = false
-                sendToAddressLabel.text = L10n.ScanQRViewController.s2
-                addressLabel.text = theString
-
-            } else if presenter.isValid(lnurl: theString) {
+            if presenter.isValid(lnurl: theString) {
                 sendToAddressView.isHidden = false
                 sendToAddressLabel.text = L10n.ScanQRViewController.s7
+                addressLabel.text = theString
+
+            } else if !presenter.isOwnAddress(theString) && presenter.isValid(rawAddress: theString) {
+                sendToAddressView.isHidden = false
+                sendToAddressLabel.text = L10n.ScanQRViewController.s2
                 addressLabel.text = theString
 
             } else {
@@ -226,16 +226,15 @@ class ScanQRViewController: MUViewController {
     @objc func sendToAddress() {
         let address = addressLabel.text!
 
-        if presenter.isValid(rawAddress: address) {
-            pushToNewOp(address, origin: .clipboard)
-
-        } else if presenter.isValid(lnurl: address) {
+        if presenter.isValid(lnurl: address) {
             navigationController!.pushViewController(
                 LNURLFromSendViewController(qr: address),
                 animated: true
             )
-        }
+        } else if presenter.isValid(rawAddress: address) {
+            pushToNewOp(address, origin: .clipboard)
 
+        }
     }
 
     override func viewDidLayoutSubviews() {

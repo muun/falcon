@@ -149,16 +149,13 @@ public class OperationActions {
     private func generateMetadata(description: String?) throws -> String {
 
         // Derive a key for metadata in it's tree on two random indexes to make it reasonably unique
-        let encrypter = try keysRepository.getBasePrivateKey()
+        let key = try keysRepository.getBasePrivateKey()
             .derive(to: .metadata)
             .deriveRandom()
             .deriveRandom()
-            .encrypter()
 
         let metadata = JSONEncoder.data(json: OperationMetadataJson(description: description))
-        return try doWithError({ err in
-            encrypter.encrypt(metadata, error: err)
-        })
+        return try key.encrypt(payload: metadata)
     }
 
     public func newOperation(_ operation: core.Operation, with swapParameters: SwapExecutionParameters? = nil) -> Single<core.Operation> {

@@ -106,7 +106,7 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 		return
 	}
 	if resp.StatusCode >= 300 {
-		notifier.Errorf(ErrInvalidResponse, "unexpected status code in response: %v", err)
+		notifier.Errorf(ErrInvalidResponse, "unexpected status code in response: %v", resp.StatusCode)
 		return
 	}
 	// parse response
@@ -171,7 +171,7 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 		return
 	}
 	if resp.StatusCode >= 300 {
-		notifier.Errorf(ErrInvalidResponse, "unexpected status code in response: %v", err)
+		notifier.Errorf(ErrInvalidResponse, "unexpected status code in response: %v", resp.StatusCode)
 		return
 	}
 	// parse response

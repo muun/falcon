@@ -87,6 +87,12 @@ final class ReceiveInLightningView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func willMove(toWindow newWindow: UIWindow?) {
+        if newWindow == nil {
+            timer.invalidate()
+        }
+    }
+
     private func setUpView() {
         setUpStackView()
         setUpExpiryNotice()

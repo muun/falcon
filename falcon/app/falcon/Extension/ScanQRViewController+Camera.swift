@@ -160,13 +160,13 @@ extension ScanQRViewController: AVCaptureMetadataOutputObjectsDelegate {
             pauseCapture()
             blurScreen()
 
-            if presenter.isValid(rawAddress: address) {
-                pushToNewOp(address, origin: .qr)
-            } else if presenter.isValid(lnurl: address) {
+            if presenter.isValid(lnurl: address) {
                 navigationController!.pushViewController(
                     LNURLFromSendViewController(qr: address),
                     animated: true
                 )
+            } else if presenter.isValid(rawAddress: address) {
+                pushToNewOp(address, origin: .qr)
             } else {
                 showInvalidAddressView(address)
             }

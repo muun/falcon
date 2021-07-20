@@ -25,16 +25,22 @@ public struct WalletPrivateKey {
         return WalletPublicKey(key.publicKey()!)
     }
 
-    func encrypter() -> LibwalletEncrypterProtocol {
-        return key.encrypter()!
+    func encrypt(payload: Data) throws -> String {
+        return try doWithError { error in
+            LibwalletEncryptOperation(key, payload: payload)?.encrypt(error)
+        }
     }
 
-    func decrypter() -> LibwalletDecrypterProtocol {
-        return key.decrypter()!
+    func decrypt(payload: String) throws -> Data {
+        return try doWithError({ _ in
+            try LibwalletDecryptOperation(key, payload: payload)?.decrypt()
+        })
     }
 
-    func decrypter(from publicKey: LibwalletPublicKey?) -> LibwalletDecrypterProtocol {
-        return key.decrypter(from: publicKey)!
+    func decrypt(payload: String, from publicKey: LibwalletPublicKey?) throws -> Data {
+        return try doWithError({ _ in
+            try LibwalletDecryptOperation(from: publicKey, key: key, payload: payload)?.decrypt()
+        })
     }
 }
 
