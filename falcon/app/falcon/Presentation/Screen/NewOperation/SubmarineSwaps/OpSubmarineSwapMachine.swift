@@ -18,11 +18,11 @@ class OpSubmarineSwapMachine<Delegate: NewOpStateMachineDelegate>: BasePresenter
     private let initialState: PaymentIntent
 
     init(delegate: Delegate,
-         state: NewOperationConfiguration,
+         state: PaymentIntent,
          operationActions: OperationActions,
          computeSwapFeesAction: ComputeSwapFeesAction) {
 
-        self.initialState = state.paymentIntent
+        self.initialState = state
         self.operationActions = operationActions
         self.computeSwapFeesAction = computeSwapFeesAction
         self.states = []
@@ -209,15 +209,6 @@ extension OpSubmarineSwapMachine: NewOperationTransitions {
             )
 
             return .nextState(state: nextState)
-        }
-    }
-
-    func getConfirmationData() -> NewOpSubmarineSwapData.Confirm {
-        switch states.last {
-        case .confirmation(let data):
-            return data
-        default:
-            Logger.fatal("No confirmation data")
         }
     }
 

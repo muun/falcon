@@ -17,10 +17,10 @@ class OpToAddressStateMachine<Delegate: NewOpStateMachineDelegate>: BasePresente
     private let initialState: PaymentIntent
 
     init(delegate: Delegate,
-         state: NewOperationConfiguration,
+         state: PaymentIntent,
          operationActions: OperationActions) {
 
-        self.initialState = state.paymentIntent
+        self.initialState = state
         self.operationActions = operationActions
         self.states = []
 
@@ -216,15 +216,6 @@ extension OpToAddressStateMachine: NewOperationTransitions {
         case .invalid(let fee, let rate):
             let feeAmount = BitcoinAmount.from(satoshis: fee, with: exchangeRateWindow, mirroring: amount)
             return .feeNeedsChange(displayFee: feeAmount, rate: rate)
-        }
-    }
-
-    func getConfirmationData() -> NewOpToAddressData.Confirm {
-        switch states.last {
-        case .confirmation(let data):
-            return data
-        default:
-            Logger.fatal("No confirmation data")
         }
     }
 

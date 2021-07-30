@@ -17,7 +17,7 @@ protocol BasePresenterDelegate: AnyObject {
 class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
 
     weak var delegate: Delegate!
-    var compositeDisposable: CompositeDisposable!
+    var compositeDisposable: CompositeDisposable?
     private var sessionActions: SessionActions = resolve()
 
     lazy private var className = String(describing: type(of: self))
@@ -48,7 +48,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
                 onError: self.handleError
             )
 
-        return compositeDisposable.insert(disp)
+        return compositeDisposable?.insert(disp)
     }
 
     @discardableResult
@@ -62,7 +62,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
                 onError: self.handleError
             )
 
-        return compositeDisposable.insert(disp)
+        return compositeDisposable?.insert(disp)
     }
 
     @discardableResult
@@ -76,7 +76,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
                 onError: self.handleError
             )
 
-        return compositeDisposable.insert(disp)
+        return compositeDisposable?.insert(disp)
     }
 
     func handleError(_ e: Error) {
@@ -138,7 +138,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
     }
 
     func tearDown() {
-        compositeDisposable.dispose()
+        compositeDisposable?.dispose()
         compositeDisposable = nil
 
         Logger.log(.debug, "\(className) Tear Down")

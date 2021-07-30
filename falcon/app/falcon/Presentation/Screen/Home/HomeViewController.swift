@@ -191,6 +191,7 @@ extension HomeViewController: HomeViewDelegate {
     }
 
     func backUpTap() {
+        SecurityCenterViewController.origin = .emptyAnonUser
         tabBarController!.selectedIndex = 1
     }
 

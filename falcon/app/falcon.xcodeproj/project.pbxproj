@@ -80,7 +80,6 @@
 		A00CB2422421490C00B0A961 /* EmergencyKitSlidesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00CB2412421490C00B0A961 /* EmergencyKitSlidesPage.swift */; };
 		A010F07B22EF4EB500B2F38F /* CurrencyPickerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A010F07A22EF4EB500B2F38F /* CurrencyPickerPage.swift */; };
 		A010F07D22EF680100B2F38F /* NewOpErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A010F07C22EF680100B2F38F /* NewOpErrorPage.swift */; };
-		A012618222777CA600CE2AD9 /* NewOperationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012618122777CA600CE2AD9 /* NewOperationConfiguration.swift */; };
 		A012F2AD24D061DB002278F4 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012F2AC24D061DB002278F4 /* CGFloat+Extension.swift */; };
 		A012F2AF24D0672B002278F4 /* ChangePasswordEnterCurrentPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012F2AE24D0672B002278F4 /* ChangePasswordEnterCurrentPage.swift */; };
 		A012F2B124D068DB002278F4 /* ChangePasswordEnterCurrentPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012F2B024D068DB002278F4 /* ChangePasswordEnterCurrentPresenter.swift */; };
@@ -589,7 +588,6 @@
 		A00CB2412421490C00B0A961 /* EmergencyKitSlidesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyKitSlidesPage.swift; sourceTree = "<group>"; };
 		A010F07A22EF4EB500B2F38F /* CurrencyPickerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerPage.swift; sourceTree = "<group>"; };
 		A010F07C22EF680100B2F38F /* NewOpErrorPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpErrorPage.swift; sourceTree = "<group>"; };
-		A012618122777CA600CE2AD9 /* NewOperationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOperationConfiguration.swift; sourceTree = "<group>"; };
 		A012F2AC24D061DB002278F4 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
 		A012F2AE24D0672B002278F4 /* ChangePasswordEnterCurrentPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordEnterCurrentPage.swift; sourceTree = "<group>"; };
 		A012F2B024D068DB002278F4 /* ChangePasswordEnterCurrentPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordEnterCurrentPresenter.swift; sourceTree = "<group>"; };
@@ -1929,7 +1927,6 @@
 				A0A03AF921EE59E100700526 /* NewOperationViewController.swift */,
 				A0A03AFB21EE59E100700526 /* NewOperationView.xib */,
 				B30D5A562225E456008F4B20 /* NewOperationView.swift */,
-				A012618122777CA600CE2AD9 /* NewOperationConfiguration.swift */,
 				A0DFCD1A24520C6400D1EBC4 /* NewOp+MoreInfo.swift */,
 				0FF90788262B311300889E0F /* NewOpError.swift */,
 			);
@@ -3665,7 +3662,6 @@
 				A0BB7A7A21234D3B0043F7FD /* UIViewController+Extension.swift in Sources */,
 				B3085CAE21C2A96B00B159F4 /* DependencyContainer.swift in Sources */,
 				A0ED8A9324A5374F00AD54D4 /* HelpEmergencyKitView.swift in Sources */,
-				A012618222777CA600CE2AD9 /* NewOperationConfiguration.swift in Sources */,
 				A0C2ACC524AF8A9700D63B34 /* ActivateEmergencyKitPresenter.swift in Sources */,
 				A0CAC9A8222435FF00C1F917 /* NewOpConfirmPresenter.swift in Sources */,
 				A0E11ACC2450A17600B068F8 /* Home+ActionCard.swift in Sources */,
@@ -3819,7 +3815,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 509;
+				CURRENT_PROJECT_VERSION = 510;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
@@ -3870,7 +3866,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 509;
+				CURRENT_PROJECT_VERSION = 510;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -3996,7 +3992,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 509;
+				CURRENT_PROJECT_VERSION = 510;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4061,7 +4057,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 509;
+				CURRENT_PROJECT_VERSION = 510;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4094,7 +4090,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 509;
+				CURRENT_PROJECT_VERSION = 510;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
@@ -4184,7 +4180,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 509;
+				CURRENT_PROJECT_VERSION = 510;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.001077">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: prompt" time="205.315574">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: prompt" time="10.970639">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: download_dsyms" time="16.689081">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: upload_symbols_to_crashlytics" time="16.082924">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: clean_build_artifacts" time="0.002168">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

@@ -185,7 +185,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             default:
                 navController.pushViewController(
                     NewOperationViewController(
-                        configuration: .standard(paymentIntent: paymentIntent, origin: .externalLink)
+                        paymentIntent: paymentIntent,
+                        origin: .externalLink
                     ),
                     animated: true
                 )

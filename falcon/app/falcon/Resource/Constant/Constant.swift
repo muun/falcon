@@ -91,8 +91,6 @@ enum Constant {
         case emptyAnonUser = "empty_home_anon_user"
         case shieldButton = "shield_button"
         case bannerSetupEmail = "banner_setup_email"
-        case banneSetupRecoveryCode = "banner_set_up_recovery_code"
-        case recoveryCodeMissing = "recovery_code_missing"
     }
 
     // 18.0.3 (1995)

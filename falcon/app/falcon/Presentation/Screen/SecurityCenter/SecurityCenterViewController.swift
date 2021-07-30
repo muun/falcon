@@ -25,7 +25,8 @@ class SecurityCenterViewController: MUViewController {
     fileprivate let stepRecoveryCode = ActionCardView()
     fileprivate let stepEmergencyKit = ActionCardView()
     fileprivate let exportAgainButton = LightButtonView()
-    fileprivate var origin: String
+
+    static var origin: Constant.SecurityCenterOrigin = .shieldButton
 
     fileprivate lazy var presenter = instancePresenter(SecurityCenterPresenter.init, delegate: self)
 
@@ -37,12 +38,12 @@ class SecurityCenterViewController: MUViewController {
         return [
             "next_step": presenter.nextStepLogParam(),
             "email_status": presenter.emailStatusLogParam(),
-            "origin": origin
+            "origin": SecurityCenterViewController.origin.rawValue
         ]
     }
 
     init(origin: Constant.SecurityCenterOrigin) {
-        self.origin = origin.rawValue
+        SecurityCenterViewController.origin = origin
 
         super.init(nibName: nil, bundle: nil)
     }

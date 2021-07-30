@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import core
 
 class ManuallyEnterQRViewController: MUViewController {
 
@@ -86,19 +87,34 @@ class ManuallyEnterQRViewController: MUViewController {
         title = L10n.ManuallyEnterQRViewController.s4
     }
 
+    fileprivate func pushToNewOperation(_ paymentIntent: PaymentIntent) {
+
+        switch paymentIntent {
+        case .lnurlWithdraw(let lnurl):
+            navigationController!.pushViewController(
+                LNURLWithdrawViewController(qr: lnurl),
+                animated: true
+            )
+        default:
+            navigationController!.pushViewController(
+                NewOperationViewController(
+                    paymentIntent: paymentIntent,
+                    origin: .manualInput
+                ),
+                animated: true
+            )
+        }
+    }
+
 }
 
 extension ManuallyEnterQRViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
         do {
-            let paymentRequestType = try presenter.getPaymentIntent(for: largeTextInputView.text)
-            navigationController!.pushViewController(
-                NewOperationViewController(configuration:
-                    .standard(paymentIntent: paymentRequestType, origin: .manualInput)
-                ),
-                animated: true
-            )
+            let paymentIntent = try presenter.getPaymentIntent(for: largeTextInputView.text)
+
+            pushToNewOperation(paymentIntent)
         } catch {
             largeTextInputView.setError(L10n.ManuallyEnterQRViewController.s5)
         }

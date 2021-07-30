@@ -215,7 +215,10 @@ class ScanQRViewController: MUViewController {
         do {
             let paymentIntent = try presenter.getPaymentIntent(for: address)
             navigationController!.pushViewController(
-                NewOperationViewController(configuration: .standard(paymentIntent: paymentIntent, origin: origin)),
+                NewOperationViewController(
+                    paymentIntent: paymentIntent,
+                    origin: origin
+                ),
                 animated: true
             )
         } catch {

@@ -24,7 +24,9 @@ class NewOperationViewController: MUViewController {
     fileprivate var keyboardWillShow = false
     fileprivate var comesFromBack = false
     fileprivate var newOpView: NewOperationView!
-    fileprivate var configuration: NewOperationConfiguration
+    fileprivate var paymentIntent: PaymentIntent
+    fileprivate var origin: Constant.NewOpAnalytics.Origin
+
     private var expiresTime: Double = 0
     private var newOpParams: [String: Any] = [:]
 
@@ -35,15 +37,16 @@ class NewOperationViewController: MUViewController {
         return "new_op"
     }
 
-    init(configuration: NewOperationConfiguration) {
-        self.configuration = configuration
+    init(paymentIntent: PaymentIntent, origin: Constant.NewOpAnalytics.Origin) {
+        self.paymentIntent = paymentIntent
+        self.origin = origin
         super.init(nibName: nil, bundle: nil)
 
-        switch configuration.paymentIntent {
+        switch paymentIntent {
         case .toAddress:
             let stateMachine = instancePresenter(OpToAddressStateMachine.init,
                                                  delegate: self,
-                                                 state: configuration)
+                                                 state: paymentIntent)
             self.stateMachine = stateMachine
 
             // The code below needs the view to be alive already
@@ -54,13 +57,13 @@ class NewOperationViewController: MUViewController {
                                                       filledDataDelegate: self,
                                                       amountDelegate: newOpView)
             newOpParams = ["type": Constant.NewOpAnalytics.OpType.toAddress.rawValue,
-                           "origin": configuration.origin.rawValue]
+                           "origin": origin.rawValue]
             title = L10n.NewOperationViewController.s1
 
         case .submarineSwap:
             let stateMachine = instancePresenter(OpSubmarineSwapMachine.init,
                                                  delegate: self,
-                                                 state: configuration)
+                                                 state: paymentIntent)
             self.stateMachine = stateMachine
 
             // The code below needs the view to be alive already
@@ -71,13 +74,13 @@ class NewOperationViewController: MUViewController {
                                                           filledDataDelegate: self,
                                                           amountDelegate: newOpView)
             newOpParams = ["type": Constant.NewOpAnalytics.OpType.submarineSwap.rawValue,
-                           "origin": configuration.origin.rawValue]
+                           "origin": origin.rawValue]
             title = L10n.NewOperationViewController.s2
 
         case .fromHardwareWallet, .toContact, .toHardwareWallet:
-            Logger.fatal("Intent is not implemented yet: \(configuration.paymentIntent)")
+            Logger.fatal("Intent is not implemented yet: \(paymentIntent)")
         case .lnurlWithdraw:
-            Logger.fatal("Intent is not handled by this view controller: \(configuration.paymentIntent)")
+            Logger.fatal("Intent is not handled by this view controller: \(paymentIntent)")
         }
 
         logEvent("\(screenLoggingName)_started", parameters: newOpParams)
@@ -152,7 +155,7 @@ class NewOperationViewController: MUViewController {
     }
 
     private func fullUri() -> String? {
-        switch configuration.paymentIntent {
+        switch paymentIntent {
         case .toAddress(let uri):
             return uri.uri.absoluteString
         default:
@@ -160,7 +163,7 @@ class NewOperationViewController: MUViewController {
         }
     }
 
-    private func displayErrorView(type: NewOpError, buttonText: String? = nil) {
+    private func displayErrorView(type: NewOpError) {
         navigationController?.setNavigationBarHidden(true, animated: true)
 
         let view = ErrorView()
