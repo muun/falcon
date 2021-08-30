@@ -23,7 +23,9 @@ public class SignChallengeWithUserKeyAction: AsyncAction<()> {
         precondition(challenge.type == .USER_KEY)
 
         let privKey = try keysRepository.getBasePrivateKey()
-        let signature = try privKey.key.sign(Data(hex: challenge.challenge))
+        let signature = try doWithError({ err in
+            LibwalletSignWithPrivateKey(privKey.key, Data(hex: challenge.challenge), err)
+        })
 
         return ChallengeSignature(type: challenge.type, hex: signature.toHexString())
     }

@@ -97,7 +97,7 @@ class CurrencyHelper: Resolver {
         add(FiatCurrency(code: "BMD", symbol: "$", name: "Bermudan Dollar", flag: "🇧🇲"))
         add(FiatCurrency(code: "BND", symbol: "$", name: "Brunei Dollar", flag: "🇧🇳"))
         add(FiatCurrency(code: "BOB", symbol: "Bs", name: "Bolivian Boliviano", flag: "🇧🇴"))
-        add(FiatCurrency(code: "BRL", symbol: "R$", name: "Brasilian Real", flag: "🇧🇷"))
+        add(FiatCurrency(code: "BRL", symbol: "R$", name: "Brazilian Real", flag: "🇧🇷"))
         add(FiatCurrency(code: "BSD", symbol: "$", name: "Bahamian Dollar", flag: "🇧🇸"))
         add(FiatCurrency(code: "BTN", symbol: "Nu", name: "Bhutanese Ngultrum", flag: "🇧🇹"))
         add(FiatCurrency(code: "BWP", symbol: "P", name: "Botswanan Pula", flag: "🇧🇼"))
