@@ -8,12 +8,11 @@
 
 import RxSwift
 
-private let scheduler = SerialDispatchQueueScheduler(qos: .background)
-
 public class AsyncAction<T>: NSObject {
 
     private let name: String
     private let subject: BehaviorSubject<ActionState<T>>
+    private let scheduler = SerialDispatchQueueScheduler(qos: .background)
 
     init(name: String) {
         self.name = name
@@ -34,17 +33,15 @@ public class AsyncAction<T>: NSObject {
 
         _ = single
             .observeOn(scheduler)
-            .do(onSubscribe: { self.subject.onNext(ActionState.createLoading()) })
+            .do(onSuccess: {
+                self.subject.onNext(ActionState.createValue(value: $0))
+            }, onError: {
+                self.subject.onNext(ActionState.createError(error: $0))
+            }, onSubscribe: {
+                self.subject.onNext(ActionState.createLoading())
+            })
             .subscribeOn(Scheduler.backgroundScheduler)
-            .subscribe(
-                onSuccess: {
-                    self.subject.onNext(ActionState.createValue(value: $0))
-                },
-                onError: {
-                    self.subject.onNext(ActionState.createError(error: $0))
-                }
-            )
-
+            .subscribe()
     }
 
     private func safeSetEmpty() {
@@ -59,7 +56,6 @@ public class AsyncAction<T>: NSObject {
         return Observable.create({ (observer) -> Disposable in
 
             return self.subject
-                .subscribeOn(scheduler)
                 .do(onSubscribed: {
                     observer.onNext(ActionState.createEmpty())
                 })
@@ -90,7 +86,6 @@ public class AsyncAction<T>: NSObject {
         return Single.create(subscribe: { (callback) -> Disposable in
 
             return self.subject
-                .subscribeOn(scheduler)
                 .subscribe(onNext: { [weak self] state in
                     switch state.type {
 

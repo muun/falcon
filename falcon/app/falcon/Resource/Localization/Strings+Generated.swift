@@ -21,9 +21,9 @@ internal enum L10n {
     internal static let activationDescription = L10n.tr("Localizable", "ActivateEmergencyKitView.activationDescription")
     /// 6-digit verification code
     internal static let boldDescription = L10n.tr("Localizable", "ActivateEmergencyKitView.boldDescription")
-    /// This is an old code. Check your latest Emergency Kit (your code starts with %s)
-    internal static func oldCodeError(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ActivateEmergencyKitView.oldCodeError", p1)
+    /// This is an old code. Check your latest Emergency Kit (your code starts with %@)
+    internal static func oldCodeError(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ActivateEmergencyKitView.oldCodeError", String(describing: p1))
     }
     /// This is an old code.
     internal static let oldCodeErrorRed = L10n.tr("Localizable", "ActivateEmergencyKitView.oldCodeErrorRed")
@@ -192,9 +192,9 @@ internal enum L10n {
   internal enum ChangePasswordVerifyViewController {
     /// Confirm Password change
     internal static let s1 = L10n.tr("Localizable", "ChangePasswordVerifyViewController.s1")
-    /// You will receive a verification email at %s
-    internal static func s2(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ChangePasswordVerifyViewController.s2", p1)
+    /// You will receive a verification email at %@
+    internal static func s2(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ChangePasswordVerifyViewController.s2", String(describing: p1))
     }
     /// Change password
     internal static let s3 = L10n.tr("Localizable", "ChangePasswordVerifyViewController.s3")
@@ -214,13 +214,13 @@ internal enum L10n {
   }
 
   internal enum DetailPresenter {
-    /// %s hours
-    internal static func s1(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "DetailPresenter.s1", p1)
+    /// %@ hours
+    internal static func s1(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "DetailPresenter.s1", String(describing: p1))
     }
-    /// (%s blocks)
-    internal static func s2(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "DetailPresenter.s2", p1)
+    /// (%@ blocks)
+    internal static func s2(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "DetailPresenter.s2", String(describing: p1))
     }
   }
 
@@ -262,9 +262,9 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "DetailViewController.s2")
     /// Why?
     internal static let s20 = L10n.tr("Localizable", "DetailViewController.s20")
-    /// There was no available route for this payment. You will get the refund in approximately %s %s.
-    internal static func s22(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "DetailViewController.s22", p1, p2)
+    /// There was no available route for this payment. You will get the refund in approximately %@ %@.
+    internal static func s22(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "DetailViewController.s22", String(describing: p1), String(describing: p2))
     }
     /// Transaction ID
     internal static let s3 = L10n.tr("Localizable", "DetailViewController.s3")
@@ -490,39 +490,47 @@ internal enum L10n {
   }
 
   internal enum LNURLWithdrawPresenter {
-    /// Your lightning invoice expired, and %s didn't complete the payment. Please, contact them for more information.
-    internal static func expiredInvoiceDescription(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.expiredInvoiceDescription", p1)
+    /// This code was used by another wallet, and can't be used again.
+    internal static let alreadyUsedDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.alreadyUsedDescription")
+    /// Code already used
+    internal static let alreadyUsedTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.alreadyUsedTitle")
+    /// Your lightning invoice expired, and %@ didn't complete the payment. Please, contact them for more information.
+    internal static func expiredInvoiceDescription(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.expiredInvoiceDescription", String(describing: p1))
     }
     /// Your payment failed
     internal static let expiredInvoiceTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.expiredInvoiceTitle")
-    /// Your lightning invoice expired, and %s didn't complete the payment.
-    internal static func failedNotificationBody(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.failedNotificationBody", p1)
+    /// Your lightning invoice expired, and %@ didn't complete the payment.
+    internal static func failedNotificationBody(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.failedNotificationBody", String(describing: p1))
     }
     /// Your payment failed
     internal static let failedNotificationTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.failedNotificationTitle")
+    /// The service that created this code is not available in your country.
+    internal static let forbiddenDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.forbiddenDescription")
+    /// Country not supported
+    internal static let forbiddenTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.forbiddenTitle")
     /// It doesn't seem to be one. Please, double-check its source. Keep in mind you can only use LNURL with services that support it.
     internal static let invalidCodeDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.invalidCodeDescription")
     /// Is it a LNURL code?
     internal static let invalidCodeTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.invalidCodeTitle")
     /// Invoice
     internal static let invoice = L10n.tr("Localizable", "LNURLWithdrawPresenter.invoice")
-    /// It seems you don't have any funds to withdraw from %s. Please, check that your balance isn't empty.
-    internal static func noAvailableBalanceDescription(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noAvailableBalanceDescription", p1)
+    /// It seems you don't have any funds to withdraw from %@. Please, check that your balance isn't empty.
+    internal static func noAvailableBalanceDescription(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noAvailableBalanceDescription", String(describing: p1))
     }
     /// There are no funds to withdraw
     internal static let noAvailableBalanceTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.noAvailableBalanceTitle")
-    /// It seems %s couldn't find a route to send you the payment. We suggest you contact <service> to let them know.
-    internal static func noRouteDescription(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteDescription", p1)
+    /// It seems %@ couldn't find a route to send you the payment. We suggest you contact <service> to let them know.
+    internal static func noRouteDescription(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteDescription", String(describing: p1))
     }
     /// There's no available route
     internal static let noRouteTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteTitle")
-    /// You'll receive your payment as soon as %s completes it.
-    internal static func pendingNotificationBody(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationBody", p1)
+    /// You'll receive your payment as soon as %@ completes it.
+    internal static func pendingNotificationBody(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationBody", String(describing: p1))
     }
     /// Your payment is on the way
     internal static let pendingNotificationTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.pendingNotificationTitle")
@@ -538,9 +546,9 @@ internal enum L10n {
     internal static let unknownErrorTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.unknownErrorTitle")
     /// The service that created the LNURL code is unavailable. Please, try again later.
     internal static let unresponsiveDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.unresponsiveDescription")
-    /// %s is not responding
-    internal static func unresponsiveTitle(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.unresponsiveTitle", p1)
+    /// %@ is not responding
+    internal static func unresponsiveTitle(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.unresponsiveTitle", String(describing: p1))
     }
     /// This is a valid LNURL, but not for this operation. Please, double-check its source. Keep in mind you can only use LNURL to withdraw funds.
     internal static let wrongTagDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.wrongTagDescription")
@@ -549,27 +557,27 @@ internal enum L10n {
   }
 
   internal enum LNURLWithdrawViewController {
-    /// Contacting %s...
-    internal static func contacting(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawViewController.contacting", p1)
+    /// Contacting %@...
+    internal static func contacting(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.contacting", String(describing: p1))
     }
     /// Copy to clipboard
     internal static let copyToClipboard = L10n.tr("Localizable", "LNURLWithdrawViewController.copyToClipboard")
     /// Loading...
     internal static let loading = L10n.tr("Localizable", "LNURLWithdrawViewController.loading")
-    /// Receiving from %s...
-    internal static func receiving(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawViewController.receiving", p1)
+    /// Receiving from %@...
+    internal static func receiving(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.receiving", String(describing: p1))
     }
     /// Receive
     internal static let title = L10n.tr("Localizable", "LNURLWithdrawViewController.title")
-    /// %s is taking too long to pay
-    internal static func tooLong(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawViewController.tooLong", p1)
+    /// %@ is taking too long to pay
+    internal static func tooLong(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.tooLong", String(describing: p1))
     }
-    /// You can choose to wait here or leave, and receive a notification when the payment completes. If the payment doesn't complete, please contact %s
-    internal static func tooLongDescription(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawViewController.tooLongDescription", p1)
+    /// You can choose to wait here or leave, and receive a notification when the payment completes. If the payment doesn't complete, please contact %@
+    internal static func tooLongDescription(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawViewController.tooLongDescription", String(describing: p1))
     }
   }
 
@@ -611,17 +619,17 @@ internal enum L10n {
   internal enum ManuallyEnterFeeViewController {
     /// Edit network fee
     internal static let s1 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s1")
-    /// Not enough funds. You can pay up to %s sat/vbyte
-    internal static func s10(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s10", p1)
+    /// Not enough funds. You can pay up to %@ sat/vbyte
+    internal static func s10(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s10", String(describing: p1))
     }
     /// Not enough funds.
     internal static let s11 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s11")
     /// Fee is very low. This transaction may take days to confirm.
     internal static let s12 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s12")
-    /// Fee is too low. The bitcoin network is experiencing unusually high traffic and rejecting transactions with fee rates below %s sat/vbyte.
-    internal static func s13(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s13", p1)
+    /// Fee is too low. The bitcoin network is experiencing unusually high traffic and rejecting transactions with fee rates below %@ sat/vbyte.
+    internal static func s13(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s13", String(describing: p1))
     }
     /// Enter a fee manually. What's this?
     internal static let s2 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s2")
@@ -633,17 +641,17 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s5")
     /// USE MAXIMUM FEE
     internal static let s6 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s6")
-    /// Less than %s
-    internal static func s7(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s7", p1)
+    /// Less than %@
+    internal static func s7(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s7", String(describing: p1))
     }
-    /// Fee is too low. Enter a fee of at least %s sat/vbyte
-    internal static func s8(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s8", p1)
+    /// Fee is too low. Enter a fee of at least %@ sat/vbyte
+    internal static func s8(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s8", String(describing: p1))
     }
-    /// Fee is too high. Enter a fee lower than %s sat/vbyte
-    internal static func s9(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s9", p1)
+    /// Fee is too high. Enter a fee lower than %@ sat/vbyte
+    internal static func s9(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s9", String(describing: p1))
     }
   }
 
@@ -697,9 +705,9 @@ internal enum L10n {
   internal enum NewOpAmountView {
     /// CONFIRM AMOUNT
     internal static let s1 = L10n.tr("Localizable", "NewOpAmountView.s1")
-    /// Balance: %s %s
-    internal static func s2(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "NewOpAmountView.s2", p1, p2)
+    /// Balance: %@ %@
+    internal static func s2(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "NewOpAmountView.s2", String(describing: p1), String(describing: p2))
     }
     /// Use all funds
     internal static let s3 = L10n.tr("Localizable", "NewOpAmountView.s3")
@@ -772,9 +780,9 @@ internal enum L10n {
     internal static let s29 = L10n.tr("Localizable", "NewOpError.s29")
     /// This invoice has expired
     internal static let s3 = L10n.tr("Localizable", "NewOpError.s3")
-    /// The amount you are trying too send is too small. It must be greater than %s satoshis.
-    internal static func s30(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "NewOpError.s30", p1)
+    /// The amount you are trying too send is too small. It must be greater than %@ satoshis.
+    internal static func s30(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "NewOpError.s30", String(describing: p1))
     }
     /// Something went wrong, but we don’t know what. Please, reach out to our support team and let us know what happened. We'll be happy to help.
     internal static let s31 = L10n.tr("Localizable", "NewOpError.s31")
@@ -800,9 +808,9 @@ internal enum L10n {
   }
 
   internal enum NewOperationView {
-    /// This invoice expires in %s
-    internal static func s1(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "NewOperationView.s1", p1)
+    /// This invoice expires in %@
+    internal static func s1(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "NewOperationView.s1", String(describing: p1))
     }
     /// This payment will take longer than most lightning payments. Why?
     internal static let s2 = L10n.tr("Localizable", "NewOperationView.s2")
@@ -868,9 +876,9 @@ internal enum L10n {
     internal static let cancelable = L10n.tr("Localizable", "OperationFormatter.cancelable")
     /// You paid yourself
     internal static let s1 = L10n.tr("Localizable", "OperationFormatter.s1")
-    /// %s paid you
-    internal static func s10(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "OperationFormatter.s10", p1)
+    /// %@ paid you
+    internal static func s10(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "OperationFormatter.s10", String(describing: p1))
     }
     /// You received
     internal static let s2 = L10n.tr("Localizable", "OperationFormatter.s2")
@@ -913,9 +921,9 @@ internal enum L10n {
     internal static let s3 = L10n.tr("Localizable", "PinViewController.s3")
     /// Invalid PIN.
     internal static let s4 = L10n.tr("Localizable", "PinViewController.s4")
-    /// Invalid PIN. After %s more failed attempts, you'll be logged out of your wallet.
-    internal static func s5(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "PinViewController.s5", p1)
+    /// Invalid PIN. After %@ more failed attempts, you'll be logged out of your wallet.
+    internal static func s5(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "PinViewController.s5", String(describing: p1))
     }
     /// Pin did not match
     internal static let s6 = L10n.tr("Localizable", "PinViewController.s6")
@@ -957,9 +965,9 @@ internal enum L10n {
   internal enum ReceiveInLightningView {
     /// Generating invoice
     internal static let loading = L10n.tr("Localizable", "ReceiveInLightningView.loading")
-    /// This invoice will expire in %s. Create another
-    internal static func s1(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ReceiveInLightningView.s1", p1)
+    /// This invoice will expire in %@. Create another
+    internal static func s1(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ReceiveInLightningView.s1", String(describing: p1))
     }
     /// Create another
     internal static let s2 = L10n.tr("Localizable", "ReceiveInLightningView.s2")
@@ -981,9 +989,9 @@ internal enum L10n {
   }
 
   internal enum ReceivePresenter {
-    /// %s received
-    internal static func s1(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ReceivePresenter.s1", p1)
+    /// %@ received
+    internal static func s1(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ReceivePresenter.s1", String(describing: p1))
     }
   }
 
@@ -996,9 +1004,9 @@ internal enum L10n {
     internal static let s3 = L10n.tr("Localizable", "ReceiveViewController.s3")
     /// Copied to clipboard
     internal static let s4 = L10n.tr("Localizable", "ReceiveViewController.s4")
-    /// Copied to clipboard. This invoice expires in %s.
-    internal static func s5(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "ReceiveViewController.s5", p1)
+    /// Copied to clipboard. This invoice expires in %@.
+    internal static func s5(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "ReceiveViewController.s5", String(describing: p1))
     }
   }
 
@@ -1007,15 +1015,15 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "Recover.s1")
     /// Forgotten passwords
     internal static let s2 = L10n.tr("Localizable", "Recover.s2")
-    /// It is a set of randomly-generated characters and the only way to log in if you forgot your password.\nYou set it up on %s and most likely wrote it on a paper.
-    internal static func s3(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "Recover.s3", p1)
+    /// It is a set of randomly-generated characters and the only way to log in if you forgot your password.\nYou set it up on %@ and most likely wrote it on a paper.
+    internal static func s3(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "Recover.s3", String(describing: p1))
     }
     /// It is a set of randomly-generated characters and the only way to log in if you forgot your password.
     internal static let s4 = L10n.tr("Localizable", "Recover.s4")
-    /// Muun doesn't keep a copy of your password, so it can't be reset.\nTry to remember it. You chose it on %s
-    internal static func s5(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "Recover.s5", p1)
+    /// Muun doesn't keep a copy of your password, so it can't be reset.\nTry to remember it. You chose it on %@
+    internal static func s5(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "Recover.s5", String(describing: p1))
     }
     /// Muun doesn't keep a copy of your password, so it can't be reset.\nTry to remember it.
     internal static let s6 = L10n.tr("Localizable", "Recover.s6")
@@ -1313,9 +1321,9 @@ internal enum L10n {
     internal static let s4 = L10n.tr("Localizable", "SetupEmailWording.s4")
     /// You backed up your wallet
     internal static let s5 = L10n.tr("Localizable", "SetupEmailWording.s5")
-    /// Use %s and your password to recover your wallet.
-    internal static func s6(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "SetupEmailWording.s6", p1)
+    /// Use %@ and your password to recover your wallet.
+    internal static func s6(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SetupEmailWording.s6", String(describing: p1))
     }
     /// Back up with password
     internal static let s8 = L10n.tr("Localizable", "SetupEmailWording.s8")
@@ -1354,9 +1362,9 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "SignInAuthorizeEmailViewController.s2")
     /// Choose Email
     internal static let s3 = L10n.tr("Localizable", "SignInAuthorizeEmailViewController.s3")
-    /// You will receive an authorization email at %s. Please click the link in the email to continue.
-    internal static func s4(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "SignInAuthorizeEmailViewController.s4", p1)
+    /// You will receive an authorization email at %@. Please click the link in the email to continue.
+    internal static func s4(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SignInAuthorizeEmailViewController.s4", String(describing: p1))
     }
   }
 
@@ -1365,9 +1373,9 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s1")
     /// Enter your Recovery Code
     internal static let s2 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s2")
-    /// You set it up on %s and most likely wrote it on a paper. What's this?
-    internal static func s3(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "SignInEmailAndRCViewController.s3", p1)
+    /// You set it up on %@ and most likely wrote it on a paper. What's this?
+    internal static func s3(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SignInEmailAndRCViewController.s3", String(describing: p1))
     }
     /// What's this?
     internal static let s4 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s4")
@@ -1435,9 +1443,9 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "SignInWithRCVerifyEmailViewController.s2")
     /// Choose Email
     internal static let s3 = L10n.tr("Localizable", "SignInWithRCVerifyEmailViewController.s3")
-    /// You will receive an authorization email at %s. Please click the link in the email to continue.
-    internal static func s4(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "SignInWithRCVerifyEmailViewController.s4", p1)
+    /// You will receive an authorization email at %@. Please click the link in the email to continue.
+    internal static func s4(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SignInWithRCVerifyEmailViewController.s4", String(describing: p1))
     }
   }
 
@@ -1508,9 +1516,9 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "SignUpVerifyEmailViewController.s1")
     /// Choose Email
     internal static let s2 = L10n.tr("Localizable", "SignUpVerifyEmailViewController.s2")
-    /// You will receive a verification email at %s. Please click the link in the email to continue.
-    internal static func s3(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "SignUpVerifyEmailViewController.s3", p1)
+    /// You will receive a verification email at %@. Please click the link in the email to continue.
+    internal static func s3(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SignUpVerifyEmailViewController.s3", String(describing: p1))
     }
   }
 
@@ -1555,9 +1563,9 @@ internal enum L10n {
   }
 
   internal enum TargetedFeeTableViewCell {
-    /// Less than %s
-    internal static func s1(_ p1: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "TargetedFeeTableViewCell.s1", p1)
+    /// Less than %@
+    internal static func s1(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "TargetedFeeTableViewCell.s1", String(describing: p1))
     }
   }
 
@@ -1581,9 +1589,9 @@ internal enum L10n {
   }
 
   internal enum UIBarButtonItem {
-    /// %s of %s
-    internal static func s1(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
-      return L10n.tr("Localizable", "UIBarButtonItem.s1", p1, p2)
+    /// %@ of %@
+    internal static func s1(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "UIBarButtonItem.s1", String(describing: p1), String(describing: p2))
     }
   }
 

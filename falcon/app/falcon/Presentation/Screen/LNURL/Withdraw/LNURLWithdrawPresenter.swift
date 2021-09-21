@@ -193,6 +193,10 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return L10n.LNURLWithdrawPresenter.unknownErrorTitle
         case .expiredInvoice:
             return L10n.LNURLWithdrawPresenter.expiredInvoiceTitle
+        case .forbidden:
+            return L10n.LNURLWithdrawPresenter.forbiddenTitle
+        case .alreadyUsed:
+            return L10n.LNURLWithdrawPresenter.alreadyUsedTitle
         }
     }
 
@@ -225,6 +229,12 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return L10n.LNURLWithdrawPresenter.expiredInvoiceDescription(domain)
                 .attributedForDescription(alignment: .center)
                 .set(bold: domain, color: Asset.Colors.muunGrayDark.color)
+        case .forbidden(_, let domain):
+            return L10n.LNURLWithdrawPresenter.forbiddenDescription
+                .attributedForDescription(alignment: .center)
+        case .alreadyUsed(_, let domain):
+            return L10n.LNURLWithdrawPresenter.alreadyUsedDescription
+                .attributedForDescription(alignment: .center)
         }
     }
 
@@ -246,6 +256,10 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return "lnurl_unknown_error"
         case .expiredInvoice:
             return "lnurl_expired_invoice"
+        case .alreadyUsed:
+            return "lnurl_already_used"
+        case .forbidden:
+            return "lnurl_forbidden"
         }
     }
 
