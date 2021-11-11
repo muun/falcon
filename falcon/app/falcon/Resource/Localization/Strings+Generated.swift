@@ -47,8 +47,20 @@ internal enum L10n {
     internal static let label = L10n.tr("Localizable", "AddressTypeOptionView.label")
     /// Legacy
     internal static let legacy = L10n.tr("Localizable", "AddressTypeOptionView.legacy")
-    /// SegWit
+    /// The most widely accepted address type. Use it only when a service labels your Segwit addresses as invalid.
+    internal static let legacyDescription = L10n.tr("Localizable", "AddressTypeOptionView.legacyDescription")
+    /// Segwit
     internal static let segwit = L10n.tr("Localizable", "AddressTypeOptionView.segwit")
+    /// A relatively new address type, already widely accepted. It creates lighter transactions and saves you money on future network fees.
+    internal static let segwitDescription = L10n.tr("Localizable", "AddressTypeOptionView.segwitDescription")
+    /// Taproot
+    internal static let taproot = L10n.tr("Localizable", "AddressTypeOptionView.taproot")
+    /// Activates in ~%@ hours.
+    internal static func taprootActivation(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "AddressTypeOptionView.taprootActivation", String(describing: p1))
+    }
+    /// The newest and most powerful address type. Many services are not yet compatible and may label it as invalid.
+    internal static let taprootDescription = L10n.tr("Localizable", "AddressTypeOptionView.taprootDescription")
   }
 
   internal enum AddressTypeSelectViewController {
@@ -311,33 +323,31 @@ internal enum L10n {
     internal static let s6 = L10n.tr("Localizable", "EmailPrimingViewController.s6")
   }
 
-  internal enum EmergencyKitSlidesViewController {
+  internal enum EmergencyKitSlides {
     /// Emergency Kit
-    internal static let s1 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s1")
+    internal static let s1 = L10n.tr("Localizable", "EmergencyKitSlides.s1")
     /// Continue
-    internal static let s10 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s10")
+    internal static let s10 = L10n.tr("Localizable", "EmergencyKitSlides.s10")
     /// Abort
-    internal static let s11 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s11")
+    internal static let s11 = L10n.tr("Localizable", "EmergencyKitSlides.s11")
     /// Your Emergency Kit is a PDF document with information and instructions to independently transfer your funds.
-    internal static let s12 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s12")
+    internal static let s12 = L10n.tr("Localizable", "EmergencyKitSlides.s12")
     /// By combining the Emergency Kit and your Recovery Code, you will have total, undisputed control over your funds.
-    internal static let s13 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s13")
+    internal static let s13 = L10n.tr("Localizable", "EmergencyKitSlides.s13")
     /// CREATE YOUR EMERGENCY KIT
-    internal static let s2 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s2")
-    /// Swipe to continue
-    internal static let s3 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s3")
+    internal static let s2 = L10n.tr("Localizable", "EmergencyKitSlides.s2")
     /// One document
-    internal static let s4 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s4")
+    internal static let s4 = L10n.tr("Localizable", "EmergencyKitSlides.s4")
     /// Your private keys are securely encrypted with your Recovery Code, so you can save it online.
-    internal static let s5 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s5")
+    internal static let s5 = L10n.tr("Localizable", "EmergencyKitSlides.s5")
     /// Stored online
-    internal static let s6 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s6")
+    internal static let s6 = L10n.tr("Localizable", "EmergencyKitSlides.s6")
     /// Complete Ownership
-    internal static let s7 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s7")
+    internal static let s7 = L10n.tr("Localizable", "EmergencyKitSlides.s7")
     /// You haven’t finished exporting up your Emergency Kit. You can restart this setup later.
-    internal static let s8 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s8")
+    internal static let s8 = L10n.tr("Localizable", "EmergencyKitSlides.s8")
     /// Abort Emergency Kit export?
-    internal static let s9 = L10n.tr("Localizable", "EmergencyKitSlidesViewController.s9")
+    internal static let s9 = L10n.tr("Localizable", "EmergencyKitSlides.s9")
   }
 
   internal enum EnterFeeManuallyTableViewCell {
@@ -426,6 +436,10 @@ internal enum L10n {
   }
 
   internal enum Home {
+    /// Level-up your payments. Save with each payment by activating Taproot.
+    internal static let activateTaproot = L10n.tr("Localizable", "Home.activateTaproot")
+    /// Level-up your payments.
+    internal static let activateTaprootHighlight = L10n.tr("Localizable", "Home.activateTaprootHighlight")
     /// Back up your wallet. Create a backup to never lose access to your wallet.
     internal static let backUp = L10n.tr("Localizable", "Home.backUp")
     /// Back up your wallet
@@ -614,6 +628,25 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "LogOutViewController.s2")
     /// You entered a wrong pin 3 times in a row. As a security measure, you were logged out. Please restart Muun to recover your wallet.
     internal static let s3 = L10n.tr("Localizable", "LogOutViewController.s3")
+  }
+
+  internal enum ManualSaveEmergencyKitView {
+    /// Make it accesible. You should be able to access your Kit at all times, even if your phone is lost, stolen or stops working.
+    internal static let accesible = L10n.tr("Localizable", "ManualSaveEmergencyKitView.accesible")
+    /// Make it accesible.
+    internal static let accesibleBold = L10n.tr("Localizable", "ManualSaveEmergencyKitView.accesibleBold")
+    /// SAVE MANUALLY
+    internal static let save = L10n.tr("Localizable", "ManualSaveEmergencyKitView.save")
+    /// Don’t prioritize secrecy. Remember, your Kit is encrypted. Without your Recovery Code, the Kit is harmless. 
+    internal static let secrecy = L10n.tr("Localizable", "ManualSaveEmergencyKitView.secrecy")
+    /// Don’t prioritize secrecy.
+    internal static let secrecyBold = L10n.tr("Localizable", "ManualSaveEmergencyKitView.secrecyBold")
+    /// Saving the Kit manually? Here’s some advice.
+    internal static let title = L10n.tr("Localizable", "ManualSaveEmergencyKitView.title")
+    /// Make it easy to update. You should always have the latest Kit at hand, an old Kit won’t work.
+    internal static let update = L10n.tr("Localizable", "ManualSaveEmergencyKitView.update")
+    /// Make it easy to update.
+    internal static let updateBold = L10n.tr("Localizable", "ManualSaveEmergencyKitView.updateBold")
   }
 
   internal enum ManuallyEnterFeeViewController {
@@ -833,6 +866,35 @@ internal enum L10n {
     internal static let s6 = L10n.tr("Localizable", "NewOperationViewController.s6")
   }
 
+  internal enum NotificationService {
+    /// Open the app to claim it
+    internal static let fulfillIncomingSwapBody = L10n.tr("Localizable", "NotificationService.fulfillIncomingSwapBody")
+    /// A lightning payment is pending!
+    internal static let fulfillIncomingSwapTitle = L10n.tr("Localizable", "NotificationService.fulfillIncomingSwapTitle")
+    /// %@ sent you %@
+    internal static func opFromContactTitle(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "NotificationService.opFromContactTitle", String(describing: p1), String(describing: p2))
+    }
+    /// %@ received
+    internal static func opReceivedTitle(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "NotificationService.opReceivedTitle", String(describing: p1))
+    }
+    /// %@ sent
+    internal static func opSentTitle(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "NotificationService.opSentTitle", String(describing: p1))
+    }
+    /// The Bitcoin Network activated Taproot. You can now enjoy cheaper payments.
+    internal static let taprootActivatedBody = L10n.tr("Localizable", "NotificationService.taprootActivatedBody")
+    /// Taproot is live 🎉
+    internal static let taprootActivatedTitle = L10n.tr("Localizable", "NotificationService.taprootActivatedTitle")
+    /// Save with each payment by activating Taproot.
+    internal static let taprootPreactivationBody = L10n.tr("Localizable", "NotificationService.taprootPreactivationBody")
+    /// Level-up your payments
+    internal static let taprootPreactivationTitle = L10n.tr("Localizable", "NotificationService.taprootPreactivationTitle")
+    /// You have a new notification
+    internal static let unknown = L10n.tr("Localizable", "NotificationService.unknown")
+  }
+
   internal enum NotificationsPrimingView {
     /// Never miss a payment
     internal static let s1 = L10n.tr("Localizable", "NotificationsPrimingView.s1")
@@ -853,6 +915,25 @@ internal enum L10n {
     internal static let header = L10n.tr("Localizable", "OnChainAdvancedOptionsView.header")
     /// Hide settings
     internal static let hide = L10n.tr("Localizable", "OnChainAdvancedOptionsView.hide")
+  }
+
+  internal enum OnchainSettings {
+    /// Confirm
+    internal static let confirm = L10n.tr("Localizable", "OnchainSettings.confirm")
+    /// Some services may label your addresses as invalid.
+    internal static let confirmDescription = L10n.tr("Localizable", "OnchainSettings.confirmDescription")
+    /// Set Taproot as default?
+    internal static let confirmTitle = L10n.tr("Localizable", "OnchainSettings.confirmTitle")
+    /// Default to Taproot
+    internal static let defaultTaproot = L10n.tr("Localizable", "OnchainSettings.defaultTaproot")
+    /// Taproot is a new address type that makes your payments cheaper and less traceable.\n\nMany services are not yet compatible with Taproot and may label your addresses as invalid. If you make Taproot the default, you'll need to manually change the address type to Segwit or Legacy every time this happens.
+    internal static let learnMore = L10n.tr("Localizable", "OnchainSettings.learnMore")
+    /// Activates in ~%@ hours
+    internal static func timeToActivation(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "OnchainSettings.timeToActivation", String(describing: p1))
+    }
+    /// Bitcoin Network
+    internal static let title = L10n.tr("Localizable", "OnchainSettings.title")
   }
 
   internal enum OpSubmarineSwapViewBuilder {
@@ -1056,32 +1137,39 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "RecoveryToolViewController.s5")
   }
 
+  internal enum RequestCloudView {
+    /// We plan to support more cloud services. Which one would you like to see added?
+    internal static let description = L10n.tr("Localizable", "RequestCloudView.description")
+    /// SEND FEEDBACK
+    internal static let send = L10n.tr("Localizable", "RequestCloudView.send")
+  }
+
   internal enum SaveEmergencyKitOptionView {
-    /// Use your Google account to save and access your kit.
+    /// Tell us which cloud service you would like us to support.
+    internal static let anotherCloudDescription = L10n.tr("Localizable", "SaveEmergencyKitOptionView.anotherCloudDescription")
+    /// Suggest another cloud
+    internal static let anotherCloudTitle = L10n.tr("Localizable", "SaveEmergencyKitOptionView.anotherCloudTitle")
+    /// Use your Google account to save and access your Kit.
     internal static let driveDescription = L10n.tr("Localizable", "SaveEmergencyKitOptionView.driveDescription")
     /// Save to Drive
     internal static let driveTitle = L10n.tr("Localizable", "SaveEmergencyKitOptionView.driveTitle")
-    /// Use your Apple account to save and access your kit.
+    /// Use your Apple account to save and access your Kit.
     internal static let icloudDescription = L10n.tr("Localizable", "SaveEmergencyKitOptionView.icloudDescription")
-    /// Enable iCloud on your phone settings to export your kit.
+    /// Enable iCloud on your phone settings to export your Kit.
     internal static let icloudDisabledDescription = L10n.tr("Localizable", "SaveEmergencyKitOptionView.icloudDisabledDescription")
     /// Save to iCloud
     internal static let icloudTitle = L10n.tr("Localizable", "SaveEmergencyKitOptionView.icloudTitle")
-    /// Choose an application to save and access your kit.
-    internal static let manuallyDescription = L10n.tr("Localizable", "SaveEmergencyKitOptionView.manuallyDescription")
-    /// Save manually
-    internal static let manuallyTitle = L10n.tr("Localizable", "SaveEmergencyKitOptionView.manuallyTitle")
     /// Not enabled
     internal static let notEnabled = L10n.tr("Localizable", "SaveEmergencyKitOptionView.notEnabled")
     /// OPEN IN DRIVE
     internal static let openInDrive = L10n.tr("Localizable", "SaveEmergencyKitOptionView.openInDrive")
-    /// OPEN ICLOUD
+    /// OPEN IN ICLOUD
     internal static let openInICloud = L10n.tr("Localizable", "SaveEmergencyKitOptionView.openInICloud")
     /// Recommended
     internal static let recommended = L10n.tr("Localizable", "SaveEmergencyKitOptionView.recommended")
-    /// You saved your kit to Google Drive. Before you go, find it and take a good look inside. Make sure you can do this in the future.
+    /// You saved your Kit to Google Drive. Before you go, find it and take a good look inside. Make sure you can do this in the future.
     internal static let verifyDescriptionDrive = L10n.tr("Localizable", "SaveEmergencyKitOptionView.verifyDescriptionDrive")
-    /// You saved your kit to iCloud. Before you go, find it and take a good look inside. Make sure you can do this in the future.
+    /// You saved your Kit to iCloud. Before you go, find it and take a good look inside. Make sure you can do this in the future.
     internal static let verifyDescriptionICloud = L10n.tr("Localizable", "SaveEmergencyKitOptionView.verifyDescriptionICloud")
     /// Verify your Emergency Kit
     internal static let verifyTitle = L10n.tr("Localizable", "SaveEmergencyKitOptionView.verifyTitle")
@@ -1133,7 +1221,7 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "SecurityCenter.s2")
     /// Is cloud storage safe?
     internal static let s20 = L10n.tr("Localizable", "SecurityCenter.s20")
-    /// Data inside your Emergency Kit is securely encrypted with your Recovery Code. Without access to that code, the kit is harmless.\n\nSince your Recovery Code is written in paper, you can save your Emergency Kit in the cloud without risk. It will be safe and available in the long term.
+    /// Data inside your Emergency Kit is securely encrypted with your Recovery Code. Without access to that code, the Kit is harmless.\n\nSince your Recovery Code is written in paper, you can save your Emergency Kit in the cloud without risk. It will be safe and available in the long term.
     internal static let s21 = L10n.tr("Localizable", "SecurityCenter.s21")
     /// Create an Emergency Kit
     internal static let s3 = L10n.tr("Localizable", "SecurityCenter.s3")
@@ -1141,7 +1229,7 @@ internal enum L10n {
     internal static let s4 = L10n.tr("Localizable", "SecurityCenter.s4")
     /// You created an Emergency Kit
     internal static let s5 = L10n.tr("Localizable", "SecurityCenter.s5")
-    /// Follow the instructions in the kit you saved to recover your money without using Muun.
+    /// Follow the instructions in the Kit you saved to recover your money without using Muun.
     internal static let s6 = L10n.tr("Localizable", "SecurityCenter.s6")
     /// You wrote down your Private Keys. Use them with your Recovery Code and the Recovery Tool to recover your money without using Muun.
     internal static let s7 = L10n.tr("Localizable", "SecurityCenter.s7")
@@ -1149,6 +1237,26 @@ internal enum L10n {
     internal static let s8 = L10n.tr("Localizable", "SecurityCenter.s8")
     /// Something went wrong
     internal static let s9 = L10n.tr("Localizable", "SecurityCenter.s9")
+    internal enum TaprootActivated {
+      /// You can now send and receive payments using Taproot addresses. Your payments will be cheaper and less traceable.
+      internal static let description = L10n.tr("Localizable", "SecurityCenter.taprootActivated.description")
+      /// You're ready for Taproot!
+      internal static let title = L10n.tr("Localizable", "SecurityCenter.taprootActivated.title")
+    }
+    internal enum TaprootActivationCountdown {
+      /// When the Bitcoin Network mines block 709,632 Taproot will activate globally.\n\nTo protect you from potential blockchain reorganizations, you'll be able to start using Taproot addresses %1@ blocks later.\n\nWe have %2@ blocks to go!
+      internal static func description(_ p1: Any, _ p2: Any) -> String {
+        return L10n.tr("Localizable", "SecurityCenter.taprootActivationCountdown.description", String(describing: p1), String(describing: p2))
+      }
+      /// It's the final countdown!
+      internal static let title = L10n.tr("Localizable", "SecurityCenter.taprootActivationCountdown.title")
+    }
+    internal enum TaprootPreactivated {
+      /// In %@ blocks (~%@ hours), the Bitcoin Network will activate Taproot globally.\n\nWhen this happens, you'll be able to receive funds in Taproot addresses.
+      internal static func description(_ p1: Any, _ p2: Any) -> String {
+        return L10n.tr("Localizable", "SecurityCenter.taprootPreactivated.description", String(describing: p1), String(describing: p2))
+      }
+    }
   }
 
   internal enum SecurityCenterPresenter {
@@ -1252,6 +1360,8 @@ internal enum L10n {
     internal static let lightningNetwork = L10n.tr("Localizable", "SettingsViewController.lightningNetwork")
     /// OK
     internal static let ok = L10n.tr("Localizable", "SettingsViewController.ok")
+    /// Bitcoin Network
+    internal static let onchain = L10n.tr("Localizable", "SettingsViewController.onchain")
     /// Settings
     internal static let s1 = L10n.tr("Localizable", "SettingsViewController.s1")
     /// You can’t delete your wallet at this moment
@@ -1330,12 +1440,14 @@ internal enum L10n {
   }
 
   internal enum ShareEmergencyKitView {
-    /// We recommend using cloud storage, to ensure your kit is never lost. Is that safe?
+    /// Choose your preferred cloud service to ensure your Kit is never lost.
     internal static let description = L10n.tr("Localizable", "ShareEmergencyKitView.description")
-    /// Is that safe?
-    internal static let descriptionCTA = L10n.tr("Localizable", "ShareEmergencyKitView.descriptionCTA")
     /// Save your Emergency Kit
-    internal static let title = L10n.tr("Localizable", "ShareEmergencyKitView.title")
+    internal static let exportTitle = L10n.tr("Localizable", "ShareEmergencyKitView.exportTitle")
+    /// I don’t want to use cloud storage
+    internal static let saveManually = L10n.tr("Localizable", "ShareEmergencyKitView.saveManually")
+    /// Update your Emergency Kit
+    internal static let updateTitle = L10n.tr("Localizable", "ShareEmergencyKitView.updateTitle")
   }
 
   internal enum ShareEmergencyKitViewController {
@@ -1351,6 +1463,8 @@ internal enum L10n {
     internal static let fileName = L10n.tr("Localizable", "ShareEmergencyKitViewController.fileName")
     /// Emergency Kit
     internal static let s1 = L10n.tr("Localizable", "ShareEmergencyKitViewController.s1")
+    /// Updating your Emergency Kit
+    internal static let updating = L10n.tr("Localizable", "ShareEmergencyKitViewController.updating")
     /// Uploading your Emergency Kit
     internal static let uploading = L10n.tr("Localizable", "ShareEmergencyKitViewController.uploading")
   }
@@ -1522,6 +1636,11 @@ internal enum L10n {
     }
   }
 
+  internal enum SlidesViewController {
+    /// Swipe to continue
+    internal static let swipe = L10n.tr("Localizable", "SlidesViewController.swipe")
+  }
+
   internal enum SupportViewController {
     /// Please include this support code
     internal static let s1 = L10n.tr("Localizable", "SupportViewController.s1")
@@ -1560,6 +1679,40 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "SyncViewController.s1")
     /// Creating your wallet
     internal static let s2 = L10n.tr("Localizable", "SyncViewController.s2")
+  }
+
+  internal enum TaprootActivatedPopup {
+    /// You can now send and receive payments using Taproot addresses. Your payments will be cheaper and less traceable.
+    internal static let description = L10n.tr("Localizable", "TaprootActivatedPopup.description")
+    /// EXCELLENT
+    internal static let ok = L10n.tr("Localizable", "TaprootActivatedPopup.ok")
+    /// Taproot is live!
+    internal static let title = L10n.tr("Localizable", "TaprootActivatedPopup.title")
+  }
+
+  internal enum TaprootActivationSlides {
+    /// You haven't activated Taproot yet. You can restart this process later.
+    internal static let abortDescription = L10n.tr("Localizable", "TaprootActivationSlides.abortDescription")
+    /// Leave activation?
+    internal static let abortTitle = L10n.tr("Localizable", "TaprootActivationSlides.abortTitle")
+    /// Taproot is one of the most anticipated upgrades in bitcoin.\n\nStarting with cheaper and less traceable payments, Taproot is setting the stage for massive innovation in bitcoin.
+    internal static let description1 = L10n.tr("Localizable", "TaprootActivationSlides.description1")
+    /// Taproot uses new scripts to create the addresses where you'll receive funds.\n\nTo recover those funds in an emergency, these scripts need to be included in your Emergency Kit.
+    internal static let description2 = L10n.tr("Localizable", "TaprootActivationSlides.description2")
+    /// Keep total control over your funds by updating your Emergency Kit before ever using Taproot.\n\nThe updated Kit replaces the one you already have, but your Recovery Code doesn't change.
+    internal static let description3 = L10n.tr("Localizable", "TaprootActivationSlides.description3")
+    /// UPDATE YOUR KIT
+    internal static let finish = L10n.tr("Localizable", "TaprootActivationSlides.finish")
+    /// Leave
+    internal static let leave = L10n.tr("Localizable", "TaprootActivationSlides.leave")
+    /// Stay
+    internal static let stay = L10n.tr("Localizable", "TaprootActivationSlides.stay")
+    /// A giant leap for bitcoin
+    internal static let title1 = L10n.tr("Localizable", "TaprootActivationSlides.title1")
+    /// Enabled by powerful scripts
+    internal static let title2 = L10n.tr("Localizable", "TaprootActivationSlides.title2")
+    /// Completely secure
+    internal static let title3 = L10n.tr("Localizable", "TaprootActivationSlides.title3")
   }
 
   internal enum TargetedFeeTableViewCell {

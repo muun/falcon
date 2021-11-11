@@ -8,6 +8,7 @@
 
 import Foundation
 import GRDB
+import Libwallet
 
 public class DatabaseCoordinator {
 
@@ -432,6 +433,37 @@ public class DatabaseCoordinator {
             try db.alter(table: "operationDB", body: { t in
                 t.add(column: "metadata", .text)
             })
+        }
+
+        migrator.registerMigration("create exported ek in user") { [self] _ in
+            var user: User? = preferences.object(forKey: .user)
+            guard var user = user  else {
+                return
+            }
+
+            if let exportDate = user.emergencyKitLastExportedDate {
+                let code: String
+
+                if let codes = preferences.array(forKey: .emergencyKitVerificationCodes) as? [String],
+                   let lastCode = codes.last {
+                    code = lastCode
+                } else {
+                    // Default to an empty code if we can't find it
+                    code = ""
+                }
+
+                let version = Int(LibwalletEKVersionDescriptors)
+                user.emergencyKit = ExportEmergencyKit(
+                    lastExportedAt: exportDate,
+                    verificationCode: code,
+                    verified: true,
+                    version: version,
+                    method: nil
+                )
+                user.exportedKitVersions = [version]
+
+                preferences.set(object: user, forKey: .user)
+            }
         }
 
         return migrator

@@ -13,14 +13,16 @@ class VerifyEmergencyKitViewController: MUViewController {
     private var verifyView: VerifyEmergencyKitView!
     private let option: EmergencyKitSavingOption
     private let link: URL?
+    private let flow: EmergencyKitFlow
 
     override var screenLoggingName: String {
         return "emergency_kit_cloud_verify"
     }
 
-    init(option: EmergencyKitSavingOption, link: URL?) {
+    init(option: EmergencyKitSavingOption, link: URL?, flow: EmergencyKitFlow) {
         self.option = option
         self.link = link
+        self.flow = flow
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -44,7 +46,12 @@ class VerifyEmergencyKitViewController: MUViewController {
     }
 
     private func setUpNavigation() {
-        title = L10n.ShareEmergencyKitViewController.s1
+        switch flow {
+        case .export:
+            title = L10n.ShareEmergencyKitViewController.s1
+        case .update:
+            navigationController?.hideSeparator()
+        }
     }
 
 }
@@ -59,7 +66,7 @@ extension VerifyEmergencyKitViewController: VerifyEmergencyKitViewDelegate {
 
     func didTapOnContinue() {
         navigationController!.pushViewController(
-            FeedbackViewController(feedback: FeedbackInfo.emergencyKit), animated: true
+            FeedbackViewController(feedback: flow.successFeedback), animated: true
         )
     }
 

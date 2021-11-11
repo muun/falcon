@@ -20,15 +20,10 @@ public class ReportEmergencyKitExportedAction: AsyncAction<()> {
         super.init(name: "ReportEmergencyKitExportedAction")
     }
 
-    public func run(date: Date, verificationCode: String, isVerified: Bool) {
-        let exportKit = ExportEmergencyKit(
-            lastExportedAt: date,
-            verificationCode: verificationCode,
-            verified: isVerified
-        )
-        runSingle(houstonService.setEmergencyKitExported(exportEmergencyKit: exportKit).map({
-            if isVerified {
-                self.sessionActions.setEmergencyKitExported(date: date)
+    public func run(kit: ExportEmergencyKit) {
+        runSingle(houstonService.setEmergencyKitExported(exportEmergencyKit: kit).map({
+            if kit.verified {
+                self.sessionActions.exported(kit: kit)
             }
         }))
     }

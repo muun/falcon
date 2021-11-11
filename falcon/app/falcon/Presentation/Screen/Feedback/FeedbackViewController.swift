@@ -16,6 +16,9 @@ class FeedbackViewController: MUViewController {
     @IBOutlet fileprivate weak var descriptionLabel: UILabel!
     @IBOutlet fileprivate weak var buttonView: ButtonView!
     @IBOutlet fileprivate weak var animationView: AnimationView!
+    fileprivate let blockClock = BlockClockView()
+    @IBOutlet fileprivate weak var contentView: UIView!
+    @IBOutlet weak var stackView: UIStackView!
 
     private var feedback: FeedbackModel
 
@@ -51,7 +54,9 @@ class FeedbackViewController: MUViewController {
     }
 
     fileprivate func setUpNavigation() {
-        navigationController!.setNavigationBarHidden(true, animated: true)
+        if feedback.buttonText != nil {
+            navigationController!.setNavigationBarHidden(true, animated: true)
+        }
     }
 
     fileprivate func setUpView() {
@@ -59,14 +64,40 @@ class FeedbackViewController: MUViewController {
         setUpButton()
         setUpImageView()
         setUpLottieView()
+        setUpBlockClock()
+
+        if feedback.blocksLeft != nil {
+            stackView.setCustomSpacing(.bigSpacing, after: blockClock)
+        } else if feedback.lottieAnimationName != nil {
+            stackView.setCustomSpacing(.bigSpacing, after: animationView)
+        } else {
+            stackView.setCustomSpacing(.bigSpacing, after: feedbackIImageView)
+        }
+
+        let containerBottomToAnchor: NSLayoutYAxisAnchor
+        if feedback.buttonText == nil {
+            containerBottomToAnchor = view.safeAreaLayoutGuide.bottomAnchor
+        } else {
+            containerBottomToAnchor = buttonView.topAnchor
+        }
+
+        NSLayoutConstraint.activate([
+            contentView.bottomAnchor.constraint(equalTo: containerBottomToAnchor)
+        ])
 
         animateView()
     }
 
     fileprivate func setUpButton() {
+        guard let text = feedback.buttonText else {
+            buttonView.isHidden = true
+            return
+        }
+
         buttonView.delegate = self
-        buttonView.buttonText = feedback.buttonText
+        buttonView.buttonText = text
         buttonView.isEnabled = true
+        buttonView.alpha = 0
     }
 
     fileprivate func setUpLabels() {
@@ -79,14 +110,35 @@ class FeedbackViewController: MUViewController {
         descriptionLabel.attributedText = feedback.description
         descriptionLabel.alpha = 0
         descriptionLabel.textAlignment = .center
+        let ble = descriptionLabel.heightAnchor.constraint(equalToConstant: 0)
+        ble.priority = .defaultLow
+        NSLayoutConstraint.activate([ble])
+
 
         descriptionLabel.isUserInteractionEnabled = true
         descriptionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .descriptionTouched))
     }
 
     fileprivate func setUpImageView() {
-        feedbackIImageView.image = feedback.image
+        guard let image = feedback.image else {
+            feedbackIImageView.removeFromSuperview()
+            return
+        }
+
+        feedbackIImageView.image = image
         feedbackIImageView.alpha = 0
+
+        let width = feedbackIImageView.widthAnchor.constraint(equalToConstant: image.size.width)
+        width.priority = .defaultLow
+        let height = feedbackIImageView.heightAnchor.constraint(equalToConstant: image.size.height)
+        height.priority = .defaultLow
+
+        NSLayoutConstraint.activate([
+            height,
+            width,
+
+            feedbackIImageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, constant: -2 * .sideMargin),
+        ])
     }
 
     fileprivate func setUpLottieView() {
@@ -100,11 +152,30 @@ class FeedbackViewController: MUViewController {
             animationView.play()
 
             feedbackIImageView.isHidden = true
+        } else {
+            animationView.removeFromSuperview()
         }
+    }
+
+    fileprivate func setUpBlockClock() {
+        guard let blocksLeft = feedback.blocksLeft else {
+            return
+        }
+
+        blockClock.alpha = 0
+        blockClock.translatesAutoresizingMaskIntoConstraints = false
+        blockClock.blocks = blocksLeft
+        stackView.insertArrangedSubview(blockClock, at: stackView.arrangedSubviews.firstIndex(of: titleLabel)!)
+
+        stackView.setCustomSpacing(-.closeSpacing, after: feedbackIImageView)
     }
 
     fileprivate func animateView() {
         feedbackIImageView.animate(direction: .topToBottom, duration: .short) {
+            if self.blockClock.superview != nil {
+                self.blockClock.animate(direction: .topToBottom, duration: .short)
+            }
+            
             self.titleLabel.animate(direction: .topToBottom, duration: .short) {
                 self.descriptionLabel.animate(direction: .topToBottom, duration: .short)
             }
@@ -136,6 +207,9 @@ extension FeedbackViewController: ButtonViewDelegate {
             navigationController!.setViewControllers(vcs, animated: true)
         case .resetToGetStarted:
             resetWindowToGetStarted()
+        case nil:
+            // Shouldn't happen
+            ()
         }
     }
 

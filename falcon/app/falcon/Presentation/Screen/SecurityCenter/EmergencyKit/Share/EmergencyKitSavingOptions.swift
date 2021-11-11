@@ -11,13 +11,13 @@ import UIKit
 typealias EKOption = (option: EmergencyKitSavingOption, isRecommended: Bool, isEnabled: Bool)
 
 enum EmergencyKitSavingOption {
-    case drive, icloud, manually
+    case drive, icloud, anotherCloud
 
     func image() -> UIImage {
         switch self {
         case .drive: return Asset.Assets.ekOptionDrive.image
         case .icloud: return Asset.Assets.ekOptionIcloud.image
-        case .manually: return Asset.Assets.ekOptionManually.image
+        case .anotherCloud: return Asset.Assets.ekOptionAnotherCloud.image
         }
     }
 
@@ -25,7 +25,7 @@ enum EmergencyKitSavingOption {
         switch self {
         case .drive: return L10n.SaveEmergencyKitOptionView.driveTitle
         case .icloud: return L10n.SaveEmergencyKitOptionView.icloudTitle
-        case .manually: return L10n.SaveEmergencyKitOptionView.manuallyTitle
+        case .anotherCloud: return L10n.SaveEmergencyKitOptionView.anotherCloudTitle
         }
     }
 
@@ -33,7 +33,7 @@ enum EmergencyKitSavingOption {
         switch self {
         case .drive: return L10n.SaveEmergencyKitOptionView.driveDescription.attributedForDescription()
         case .icloud: return L10n.SaveEmergencyKitOptionView.icloudDescription.attributedForDescription()
-        case .manually: return L10n.SaveEmergencyKitOptionView.manuallyDescription.attributedForDescription()
+        case .anotherCloud: return L10n.SaveEmergencyKitOptionView.anotherCloudDescription.attributedForDescription()
         }
     }
 
@@ -41,7 +41,7 @@ enum EmergencyKitSavingOption {
         switch self {
         case .drive: return L10n.SaveEmergencyKitOptionView.driveDescription.attributedForDescription()
         case .icloud: return L10n.SaveEmergencyKitOptionView.icloudDisabledDescription.attributedForDescription()
-        case .manually: return L10n.SaveEmergencyKitOptionView.manuallyDescription.attributedForDescription()
+        case .anotherCloud: return L10n.SaveEmergencyKitOptionView.anotherCloudDescription.attributedForDescription()
         }
     }
 
@@ -49,7 +49,7 @@ enum EmergencyKitSavingOption {
         switch self {
         case .drive: return L10n.SaveEmergencyKitOptionView.openInDrive
         case .icloud: return L10n.SaveEmergencyKitOptionView.openInICloud
-        case .manually: return "" // won't be used
+        case .anotherCloud: return "" // won't be used
         }
     }
 
@@ -57,14 +57,14 @@ enum EmergencyKitSavingOption {
         switch self {
         case .drive: return Asset.Assets.ekVerifyDrive.image
         case .icloud: return Asset.Assets.ekVerifyIcloud.image
-        case .manually: return UIImage() // won't be used
+        case .anotherCloud: return UIImage() // won't be used
         }
     }
 
     func verifyTitle() -> String {
         switch self {
         case .drive, .icloud: return L10n.SaveEmergencyKitOptionView.verifyTitle
-        case .manually: return "" // won't be used
+        case .anotherCloud: return "" // won't be used
         }
     }
 
@@ -72,7 +72,7 @@ enum EmergencyKitSavingOption {
         switch self {
         case .drive: return L10n.SaveEmergencyKitOptionView.verifyDescriptionDrive
         case .icloud: return L10n.SaveEmergencyKitOptionView.verifyDescriptionICloud
-        case .manually: return "" // won't be used
+        case .anotherCloud: return "" // won't be used
         }
     }
 }

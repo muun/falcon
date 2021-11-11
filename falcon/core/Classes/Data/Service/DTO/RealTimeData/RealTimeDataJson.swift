@@ -15,6 +15,7 @@ struct RealTimeDataJson: Codable {
     let currentBlockchainHeight: Int
     let forwardingPolicies: [ForwardingPolicyJson]
     let minFeeRateInWeightUnits: Double
+    let features: [String]
 
 }
 

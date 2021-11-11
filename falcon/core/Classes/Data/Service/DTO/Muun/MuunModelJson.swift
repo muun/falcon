@@ -14,6 +14,7 @@ struct MuunInputJson: Codable {
     let submarineSwap: InputSubmarineSwapV1Json?
     let submarineSwapV102: InputSubmarineSwapV2Json?
     let incomingSwap: InputIncomingSwapJson?
+    let rawMuunPublicNonceHex: String?
 }
 
 struct MuunOutputJson: Codable {

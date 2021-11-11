@@ -14,8 +14,14 @@ class ShareEmergencyKitViewController: MUViewController {
 
     fileprivate lazy var presenter = instancePresenter(ShareEmergencyKitPresenter.init, delegate: self)
 
+    private let flow: EmergencyKitFlow
+
+    private var dismissManualExport: DisplayablePopUp.Dismiss?
+    private var dismissSuggestCloud: DisplayablePopUp.Dismiss?
+
     private var shareView: ShareEmergencyKitView!
     private var uploadingEKLoadingView: LoadingView! = LoadingView()
+    private var dismissLoading: DisplayablePopUp.Dismiss?
 
     private var emergencyKit: EmergencyKit?
     private var googleUser: GIDGoogleUser?
@@ -24,10 +30,23 @@ class ShareEmergencyKitViewController: MUViewController {
         return "emergency_kit_save"
     }
 
+    init(flow: EmergencyKitFlow) {
+        self.flow = flow
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        preconditionFailure()
+    }
+
     override func loadView() {
         super.loadView()
 
-        shareView = ShareEmergencyKitView(delegate: self, options: presenter.getOptions())
+        shareView = ShareEmergencyKitView(
+            delegate: self,
+            options: presenter.getOptions(),
+            flow: flow
+        )
         self.view = shareView
     }
 
@@ -60,7 +79,13 @@ class ShareEmergencyKitViewController: MUViewController {
     }
 
     private func setUpNavigation() {
-        title = L10n.ShareEmergencyKitViewController.s1
+        switch flow {
+        case .export:
+            title = L10n.ShareEmergencyKitViewController.s1
+
+        case .update:
+            ()
+        }
     }
 
     @objc func displayShareActivity() {
@@ -68,6 +93,8 @@ class ShareEmergencyKitViewController: MUViewController {
         guard let kit = emergencyKit else {
             return
         }
+
+        logScreen("emergency_kit_manual_advice", parameters: [:])
 
         let activityViewController = UIActivityViewController(
             activityItems: [kit.url],
@@ -81,6 +108,7 @@ class ShareEmergencyKitViewController: MUViewController {
                 // User did not share the pdf
                 return
             }
+            self.logEvent("ek_save_select", parameters: ["option": "manual"])
 
             // Remove the temp file
             kit.dispose()
@@ -88,8 +116,9 @@ class ShareEmergencyKitViewController: MUViewController {
             // User shared the pdf
             self.navigationController!.pushViewController(
                 ActivateEmergencyKitViewController(
-                    verificationCode: kit.verificationCode,
-                    shareOption: activity?.rawValue
+                    kit: kit,
+                    shareOption: activity?.rawValue,
+                    flow: self.flow
                 ), animated: true
             )
         }
@@ -98,21 +127,32 @@ class ShareEmergencyKitViewController: MUViewController {
     }
 
     private func displayUploadingEKView() {
-        let loadingView = LoadingPopUpView(loadingText: L10n.ShareEmergencyKitViewController.uploading)
-        show(popUp: loadingView, duration: nil, isDismissableOnTap: false)
+        let text: String
+        switch flow {
+        case .export:
+            text = L10n.ShareEmergencyKitViewController.uploading
+        case .update:
+            text = L10n.ShareEmergencyKitViewController.updating
+        }
+
+        let loadingView = LoadingPopUpView(loadingText: text)
+        dismissLoading = show(popUp: loadingView, duration: nil, isDismissableOnTap: false)
     }
 
     private func hideUploadingEKView() {
-        dismissPopUp()
+        dismissLoading?()
     }
 
 }
 
 extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
 
-    func didTapOnCloudStorageInfo() {
-        let overlayVc = BottomDrawerOverlayViewController(info: BottomDrawerInfo.cloudStorage)
-        navigationController!.present(overlayVc, animated: true)
+    func didTapOnManualExport() {
+        dismissManualExport = show(
+            popUp: ManualSaveEmergencyKitView(delegate: self),
+            duration: nil,
+            isDismissableOnTap: false
+        )
     }
 
     func didTapOnOption(_ option: EKOption) {
@@ -135,11 +175,9 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
             }
             // It doesn't do anything if it is disabled
 
-        case .manually:
-            logEvent("ek_save_select", parameters: ["option": "manual"])
-
-            displayShareActivity()
-
+        case .anotherCloud:
+            logScreen("emergency_kit_cloud_feedback", parameters: [:])
+            dismissSuggestCloud = show(popUp: RequestCloudView(delegate: self), duration: nil, isDismissableOnTap: false)
         }
     }
 
@@ -151,7 +189,7 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
         displayUploadingEKView()
 
         presenter.uploadEmergencyKitToICloud(
-            ekUrl: kit.url,
+            kit: kit,
             fileName: L10n.ShareEmergencyKitViewController.fileName
         )
     }
@@ -165,14 +203,14 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
 
         logEvent("ek_drive", parameters: ["type": "upload_start"])
         presenter.uploadEmergencyKitToDrive(
-            user: user,
-            ekUrl: kit.url,
+            googleUser: user,
+            kit: kit,
             fileName: L10n.ShareEmergencyKitViewController.fileName
         )
     }
 
     private func presentErrorUploading(option: EmergencyKitSavingOption) {
-        dismissPopUp()
+        dismissLoading?()
 
         let alert = UIAlertController(
             title: L10n.ShareEmergencyKitViewController.ekUploadErrorTitle,
@@ -202,29 +240,22 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
 
         alert.view.tintColor = Asset.Colors.muunBlue.color
 
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
 
 }
 
 extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
-    func errorUploadingToICloud() {
-        presentErrorUploading(option: .icloud)
-    }
 
-    func uploadToICloudSuccessful(link: URL?) {
-        guard let kit = emergencyKit else {
-            return
-        }
-
-        presenter.reportExported(verificationCode: kit.verificationCode)
-        logEvent("emergency_kit_exported", parameters: ["share_option": "icloud"])
+    func uploadToCloudSuccessful(kit: EmergencyKit, option: EmergencyKitSavingOption, link: URL?) {
+        logEvent("emergency_kit_exported", parameters: ["share_option": "\(option)"])
         kit.dispose()
 
-        dismissPopUp()
+        dismissLoading?()
 
         navigationController!.pushViewController(
-            VerifyEmergencyKitViewController(option: .icloud, link: link), animated: true
+            VerifyEmergencyKitViewController(option: option, link: link, flow: self.flow),
+            animated: true
         )
     }
 
@@ -232,25 +263,9 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
         self.emergencyKit = kit
     }
 
-    func errorUploadingToDrive() {
-        logEvent("ek_drive", parameters: ["type": "upload_error"])
-        presentErrorUploading(option: .drive)
-    }
-
-    func uploadToDriveSuccessful(link: URL?) {
-        guard let kit = emergencyKit else {
-            return
-        }
-
-        presenter.reportExported(verificationCode: kit.verificationCode)
-        logEvent("ek_drive", parameters: ["type": "upload_finish"])
-        kit.dispose()
-
-        dismissPopUp()
-
-        navigationController!.pushViewController(
-            VerifyEmergencyKitViewController(option: .drive, link: link), animated: true
-        )
+    func errorUploadingToCloud(option: EmergencyKitSavingOption) {
+        logEvent("emergency_kit_fail", parameters: ["type": "upload_error", "shared_option": "\(option)"])
+        presentErrorUploading(option: option)
     }
 }
 
@@ -259,8 +274,11 @@ extension ShareEmergencyKitViewController: GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
 
         guard error == nil else {
-            logEvent("ek_drive", parameters: ["type": "sign_in_error"])
-            presentErrorUploading(option: .drive)
+            // Show the error only if it's not an user cancel
+            if (error as NSError).code != GIDSignInErrorCode.canceled.rawValue {
+                logEvent("ek_drive", parameters: ["type": "sign_in_error"])
+                presentErrorUploading(option: .drive)
+            }
 
             googleUser = nil
             return
@@ -269,6 +287,33 @@ extension ShareEmergencyKitViewController: GIDSignInDelegate {
         logEvent("ek_drive", parameters: ["type": "sign_in_finish"])
         googleUser = user
         uploadEKToDrive(user)
+    }
+
+}
+
+extension ShareEmergencyKitViewController: ManualSaveEmergencyKitViewDelegate {
+
+    func save() {
+        dismissManualExport?()
+        displayShareActivity()
+    }
+
+    func dismiss() {
+        dismissManualExport?()
+    }
+
+}
+
+extension ShareEmergencyKitViewController: RequestCloudViewDelegate {
+
+    func dismiss(requestCloud: UIView) {
+        dismissSuggestCloud?()
+    }
+
+    func request(cloud: String) {
+        logScreen("emergency_kit_cloud_feedback_submit", parameters: ["cloud_name": cloud])
+        presenter.request(cloud: cloud)
+        dismissSuggestCloud?()
     }
 
 }

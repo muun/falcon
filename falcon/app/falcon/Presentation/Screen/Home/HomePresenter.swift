@@ -8,6 +8,7 @@
 
 import RxSwift
 import core
+import Libwallet
 
 enum HomeOperationsState {
     case confirmed
@@ -15,11 +16,22 @@ enum HomeOperationsState {
     case rbf
 }
 
+enum HomeCompanion {
+    case backUp
+    case activateTaproot
+    case preactiveTaproot(blocksLeft: UInt)
+    case blockClock(blocksLeft: UInt)
+    case none
+}
+
 protocol HomePresenterDelegate: BasePresenterDelegate {
+    func showWelcome()
+    func showTaprootActivated()
     func onOperationsChange()
     func onBalanceChange(_ balance: MonetaryAmount)
     func onBalanceVisibilityChange(_ isHidden: Bool)
     func didReceiveNewOperation(amount: MonetaryAmount, direction: OperationDirection)
+    func onCompanionChange(_ companion: HomeCompanion)
 }
 
 class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
@@ -32,6 +44,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     private let updateUserPreferencesAction: UpdateUserPreferencesAction
     private let sessionActions: SessionActions
     internal let fetchNotificationsAction: FetchNotificationsAction
+    private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
     private var balance: MonetaryAmount = MonetaryAmount(amount: 0, currency: "BTC")
 
     private var numberOfOperations: Int?
@@ -44,7 +57,8 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
          preferences: Preferences,
          userPreferencesSelector: UserPreferencesSelector,
          updateUserPreferencesAction: UpdateUserPreferencesAction,
-         fetchNotificationsAction: FetchNotificationsAction) {
+         fetchNotificationsAction: FetchNotificationsAction,
+         userActivatedFeatureSelector: UserActivatedFeaturesSelector) {
 
         self.operationActions = operationActions
         self.balanceActions = balanceActions
@@ -54,6 +68,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         self.userPreferencesSelector = userPreferencesSelector
         self.updateUserPreferencesAction = updateUserPreferencesAction
         self.fetchNotificationsAction = fetchNotificationsAction
+        self.userActivatedFeatureSelector = userActivatedFeatureSelector
 
         super.init(delegate: delegate)
     }
@@ -66,7 +81,33 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         subscribeTo(operationActions.getOperationsChange(), onNext: self.onOperationsChange)
         subscribeTo(balanceActions.watchBalance(), onNext: self.onBalanceChange)
         subscribeTo(fetchNotificationsAction.getState(), onNext: { _ in })
+
+        let taproot = Libwallet.userActivatedFeatureTaproot()!
+        subscribeTo(
+                Observable.combineLatest(sessionActions.watchUser(), userActivatedFeatureSelector.watch(for: taproot))
+        ) { [self] (_, taprootStatus) in
+
+            if case .active = taprootStatus,
+               preferences.bool(forKey: .preactivedTaproot) {
+
+                preferences.set(value: false, forKey: .preactivedTaproot)
+                delegate.showTaprootActivated()
+
+            } else if case .preactivated = taprootStatus {
+                // FIXME: delete me, this is a nasty hack
+
+                preferences.set(value: true, forKey: .preactivedTaproot)
+            }
+
+            delegate.onCompanionChange(decideCompanion(taprootStatus: taprootStatus))
+        }
+
         decidePollNotificationsPolicy()
+
+        if shouldDisplayWelcomeMessage() {
+            delegate.showWelcome()
+            setWelcomeMessageSeen()
+        }
     }
 
     private func decidePollNotificationsPolicy() {
@@ -242,11 +283,11 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         return sessionActions.hasPasswordChallengeKey()
     }
 
-    func isAnonUser() -> Bool {
+    private func isAnonUser() -> Bool {
         return sessionActions.isAnonUser()
     }
 
-    func shouldDisplayWelcomeMessage() -> Bool {
+    private func shouldDisplayWelcomeMessage() -> Bool {
         return isAnonUser() && !preferences.bool(forKey: .welcomeMessageSeen)
     }
 
@@ -268,7 +309,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
-    func setWelcomeMessageSeen() {
+    private func setWelcomeMessageSeen() {
         preferences.set(value: true, forKey: .welcomeMessageSeen)
     }
 
@@ -294,6 +335,25 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
+    private func decideCompanion(taprootStatus: UserActivatedFeatureStatus) -> HomeCompanion {
+        if isAnonUser() {
+            return .backUp
+        }
+
+        switch taprootStatus {
+        case .canActivate:
+            return .activateTaproot
+
+        case .canPreactivate(let blocksLeft):
+            return .preactiveTaproot(blocksLeft: blocksLeft)
+
+        case .preactivated(let blocksLeft):
+            return .blockClock(blocksLeft: blocksLeft)
+
+        case .active, .off, .scheduledActivation:
+            return .none
+        }
+    }
 }
 
 extension HomePresenter: NotificationsFetcher {}

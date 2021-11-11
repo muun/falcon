@@ -19,20 +19,31 @@ protocol DisplayablePopUp {
 
 extension DisplayablePopUp {
 
-    func show(popUp: UIView, duration: Double? = 2, isDismissableOnTap: Bool = true) {
+    typealias Dismiss = () -> ()
+
+    func show(popUp: UIView, duration: Double? = 2, isDismissableOnTap: Bool = true) -> Dismiss {
         view.endEditing(true)
 
         let newNavigation = buildNewNavigation(popUp, isDismissableOnTap: isDismissableOnTap)
+        let dismiss = { [weak self] in
+            guard let self = self else {
+                return
+            }
 
+            if !self.alreadyDismissedPopUp {
+                self.dismissPopUp()
+            }
+        }
         navigationController.present(newNavigation, animated: true) {
+            self.alreadyDismissedPopUp = false
             if let duration = duration {
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                    if !self.alreadyDismissedPopUp {
-                        self.dismissPopUp()
-                    }
+                    dismiss()
                 }
             }
         }
+
+        return dismiss
     }
 
     private func buildNewNavigation(_ popUp: UIView, isDismissableOnTap: Bool) -> UINavigationController {
@@ -53,7 +64,10 @@ extension DisplayablePopUp {
         containerView.addSubview(popUp)
         NSLayoutConstraint.activate([
             popUp.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            popUp.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+            popUp.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+
+            popUp.widthAnchor.constraint(lessThanOrEqualTo: containerView.widthAnchor),
+            popUp.heightAnchor.constraint(lessThanOrEqualTo: containerView.heightAnchor),
         ])
 
         if isDismissableOnTap {

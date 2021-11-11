@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 
-@testable import falcon
+@testable import Muun
 
 class StringExtensionTests: XCTestCase {
 

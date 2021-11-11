@@ -8,6 +8,8 @@
 import GoogleSignIn
 import GoogleAPIClientForREST
 import GTMSessionFetcher
+import CryptoKit
+import Libwallet
 
 public enum GoogleDriveHelper {
 
@@ -15,40 +17,97 @@ public enum GoogleDriveHelper {
         case noFolder
     }
 
+    fileprivate static let userProperty = "muun_user"
+    fileprivate static let versionProperty = "muuk_ek_version"
+    fileprivate static let mimeTypePdf = "application/pdf"
+
     public static func uploadEK(
-        user: GIDGoogleUser,
+        googleUser: GIDGoogleUser,
         emergencyKitUrl: URL,
         fileName: String,
-        completion: @escaping (String?, Error?) -> Void) {
+        user: User,
+        kitVersion: Int,
+        completion: @escaping (String?, Error?) -> Void
+    ) {
 
         let cloudStorageFolderName = "Muun"
         let service = GTLRDriveService()
 
-        service.authorizer = user.authentication.fetcherAuthorizer()
+        service.authorizer = googleUser.authentication.fetcherAuthorizer()
 
-        getOrCreateFolderID(name: cloudStorageFolderName,
-                            service: service,
-                            user: user) { (folderId, folderLink, err) in
+        getOrCreateFolderID(
+            name: cloudStorageFolderName,
+            service: service,
+            user: googleUser
+        ) { (folderId, folderLink, err) in
 
             if err != nil {
                 Logger.log(.info, err.debugDescription)
                 completion(nil, err)
             }
 
-            guard let id = folderId else {
+            guard let folderId = folderId else {
                 completion(nil, MuunError(Errors.noFolder))
                 return
             }
 
-            uploadFile(
+            findExistingKit(
                 name: fileName,
-                folderID: id,
-                folderWebViewLink: folderLink ?? "",
-                fileURL: emergencyKitUrl,
-                mimeType: "application/pdf",
-                service: service,
-                completion: completion
-            )
+                folderId: folderId,
+                user: user,
+                googleUser: googleUser,
+                service: service
+            ) { existingKit, error in
+
+                let uploadParameters = GTLRUploadParameters(fileURL: emergencyKitUrl, mimeType: mimeTypePdf)
+
+                let file = GTLRDrive_File()
+                let userId = userToKitId(user: user)
+
+                // Ensure the properties are up to date
+                file.appProperties = GTLRDrive_File_AppProperties()
+                file.appProperties?.setAdditionalProperty("\(kitVersion)", forName: versionProperty)
+                file.appProperties?.setAdditionalProperty(userId, forName: userProperty)
+                
+                let query: GTLRDriveQuery
+                if let existingKit = existingKit,
+                   let id = existingKit.identifier {
+
+                    // Pin the existing revision just in case we're overwriting another wallet
+                    if existingKit.appProperties?.additionalProperty(forName: userProperty) as? String != userId,
+                       let revisionId = existingKit.headRevisionId {
+
+                        let revision = GTLRDrive_Revision()
+                        revision.keepForever = true
+                        let pinQuery = GTLRDriveQuery_RevisionsUpdate.query(
+                            withObject: revision,
+                            fileId: id,
+                            revisionId: revisionId
+                        )
+
+                        service.executeQuery(pinQuery) { _, _, _ in
+                        }
+                    }
+
+                    query = GTLRDriveQuery_FilesUpdate.query(
+                        withObject: file,
+                        fileId: id,
+                        uploadParameters: uploadParameters
+                    )
+
+                } else {
+
+                    file.name = fileName
+                    file.parents = [folderId]
+
+                    query = GTLRDriveQuery_FilesCreate.query(withObject: file, uploadParameters: uploadParameters)
+                }
+
+                service.executeQuery(query) { (_, _, error) in
+                    completion(folderLink ?? "", error)
+                }
+            }
+
         }
 
     }
@@ -73,32 +132,75 @@ public enum GoogleDriveHelper {
         }
     }
 
-    private static func uploadFile(
+    private static func findExistingKit(
         name: String,
-        folderID: String,
-        folderWebViewLink: String,
-        fileURL: URL,
-        mimeType: String,
+        folderId: String,
+        user: User,
+        googleUser: GIDGoogleUser,
         service: GTLRDriveService,
-        completion: @escaping (String?, Error?) -> Void) {
+        completion: @escaping (GTLRDrive_File?, Error?) -> Void
+    ) {
+        let query = GTLRDriveQuery_FilesList.query()
 
-        let file = GTLRDrive_File()
-        file.name = name
-        file.parents = [folderID]
+        // Comma-separated list of areas the search applies to. E.g., appDataFolder, photos, drive.
+        query.spaces = "drive"
 
-        // Optionally, GTLRUploadParameters can also be created with a Data object.
-        let uploadParameters = GTLRUploadParameters(fileURL: fileURL, mimeType: mimeType)
+        // Comma-separated list of access levels to search in. Some possible values are "user,allTeamDrives" or "user"
+        query.corpora = "user"
+        query.fields = "*" // This is important to retreive the link of the document later
 
-        let query = GTLRDriveQuery_FilesCreate.query(withObject: file, uploadParameters: uploadParameters)
+        let withName = "name = '\(name)'" // Case insensitive!
+        let pdfsOnly = "mimeType = '\(mimeTypePdf)'"
+        let ownedByUser = "'\(googleUser.profile!.email!)' in owners"
+        let insideFolder = "'\(folderId)' in parents"
+        query.q = """
+                  \(withName) 
+                  and \(pdfsOnly) 
+                  and \(ownedByUser) 
+                  and \(insideFolder)
+                  and trashed = false
+                  """
 
-        service.uploadProgressBlock = { _, totalBytesUploaded, totalBytesExpectedToUpload in
-            // This block is called multiple times during upload and can
-            // be used to update a progress indicator visible to the user.
-        }
+        service.executeQuery(query) { (_, result, error) in
+            guard error == nil,
+                  let result = result as? GTLRDrive_FileList,
+                  let files = result.files else {
 
-        service.executeQuery(query) { (_, _, error) in
-            // Successful upload if no error is returned.
-            completion(folderWebViewLink, error)
+                completion(nil, error)
+                return
+            }
+
+            // No files, no kit
+            if files.count == 0 {
+                completion(nil, nil)
+                return
+            }
+
+            let kitUserToFind = userToKitId(user: user)
+
+            // First check for properties matching
+            for file in files {
+                if let kitUser = file.appProperties?.additionalProperty(forName: userProperty) as? String {
+                    if kitUser == kitUserToFind && file.isAppAuthorized?.boolValue ?? false {
+                        completion(file, nil)
+                        return
+                    }
+                }
+            }
+
+            // No matches, so we use the 1 file kit heuristic
+            // We do however check first that it has no properties. If it has, and it hasn't been selected
+            // by the previous for, that means it's not from this wallet.
+            if files.count == 1,
+               let file = files.first,
+               file.appProperties?.additionalProperty(forName: userProperty) == nil {
+
+                completion(files.first, nil)
+                return
+            }
+
+            // No exact match
+            completion(nil, nil)
         }
     }
 
@@ -126,7 +228,7 @@ public enum GoogleDriveHelper {
         let ownedByUser = "'\(user.profile!.email!)' in owners"
         query.q = "\(withName) and \(foldersOnly) and \(ownedByUser)"
 
-        service.executeQuery(query) { (ticket, result, error) in
+        service.executeQuery(query) { (_, result, error) in
             guard error == nil else {
                 completion(nil, nil, error)
                 return
@@ -170,4 +272,7 @@ public enum GoogleDriveHelper {
         }
     }
 
+    fileprivate static func userToKitId(user: User) -> String {
+        return LibwalletSHA256("\(user.id)".data(using: .utf8))!.toHexString()
+    }
 }

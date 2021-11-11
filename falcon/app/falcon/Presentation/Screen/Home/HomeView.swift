@@ -13,7 +13,7 @@ protocol HomeViewDelegate: AnyObject {
     func sendButtonTap()
     func receiveButtonTap()
     func chevronTap()
-    func backUpTap()
+    func companionTap()
     func balanceTap()
     func didShowTransactionListTooltip()
 }
@@ -24,7 +24,10 @@ final class HomeView: UIView {
     private var contentVerticalStack: UIStackView! = UIStackView()
     private var tooltipView = TooltipView(message: L10n.Home.transactionListTooltip)
     private var balanceView: BalanceView!
-    private var backUpCTA = ActionCardView()
+    private var actionCardView = ActionCardView()
+    private var blockClock = BlockClockView()
+    private var blockClockContainer = UIView()
+    private var currentCompanionView: UIView?
     private var chevronView: ChevronView!
 
     private weak var delegate: HomeViewDelegate?
@@ -46,8 +49,29 @@ final class HomeView: UIView {
     private func setUpView() {
         setUpContentView()
         setUpChevronView()
+        setUpBlockClock()
+        actionCardView.delegate = self
 
         makeViewTestable()
+    }
+
+    private func setUpBlockClock() {
+        blockClock.translatesAutoresizingMaskIntoConstraints = false
+        blockClockContainer.translatesAutoresizingMaskIntoConstraints = false
+        blockClockContainer.addSubview(blockClock)
+        NSLayoutConstraint.activate([
+            blockClock.centerXAnchor.constraint(equalTo: blockClockContainer.centerXAnchor),
+            blockClock.centerYAnchor.constraint(equalTo: blockClockContainer.centerYAnchor),
+            blockClock.heightAnchor.constraint(equalTo: blockClockContainer.heightAnchor),
+
+            blockClockContainer.leadingAnchor.constraint(lessThanOrEqualTo: blockClock.leadingAnchor),
+            blockClock.trailingAnchor.constraint(lessThanOrEqualTo: blockClockContainer.trailingAnchor),
+        ])
+
+        blockClock.isUserInteractionEnabled = true
+        blockClock.addGestureRecognizer(UITapGestureRecognizer(
+            target: self, action: #selector(blockClockTapped)
+        ))
     }
 
     private func setUpChevronView() {
@@ -111,18 +135,33 @@ final class HomeView: UIView {
 
     // MARK: - View Controller actions -
 
-    func addBackUpCTA() {
-        if !contentVerticalStack.contains(backUpCTA) {
-            backUpCTA.setUp(actionCard: ActionCard.homeBackUp())
-            backUpCTA.delegate = self
-            contentVerticalStack.addArrangedSubview(backUpCTA)
+    func show(actionCard: ActionCardModel) {
+        ensureCompanionVisible(actionCardView)
+        contentVerticalStack.setCustomSpacing(.headerSpacing, after: balanceView)
+        actionCardView.setUp(actionCard: actionCard)
+    }
+
+    func show(blocksLeft: UInt) {
+        ensureCompanionVisible(blockClockContainer)
+        contentVerticalStack.setCustomSpacing(.bigSpacing, after: balanceView)
+        blockClock.blocks = blocksLeft
+    }
+
+    private func ensureCompanionVisible(_ view: UIView) {
+        if let currentCompanionView = currentCompanionView,
+           currentCompanionView != view {
+
+            currentCompanionView.removeFromSuperview()
+        }
+
+        currentCompanionView = view
+        if !contentVerticalStack.contains(view) {
+            contentVerticalStack.addArrangedSubview(view)
         }
     }
 
-    func removeBackUpCTA() {
-        if contentVerticalStack.contains(backUpCTA) {
-            backUpCTA.removeFromSuperview()
-        }
+    func hideCompanion() {
+        currentCompanionView?.removeFromSuperview()
     }
 
     func updateBalanceAndChevron(state: core.OperationsState) {
@@ -172,11 +211,17 @@ final class HomeView: UIView {
         opsBadgeView.animate(opDirection: direction)
     }
 
+    // MARK: - UI events -
+
+    @objc func blockClockTapped() {
+        delegate?.companionTap()
+    }
 }
 
 extension HomeView: ActionCardDelegate {
+
     func push(nextViewController: UIViewController) {
-        delegate?.backUpTap()
+        delegate?.companionTap()
     }
 }
 

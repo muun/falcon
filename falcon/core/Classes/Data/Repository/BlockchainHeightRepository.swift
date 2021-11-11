@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 public class BlockchainHeightRepository {
 
@@ -21,6 +22,10 @@ public class BlockchainHeightRepository {
 
     public func getCurrentBlockchainHeight() -> Int {
         return preferences.integer(forKey: .blockchainHeight)
+    }
+
+    public func watch() -> Observable<Int?> {
+        return preferences.watchInteger(key: .blockchainHeight)
     }
 
 }

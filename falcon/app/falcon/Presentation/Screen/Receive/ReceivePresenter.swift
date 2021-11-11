@@ -24,8 +24,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     internal let fetchNotificationsAction: FetchNotificationsAction
     private let userPreferencesSelector: UserPreferencesSelector
 
-    private let segwitAddress: String
-    private let legacyAddress: String
+    private let addressSet: AddressSet
     private var numberOfOperations: Int?
 
     private var customAmount: BitcoinAmount?
@@ -45,9 +44,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         self.fetchNotificationsAction = fetchNotificationsAction
         self.userPreferencesSelector = userPreferencesSelector
         do {
-            let (segwit, legacy) = try addressActions.generateExternalAddresses()
-            self.segwitAddress = segwit
-            self.legacyAddress = legacy
+            self.addressSet = try addressActions.generateExternalAddresses()
         } catch {
             Logger.fatal(error: error)
         }
@@ -65,8 +62,8 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         subscribeTo(operationActions.getOperationsChange(), onNext: self.onOperationsChange)
     }
 
-    func getOnChainAddresses() -> (segwit: String, legacy: String) {
-        return (segwitAddress, legacyAddress)
+    func getOnChainAddresses() -> AddressSet {
+        return addressSet
     }
 
     func getCustomAmount() -> BitcoinAmount? {
@@ -155,6 +152,17 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         return !(preferences?.seenLnurlFirstTime ?? false)
     }
 
+    func defaultAddressType() -> AddressType {
+        do {
+            let preferences = try userPreferencesSelector.get()
+                .toBlocking()
+                .single()
+
+            return preferences.defaultAddressType
+        } catch {
+            return .segwit
+        }
+    }
 }
 
 extension ReceivePresenter: NotificationsFetcher {}

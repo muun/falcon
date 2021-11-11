@@ -298,6 +298,8 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s6
         case .anonSupport:
             return L10n.SupportViewController.s7
+        case .cloudRequest:
+            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -313,6 +315,8 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s10
                 .attributedForDescription()
                 .set(bold: "support@muun.com", color: Asset.Colors.title.color)
+        case .cloudRequest:
+            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -324,6 +328,8 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s12
         case .anonSupport:
             return ""
+        case .cloudRequest:
+            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -335,6 +341,8 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s14
         case .anonSupport:
             return L10n.SupportViewController.s15
+        case .cloudRequest:
+            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -347,6 +355,8 @@ extension SupportAction.RequestType {
         case .help: return "help"
         case .support: return "support"
         case .anonSupport: return "anon_support"
+        case .cloudRequest:
+            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 }

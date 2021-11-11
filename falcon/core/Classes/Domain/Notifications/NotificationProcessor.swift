@@ -17,6 +17,7 @@ public class NotificationProcessor {
     private let sessionRepository: SessionRepository
     private let sessionActions: SessionActions
     private let fulfillIncomingSwap: FulfillIncomingSwapAction
+    private let realTimeDataAction: RealTimeDataAction
 
     private let queue: DispatchQueue
 
@@ -24,12 +25,15 @@ public class NotificationProcessor {
          houstonService: HoustonService,
          sessionRepository: SessionRepository,
          sessionActions: SessionActions,
-         fulfillIncomingSwap: FulfillIncomingSwapAction) {
+         fulfillIncomingSwap: FulfillIncomingSwapAction,
+         realTimeDataAction: RealTimeDataAction
+    ) {
         self.operationActions = operationActions
         self.houstonService = houstonService
         self.sessionRepository = sessionRepository
         self.sessionActions = sessionActions
         self.fulfillIncomingSwap = fulfillIncomingSwap
+        self.realTimeDataAction = realTimeDataAction
 
         self.queue = DispatchQueue(label: "notifications")
     }
@@ -246,7 +250,19 @@ public class NotificationProcessor {
         case .getSatelliteState:
             return FutureCompatNotificationHandler()
 
+        case .eventCommunication:
+            // This is a UI only notification
+            return CallbackNotificationHandler { [realTimeDataAction] in
+                realTimeDataAction.run(forceUpdate: true)
+                return realTimeDataAction.getValue().asCompletable()
+            }
+
+        case .noOp:
+            return CallbackNotificationHandler {
+                return Completable.empty()
+            }
         }
+
     }
 
     private func verifyPermissions(handler: NotificationHandler, notification: Notification) throws {

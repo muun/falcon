@@ -187,6 +187,14 @@ public class OperationActions {
             Logger.log(error: error)
         }
 
+        let nonceCount = json.outpoints?.count ?? 0
+        let nonces = LibwalletGenerateMusigNonces(nonceCount)!
+        var noncesHex = [String]()
+        for i in 0..<nonceCount {
+            noncesHex.append(nonces.getPubnonceHex(i))
+        }
+        json.userPublicNoncesHex = noncesHex
+
         return houstonService.newOperation(operation: json)
             .flatMap({ created in
 
@@ -210,7 +218,9 @@ public class OperationActions {
                     let signedTransaction = try created.partiallySignedTransaction.sign(
                         key: privateKey,
                         muunKey: muunKey,
-                        expectations: expectations)
+                        expectations: expectations,
+                        nonces: nonces
+                    )
 
                     operationUpdated.transaction?.hash = signedTransaction.hash
                     operationUpdated.status = .SIGNED

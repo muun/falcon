@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import core
-@testable import falcon
+@testable import Muun
 
 class KeyCrypterTests: XCTestCase {
 

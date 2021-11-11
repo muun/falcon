@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 @testable import core
-@testable import falcon
+@testable import Muun
 
 func AssertThrowsError<T, E>(_ expression: @autoclosure () throws -> T,
                              _ type: E.Type = E.self,

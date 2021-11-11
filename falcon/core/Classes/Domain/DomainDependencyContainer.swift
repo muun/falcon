@@ -39,7 +39,15 @@ public extension DependencyContainer {
             }
             container.register(.singleton, factory: BalanceActions.init)
             container.register(.singleton, factory: CurrencyActions.init)
-            container.register(.singleton, factory: RealTimeDataAction.init)
+            container.register(.singleton) {
+                RealTimeDataAction(houstonService: $0,
+                                   feeWindowRepository: $1,
+                                   exchangeRateWindowRepository: $2,
+                                   blockchainHeightRepository: $3,
+                                   forwardingPoliciesRepository: $4,
+                                   minFeeRateRepository: $5,
+                                   featureFlagsRepository: try container.resolve())
+            }
             container.register(.singleton, factory: FCMTokenAction.init)
             container.register(.singleton, factory: SyncExternalAddresses.init)
             container.register(.singleton, factory: FeeCalculatorAction.init)
@@ -78,6 +86,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EmergencyKitDataSelector.init)
             container.register(.singleton, factory: UserPreferencesSelector.init)
+            container.register(.singleton, factory: UserActivatedFeaturesSelector.init)
 
             container.register(.singleton, factory: ApiMigrationsManager.init)
 

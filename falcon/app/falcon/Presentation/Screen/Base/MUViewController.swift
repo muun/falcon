@@ -92,7 +92,7 @@ class MUViewController: UIViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(image: Constant.Images.close,
                                                                style: .plain,
                                                                target: self,
-                                                               action: .dismissModal)
+                                                               action: .onCloseTap)
         }
 
         navigationItem.setHidesBackButton(false, animated: true)
@@ -102,7 +102,7 @@ class MUViewController: UIViewController {
                                                            action: nil)
     }
 
-    @objc func dismissModal() {
+    @objc func onCloseTap() {
         dismiss(animated: true, completion: nil)
     }
 
@@ -265,7 +265,7 @@ fileprivate extension Selector {
     static let keyboardWillShow = #selector(MUViewController.keyboardWillShow(notification:))
     static let keyboardWillHide = #selector(MUViewController.keyboardWillHide(notification:))
 
-    static let dismissModal = #selector(MUViewController.dismissModal)
+    static let onCloseTap = #selector(MUViewController.onCloseTap)
 
     static let clipboardChanged = #selector(MUViewController.clipboardChanged)
 

@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 @testable import core
-@testable import falcon
+@testable import Muun
 
 class AmountLabelTests: MuunTestCase {
 

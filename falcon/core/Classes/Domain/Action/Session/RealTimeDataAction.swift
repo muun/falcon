@@ -19,6 +19,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     private let blockchainHeightRepository: BlockchainHeightRepository
     private let forwardingPoliciesRepository: ForwardingPolicyRepository
     private let minFeeRateRepository: MinFeeRateRepository
+    private let featureFlagsRepository: FeaturesFlagsRepository
 
     private let secondsForFreshData: Double = 5 * 60
 
@@ -27,7 +28,8 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
          exchangeRateWindowRepository: ExchangeRateWindowRepository,
          blockchainHeightRepository: BlockchainHeightRepository,
          forwardingPoliciesRepository: ForwardingPolicyRepository,
-         minFeeRateRepository: MinFeeRateRepository) {
+         minFeeRateRepository: MinFeeRateRepository,
+         featureFlagsRepository: FeaturesFlagsRepository) {
 
         self.houstonService = houstonService
 
@@ -36,6 +38,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
         self.blockchainHeightRepository = blockchainHeightRepository
         self.forwardingPoliciesRepository = forwardingPoliciesRepository
         self.minFeeRateRepository = minFeeRateRepository
+        self.featureFlagsRepository = featureFlagsRepository
 
         super.init(name: "RealTimeDataAction")
     }
@@ -53,6 +56,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                     self.blockchainHeightRepository.setBlockchainHeight(data.currentBlockchainHeight)
                     self.forwardingPoliciesRepository.store(policies: data.forwardingPolicies)
                     self.minFeeRateRepository.store(satsPerWeightUnit: data.minFeeRateInWeightUnits)
+                    self.featureFlagsRepository.store(flags: data.features)
                 })
         } else {
             let realData = RealTimeData(
@@ -60,7 +64,8 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                 exchangeRateWindow: exchangeRateWindowRepository.getExchangeRateWindow()!,
                 currentBlockchainHeight: blockchainHeightRepository.getCurrentBlockchainHeight(),
                 forwardingPolicies: forwardingPoliciesRepository.fetch(),
-                minFeeRateInWeightUnits: NSDecimalNumber(decimal: minFeeRateRepository.fetch().satsPerWeightUnit).doubleValue
+                minFeeRateInWeightUnits: NSDecimalNumber(decimal: minFeeRateRepository.fetch().satsPerWeightUnit).doubleValue,
+                features: featureFlagsRepository.fetch()
             )
             return Single.just(realData)
         }

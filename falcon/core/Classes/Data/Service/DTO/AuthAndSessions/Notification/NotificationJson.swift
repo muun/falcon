@@ -22,6 +22,10 @@ public struct NotificationJson {
         case updateAuthorizeChallenge
         case authorizeRcSignIn
         case fulfillIncomingSwap(uuid: String)
+        case eventCommunication(type: EventCommunicationType)
+
+        // Empty one to be used by beam to fix broken id sequences
+        case noOp
 
         /// These are here to make Apollo users that sign in not loose notifications
         case newContact
@@ -50,6 +54,11 @@ public struct NotificationJson {
 
     public struct FulfillIncomingSwapJson: Decodable {
         let uuid: String
+    }
+
+    public enum EventCommunicationType: String, RawRepresentable, Decodable {
+        case taprootActivated = "TAPROOT_ACTIVATED"
+        case taprootPreactivation = "TAPROOT_PREACTIVATION"
     }
 }
 
@@ -120,6 +129,16 @@ extension NotificationJson: Decodable {
 
         case "satellite/getState":
             self.message = .getSatelliteState
+
+        case "event_communication":
+            struct Event: Decodable {
+                let event: EventCommunicationType
+            }
+            let event = try container.decode(Event.self, forKey: .message)
+            self.message = .eventCommunication(type: event.event)
+
+        case "no-op":
+            self.message = .noOp
 
         default:
             self.message = .unknownMessage(type: rawType)

@@ -6,7 +6,7 @@ platform :ios do
   desc "publish to testflight beta"
   lane :prd do
 
-    version_number = get_version_number(target: "falcon")
+    version_number = get_version_number(target: "Muun")
 
     # Make sure we're on the right intial state
     ensure_git_branch(branch: "^falcon-#{version_number}$")
@@ -78,7 +78,7 @@ platform :ios do
 
     increment_build_number
 
-    version_number = get_version_number(target: "falcon")
+    version_number = get_version_number(target: "Muun")
 
     build_app(
       scheme: "falcon", 

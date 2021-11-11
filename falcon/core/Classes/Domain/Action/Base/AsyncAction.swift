@@ -44,6 +44,10 @@ public class AsyncAction<T>: NSObject {
             .subscribe()
     }
 
+    public func reset() {
+        subject.onNext(ActionState.createEmpty())
+    }
+
     private func safeSetEmpty() {
 
         _ = scheduler.schedule((), action: { [weak self] _ in

@@ -30,6 +30,7 @@ class ReceiveViewController: MUViewController {
     fileprivate lazy var typeLogParams = segwitLogParams
     fileprivate let segwitLogParams = ["type": "segwit_address"]
     fileprivate let legacyLogParams = ["type": "legacy_address"]
+    fileprivate let taprootLogParams = ["type": "taproot_address"]
     fileprivate let onChainAddressLogParams = ["type": "on_chain_address"]
     fileprivate let lightningInvoiceLogParams = ["type": "lightning_invoice"]
     fileprivate let notificationLogParams = ["type": "notifications_priming"]
@@ -140,8 +141,11 @@ class ReceiveViewController: MUViewController {
     }
 
     private func setUpOnChainView() {
-        let addresses = presenter.getOnChainAddresses()
-        receiveOnChainView = ReceiveOnChainView(segwit: addresses.segwit, legacy: addresses.legacy, delegate: self)
+        receiveOnChainView = ReceiveOnChainView(
+            addressSet: presenter.getOnChainAddresses(),
+            delegate: self,
+            defaultAddressType: presenter.defaultAddressType()
+        )
         receiveOnChainView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(receiveOnChainView)
 
@@ -496,6 +500,9 @@ extension ReceiveViewController: ReceiveAddressTypeSelectViewControllerDelegate 
             logScreen(receiveLogName, parameters: getLogParams())
         case .legacy:
             typeLogParams = legacyLogParams
+            logScreen(receiveLogName, parameters: getLogParams())
+        case .taproot:
+            typeLogParams = taprootLogParams
             logScreen(receiveLogName, parameters: getLogParams())
         }
     }

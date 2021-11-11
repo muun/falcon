@@ -103,7 +103,10 @@ class NotificationService: UNNotificationServiceExtension {
             return ("You have a new notification", "")
 
         case .fulfillIncomingSwap:
-            return ("A lightning payment is pending!", "Open the app to claim it")
+            return (
+                L10n.NotificationService.fulfillIncomingSwapTitle,
+                L10n.NotificationService.fulfillIncomingSwapBody
+            )
 
         // These are here for future compatibility
         case .newContact:
@@ -135,6 +138,23 @@ class NotificationService: UNNotificationServiceExtension {
 
         case .getSatelliteState:
             return ("Get", "Satellite State")
+
+        case .eventCommunication(let type):
+            switch type {
+            case .taprootActivated:
+                return (
+                    L10n.NotificationService.taprootActivatedTitle,
+                    L10n.NotificationService.taprootActivatedBody
+                )
+            case .taprootPreactivation:
+                return (
+                    L10n.NotificationService.taprootPreactivationTitle,
+                    L10n.NotificationService.taprootPreactivationBody
+                )
+            }
+
+        case .noOp:
+            return ("No op", "No op")
         }
     }
     // swiftlint:enable cyclomatic_complexity
@@ -146,7 +166,7 @@ class NotificationService: UNNotificationServiceExtension {
         let amountString = "\(LocaleAmountFormatter.string(from: amount)) \(amount.currency)"
 
         if newOp.direction == .OUTGOING {
-            return ("\(amountString) sent", "")
+            return (L10n.NotificationService.opSentTitle(amount), "")
         }
 
         let description: String
@@ -158,11 +178,11 @@ class NotificationService: UNNotificationServiceExtension {
         }
 
         if let senderProfile = newOp.senderProfile {
-            let title = "\(senderProfile.firstName) sent you \(amountString)"
+            let title = L10n.NotificationService.opFromContactTitle(senderProfile.firstName, amountString)
             return (title, description)
         }
 
-        return ("\(amountString) received", description)
+        return (L10n.NotificationService.opReceivedTitle(amountString), description)
     }
 
     private func getDescription(from op: OperationJson) throws -> String {

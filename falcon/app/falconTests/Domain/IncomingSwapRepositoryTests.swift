@@ -9,7 +9,7 @@
 import XCTest
 import Firebase
 @testable import core
-@testable import falcon
+@testable import Muun
 
 class IncomingSwapRepositoryTests: MuunTestCase {
 

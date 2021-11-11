@@ -10,6 +10,12 @@ import Foundation
 import RxSwift
 import Libwallet
 
+public struct AddressSet {
+    public let legacy: String
+    public let segwit: String
+    public let taproot: String
+}
+
 public class AddressActions {
 
     private let houstonService: HoustonService
@@ -53,7 +59,7 @@ public class AddressActions {
             .asCompletable()
     }
 
-    public func generateExternalAddresses() throws -> (segwit: String, legacy: String) {
+    public func generateExternalAddresses() throws -> AddressSet {
 
         let maxUsedIndex = keysRepository.getMaxUsedIndex()
         let maxWatchingIndex = keysRepository.getMaxWatchingIndex()
@@ -78,6 +84,10 @@ public class AddressActions {
             .derive(to: .external)
             .derive(at: UInt32(nextIndex))
 
+        let taprootAddress = try doWithError { error in
+            LibwalletCreateAddressV5(derivedKey.key, derivedMuunKey.key, error)
+        }
+
         let segwitAddress = try doWithError { error in
             LibwalletCreateAddressV4(derivedKey.key, derivedMuunKey.key, error)
         }
@@ -92,6 +102,10 @@ public class AddressActions {
             syncExternalAddresses.run()
         }
 
-        return (segwitAddress.address(), legacyAddress.address())
+        return AddressSet(
+            legacy: legacyAddress.address(),
+            segwit: segwitAddress.address(),
+            taproot: taprootAddress.address()
+        )
     }
 }

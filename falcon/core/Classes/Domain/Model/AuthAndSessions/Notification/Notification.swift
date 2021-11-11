@@ -21,6 +21,10 @@ public struct Notification {
         case updateAuthorizeChallenge
         case authorizeRcSignIn
         case fulfillIncomingSwap(uuid: String)
+        case eventCommunication(type: EventCommunicationType)
+
+        // Empty one to be used by beam to fix broken id sequences
+        case noOp
 
         // These are here for future compatibility
         case newContact
@@ -45,5 +49,10 @@ public struct Notification {
         let hash: String?
         let nextTransactionSize: NextTransactionSize
         let swapDetails: SubmarineSwap?
+    }
+
+    public enum EventCommunicationType {
+        case taprootActivated
+        case taprootPreactivation
     }
 }

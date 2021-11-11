@@ -1,5 +1,5 @@
 /* Extension/UIBarButtonItem+Extension.swift */
-"UIBarButtonItem.s1" = "%s de %s";
+"UIBarButtonItem.s1" = "%@ de %@";
 /* Presentation/Component/ActionCard/ActionCardView.swift */
 "ActionCardView.s1" = "Omitido";
 /* Presentation/Component/CameraPermission/CameraPermissionView.swift */
@@ -20,7 +20,7 @@
 "NotificationsPrimingView.s5" = "Por favor habilita las notificationes";
 "NotificationsPrimingView.s6" = "Los pagos en lightning requieren que te lleguen las notificaciones";
 /* Presentation/Component/Receive/ReceiveInLightningView.swift */
-"ReceiveInLightningView.s1" = "Esta factura expirará en %s. Crear otra";
+"ReceiveInLightningView.s1" = "Esta factura expirará en %@. Crear otra";
 "ReceiveInLightningView.s2" = "Crear otra";
 "ReceiveInLightningView.s5" = "Esta factura expiró. Creá una nueva.";
 "ReceiveInLightningView.s6" = "CREAR FACTURA";
@@ -41,7 +41,7 @@ Cambiar a dirección de compatibilidad";
 "OperationFormatter.s4" = "Confirmando";
 "OperationFormatter.s5" = "Falló";
 "OperationFormatter.s9" = "Confirmado";
-"OperationFormatter.s10" = "%s te pagó";
+"OperationFormatter.s10" = "%@ te pagó";
 "OperationFormatter.cancelable" = "Cancelable";
 /* Presentation/Screen/Base/BasePresenter.swift */
 "BasePresenter.s1" = "Por favor, intenta de nuevo";
@@ -49,8 +49,8 @@ Cambiar a dirección de compatibilidad";
 "BasePresenter.s3" = "No se puede conectar con el servidor de Muun";
 "BasePresenter.s6" = "Por razones de seguridad, tu sesión ha expirado. Por favor, ingresa nuevamente o contacta al soporte técnico.";
 /* Presentation/Screen/Detail/DetailPresenter.swift */
-"DetailPresenter.s1" = "%s horas";
-"DetailPresenter.s2" = "(%s bloques)";
+"DetailPresenter.s1" = "%@ horas";
+"DetailPresenter.s2" = "(%@ bloques)";
 /* Presentation/Screen/Detail/DetailRowView.swift */
 "DetailRowView.s1" = "Copiado al portapapeles";
 /* Presentation/Screen/Detail/DetailViewController.swift */
@@ -71,7 +71,7 @@ Cambiar a dirección de compatibilidad";
 "DetailViewController.s16" = "Esperando a que el destinatario acepte el pago.";
 "DetailViewController.s19" = "Este pago está esperando una confirmación on-chain. ¿Por qué?";
 "DetailViewController.s20" = "¿Por qué?";
-"DetailViewController.s22" = "No hay ruta disponible para realizar este pago. Recibirás un reembolso en aproximadamente %s %s.";
+"DetailViewController.s22" = "No hay ruta disponible para realizar este pago. Recibirás un reembolso en aproximadamente %@ %@.";
 "DetailViewController.outgoingTxFee" = "Comisión pagada a mineros";
 "DetailViewController.rbfNotice" = "Hasta que se confirme, esta transacción puede ser cancelada por el remitente. ¿Cómo?";
 "DetailViewController.rbfCta" = "¿Cómo?";
@@ -111,6 +111,10 @@ para bitcoin y lightning.";
 "Home.sendCTA" = "ENVIAR";
 "Home.transactionListTooltip" = "¡Bienvenido a tu nueva pantalla de inicio!
 Haz clic o desliza para ver tus pagos.";
+
+"Home.activateTaproot" = "Mejora tus pagos. Ahorra con cada pago activando Taproot.";
+"Home.activateTaprootHighlight" = "Mejora tus pagos.";
+
 /* Presentation/Screen/Home/HomeViewController.swift */
 "HomeViewController.s1" = "Reportar un problema";
 "HomeViewController.s2" = "Enviar comentarios";
@@ -120,7 +124,7 @@ Haz clic o desliza para ver tus pagos.";
 "BalanceView.tapToRevealBalance" = "Haz clic para ver el balance";
 /* Presentation/Screen/NewOperation/ChildViews/Amount/NewOpAmountView.swift */
 "NewOpAmountView.s1" = "CONFIRMAR MONTO";
-"NewOpAmountView.s2" = "Balance: %s %s";
+"NewOpAmountView.s2" = "Balance: %@ %@";
 "NewOpAmountView.s3" = "Usar todos los fondos";
 "NewOpAmountView.s4" = "FONDOS INSUFICIENTES";
 "NewOpAmountView.s5" = "MONTO DEMASIADO PEQUEÑO";
@@ -158,7 +162,7 @@ Haz clic o desliza para ver tus pagos.";
 "NewOpError.s27" = "Este pago requiere más tiempo restante antes de que expire la factura. Por favor, crea o solicita una nueva factura. Sugerimos un tiempo de expiración de 1 hora o más.";
 "NewOpError.s28" = "Esta factura ya ha sido escaneada o pagada por otro monedero. Por favor crea o solicita una nueva factura.";
 "NewOpError.s29" = "No existe una ruta con suficiente capacidad para hacer este pago. Por favor, contacta a nuestro equipo de soporte y cuéntanos que ocurrió.";
-"NewOpError.s30" = "El monto que estás intentando enviar es demasiado pequeño para completar esta transacción. Debe superar los %s satoshis.";
+"NewOpError.s30" = "El monto que estás intentando enviar es demasiado pequeño para completar esta transacción. Debe superar los %@ satoshis.";
 "NewOpError.s31" = "Algo salió mal, pero no sabemos qué. Se generó un reporte de error que ayudará a resolverlo. Por favor, envíanoslo por email.";
 "NewOpError.s32" = "Esta factura fue creada por un nodo privado al que no se puede acceder. Para poder accederlo, la factura debe incluir datos adicionales (RouteHints). Sólo el creador de la factura puede solucionar este problema.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/ManuallyEnterFee/ManuallyEnterFeeViewController.swift */
@@ -168,18 +172,18 @@ Haz clic o desliza para ver tus pagos.";
 "ManuallyEnterFeeViewController.s4" = "sat/vbyte";
 "ManuallyEnterFeeViewController.s5" = "CONFIRMAR COMISIÓN";
 "ManuallyEnterFeeViewController.s6" = "USAR COMISIÓN MÁXIMA";
-"ManuallyEnterFeeViewController.s7" = "Menos de %s";
-"ManuallyEnterFeeViewController.s8" = "Comisión muy baja. Ingresa una comisión de al menos %s sat/vbyte";
-"ManuallyEnterFeeViewController.s9" = "Comisión demasiado alta. Ingresa una comisión menor a %s sat/vbyte";
-"ManuallyEnterFeeViewController.s10" = "Fondos insuficientes. Puedes pagar hasta %s sat/vbyte";
+"ManuallyEnterFeeViewController.s7" = "Menos de %@";
+"ManuallyEnterFeeViewController.s8" = "Comisión muy baja. Ingresa una comisión de al menos %@ sat/vbyte";
+"ManuallyEnterFeeViewController.s9" = "Comisión demasiado alta. Ingresa una comisión menor a %@ sat/vbyte";
+"ManuallyEnterFeeViewController.s10" = "Fondos insuficientes. Puedes pagar hasta %@ sat/vbyte";
 "ManuallyEnterFeeViewController.s11" = "Fondos insuficientes.";
 "ManuallyEnterFeeViewController.s12" = "Comisión muy baja. Esta transacción puede demorar días en confirmarse.";
-"ManuallyEnterFeeViewController.s13" = "Comisión demasiado baja. La red de bitcoin está teniendo un tráfico inusualmente alto y rechazando transacciones con comisiones menores a %s sat/vbyte.";
+"ManuallyEnterFeeViewController.s13" = "Comisión demasiado baja. La red de bitcoin está teniendo un tráfico inusualmente alto y rechazando transacciones con comisiones menores a %@ sat/vbyte.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/EnterFeeManuallyTableViewCell.swift */
 "EnterFeeManuallyTableViewCell.s1" = "SELECCIONADA MANUALMENTE";
 "EnterFeeManuallyTableViewCell.s2" = "INGRESAR MANUALMENTE";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/TargetedFeeTableViewCell.swift */
-"TargetedFeeTableViewCell.s1" = "Menos de %s";
+"TargetedFeeTableViewCell.s1" = "Menos de %@";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/Cell/TitleTableViewCell.swift */
 "TitleTableViewCell.s1" = "¿Qué es esto?";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/SelectFeeViewController.swift */
@@ -220,7 +224,7 @@ El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si est
 "NewOp.s10" = "¿Por qué puede demorarse este pago?";
 "NewOp.s11" = "Este pago de Lightning requiere una transacción en cadena (on-chain) confirmada. Este pago puede demorar aproximadamente 10 minutos en confirmarse.";
 /* Presentation/Screen/NewOperation/NewOperationView.swift */
-"NewOperationView.s1" = "Esta factura vence en %s";
+"NewOperationView.s1" = "Esta factura vence en %@";
 "NewOperationView.s2" = "Este pago puede demorar más que la mayoría de los pagos en lightning. ¿Por qué?";
 "NewOperationView.s3" = "¿Por qué?";
 /* Presentation/Screen/NewOperation/NewOperationViewController.swift */
@@ -263,7 +267,7 @@ de lightning network";
 "PinViewController.s2" = "Use tu huella digital para desbloquear Muun";
 "PinViewController.s3" = "Desbloquea muun";
 "PinViewController.s4" = "PIN incorrecto.";
-"PinViewController.s5" = "PIN incorrecto. Quedan %s intentos antes de que se finalice tu sesión.";
+"PinViewController.s5" = "PIN incorrecto. Quedan %@ intentos antes de que se finalice tu sesión.";
 "PinViewController.s6" = "El PIN no coincide";
 /* Presentation/Screen/Receive/Receive+MoreInfo.swift */
 "Receive.s1" = "Tu dirección de bitcoin";
@@ -275,13 +279,13 @@ Las direcciones de compatibilidad son ampliamente aceptadas en el ecosistema, pe
 
 Para que tus transacciones sean más eficientes, Muun muestra las direcciones de Segwit en primer lugar. Algunos servicios aún no se han actualizado a Segwit. Si tienes problemas para utilizar Segwit, utiliza direcciones de compatibilidad en su lugar.";
 /* Presentation/Screen/Receive/ReceivePresenter.swift */
-"ReceivePresenter.s1" = "%s recibido";
+"ReceivePresenter.s1" = "%@ recibido";
 /* Presentation/Screen/Receive/ReceiveViewController.swift */
 "ReceiveViewController.s1" = "Bitcoin";
 "ReceiveViewController.s2" = "Lightning";
 "ReceiveViewController.s3" = "Recibir";
 "ReceiveViewController.s4" = "Copiado al portapapeles";
-"ReceiveViewController.s5" = "Copiado al portapapeles. Esta factura expirará en %s.";
+"ReceiveViewController.s5" = "Copiado al portapapeles. Esta factura expirará en %@.";
 /* Presentation/Screen/Receive/AddressTypeSelectViewController.swift */
 "AddressTypeSelectViewController.title" = "Elige un tipo de dirección";
 /* Presentation/Screen/Receive/OnChain/OnChainAdvancedOptionsView.swift */
@@ -291,6 +295,11 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "AddressTypeOptionView.label" = "Tipo de dirección";
 "AddressTypeOptionView.segwit" = "SegWit";
 "AddressTypeOptionView.legacy" = "Legacy";
+"AddressTypeOptionView.taproot" = "Taproot";
+"AddressTypeOptionView.segwitDescription" = "Es un tipo de dirección relativamente nuevo, ya ampliamente aceptado. Crea transacciones más livianas y te ahorra dinero en futuras comisiones de red.";
+"AddressTypeOptionView.legacyDescription" = "Es el tipo de dirección más aceptado. Úsalo sólo cuando un servicio marque tus direcciones de Segwit como inválidas.";
+"AddressTypeOptionView.taprootDescription" = "Es el tipo de dirección más nuevo y potente. Muchos servicios aún no son compatibles y pueden marcarlas como inválidas.";
+"AddressTypeOptionView.taprootActivation" = "Se activa en ~%@ horas.";
 /* Presentation/Screen/Receive/Lightning/LightningAdvancedOptionsView.swift */
 "LightningAdvancedOptionsView.header" = "Configuración de factura";
 "LightningAdvancedOptionsView.hide" = "Ocultar configuración";
@@ -325,14 +334,14 @@ recibir bitcoin";
 /* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawViewController.swift */
 "LNURLWithdrawViewController.title" = "Recibir";
 "LNURLWithdrawViewController.loading" = "Cargando...";
-"LNURLWithdrawViewController.contacting" = "Contactando %s...";
-"LNURLWithdrawViewController.receiving" = "Recibiendo de %s...";
-"LNURLWithdrawViewController.tooLong" = "%s está tardando mucho en pagar";
-"LNURLWithdrawViewController.tooLongDescription" = "Puedes esperar aquí o irte, y recibir una notificación cuando se complete el pago. Si el pago no se completa, comunícate con %s.";
+"LNURLWithdrawViewController.contacting" = "Contactando %@...";
+"LNURLWithdrawViewController.receiving" = "Recibiendo de %@...";
+"LNURLWithdrawViewController.tooLong" = "%@ está tardando mucho en pagar";
+"LNURLWithdrawViewController.tooLongDescription" = "Puedes esperar aquí o irte, y recibir una notificación cuando se complete el pago. Si el pago no se completa, comunícate con %@.";
 "LNURLWithdrawViewController.copyToClipboard" = "Copiar al portapapeles";
 /* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawPresenter.swift */
 "LNURLWithdrawPresenter.invalidCodeTitle" = "¿Es un código LNURL?";
-"LNURLWithdrawPresenter.unresponsiveTitle" = "%s no responde";
+"LNURLWithdrawPresenter.unresponsiveTitle" = "%@ no responde";
 "LNURLWithdrawPresenter.wrongTagTitle" = "¿Es esto un LNURL para retirar?";
 "LNURLWithdrawPresenter.requestExpiredTitle" = "La solicitud de retiro expiró";
 "LNURLWithdrawPresenter.noAvailableBalanceTitle" = "No hay fondos para retirar";
@@ -341,20 +350,20 @@ recibir bitcoin";
 "LNURLWithdrawPresenter.invalidCodeDescription" = "No parece ser uno. Por favor, vuelve a verificar su fuente. Ten en cuenta que solo puedes usar LNURL con servicios que lo soporten.";
 "LNURLWithdrawPresenter.wrongTagDescription" = "Esto es un LNURL válido, pero no para esta operación. Por favor, vuelve a verificar su fuente.";
 "LNURLWithdrawPresenter.requestExpiredDescription" = "La LNURL expiró antes de que se realizara el pago. Por favor, solicita una nueva.";
-"LNURLWithdrawPresenter.noAvailableBalanceDescription" = "Parece que no tienes fondos para retirar de %s. Por favor, comprueba que tu saldo no esté vacío.";
-"LNURLWithdrawPresenter.noRouteDescription" = "Parece que <service> no pudo encontrar una ruta para enviarte el pago. Te sugerimos que te pongas en contacto con %s para avisarles.";
+"LNURLWithdrawPresenter.noAvailableBalanceDescription" = "Parece que no tienes fondos para retirar de %@. Por favor, comprueba que tu saldo no esté vacío.";
+"LNURLWithdrawPresenter.noRouteDescription" = "Parece que <service> no pudo encontrar una ruta para enviarte el pago. Te sugerimos que te pongas en contacto con %@ para avisarles.";
 "LNURLWithdrawPresenter.unresponsiveDescription" = "El servicio que creó el código LNURL no está disponible. Por favor, inténtalo de nuevo más tarde.";
 "LNURLWithdrawPresenter.unknownErrorDescription" = "Algo falló y no estamos seguros de qué fue. Envíanos un reporte para ayudarnos a averiguar qué sucedió.";
 "LNURLWithdrawPresenter.expiredInvoice" = "Tu pago falló";
-"LNURLWithdrawPresenter.expiredInvoiceDescription" = "Tu factura de lightning venció y %s no completó el pago. Por favor, contáctalos para obtener más información.";
+"LNURLWithdrawPresenter.expiredInvoiceDescription" = "Tu factura de lightning venció y %@ no completó el pago. Por favor, contáctalos para obtener más información.";
 "LNURLWithdrawPresenter.alreadyUsedTitle" = "Código ya usado";
 "LNURLWithdrawPresenter.alreadyUsedDescription" = "Éste código ya fue usado por otro monedero, y no puede ser usado nuevamente.";
 "LNURLWithdrawPresenter.forbiddenTitle" = "País sin soporte";
 "LNURLWithdrawPresenter.forbiddenDescription" = "El servicio que creó éste código no está disponible en tu país.";
 "LNURLWithdrawPresenter.pendingNotificationTitle" = "Tu pago está en camino";
-"LNURLWithdrawPresenter.pendingNotificationBody" = "Recibirás tu pago tan pronto como %s lo complete.";
+"LNURLWithdrawPresenter.pendingNotificationBody" = "Recibirás tu pago tan pronto como %@ lo complete.";
 "LNURLWithdrawPresenter.failedNotificationTitle" = "Tu pago falló";
-"LNURLWithdrawPresenter.failedNotificationBody" = "Tu factura de lightning venció y %s no completó el pago.";
+"LNURLWithdrawPresenter.failedNotificationBody" = "Tu factura de lightning venció y %@ no completó el pago.";
 "LNURLWithdrawPresenter.invoice" = "Factura";
 "LNURLWithdrawPresenter.receivedMessage" = "Mensaje recibido";
 /* Presentation/Screen/LNURL/FromSend/LNURLFromSendViewController.swift */
@@ -387,16 +396,16 @@ recibir bitcoin";
 "Recover.s1" = "¿Qué es el Código de Recuperación?";
 "Recover.s2" = "Contraseñas olvidadas";
 "Recover.s3" = "El Código de Recuperación es un conjunto de caracteres generados aleatoriamente. Se utiliza para crear un respaldo encriptado de tus Claves Privadas.
-Lo configuraste el %s y probablemente lo escribiste en un papel.";
+Lo configuraste el %@ y probablemente lo escribiste en un papel.";
 "Recover.s4" = "El Código de Recuperación es un conjunto de caracteres generados aleatoriamente y la única forma de ingresar a tu monedero si olvidas tu contraseña.";
 "Recover.s5" = "Muun no guarda una copia de tu contraseña, así que no se puede restaurar.
-Intenta recordarla. La elegiste el %s";
+Intenta recordarla. La elegiste el %@";
 "Recover.s6" = "Muun no guarda una copia de tu contraseña, así que no se puede restaurar.
 Intenta recordarla.";
 /* Presentation/Screen/RecoverWallet/RecoveryCode/SignInEmailAndRCViewController.swift */
 "SignInEmailAndRCViewController.s1" = "Recupera tu monedero";
 "SignInEmailAndRCViewController.s2" = "Ingresa tu Código de Recuperación";
-"SignInEmailAndRCViewController.s3" = "Lo configuraste el %s y probablemente lo escribiste en un papel. ¿Qué es esto?";
+"SignInEmailAndRCViewController.s3" = "Lo configuraste el %@ y probablemente lo escribiste en un papel. ¿Qué es esto?";
 "SignInEmailAndRCViewController.s4" = "¿Qué es esto?";
 "SignInEmailAndRCViewController.s5" = "Probablemente lo escribiste en un papel. ¿Qué es esto?";
 "SignInEmailAndRCViewController.s7" = "Código de Recuperación incorrecto. Intenta de nuevo.";
@@ -405,7 +414,7 @@ Intenta recordarla.";
 "SignInAuthorizeEmailViewController.s1" = "Autoriza tu inicio de sesión";
 "SignInAuthorizeEmailViewController.s2" = "Recupera tu monedero";
 "SignInAuthorizeEmailViewController.s3" = "Elige email";
-"SignInAuthorizeEmailViewController.s4" = "Recibirás un correo electrónico de autorización en %s. Por favor, haz clic en el enlace del correo para continuar.";
+"SignInAuthorizeEmailViewController.s4" = "Recibirás un correo electrónico de autorización en %@. Por favor, haz clic en el enlace del correo para continuar.";
 /* Presentation/Screen/RecoverWithRC/InputRC/SignInWithRCView.swift */
 "SignInWithRCView.s1" = "INGRESAR CÓDIGO";
 "SignInWithRCView.s2" = "Ingresa tu Código de Recuperación";
@@ -421,7 +430,7 @@ Intenta recordarla.";
 "SignInWithRCVerifyEmailViewController.s1" = "Autoriza tu inicio de sesión";
 "SignInWithRCVerifyEmailViewController.s2" = "Recupera tu monedero";
 "SignInWithRCVerifyEmailViewController.s3" = "Elige Email";
-"SignInWithRCVerifyEmailViewController.s4" = "Recibirás un correo electrónico de autorización en %s. Por favor, haz clic en el enlace del correo para continuar.";
+"SignInWithRCVerifyEmailViewController.s4" = "Recibirás un correo electrónico de autorización en %@. Por favor, haz clic en el enlace del correo para continuar.";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Activate/ActivateEmergencyKitView.swift */
 "ActivateEmergencyKitView.s1" = "Verifica tu Kit de Emergencia";
 "ActivateEmergencyKitView.s4" = "Código de verificación";
@@ -429,7 +438,7 @@ Intenta recordarla.";
 "ActivateEmergencyKitView.s8" = "Código incorrecto";
 "ActivateEmergencyKitView.activationDescription" = "Ingresa tu código de verificación de 6 dígitos ubicado arriba a la derecha del documento, sólo para asegurarte de que todo salió bien.";
 "ActivateEmergencyKitView.boldDescription" = "código de verificación de 6 dígitos";
-"ActivateEmergencyKitView.oldCodeError" = "Éste es un código viejo. Mira tu último Kit de Emergencia (tu código empieza con %s)";
+"ActivateEmergencyKitView.oldCodeError" = "Éste es un código viejo. Mira tu último Kit de Emergencia (tu código empieza con %@)";
 "ActivateEmergencyKitView.oldCodeErrorRed" = "Éste es un código viejo.";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Activate/ActivateEmergencyKitViewController.swift */
 "ActivateEmergencyKitViewController.s1" = "Kit de Emergencia";
@@ -445,54 +454,88 @@ Intenta recordarla.";
 "RecoveryToolViewController.s5" = "Puedes encontrar la herramienta y las instrucciones para este proceso en https://github.com/muun/recovery";
 /* SaveEmergencyKitOptionView.swift */
 "SaveEmergencyKitOptionView.driveTitle" = "Guardar en Drive";
-"SaveEmergencyKitOptionView.driveDescription" = "Usa tu cuenta de Google para guardar y acceder a tu kit.";
+"SaveEmergencyKitOptionView.driveDescription" = "Usa tu cuenta de Google para guardar y acceder a tu Kit.";
 "SaveEmergencyKitOptionView.icloudTitle" = "Guardar en iCloud";
-"SaveEmergencyKitOptionView.icloudDescription" = "Usa tu cuenta de Apple para guardar y acceder a tu kit.";
-"SaveEmergencyKitOptionView.icloudDisabledDescription" = "Activa iCloud en la configuración de tu teléfono para guardar tu kit.";
-"SaveEmergencyKitOptionView.manuallyTitle" = "Guardar manualmente";
-"SaveEmergencyKitOptionView.manuallyDescription" = "Elige una aplicación para guardar y acceder a tu kit.";
+"SaveEmergencyKitOptionView.icloudDescription" = "Usa tu cuenta de Apple para guardar y acceder a tu Kit.";
+"SaveEmergencyKitOptionView.icloudDisabledDescription" = "Activa iCloud en la configuración de tu teléfono para guardar tu Kit.";
+"SaveEmergencyKitOptionView.anotherCloudTitle" = "Sugiere otro servicio";
+"SaveEmergencyKitOptionView.anotherCloudDescription" = "Cuéntanos qué servicio en la nube te gustaría que soportemos.";
 "SaveEmergencyKitOptionView.recommended" = "Recomendado";
 "SaveEmergencyKitOptionView.notEnabled" = "Desactivado";
 "SaveEmergencyKitOptionView.openInDrive" = "ABRIR EN DRIVE";
-"SaveEmergencyKitOptionView.openInICloud" = "ABRIR ICLOUD";
+"SaveEmergencyKitOptionView.openInICloud" = "ABRIR EN ICLOUD";
 "SaveEmergencyKitOptionView.verifyTitle" = "Verifica tu Kit de Emergencia";
-"SaveEmergencyKitOptionView.verifyDescriptionDrive" = "Guardaste tu kit en Google Drive. Antes de irte, encuéntralo y examina el contenido. Asegúrate de poder hacer ésto en el futuro";
-"SaveEmergencyKitOptionView.verifyDescriptionICloud" = "Guardaste tu kit en iCloud. Antes de irte, encuéntralo y examina el contenido. Asegúrate de poder hacer ésto en el futuro";
+"SaveEmergencyKitOptionView.verifyDescriptionDrive" = "Guardaste tu Kit en Google Drive. Antes de irte, encuéntralo y examina el contenido. Asegúrate de poder hacer ésto en el futuro";
+"SaveEmergencyKitOptionView.verifyDescriptionICloud" = "Guardaste tu Kit en iCloud. Antes de irte, encuéntralo y examina el contenido. Asegúrate de poder hacer ésto en el futuro";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitView.swift */
-"ShareEmergencyKitView.title" = "Guarda tu Kit de Emergencia";
-"ShareEmergencyKitView.description" = "Recomendamos guardarlo en la nube, para asegurar que nunca se pierda. ¿Es seguro?";
-"ShareEmergencyKitView.descriptionCTA" = "¿Es seguro?";
+"ShareEmergencyKitView.exportTitle" = "Guarda tu Kit de Emergencia";
+"ShareEmergencyKitView.updateTitle" = "Actualiza tu Kit de Emergencia";
+"ShareEmergencyKitView.description" = "Elije tu servicio en la nube preferido para asegurarte de que tu Kit nunca se pierda.";
+"ShareEmergencyKitView.saveManually" = "No quiero almacenarlo en la nube";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitViewController.swift */
 "ShareEmergencyKitViewController.s1" = "Kit de Emergencia";
 "ShareEmergencyKitViewController.uploading" = "Subiendo tu Kit de Emergencia";
+"ShareEmergencyKitViewController.updating" = "Actualizando tu Kit de Emergencia";
 "ShareEmergencyKitViewController.ekUploadErrorTitle" = "Tu Kit de Emergencia no pudo guardarse";
 "ShareEmergencyKitViewController.ekUploadErrorDescription" = "No pudimos subir tu Kit de Emergencia a la nube. Por favor, verifica tu conexión e inténtalo de nuevo";
 "ShareEmergencyKitViewController.alertRetry" = "Reintentar";
 "ShareEmergencyKitViewController.alertCancel" = "Cancelar";
 "ShareEmergencyKitViewController.fileName" = "Muun - Kit de Emergencia.pdf";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ManualSaveEmergencyKitView.swift */
+"ManualSaveEmergencyKitView.title" = "¿Quieres guardar tu Kit manualmente? Te damos algunos consejos.";
+"ManualSaveEmergencyKitView.accesible" = "Hazlo accesible. Debes poder acceder a tu Kit en todo momento, incluso si perdieras tu teléfono, te lo robaran o dejara de funcionar.";
+"ManualSaveEmergencyKitView.accesibleBold" = "Hazlo accesible.";
+"ManualSaveEmergencyKitView.secrecy" = "No priorices mantenerlo en secreto. Recuerda, tu Kit está encriptado. Sin tu Código de Recuperación, el Kit es inofensivo.";
+"ManualSaveEmergencyKitView.secrecyBold" = "No priorices mantenerlo en secreto.";
+"ManualSaveEmergencyKitView.update" = "Facilita su actualización. Debes tener el último Kit a mano siempre, un Kit viejo no funcionará. ";
+"ManualSaveEmergencyKitView.updateBold" = "Facilita su actualización.";
+"ManualSaveEmergencyKitView.save" = "GUARDAR MANUALMENTE";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/RequestCloudView.swift */
+"RequestCloudView.description" = "Planeamos incluir más servicios en la nube. ¿Cuál te gustaría que se agregue?";
+"RequestCloudView.send" = "ENVIAR COMENTARIO";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Verify/VerifyEmergencyKitView.swift */
 "VerifyEmergencyKitView.done" = "LISTO";
-/* Presentation/Screen/SecurityCenter/EmergencyKit/Slides/EmergencyKitSlidesViewController.swift */
-"EmergencyKitSlidesViewController.s1" = "Kit de Emergencia";
-"EmergencyKitSlidesViewController.s2" = "CREA TU KIT DE EMERGENCIA";
-"EmergencyKitSlidesViewController.s3" = "Desliza para continuar";
-"EmergencyKitSlidesViewController.s4" = "Un documento";
-"EmergencyKitSlidesViewController.s5" = "Tus claves privadas están encriptadas de forma segura con tu Código de Recuperación, así que puedes guardarlo online.";
-"EmergencyKitSlidesViewController.s6" = "Guardado online";
-"EmergencyKitSlidesViewController.s7" = "Posesión Completa";
-"EmergencyKitSlidesViewController.s8" = "No has terminado de exportar tu Kit de Emergencia. Puedes retomar éste proceso más tarde.";
-"EmergencyKitSlidesViewController.s9" = "¿Abortar la exportación del kit?";
-"EmergencyKitSlidesViewController.s10" = "Continuar";
-"EmergencyKitSlidesViewController.s11" = "Abortar";
-"EmergencyKitSlidesViewController.s12" = "Tu Kit de Emergencia es un documento PDF con información e instrucciones para transferir tus fondos independientemente.";
-"EmergencyKitSlidesViewController.s13" = "Combinando tu Kit de Emergencia y tu Código de Recuperación, tendrás control total e indisputado de tus fondos.";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Slides/SlidesViewController.swift */
+"SlidesViewController.swipe" = "Desliza para continuar";
+
+"EmergencyKitSlides.s1" = "Kit de Emergencia";
+"EmergencyKitSlides.s2" = "CREA TU KIT DE EMERGENCIA";
+"EmergencyKitSlides.s4" = "Un documento";
+"EmergencyKitSlides.s5" = "Tus claves privadas están encriptadas de forma segura con tu Código de Recuperación, así que puedes guardarlo online.";
+"EmergencyKitSlides.s6" = "Guardado online";
+"EmergencyKitSlides.s7" = "Posesión Completa";
+"EmergencyKitSlides.s8" = "No has terminado de exportar tu Kit de Emergencia. Puedes retomar éste proceso más tarde.";
+"EmergencyKitSlides.s9" = "¿Abortar la exportación del Kit?";
+"EmergencyKitSlides.s10" = "Continuar";
+"EmergencyKitSlides.s11" = "Abortar";
+"EmergencyKitSlides.s12" = "Tu Kit de Emergencia es un documento PDF con información e instrucciones para transferir tus fondos independientemente.";
+"EmergencyKitSlides.s13" = "Combinando tu Kit de Emergencia y tu Código de Recuperación, tendrás control total e indisputado de tus fondos.";
+
+"TaprootActivationSlides.title1" = "Un gran paso para bitcoin";
+"TaprootActivationSlides.description1" = "Taproot es una de las actualizaciones más esperadas en bitcoin.
+
+Empezando por pagos más baratos y menos rastreables, Taproot está sentando las bases para una innovación masiva en bitcoin.";
+"TaprootActivationSlides.title2" = "Habilitado por potentes scripts";
+"TaprootActivationSlides.description2" = "Taproot usa nuevos scripts para crear las direcciones donde recibirás fondos.
+
+Para recuperar esos fondos en una emergencia, estos scripts deben incluirse en tu Kit de Emergencia.";
+"TaprootActivationSlides.title3" = "Completamente seguro";
+"TaprootActivationSlides.description3" = "Mantiene el control total de tus fondos actualizando tu Kit de Emergencia antes de usar Taproot por primera vez.
+
+El Kit actualizado reemplaza al que ya tienes, pero tu Código de Recuperación no cambia.";
+"TaprootActivationSlides.finish" = "ACTUALIZA TU KIT";
+"TaprootActivationSlides.abortTitle" = "¿Abandonar la activación?";
+"TaprootActivationSlides.abortDescription" = "Aún no has activado Taproot. Puedes reiniciar este proceso más tarde.";
+"TaprootActivationSlides.stay" = "Seguir";
+"TaprootActivationSlides.leave" = "Abandonar";
+
 /* Presentation/Screen/SecurityCenter/SecurityCenter+ActionCard.swift */
 "SecurityCenter.s1" = "Exportaste tus claves";
 "SecurityCenter.s2" = "Herramienta de Recuperación";
 "SecurityCenter.s3" = "Crea un Kit de Emergencia";
 "SecurityCenter.s4" = "Descargar la información necesaria para recuperar tu dinero sin usar Muun.";
 "SecurityCenter.s5" = "Creaste un Kit de Emergencia";
-"SecurityCenter.s6" = "Sigue las instrucciones en el kit que guardaste para recuperar tu dinero sin usar Muun.";
+"SecurityCenter.s6" = "Sigue las instrucciones en el Kit que guardaste para recuperar tu dinero sin usar Muun.";
 "SecurityCenter.s7" = "Escribiste tus claves privadas. Úsalas con tu Código de Recuperación y nuestra Herramienta de Recuperación para recuperar tu dinero sin usar Muun.";
 /* Presentation/Screen/SecurityCenter/SecurityCenter+Feedback.swift */
 "SecurityCenter.s8" = "EXCELENTE";
@@ -501,6 +544,23 @@ Intenta recordarla.";
 "SecurityCenter.s11" = "VOLVER AL INICIO";
 "SecurityCenter.s12" = "¡Éxito!";
 "SecurityCenter.EKSuccessDescription" = "Tienes control completo e indisputado de tus Bitcoins.";
+
+"SecurityCenter.taprootActivated.title" = "¡Estás listo para Taproot!";
+"SecurityCenter.taprootPreactivated.description" = "En %@ bloques (~%@ horas), la Red de Bitcoin activará Taproot globalmente.
+
+Cuando esto suceda, podrás recibir fondos en direcciones Taproot.";
+"SecurityCenter.taprootActivated.description" = "Ahora puedes enviar y recibir pagos usando direcciones Taproot. Tus pagos serán más baratos y menos rastreables.";
+
+
+"SecurityCenter.taprootActivationCountdown.title" = "¡Estamos en cuenta regresiva!";
+"SecurityCenter.taprootActivationCountdown.description" = "Cuando la Red de Bitcoin mine el bloque 709,632, Taproot se activará globalmente.
+
+Para protegerte de posibles reorganizaciones de la blockchain, podrás comenzar a usar  direcciones Taproot %1@ bloques después.
+
+¡Quedan %2@ bloques!";
+
+
+
 /* Presentation/Screen/SecurityCenter/SecurityCenter+MoreInfo.swift */
 "SecurityCenter.s13" = "¿Por qué no se puede restaurar la contraseña?";
 "SecurityCenter.s14" = "¿Qué es el Código de Recuperación?";
@@ -514,7 +574,7 @@ El Código de Recuperación se utiliza para crear una copia de seguridad cifrada
 No guardamos una copia de este código, así que escríbelo en papel y guárdalo en un lugar seguro.";
 "SecurityCenter.s19" = "Muun te enviará un correo electrónico cada vez que alguien intente acceder a tu monedero, pidiendo tu autorización. Esto te proteje de gente (o computadoras) que intenten adivinar tu contraseña, y te alerta si alguien lo intenta.";
 "SecurityCenter.s20" = "¿Es seguro guardar en la nube?";
-"SecurityCenter.s21" = "Los datos dentro de tu Kit de Emergencia están encriptados de forma segura con tu Código de Recuperación. Sin acceso a ese código, el kit es inofensivo.
+"SecurityCenter.s21" = "Los datos dentro de tu Kit de Emergencia están encriptados de forma segura con tu Código de Recuperación. Sin acceso a ese código, el Kit es inofensivo.
 
 Como tu Código de Recuperación está escrito en papel, puedes guardar tu Kit de Emergencia en la nube sin riesgos. Estará seguro y disponible a largo plazo.";
 /* Presentation/Screen/SecurityCenter/SecurityCenterPresenter.swift */
@@ -571,7 +631,7 @@ Como tu Código de Recuperación está escrito en papel, puedes guardar tu Kit d
 "SetupEmailWording.s3" = "Crea un método de recuperación en caso de que cambies tu teléfono o reinstales Muun.";
 "SetupEmailWording.s4" = "Usa tu email y una contraseña para recuperar tu monedero.";
 "SetupEmailWording.s5" = "Respaldaste tu monedero";
-"SetupEmailWording.s6" = "Usa %s y tu contraseña para recuperar tu monedero.";
+"SetupEmailWording.s6" = "Usa %@ y tu contraseña para recuperar tu monedero.";
 "SetupEmailWording.s8" = "Respalda tu monedero con contraseña";
 "SetupEmailWording.s10" = "Aumenta tu seguridad";
 "SetupEmailWording.s11" = "Ingresa un email";
@@ -590,7 +650,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 /* Presentation/Screen/SecurityCenter/SetupEmail/VerifyEmail/SignUpVerifyEmailViewController.swift */
 "SignUpVerifyEmailViewController.s1" = "Verifica tu email";
 "SignUpVerifyEmailViewController.s2" = "Elegir Email";
-"SignUpVerifyEmailViewController.s3" = "Recibirás un correo de verificación en %s. Por favor, haz clic en el enlace del correo para continuar.";
+"SignUpVerifyEmailViewController.s3" = "Recibirás un correo de verificación en %@. Por favor, haz clic en el enlace del correo para continuar.";
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Confirm/FinishRecoveryCodeSetupViewController.swift */
 "FinishRecoveryCodeSetupViewController.s1" = "Dos cosas que debes entender";
 "FinishRecoveryCodeSetupViewController.s2" = "FINALIZAR";
@@ -671,7 +731,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "RecoveryCodeMissingView.s3" = "Para continuar, primero debes configurar tu Código de Recuperación.";
 /* Presentation/Screen/Settings/ChangePassword/VerifyEmail/ChangePasswordVerifyViewController.swift */
 "ChangePasswordVerifyViewController.s1" = "Confirmar cambio de contraseña";
-"ChangePasswordVerifyViewController.s2" = "Recibirás un correo electrónico de autorización en %s";
+"ChangePasswordVerifyViewController.s2" = "Recibirás un correo electrónico de autorización en %@";
 "ChangePasswordVerifyViewController.s3" = "Cambiar contraseña";
 "ChangePasswordVerifyViewController.s4" = "Elige Email";
 /* Presentation/Screen/Settings/ChangePassword/VerifyEmail/WaitForEmailView.swift */
@@ -719,6 +779,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "SettingsViewController.s23" = "Necesitas vaciar tu monedero. Realiza un pago con todos tus fondos, y vuelve a intentarlo cuando la transacción tenga 6 confirmaciones.";
 "SettingsViewController.advanced" = "Configuración avanzada";
 "SettingsViewController.lightningNetwork" = "Lightning Network";
+"SettingsViewController.onchain" = "Red Bitcoin";
 /* Presentation/Screen/Sync/SyncViewController.swift */
 "SyncViewController.s1" = "Cargando tu monedero";
 "SyncViewController.s2" = "Creando tu monedero";
@@ -750,3 +811,30 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "LightningNetworkSettings.learnMoreUnderline" = "Aprende más";
 "LightningNetworkSettings.disable" = "Apagar";
 "LightningNetworkSettings.blogPost" = "https://blog.muun.com/turbo-channels-es/";
+/* OnchainSettings */
+"OnchainSettings.timeToActivation" = "Se activa en ~%@ horas";
+"OnchainSettings.learnMore" = "Taproot es un nuevo tipo de dirección que hace que tus pagos sean más baratos y menos rastreables.
+
+Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcciones como inválidas. Si elijes a Taproot como tipo predeterminado, deberás cambiar manualmente el tipo de dirección a Segwit o Legacy cada vez que esto suceda.";
+"OnchainSettings.defaultTaproot" = "Predeterminar a Taproot";
+"OnchainSettings.title" = "Bitcoin Network";
+"OnchainSettings.confirmTitle" = "Predeterminar a Taproot?";
+"OnchainSettings.confirmDescription" = "Algunos servicios pueden marcar tus direcciones como inválidas.";
+"OnchainSettings.confirm" = "Confirmar";
+
+/* TaprootActivatedPopup */
+"TaprootActivatedPopup.title" = "¡Se activó Taproot!";
+"TaprootActivatedPopup.description" = "Ahora puedes enviar y recibir pagos usando direcciones Taproot. Tus pagos serán más baratos y menos rastreables.";
+"TaprootActivatedPopup.ok" = "EXCELENTE";
+
+/* NotificationService */
+"NotificationService.unknown" = "Tienes nueva actividad en Muun";
+"NotificationService.fulfillIncomingSwapTitle" = "Alguien te envío bitcoin via Lightning Network";
+"NotificationService.fulfillIncomingSwapBody" = "Abre Muun para recibir el pago.";
+"NotificationService.taprootActivatedTitle" = "Se activó Taproot 🎉";
+"NotificationService.taprootActivatedBody" = "La Red de Bitcoin activó Taproot. Ahora puedes disfrutar de pagos más baratos.";
+"NotificationService.taprootPreactivationTitle" = "Mejora tus pagos";
+"NotificationService.taprootPreactivationBody" = "Ahorra con cada pago activando Taproot.";
+"NotificationService.opSentTitle" = "%@ sent";
+"NotificationService.opReceivedTitle" = "%@ recibidos";
+"NotificationService.opFromContactTitle" = "%@ te ha enviado %@";

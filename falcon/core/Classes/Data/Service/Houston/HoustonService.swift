@@ -264,8 +264,8 @@ public class HoustonService: BaseService {
             .map({ $0.toModel() })
     }
 
-    func submitFeedback(feedback: String) -> Single<()> {
-        let payload = FeedbackJson(content: feedback)
+    func submitFeedback(feedback: String, type: FeedbackTypeJson) -> Single<()> {
+        let payload = FeedbackJson(content: feedback, type: type)
         guard let jsonData = try? JSONEncoder().encode(payload) else {
             fatalError("ERROR")
         }
@@ -323,8 +323,12 @@ public class HoustonService: BaseService {
     }
 
     func newOperation(operation: OperationJson) -> Single<OperationCreated> {
-        return post("operations", body: JSONEncoder.data(json: operation), andReturn: OperationCreatedJson.self)
-            .map({ $0.toModel(decrypter: self.decrypter) })
+        return post(
+            "operations",
+            body: JSONEncoder.data(json: operation),
+            andReturn: OperationCreatedJson.self,
+            maxRetries: 1 // Due to nonce reuse attacks we never retry this endpoint automatically
+        ).map({ $0.toModel(decrypter: self.decrypter) })
     }
 
     func updateOperationMetadata(operationId: Int, metadata: String) -> Completable {
@@ -346,8 +350,13 @@ public class HoustonService: BaseService {
         let path = "operations/{operationId}/raw-transaction"
         let finalPath = path.replacingOccurrences(of: "{operationId}", with: String(describing: operationId))
 
-        return put(finalPath, body: jsonData, andReturn: RawTransactionResponseJson.self)
-            .map({ $0.toModel() })
+        return put(
+            finalPath,
+            body: jsonData,
+            andReturn: RawTransactionResponseJson.self,
+            maxRetries: 1 // Due to nonce reuse attacks we never retry this endpoint automatically
+        )
+        .map({ $0.toModel() })
     }
 
     func fetchNextTransactionSize() -> Single<NextTransactionSize> {

@@ -74,7 +74,7 @@ extension ActionCard {
             title: NSAttributedString(string: L10n.SecurityCenter.s3),
             description: L10n.SecurityCenter.s4
                 .attributedForDescription(),
-            nextViewController: EmergencyKitSlidesViewController(),
+            nextViewController: SlidesViewController(configuration: .exportKit),
             stemNumber: "3",
             stepImage: nil,
             state: state

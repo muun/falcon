@@ -19,4 +19,15 @@ extension CGFloat {
     // Use as leading and trailing constant for almost all the views
     static let sideMargin: CGFloat = 16.0
 
+    // Horizontal spacing between close views
+    static let closeSpacing: CGFloat = 8.0
+
+    // Spacing between header and content
+    static let headerSpacing: CGFloat = 24
+
+    // Spacing between view of the same level
+    static let spacing: CGFloat = 16
+
+    // Ocassionaly, a really big space.
+    static let bigSpacing: CGFloat = 32
 }

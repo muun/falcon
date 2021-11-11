@@ -5,7 +5,7 @@ install! 'cocoapods',
 
 platform :ios, '11.0'
 
-target 'falcon' do
+target 'Muun' do
   use_frameworks! :linkage => :static
 
   pod 'core', :path => '../core', :testspecs => ['Tests'] 

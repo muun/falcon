@@ -9,7 +9,8 @@
 import Foundation
 import XCTest
 @testable import core
-@testable import falcon
+@testable import Muun
+import Libwallet
 
 class TransactionSchemeV2Tests: XCTestCase {
 
@@ -36,7 +37,8 @@ class TransactionSchemeV2Tests: XCTestCase {
                 amount: Satoshis.from(bitcoin: 9.9995),
                 fee: Satoshis(value: 0),
                 change: nil
-            )
+            ),
+            nonces: LibwalletGenerateMusigNonces(1)!
         )
     }
 

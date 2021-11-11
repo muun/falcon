@@ -14,6 +14,7 @@ class HomeViewController: MUViewController {
     fileprivate lazy var presenter = instancePresenter(HomePresenter.init, delegate: self)
 
     private var homeView: HomeView!
+    private var companion: HomeCompanion = .none
 
     override var screenLoggingName: String {
         return "home"
@@ -62,15 +63,10 @@ class HomeViewController: MUViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        if presenter.shouldDisplayWelcomeMessage() {
-            presentWelcomePopUp()
-        }
     }
 
     private func populateView() {
         populateBalanceView()
-        decideBackUpCTA()
         homeView.updateBalanceAndChevron(state: presenter.getOperationsState())
     }
 
@@ -131,11 +127,6 @@ class HomeViewController: MUViewController {
         }
     }
 
-    private func presentWelcomePopUp() {
-        show(popUp: WelcomePopUpView(), duration: nil)
-        presenter.setWelcomeMessageSeen()
-    }
-
     private func populateBalanceView() {
         homeView.setUp(
             btcBalance: presenter.getBTCBalance(),
@@ -144,16 +135,17 @@ class HomeViewController: MUViewController {
         )
     }
 
-    private func decideBackUpCTA() {
-        if presenter.isAnonUser() {
-            homeView.addBackUpCTA()
-        } else {
-            homeView.removeBackUpCTA()
-        }
-    }
 }
 
 extension HomeViewController: HomePresenterDelegate {
+
+    func showWelcome() {
+        _ = show(popUp: WelcomePopUpView(), duration: nil)
+    }
+
+    func showTaprootActivated() {
+        _ = show(popUp: TaprootActivatedPopup(delegate: self), duration: nil)
+    }
 
     func didReceiveNewOperation(amount: MonetaryAmount, direction: OperationDirection) {
         homeView.displayOpsBadge(bitcoinAmount: amount, direction: direction)
@@ -169,6 +161,23 @@ extension HomeViewController: HomePresenterDelegate {
 
     func onBalanceChange(_ balance: MonetaryAmount) {
         populateBalanceView()
+    }
+
+    func onCompanionChange(_ companion: HomeCompanion) {
+
+        self.companion = companion
+        switch companion {
+        case .backUp:
+            homeView.show(actionCard: .homeBackUp())
+        case .activateTaproot:
+            homeView.show(actionCard: .activateTaproot())
+        case .preactiveTaproot:
+            homeView.show(actionCard: .activateTaproot())
+        case .blockClock(let blocksLeft):
+            homeView.show(blocksLeft: blocksLeft)
+        case .none:
+            homeView.hideCompanion()
+        }
     }
 
 }
@@ -190,9 +199,32 @@ extension HomeViewController: HomeViewDelegate {
         navigationController!.present(txListNavBar, animated: true)
     }
 
-    func backUpTap() {
-        SecurityCenterViewController.origin = .emptyAnonUser
-        tabBarController!.selectedIndex = 1
+    func companionTap() {
+        switch companion {
+        case .backUp:
+            SecurityCenterViewController.origin = .emptyAnonUser
+            tabBarController!.selectedIndex = 1
+
+        case .activateTaproot:
+            pushTo(SlidesViewController(
+                configuration: .taprootActivation(successFeedback: FeedbackInfo.taprootActive)
+            ))
+
+        case .preactiveTaproot(let blocksLeft):
+            pushTo(SlidesViewController(
+                configuration: .taprootActivation(successFeedback: FeedbackInfo.taprootPreactived(blocksLeft: blocksLeft))
+            ))
+
+        case .blockClock(let blocksLeft):
+            navigationController!.pushViewController(
+                FeedbackViewController(feedback: FeedbackInfo.taprootPreactivationCountdown(blocksLeft: blocksLeft)),
+                animated: true
+            )
+
+        case .none:
+            // Do nothing
+            ()
+        }
     }
 
     func balanceTap() {
@@ -211,6 +243,13 @@ extension HomeViewController: TransactionListViewControllerDelegate {
         receiveButtonTap()
     }
 
+}
+
+extension HomeViewController: TaprootActivatedPopupDelegate {
+
+    func dismiss(taprootActivated: TaprootActivatedPopup) {
+        self.dismissPopUp()
+    }
 }
 
 extension HomeViewController: UITestablePage {

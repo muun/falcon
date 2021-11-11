@@ -13,10 +13,8 @@ import GoogleAPIClientForREST
 
 protocol ShareEmergencyKitPresenterDelegate: BasePresenterDelegate {
     func gotEmergencyKit(_ kit: EmergencyKit)
-    func errorUploadingToDrive()
-    func uploadToDriveSuccessful(link: URL?)
-    func errorUploadingToICloud()
-    func uploadToICloudSuccessful(link: URL?)
+    func errorUploadingToCloud(option: EmergencyKitSavingOption)
+    func uploadToCloudSuccessful(kit:EmergencyKit, option: EmergencyKitSavingOption, link: URL?)
 }
 
 class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: BasePresenter<Delegate> {
@@ -24,15 +22,22 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
     fileprivate let emergencyKitDataSelector: EmergencyKitDataSelector
 
     fileprivate let emergencyKitExportedAction: ReportEmergencyKitExportedAction
-    fileprivate let emergencyKitVerificationCodesRepository: EmergencyKitVerificationCodesRepository
+    fileprivate let emergencyKitVerificationCodesRepository: EmergencyKitRepository
+    fileprivate let supportAction: SupportAction
+    fileprivate let sessionActions: SessionActions
 
     init(delegate: Delegate,
          emergencyKitExportedAction: ReportEmergencyKitExportedAction,
          emergencyKitDataSelector: EmergencyKitDataSelector,
-         emergencyKitVerificationCodesRepository: EmergencyKitVerificationCodesRepository) {
+         emergencyKitVerificationCodesRepository: EmergencyKitRepository,
+         feedbackAction: SupportAction,
+         sessionActions: SessionActions
+    ) {
         self.emergencyKitExportedAction = emergencyKitExportedAction
         self.emergencyKitDataSelector = emergencyKitDataSelector
         self.emergencyKitVerificationCodesRepository = emergencyKitVerificationCodesRepository
+        self.supportAction = feedbackAction
+        self.sessionActions = sessionActions
 
         super.init(delegate: delegate)
     }
@@ -44,19 +49,15 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
 
         subscribeTo(obs) { data in
             let kit = EmergencyKit.generate(data: data)
-            self.reportGenerated(verificationCode: kit.verificationCode)
+            self.reportGenerated(kit: kit)
             self.emergencyKitVerificationCodesRepository.store(code: kit.verificationCode)
             self.delegate.gotEmergencyKit(kit)
         }
     }
 
     // When the EK gets generated we let houston know
-    private func reportGenerated(verificationCode: String) {
-        emergencyKitExportedAction.run(date: Date(), verificationCode: verificationCode, isVerified: false)
-    }
-
-    func reportExported(verificationCode: String) {
-        emergencyKitExportedAction.run(date: Date(), verificationCode: verificationCode, isVerified: true)
+    private func reportGenerated(kit: EmergencyKit) {
+        emergencyKitExportedAction.run(kit: kit.generated())
     }
 
     func getOptions() -> [EKOption] {
@@ -70,42 +71,78 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
         if isICloudAvailable() {
             // iCloud is recommended if it is available and drive is not available
             options.append((option: .icloud, isRecommended: !isDriveAvailable(), isEnabled: true))
-            options.append((option: .manually, isRecommended: false, isEnabled: true))
+            options.append((option: .anotherCloud, isRecommended: false, isEnabled: true))
         } else {
             // if iCloud is not available, it should be at the bottom of the list
-            options.append((option: .manually, isRecommended: false, isEnabled: true))
+            options.append((option: .anotherCloud, isRecommended: false, isEnabled: true))
             options.append((option: .icloud, isRecommended: false, isEnabled: false))
         }
 
         return options
     }
 
-    func uploadEmergencyKitToDrive(user: GIDGoogleUser, ekUrl: URL, fileName: String) {
+    private func reportExportedViaCloud(kit: EmergencyKit, option: EmergencyKitSavingOption, link: URL?) {
+        
+        emergencyKitExportedAction.reset()
+        subscribeTo(emergencyKitExportedAction.getState()) { state in
+            switch state.type {
+            case .VALUE:
+                self.delegate.uploadToCloudSuccessful(kit: kit, option: option, link: link)
+            case .ERROR:
+                if let error = state.error {
+                    self.handleError(error)
+                }
+            case .EMPTY, .LOADING:
+                // Nothing to do
+                ()
+            }
+        }
+
+        let method: ExportEmergencyKit.Method
+        switch option {
+        case .drive:
+            method = .drive
+        case .icloud:
+            method = .icloud
+        case .anotherCloud:
+            Logger.fatal("Got another cloud after successful export")
+        }
+        emergencyKitExportedAction.run(kit: kit.exported(method: method))
+    }
+
+    func uploadEmergencyKitToDrive(googleUser: GIDGoogleUser, kit: EmergencyKit, fileName: String) {
+        guard let user = sessionActions.getUser() else {
+            Logger.fatal("Unlogged user managed to upload a kit to drive")
+        }
+
         GoogleDriveHelper.uploadEK(
+            googleUser: googleUser,
+            emergencyKitUrl: kit.url,
+            fileName: fileName,
             user: user,
-            emergencyKitUrl: ekUrl,
-            fileName: fileName) { webViewLinkString, err in
+            kitVersion: kit.version
+        ) { webViewLinkString, err in
 
             if err != nil {
-                self.delegate.errorUploadingToDrive()
+                self.delegate.errorUploadingToCloud(option: .drive)
                 return
             }
 
             let url = URL(string: webViewLinkString ?? "") // This will be nil if the link is nil
-            self.delegate.uploadToDriveSuccessful(link: url)
+            self.reportExportedViaCloud(kit: kit, option: .drive, link: url)
         }
     }
 
-    func uploadEmergencyKitToICloud(ekUrl: URL, fileName: String) {
-        ICloudHelper.uploadEK(emergencyKitUrl: ekUrl, fileName: fileName) { kitUrl, err in
+    func uploadEmergencyKitToICloud(kit: EmergencyKit, fileName: String) {
+        ICloudHelper.uploadEK(emergencyKitUrl: kit.url, fileName: fileName) { kitUrl, err in
             if err != nil {
-                self.delegate.errorUploadingToICloud()
+                self.delegate.errorUploadingToCloud(option: .icloud)
                 return
             }
 
             var components = kitUrl.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
             components?.scheme = "shareddocuments"
-            self.delegate.uploadToICloudSuccessful(link: components?.url)
+            self.reportExportedViaCloud(kit: kit, option: .icloud, link: components?.url)
         }
     }
 
@@ -128,5 +165,9 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
         }
 
         return true
+    }
+
+    func request(cloud: String) {
+        supportAction.run(type: .cloudRequest, text: cloud)
     }
 }

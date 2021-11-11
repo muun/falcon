@@ -10,10 +10,11 @@ import UIKit
 
 class ActivateEmergencyKitViewController: MUViewController {
 
-    private let verificationCode: String
+    private let kit: EmergencyKit
     private let shareOption: String?
     private var activateView: ActivateEmergencyKitView!
     private let helpNavigationController = UINavigationController()
+    private let flow: EmergencyKitFlow
 
     fileprivate lazy var presenter = instancePresenter(ActivateEmergencyKitPresenter.init, delegate: self)
 
@@ -21,9 +22,10 @@ class ActivateEmergencyKitViewController: MUViewController {
         return "emergency_kit_verify"
     }
 
-    init(verificationCode: String, shareOption: String? = nil) {
-        self.verificationCode = verificationCode
+    init(kit: EmergencyKit, shareOption: String? = nil, flow: EmergencyKitFlow) {
+        self.kit = kit
         self.shareOption = shareOption
+        self.flow = flow
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -62,13 +64,20 @@ class ActivateEmergencyKitViewController: MUViewController {
     }
 
     fileprivate func setUpNavigation() {
-        title = L10n.ActivateEmergencyKitViewController.s1
+
+        switch flow {
+        case .export:
+            title = L10n.ActivateEmergencyKitViewController.s1
+
+        case .update:
+            ()
+        }
     }
 
     private func displayActivationCodeInViewForTesting() {
         #if DEBUG
         if ProcessInfo().arguments.contains("testMode") {
-            activateView.displayActivationCodeForTesting(verificationCode)
+            activateView.displayActivationCodeForTesting(kit.verificationCode)
         }
         #endif
     }
@@ -78,15 +87,12 @@ class ActivateEmergencyKitViewController: MUViewController {
 extension ActivateEmergencyKitViewController: ActivateEmergencyKitViewDelegate {
 
     func verifyCode(_ code: String) {
-        if code == verificationCode {
-            presenter.reportExported(verificationCode: code)
+        if code == kit.verificationCode {
+            showLoading("")
+            presenter.reportExported(kit: kit)
             logEvent("emergency_kit_exported", parameters: ["share_option": shareOption ?? "unknown"])
-
-            navigationController!.pushViewController(
-                FeedbackViewController(feedback: FeedbackInfo.emergencyKit), animated: true
-            )
         } else if presenter.isOld(code: code) {
-            let firstDigitsOfOriginalCode = String(describing: verificationCode.prefix(2))
+            let firstDigitsOfOriginalCode = String(describing: kit.verificationCode.prefix(2))
             activateView.oldCode(firstDigitsOfOriginalCode)
         } else {
             activateView.wrongCode()
@@ -101,4 +107,11 @@ extension ActivateEmergencyKitViewController: ActivateEmergencyKitViewDelegate {
 
 }
 
-extension ActivateEmergencyKitViewController: ActivateEmergencyKitPresenterDelegate {}
+extension ActivateEmergencyKitViewController: ActivateEmergencyKitPresenterDelegate {
+
+    func reported() {
+        navigationController!.pushViewController(
+                FeedbackViewController(feedback: flow.successFeedback), animated: true
+        )
+    }
+}

@@ -9,7 +9,7 @@
 import XCTest
 import RxBlocking
 @testable import core
-@testable import falcon
+@testable import Muun
 
 class HomePresenterTests: MuunTestCase {
     
@@ -107,6 +107,18 @@ class HomePresenterTests: MuunTestCase {
 }
 
 private class BalanceDelegate: ExpectablePresenterDelegate, HomePresenterDelegate {
+
+    func showWelcome() {
+        // Do nothing
+    }
+
+    func showTaprootActivated() {
+        // Do nothing
+    }
+
+    func onCompanionChange(_ companion: HomeCompanion) {
+        // Do nothing
+    }
 
     func didReceiveNewOperation(amount: MonetaryAmount, direction: OperationDirection) {
         // Do nothing

@@ -9,7 +9,7 @@
 import XCTest
 import RxSwift
 @testable import core
-@testable import falcon
+@testable import Muun
 
 // For some reason Swift thinks Notification is ambiguous in this file
 typealias Notification = core.Notification

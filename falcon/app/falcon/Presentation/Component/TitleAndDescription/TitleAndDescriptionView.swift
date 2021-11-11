@@ -104,6 +104,13 @@ class TitleAndDescriptionView: MUView {
         descriptionLabel.alpha = 1
     }
 
+    func fixCompressionResistance() {
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        titleLabel.setContentHuggingPriority(.required, for: .vertical)
+
+        descriptionLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        descriptionLabel.setContentHuggingPriority(.required, for: .vertical)
+    }
 }
 
 fileprivate extension Selector {

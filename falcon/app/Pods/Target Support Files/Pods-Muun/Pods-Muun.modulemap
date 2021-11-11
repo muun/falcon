@@ -1,0 +1,6 @@
+framework module Pods_Muun {
+  umbrella header "Pods-Muun-umbrella.h"
+
+  export *
+  module * { export * }
+}

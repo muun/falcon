@@ -67,7 +67,7 @@ final class SaveEmergencyKitOptionView: UIView {
         addSubview(labelsView)
 
         NSLayoutConstraint.activate([
-            labelsView.topAnchor.constraint(equalTo: topAnchor, constant: .sideMargin),
+            labelsView.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             labelsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
             labelsView.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 20)
         ])
@@ -128,7 +128,7 @@ final class SaveEmergencyKitOptionView: UIView {
         chevron.translatesAutoresizingMaskIntoConstraints = false
         chevron.image = Asset.Assets.chevron.image
         chevron.contentMode = .scaleAspectFit
-        chevron.tintColor = Asset.Colors.muunGrayLight.color
+        chevron.tintColor = Asset.Colors.muunGrayDark.color
         addSubview(chevron)
 
         NSLayoutConstraint.activate([

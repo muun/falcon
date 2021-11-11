@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import falcon
+@testable import Muun
 
 class BlockHelperTests: MuunTestCase {
 

@@ -21,6 +21,7 @@ class MuunInput: NSObject {
     let _submarineSwapV1: InputSubmarineSwapV1?
     let _submarineSwapV2: InputSubmarineSwapV2?
     let _incomingSwap: InputIncomingSwap?
+    let _muunPublicNonce: Data?
 
     init(prevOut: MuunOutput,
          address: MuunAddress,
@@ -28,7 +29,8 @@ class MuunInput: NSObject {
          muunSignature: Signature?,
          submarineSwapV1: InputSubmarineSwapV1?,
          submarineSwapV2: InputSubmarineSwapV2?,
-         incomingSwap: InputIncomingSwap?) {
+         incomingSwap: InputIncomingSwap?,
+         muunPublicNonce: Data?) {
         self._prevOut = prevOut
         self._address = address
         self._userSignature = userSignature
@@ -36,6 +38,7 @@ class MuunInput: NSObject {
         self._submarineSwapV1 = submarineSwapV1
         self._submarineSwapV2 = submarineSwapV2
         self._incomingSwap = incomingSwap
+        self._muunPublicNonce = muunPublicNonce
 
         super.init()
     }
@@ -170,6 +173,10 @@ extension MuunInput: LibwalletInputProtocol {
             return sw
         }
         return nil
+    }
+
+    func muunPublicNonce() -> Data? {
+        return _muunPublicNonce
     }
 
 }

@@ -41,6 +41,7 @@ private struct StoredUserPreferences: Codable {
     var receiveStrictMode: Bool?
     var seenNewHome: Bool?
     var seenLnurlFirstTime: Bool?
+    var defaultAddressType: AddressType?
 
     init() {
     }
@@ -49,13 +50,15 @@ private struct StoredUserPreferences: Codable {
         self.receiveStrictMode = prefs.receiveStrictMode
         self.seenNewHome = prefs.seenNewHome
         self.seenLnurlFirstTime = prefs.seenLnurlFirstTime
+        self.defaultAddressType = prefs.defaultAddressType
     }
 
     func toModel() -> UserPreferences {
         return UserPreferences(
             receiveStrictMode: receiveStrictMode ?? false,
             seenNewHome: seenNewHome ?? false,
-            seenLnurlFirstTime: seenLnurlFirstTime ?? false
+            seenLnurlFirstTime: seenLnurlFirstTime ?? false,
+            defaultAddressType: defaultAddressType ?? .segwit
         )
     }
 }

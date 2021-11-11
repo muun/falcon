@@ -8,24 +8,45 @@
 
 import core
 
-protocol ActivateEmergencyKitPresenterDelegate: BasePresenterDelegate {}
+protocol ActivateEmergencyKitPresenterDelegate: BasePresenterDelegate {
+    func reported()
+}
 
 class ActivateEmergencyKitPresenter<Delegate: ActivateEmergencyKitPresenterDelegate>: BasePresenter<Delegate> {
 
     private let emergencyKitExportedAction: ReportEmergencyKitExportedAction
-    fileprivate let emergencyKitVerificationCodesRepository: EmergencyKitVerificationCodesRepository
+    fileprivate let emergencyKitVerificationCodesRepository: EmergencyKitRepository
 
     init(delegate: Delegate,
          emergencyKitExportedAction: ReportEmergencyKitExportedAction,
-         emergencyKitVerificationCodesRepository: EmergencyKitVerificationCodesRepository) {
+         emergencyKitVerificationCodesRepository: EmergencyKitRepository) {
         self.emergencyKitExportedAction = emergencyKitExportedAction
         self.emergencyKitVerificationCodesRepository = emergencyKitVerificationCodesRepository
 
         super.init(delegate: delegate)
     }
 
-    func reportExported(verificationCode: String) {
-        emergencyKitExportedAction.run(date: Date(), verificationCode: verificationCode, isVerified: true)
+    override func setUp() {
+        super.setUp()
+
+        emergencyKitExportedAction.reset()
+        subscribeTo(emergencyKitExportedAction.getState()) { state in
+            switch state.type {
+            case .VALUE:
+                self.delegate?.reported()
+            case .ERROR:
+                if let error = state.error {
+                    self.handleError(error)
+                }
+            case .EMPTY, .LOADING:
+                // Nothing to do
+                ()
+            }
+        }
+    }
+
+    func reportExported(kit: EmergencyKit) {
+        emergencyKitExportedAction.run(kit: kit.exported(method: .manual))
     }
 
     func isOld(code: String) -> Bool {

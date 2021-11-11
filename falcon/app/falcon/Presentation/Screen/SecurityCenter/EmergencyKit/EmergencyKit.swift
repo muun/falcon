@@ -13,6 +13,7 @@ class EmergencyKit {
 
     let verificationCode: String
     let url: URL
+    let version: Int
 
     static func generate(data: EmergencyKitData) -> EmergencyKit {
         let input = LibwalletEKInput()
@@ -37,15 +38,20 @@ class EmergencyKit {
 
             try FileManager.default.removeItem(at: srcUrl)
 
-            return EmergencyKit(url: destUrl, verificationCode: out.verificationCode)
+            return EmergencyKit(
+                url: destUrl,
+                verificationCode: out.verificationCode,
+                version: out.version
+            )
         } catch {
             Logger.fatal(error: error)
         }
     }
 
-    private init(url: URL, verificationCode: String) {
+    private init(url: URL, verificationCode: String, version: Int) {
         self.url = url
         self.verificationCode = verificationCode
+        self.version = version
     }
 
     func dispose() {
@@ -54,5 +60,25 @@ class EmergencyKit {
         } catch {
             Logger.log(.warn, "Could not remove emergency kit PDF")
         }
+    }
+
+    func generated() -> ExportEmergencyKit {
+        return ExportEmergencyKit(
+            lastExportedAt: Date(),
+            verificationCode: verificationCode,
+            verified: false,
+            version: version,
+            method: nil
+        )
+    }
+
+    func exported(method: ExportEmergencyKit.Method) -> ExportEmergencyKit {
+        return ExportEmergencyKit(
+            lastExportedAt: Date(),
+            verificationCode: verificationCode,
+            verified: true,
+            version: version,
+            method: method
+        )
     }
 }

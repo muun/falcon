@@ -10,7 +10,6 @@ import UIKit
 import core
 
 protocol OnChainAdvancedOptionsViewDelegate: AnyObject {
-    func didTapOnCompatibilityAddressInfo()
     func didTapOnAddressTypeControl()
     func didTapAddAmount()
     func didToggleOptions(visible: Bool)
@@ -22,7 +21,7 @@ class OnChainAdvancedOptionsView: UIView {
     private let headerStackView = UIStackView()
     private let toggleLabel = UILabel()
     private let chevronView = UIImageView(image: Asset.Assets.chevronAlt.image)
-    private let addressTypeOptionView = AddressTypeOptionView()
+    private let addressTypeOptionView = SelectAddressTypeOptionView()
     private let amountOptionView = AmountOptionView()
 
     weak var delegate: OnChainAdvancedOptionsViewDelegate?
@@ -142,10 +141,6 @@ class OnChainAdvancedOptionsView: UIView {
 }
 
 extension OnChainAdvancedOptionsView: AddressTypeOptionViewDelegate {
-
-    func didTapHelp() {
-        delegate?.didTapOnCompatibilityAddressInfo()
-    }
 
     func didTapControl() {
         delegate?.didTapOnAddressTypeControl()

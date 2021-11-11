@@ -25,7 +25,7 @@ struct PartiallySignedTransaction {
         let bytes: Data
     }
 
-    func sign(key: WalletPrivateKey, muunKey: WalletPublicKey, expectations: Expectations)
+    func sign(key: WalletPrivateKey, muunKey: WalletPublicKey, expectations: Expectations, nonces: LibwalletMusigNonces)
         throws -> SignedTransaction {
 
         let inputList = LibwalletInputList()
@@ -34,7 +34,7 @@ struct PartiallySignedTransaction {
         }
 
         let partial = try doWithError({ error in
-            LibwalletNewPartiallySignedTransaction(inputList, Data(hex: hexTransaction), error)
+            LibwalletNewPartiallySignedTransaction(inputList, Data(hex: hexTransaction), nonces, error)
         })
 
         let expectations = LibwalletNewSigningExpectations(

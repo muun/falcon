@@ -9,18 +9,26 @@
 import UIKit
 import core
 
-enum AddressType: CustomStringConvertible {
-    case segwit
-    case legacy
+extension AddressType {
 
-    var description: String {
+    var name: String {
         switch self {
         case .segwit: return L10n.AddressTypeOptionView.segwit
         case .legacy: return L10n.AddressTypeOptionView.legacy
+        case .taproot: return L10n.AddressTypeOptionView.taproot
         }
     }
 
-    static let allValues = [segwit, legacy]
+    var description: String {
+        switch self {
+        case .legacy:
+            return L10n.AddressTypeOptionView.legacyDescription
+        case .segwit:
+            return L10n.AddressTypeOptionView.segwitDescription
+        case .taproot:
+            return L10n.AddressTypeOptionView.taprootDescription
+        }
+    }
 }
 
 protocol ReceiveOnChainViewDelegate: ReceiveDelegate {
@@ -35,26 +43,36 @@ final class ReceiveOnChainView: UIView {
     private let qrCodeView = QRCodeWithActionsView()
     private let advancedOptionsView = OnChainAdvancedOptionsView()
 
-    private let segwitAddress: String
-    private let legacyAddress: String
+    private let addressSet: AddressSet
     private weak var delegate: ReceiveOnChainViewDelegate?
 
-    var addressType: AddressType = .segwit {
+    var addressType: AddressType {
         didSet {
             updateQRCode()
             advancedOptionsView.setAddressType(addressType)
         }
     }
+    let defaultAddressType: AddressType
 
     private var currentAddress: String {
-        (addressType == .segwit) ? segwitAddress : legacyAddress
+        switch addressType {
+        case .segwit:
+            return addressSet.segwit
+        case .legacy:
+            return addressSet.legacy
+        case .taproot:
+            return addressSet.taproot
+        }
     }
 
     private var customAmountInBTC: Decimal?
 
-    init(segwit: String, legacy: String, delegate: ReceiveOnChainViewDelegate?) {
-        segwitAddress = segwit
-        legacyAddress = legacy
+    init(addressSet: AddressSet,
+         delegate: ReceiveOnChainViewDelegate?,
+         defaultAddressType: AddressType) {
+        self.defaultAddressType = defaultAddressType
+        self.addressType = defaultAddressType
+        self.addressSet = addressSet
         self.delegate = delegate
 
         super.init(frame: .zero)
@@ -129,15 +147,7 @@ final class ReceiveOnChainView: UIView {
             // Uppercase segwit addresses to trigger alphanumeric mode in
             // the QR code, which reduces QR density
             // TODO: Bring back the uppercase once all wallets support it
-            let stringData: Data?
-            if addressType == .segwit {
-                stringData = segwitAddress.data(using: .utf8)
-            } else {
-                stringData = legacyAddress.data(using: .utf8)
-            }
-
-            qrCodeView.data = stringData
-
+            qrCodeView.data = currentAddress.data(using: .utf8)
         }
 
         qrCodeView.label = currentAddress
@@ -155,10 +165,10 @@ final class ReceiveOnChainView: UIView {
 
     func resetOptions() {
         customAmountInBTC = nil
-        addressType = .segwit
+        addressType = defaultAddressType
 
         advancedOptionsView.setAmount(nil)
-        advancedOptionsView.setAddressType(.segwit)
+        advancedOptionsView.setAddressType(addressType)
     }
 
 }
@@ -184,10 +194,6 @@ extension ReceiveOnChainView: QRCodeWithActionsViewDelegate {
 }
 
 extension ReceiveOnChainView: OnChainAdvancedOptionsViewDelegate {
-
-    func didTapOnCompatibilityAddressInfo() {
-        delegate?.didTapOnCompatibilityAddressInfo()
-    }
 
     func didTapOnAddressTypeControl() {
         delegate?.didTapOnAddressTypeControl()

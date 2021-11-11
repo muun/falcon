@@ -46,6 +46,7 @@ public struct OperationJson: Codable {
     let outpoints: [String]? // The complete utxoSet, sorted as used for fee computation
 
     let incomingSwap: IncomingSwapJson?
+    var userPublicNoncesHex: [String]?
 }
 
 public struct OperationMetadataJson: Codable {

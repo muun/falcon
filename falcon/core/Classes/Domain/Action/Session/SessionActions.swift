@@ -206,13 +206,19 @@ public class SessionActions {
         return user.primaryCurrencyWithValidExchangeRate(window: window)
     }
 
-    func setEmergencyKitExported(date: Date) {
+    func exported(kit: ExportEmergencyKit) {
         guard let user = getUser() else {
             return
         }
 
+        var newVersions = user.exportedKitVersions ?? []
+        if !newVersions.contains(kit.version) {
+            newVersions.append(kit.version)
+        }
+
         var updatedUser = user
-        updatedUser.emergencyKitLastExportedDate = date
+        updatedUser.emergencyKit = kit
+        updatedUser.exportedKitVersions = newVersions
         userRepository.setUser(updatedUser)
     }
 

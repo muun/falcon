@@ -8,6 +8,7 @@
 
 import Foundation
 import core
+import Libwallet
 
 protocol SettingsPresenterDelegate: BasePresenterDelegate {
     func successfullyUpdateUser()
@@ -34,6 +35,7 @@ enum SecurityRow {
 
 enum AdvancedRow {
     case lightningNetwork
+    case onchain
 }
 
 class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Delegate> {
@@ -44,6 +46,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     private let changeCurrencyAction: ChangeCurrencyAction
     private let operationActions: OperationActions
     private let balanceActions: BalanceActions
+    private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
 
     var sections: [SettingsSection] = []
 
@@ -59,13 +62,15 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
          exchangeRateWindowRepository: ExchangeRateWindowRepository,
          changeCurrencyAction: ChangeCurrencyAction,
          operationActions: OperationActions,
-         balanceActions: BalanceActions) {
+         balanceActions: BalanceActions,
+         userActivatedFeatureSelector: UserActivatedFeaturesSelector) {
         self.logoutAction = logoutAction
         self.sessionActions = sessionActions
         self.exchangeRateRepository = exchangeRateWindowRepository
         self.changeCurrencyAction = changeCurrencyAction
         self.operationActions = operationActions
         self.balanceActions = balanceActions
+        self.userActivatedFeatureSelector = userActivatedFeatureSelector
 
         super.init(delegate: delegate)
     }
@@ -104,7 +109,12 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
             sections.append(.security([.changePassword]))
         }
 
-        sections.append(.advanced([.lightningNetwork]))
+        switch userActivatedFeatureSelector.get(for: Libwallet.userActivatedFeatureTaproot()!) {
+        case .active, .preactivated, .scheduledActivation:
+            sections.append(.advanced([.onchain, .lightningNetwork]))
+        default:
+            sections.append(.advanced([.lightningNetwork]))
+        }
 
         if sessionActions.isAnonUser() {
             sections.append(.deleteWallet)
@@ -180,5 +190,14 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     func hasPendingIncomingSwapOperations() -> Bool {
         return hasPendingIncomingSwaps
     }
+
+#if DEBUG
+    func debugChangeTaprootActivation() {
+        userActivatedFeatureSelector.debugChangeTaprootActivation()
+        delegate.showMessage(
+            "New status \(userActivatedFeatureSelector.get(for: Libwallet.userActivatedFeatureTaproot()!))"
+        )
+    }
+#endif
 
 }

@@ -116,6 +116,11 @@ class BlockHelper {
         return Int(log(x) / log(base))
     }
 
+    public static func hoursFor(_ blocks: UInt) -> Int {
+        let secs = Double(BlockHelper.timeInSecs(numBlocks: blocks, certainty: blockConfirmationCertainty))
+        return Int(ceil(secs / (60 * 60)))
+    }
+
     public static func timeFor(_ blocks: UInt) -> String {
         let secs = Double(BlockHelper.timeInSecs(numBlocks: blocks, certainty: blockConfirmationCertainty))
         var roundedSecs: Int = 0

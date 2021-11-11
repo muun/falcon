@@ -15,6 +15,41 @@ protocol TextInputViewDelegate: AnyObject {
 @IBDesignable
 class TextInputView: MUView {
 
+    enum Style {
+        case `default`, small
+
+        var font: UIFont {
+            switch self {
+            case .default:
+                return Constant.Fonts.system(size: .h1, weight: .light)
+            case .small:
+                return Constant.Fonts.description
+            }
+        }
+
+        var tintColor: UIColor {
+            Asset.Colors.muunBlue.color
+        }
+
+        var textColor: UIColor {
+            switch self {
+            case .default:
+                return Asset.Colors.title.color
+            case .small:
+                return Asset.Colors.black.color
+            }
+        }
+
+        var showsAccessory: Bool {
+            switch self {
+            case .default:
+                return true
+            case .small:
+                return false
+            }
+        }
+    }
+
     @IBOutlet private weak var textfieldTopLabel: UILabel!
     @IBOutlet private weak var textfield: UITextField!
     @IBOutlet private weak var textfieldBottomLabel: UILabel!
@@ -25,6 +60,12 @@ class TextInputView: MUView {
     fileprivate var bottomIsError = false
 
     weak var delegate: TextInputViewDelegate?
+
+    public var style: Style = .default {
+        didSet {
+            updateTextfieldStyle()
+        }
+    }
 
     public var isPassword: Bool = false {
         didSet {
@@ -88,13 +129,20 @@ class TextInputView: MUView {
     fileprivate func setUpTextfield() {
         textfield.delegate = self
         textfield.placeholder = ""
-        textfield.tintColor = Asset.Colors.muunBlue.color
-        textfield.font = Constant.Fonts.system(size: .h1, weight: .light)
         textfield.clearsOnBeginEditing = false
-        textfield.textColor = Asset.Colors.title.color
+        updateTextfieldStyle()
 
         textfieldBottomBar.backgroundColor = Asset.Colors.muunGrayLight.color
         textfieldBottomBarHeightConstraint.constant = 1
+    }
+
+    private func updateTextfieldStyle() {
+        textfield.tintColor = style.tintColor
+        textfield.font = style.font
+        textfield.textColor = style.textColor
+        accessoryButton.isEnabled = style.showsAccessory
+        accessoryButton.isHidden = !style.showsAccessory
+        accessoryButton.isUserInteractionEnabled = style.showsAccessory
     }
 
     @IBAction fileprivate func accessoryButtonTouched(_ sender: Any) {
@@ -211,7 +259,9 @@ extension TextInputView: UITextFieldDelegate {
             let updatedText = text.replacingCharacters(in: textRange, with: string)
             delegate?.onTextChange(textInputView: self, text: updatedText)
 
-            accessoryButton.isHidden = (updatedText == "")
+            if style.showsAccessory {
+                accessoryButton.isHidden = (updatedText == "")
+            }
         }
         return true
     }

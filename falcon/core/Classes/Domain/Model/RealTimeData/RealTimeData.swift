@@ -15,6 +15,12 @@ public struct RealTimeData {
     let currentBlockchainHeight: Int
     let forwardingPolicies: [ForwardingPolicy]
     let minFeeRateInWeightUnits: Double
+    let features: [FeatureFlags]
+}
+
+public enum FeatureFlags: String, RawRepresentable {
+    case Taproot = "TAPROOT"
+    case TaprootPreactivation = "TAPROOT_PREACTIVATION"
 }
 
 public struct FeeWindow: Codable {

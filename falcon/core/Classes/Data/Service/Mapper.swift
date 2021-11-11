@@ -222,6 +222,16 @@ extension NotificationJson.MessagePayloadJson: ModelOperationConvertible {
         case .withdrawalResult: return .withdrawalResult
 
         case .getSatelliteState: return .getSatelliteState
+
+        case .eventCommunication(let type):
+            switch type {
+            case .taprootActivated:
+                return .eventCommunication(type: .taprootActivated)
+            case .taprootPreactivation:
+                return .eventCommunication(type: .taprootPreactivation)
+            }
+
+        case .noOp: return .noOp
         }
     }
 
@@ -265,7 +275,9 @@ extension UserJson: ModelConvertible {
                     hasP2PEnabled: hasP2PEnabled,
                     hasExportedKeys: hasExportedKeys,
                     createdAt: createdAt,
-                    emergencyKitLastExportedDate: emergencyKitLastExportedAt)
+                    emergencyKit: emergencyKit?.toModel(),
+                    exportedKitVersions: exportedKitVersions
+        )
     }
 
 }
@@ -286,8 +298,10 @@ extension User: APIConvertible {
                         hasP2PEnabled: hasP2PEnabled,
                         hasExportedKeys: hasExportedKeys ?? false,
                         createdAt: createdAt ?? nil,
-                        emergencyKitLastExportedAt: emergencyKitLastExportedDate,
-                        preferences: nil)
+                        preferences: nil,
+                        emergencyKit: nil,
+                        exportedKitVersions: exportedKitVersions ?? []
+        )
     }
 
 }
@@ -298,10 +312,53 @@ extension ExportEmergencyKit: APIConvertible {
         return ExportEmergencyKitJson(
             lastExportedAt: lastExportedAt,
             verificationCode: verificationCode,
-            verified: verified
+            verified: verified,
+            version: version,
+            method: method?.toJson()
         )
     }
 
+}
+
+extension ExportEmergencyKitJson: ModelConvertible {
+
+    func toModel() -> ExportEmergencyKit {
+        return ExportEmergencyKit(
+            lastExportedAt: lastExportedAt,
+            verificationCode: verificationCode,
+            verified: verified,
+            version: version,
+            method: method?.toModel()
+        )
+    }
+}
+
+extension ExportEmergencyKitJson.Method: ModelConvertible {
+
+    func toModel() -> ExportEmergencyKit.Method {
+        switch self {
+        case .drive:
+            return .drive
+        case .icloud:
+            return .icloud
+        case .manual:
+            return .manual
+        }
+    }
+}
+
+extension ExportEmergencyKit.Method: APIConvertible {
+
+    func toJson() -> ExportEmergencyKitJson.Method {
+        switch self {
+        case .drive:
+            return .drive
+        case .icloud:
+            return .icloud
+        case .manual:
+            return .manual
+        }
+    }
 }
 
 extension PhoneNumber: APIConvertible {
@@ -756,7 +813,8 @@ extension Operation: APIConvertible {
             swap: submarineSwap?.toJson(),
             description: description,
             outpoints: outpoints,
-            incomingSwap: nil)
+            incomingSwap: nil,
+            userPublicNoncesHex: [])
     }
 }
 
@@ -977,13 +1035,18 @@ extension SignatureJson: ModelConvertible {
 extension MuunInputJson: ModelConvertible {
 
     public func toModel() -> MuunInput {
+
+        let nonce = rawMuunPublicNonceHex.map { Data(hex: $0) }
+
         return MuunInput(prevOut: prevOut.toModel(),
                          address: address.toModel(),
                          userSignature: userSignature?.toModel(),
                          muunSignature: muunSignature?.toModel(),
                          submarineSwapV1: submarineSwap?.toModel(),
                          submarineSwapV2: submarineSwapV102?.toModel(),
-                         incomingSwap: incomingSwap?.toModel())
+                         incomingSwap: incomingSwap?.toModel(),
+                         muunPublicNonce: nonce
+        )
     }
 
 }
@@ -1082,7 +1145,12 @@ extension RealTimeDataJson: ModelConvertible {
                             exchangeRateWindow: exchangeRateWindow.toModel(),
                             currentBlockchainHeight: currentBlockchainHeight,
                             forwardingPolicies: forwardingPolicies.toModel(),
-                            minFeeRateInWeightUnits: minFeeRateInWeightUnits)
+                            minFeeRateInWeightUnits: minFeeRateInWeightUnits,
+                            features: features.compactMap({ feature in
+                                // We map this manually with a failable init so that we ignore
+                                // any new values the backend may know about but we don't
+                                FeatureFlags(rawValue: feature)
+                            }))
     }
 
 }

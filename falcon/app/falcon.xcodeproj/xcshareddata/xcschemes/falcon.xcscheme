@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A0E6F2F1211C785700821A80"
-               BuildableName = "falcon.app"
-               BlueprintName = "falcon"
+               BuildableName = "Muun.app"
+               BlueprintName = "Muun"
                ReferencedContainer = "container:falcon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,8 +32,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E6F2F1211C785700821A80"
-            BuildableName = "falcon.app"
-            BlueprintName = "falcon"
+            BuildableName = "Muun.app"
+            BlueprintName = "Muun"
             ReferencedContainer = "container:falcon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,8 +55,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E6F2F1211C785700821A80"
-            BuildableName = "falcon.app"
-            BlueprintName = "falcon"
+            BuildableName = "Muun.app"
+            BlueprintName = "Muun"
             ReferencedContainer = "container:falcon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -72,8 +72,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E6F2F1211C785700821A80"
-            BuildableName = "falcon.app"
-            BlueprintName = "falcon"
+            BuildableName = "Muun.app"
+            BlueprintName = "Muun"
             ReferencedContainer = "container:falcon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

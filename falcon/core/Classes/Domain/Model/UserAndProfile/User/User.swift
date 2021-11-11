@@ -29,10 +29,13 @@ public struct User: Codable {
     // in previous versions:
     var hasExportedKeys: Bool?
     public let createdAt: Date?
+    @available(*, deprecated, message: "use emergencyKit")
     var emergencyKitLastExportedDate: Date?
+    var emergencyKit: ExportEmergencyKit?
+    var exportedKitVersions: [Int]?
 
     func hasExportedEmergencyKit() -> Bool {
-        return emergencyKitLastExportedDate != nil
+        return emergencyKit != nil
     }
 
     public func primaryCurrencyWithValidExchangeRate(window: ExchangeRateWindow) -> String {
@@ -79,10 +82,26 @@ enum VerificationType: String {
     case CALL
 }
 
-struct ExportEmergencyKit: Codable {
+public struct ExportEmergencyKit: Codable {
     let lastExportedAt: Date
     let verificationCode: String
     let verified: Bool
+    let version: Int
+    let method: Method?
+
+    public init(lastExportedAt: Date, verificationCode: String, verified: Bool, version: Int, method: Method?) {
+        self.lastExportedAt = lastExportedAt
+        self.verificationCode = verificationCode
+        self.verified = verified
+        self.version = version
+        self.method = method
+    }
+
+    public enum Method: String, RawRepresentable, Codable {
+        case icloud,
+             drive,
+             manual
+    }
 }
 
 /*
@@ -92,15 +111,18 @@ public struct UserPreferences: Codable {
     public let receiveStrictMode: Bool
     public let seenNewHome: Bool
     public let seenLnurlFirstTime: Bool
+    public let defaultAddressType: AddressType
 
     public func copy(receiveStrictMode: Bool? = nil,
                      seenNewHome: Bool? = nil,
-                     seenLnurlFirstTime: Bool? = nil) -> UserPreferences {
+                     seenLnurlFirstTime: Bool? = nil,
+                     defaultAddressType: AddressType? = nil) -> UserPreferences {
 
         return UserPreferences(
             receiveStrictMode: receiveStrictMode ?? self.receiveStrictMode,
             seenNewHome: seenNewHome ?? self.seenNewHome,
-            seenLnurlFirstTime: seenLnurlFirstTime ?? self.seenLnurlFirstTime
+            seenLnurlFirstTime: seenLnurlFirstTime ?? self.seenLnurlFirstTime,
+            defaultAddressType: defaultAddressType ?? self.defaultAddressType
         )
     }
 }

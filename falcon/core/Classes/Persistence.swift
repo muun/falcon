@@ -74,4 +74,8 @@ public enum Persistence: String, CaseIterable {
     case emergencyKitVerificationCodes // [String]
 
     case userPreferences
+
+    case featureFlags
+
+    case preactivedTaproot
 }

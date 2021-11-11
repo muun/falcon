@@ -111,6 +111,10 @@ for bitcoin and lightning.";
 "Home.sendCTA" = "SEND";
 "Home.transactionListTooltip" = "Welcome to your new homescreen!
 Tap or swipe up to see your transactions.";
+
+"Home.activateTaproot" = "Level-up your payments. Save with each payment by activating Taproot.";
+"Home.activateTaprootHighlight" = "Level-up your payments.";
+
 /* Presentation/Screen/Home/HomeViewController.swift */
 "HomeViewController.s1" = "Report a problem";
 "HomeViewController.s2" = "Send feedback";
@@ -289,8 +293,13 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 "OnChainAdvancedOptionsView.hide" = "Hide settings";
 /* Presentation/Component/Receive/OnChain/AddressTypeOptionView.swift */
 "AddressTypeOptionView.label" = "Address type";
-"AddressTypeOptionView.segwit" = "SegWit";
+"AddressTypeOptionView.segwit" = "Segwit";
 "AddressTypeOptionView.legacy" = "Legacy";
+"AddressTypeOptionView.taproot" = "Taproot";
+"AddressTypeOptionView.segwitDescription" = "A relatively new address type, already widely accepted. It creates lighter transactions and saves you money on future network fees.";
+"AddressTypeOptionView.legacyDescription" = "The most widely accepted address type. Use it only when a service labels your Segwit addresses as invalid.";
+"AddressTypeOptionView.taprootDescription" = "The newest and most powerful address type. Many services are not yet compatible and may label it as invalid.";
+"AddressTypeOptionView.taprootActivation" = "Activates in ~%@ hours.";
 /* Presentation/Component/Receive/Lightning/LightningAdvancedOptionsView.swift */
 "LightningAdvancedOptionsView.header" = "Invoice settings";
 "LightningAdvancedOptionsView.hide" = "Hide settings";
@@ -445,54 +454,87 @@ Try to remember it.";
 "RecoveryToolViewController.s5" = "You can find our Recovery Tool and the instructions for this process at https://github.com/muun/recovery";
 /* SaveEmergencyKitOptionView.swift */
 "SaveEmergencyKitOptionView.driveTitle" = "Save to Drive";
-"SaveEmergencyKitOptionView.driveDescription" = "Use your Google account to save and access your kit.";
+"SaveEmergencyKitOptionView.driveDescription" = "Use your Google account to save and access your Kit.";
 "SaveEmergencyKitOptionView.icloudTitle" = "Save to iCloud";
-"SaveEmergencyKitOptionView.icloudDescription" = "Use your Apple account to save and access your kit.";
-"SaveEmergencyKitOptionView.icloudDisabledDescription" = "Enable iCloud on your phone settings to export your kit.";
-"SaveEmergencyKitOptionView.manuallyTitle" = "Save manually";
-"SaveEmergencyKitOptionView.manuallyDescription" = "Choose an application to save and access your kit.";
+"SaveEmergencyKitOptionView.icloudDescription" = "Use your Apple account to save and access your Kit.";
+"SaveEmergencyKitOptionView.icloudDisabledDescription" = "Enable iCloud on your phone settings to export your Kit.";
+"SaveEmergencyKitOptionView.anotherCloudTitle" = "Suggest another cloud";
+"SaveEmergencyKitOptionView.anotherCloudDescription" = "Tell us which cloud service you would like us to support.";
 "SaveEmergencyKitOptionView.recommended" = "Recommended";
 "SaveEmergencyKitOptionView.notEnabled" = "Not enabled";
 "SaveEmergencyKitOptionView.openInDrive" = "OPEN IN DRIVE";
-"SaveEmergencyKitOptionView.openInICloud" = "OPEN ICLOUD";
+"SaveEmergencyKitOptionView.openInICloud" = "OPEN IN ICLOUD";
 "SaveEmergencyKitOptionView.verifyTitle" = "Verify your Emergency Kit";
-"SaveEmergencyKitOptionView.verifyDescriptionDrive" = "You saved your kit to Google Drive. Before you go, find it and take a good look inside. Make sure you can do this in the future.";
-"SaveEmergencyKitOptionView.verifyDescriptionICloud" = "You saved your kit to iCloud. Before you go, find it and take a good look inside. Make sure you can do this in the future.";
+"SaveEmergencyKitOptionView.verifyDescriptionDrive" = "You saved your Kit to Google Drive. Before you go, find it and take a good look inside. Make sure you can do this in the future.";
+"SaveEmergencyKitOptionView.verifyDescriptionICloud" = "You saved your Kit to iCloud. Before you go, find it and take a good look inside. Make sure you can do this in the future.";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitView.swift */
-"ShareEmergencyKitView.title" = "Save your Emergency Kit";
-"ShareEmergencyKitView.description" = "We recommend using cloud storage, to ensure your kit is never lost. Is that safe?";
-"ShareEmergencyKitView.descriptionCTA" = "Is that safe?";
+"ShareEmergencyKitView.exportTitle" = "Save your Emergency Kit";
+"ShareEmergencyKitView.updateTitle" = "Update your Emergency Kit";
+"ShareEmergencyKitView.description" = "Choose your preferred cloud service to ensure your Kit is never lost.";
+"ShareEmergencyKitView.saveManually" = "I don’t want to use cloud storage";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitViewController.swift */
 "ShareEmergencyKitViewController.s1" = "Emergency Kit";
 "ShareEmergencyKitViewController.uploading" = "Uploading your Emergency Kit";
+"ShareEmergencyKitViewController.updating" = "Updating your Emergency Kit";
 "ShareEmergencyKitViewController.ekUploadErrorTitle" = "Your Emergency Kit could not be saved";
 "ShareEmergencyKitViewController.ekUploadErrorDescription" = "We couldn’t upload your Emergency Kit to the cloud. Please, check your connection and try again.";
 "ShareEmergencyKitViewController.alertRetry" = "Retry";
 "ShareEmergencyKitViewController.alertCancel" = "Cancel";
 "ShareEmergencyKitViewController.fileName" = "Muun - Emergency Kit.pdf";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ManualSaveEmergencyKitView.swift */
+"ManualSaveEmergencyKitView.title" = "Saving the Kit manually? Here’s some advice.";
+"ManualSaveEmergencyKitView.accesible" = "Make it accesible. You should be able to access your Kit at all times, even if your phone is lost, stolen or stops working.";
+"ManualSaveEmergencyKitView.accesibleBold" = "Make it accesible.";
+"ManualSaveEmergencyKitView.secrecy" = "Don’t prioritize secrecy. Remember, your Kit is encrypted. Without your Recovery Code, the Kit is harmless. ";
+"ManualSaveEmergencyKitView.secrecyBold" = "Don’t prioritize secrecy.";
+"ManualSaveEmergencyKitView.update" = "Make it easy to update. You should always have the latest Kit at hand, an old Kit won’t work.";
+"ManualSaveEmergencyKitView.updateBold" = "Make it easy to update.";
+"ManualSaveEmergencyKitView.save" = "SAVE MANUALLY";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/RequestCloudView.swift */
+"RequestCloudView.description" = "We plan to support more cloud services. Which one would you like to see added?";
+"RequestCloudView.send" = "SEND FEEDBACK";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Verify/VerifyEmergencyKitView.swift */
 "VerifyEmergencyKitView.done" = "DONE";
-/* Presentation/Screen/SecurityCenter/EmergencyKit/Slides/EmergencyKitSlidesViewController.swift */
-"EmergencyKitSlidesViewController.s1" = "Emergency Kit";
-"EmergencyKitSlidesViewController.s2" = "CREATE YOUR EMERGENCY KIT";
-"EmergencyKitSlidesViewController.s3" = "Swipe to continue";
-"EmergencyKitSlidesViewController.s4" = "One document";
-"EmergencyKitSlidesViewController.s5" = "Your private keys are securely encrypted with your Recovery Code, so you can save it online.";
-"EmergencyKitSlidesViewController.s6" = "Stored online";
-"EmergencyKitSlidesViewController.s7" = "Complete Ownership";
-"EmergencyKitSlidesViewController.s8" = "You haven’t finished exporting up your Emergency Kit. You can restart this setup later.";
-"EmergencyKitSlidesViewController.s9" = "Abort Emergency Kit export?";
-"EmergencyKitSlidesViewController.s10" = "Continue";
-"EmergencyKitSlidesViewController.s11" = "Abort";
-"EmergencyKitSlidesViewController.s12" = "Your Emergency Kit is a PDF document with information and instructions to independently transfer your funds.";
-"EmergencyKitSlidesViewController.s13" = "By combining the Emergency Kit and your Recovery Code, you will have total, undisputed control over your funds.";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Slides/SlidesViewController.swift */
+"SlidesViewController.swipe" = "Swipe to continue";
+"EmergencyKitSlides.s1" = "Emergency Kit";
+"EmergencyKitSlides.s2" = "CREATE YOUR EMERGENCY KIT";
+"EmergencyKitSlides.s4" = "One document";
+"EmergencyKitSlides.s5" = "Your private keys are securely encrypted with your Recovery Code, so you can save it online.";
+"EmergencyKitSlides.s6" = "Stored online";
+"EmergencyKitSlides.s7" = "Complete Ownership";
+"EmergencyKitSlides.s8" = "You haven’t finished exporting up your Emergency Kit. You can restart this setup later.";
+"EmergencyKitSlides.s9" = "Abort Emergency Kit export?";
+"EmergencyKitSlides.s10" = "Continue";
+"EmergencyKitSlides.s11" = "Abort";
+"EmergencyKitSlides.s12" = "Your Emergency Kit is a PDF document with information and instructions to independently transfer your funds.";
+"EmergencyKitSlides.s13" = "By combining the Emergency Kit and your Recovery Code, you will have total, undisputed control over your funds.";
+
+"TaprootActivationSlides.title1" = "A giant leap for bitcoin";
+"TaprootActivationSlides.description1" = "Taproot is one of the most anticipated upgrades in bitcoin.
+
+Starting with cheaper and less traceable payments, Taproot is setting the stage for massive innovation in bitcoin.";
+"TaprootActivationSlides.title2" = "Enabled by powerful scripts";
+"TaprootActivationSlides.description2" = "Taproot uses new scripts to create the addresses where you'll receive funds.
+
+To recover those funds in an emergency, these scripts need to be included in your Emergency Kit.";
+"TaprootActivationSlides.title3" = "Completely secure";
+"TaprootActivationSlides.description3" = "Keep total control over your funds by updating your Emergency Kit before ever using Taproot.
+
+The updated Kit replaces the one you already have, but your Recovery Code doesn't change.";
+"TaprootActivationSlides.finish" = "UPDATE YOUR KIT";
+"TaprootActivationSlides.abortTitle" = "Leave activation?";
+"TaprootActivationSlides.abortDescription" = "You haven't activated Taproot yet. You can restart this process later.";
+"TaprootActivationSlides.stay" = "Stay";
+"TaprootActivationSlides.leave" = "Leave";
+
 /* Presentation/Screen/SecurityCenter/SecurityCenter+ActionCard.swift */
 "SecurityCenter.s1" = "You exported your keys";
 "SecurityCenter.s2" = "Recovery tool";
 "SecurityCenter.s3" = "Create an Emergency Kit";
 "SecurityCenter.s4" = "Download the data you need to recover your money without using Muun.";
 "SecurityCenter.s5" = "You created an Emergency Kit";
-"SecurityCenter.s6" = "Follow the instructions in the kit you saved to recover your money without using Muun.";
+"SecurityCenter.s6" = "Follow the instructions in the Kit you saved to recover your money without using Muun.";
 "SecurityCenter.s7" = "You wrote down your Private Keys. Use them with your Recovery Code and the Recovery Tool to recover your money without using Muun.";
 /* Presentation/Screen/SecurityCenter/SecurityCenter+Feedback.swift */
 "SecurityCenter.s8" = "EXCELLENT";
@@ -501,6 +543,20 @@ Try to remember it.";
 "SecurityCenter.s11" = "GO BACK TO HOME";
 "SecurityCenter.s12" = "Success!";
 "SecurityCenter.EKSuccessDescription" = "You have complete, undisputed ownership of your bitcoin.";
+
+"SecurityCenter.taprootActivated.title" = "You're ready for Taproot!";
+"SecurityCenter.taprootPreactivated.description" = "In %@ blocks (~%@ hours), the Bitcoin Network will activate Taproot globally.
+
+When this happens, you'll be able to receive funds in Taproot addresses.";
+"SecurityCenter.taprootActivated.description" = "You can now send and receive payments using Taproot addresses. Your payments will be cheaper and less traceable.";
+
+"SecurityCenter.taprootActivationCountdown.title" = "It's the final countdown!";
+"SecurityCenter.taprootActivationCountdown.description" = "When the Bitcoin Network mines block 709,632 Taproot will activate globally.
+
+To protect you from potential blockchain reorganizations, you'll be able to start using Taproot addresses %1@ blocks later.
+
+We have %2@ blocks to go!";
+
 /* Presentation/Screen/SecurityCenter/SecurityCenter+MoreInfo.swift */
 "SecurityCenter.s13" = "Why can't the password be reset?";
 "SecurityCenter.s14" = "What is the Recovery Code?";
@@ -514,7 +570,7 @@ We use the Recovery Code to create an encrypted backup of your Personal Key in c
 We do not keep a copy of this code, so write it down on paper and keep it safe.";
 "SecurityCenter.s19" = "Muun will send you an email every time somebody tries to access your wallet, asking for your authorization. This protects you from people (or computers) attempting to guess your password, and alerts you if somebody tries.";
 "SecurityCenter.s20" = "Is cloud storage safe?";
-"SecurityCenter.s21" = "Data inside your Emergency Kit is securely encrypted with your Recovery Code. Without access to that code, the kit is harmless.
+"SecurityCenter.s21" = "Data inside your Emergency Kit is securely encrypted with your Recovery Code. Without access to that code, the Kit is harmless.
 
 Since your Recovery Code is written in paper, you can save your Emergency Kit in the cloud without risk. It will be safe and available in the long term.";
 /* Presentation/Screen/SecurityCenter/SecurityCenterPresenter.swift */
@@ -719,6 +775,7 @@ This enables multi-factor authentication, improving security when you use your R
 "SettingsViewController.s23" = "You need to empty your wallet. Make a payment using all your funds, and try again when the transaction has 6 confirmations.";
 "SettingsViewController.advanced" = "ADVANCED SETTINGS";
 "SettingsViewController.lightningNetwork" = "Lightning Network";
+"SettingsViewController.onchain" = "Bitcoin Network";
 /* Presentation/Screen/Sync/SyncViewController.swift */
 "SyncViewController.s1" = "Loading your wallet";
 "SyncViewController.s2" = "Creating your wallet";
@@ -750,3 +807,30 @@ This enables multi-factor authentication, improving security when you use your R
 "LightningNetworkSettings.learnMoreUnderline" = "Learn more";
 "LightningNetworkSettings.disable" = "Disable";
 "LightningNetworkSettings.blogPost" = "https://blog.muun.com/turbo-channels/";
+/* OnchainSettings */
+"OnchainSettings.timeToActivation" = "Activates in ~%@ hours";
+"OnchainSettings.learnMore" = "Taproot is a new address type that makes your payments cheaper and less traceable.
+
+Many services are not yet compatible with Taproot and may label your addresses as invalid. If you make Taproot the default, you'll need to manually change the address type to Segwit or Legacy every time this happens.";
+"OnchainSettings.defaultTaproot" = "Default to Taproot";
+"OnchainSettings.title" = "Bitcoin Network";
+"OnchainSettings.confirmTitle" = "Set Taproot as default?";
+"OnchainSettings.confirmDescription" = "Some services may label your addresses as invalid.";
+"OnchainSettings.confirm" = "Confirm";
+
+/* TaprootActivatedPopup */
+"TaprootActivatedPopup.title" = "Taproot is live!";
+"TaprootActivatedPopup.description" = "You can now send and receive payments using Taproot addresses. Your payments will be cheaper and less traceable.";
+"TaprootActivatedPopup.ok" = "EXCELLENT";
+
+/* NotificationService */
+"NotificationService.unknown" = "You have a new notification";
+"NotificationService.fulfillIncomingSwapTitle" = "A lightning payment is pending!";
+"NotificationService.fulfillIncomingSwapBody" = "Open the app to claim it";
+"NotificationService.taprootActivatedTitle" = "Taproot is live 🎉";
+"NotificationService.taprootActivatedBody" = "The Bitcoin Network activated Taproot. You can now enjoy cheaper payments.";
+"NotificationService.taprootPreactivationTitle" = "Level-up your payments";
+"NotificationService.taprootPreactivationBody" = "Save with each payment by activating Taproot.";
+"NotificationService.opSentTitle" = "%@ sent";
+"NotificationService.opReceivedTitle" = "%@ received";
+"NotificationService.opFromContactTitle" = "%@ sent you %@";

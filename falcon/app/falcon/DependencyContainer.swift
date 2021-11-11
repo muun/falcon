@@ -318,6 +318,42 @@ extension PresenterInstantior {
             ))
     }
 
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I>(_ factory: ((U, A, B, C, D, E, F, G, H, I)) -> T, delegate: U) -> T
+        where T: BasePresenter<U> {
+
+            return factory((
+                delegate,
+                try! DIManager.activeContainer.resolve() as A,
+                try! DIManager.activeContainer.resolve() as B,
+                try! DIManager.activeContainer.resolve() as C,
+                try! DIManager.activeContainer.resolve() as D,
+                try! DIManager.activeContainer.resolve() as E,
+                try! DIManager.activeContainer.resolve() as F,
+                try! DIManager.activeContainer.resolve() as G,
+                try! DIManager.activeContainer.resolve() as H,
+                try! DIManager.activeContainer.resolve() as I
+            ))
+    }
+
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I, S>(
+        _ factory: ((U, S, A, B, C, D, E, F, G, H, I)) -> T, delegate: U, state: S) -> T
+        where T: BasePresenter<U> {
+
+            return factory((
+                delegate,
+                state,
+                try! DIManager.activeContainer.resolve() as A,
+                try! DIManager.activeContainer.resolve() as B,
+                try! DIManager.activeContainer.resolve() as C,
+                try! DIManager.activeContainer.resolve() as D,
+                try! DIManager.activeContainer.resolve() as E,
+                try! DIManager.activeContainer.resolve() as F,
+                try! DIManager.activeContainer.resolve() as G,
+                try! DIManager.activeContainer.resolve() as H,
+                try! DIManager.activeContainer.resolve() as I
+            ))
+    }
+
 }
 
 // swiftlint:enable force_try large_tuple

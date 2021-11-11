@@ -15,6 +15,7 @@ public class SupportAction: AsyncAction<()> {
         case help
         case support
         case anonSupport
+        case cloudRequest
     }
 
     private let houstonService: HoustonService
@@ -26,8 +27,27 @@ public class SupportAction: AsyncAction<()> {
     }
 
     public func run(type: RequestType, text: String) {
-        let feedback = "--- On general \(type) ---\n\n\(text)"
-        runSingle(houstonService.submitFeedback(feedback: feedback))
+        let feedback: String
+        let jsonType: FeedbackTypeJson
+        switch type {
+        case .feedback:
+            feedback = "--- On general \(type) ---\n\n\(text)"
+            jsonType = .support
+        case .help:
+            feedback = "--- On general \(type) ---\n\n\(text)"
+            jsonType = .support
+        case .support:
+            feedback = "--- On general \(type) ---\n\n\(text)"
+            jsonType = .support
+        case .anonSupport:
+            feedback = "--- On general \(type) ---\n\n\(text)"
+            jsonType = .support
+        case .cloudRequest:
+            jsonType = .cloudRequest
+            feedback = text
+        }
+
+        runSingle(houstonService.submitFeedback(feedback: feedback, type: jsonType))
     }
 
 }

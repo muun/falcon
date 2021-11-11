@@ -114,6 +114,9 @@ class SettingsViewController: MUViewController {
         navigationController!.pushViewController(LightningNetworkSettingsViewController(), animated: true)
     }
 
+    private func showOnchainSettings() {
+        navigationController!.pushViewController(OnchainSettingsViewController(), animated: true)
+    }
 }
 
 extension SettingsViewController: UITableViewDelegate {
@@ -154,10 +157,14 @@ extension SettingsViewController: UITableViewDelegate {
             switch rows[indexPath.row] {
             case .lightningNetwork:
                 showLightningNetworkSettings()
+            case .onchain:
+                showOnchainSettings()
             }
 
         case .version:
-            return
+#if DEBUG
+            debugChangeTaprootActivation()
+#endif
 
         case .deleteWallet:
             decideDeleteWalletAction()
@@ -295,7 +302,18 @@ extension SettingsViewController: UITableViewDataSource {
 
             cell.setUp(L10n.SettingsViewController.lightningNetwork, color: Asset.Colors.title.color)
             cell.showChevron()
+            if rows.count > 1 {
+                cell.hideTopSeparator()
+            }
+
             return cell
+        case .onchain:
+            let cell = tableView.dequeue(type: SettingsTableViewCell.self, indexPath: indexPath)
+
+            cell.setUp(L10n.SettingsViewController.onchain, color: Asset.Colors.title.color)
+            cell.showChevron()
+            return cell
+
         }
     }
 
@@ -379,6 +397,11 @@ extension SettingsViewController {
         self.present(alert, animated: true)
     }
 
+#if DEBUG
+    private func debugChangeTaprootActivation() {
+        presenter.debugChangeTaprootActivation()
+    }
+#endif
 }
 
 extension SettingsViewController: SettingsPresenterDelegate {

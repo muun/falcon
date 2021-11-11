@@ -27,4 +27,10 @@ struct ExternalAddressesRecordJson: Codable {
 
 struct FeedbackJson: Codable {
     let content: String
+    let type: FeedbackTypeJson
+}
+
+enum FeedbackTypeJson: String, RawRepresentable, Codable {
+    case cloudRequest = "CLOUD_REQUEST"
+    case support = "SUPPORT"
 }

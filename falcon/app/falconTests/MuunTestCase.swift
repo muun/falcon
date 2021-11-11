@@ -12,7 +12,7 @@ import GRDB
 import RxSwift
 import RxBlocking
 @testable import core
-@testable import falcon
+@testable import Muun
 import Libwallet
 
 private let secureStoragePrefix = "muun_tests_secure"

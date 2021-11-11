@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import core
-@testable import falcon
+@testable import Muun
 
 // These are all really dumb tests, but they test a very core part of the logic that
 // would be really easy to fat finger into subtle errors

@@ -45,7 +45,9 @@ extension String {
 
 extension NSMutableAttributedString {
 
-    func set(bold text: String, color: UIColor) -> NSMutableAttributedString {
+    func set(bold text: String,
+             color: UIColor = Asset.Colors.black.color,
+             weight: UIFont.Weight = .bold) -> NSMutableAttributedString {
         let boldFontAttribute: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: getFont().pointSize, weight: .bold),
             .foregroundColor: color

@@ -27,15 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A0E6F2F1211C785700821A80"
-            BuildableName = "falcon.app"
-            BlueprintName = "falcon"
-            ReferencedContainer = "container:falcon.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <TestPlans>
          <TestPlanReference
             reference = "container:falconUITests/Bitrise.xctestplan"
@@ -74,8 +65,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E6F2F1211C785700821A80"
-            BuildableName = "falcon.app"
-            BlueprintName = "falcon"
+            BuildableName = "Muun.app"
+            BlueprintName = "Muun"
             ReferencedContainer = "container:falcon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
