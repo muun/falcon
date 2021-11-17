@@ -32,6 +32,8 @@ public enum ICloudHelper {
     public static func uploadEK(
         emergencyKitUrl: URL,
         fileName: String,
+        user: User,
+        kitVersion: Int,
         completion: @escaping (URL?, Error?) -> Void) {
         let manager = FileManager.default
 
@@ -41,12 +43,23 @@ public enum ICloudHelper {
                 return
             }
 
+            // Remember: ubiquity container contents can only be manipulated via URL-taking APIs. String based ones
+            // fail 100% of the time.
             let icloudUrl = folder.appendingPathComponent(fileName)
             do {
-                if manager.fileExists(atPath: icloudUrl.path) {
-                    try manager.removeItem(at: icloudUrl)
+                if manager.isUbiquitousItem(at: icloudUrl) {
+                    try manager.replaceItem(at: icloudUrl, withItemAt: emergencyKitUrl, backupItemName: fileName+".bak", resultingItemURL: nil)
+                } else {
+                    try manager.setUbiquitous(true, itemAt: emergencyKitUrl, destinationURL: icloudUrl)
                 }
-                try manager.setUbiquitous(true, itemAt: emergencyKitUrl, destinationURL: icloudUrl)
+                try icloudUrl.setExtendedAttribute(
+                    data: CloudConstants.userToKitId(user: user).data(using: .utf8)!,
+                    forName: toXattrKey(CloudConstants.userProperty)
+                )
+                try icloudUrl.setExtendedAttribute(
+                    data: "\(kitVersion)".data(using: .utf8)!,
+                    forName: toXattrKey(CloudConstants.versionProperty)
+                )
 
                 completion(icloudUrl, nil)
             } catch {
@@ -54,5 +67,11 @@ public enum ICloudHelper {
             }
         }
 
+    }
+
+    fileprivate static func toXattrKey(_ name: String) -> String {
+        // The #S makes the attribute syncable
+        // https://eclecticlight.co/2019/07/23/how-to-save-file-metadata-in-icloud-and-new-info-on-extended-attributes/
+        "com.muun.falcon.\(name)#S"
     }
 }

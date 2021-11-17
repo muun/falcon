@@ -17,7 +17,6 @@ platform :ios do
 
   desc "publish to testflight staging"
   lane :stg do
-
     ensure_git_status_clean
     upload_testflight(env: "stg")
   end
@@ -74,6 +73,9 @@ platform :ios do
         plist_path: "falconPushNotifications/Info.plist",
         app_identifier: extension_identifier
       )
+
+      # Replace the bundle id for the iCloud container
+      sh("sed", "-i", "", "s/<key>iCloud.[^<]*</<key>iCloud.#{app_identifier}</", "../../app/falcon/Info.plist")
     end
 
     increment_build_number
@@ -111,7 +113,8 @@ platform :ios do
       force: true,
       files: [
         "../core/Classes/Environment.swift",
-        "../app/falconPushNotifications/Environment.swift"
+        "../app/falconPushNotifications/Environment.swift",
+        "../app/falcon/Resource/Identifiers.swift"
       ]
     )
 
@@ -133,6 +136,9 @@ platform :ios do
         plist_path: "falconPushNotifications/Info.plist",
         app_identifier: "com.muun.falcon.falconPushNotifications"
       )
+
+      # Replace the bundle id for the iCloud container
+      sh("sed", "-i", "", "s/<key>iCloud.[^<]*</<key>iCloud.com.muun.falcon</", "../../app/falcon/Info.plist")
     end
 
     # We're done, tag it

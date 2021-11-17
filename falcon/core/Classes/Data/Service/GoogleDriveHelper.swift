@@ -17,8 +17,6 @@ public enum GoogleDriveHelper {
         case noFolder
     }
 
-    fileprivate static let userProperty = "muun_user"
-    fileprivate static let versionProperty = "muuk_ek_version"
     fileprivate static let mimeTypePdf = "application/pdf"
 
     public static func uploadEK(
@@ -44,6 +42,7 @@ public enum GoogleDriveHelper {
             if err != nil {
                 Logger.log(.info, err.debugDescription)
                 completion(nil, err)
+                return
             }
 
             guard let folderId = folderId else {
@@ -62,19 +61,19 @@ public enum GoogleDriveHelper {
                 let uploadParameters = GTLRUploadParameters(fileURL: emergencyKitUrl, mimeType: mimeTypePdf)
 
                 let file = GTLRDrive_File()
-                let userId = userToKitId(user: user)
+                let userId = CloudConstants.userToKitId(user: user)
 
                 // Ensure the properties are up to date
                 file.appProperties = GTLRDrive_File_AppProperties()
-                file.appProperties?.setAdditionalProperty("\(kitVersion)", forName: versionProperty)
-                file.appProperties?.setAdditionalProperty(userId, forName: userProperty)
+                file.appProperties?.setAdditionalProperty("\(kitVersion)", forName: CloudConstants.versionProperty)
+                file.appProperties?.setAdditionalProperty(userId, forName: CloudConstants.userProperty)
                 
                 let query: GTLRDriveQuery
                 if let existingKit = existingKit,
                    let id = existingKit.identifier {
 
                     // Pin the existing revision just in case we're overwriting another wallet
-                    if existingKit.appProperties?.additionalProperty(forName: userProperty) as? String != userId,
+                    if existingKit.appProperties?.additionalProperty(forName: CloudConstants.userProperty) as? String != userId,
                        let revisionId = existingKit.headRevisionId {
 
                         let revision = GTLRDrive_Revision()
@@ -121,6 +120,7 @@ public enum GoogleDriveHelper {
         getFolderID(name: name, service: service, user: user) { folderID, folderLink, err in
             if err != nil {
                 completion(nil, nil, err)
+                return
             }
 
             if folderID == nil {
@@ -176,11 +176,11 @@ public enum GoogleDriveHelper {
                 return
             }
 
-            let kitUserToFind = userToKitId(user: user)
+            let kitUserToFind = CloudConstants.userToKitId(user: user)
 
             // First check for properties matching
             for file in files {
-                if let kitUser = file.appProperties?.additionalProperty(forName: userProperty) as? String {
+                if let kitUser = file.appProperties?.additionalProperty(forName: CloudConstants.userProperty) as? String {
                     if kitUser == kitUserToFind && file.isAppAuthorized?.boolValue ?? false {
                         completion(file, nil)
                         return
@@ -193,7 +193,7 @@ public enum GoogleDriveHelper {
             // by the previous for, that means it's not from this wallet.
             if files.count == 1,
                let file = files.first,
-               file.appProperties?.additionalProperty(forName: userProperty) == nil {
+               file.appProperties?.additionalProperty(forName: CloudConstants.userProperty) == nil {
 
                 completion(files.first, nil)
                 return
@@ -270,9 +270,5 @@ public enum GoogleDriveHelper {
                 completion("", nil, MuunError(Errors.noFolder))
             }
         }
-    }
-
-    fileprivate static func userToKitId(user: User) -> String {
-        return LibwalletSHA256("\(user.id)".data(using: .utf8))!.toHexString()
     }
 }

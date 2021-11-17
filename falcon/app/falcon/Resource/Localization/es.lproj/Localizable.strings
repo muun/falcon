@@ -287,7 +287,7 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "ReceiveViewController.s4" = "Copiado al portapapeles";
 "ReceiveViewController.s5" = "Copiado al portapapeles. Esta factura expirará en %@.";
 /* Presentation/Screen/Receive/AddressTypeSelectViewController.swift */
-"AddressTypeSelectViewController.title" = "Elige un tipo de dirección";
+"AddressTypeSelectViewController.title" = "Elige tu tipo de dirección";
 /* Presentation/Screen/Receive/OnChain/OnChainAdvancedOptionsView.swift */
 "OnChainAdvancedOptionsView.header" = "Configuración de dirección";
 "OnChainAdvancedOptionsView.hide" = "Ocultar configuración";
@@ -470,7 +470,7 @@ Intenta recordarla.";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitView.swift */
 "ShareEmergencyKitView.exportTitle" = "Guarda tu Kit de Emergencia";
 "ShareEmergencyKitView.updateTitle" = "Actualiza tu Kit de Emergencia";
-"ShareEmergencyKitView.description" = "Elije tu servicio en la nube preferido para asegurarte de que tu Kit nunca se pierda.";
+"ShareEmergencyKitView.description" = "Elige tu servicio en la nube preferido para asegurarte de que tu Kit nunca se pierda.";
 "ShareEmergencyKitView.saveManually" = "No quiero almacenarlo en la nube";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ShareEmergencyKitViewController.swift */
 "ShareEmergencyKitViewController.s1" = "Kit de Emergencia";
@@ -520,7 +520,7 @@ Empezando por pagos más baratos y menos rastreables, Taproot está sentando las
 
 Para recuperar esos fondos en una emergencia, estos scripts deben incluirse en tu Kit de Emergencia.";
 "TaprootActivationSlides.title3" = "Completamente seguro";
-"TaprootActivationSlides.description3" = "Mantiene el control total de tus fondos actualizando tu Kit de Emergencia antes de usar Taproot por primera vez.
+"TaprootActivationSlides.description3" = "Mantén el control total de tus fondos actualizando tu Kit de Emergencia antes de usar Taproot por primera vez.
 
 El Kit actualizado reemplaza al que ya tienes, pero tu Código de Recuperación no cambia.";
 "TaprootActivationSlides.finish" = "ACTUALIZA TU KIT";
@@ -779,7 +779,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "SettingsViewController.s23" = "Necesitas vaciar tu monedero. Realiza un pago con todos tus fondos, y vuelve a intentarlo cuando la transacción tenga 6 confirmaciones.";
 "SettingsViewController.advanced" = "Configuración avanzada";
 "SettingsViewController.lightningNetwork" = "Lightning Network";
-"SettingsViewController.onchain" = "Red Bitcoin";
+"SettingsViewController.onchain" = "Bitcoin Network";
 /* Presentation/Screen/Sync/SyncViewController.swift */
 "SyncViewController.s1" = "Cargando tu monedero";
 "SyncViewController.s2" = "Creando tu monedero";
@@ -815,7 +815,7 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "OnchainSettings.timeToActivation" = "Se activa en ~%@ horas";
 "OnchainSettings.learnMore" = "Taproot es un nuevo tipo de dirección que hace que tus pagos sean más baratos y menos rastreables.
 
-Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcciones como inválidas. Si elijes a Taproot como tipo predeterminado, deberás cambiar manualmente el tipo de dirección a Segwit o Legacy cada vez que esto suceda.";
+Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcciones como inválidas. Si eliges a Taproot como tipo predeterminado, deberás cambiar manualmente el tipo de dirección a Segwit o Legacy cada vez que esto suceda.";
 "OnchainSettings.defaultTaproot" = "Predeterminar a Taproot";
 "OnchainSettings.title" = "Bitcoin Network";
 "OnchainSettings.confirmTitle" = "Predeterminar a Taproot?";

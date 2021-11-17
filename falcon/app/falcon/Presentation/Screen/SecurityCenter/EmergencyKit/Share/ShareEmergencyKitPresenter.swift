@@ -13,7 +13,7 @@ import GoogleAPIClientForREST
 
 protocol ShareEmergencyKitPresenterDelegate: BasePresenterDelegate {
     func gotEmergencyKit(_ kit: EmergencyKit)
-    func errorUploadingToCloud(option: EmergencyKitSavingOption)
+    func errorUploadingToCloud(option: EmergencyKitSavingOption, error: Error)
     func uploadToCloudSuccessful(kit:EmergencyKit, option: EmergencyKitSavingOption, link: URL?)
 }
 
@@ -123,8 +123,8 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
             kitVersion: kit.version
         ) { webViewLinkString, err in
 
-            if err != nil {
-                self.delegate.errorUploadingToCloud(option: .drive)
+            if let err = err {
+                self.delegate.errorUploadingToCloud(option: .drive, error: err)
                 return
             }
 
@@ -134,9 +134,18 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
     }
 
     func uploadEmergencyKitToICloud(kit: EmergencyKit, fileName: String) {
-        ICloudHelper.uploadEK(emergencyKitUrl: kit.url, fileName: fileName) { kitUrl, err in
-            if err != nil {
-                self.delegate.errorUploadingToCloud(option: .icloud)
+        guard let user = sessionActions.getUser() else {
+            Logger.fatal("Unlogged user managed to upload a kit to iCloud")
+        }
+
+        ICloudHelper.uploadEK(
+            emergencyKitUrl: kit.url,
+            fileName: fileName,
+            user: user,
+            kitVersion: kit.version
+        ) { kitUrl, err in
+            if let err = err {
+                self.delegate.errorUploadingToCloud(option: .icloud, error: err)
                 return
             }
 

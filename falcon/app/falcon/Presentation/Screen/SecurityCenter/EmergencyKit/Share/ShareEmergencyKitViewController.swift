@@ -9,6 +9,7 @@
 import UIKit
 import GoogleSignIn
 import GoogleAPIClientForREST
+import AppAuth
 
 class ShareEmergencyKitViewController: MUViewController {
 
@@ -263,7 +264,27 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
         self.emergencyKit = kit
     }
 
-    func errorUploadingToCloud(option: EmergencyKitSavingOption) {
+    func errorUploadingToCloud(option: EmergencyKitSavingOption, error: Error) {
+
+        if option == .drive,
+            let error = error as? NSError {
+
+            switch (error.domain, error.code) {
+            case (OIDOAuthTokenErrorDomain, OIDErrorCodeOAuth.unauthorizedClient.rawValue),
+                (OIDOAuthTokenErrorDomain, OIDErrorCodeOAuth.accessDenied.rawValue),
+                (OIDOAuthTokenErrorDomain, OIDErrorCodeOAuth.invalidGrant.rawValue),
+                (kGTLRErrorObjectDomain, 403):
+
+                // Retrigger a login
+                GIDSignIn.sharedInstance().signIn()
+                return
+
+            default:
+                // 🤷‍♂️
+                ()
+            }
+        }
+
         logEvent("emergency_kit_fail", parameters: ["type": "upload_error", "shared_option": "\(option)"])
         presentErrorUploading(option: option)
     }
@@ -284,9 +305,15 @@ extension ShareEmergencyKitViewController: GIDSignInDelegate {
             return
         }
 
-        logEvent("ek_drive", parameters: ["type": "sign_in_finish"])
         googleUser = user
-        uploadEKToDrive(user)
+
+        // Check if the file scope has been given cause it's actually optional in spite of us requesting it
+        if user.grantedScopes.contains(where: { scope in scope as? String == kGTLRAuthScopeDriveFile }) {
+            uploadEKToDrive(user)
+        } else {
+            // Re-request sign in so we get the missing scope
+            GIDSignIn.sharedInstance().signIn()
+        }
     }
 
 }
