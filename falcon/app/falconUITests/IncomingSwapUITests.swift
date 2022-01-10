@@ -80,7 +80,7 @@ class IncomingSwapUITests: FalconUITests {
         expectedBalance = formatBTCAmount(0.00300100, format: .short)
         let isPaid = receive(homePage, amount: 100_000, balance: expectedBalance, operations: 4, oneConf: true)
 
-        sweepWallet(homePage, amount: 0.00299577, fee: 0.00000523)
+        sweepWallet(homePage, amount: 0.00299687, fee: 0.00000413)
         waitUntil(condition: isPaid, timeout: 60, description: "waiting until LND sees last payment")
     }
 
@@ -115,7 +115,7 @@ class IncomingSwapUITests: FalconUITests {
         enableTurboChannels(homePage)
         receiveZeroConfSpend(homePage, amount: 100_000, balance: expectedBalance, operations: 4)
 
-        sweepWallet(homePage, amount: 0.00099994, fee: 0.00000306)
+        sweepWallet(homePage, amount: 0.00100068, fee: 0.00000232)
     }
 
     public func testLogoutConditions() {

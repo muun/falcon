@@ -356,7 +356,7 @@ public class HoustonService: BaseService {
             andReturn: RawTransactionResponseJson.self,
             maxRetries: 1 // Due to nonce reuse attacks we never retry this endpoint automatically
         )
-        .map({ $0.toModel() })
+        .map({ $0.toModel(decrypter: self.decrypter) })
     }
 
     func fetchNextTransactionSize() -> Single<NextTransactionSize> {

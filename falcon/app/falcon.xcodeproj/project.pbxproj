@@ -43,6 +43,7 @@
 		0FB71A8E264AE0E300B1DB23 /* LNURLWithdrawTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB71A8D264AE0E300B1DB23 /* LNURLWithdrawTests.swift */; };
 		0FB71A91264AE7AF00B1DB23 /* LNURLFirstTimePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB71A90264AE7AF00B1DB23 /* LNURLFirstTimePage.swift */; };
 		0FB71A93264AEF4100B1DB23 /* LNURLManuallyEnterQRPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB71A92264AEF4100B1DB23 /* LNURLManuallyEnterQRPage.swift */; };
+		0FCB0E802694EA6400FE764C /* NewOperationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCB0E7F2694EA6400FE764C /* NewOperationPresenter.swift */; };
 		0FE40506258A4F64001DAA43 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE40505258A4F64001DAA43 /* TooltipView.swift */; };
 		0FE40530258A6CB9001DAA43 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE4052F258A6CB9001DAA43 /* TriangleView.swift */; };
 		0FE97AB7261FA08B00B7E31E /* LNURLFirstTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE97AB6261FA08B00B7E31E /* LNURLFirstTimeViewController.swift */; };
@@ -54,6 +55,7 @@
 		0FF4E27025D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E26F25D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift */; };
 		0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */; };
 		0FF90789262B311300889E0F /* NewOpError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF90788262B311300889E0F /* NewOpError.swift */; };
+		0FFF339526CABFC80050F69F /* NewOperationStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */; };
 		2DC85BFA9495F9E18B18AA94 /* Pods_Muun.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B72D0AFE8F8C693501DF6C /* Pods_Muun.framework */; };
 		499457CCAD48131DF39F44AC /* Pods_falconPushNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2071EBB1AE2DEB4EB62C295 /* Pods_falconPushNotifications.framework */; };
 		A0000991257A7B9600B69008 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000990257A7B9600B69008 /* TransactionListViewController.swift */; };
@@ -154,7 +156,6 @@
 		A0480E5A255C5FF3002F76DD /* VerifyEmergencyKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0480E59255C5FF3002F76DD /* VerifyEmergencyKitView.swift */; };
 		A0481280255D84CC002F76DD /* EmergencyKitSavingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A048127F255D84CC002F76DD /* EmergencyKitSavingOptions.swift */; };
 		A048B8792354B34B00C1CA3B /* NewOpToAddressData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A048B8782354B34B00C1CA3B /* NewOpToAddressData.swift */; };
-		A048B87B2354B3DE00C1CA3B /* NewOpSubmarineSwapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A048B87A2354B3DE00C1CA3B /* NewOpSubmarineSwapData.swift */; };
 		A0491977253A0E660065C2B2 /* NoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0491976253A0E660065C2B2 /* NoticeView.swift */; };
 		A049200F21FB52E80038B92A /* NewOpDescriptionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A049200E21FB52E80038B92A /* NewOpDescriptionPresenter.swift */; };
 		A04996CC2368E8C600DFD38C /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A04996CB2368E8C600DFD38C /* Colors.xcassets */; };
@@ -444,8 +445,6 @@
 		B3BF3B5C2215ADA50009F76D /* SupportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3BF3B5A2215ADA50009F76D /* SupportViewController.xib */; };
 		B3BF3B622215C2F70009F76D /* LargeTextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3BF3B602215C2F60009F76D /* LargeTextInputView.xib */; };
 		B3BF3B632215C2F70009F76D /* LargeTextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BF3B612215C2F70009F76D /* LargeTextInputView.swift */; };
-		B3C1B6C32343D60200327FA4 /* OpSubmarineSwapMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1B6C12343D60200327FA4 /* OpSubmarineSwapMachine.swift */; };
-		B3C1B6C42343D60200327FA4 /* OpToAddressMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1B6C22343D60200327FA4 /* OpToAddressMachine.swift */; };
 		B3C1B6C62343D65100327FA4 /* OpStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1B6C52343D65100327FA4 /* OpStateMachine.swift */; };
 		B3C1B6C92343D7D000327FA4 /* OpSubmarineSwapViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C1B6C82343D7D000327FA4 /* OpSubmarineSwapViewBuilder.swift */; };
 		B3CA2276227349CC008B1018 /* FeedbackPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CA2275227349CC008B1018 /* FeedbackPage.swift */; };
@@ -563,6 +562,7 @@
 		0FB71A8D264AE0E300B1DB23 /* LNURLWithdrawTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNURLWithdrawTests.swift; sourceTree = "<group>"; };
 		0FB71A90264AE7AF00B1DB23 /* LNURLFirstTimePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNURLFirstTimePage.swift; sourceTree = "<group>"; };
 		0FB71A92264AEF4100B1DB23 /* LNURLManuallyEnterQRPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNURLManuallyEnterQRPage.swift; sourceTree = "<group>"; };
+		0FCB0E7F2694EA6400FE764C /* NewOperationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOperationPresenter.swift; sourceTree = "<group>"; };
 		0FE40505258A4F64001DAA43 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		0FE4052F258A6CB9001DAA43 /* TriangleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleView.swift; sourceTree = "<group>"; };
 		0FE97AB6261FA08B00B7E31E /* LNURLFirstTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNURLFirstTimeViewController.swift; sourceTree = "<group>"; };
@@ -574,6 +574,7 @@
 		0FF4E26F25D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTypeSelectViewController.swift; sourceTree = "<group>"; };
 		0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioGroupView.swift; sourceTree = "<group>"; };
 		0FF90788262B311300889E0F /* NewOpError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpError.swift; sourceTree = "<group>"; };
+		0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewOperationStateMachine.swift; sourceTree = "<group>"; };
 		14301C2622A3B1060248AE1C /* Pods-Muun.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun.release.xcconfig"; path = "Target Support Files/Pods-Muun/Pods-Muun.release.xcconfig"; sourceTree = "<group>"; };
 		14EA1031B6D1922CF2D02E8C /* Pods-Muun.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun.debug.xcconfig"; path = "Target Support Files/Pods-Muun/Pods-Muun.debug.xcconfig"; sourceTree = "<group>"; };
 		539EA673B7836932F6AA1D84 /* Pods-falconTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconTests.release.xcconfig"; path = "Target Support Files/Pods-falconTests/Pods-falconTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -679,7 +680,6 @@
 		A0480E59255C5FF3002F76DD /* VerifyEmergencyKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmergencyKitView.swift; sourceTree = "<group>"; };
 		A048127F255D84CC002F76DD /* EmergencyKitSavingOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyKitSavingOptions.swift; sourceTree = "<group>"; };
 		A048B8782354B34B00C1CA3B /* NewOpToAddressData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpToAddressData.swift; sourceTree = "<group>"; };
-		A048B87A2354B3DE00C1CA3B /* NewOpSubmarineSwapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpSubmarineSwapData.swift; sourceTree = "<group>"; };
 		A0491976253A0E660065C2B2 /* NoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeView.swift; sourceTree = "<group>"; };
 		A049200E21FB52E80038B92A /* NewOpDescriptionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpDescriptionPresenter.swift; sourceTree = "<group>"; };
 		A04996CB2368E8C600DFD38C /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -974,8 +974,6 @@
 		B3BF3B5A2215ADA50009F76D /* SupportViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SupportViewController.xib; sourceTree = "<group>"; };
 		B3BF3B602215C2F60009F76D /* LargeTextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LargeTextInputView.xib; sourceTree = "<group>"; };
 		B3BF3B612215C2F70009F76D /* LargeTextInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeTextInputView.swift; sourceTree = "<group>"; };
-		B3C1B6C12343D60200327FA4 /* OpSubmarineSwapMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpSubmarineSwapMachine.swift; sourceTree = "<group>"; };
-		B3C1B6C22343D60200327FA4 /* OpToAddressMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpToAddressMachine.swift; sourceTree = "<group>"; };
 		B3C1B6C52343D65100327FA4 /* OpStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpStateMachine.swift; sourceTree = "<group>"; };
 		B3C1B6C82343D7D000327FA4 /* OpSubmarineSwapViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSubmarineSwapViewBuilder.swift; sourceTree = "<group>"; };
 		B3C742762461BE8A00EE1ADF /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
@@ -1728,7 +1726,6 @@
 		A048B8772354B33800C1CA3B /* ToAddress */ = {
 			isa = PBXGroup;
 			children = (
-				B3C1B6C22343D60200327FA4 /* OpToAddressMachine.swift */,
 				A048B8782354B34B00C1CA3B /* NewOpToAddressData.swift */,
 				A04C8A852343B9B800A89A73 /* OpToAddressViewBuilder.swift */,
 			);
@@ -1958,11 +1955,13 @@
 				A05D6D8521FA2DB40082B78D /* ChildViews */,
 				B3C1B6C52343D65100327FA4 /* OpStateMachine.swift */,
 				A0EB36B723535BB200350ECD /* NewOpStates.swift */,
+				0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */,
 				A0A03AF921EE59E100700526 /* NewOperationViewController.swift */,
 				A0A03AFB21EE59E100700526 /* NewOperationView.xib */,
 				B30D5A562225E456008F4B20 /* NewOperationView.swift */,
 				A0DFCD1A24520C6400D1EBC4 /* NewOp+MoreInfo.swift */,
 				0FF90788262B311300889E0F /* NewOpError.swift */,
+				0FCB0E7F2694EA6400FE764C /* NewOperationPresenter.swift */,
 			);
 			path = NewOperation;
 			sourceTree = "<group>";
@@ -2887,8 +2886,6 @@
 		B3C1B6C02343D60200327FA4 /* SubmarineSwaps */ = {
 			isa = PBXGroup;
 			children = (
-				B3C1B6C12343D60200327FA4 /* OpSubmarineSwapMachine.swift */,
-				A048B87A2354B3DE00C1CA3B /* NewOpSubmarineSwapData.swift */,
 				B3C1B6C82343D7D000327FA4 /* OpSubmarineSwapViewBuilder.swift */,
 			);
 			path = SubmarineSwaps;
@@ -3610,8 +3607,6 @@
 				A033FE1C2518E63E001148F5 /* SignInWithRCVerifyEmailViewController.swift in Sources */,
 				B3E131A62326DF2400D55759 /* RecoveryToolViewController.swift in Sources */,
 				A0E295D224A40285001317F6 /* EmailAlreadyUsedView.swift in Sources */,
-				B3C1B6C32343D60200327FA4 /* OpSubmarineSwapMachine.swift in Sources */,
-				A048B87B2354B3DE00C1CA3B /* NewOpSubmarineSwapData.swift in Sources */,
 				A06C88DF2125E9D700940EB3 /* MUViewController.swift in Sources */,
 				B3B9C0D2224E82B0009C3617 /* DetailRowView.swift in Sources */,
 				A032C0A624D4A95E00A111A0 /* ChangePasswordEnterRecoveryCodePresenter.swift in Sources */,
@@ -3645,6 +3640,7 @@
 				A089FFDF21383606006915FC /* SignInPasswordViewController.swift in Sources */,
 				A06100D923396F9E00CC3192 /* DetailPresenter.swift in Sources */,
 				0F50769C25719C990020FC08 /* ApiMigrationsViewController.swift in Sources */,
+				0FCB0E802694EA6400FE764C /* NewOperationPresenter.swift in Sources */,
 				A0A1E9B125266A8C00CBC03C /* PushNotificationsHelper.swift in Sources */,
 				A018410D211E03D600337895 /* UIColor+Extension.swift in Sources */,
 				A0D28C0A2454CDF900CDE873 /* Settings+Feedback.swift in Sources */,
@@ -3689,6 +3685,7 @@
 				A012F2B124D068DB002278F4 /* ChangePasswordEnterCurrentPresenter.swift in Sources */,
 				B3E76FAD2729D0A500618C90 /* SlidesViewConfiguration.swift in Sources */,
 				A04B49C322089ECD001DD436 /* SmallButtonView.swift in Sources */,
+				0FFF339526CABFC80050F69F /* NewOperationStateMachine.swift in Sources */,
 				0FE40506258A4F64001DAA43 /* TooltipView.swift in Sources */,
 				0FEE3E20262FC9E300FB794C /* LNURLFromSendViewController.swift in Sources */,
 				A0480E54255C5F76002F76DD /* VerifyEmergencyKitViewController.swift in Sources */,
@@ -3749,7 +3746,6 @@
 				B33735C7221DA54E00185403 /* NewOpDestinationFilledDataView.swift in Sources */,
 				0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */,
 				A012F2D824D1EFEC002278F4 /* ChangePasswordVerifyViewController.swift in Sources */,
-				B3C1B6C42343D60200327FA4 /* OpToAddressMachine.swift in Sources */,
 				A0DFCD1D24520CCA00D1EBC4 /* Recover+MoreInfo.swift in Sources */,
 				A012F2DC24D1F0EB002278F4 /* ChangePasswordVerifyPresenter.swift in Sources */,
 				A0480E5A255C5FF3002F76DD /* VerifyEmergencyKitView.swift in Sources */,
@@ -3887,7 +3883,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 610;
+				CURRENT_PROJECT_VERSION = 702;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
@@ -3938,7 +3934,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 610;
+				CURRENT_PROJECT_VERSION = 702;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4000,9 +3996,10 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = muun.falconUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = falcon;
+				TEST_TARGET_NAME = Muun;
 			};
 			name = Debug;
 		};
@@ -4023,9 +4020,10 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = muun.falconUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = falcon;
+				TEST_TARGET_NAME = Muun;
 			};
 			name = Release;
 		};
@@ -4064,7 +4062,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 610;
+				CURRENT_PROJECT_VERSION = 702;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4129,7 +4127,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 610;
+				CURRENT_PROJECT_VERSION = 702;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4162,7 +4160,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 610;
+				CURRENT_PROJECT_VERSION = 702;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
@@ -4252,7 +4250,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 610;
+				CURRENT_PROJECT_VERSION = 702;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (

@@ -31,7 +31,8 @@ class NewOperationViewController: MUViewController {
     private var newOpParams: [String: Any] = [:]
 
     fileprivate var viewBuilder: OpViewBuilder?
-    fileprivate var stateMachine: OpStateMachine?
+
+    fileprivate lazy var presenter = instancePresenter(NewOperationPresenter.init, delegate: self)
 
     override var screenLoggingName: String {
         return "new_op"
@@ -43,33 +44,28 @@ class NewOperationViewController: MUViewController {
         super.init(nibName: nil, bundle: nil)
 
         switch paymentIntent {
-        case .toAddress:
-            let stateMachine = instancePresenter(OpToAddressStateMachine.init,
-                                                 delegate: self,
-                                                 state: paymentIntent)
-            self.stateMachine = stateMachine
+        case .toAddress(let uri):
+            presenter.start(uri: uri.raw)
 
             // The code below needs the view to be alive already
             self.loadViewIfNeeded()
 
-            self.viewBuilder = OpToAddressViewBuilder(transitionDelegate: stateMachine,
+            self.viewBuilder = OpToAddressViewBuilder(transitionDelegate: presenter,
                                                       newOpViewDelegate: self,
                                                       filledDataDelegate: self,
                                                       amountDelegate: newOpView)
+
             newOpParams = ["type": Constant.NewOpAnalytics.OpType.toAddress.rawValue,
                            "origin": origin.rawValue]
             title = L10n.NewOperationViewController.s1
 
-        case .submarineSwap:
-            let stateMachine = instancePresenter(OpSubmarineSwapMachine.init,
-                                                 delegate: self,
-                                                 state: paymentIntent)
-            self.stateMachine = stateMachine
+        case .submarineSwap(let invoice):
+            presenter.start(invoice: invoice)
 
             // The code below needs the view to be alive already
             self.loadViewIfNeeded()
 
-            self.viewBuilder = OpSubmarineSwapViewBuilder(transitionDelegate: stateMachine,
+            self.viewBuilder = OpSubmarineSwapViewBuilder(transitionDelegate: presenter,
                                                           newOpViewDelegate: self,
                                                           filledDataDelegate: self,
                                                           amountDelegate: newOpView)
@@ -82,8 +78,6 @@ class NewOperationViewController: MUViewController {
         case .lnurlWithdraw:
             Logger.fatal("Intent is not handled by this view controller: \(paymentIntent)")
         }
-
-        logEvent("\(screenLoggingName)_started", parameters: newOpParams)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -91,7 +85,7 @@ class NewOperationViewController: MUViewController {
     }
 
     override func loadView() {
-        newOpView = NewOperationView(stateTransitions: stateMachine!, filledDataDelegate: self)
+        newOpView = NewOperationView(stateTransitions: presenter, filledDataDelegate: self)
 
         let recognizer = UIScreenEdgePanGestureRecognizer(target: self,
                                                           action: #selector(swipe(_:)))
@@ -99,6 +93,8 @@ class NewOperationViewController: MUViewController {
         newOpView.addGestureRecognizer(recognizer)
 
         self.view = newOpView
+
+        presenter.setUp()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -109,16 +105,16 @@ class NewOperationViewController: MUViewController {
 
         setUpNavigation()
         addKeyboardObservers()
-
-        stateMachine?.setUp()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         removeKeyboardObservers()
+    }
 
-        stateMachine?.tearDown()
+    deinit {
+        presenter.tearDown()
     }
 
     fileprivate func setUpNavigation() {
@@ -138,7 +134,7 @@ class NewOperationViewController: MUViewController {
 
     @objc func back() {
         comesFromBack = true
-        stateMachine?.back()
+        presenter.back()
     }
 
     func replaceCurrentView(with view: MUView, filledData: [MUView]) {
@@ -179,8 +175,11 @@ class NewOperationViewController: MUViewController {
 
 extension NewOperationViewController: NewOpViewDelegate {
 
-    private func showInsufficientFundsScreen(amountPlusFee: String, totalBalance: String) {
-        displayErrorView(type: .insufficientFunds(amountPlusFee: amountPlusFee, maxBalance: totalBalance))
+    private func showInsufficientFundsScreen(amountPlusFee: MonetaryAmount, totalBalance: MonetaryAmount) {
+        displayErrorView(type: .insufficientFunds(
+            amountPlusFee: amountPlusFee.toString(),
+            maxBalance: totalBalance.toString()
+        ))
     }
 
     func readyForNextState(_ isReady: Bool, error: String?) {
@@ -212,17 +211,15 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
                                                  removeFromStack: true)
     }
 
-    func requestNextStep(_ data: NewOpState, preset: Any?) {
-        guard let nextStep = viewBuilder?.getNextStep(state: data, preset: preset) else {
+    func requestNextStep(_ data: NewOpState) {
+        guard let nextStep = viewBuilder?.getNextStep(state: data) else {
             Logger.fatal("View builder didn't return new step")
         }
 
         switch nextStep {
         case .view(let view, let filledData):
             replaceCurrentView(with: view, filledData: filledData)
-            if let vb = viewBuilder, vb.shouldDisplayOneConfNotice(state: data) {
-                newOpView.displayOneConfNotice()
-            }
+            newOpView.displayOneConfNotice(viewBuilder?.shouldDisplayOneConfNotice(state: data) ?? false)
         case .modal(let vc):
             let navController = UINavigationController(rootViewController: vc)
             if vc.isKind(of: CurrencyPickerViewController.self) {
@@ -239,6 +236,17 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
 
             let logName = "\(screenLoggingName)_\(customLogging.logName)"
             logScreen(logName, parameters: newOpParams)
+        }
+    }
+
+    func updateStep(_ data: NewOpState) {
+
+        switch data {
+        case .amount(let data):
+            newOpView.withCurrentView { (v: NewOpAmountView) in v.updateUI(data: data) }
+
+        default:
+            Logger.fatal("Can't update for state \(type(of: data))")
         }
     }
 
@@ -281,7 +289,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         displayErrorView(type: .expiredInvoice)
     }
 
-    func notEnoughBalance(amountPlusFee: String, totalBalance: String) {
+    func notEnoughBalance(amountPlusFee: MonetaryAmount, totalBalance: MonetaryAmount) {
         showInsufficientFundsScreen(amountPlusFee: amountPlusFee, totalBalance: totalBalance)
     }
 
@@ -297,6 +305,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         )
         alert.addAction(UIAlertAction(title: L10n.NewOperationViewController.s5, style: .default, handler: { _ in
             alert.dismiss(animated: true)
+            self.presenter.cancelAbort()
         }))
 
         alert.addAction(UIAlertAction(title: L10n.NewOperationViewController.s6, style: .destructive, handler: { _ in
@@ -412,6 +421,14 @@ extension NewOperationViewController: NewOperationViewDelegate {
     func invoiceJustExpired() {
         expiredInvoice()
     }
+
+    func changeCurrency(_ currency: Currency) {
+        presenter.changeCurrency(currency)
+    }
+
+}
+
+extension NewOperationViewController: NewOperationPresenterDelegate {
 
 }
 

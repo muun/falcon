@@ -24,18 +24,17 @@ class NewOpDescriptionView: MUView {
     weak var transitionsDelegate: OpDescriptionTransitions?
     fileprivate lazy var presenter = instancePresenter(NewOpDescriptionPresenter.init, delegate: self, state: data)
 
-    init(data: NewOperationStateAmount,
+    init(data: NewOpData.Description,
          delegate: NewOpViewDelegate?,
-         transitionsDelegate: OpDescriptionTransitions?,
-         preset: String?) {
+         transitionsDelegate: OpDescriptionTransitions?) {
         self.data = data
         self.delegate = delegate
         self.transitionsDelegate = transitionsDelegate
 
         super.init(frame: .zero)
 
-        if let preset = preset, !preset.isEmpty {
-            textView.text = preset
+        if !data.description.isEmpty {
+            textView.text = data.description
         }
 
         presenter.validityCheck(textView.text ?? "")

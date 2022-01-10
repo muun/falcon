@@ -19,6 +19,7 @@ public struct MuunPaymentURI {
     public let bip70URL: String?
     let creationTime: String?
     let expiresTime: String?
+    public let raw: String
 }
 
 public enum AddressHelper {
@@ -62,7 +63,7 @@ public enum AddressHelper {
         }
 
         let address: String? = !muunUri.address.isEmpty ? muunUri.address : nil
-        let bip70Url: String? = !muunUri.biP70Url.isEmpty ? muunUri.biP70Url : nil
+        let bip70Url: String? = !muunUri.bip70Url.isEmpty ? muunUri.bip70Url : nil
 
         guard let actualUriString = muunUri.uri.trimmingCharacters(in: .whitespaces)
             .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
@@ -78,7 +79,8 @@ public enum AddressHelper {
                                  uri: url,
                                  bip70URL: bip70Url,
                                  creationTime: nil,
-                                 expiresTime: nil)
+                                 expiresTime: nil,
+                                 raw: rawAddress)
 
         return .toAddress(uri: uri)
     }

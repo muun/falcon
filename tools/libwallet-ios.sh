@@ -54,7 +54,7 @@ mkdir -p "$build_dir/pkg"
 
 CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
     GOMODCACHE="$build_dir/pkg" \
-    go run golang.org/x/mobile/cmd/gomobile bind -target=ios -o "$libwallet" -cache "$build_dir/ios" .
+    go run golang.org/x/mobile/cmd/gomobile bind -target=ios -o "$libwallet" -cache "$build_dir/ios" . ./newop
 
 st=$?
 

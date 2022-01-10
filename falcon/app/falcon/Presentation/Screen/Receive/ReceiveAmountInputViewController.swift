@@ -187,7 +187,10 @@ extension ReceiveAmountInputViewController: AmountInputViewDelegate {
     }
 
     func didTapCurrency() {
-        let vc = CurrencyPickerViewController(exchangeRateWindow: presenter.getExchangeRateWindow(), delegate: self)
+        let vc = CurrencyPickerViewController(
+            exchangeRateWindow: presenter.getExchangeRateWindow().toLibwallet(),
+            delegate: self
+        )
         let nc = UINavigationController(rootViewController: vc)
         nc.modalPresentationStyle = .fullScreen
         navigationController?.present(nc, animated: true)

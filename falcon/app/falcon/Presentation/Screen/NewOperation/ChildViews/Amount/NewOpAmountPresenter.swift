@@ -20,17 +20,20 @@ protocol NewOpAmountPresenterDelegate: BasePresenterDelegate {}
 
 class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresenter<Delegate> {
 
-    private let data: NewOperationStateLoaded
-    private let totalBalance: Satoshis
+    private let sessionActions: SessionActions
 
-    init(delegate: Delegate, state: NewOperationStateLoaded) {
-        self.totalBalance = state.feeInfo.feeCalculator.totalBalance()
+    var data: NewOperationStateLoaded
+
+    init(delegate: Delegate, state: NewOperationStateLoaded, sessionActions: SessionActions) {
         self.data = state
+        self.sessionActions = sessionActions
 
         super.init(delegate: delegate)
     }
 
     func validityCheck(_ value: String, currency: String) -> AmountInputView.State {
+        precondition(currency == data.totalBalance.inInputCurrency.currency)
+
         let amount = LocaleAmountFormatter.number(from: value, in: currency)
         let satoshiAmount = Satoshis.from(amount: amount.amount, at: rate(for: currency))
 
@@ -61,34 +64,29 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
     }
 
     func getUserPrimaryCurrency() -> String {
-        let window = data.feeInfo.exchangeRateWindow
-        return data.user.primaryCurrencyWithValidExchangeRate(window: window)
+        return data.primaryCurrency
     }
 
     func totalBalance(in currency: String) -> MonetaryAmount {
-        return totalBalance.valuation(at: rate(for: currency), currency: currency)
+        return data.totalBalance.inSatoshis.valuation(at: rate(for: currency), currency: currency)
     }
 
     func allFunds(in currency: String) -> BitcoinAmount {
-        return BitcoinAmount(inSatoshis: totalBalance,
-                             inInputCurrency: totalBalance(in: currency),
-                             inPrimaryCurrency: totalBalance(in: getUserPrimaryCurrency()))
-    }
-
-    func amount(from value: String, in currency: String) -> BitcoinAmount {
-        return BitcoinAmount.from(
-            inputCurrency: LocaleAmountFormatter.number(from: value, in: currency),
-            with: data.feeInfo.exchangeRateWindow,
-            primaryCurrency: getUserPrimaryCurrency()
+        return BitcoinAmount(
+            inSatoshis: data.totalBalance.inSatoshis,
+            inInputCurrency: totalBalance(in: currency),
+            inPrimaryCurrency: totalBalance(in: data.primaryCurrency)
         )
     }
 
+    func amount(from value: String, in currency: String) -> BitcoinAmount {
+        return BitcoinAmount.from(inputCurrency: LocaleAmountFormatter.number(from: value, in: currency),
+                                  rate: data.rate,
+                                  primaryCurrency: data.primaryCurrency)
+    }
+
     private func rate(for currency: String) -> Decimal {
-        do {
-            return try data.feeInfo.exchangeRateWindow.rate(for: currency)
-        } catch {
-            Logger.fatal(error: error)
-        }
+        return data.rate(for: currency)
     }
 
     func convert(value: String, in currency: String, to newCurrency: String) -> MonetaryAmount {
@@ -96,7 +94,7 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         var satoshis = amount(from: value, in: currency).inSatoshis
 
         if isSendingAllFundsManually(value: value, currency: currency) {
-            satoshis = totalBalance
+            satoshis = data.totalBalance.inSatoshis
         }
 
         return satoshis.valuation(at: rate(for: newCurrency), currency: newCurrency)

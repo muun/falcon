@@ -9,6 +9,7 @@ import Foundation
 
 public enum Constant {
     public static let buildVersion = "\(Bundle.main.infoDictionary!["CFBundleVersion"]!)"
+    public static let buildVersionName = "\(Bundle.main.infoDictionary!["CFBundleShortVersionString"]!)"
     static let houstonLocale = Locale.init(identifier: "en_US")
 
     // Falcon timeout is 32 seconds because it will attempt the requests up to 3 times (96 seconds)

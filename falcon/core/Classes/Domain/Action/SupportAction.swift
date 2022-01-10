@@ -14,7 +14,6 @@ public class SupportAction: AsyncAction<()> {
         case feedback
         case help
         case support
-        case anonSupport
         case cloudRequest
     }
 
@@ -37,9 +36,6 @@ public class SupportAction: AsyncAction<()> {
             feedback = "--- On general \(type) ---\n\n\(text)"
             jsonType = .support
         case .support:
-            feedback = "--- On general \(type) ---\n\n\(text)"
-            jsonType = .support
-        case .anonSupport:
             feedback = "--- On general \(type) ---\n\n\(text)"
             jsonType = .support
         case .cloudRequest:

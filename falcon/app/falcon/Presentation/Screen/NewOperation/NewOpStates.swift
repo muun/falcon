@@ -13,8 +13,10 @@ protocol NewOperationStateDelegate { }
 
 protocol NewOperationStateLoaded: NewOperationStateDelegate {
     var type: PaymentRequestType { get }
-    var feeInfo: FeeInfo { get }
-    var user: User { get }
+    var primaryCurrency: String { get }
+    var totalBalance: BitcoinAmount { get }
+
+    func rate(for currency: String) -> Decimal
 }
 
 protocol NewOperationStateAmount: NewOperationStateLoaded {
@@ -25,25 +27,14 @@ protocol NewOperationStateDescription: NewOperationStateAmount {
     var description: String { get }
 }
 
-protocol NewOpState {}
+enum NewOpState {
+    case loading(_ data: NewOpData.Loading)
+    case amount(_ data: NewOpData.Amount)
+    case description(_ data: NewOpData.Description)
+    case confirmation(_ data: NewOpData.Confirm)
 
-enum ToAddressState: NewOpState {
-    case loading(_ data: NewOpToAddressData.Loading)
-    case amount(_ data: NewOpToAddressData.Amount)
-    case description(_ data: NewOpToAddressData.Description)
-    case confirmation(_ data: NewOpToAddressData.Confirm)
-
-    case feeEditor(_ data: NewOpToAddressData.Confirm, calculateFee: FeeEditor.CalculateFee)
-    case currencyPicker(_ data: NewOpToAddressData.Amount)
-}
-
-enum SubmarineSwapState: NewOpState {
-    case loading(_ data: NewOpSubmarineSwapData.Loading)
-    case amount(_ data: NewOpSubmarineSwapData.Amount)
-    case description(_ data: NewOpSubmarineSwapData.Description)
-    case confirmation(_ data: NewOpSubmarineSwapData.Confirm)
-
-    case currencyPicker(_ data: NewOpSubmarineSwapData.Amount)
+    case feeEditor(_ data: NewOpData.FeeEditor)
+    case currencyPicker(_ data: NewOpData.Amount, selectedCurrency: String)
 }
 
 extension NewOperationStateAmount {
@@ -56,12 +47,6 @@ extension NewOperationStateAmount {
     private func amountInPrimary(satoshis: Satoshis) -> MonetaryAmount {
         let currency = amount.inPrimaryCurrency.currency
         return satoshis.valuation(at: rate(for: currency), currency: currency)
-    }
-
-    private func rate(for currency: String) -> Decimal {
-        do {
-            return try feeInfo.exchangeRateWindow.rate(for: currency)
-        } catch { Logger.fatal(error: error) }
     }
 
     func toBitcoinAmount(satoshis: Satoshis) -> BitcoinAmount {

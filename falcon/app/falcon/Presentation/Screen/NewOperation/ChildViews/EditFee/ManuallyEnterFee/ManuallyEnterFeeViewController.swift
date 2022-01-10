@@ -36,7 +36,7 @@ class ManuallyEnterFeeViewController: MUViewController {
     private let originalFeeState: FeeState
     private var selectedFee: FeeState?
     private let shouldShowUseMaxButton: Bool
-    private let state: FeeEditor.State
+    private let state: FeeEditorState
 
     private let highImage = Asset.Assets.warningHigh.image
     private let lowImage = Asset.Assets.warningLow.image
@@ -47,7 +47,7 @@ class ManuallyEnterFeeViewController: MUViewController {
         return "manually_enter_fee"
     }
 
-    init(delegate: SelectFeeDelegate?, state: FeeEditor.State, showUseMaxButton: Bool) {
+    init(delegate: SelectFeeDelegate?, state: FeeEditorState, showUseMaxButton: Bool) {
         self.delegate = delegate
         self.originalFeeState = state.feeState
         self.selectedFee = state.feeState
@@ -180,8 +180,10 @@ class ManuallyEnterFeeViewController: MUViewController {
             timeLabel.isHidden = false
 
             let fee = state.calculateFee(feeRate)
+            let feeState = fee.adapt()
+
             let feeAmount: BitcoinAmount
-            switch fee {
+            switch feeState {
             case .finalFee(let amount, _):
                 feeAmount = amount
             case .feeNeedsChange(let amount, _):
@@ -203,11 +205,11 @@ class ManuallyEnterFeeViewController: MUViewController {
                 inInputLabel.isHidden = true
             }
 
-            let timeString = presenter.timeToConfirm(feeRate: feeRate)
+            let timeString = presenter.timeToConfirm(fee)
             timeLabel.text = L10n.ManuallyEnterFeeViewController.s7(timeString)
 
-            selectedFee = fee
-            presenter.checkWarnings(fee)
+            selectedFee = feeState
+            presenter.checkWarnings(feeState)
 
         } else {
             selectedFee = nil

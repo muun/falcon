@@ -126,6 +126,7 @@ public class BaseService {
             .addHeader(key: "Content-Type", value: "application/json")
             .addHeader(key: "Accept", value: "application/json")
             .addHeader(key: "X-Client-Version", value: Constant.buildVersion)
+            .addHeader(key: "X-Client-Version-Name", value: Constant.buildVersionName)
             .addHeader(key: "X-Client-Language", value: Locale.current.languageCode ?? "en")
             .addHeader(key: "X-Client-Type", value: "FALCON")
             .addHeader(key: "X-Idempotency-Key", value: UUID().uuidString)

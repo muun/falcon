@@ -31,6 +31,10 @@ class SupportPresenter<Delegate: SupportPresenterDelegeate>: BasePresenter<Deleg
         super.init(delegate: delegate)
     }
 
+    func isAnonUser() -> Bool {
+        return sessionActions.isAnonUser()
+    }
+
     func sendRequest(text: String) {
         supportAction.run(type: type, text: text)
         subscribeTo(supportAction.getState(), onNext: supportRequest)

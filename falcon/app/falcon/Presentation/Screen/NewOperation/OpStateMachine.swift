@@ -39,7 +39,7 @@ enum FeeState: Equatable {
 }
 
 protocol NewOpStateMachineDelegate: BasePresenterDelegate {
-    func requestNextStep(_ data: NewOpState, preset: Any?)
+    func requestNextStep(_ data: NewOpState)
     func requestFinish(_ operation: core.Operation)
 
     func operationCompleted(_ operation: core.Operation)
@@ -47,7 +47,7 @@ protocol NewOpStateMachineDelegate: BasePresenterDelegate {
     // Errors
     func operationError()
     func showExchangeRateWindowTooOldError()
-    func notEnoughBalance(amountPlusFee: String, totalBalance: String)
+    func notEnoughBalance(amountPlusFee: MonetaryAmount, totalBalance: MonetaryAmount)
     func expiredInvoice()
     func invalidAddress()
     func swapError(_ error: NewOpError)
@@ -74,7 +74,7 @@ enum NewOpNextStep {
 }
 
 protocol OpViewBuilder {
-    func getNextStep(state: NewOpState, preset: Any?) -> NewOpNextStep
+    func getNextStep(state: NewOpState) -> NewOpNextStep
     func getLoggingData(state: NewOpState) -> (logName: String, logParams: [String: Any]?)?
     func shouldDisplayOneConfNotice(state: NewOpState) -> Bool
 }

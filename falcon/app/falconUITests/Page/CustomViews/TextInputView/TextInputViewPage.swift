@@ -29,10 +29,17 @@ final class TextInputViewPage: UIElementPage<UIElements.CustomViews.TextInputVie
         _ = mainTextField.waitForExistence(timeout: 1)
 
         let lowerRightCorner = mainTextField.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
-        lowerRightCorner.tap()
+        if !mainTextField.focused {
+            lowerRightCorner.tap()
+        }
 
         clearText()
-        mainTextField.typeText(text)
+
+        UIPasteboard.general.string = text
+        if !XCUIApplication().menuItems["Paste"].exists {
+            lowerRightCorner.doubleTap()
+        }
+        XCUIApplication().menuItems["Paste"].tap()
     }
 
     func clearText() {

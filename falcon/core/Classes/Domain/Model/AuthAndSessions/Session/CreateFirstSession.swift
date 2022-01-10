@@ -29,9 +29,20 @@ struct Client {
     let type: String = "FALCON"
     let buildType: String
     let version: Int
+    let versionName: String
+    let deviceModel: String
+    let timezoneOffsetInSeconds: Int64
+    let language: String
 
     static func buildCurrent() -> Client {
-        Client(buildType: Environment.current.buildType, version: Int(core.Constant.buildVersion)!)
+        Client(
+            buildType: Environment.current.buildType,
+            version: Int(core.Constant.buildVersion)!,
+            versionName: core.Constant.buildVersionName,
+            deviceModel: DeviceUtils.deviceInfo().model,
+            timezoneOffsetInSeconds: Int64(TimeZone.current.secondsFromGMT()),
+            language: Locale.current.identifier
+        )
     }
 
 }

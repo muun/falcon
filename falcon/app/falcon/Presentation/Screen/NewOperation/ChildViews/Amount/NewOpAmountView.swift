@@ -30,27 +30,16 @@ class NewOpAmountView: MUView {
 
     fileprivate lazy var presenter = instancePresenter(NewOpAmountPresenter.init, delegate: self, state: data)
 
-    init(data: NewOperationStateLoaded,
+    init(data: NewOpData.Amount,
          delegate: NewOpViewDelegate?,
-         transitionsDelegate: OpAmountTransitions?,
-         preset: MonetaryAmount?) {
+         transitionsDelegate: OpAmountTransitions?) {
         self.data = data
         self.delegate = delegate
         self.transitionsDelegate = transitionsDelegate
 
         super.init(frame: CGRect.zero)
 
-        amountInputView.currency = presenter.getUserPrimaryCurrency()
-
-        if let preset = preset {
-            // NOTE: it's important that we set the currency before the value to avoid
-            // unwanted currency conversions.
-            amountInputView.currency = preset.currency
-            amountInputView.value = LocaleAmountFormatter.string(from: preset, btcCurrencyFormat: .short)
-        }
-
-        setUp()
-
+        updateUI(data: data)
         validate(amount: amountInputView.value)
         delegate?.update(buttonText: L10n.NewOpAmountView.s1)
     }
@@ -75,42 +64,49 @@ class NewOpAmountView: MUView {
     }
 
     private func setUpView() {
-        setUpMaxAmountLabel()
         setUpAllFundsButton()
-        if inputContainerView.subviews.isEmpty {
-
-            amountInputView = AmountInputView(delegate: self, converter: presenter.convert)
-            amountInputView.translatesAutoresizingMaskIntoConstraints = false
-            inputContainerView.addSubview(amountInputView)
-
-            NSLayoutConstraint.activate([
-                amountInputView.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-                amountInputView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
-                amountInputView.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
-                amountInputView.topAnchor.constraint(equalTo: inputContainerView.topAnchor)
-            ])
-        }
+        setUpAmountView()
     }
 
-    private func setUpMaxAmountLabel() {
-        let amount = presenter.totalBalance(in: currency)
-        amountInputView?.subtitle = L10n.NewOpAmountView.s2(
-            LocaleAmountFormatter.string(from: amount),
-            CurrencyHelper.string(for: amount.currency)
-        )
+    private func setUpAmountView() {
+        amountInputView = AmountInputView(delegate: self, converter: presenter.convert)
+        amountInputView.translatesAutoresizingMaskIntoConstraints = false
+        inputContainerView.addSubview(amountInputView)
+
+        NSLayoutConstraint.activate([
+            amountInputView.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            amountInputView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            amountInputView.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
+            amountInputView.topAnchor.constraint(equalTo: inputContainerView.topAnchor)
+        ])
     }
 
     private func setUpAllFundsButton() {
         allFundsButton.buttonText = L10n.NewOpAmountView.s3
         allFundsButton.delegate = self
-
-        allFundsButton.isEnabled = (presenter.allFunds(in: currency).inSatoshis.asDecimal() > 0)
     }
 
-    func updateInfo(newCurrency: Currency) {
-        amountInputView.currency = newCurrency.code
+    func updateUI(data: NewOpData.Amount) {
+        presenter.data = data
+        // NOTE: it's important that we set the currency before the value to avoid
+        // unwanted currency conversions.
 
-        setUpView()
+        amountInputView.currency = data.amount.inInputCurrency.currency
+        if data.amount.inSatoshis.asDecimal() > 0 {
+            amountInputView.value = LocaleAmountFormatter.string(
+                from: data.amount.inInputCurrency,
+                btcCurrencyFormat: .short
+            )
+        }
+
+        let totalBalance = data.totalBalance.inInputCurrency
+        amountInputView?.subtitle = L10n.NewOpAmountView.s2(
+            LocaleAmountFormatter.string(from: totalBalance),
+            CurrencyHelper.string(for: totalBalance.currency)
+        )
+
+        allFundsButton.isEnabled = data.totalBalance.inSatoshis > Satoshis.zero
+
         validate(amount: amountInputView.value)
     }
 
@@ -180,9 +176,7 @@ extension NewOpAmountView: NewOperationChildViewDelegate {
             amount = presenter.amount(from: input, in: currency)
         }
 
-        let takeFeeFromAmount = data.feeInfo.feeCalculator.shouldTakeFeeFromAmount(amount.inSatoshis)
-
-        transitionsDelegate?.didEnter(amount: amount, data: data, takeFeeFromAmount: takeFeeFromAmount)
+        transitionsDelegate?.didEnter(amount: amount, data: data, takeFeeFromAmount: isUsingAllFunds)
     }
 
 }

@@ -14,6 +14,7 @@ protocol ManualSaveEmergencyKitViewDelegate: AnyObject {
 class ManualSaveEmergencyKitView: UIScrollView {
 
     private weak var viewDelegate: ManualSaveEmergencyKitViewDelegate?
+    private let button: SmallButtonView = SmallButtonView()
 
     required init(coder: NSCoder) {
         preconditionFailure()
@@ -23,6 +24,7 @@ class ManualSaveEmergencyKitView: UIScrollView {
         self.viewDelegate = delegate
         super.init(frame: .zero)
         setupView()
+        makeViewTestable()
     }
 
     private func setupView() {
@@ -106,7 +108,6 @@ class ManualSaveEmergencyKitView: UIScrollView {
             stack.setCustomSpacing(.bigSpacing, after: $0)
         }
 
-        let button = SmallButtonView()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.buttonText = L10n.ManualSaveEmergencyKitView.save
         button.delegate = self
@@ -177,6 +178,16 @@ extension ManualSaveEmergencyKitView: SmallButtonViewDelegate {
 
     func button(didPress button: SmallButtonView) {
         viewDelegate?.save()
+    }
+
+}
+
+extension ManualSaveEmergencyKitView: UITestablePage {
+
+    typealias UIElementType = UIElements.Pages.EmergencyKit.SharePDF
+
+    func makeViewTestable() {
+        makeViewTestable(self.button, using: .confirm)
     }
 
 }

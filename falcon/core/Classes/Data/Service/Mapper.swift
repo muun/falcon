@@ -87,7 +87,15 @@ extension CreateSessionRcOkJson: ModelConvertible {
 extension Client: APIConvertible {
 
     func toJson() -> ClientJson {
-        return ClientJson(type: type, buildType: buildType, version: version)
+        ClientJson(
+            type: type,
+            buildType: buildType,
+            version: version,
+            versionName: versionName,
+            deviceModel: deviceModel,
+            timezoneOffsetInSeconds: timezoneOffsetInSeconds,
+            language: language
+        )
     }
 
 }
@@ -636,18 +644,14 @@ extension RawTransactionJson: ModelConvertible {
 
 }
 
-extension RawTransactionResponse: APIConvertible {
+extension RawTransactionResponseJson: ModelOperationConvertible {
 
-    func toJson() -> RawTransactionResponseJson {
-        return RawTransactionResponseJson(hex: self.hex, nextTransactionSize: self.nextTransactionSize.toJson())
-    }
-
-}
-
-extension RawTransactionResponseJson: ModelConvertible {
-
-    public func toModel() -> RawTransactionResponse {
-        return RawTransactionResponse(hex: self.hex, nextTransactionSize: self.nextTransactionSize.toModel())
+    func toModel(decrypter: OperationMetadataDecrypter) -> RawTransactionResponse {
+        return RawTransactionResponse(
+            hex: self.hex,
+            nextTransactionSize: self.nextTransactionSize.toModel(),
+            updatedOperation: self.updatedOperation.toModel(decrypter: decrypter)
+        )
     }
 
 }

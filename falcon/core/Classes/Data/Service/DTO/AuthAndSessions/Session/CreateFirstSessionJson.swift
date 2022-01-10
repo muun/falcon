@@ -29,5 +29,9 @@ struct ClientJson: Codable {
     let type: String
     let buildType: String
     let version: Int
+    let versionName: String
+    let deviceModel: String
+    let timezoneOffsetInSeconds: Int64
+    let language: String
 
 }

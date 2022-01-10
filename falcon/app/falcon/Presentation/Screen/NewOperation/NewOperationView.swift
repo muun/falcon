@@ -14,6 +14,7 @@ protocol NewOperationViewDelegate: AnyObject {
     func invoiceJustExpired()
     func didPressInfoButton(info: MoreInfo)
     func oneConfNoticeTapped()
+    func changeCurrency(_ currency: Currency)
 }
 
 protocol NewOperationChildView {
@@ -72,6 +73,7 @@ class NewOperationView: MUView {
 
         buttonView.delegate = self
         setUpMoreInfoLabel()
+        setUpOneConfNotice()
 
         makeViewTestable()
     }
@@ -81,6 +83,19 @@ class NewOperationView: MUView {
         moreInfoLabel.font = Constant.Fonts.system(size: .notice)
         moreInfoLabel.isHidden = true
         moreInfoLabel.text = ""
+    }
+
+    private func setUpOneConfNotice() {
+        oneConfNoticeView.style = .notice
+        oneConfNoticeView.text = L10n.NewOperationView.s2
+            .set(font: Constant.Fonts.system(size: .opHelper),
+                 lineSpacing: Constant.FontAttributes.lineSpacing,
+                 kerning: Constant.FontAttributes.kerning,
+                 alignment: .left)
+            .set(underline: L10n.NewOperationView.s3, color: Asset.Colors.muunBlue.color)
+
+        oneConfNoticeView.delegate = self
+        oneConfNoticeView.isHidden = true
     }
 
     fileprivate func animate(in view: MUView, out previousView: UIView, isBack: Bool) {
@@ -175,6 +190,10 @@ class NewOperationView: MUView {
         }
     }
 
+    func withCurrentView<T: UIView>(_ cb: (T) -> ()) {
+        (currentView as? T).map(cb)
+    }
+
     func animateButtonTransition(height: CGFloat) {
 
         UIView.animate(withDuration: 0.25, delay: 0, options: [.beginFromCurrentState], animations: {
@@ -218,17 +237,8 @@ class NewOperationView: MUView {
         startTimer(calculateSecondsLeft())
     }
 
-    func displayOneConfNotice() {
-        oneConfNoticeView.style = .notice
-        oneConfNoticeView.text = L10n.NewOperationView.s2
-            .set(font: Constant.Fonts.system(size: .opHelper),
-                 lineSpacing: Constant.FontAttributes.lineSpacing,
-                 kerning: Constant.FontAttributes.kerning,
-                 alignment: .left)
-            .set(underline: L10n.NewOperationView.s3, color: Asset.Colors.muunBlue.color)
-
-        oneConfNoticeView.delegate = self
-        oneConfNoticeView.isHidden = false
+    func displayOneConfNotice(_ display: Bool) {
+        oneConfNoticeView.isHidden = !display
     }
 
     private func calculateSecondsLeft() -> Int {
@@ -292,9 +302,7 @@ extension NewOperationView: NoticeViewDelegate {
 extension NewOperationView: CurrencyPickerDelegate {
 
     func didSelectCurrency(_ currency: Currency) {
-        if let view = currentView as? NewOpAmountView {
-            view.updateInfo(newCurrency: currency)
-        }
+        filledDataDelegate?.changeCurrency(currency)
     }
 
 }

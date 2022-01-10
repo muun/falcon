@@ -33,7 +33,7 @@ class EmailAlreadyUsedViewController: MUViewController {
 
 extension EmailAlreadyUsedViewController: EmailAlreadyUsedViewDelegate {
     func descriptionTouched() {
-        let nc = UINavigationController(rootViewController: SupportViewController(type: .anonSupport))
+        let nc = UINavigationController(rootViewController: SupportViewController(type: .help))
         navigationController!.present(nc, animated: true)
     }
 }

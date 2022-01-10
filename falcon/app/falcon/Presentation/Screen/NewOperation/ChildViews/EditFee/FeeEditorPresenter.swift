@@ -8,42 +8,40 @@
 
 import Foundation
 import core
+import Libwallet
 
-enum FeeEditor {
-    struct State {
-        let feeState: FeeState
-        let calculateFee: CalculateFee
-        let feeCalculator: FeeCalculator
-        let amount: Satoshis
-        let feeConfirmationTargets: FeeConfirmationTargets
-    }
-    typealias CalculateFee = (FeeRate) -> FeeState
-}
+typealias FeeEditorState = NewOpData.FeeEditor
 
 class FeeEditorPresenter<Delegate: BasePresenterDelegate>: BasePresenter<Delegate> {
 
     let feeState: FeeState
-    let calculateFee: FeeEditor.CalculateFee
-    let feeCalculator: FeeCalculator
+    let calculateFee: (FeeRate) -> NewopFeeState
     let amount: Satoshis
+    let takeFeeFromAmount: Bool
+    let minMempoolFeeRate: FeeRate
+    let minFeeRate: (_ target: UInt) -> FeeRate
+    let maxFeeRate: FeeRate
     let feeConfirmationTargets: FeeConfirmationTargets
 
-    init(delegate: Delegate, state: FeeEditor.State) {
+    init(delegate: Delegate, state: FeeEditorState) {
         self.feeState = state.feeState
         self.calculateFee = state.calculateFee
-        self.feeCalculator = state.feeCalculator
-        self.amount = state.amount
+        self.amount = state.amount.inSatoshis
+        self.takeFeeFromAmount = state.takeFeeFromAmount
+        self.minMempoolFeeRate = state.minMempoolFeeRate
+        self.minFeeRate = state.minFeeRate
+        self.maxFeeRate = state.maxFeeRate
         self.feeConfirmationTargets = state.feeConfirmationTargets
 
         super.init(delegate: delegate)
     }
 
-    var takeFeeFromAmount: Bool {
-        return feeCalculator.shouldTakeFeeFromAmount(amount)
-    }
-
-    func timeToConfirm(feeRate: FeeRate) -> String {
-        return timeToConfirm(targetBlock: feeCalculator.nextHighestBlock(for: feeRate))
+    func timeToConfirm(_ feeState: NewopFeeState) -> String {
+        var targetBlock: UInt? = UInt(feeState.targetBlocks)
+        if targetBlock == 0 {
+            targetBlock = nil
+        }
+        return timeToConfirm(targetBlock: targetBlock)
     }
 
     func timeToConfirm(targetBlock: UInt?) -> String {

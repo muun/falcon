@@ -38,14 +38,13 @@ class SelectFeePresenter<Delegate: BasePresenterDelegate>: FeeEditorPresenter<De
     private func calculateFees() -> [FeeState] {
         var allFees: [FeeState] = [FeeState]()
         for target in targetBlocks {
-            let rate = feeCalculator.getMinimumFeeRate(confirmationTarget: target)
-            let fee = calculateFee(rate)
+            let rate = minFeeRate(target)
+            let fee = calculateFee(rate).adapt()
             // Do not add duplicate values
             if !allFees.contains(fee) {
                 allFees.append(fee)
             }
         }
-
         return allFees
     }
 

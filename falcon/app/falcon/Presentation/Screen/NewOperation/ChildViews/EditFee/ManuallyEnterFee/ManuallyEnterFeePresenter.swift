@@ -21,11 +21,10 @@ protocol ManuallyEnterFeePresenterDelegate: BasePresenterDelegate {
 class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: FeeEditorPresenter<Delegate> {
 
     func calculateMaximumFeePossible() -> FeeRate {
-        return feeCalculator.calculateMaximumFeePossible(amount: amount)
+        return maxFeeRate
     }
 
     func checkWarnings(_ fee: FeeState) {
-
         let feeRate: FeeRate
         let isValid: Bool
 
@@ -48,14 +47,12 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
             return
         }
 
-        let minMempoolFeeRate = feeCalculator.getMinimumFeeRate()
         let minProtocolFeeRate = core.Constant.FeeProtocol.minProtocolFeeRate
         let minSatsPerVByte = max(minMempoolFeeRate.satsPerVByte, minProtocolFeeRate.satsPerVByte)
 
         if feeRate.satsPerVByte < minSatsPerVByte {
             // This fee rate is too low. Is it because it doesn't match current network
             // requirements, or because it's below the protocol-level minimum.
-
             if minMempoolFeeRate.satsPerVByte > minProtocolFeeRate.satsPerVByte {
                 delegate.feeBelowMempoolMinimum(minFee: minSatsPerVByte.stringValue())
                 return
@@ -74,7 +71,7 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
             return
         }
 
-        let lowFee = feeCalculator.getMinimumFeeRate(confirmationTarget: feeConfirmationTargets.slow)
+        let lowFee = minFeeRate(feeConfirmationTargets.slow)
 
         if feeRate.satsPerVByte < lowFee.satsPerVByte {
             delegate.feeIsVeryLow()

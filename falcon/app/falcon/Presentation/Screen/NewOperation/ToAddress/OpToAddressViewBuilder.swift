@@ -39,7 +39,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
         self.amountDelegate = amountDelegate
     }
 
-    func getNextStep(state: NewOpState, preset: Any? = nil) -> NewOpNextStep {
+    func getNextStep(state: NewOpState) -> NewOpNextStep {
         let currentState = checkFlow(state: state)
 
         switch currentState {
@@ -50,15 +50,13 @@ class OpToAddressViewBuilder: OpViewBuilder {
         case .amount(let data):
             return .view(NewOpAmountView(data: data,
                                          delegate: newOpViewDelegate,
-                                         transitionsDelegate: transitionDelegate,
-                                         preset: preset as? MonetaryAmount),
+                                         transitionsDelegate: transitionDelegate),
                          filledData: [buildDestinationView(type: data.type)])
 
         case .description(let data):
             let descriptionView = NewOpDescriptionView(data: data,
                                                        delegate: newOpViewDelegate,
-                                                       transitionsDelegate: transitionDelegate,
-                                                       preset: preset as? String)
+                                                       transitionsDelegate: transitionDelegate)
             return .view(descriptionView, filledData: [
                 buildDestinationView(type: data.type),
                 buildAmountView(data.amount, takeFeeFromAmount: false)
@@ -77,23 +75,16 @@ class OpToAddressViewBuilder: OpViewBuilder {
                 NewOpDescriptionFilledDataView(descriptionText: data.description)
             ])
 
-        case .feeEditor(let data, let calculateFee):
+        case .feeEditor(let data):
 
-            let state = FeeEditor.State(feeState: data.feeState,
-                                        calculateFee: calculateFee,
-                                        feeCalculator: data.feeInfo.feeCalculator,
-                                        amount: data.amount.inSatoshis,
-                                        feeConfirmationTargets: getConfirmationTargets(data))
+            return .modal(SelectFeeViewController(delegate: transitionDelegate, state: data))
 
-            return .modal(SelectFeeViewController(delegate: transitionDelegate,
-                                                  state: state))
-
-        case .currencyPicker(let data):
+        case .currencyPicker(let data, let selectedCurrency):
             let currencyPicker = CurrencyPickerViewController(
-                exchangeRateWindow: data.feeInfo.exchangeRateWindow,
+                exchangeRateWindow: data.exchangeRateWindow,
                 delegate: amountDelegate
             )
-            currencyPicker.selectedCurrencyCode = preset as? String
+            currencyPicker.selectedCurrencyCode = selectedCurrency
 
             return .modal(currencyPicker)
         }
@@ -108,7 +99,9 @@ class OpToAddressViewBuilder: OpViewBuilder {
         case .loading: return ("loading", nil)
         case .amount: return ("amount", nil)
         case .description: return ("description", nil)
-        case .confirmation(let data): return ("confirmation", getFeeParams(data))
+        case .confirmation(let data):
+            // TODO(newop): this will not log again if we don't recreate the view
+            return ("confirmation", getFeeParams(data))
         case .feeEditor, .currencyPicker:
             // These are view controller, they control their own logging
             return nil
@@ -120,20 +113,11 @@ class OpToAddressViewBuilder: OpViewBuilder {
         return false
     }
 
-    private func getConfirmationTargets(_ data: NewOpToAddressData.Confirm) -> FeeConfirmationTargets {
-        let feeWindow = data.feeInfo.feeWindow
-        return (
-            slow: feeWindow.slowConfTarget ?? 1,
-            medium: feeWindow.mediumConfTarget ?? 1,
-            fast: feeWindow.fastConfTarget ?? 1
-        )
-    }
-
-    private func getFeeParams(_ data: NewOpToAddressData.Confirm) -> [String: Any]? {
-        let feeWindow = data.feeInfo.feeWindow
-        let fastFee = feeWindow.targetedFees[feeWindow.fastConfTarget ?? 1]
-        let mediumFee = feeWindow.targetedFees[feeWindow.mediumConfTarget ?? 1]
-        let slowFee = feeWindow.targetedFees[feeWindow.slowConfTarget ?? 1]
+    private func getFeeParams(_ data: NewOpData.Confirm) -> [String: Any]? {
+        let feeWindow = data.feeWindow
+        let fastFee = feeWindow.getTargetedFees(feeWindow.fastConfTarget)
+        let mediumFee = feeWindow.getTargetedFees(feeWindow.mediumConfTarget)
+        let slowFee = feeWindow.getTargetedFees(feeWindow.slowConfTarget)
 
         var params = [String: String]()
 
@@ -141,12 +125,12 @@ class OpToAddressViewBuilder: OpViewBuilder {
         case .noPossibleFee, .feeNeedsChange:
             return params
         case .finalFee(_, let rate):
-            switch rate.satsPerVByte {
-            case fastFee?.satsPerVByte:
+            switch (rate.satsPerVByte as NSDecimalNumber).doubleValue {
+            case fastFee:
                 params["fee_type"] = "fast"
-            case mediumFee?.satsPerVByte:
+            case mediumFee:
                 params["fee_type"] = "medium"
-            case slowFee?.satsPerVByte:
+            case slowFee:
                 params["fee_type"] = "slow"
             default:
                 params["fee_type"] = "custom"
@@ -167,23 +151,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
                                               moreInfo: moreInfo)
     }
 
-    private func calculateTotalAmount(data: NewOpToAddressData.Confirm) -> BitcoinAmount {
-        var amountInInput = data.amount.inInputCurrency.amount
-        var amountInPrimary = data.amount.inPrimaryCurrency.amount
-
-        let fee = getOnChainFee(data: data).value
-        let finalFee = fee.inSatoshis
-        amountInInput += fee.inInputCurrency.amount
-        amountInPrimary += fee.inPrimaryCurrency.amount
-
-        return BitcoinAmount(
-            inSatoshis: data.amount.inSatoshis + finalFee,
-            inInputCurrency: MonetaryAmount(amount: amountInInput, currency: data.amount.inInputCurrency.currency),
-            inPrimaryCurrency: MonetaryAmount(amount: amountInPrimary, currency: data.amount.inPrimaryCurrency.currency)
-        )
-    }
-
-    func getOnChainFee(data: NewOpToAddressData.Confirm) -> (value: BitcoinAmount, isValid: Bool) {
+    func getOnChainFee(data: NewOpData.Confirm) -> (value: BitcoinAmount, isValid: Bool) {
 
         switch data.feeState {
         case .feeNeedsChange(let displayFee, _):
@@ -215,7 +183,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
         return view
     }
 
-    private func buildOnChainFeeView(_ confirmState: NewOpToAddressData.Confirm) -> MUView {
+    private func buildOnChainFeeView(_ confirmState: NewOpData.Confirm) -> MUView {
         let fee = getOnChainFee(data: confirmState)
         let text = L10n.OpToAddressViewBuilder.s2
         let notice: Notice? = fee.isValid
@@ -238,11 +206,11 @@ class OpToAddressViewBuilder: OpViewBuilder {
         return view
     }
 
-    private func buildTotalView(_ confirmState: NewOpToAddressData.Confirm) -> MUView {
+    private func buildTotalView(_ confirmState: NewOpData.Confirm) -> MUView {
         let fee = getOnChainFee(data: confirmState)
 
         let totalFilled = NewOpFilledAmount(type: .total,
-                                            amount: calculateTotalAmount(data: confirmState))
+                                            amount: confirmState.total)
 
         let totalView = NewOpAmountFilledDataView(filledData: totalFilled,
                                                   delegate: amountDelegate,
@@ -256,8 +224,8 @@ class OpToAddressViewBuilder: OpViewBuilder {
         return totalView
     }
 
-    private func checkFlow(state: NewOpState) -> ToAddressState {
-        guard let currentState = state as? ToAddressState else {
+    private func checkFlow(state: NewOpState) -> NewOpState {
+        guard let currentState = state as? NewOpState else {
             Logger.fatal("Wrong state: \(state) in Op To Address flow")
         }
 

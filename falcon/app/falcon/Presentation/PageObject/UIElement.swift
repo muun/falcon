@@ -262,6 +262,7 @@ enum UIElements {
             enum SharePDF: String, UIElement {
                 case root
                 case saveManually
+                case confirm
             }
 
             enum ActivatePDF: String, UIElement {

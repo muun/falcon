@@ -11,6 +11,7 @@ import core
 
 protocol SelectFeeDelegate: AnyObject {
     func selected(fee: BitcoinAmount, rate: FeeRate)
+    func cancel()
 }
 
 class SelectFeeViewController: MUViewController {
@@ -22,8 +23,7 @@ class SelectFeeViewController: MUViewController {
     @IBOutlet fileprivate weak var noticeSeparatorView: UIView!
 
     fileprivate lazy var presenter = instancePresenter(SelectFeePresenter.init,
-                                                       delegate: self,
-                                                       state: state)
+                                                       delegate: self, state: state)
     private weak var delegate: SelectFeeDelegate?
 
     private var selectedFee: FeeState {
@@ -33,13 +33,13 @@ class SelectFeeViewController: MUViewController {
     }
 
     private let originalFeeState: FeeState
-    private let state: FeeEditor.State
+    private let state: FeeEditorState
 
     override var screenLoggingName: String {
         return "select_fee"
     }
 
-    init(delegate: SelectFeeDelegate?, state: FeeEditor.State) {
+    init(delegate: SelectFeeDelegate?, state: FeeEditorState) {
 
         self.delegate = delegate
         self.originalFeeState = state.feeState
@@ -123,6 +123,10 @@ class SelectFeeViewController: MUViewController {
         }
     }
 
+    override func onCloseTap() {
+        self.delegate?.cancel()
+        super.onCloseTap()
+    }
 }
 
 extension SelectFeeViewController: UITableViewDelegate {

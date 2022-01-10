@@ -6,6 +6,8 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
+import Libwallet
+
 public struct User: Codable {
 
     public let id: Int
@@ -40,6 +42,13 @@ public struct User: Codable {
 
     public func primaryCurrencyWithValidExchangeRate(window: ExchangeRateWindow) -> String {
         if primaryCurrency != "BTC" && window.rates[primaryCurrency] != nil {
+            return primaryCurrency
+        }
+        return "BTC"
+    }
+
+    public func primaryCurrencyWithValidExchangeRate(window: NewopExchangeRateWindow) -> String {
+        if primaryCurrency != "BTC" && window.rate(primaryCurrency) != 0.0 {
             return primaryCurrency
         }
         return "BTC"

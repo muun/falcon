@@ -46,14 +46,21 @@ extension BitcoinAmount {
             }
         }
 
-        let rateForInput = rate(for: inInputCurrency.currency)
+        return from(inputCurrency: inInputCurrency, rate: rate, primaryCurrency: primaryCurrency)
+    }
+
+    public static func from(inputCurrency inInputCurrency: MonetaryAmount,
+                            rate: (String) -> Decimal,
+                            primaryCurrency: String) -> BitcoinAmount {
+
+        let rateForInput = rate(inInputCurrency.currency)
         let satoshis = Satoshis.from(amount: inInputCurrency.amount, at: rateForInput)
 
         let inPrimaryCurrency: MonetaryAmount
         if inInputCurrency.currency == primaryCurrency {
             inPrimaryCurrency = inInputCurrency
         } else {
-            inPrimaryCurrency = satoshis.valuation(at: rate(for: primaryCurrency),
+            inPrimaryCurrency = satoshis.valuation(at: rate(primaryCurrency),
                                                    currency: primaryCurrency)
         }
 

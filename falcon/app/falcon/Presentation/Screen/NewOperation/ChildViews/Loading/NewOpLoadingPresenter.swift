@@ -51,11 +51,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
 
         switch paymentIntent {
         case .toAddress(let uri):
-            if let u = bip70Url() {
-                paymentRequestType = loadBIP70(url: u, uri: uri)
-            } else {
-                paymentRequestType = Single.just(FlowToAddress(uri: uri))
-            }
+            paymentRequestType = Single.just(FlowToAddress(uri: uri))
 
         case .submarineSwap(let invoice):
             paymentRequestType = createSubmarineSwap(invoice: invoice)
@@ -83,59 +79,6 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
         return submarineSwapAction.getValue().map({ (submarineSwap) -> PaymentRequestType in
             return FlowSubmarineSwap(invoice: invoice, submarineSwap: submarineSwap)
         })
-    }
-
-    private func loadBIP70(url: String, uri: MuunPaymentURI) -> Single<PaymentRequestType> {
-
-        return Single.deferred {
-
-            do {
-                return try self.bip70Action.getPaymentRequest(url: url)
-            } catch {
-                let expiredString = "Failed to Unmarshall paymentRequest"
-                if let e = error as? MuunError {
-                    if e.localizedDescription.contains(expiredString) {
-                        // If the error contains the expired string, that means that the invoice has expired
-                        return Single.error(Errors.expiredInvoice)
-                    } else if self.uriHasAddress() {
-                        // If the request fails but the invoice did not expire and it has an address, we continue
-                        // the flow to that address
-                        return Single.just(FlowToAddress(uri: uri))
-                    }
-                    // In any other case we display the invalid address message
-                    return Single.error(Errors.invalidAddress)
-                }
-                return Single.error(Errors.invalidAddress)
-            }
-
-        }
-
-    }
-
-    private func bip70Url() -> String? {
-        switch paymentIntent {
-        case .toAddress(let uri):
-            if let url = uri.bip70URL, !url.isEmpty {
-                return url
-            }
-        default:
-            return nil
-        }
-
-        return nil
-    }
-
-    private func uriHasAddress() -> Bool {
-        switch paymentIntent {
-        case .toAddress(let uri):
-            if let address = uri.address, !address.isEmpty {
-                return true
-            }
-        default:
-            return false
-        }
-
-        return false
     }
 
     func didLoad(feeInfo: FeeInfo, paymentRequestType: PaymentRequestType, user: User) {

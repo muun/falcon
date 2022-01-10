@@ -9,6 +9,13 @@
 import UIKit
 import core
 
+fileprivate enum RequestType {
+    case feedback
+    case help
+    case support
+    case anon
+}
+
 class SupportViewController: MUViewController {
 
     @IBOutlet fileprivate weak var titleAndDescriptionView: TitleAndDescriptionView!
@@ -18,8 +25,9 @@ class SupportViewController: MUViewController {
     @IBOutlet fileprivate weak var emailBoxView: UIView!
     @IBOutlet fileprivate weak var linkButtonView: LinkButtonView!
 
-    fileprivate lazy var presenter = instancePresenter(SupportPresenter.init, delegate: self, state: type)
-    private let type: SupportAction.RequestType
+    fileprivate lazy var presenter = instancePresenter(SupportPresenter.init, delegate: self, state: actionType)
+    private var type: RequestType!
+    private let actionType: SupportAction.RequestType
     private var emailActionSheet: UIAlertController = UIAlertController()
 
     override var screenLoggingName: String {
@@ -35,9 +43,26 @@ class SupportViewController: MUViewController {
     }
 
     init(type: SupportAction.RequestType) {
-        self.type = type
+        if case .cloudRequest = type {
+            Logger.fatal("Cant invoke support VC with cloud request")
+        }
+
+        self.actionType = type
 
         super.init(nibName: nil, bundle: nil)
+
+        switch type {
+        case _ where presenter.isAnonUser():
+            self.type = .anon
+        case .feedback:
+            self.type = .feedback
+        case .help:
+            self.type = .help
+        case .support:
+            self.type = .support
+        case .cloudRequest:
+            Logger.fatal("Cant invoke support VC with cloud request")
+        }
     }
 
     override func viewDidLoad() {
@@ -72,7 +97,7 @@ class SupportViewController: MUViewController {
     fileprivate func setUpView() {
         setUpTitleAndDescription()
 
-        if type == .anonSupport {
+        if type == .anon {
             setUpAnonUserSupportView()
         } else {
             setUpUserSupportView()
@@ -110,7 +135,7 @@ class SupportViewController: MUViewController {
         titleAndDescriptionView.titleText = type.titleText
         titleAndDescriptionView.descriptionText = type.descriptionText
 
-        if type == .anonSupport, let supportId = presenter.getSupportId() {
+        if type == .anon, let supportId = presenter.getSupportId() {
             addSupportCode(supportId)
         }
     }
@@ -225,13 +250,13 @@ extension SupportViewController: SupportPresenterDelegeate {
 extension SupportViewController {
 
     override func keyboardWillHide(notification: NSNotification) {
-        guard type != .anonSupport else { return }
+        guard type != .anon else { return }
 
         animateButtonTransition(height: 0)
     }
 
     override func keyboardWillShow(notification: NSNotification) {
-        guard type != .anonSupport else { return }
+        guard type != .anon else { return }
 
         if let keyboardSize = getKeyboardSize(notification) {
             let safeAreaBottomHeight = view.safeAreaInsets.bottom
@@ -280,7 +305,7 @@ extension SupportViewController: LinkButtonViewDelegate {
 extension SupportViewController: TitleAndDescriptionViewDelegate {
 
     func descriptionTouched() {
-        if type == .anonSupport, let supportId = presenter.getSupportId() {
+        if type == .anon, let supportId = presenter.getSupportId() {
             UIPasteboard.general.string = supportId
             showToast(message: L10n.SupportViewController.s4)
         }
@@ -288,7 +313,7 @@ extension SupportViewController: TitleAndDescriptionViewDelegate {
 
 }
 
-extension SupportAction.RequestType {
+extension RequestType {
 
     var titleText: String {
         switch self {
@@ -296,10 +321,8 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s5
         case .help, .support:
             return L10n.SupportViewController.s6
-        case .anonSupport:
+        case .anon:
             return L10n.SupportViewController.s7
-        case .cloudRequest:
-            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -311,12 +334,10 @@ extension SupportAction.RequestType {
         case .help, .support:
             return L10n.SupportViewController.s9
                 .attributedForDescription()
-        case .anonSupport:
+        case .anon:
             return L10n.SupportViewController.s10
                 .attributedForDescription()
                 .set(bold: "support@muun.com", color: Asset.Colors.title.color)
-        case .cloudRequest:
-            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -326,10 +347,8 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s11
         case .help, .support:
             return L10n.SupportViewController.s12
-        case .anonSupport:
+        case .anon:
             return ""
-        case .cloudRequest:
-            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
@@ -339,24 +358,20 @@ extension SupportAction.RequestType {
             return L10n.SupportViewController.s13
         case .help, .support:
             return L10n.SupportViewController.s14
-        case .anonSupport:
+        case .anon:
             return L10n.SupportViewController.s15
-        case .cloudRequest:
-            Logger.fatal("Cant invoke support view with cloud request")
         }
     }
 
 }
 
-extension SupportAction.RequestType {
+extension RequestType {
     func loggingName() -> String {
         switch self {
         case .feedback: return "feedback"
         case .help: return "help"
         case .support: return "support"
-        case .anonSupport: return "anon_support"
-        case .cloudRequest:
-            Logger.fatal("Cant invoke support view with cloud request")
+        case .anon: return "anon_support"
         }
     }
 }

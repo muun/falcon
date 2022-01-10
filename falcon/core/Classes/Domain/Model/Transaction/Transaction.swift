@@ -58,4 +58,5 @@ struct RawTransaction {
 struct RawTransactionResponse {
     let hex: String?
     let nextTransactionSize: NextTransactionSize
+    let updatedOperation: Operation
 }

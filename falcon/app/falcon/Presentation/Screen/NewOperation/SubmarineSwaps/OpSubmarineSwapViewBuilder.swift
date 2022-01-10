@@ -8,6 +8,7 @@
 
 import Foundation
 import core
+import Libwallet
 
 class OpSubmarineSwapViewBuilder: OpViewBuilder {
 
@@ -39,11 +40,9 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         self.amountDelegate = amountDelegate
     }
 
-    func getNextStep(state: NewOpState, preset: Any? = nil) -> NewOpNextStep {
+    func getNextStep(state: NewOpState) -> NewOpNextStep {
 
-        let currentState = checkFlow(state: state)
-
-        switch currentState {
+        switch state {
 
         case .loading(let data):
             return .view(NewOpLoadingView(paymentIntent: data.type, delegate: transitionDelegate), filledData: [])
@@ -51,27 +50,27 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         case .amount(let data):
             let view = NewOpAmountView(data: data,
                                        delegate: newOpViewDelegate,
-                                       transitionsDelegate: transitionDelegate,
-                                       preset: preset as? MonetaryAmount)
+                                       transitionsDelegate: transitionDelegate)
 
             return .view(view, filledData: [
                 buildDestination(type: data.type)
             ])
 
         case .description(let data):
-            // This is the first time where we can know the debt type
-            addDebtTypeParam(swapParams: data.params)
-
             let descriptionView = NewOpDescriptionView(data: data,
                                                        delegate: newOpViewDelegate,
-                                                       transitionsDelegate: transitionDelegate,
-                                                       preset: preset as? String)
+                                                       transitionsDelegate: transitionDelegate)
             return .view(descriptionView, filledData: [
                 buildDestination(type: data.type),
                 buildAmountView(data.amount)
             ])
 
         case .confirmation(let data):
+            // This is the first time where we can know the debt type
+            if let debtType = data.debtType {
+                addDebtTypeParam(debtType)
+            }
+
             let view = NewOpConfirmView(feeState: data.feeState,
                                         delegate: newOpViewDelegate,
                                         transitionDelegate: transitionDelegate)
@@ -88,22 +87,25 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
             ])
             return .view(view, filledData: filledData)
 
-        case .currencyPicker(let data):
+        case .currencyPicker(let data, let selectedCurrency):
 
-            let currencyPicker = CurrencyPickerViewController(exchangeRateWindow: data.feeInfo.exchangeRateWindow,
-                                                              delegate: amountDelegate)
-            currencyPicker.selectedCurrencyCode = preset as? String
+            let currencyPicker = CurrencyPickerViewController(
+                exchangeRateWindow: data.exchangeRateWindow,
+                delegate: amountDelegate
+            )
+            currencyPicker.selectedCurrencyCode = selectedCurrency
 
             return .modal(currencyPicker)
 
+        default:
+            Logger.fatal("unhandled state: \(state)")
         }
+
     }
 
     func getLoggingData(state: NewOpState) -> (logName: String, logParams: [String: Any]?)? {
 
-        let currentState = checkFlow(state: state)
-
-        switch currentState {
+        switch state {
         case .loading: return ("loading", params)
         case .amount: return ("amount", params)
         case .description: return ("description", params)
@@ -113,28 +115,28 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         case .currencyPicker:
             // It's a view controller, it controls it's own logging
             return nil
+        default:
+            return nil
         }
     }
 
     func shouldDisplayOneConfNotice(state: NewOpState) -> Bool {
-        let currentState = checkFlow(state: state)
-        let swapParams: SwapExecutionParameters
-
-        switch currentState {
+        switch state {
         case .loading, .amount, .currencyPicker:
             return false
 
         case .description(let data):
-            swapParams = data.params
+            return data.isOneConf
 
         case .confirmation(let data):
-            swapParams = data.params
-        }
+            return data.isOneConf
 
-        return swapParams.confirmationsNeeded >= 1
+        default:
+            Logger.fatal("unhandled state: \(state)")
+        }
     }
 
-    private func updateFeeParams(_ data: NewOpSubmarineSwapData.Confirm) {
+    private func updateFeeParams(_ data: NewOpData.Confirm) {
         switch data.feeState {
         case .noPossibleFee, .feeNeedsChange:
             return
@@ -143,18 +145,21 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         }
     }
 
-    private func addDebtTypeParam(swapParams: SwapExecutionParameters) {
+    private func addDebtTypeParam(_ debtType: DebtType) {
         if params["debt_type"] != nil {
             return
         }
 
-        params["debt_type"] = swapParams.debtType.rawValue.lowercased()
+        params["debt_type"] = debtType.rawValue.lowercased()
     }
 
     private func buildDestination(type: PaymentRequestType, confirm: Bool = false) -> MUView {
 
-        let pubKey = self.getSubmarineSwap(type: type)._receiver.publicKey()
-        let moreInfo = BottomDrawerInfo.swapDestination(pubKey: pubKey, destinationInfo: destinationInfo(type: type))
+        let submarineSwap = getSubmarineSwap(type: type)
+
+        let pubKey = submarineSwap.receiver!.publicKey
+        let moreInfo = BottomDrawerInfo.swapDestination(
+            pubKey: pubKey, destinationInfo: destinationInfo(type: type))
 
         return NewOpDestinationFilledDataView(type: type,
                                               delegate: filledDataDelegate,
@@ -163,9 +168,11 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     }
 
     private func destinationInfo(type: PaymentRequestType) -> NSAttributedString {
-        let swap = getSubmarineSwap(type: type)
-        let pubKey = swap._receiver.publicKey()
-        let ipAddresses = swap._receiver._networkAddresses.joined(separator: "\n")
+
+        let submarineSwap = getSubmarineSwap(type: type)
+
+        let pubKey = submarineSwap.receiver!.publicKey
+        let ipAddresses = submarineSwap.receiver!.networkAddresses
         let pubKeyTitle = L10n.OpSubmarineSwapViewBuilder.s1
         let ipAddressesTitle = L10n.OpSubmarineSwapViewBuilder.s2
 
@@ -201,69 +208,35 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         return view
     }
 
-    private func buildLightningFeeView(_ confirmState: NewOpSubmarineSwapData.Confirm) -> MUView {
-        let lightningFeeFilled = NewOpFilledAmount(type: .lightningFee, amount: confirmState.lightningFee())
+    private func buildLightningFeeView(_ confirmState: NewOpData.Confirm) -> MUView {
+        guard case .finalFee(let fee, rate: let _) = confirmState.feeState else {
+            Logger.fatal("expected fee to be final for lightning payments")
+        }
+
+        let lightningFeeFilled = NewOpFilledAmount(type: .lightningFee, amount: fee)
         return NewOpAmountFilledDataView(filledData: lightningFeeFilled, delegate: amountDelegate)
     }
 
-    private func buildTotalView(_ confirmState: NewOpSubmarineSwapData.Confirm) -> MUView {
-        let totalFilled = NewOpFilledAmount(type: .total, amount: calculateTotalAmount(data: confirmState))
+    private func buildTotalView(_ confirmState: NewOpData.Confirm) -> MUView {
+        let totalFilled = NewOpFilledAmount(type: .total, amount: confirmState.total)
         let totalView = NewOpAmountFilledDataView(filledData: totalFilled, delegate: amountDelegate)
 
         totalView.showSeparator()
         return totalView
     }
 
-    private func calculateTotalAmount(data: NewOpSubmarineSwapData.Confirm) -> BitcoinAmount {
-        var amountInInput = data.amount.inInputCurrency.amount
-        var amountInPrimary = data.amount.inPrimaryCurrency.amount
-
-        let onChainFee = data.onChainFee()
-        amountInInput += onChainFee.inInputCurrency.amount
-        amountInPrimary += onChainFee.inPrimaryCurrency.amount
-
-        let routingFee = data.routingFee()
-        amountInInput += routingFee.inInputCurrency.amount
-        amountInPrimary += routingFee.inPrimaryCurrency.amount
-
-        var totalFee = onChainFee.inSatoshis + routingFee.inSatoshis
-
-        // On LEND swaps we don't need to add the sweep fee because there won't be any on-chain tx
-        if data.params.debtType != .LEND {
-            let sweepFee = data.sweepFee()
-            amountInInput += sweepFee.inInputCurrency.amount
-            amountInPrimary += sweepFee.inPrimaryCurrency.amount
-
-            totalFee += sweepFee.inSatoshis
-        }
-
-        return BitcoinAmount(
-            inSatoshis: data.amount.inSatoshis + totalFee,
-            inInputCurrency: MonetaryAmount(amount: amountInInput, currency: data.amount.inInputCurrency.currency),
-            inPrimaryCurrency: MonetaryAmount(amount: amountInPrimary, currency: data.amount.inPrimaryCurrency.currency)
-        )
-    }
-
-    private func getFeeViews(data: NewOpSubmarineSwapData.Confirm) -> [MUView] {
+    private func getFeeViews(data: NewOpData.Confirm) -> [MUView] {
         var views: [MUView] = []
         views.append(buildLightningFeeView(data))
 
         return views
     }
 
-    private func checkFlow(state: NewOpState) -> SubmarineSwapState {
-        guard let currentState = state as? SubmarineSwapState else {
-            Logger.fatal("Wrong state: \(state) in Submarine swap flow")
-        }
-
-        return currentState
-    }
-
-    private func getSubmarineSwap(type: PaymentRequestType) -> SubmarineSwap {
+    private func getSubmarineSwap(type: PaymentRequestType) -> NewopSubmarineSwap {
         guard let swapFlow = type as? FlowSubmarineSwap else {
             Logger.fatal("Wrong payment request: \(type) in Submarine swap flow")
         }
-        return swapFlow.submarineSwap
+        return swapFlow.submarineSwap.toLibwallet()
     }
 
 }

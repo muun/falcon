@@ -27,7 +27,11 @@ final class LargeTextInputViewPage: UIElementPage<UIElements.CustomViews.LargeTe
         }
 
         clearText()
-        mainTextView.typeText(text)
+        UIPasteboard.general.string = text
+        if !XCUIApplication().menuItems["Paste"].exists {
+            mainTextView.doubleTap()
+        }
+        XCUIApplication().menuItems["Paste"].tap()
     }
 
     private func clearText() {

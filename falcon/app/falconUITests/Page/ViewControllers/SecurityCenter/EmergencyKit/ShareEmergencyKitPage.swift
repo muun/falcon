@@ -12,6 +12,7 @@ import XCTest
 final class ShareEmergencyKitPage: UIElementPage<UIElements.Pages.EmergencyKit.SharePDF> {
 
     private lazy var saveManuallyView = otherElement(Root.saveManually)
+    private lazy var confirmSave = SmallButtonViewPage(Root.confirm)
 
     init() {
         super.init(root: Root.root)
@@ -20,6 +21,7 @@ final class ShareEmergencyKitPage: UIElementPage<UIElements.Pages.EmergencyKit.S
     func savePDF() -> ActivateEmergencyKitPage {
         sleep(3) // Wait for the creation of the EK
         saveManuallyView.tap()
+        confirmSave.mainButtonTap()
 
         // Hack to tap the copy button on the activity view controller
         XCUIApplication().buttons["Copy"].tap()

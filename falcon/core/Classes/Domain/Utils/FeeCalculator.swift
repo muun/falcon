@@ -23,7 +23,7 @@ public class FeeCalculator {
     }
 
     let targetedFees: [UInt: FeeRate]
-    let nts: NextTransactionSize
+    public let nts: NextTransactionSize
     let minFeeRate: FeeRate
 
     public init(targetedFees: [UInt: FeeRate], nts: NextTransactionSize, minFeeRate: FeeRate) {
@@ -154,13 +154,6 @@ public class FeeCalculator {
         let restInSatoshis = totalBalance() - amount
         let satsPerWeightUnit = restInSatoshis.asDecimal() / Decimal(maxSizeProgression.sizeInBytes)
         return FeeRate(satsPerWeightUnit: satsPerWeightUnit)
-    }
-
-    public func nextHighestBlock(for feeRate: FeeRate) -> UInt? {
-        return targetedFees
-            .filter { $0.value.satsPerVByte <= feeRate.satsPerVByte }
-            .keys
-            .min()
     }
 
     public func getMinimumFeeRate() -> FeeRate {

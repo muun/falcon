@@ -128,6 +128,7 @@ extension ShareEmergencyKitView: UITestablePage {
 
     func makeViewTestable() {
         makeViewTestable(self, using: .root)
+        makeViewTestable(manualExport, using: .saveManually)
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Libwallet
 import core
 
 protocol CurrencyPickerDelegate: AnyObject {
@@ -21,7 +22,7 @@ class CurrencyPickerViewController: MUViewController {
     fileprivate lazy var presenter = instancePresenter(CurrencyPickerPresenter.init,
                                                        delegate: self,
                                                        state: exchangeRateWindow)
-    let exchangeRateWindow: ExchangeRateWindow
+    let exchangeRateWindow: NewopExchangeRateWindow
     var selectedCurrencyCode: String?
     private weak var delegate: CurrencyPickerDelegate?
 
@@ -29,7 +30,7 @@ class CurrencyPickerViewController: MUViewController {
         return "currency_picker"
     }
 
-    init(exchangeRateWindow: ExchangeRateWindow, delegate: CurrencyPickerDelegate?) {
+    init(exchangeRateWindow: NewopExchangeRateWindow, delegate: CurrencyPickerDelegate?) {
         self.exchangeRateWindow = exchangeRateWindow
         self.delegate = delegate
 

@@ -104,7 +104,7 @@ class HomeViewController: MUViewController {
         let navController = UINavigationController()
 
         if !presenter.hasEmailAndPassword() {
-            navController.viewControllers = [SupportViewController(type: .anonSupport)]
+            navController.viewControllers = [SupportViewController(type: .help)]
             present(navController, animated: true)
         } else {
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)

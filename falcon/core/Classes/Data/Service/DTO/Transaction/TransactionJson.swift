@@ -41,4 +41,5 @@ struct RawTransactionJson: Codable {
 struct RawTransactionResponseJson: Codable {
     let hex: String?
     let nextTransactionSize: NextTransactionSizeJson
+    let updatedOperation: OperationJson
 }

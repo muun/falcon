@@ -186,7 +186,7 @@ class FeedbackViewController: MUViewController {
 
     @objc fileprivate func descriptionTouched() {
         if feedback == FeedbackInfo.deleteWallet {
-            let nc = UINavigationController(rootViewController: SupportViewController(type: .anonSupport))
+            let nc = UINavigationController(rootViewController: SupportViewController(type: .feedback))
             navigationController!.present(nc, animated: true)
         }
     }

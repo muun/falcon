@@ -231,12 +231,14 @@ public class OperationActions {
                 return self.houstonService.pushTransaction(
                     rawTransaction: rawTransaction,
                     operationId: operationUpdated.id!)
-                    .do(onSuccess: { completedOp in
-                        self.nextTransactionSizeRepository.setNextTransactionSize(completedOp.nextTransactionSize)
-                    })
-                    .flatMap({ _ in
-                        self.operationRepository.storeOperations([operationUpdated]).andThen(
-                            Single.just(operationUpdated)
+                    .map { pushTxResponse in
+                        self.nextTransactionSizeRepository.setNextTransactionSize(pushTxResponse.nextTransactionSize)
+                        operationUpdated.status = pushTxResponse.updatedOperation.status
+                        return operationUpdated
+                    }
+                    .flatMap({ op in
+                        self.operationRepository.storeOperations([op]).andThen(
+                            Single.just(op)
                         )
                     })
             })

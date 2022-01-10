@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Libwallet
 
 public class BuildOperationAction {
 
@@ -13,7 +14,7 @@ public class BuildOperationAction {
                             amount: BitcoinAmount,
                             fee: BitcoinAmount,
                             description: String,
-                            exchangeRateWindow: ExchangeRateWindow,
+                            exchangeRateWindow: NewopExchangeRateWindow,
                             outpoints: [String]?) -> Operation {
 
         // FIXME: We should check for the swaps validity here too
@@ -31,7 +32,7 @@ public class BuildOperationAction {
                               amount: amount,
                               fee: fee,
                               confirmations: nil,
-                              exchangeRatesWindowId: exchangeRateWindow.id,
+                              exchangeRatesWindowId: exchangeRateWindow.windowId,
                               description: description,
                               status: .CREATED,
                               transaction: nil,
@@ -46,7 +47,7 @@ public class BuildOperationAction {
                                  amount: BitcoinAmount,
                                  fee: BitcoinAmount,
                                  description: String,
-                                 exchangeRateWindow: ExchangeRateWindow,
+                                 exchangeRateWindow: NewopExchangeRateWindow,
                                  outpoints: [String]?) -> Operation {
 
         return core.Operation(
@@ -63,7 +64,7 @@ public class BuildOperationAction {
             amount: amount,
             fee: fee,
             confirmations: nil,
-            exchangeRatesWindowId: exchangeRateWindow.id,
+            exchangeRatesWindowId: exchangeRateWindow.windowId  ,
             description: description,
             status: .CREATED,
             transaction: nil,

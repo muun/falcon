@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Libwallet
 import core
 
 protocol CurrencyPickerPresenterDelegate: BasePresenterDelegate {
@@ -15,15 +16,17 @@ protocol CurrencyPickerPresenterDelegate: BasePresenterDelegate {
 
 class CurrencyPickerPresenter<Delegate: CurrencyPickerPresenterDelegate>: BasePresenter<Delegate> {
 
-    private let exchangeRateWindow: ExchangeRateWindow
+    private let exchangeRateWindow: NewopExchangeRateWindow
     private var currencies: [Currency] = []
     private var mostUsedCurrencies: [Currency] = []
     private var displayableCurrencies: [Currency] = []
     private var userSelector: UserSelector
+    private let exchangeRateWindowRepository: ExchangeRateWindowRepository
 
-    init(delegate: Delegate, state: ExchangeRateWindow, userSelector: UserSelector) {
+    init(delegate: Delegate, state: NewopExchangeRateWindow, userSelector: UserSelector, exchangeRateWindowRepository: ExchangeRateWindowRepository) {
         self.exchangeRateWindow = state
         self.userSelector = userSelector
+        self.exchangeRateWindowRepository = exchangeRateWindowRepository
 
         super.init(delegate: delegate)
     }
@@ -31,7 +34,7 @@ class CurrencyPickerPresenter<Delegate: CurrencyPickerPresenterDelegate>: BasePr
     override func setUp() {
         super.setUp()
 
-        currencies = CurrencyHelper.currencyList(currencyCodes: Array(exchangeRateWindow.rates.keys))
+        currencies = CurrencyHelper.currencyList(currencyCodes: exchangeRateWindow.currencies()!.adapt())
         displayableCurrencies = currencies
         mostUsedCurrencies = buildMostUsedCurrencies()
 

@@ -484,7 +484,6 @@ class NewOperationUITest: FalconUITests {
 
         // Submit the amount
         newOpPage.touchContinueButton()
-        enterDescription(newOpPage, descriptionPage)
 
         let errorPage = NewOpErrorPage()
         errorPage.assertInsufficientFunds()
@@ -523,6 +522,8 @@ class NewOperationUITest: FalconUITests {
         XCTAssertFalse(newOpPage.isContinueEnabled())
         // Error page wont exist
         XCTAssertFalse(errorPage.exists())
+
+        back()
         abortNewOp()
         backTo(page: homePage)
     }

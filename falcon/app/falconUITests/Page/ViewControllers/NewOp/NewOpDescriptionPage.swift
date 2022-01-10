@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import XCTest
 
 final class NewOpDescriptionPage: UIElementPage<UIElements.Pages.NewOp.DescriptionView> {
 
@@ -18,7 +19,11 @@ final class NewOpDescriptionPage: UIElementPage<UIElements.Pages.NewOp.Descripti
 
     func enter(description: String) {
         input.tap()
-        input.typeText(description)
+        UIPasteboard.general.string = description
+        if !XCUIApplication().menuItems["Paste"].exists {
+            input.doubleTap()
+        }
+        XCUIApplication().menuItems["Paste"].tap()
     }
 
     func description() -> String {
