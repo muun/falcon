@@ -68,3 +68,4 @@ Libwallet.framework
 .golangprod
 
 falcon/app/vendor
+.idea/
