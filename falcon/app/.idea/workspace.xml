@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b6bf2798-3eca-4488-a013-1d5a7dfcf2aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/falcon/Presentation/Component/Receive/Lightning/ReceiveInLightningView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/falcon/Presentation/Component/Receive/Lightning/ReceiveInLightningView.swift" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="iphonesimulator_A841EB90-DACB-4A02-B81D-17A5B838DEC6" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectId" id="2090hQpUbNHeEPqH5NIK7hnDe5j" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="sqlite" />
+    <property name="OBJC.PRESERVED_TARGET_SELECTION" value="core.root-all-notifications" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="com.jetbrains.cidr.execution.build.XcodeBuildErrorTreeViewPanel.FilterMode" value="ErrorsOnly" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/falcon/Presentation/Component/PopUp" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="database.main" />
+    <property name="structure.view.defaults.are.configured" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/falcon/Presentation/Component/PopUp" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Muun">
+    <configuration name="All in EmailSetupUITests.swift and 5 more" type="OCUnitRunConfiguration" factoryName="XCTest/Kiwi" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="falcon" TARGET_NAME="falconUITests" CONFIG_NAME="Debug" SCHEME_NAME="All in EmailSetupUITests.swift and 5 more" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" TEST_PATTERN="EmailSetupUITests,EmergencyKitUITest,RecoveryCodeUITest,SecurityCenterTests,ChangePasswordTests,LNURLWithdrawTests" TEST_MODE="PATTERN" XCODE_TESTS_HASH_CODE="-824153078">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserTests.testParseThingy" type="OCUnitRunConfiguration" factoryName="XCTest/Kiwi" temporary="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="falcon" TARGET_NAME="falconTests" CONFIG_NAME="Debug" SCHEME_NAME="UserTests.testParseThingy" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" TEST_CLASS="UserTests" TEST_METHOD="testParseThingy" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.falconTests" />
+      <item itemvalue="Application.Muun" />
+      <item itemvalue="Application Extension.falconPushNotifications" />
+      <item itemvalue="XCTest.All in EmailSetupUITests.swift and 5 more" />
+      <item itemvalue="XCTest.FalconUITestsScheme" />
+      <item itemvalue="XCTest.UserTests.testParseThingy" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="XCTest.UserTests.testParseThingy" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b6bf2798-3eca-4488-a013-1d5a7dfcf2aa" name="Changes" comment="" />
+      <created>1635441619523</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1635441619523</updated>
+      <workItem from="1635441621082" duration="4734000" />
+      <workItem from="1635451727084" duration="7706000" />
+      <workItem from="1635524881310" duration="4086000" />
+      <workItem from="1635956335738" duration="7201000" />
+      <workItem from="1636038565019" duration="11401000" />
+      <workItem from="1636147245584" duration="3505000" />
+      <workItem from="1636207411182" duration="5348000" />
+      <workItem from="1636219472614" duration="3490000" />
+      <workItem from="1636373736387" duration="3184000" />
+      <workItem from="1636397613547" duration="2693000" />
+      <workItem from="1636473411767" duration="198000" />
+      <workItem from="1636473632202" duration="12192000" />
+      <workItem from="1637084052193" duration="8398000" />
+      <workItem from="1637164469152" duration="2297000" />
+      <workItem from="1639144871193" duration="1363000" />
+      <workItem from="1639149506756" duration="1706000" />
+      <workItem from="1639408317597" duration="1833000" />
+      <workItem from="1639511412552" duration="481000" />
+      <workItem from="1639569063629" duration="1564000" />
+      <workItem from="1640099716109" duration="2860000" />
+      <workItem from="1640175231145" duration="834000" />
+      <workItem from="1640278706140" duration="5987000" />
+      <workItem from="1640364755734" duration="530000" />
+      <workItem from="1640803844620" duration="317000" />
+      <workItem from="1641398746197" duration="706000" />
+      <workItem from="1641579509563" duration="2820000" />
+      <workItem from="1641822834235" duration="3575000" />
+      <workItem from="1641865146822" duration="1729000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Screen/NewOperation/NewOperationPresenter.swift</url>
+          <line>575</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Screen/NewOperation/NewOperationPresenter.swift</url>
+          <line>255</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Screen/NewOperation/NewOperationPresenter.swift</url>
+          <line>566</line>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Screen/NewOperation/NewOperationPresenter.swift</url>
+          <line>576</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Screen/NewOperation/NewOperationPresenter.swift</url>
+          <line>567</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Screen/NewOperation/ChildViews/EditFee/SelectFee/SelectFeeViewController.swift</url>
+          <line>126</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Component/PopUp/PopUp.swift</url>
+          <line>32</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/falcon/Presentation/Component/Receive/Lightning/ReceiveInLightningView.swift</url>
+          <line>44</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Muun">
+        <watch expression="state.getUpdate()" language="Swift" />
+      </configuration>
+      <configuration name="AppleRunConfiguration">
+        <watch expression="state.`self`()" language="Swift" />
+        <watch expression="state.getUpdate()" language="Swift" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

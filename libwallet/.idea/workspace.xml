@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="524f919c-09a8-455f-8ba8-1152ddc240df" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../falcon/app/falcon.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/app/falcon.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../falcon/app/falcon/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/app/falcon/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../falcon/app/falconPushNotifications/Environment.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/app/falconPushNotifications/Environment.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../falcon/app/falconPushNotifications/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/app/falconPushNotifications/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../falcon/app/falconTests/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/app/falconTests/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../falcon/app/falconUITests/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/app/falconUITests/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../falcon/core/Classes/Environment.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../falcon/core/Classes/Environment.swift" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file:///usr/local/Cellar/go/1.16.5/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="1QHeuDx2LG6sZVdj7f2QP22JKEd" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="go" />
+    <property name="configurable..is.expanded" value="false" />
+    <property name="configurable.GoLibrariesConfigurable.is.expanded" value="true" />
+    <property name="go.format.on.save.advertiser.fired" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
+    <property name="last.edited.regexp" value=" io.muun.apollo.domain.errors.lnurl.UnknownLnUrlError.message=unexpected status code in response: 500, body: {&quot;message&quot;:&quot;Payment failed. Does the receiver have enough inbound capacity?&quot;,&quot;status&quot;:&quot;ERROR&quot;}&#10;&#10;recentRequests=[19:13:17.416 houston/sessions/notifications?after=78 (200 in 214ms), 19:13:15.414 houston/sessions/notifications?after=78 (200 in 176ms), 19:13:13.398 houston/sessions/notifications?after=78 (200 in 192ms), 19:13:11.400 houston/sessions/notifications?after=78 (200 in 198ms), 19:13:09.420 houston/sessions/notifications?after=78 (200 in 178ms)]" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.startup.tasks" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="GoExtractInterfaceDialog.RECENT_KEY">
+      <recent name="$PROJECT_DIR$/newop" />
+      <recent name="$PROJECT_DIR$/walletdb" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/new_op" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Test.TestMaxFeeRate in github.com/muun/libwallet/operation">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestCreateAddressV4 in github.com/muun/libwallet/addresses" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="libwallet" />
+      <working_directory value="$PROJECT_DIR$/addresses" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/muun/libwallet/addresses" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestCreateAddressV4\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestGetPaymentURI/with_unknown_params in github.com/muun/libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="libwallet" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/muun/libwallet" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestGetPaymentURI\E$/^\Qwith_unknown_params\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestMaxFeeRate in github.com/muun/libwallet/operation" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="libwallet" />
+      <working_directory value="$PROJECT_DIR$/operation" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/muun/libwallet/operation" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestMaxFeeRate\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test_DetermineUserActivatedFeatureStatus in github.com/muun/libwallet (2)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="libwallet" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/muun/libwallet" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTest_DetermineUserActivatedFeatureStatus\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test_DetermineUserActivatedFeatureStatus in github.com/muun/libwallet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="libwallet" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/muun/libwallet" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTest_DetermineUserActivatedFeatureStatus\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Go Test.TestCreateAddressV4 in github.com/muun/libwallet/addresses" />
+      <item itemvalue="Go Test.TestGetPaymentURI/with_unknown_params in github.com/muun/libwallet" />
+      <item itemvalue="Go Test.Test_DetermineUserActivatedFeatureStatus in github.com/muun/libwallet (2)" />
+      <item itemvalue="Go Test.Test_DetermineUserActivatedFeatureStatus in github.com/muun/libwallet" />
+      <item itemvalue="Go Test.TestMaxFeeRate in github.com/muun/libwallet/operation" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestMaxFeeRate in github.com/muun/libwallet/operation" />
+        <item itemvalue="Go Test.TestGetPaymentURI/with_unknown_params in github.com/muun/libwallet" />
+        <item itemvalue="Go Test.TestCreateAddressV4 in github.com/muun/libwallet/addresses" />
+        <item itemvalue="Go Test.Test_DetermineUserActivatedFeatureStatus in github.com/muun/libwallet (2)" />
+        <item itemvalue="Go Test.Test_DetermineUserActivatedFeatureStatus in github.com/muun/libwallet" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file:///usr/local/Cellar/go/1.12.5/libexec/src/crypto/elliptic/elliptic.go</url>
+          <line>33</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/github.com/btcsuite/btcd@v0.0.0-20190824003749-130ea5bddde3/txscript/scriptnum.go</url>
+          <line>93</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/github.com/btcsuite/btcutil@v0.0.0-20190425235716-9e5f4b9a998d/address.go</url>
+          <line>186</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/hdpath/hdpath.go</url>
+          <line>27</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/addresses/addresses_test.go</url>
+          <line>2</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file:///usr/local/Cellar/go/1.15.8/libexec/src/reflect/value.go</url>
+          <line>259</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/libwallet$TestPartiallySignedTransaction_Verify_in_libwallet.out" NAME="TestPartiallySignedTransaction_Verify in libwallet Coverage Results" MODIFIED="1576875802884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

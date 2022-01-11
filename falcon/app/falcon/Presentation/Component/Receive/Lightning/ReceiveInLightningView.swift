@@ -43,7 +43,12 @@ struct IncomingInvoiceInfo {
         }
 
         let formatter = DateFormatter()
-        formatter.dateFormat = "mm:ss"
+        if seconds < 60 * 60 {
+            formatter.dateFormat = "mm:ss"
+        } else {
+            formatter.dateFormat = "HH:mm:ss"
+        }
+        formatter.timeZone = TimeZone(identifier: "UTC")
 
         let timeInterval = Double(seconds)
         let timeRemaining = Date(timeIntervalSince1970: timeInterval)
