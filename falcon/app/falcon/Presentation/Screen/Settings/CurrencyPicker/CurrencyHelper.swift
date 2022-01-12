@@ -206,7 +206,6 @@ class CurrencyHelper: Resolver {
         add(FiatCurrency(code: "SRD", symbol: "$", name: "Surinamese Dollar", flag: "🇸🇷"))
         add(FiatCurrency(code: "SSP", symbol: "£", name: "South Sudanese Pound", flag: "🇸🇸"))
         add(FiatCurrency(code: "STD", symbol: "Db", name: "São Tomé and Príncipe Dobra", flag: "🇸🇹"))
-        add(FiatCurrency(code: "SVC", symbol: "₡", name: "Salvadoran Colón", flag: "🇸🇻"))
         add(FiatCurrency(code: "SYP", symbol: "LS", name: "Syrian Pound", flag: "🇸🇾"))
         add(FiatCurrency(code: "SZL", symbol: "L", name: "Swazi Lilangeni", flag: "🇸🇿"))
         add(FiatCurrency(code: "THB", symbol: "฿", name: "Thai Baht", flag: "🇹🇭"))

@@ -83,7 +83,7 @@ platform :ios do
     version_number = get_version_number(target: "Muun")
 
     build_app(
-      scheme: "falcon", 
+      scheme: "Muun", 
       workspace: "falcon.xcworkspace", 
       include_symbols: true,
       export_method: "app-store"

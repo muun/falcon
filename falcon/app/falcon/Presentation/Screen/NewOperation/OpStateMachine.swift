@@ -56,7 +56,7 @@ protocol NewOpStateMachineDelegate: BasePresenterDelegate {
     func unexpectedError()
 
     func setExpires(_ expiresTime: Double)
-    func cancel()
+    func cancel(confirm: Bool)
 }
 
 protocol NewOperationTransitions: AnyObject {

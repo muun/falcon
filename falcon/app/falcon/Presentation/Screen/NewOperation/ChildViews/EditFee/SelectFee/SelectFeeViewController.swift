@@ -127,6 +127,11 @@ class SelectFeeViewController: MUViewController {
         self.delegate?.cancel()
         super.onCloseTap()
     }
+
+    override func willMove(toParent parent: UIViewController?) {
+        parent?.presentationController?.delegate = self
+        super.willMove(toParent: parent)
+    }
 }
 
 extension SelectFeeViewController: UITableViewDelegate {
@@ -307,4 +312,11 @@ extension SelectFeeViewController: UITestablePage {
         self.makeViewTestable(confirmButton, using: .button)
     }
 
+}
+
+extension SelectFeeViewController: UIAdaptivePresentationControllerDelegate {
+
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.cancel()
+    }
 }

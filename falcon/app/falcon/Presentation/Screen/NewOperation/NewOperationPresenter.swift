@@ -31,7 +31,7 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func unexpectedError()
 
     func setExpires(_ expiresTime: Double)
-    func cancel()
+    func cancel(confirm: Bool)
 }
 
 class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresenter<Delegate> {
@@ -122,6 +122,18 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
     private func handleResolveState(_ state: NewopResolveState) {
         let paymentIntent = state.paymentIntent!.adapt()
+
+        switch paymentIntent {
+        case .submarineSwap(let invoice):
+            delegate.setExpires(Double(invoice.expiry))
+
+        case .fromHardwareWallet,
+             .toContact,
+             .toHardwareWallet,
+             .lnurlWithdraw,
+             .toAddress:
+                () // Nothing extra to do
+        }
 
         let newOpState = NewOpState.loading(NewOpData.Loading(type: paymentIntent))
 
@@ -324,7 +336,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     }
 
     private func handleAbortState(_ state: NewopAbortState) {
-        delegate.cancel()
+        delegate.cancel(confirm: true)
     }
 
     fileprivate func createOperation() {
@@ -427,7 +439,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         case .submarineSwap(let invoice):
             return FlowSubmarineSwap(invoice: invoice, submarineSwap: submarineSwap!)
         default:
-            Logger.fatal("Could not produce a valid PaymentRequestType")
+            Logger.fatal("Could not produce a valid PaymentRequestType: \(intent)")
         }
     }
 
@@ -437,6 +449,8 @@ extension NewOperationPresenter: NewOperationTransitions {
     func back() {
         try! stateMachine.withState { (state: NewopStateProtocol) in
             switch state {
+            case let state as NewopResolveState:
+                delegate.cancel(confirm: false)
             case let state as NewopConfirmState:
                 try state.back()
             case let state as NewopConfirmLightningState:
@@ -446,7 +460,7 @@ extension NewOperationPresenter: NewOperationTransitions {
             case let state as NewopEnterAmountState:
                 try state.back()
             default:
-                Logger.fatal("attempted back in state which does not support it")
+                Logger.fatal("attempted back in state which does not support it: \(state)")
             }
         }
     }

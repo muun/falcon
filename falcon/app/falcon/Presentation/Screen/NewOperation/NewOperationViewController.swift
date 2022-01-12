@@ -293,8 +293,12 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         showInsufficientFundsScreen(amountPlusFee: amountPlusFee, totalBalance: totalBalance)
     }
 
-    func cancel() {
-        presentAbortAlertView()
+    func cancel(confirm: Bool) {
+        if confirm {
+            presentAbortAlertView()
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
     }
 
     private func presentAbortAlertView() {

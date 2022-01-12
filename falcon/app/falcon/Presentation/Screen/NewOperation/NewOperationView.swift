@@ -265,6 +265,10 @@ class NewOperationView: MUView {
     }
 
     private func startTimer(_ seconds: Int) {
+        if timer.isValid {
+            timer.invalidate()
+        }
+
         timer = Timer.scheduledTimer(
             timeInterval: 1,
             target: self,
