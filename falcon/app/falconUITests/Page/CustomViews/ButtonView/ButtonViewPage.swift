@@ -17,6 +17,7 @@ final class ButtonViewPage: UIElementPage<UIElements.CustomViews.ButtonViewPage>
     }
 
     func mainButtonTap() {
+        wait(condition: "button is enabled", until: button.isEnabled)
         button.tap()
     }
 

@@ -116,7 +116,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
             sections.append(.advanced([.lightningNetwork]))
         }
 
-        if sessionActions.isAnonUser() {
+        if sessionActions.isUnrecoverableUser() {
             sections.append(.deleteWallet)
         } else {
             sections.append(.logout)

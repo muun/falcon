@@ -22,8 +22,7 @@ class RecoveryCodeUITest: FalconUITests {
         verifyCode.wait()
 
         verifyCode.inputInvalidCode(realCode: code)
-        _ = verifyCode.touchContinueButton()
-        XCTAssert(verifyCode.isInvalid(), "inputing an invalid code fails")
+        waitUntil(condition: { verifyCode.isInvalid() }, timeout: 1, description: "inputing an invalid code fails")
 
         verifyCode.set(code: code)
 

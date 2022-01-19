@@ -34,7 +34,6 @@ final class SetUpPasswordPage: UIElementPage<UIElements.Pages.SetUpPasswordPage>
 
     func createPassword(_ password: String) -> FinishEmailSetupPage {
         type(password: password)
-        tapContinueButton()
         repeatPassword(password)
         return FinishEmailSetupPage()
     }

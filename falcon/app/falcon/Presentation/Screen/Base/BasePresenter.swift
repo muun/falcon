@@ -127,7 +127,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
     private func handleSessionExpired(_ e: Error) {
         // If the user is unrecoverable we can't wipe her data because that will cause the user to lose her money.
         // So instead we just display an error toast and the app will be bricked until we fix it in the backend.
-        if sessionActions.isAnonUser() {
+        if sessionActions.isUnrecoverableUser() {
             Logger.log(error: e)
             delegate.showMessage(
                 L10n.BasePresenter.s6

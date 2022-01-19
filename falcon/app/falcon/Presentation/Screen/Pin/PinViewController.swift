@@ -256,14 +256,14 @@ extension PinViewController: PinPresenterDelegate {
         }
     }
 
-    func unlockUnsuccessful(attemptsLeft: Int, isAnonUser: Bool) {
+    func unlockUnsuccessful(attemptsLeft: Int, isUnrecoverableUser: Bool) {
         logEvent("pin", parameters: ["type": PinTypeParam.incorrect.rawValue])
         pinView.pinValidationFeedback(isValid: false)
         notification.notificationOccurred(.error)
 
         let bold = L10n.PinViewController.s4
 
-        if isAnonUser {
+        if isUnrecoverableUser {
             hintLabel.attributedText = bold
                 .attributedForDescription(alignment: .center)
                 .set(bold: bold, color: Asset.Colors.muunRed.color)

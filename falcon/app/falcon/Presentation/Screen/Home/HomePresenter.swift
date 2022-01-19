@@ -283,12 +283,12 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         return sessionActions.hasPasswordChallengeKey()
     }
 
-    private func isAnonUser() -> Bool {
-        return sessionActions.isAnonUser()
+    private func isUnrecoverableUser() -> Bool {
+        return sessionActions.isUnrecoverableUser()
     }
 
     private func shouldDisplayWelcomeMessage() -> Bool {
-        return isAnonUser() && !preferences.bool(forKey: .welcomeMessageSeen)
+        return isUnrecoverableUser() && !preferences.bool(forKey: .welcomeMessageSeen)
     }
 
     func shouldDisplayTransactionListTooltip() -> Bool {
@@ -318,7 +318,10 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     }
 
     func logType() -> String {
-        let isAnon = isAnonUser()
+        // Well, this is _awkward_. The event and variable say anon because that's how it was coded back when.
+        // But the actual criteria was whether the user is unrecoverable. This is also the behaviour on apollo, so we'll
+        // stick to it.
+        let isAnon = isUnrecoverableUser()
         let hasOperations = operationActions.hasOperations()
 
         if isAnon {
@@ -336,7 +339,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     }
 
     private func decideCompanion(taprootStatus: UserActivatedFeatureStatus) -> HomeCompanion {
-        if isAnonUser() {
+        if isUnrecoverableUser() {
             return .backUp
         }
 

@@ -31,7 +31,7 @@ public class UserRepository {
         return preferences.object(forKey: .user)
     }
 
-    public func isAnonUser() -> Bool {
+    public func isUnrecoverableUser() -> Bool {
         guard let user = getUser() else {
             return true
         }

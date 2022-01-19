@@ -92,13 +92,17 @@ class FalconUITests: XCTestCase {
     }
 
     func waitUntil(condition: @escaping () -> Bool, timeout: TimeInterval = 30, description: String) {
+        let start = Date()
 
         print(description)
-        let e = XCTNSPredicateExpectation(predicate: NSPredicate(block: { _, _ in
-            condition()
-        }), object: nil)
+        while Date().timeIntervalSince(start) < timeout {
+            Thread.sleep(forTimeInterval: 0.05)
+            if condition() {
+                return
+            }
+        }
 
-        wait(for: [e], timeout: timeout)
+        XCTFail("waited for condition \(description)")
     }
 
     func allowNotifications(_ enabled: Bool = true) {

@@ -66,6 +66,7 @@ class EmailSetupUITests: FalconUITests {
 
         _ = app.wait(for: .unknown, timeout: 1) // This is to wait for the label to change its text
         setUpPasswordPage.secondTextInputView.bottomLabelTextMatches(L10n.SignUpPasswordViewController.s6, in: self)
+        _ = app.wait(for: .unknown, timeout: 1) // This is to wait for the label to change its text
 
         back()
         app.alerts[L10n.FinishEmailSetupViewController.s5].buttons[L10n.FinishEmailSetupViewController.s7].tap()

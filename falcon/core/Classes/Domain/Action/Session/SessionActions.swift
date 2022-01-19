@@ -158,8 +158,8 @@ public class SessionActions {
         return userRepository.getUserEmail()
     }
 
-    public func isAnonUser() -> Bool {
-        return userRepository.isAnonUser()
+    public func isUnrecoverableUser() -> Bool {
+        return userRepository.isUnrecoverableUser()
     }
 
     public func getUser() -> User? {

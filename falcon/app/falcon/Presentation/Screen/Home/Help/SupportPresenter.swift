@@ -32,7 +32,7 @@ class SupportPresenter<Delegate: SupportPresenterDelegeate>: BasePresenter<Deleg
     }
 
     func isAnonUser() -> Bool {
-        return sessionActions.isAnonUser()
+        return !sessionActions.hasPasswordChallengeKey()
     }
 
     func sendRequest(text: String) {

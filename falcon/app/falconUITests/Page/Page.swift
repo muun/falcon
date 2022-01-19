@@ -25,4 +25,17 @@ class Page {
         return element.waitForExistence(timeout: timeout)
     }
 
+    func wait(_ timeout: TimeInterval = 1, condition: String, until: @autoclosure () -> Bool) {
+        let start = Date()
+
+        while Date().timeIntervalSince(start) < timeout {
+            Thread.sleep(forTimeInterval: 0.05)
+            if until() {
+                return
+            }
+        }
+
+        XCTFail("waited for condition \(condition)")
+    }
+
 }

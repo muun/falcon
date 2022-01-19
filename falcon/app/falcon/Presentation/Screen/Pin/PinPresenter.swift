@@ -13,7 +13,7 @@ protocol PinPresenterDelegate: BasePresenterDelegate {
     func pinRepeated(isValid: Bool)
     func pinChoosed()
     func unlockSuccessful()
-    func unlockUnsuccessful(attemptsLeft: Int, isAnonUser: Bool)
+    func unlockUnsuccessful(attemptsLeft: Int, isUnrecoverableUser: Bool)
     func noMoreAttempts()
 }
 
@@ -117,8 +117,8 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
             switch applicationLockManager.isValid(pin: pin) {
             case .valid:
                 delegate.unlockSuccessful()
-            case .invalid(let isAnonUser):
-                delegate.unlockUnsuccessful(attemptsLeft: getAttemptsLeft(), isAnonUser: isAnonUser)
+            case .invalid(let isUnrecoverableUser):
+                delegate.unlockUnsuccessful(attemptsLeft: getAttemptsLeft(), isUnrecoverableUser: isUnrecoverableUser)
             case .noMoreAttempts:
                 delegate.noMoreAttempts()
             }
