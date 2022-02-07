@@ -298,6 +298,9 @@ extension PinViewController: PinPresenterDelegate {
         hintLabel.text = hintText
 
         if isValid {
+            // requestAuthentication can be async, so block the UI in the meantime to avoid bugs
+            self.view.isUserInteractionEnabled = false
+
             logEvent("pin", parameters: ["type": PinTypeParam.created.rawValue])
 
             requestAuthentication(completion: {

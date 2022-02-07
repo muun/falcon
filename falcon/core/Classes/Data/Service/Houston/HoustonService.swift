@@ -83,14 +83,14 @@ public class HoustonService: BaseService {
             .map({ $0.toModel() })
     }
 
-    func fetchNotificationsAfter(notificationId: Int?) -> Single<[Notification]> {
+    func fetchNotificationReportAfter(notificationId: Int?) -> Single<NotificationReport> {
         var queryParams: [String: Any] = [:]
 
         if let nId = notificationId {
             queryParams = ["after": nId]
         }
 
-        return get("sessions/notifications", queryParams: queryParams, andReturn: [NotificationJson].self)
+        return get("sessions/notification_report", queryParams: queryParams, andReturn: NotificationReportJson.self)
             .map({ $0.toModel(decrypter: self.decrypter) })
     }
 

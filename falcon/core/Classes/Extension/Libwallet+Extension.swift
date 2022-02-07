@@ -233,11 +233,15 @@ extension BestRouteFees {
 extension LibwalletMuunPaymentURI {
 
     public func adapt() -> MuunPaymentURI {
-        var uri: URL
+        let toParse: String
         if self.uri != "" {
-            uri = URL(string: self.uri)!
+            toParse = self.uri
         } else {
-            uri = URL(string: bip70Url)!
+            toParse = self.bip70Url
+        }
+
+        guard let uri = URL(string: toParse) else {
+            Logger.fatal("Failed to parse URL \(toParse)")
         }
 
         return MuunPaymentURI(

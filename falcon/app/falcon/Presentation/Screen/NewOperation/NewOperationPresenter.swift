@@ -447,9 +447,12 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
 extension NewOperationPresenter: NewOperationTransitions {
     func back() {
-        try! stateMachine.withState { (state: NewopStateProtocol) in
+        try! stateMachine.withState({ (state: NewopStateProtocol) in
             switch state {
-            case let state as NewopResolveState:
+            case _ as NewopResolveState,
+                 _ as NewopStartState:
+                // BIP70 and invoices need a request before transitioning out of start and resolve, respectively.
+                // Allow the user abort the flow during the resulting spinner
                 delegate.cancel(confirm: false)
             case let state as NewopConfirmState:
                 try state.back()
@@ -462,7 +465,7 @@ extension NewOperationPresenter: NewOperationTransitions {
             default:
                 Logger.fatal("attempted back in state which does not support it: \(state)")
             }
-        }
+        })
     }
 
 }

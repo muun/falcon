@@ -267,6 +267,17 @@ extension NotificationJson.OperationUpdateJson: ModelConvertible {
 
 }
 
+extension NotificationReportJson: ModelOperationConvertible {
+
+    public func toModel(decrypter: OperationMetadataDecrypter) -> NotificationReport {
+        NotificationReport(
+            previousId: previousId,
+            maximumId: maximumId,
+            preview: preview.toModel(decrypter: decrypter)
+        )
+    }
+}
+
 extension UserJson: ModelConvertible {
 
     public func toModel() -> User {

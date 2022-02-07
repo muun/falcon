@@ -395,6 +395,29 @@ func TestAnalyzeOnChain(t *testing.T) {
 				TotalInSat:  2000,
 			},
 		},
+		{
+			desc: "unpayable using TFFA because amount < DUST",
+			nts: &NextTransactionSize{
+				SizeProgression: []SizeForAmount{
+					{
+						AmountInSat: 10_000,
+						SizeInVByte: 240,
+					},
+				},
+				ExpectedDebtInSat: 7400,
+			},
+			payment: &PaymentToAddress{
+				TakeFeeFromAmount:     true,
+				AmountInSat:           2600,
+				FeeRateInSatsPerVByte: 10,
+			},
+			expected: &PaymentAnalysis{
+				Status:      AnalysisStatusUnpayable,
+				AmountInSat: 200,
+				FeeInSat:    2400,
+				TotalInSat:  2600,
+			},
+		},
 	}
 
 	for _, tC := range testCases {
@@ -2209,45 +2232,40 @@ func TestMaxFeeRate(t *testing.T) {
 		{
 			desc: "small amount with one coin",
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     false,
-				AmountInSat:           10_000,
-				FeeRateInSatsPerVByte: 1,
+				TakeFeeFromAmount: false,
+				AmountInSat:       10_000,
 			},
 			expected: 9_900,
 		},
 		{
 			desc: "take fee from amount one coin",
 			payment: &PaymentToAddress{
-				AmountInSat:           1_000_000,
-				TakeFeeFromAmount:     true,
-				FeeRateInSatsPerVByte: 1,
+				AmountInSat:       1_000_000,
+				TakeFeeFromAmount: true,
 			},
 			expected: 10_000,
 		},
 		{
 			desc: "zero amount",
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     false,
-				AmountInSat:           0,
-				FeeRateInSatsPerVByte: 1,
+				TakeFeeFromAmount: false,
+				AmountInSat:       0,
 			},
 			expected: 10_000,
 		},
 		{
 			desc: "zero amount using TFFA",
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     true,
-				AmountInSat:           0,
-				FeeRateInSatsPerVByte: 1,
+				TakeFeeFromAmount: true,
+				AmountInSat:       0,
 			},
 			expected: 0,
 		},
 		{
 			desc: "amount greater than balance",
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     false,
-				AmountInSat:           1_000_000_000,
-				FeeRateInSatsPerVByte: 1,
+				TakeFeeFromAmount: false,
+				AmountInSat:       1_000_000_000,
 			},
 			expected: 0,
 		},
@@ -2258,9 +2276,8 @@ func TestMaxFeeRate(t *testing.T) {
 				ExpectedDebtInSat: 10_000,
 			},
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     false,
-				AmountInSat:           10_000,
-				FeeRateInSatsPerVByte: 1,
+				TakeFeeFromAmount: false,
+				AmountInSat:       10_000,
 			},
 			expected: 9_800,
 		},
@@ -2271,9 +2288,8 @@ func TestMaxFeeRate(t *testing.T) {
 				ExpectedDebtInSat: 10_000,
 			},
 			payment: &PaymentToAddress{
-				AmountInSat:           990_000,
-				TakeFeeFromAmount:     true,
-				FeeRateInSatsPerVByte: 1,
+				AmountInSat:       990_000,
+				TakeFeeFromAmount: true,
 			},
 			expected: 9_900,
 		},
@@ -2284,9 +2300,8 @@ func TestMaxFeeRate(t *testing.T) {
 				ExpectedDebtInSat: 10_000,
 			},
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     false,
-				AmountInSat:           999_900,
-				FeeRateInSatsPerVByte: 1,
+				TakeFeeFromAmount: false,
+				AmountInSat:       999_900,
 			},
 			expected: 0,
 		},
@@ -2306,9 +2321,8 @@ func TestMaxFeeRate(t *testing.T) {
 				ExpectedDebtInSat: 0,
 			},
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     false,
-				AmountInSat:           11_000,
-				FeeRateInSatsPerVByte: 0,
+				TakeFeeFromAmount: false,
+				AmountInSat:       11_000,
 			},
 			expected: 20,
 		},
@@ -2350,9 +2364,8 @@ func TestMaxFeeRate(t *testing.T) {
 				ExpectedDebtInSat: 8_000,
 			},
 			payment: &PaymentToAddress{
-				TakeFeeFromAmount:     true,
-				AmountInSat:           12_000,
-				FeeRateInSatsPerVByte: 0,
+				TakeFeeFromAmount: true,
+				AmountInSat:       12_000,
 			},
 			expected: 30,
 		},

@@ -23,16 +23,16 @@ extension AppDelegate {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .customISO8601
-            let report: NotificationReportJson.Container
+            let report: NotificationReportJson
 
             if let aps = notification["aps"] as? [String: Any],
                 let alert = aps["alert"] as? String,
                 let data = alert.data(using: .utf8) {
 
-                report = try decoder.decode(NotificationReportJson.self, from: data).message
+                report = try decoder.decode(NotificationReportJsonContainer.self, from: data).message
             } else {
                 if let message = notification["message"] as? String, let data = message.data(using: .utf8) {
-                    report = try decoder.decode(NotificationReportJson.Container.self, from: data)
+                    report = try decoder.decode(NotificationReportJson.self, from: data)
                 } else {
                     guard let notif = notification["notification"] as? [AnyHashable: Any],
                         let body = notif["body"] as? String,
@@ -41,13 +41,11 @@ extension AppDelegate {
                             completionHandler(.failed)
                             return
                     }
-                    report = try decoder.decode(NotificationReportJson.self, from: data).message
+                    report = try decoder.decode(NotificationReportJsonContainer.self, from: data).message
                 }
             }
 
-            let notifications = report.preview.map { $0.toModel(decrypter: self.operationMetadataDecrypter) }
-
-            _ = notificationProcessor.processReport(notifications, maximumId: report.maximumId)
+            _ = notificationProcessor.process(report: report.toModel(decrypter: operationMetadataDecrypter))
                 .subscribe(onCompleted: {
                     completionHandler(.newData)
                 }, onError: { err in

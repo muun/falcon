@@ -38,19 +38,40 @@ public class NotificationProcessor {
         self.queue = DispatchQueue(label: "notifications")
     }
 
-    public func processReport(_ notifications: [Notification], maximumId: Int) -> Completable {
+    public func process(report: NotificationReport) -> Completable {
 
         let subject = BehaviorSubject.init(value: ())
 
         queue.async {
             do {
-                _ = try self._process(notifications: notifications).toBlocking().materialize()
-
                 let previousId = self.sessionRepository.getLastNotificationId()
-                if previousId < maximumId {
 
-                    let nextBatch = try self.fetchNotificationsAfter(previousId, retries: 5)
-                    _ = try self._process(notifications: nextBatch).toBlocking().materialize()
+                var maxProcessedId = previousId
+                var maxSeenId = 0
+                var reportToProcess = report;
+
+                // If we have a gap between the report and what we last processed, ignore the report
+                // and start processing from the start of the gap. We'll refetch a bit of data, but it
+                // makes for simple code.
+                if reportToProcess.previousId > previousId {
+                    reportToProcess = try self.fetchNotificationsAfter(previousId, retries: 5)
+                }
+
+                _ = try self._process(notifications: reportToProcess.preview).toBlocking().materialize()
+                maxSeenId = max(maxSeenId, reportToProcess.maximumId);
+                if let lastNotification = reportToProcess.preview.last {
+                    maxProcessedId = max(lastNotification.id, maxProcessedId)
+                }
+
+                while maxProcessedId < maxSeenId {
+
+                    reportToProcess = try self.fetchNotificationsAfter(maxProcessedId, retries: 5)
+                    _ = try self._process(notifications: reportToProcess.preview).toBlocking().materialize()
+
+                    maxSeenId = max(maxSeenId, reportToProcess.maximumId);
+                    if let lastNotification = reportToProcess.preview.last {
+                        maxProcessedId = max(lastNotification.id, maxProcessedId)
+                    }
                 }
 
             } catch {
@@ -63,29 +84,12 @@ public class NotificationProcessor {
         return subject.asObservable().ignoreElements()
     }
 
-    func process(notifications: [Notification]) -> Completable {
-
-        let subject = BehaviorSubject.init(value: ())
-
-        queue.async {
-            do {
-                _ = try self._process(notifications: notifications).toBlocking().materialize()
-            } catch {
-                Logger.log(error: error)
-            }
-
-            subject.onCompleted()
-        }
-
-        return subject.asObservable().ignoreElements()
-    }
-
-    private func fetchNotificationsAfter(_ notificationId: Int, retries: Int) throws -> [Notification] {
+    private func fetchNotificationsAfter(_ notificationId: Int, retries: Int) throws -> NotificationReport {
         // The retries param is here because we are having a weird bug in the backend.
         // Will delete it once we fix the backend.
-        let notifications = houstonService.fetchNotificationsAfter(notificationId: notificationId).toBlocking()
+        let report = houstonService.fetchNotificationReportAfter(notificationId: notificationId).toBlocking()
 
-        switch notifications.materialize() {
+        switch report.materialize() {
         case .completed(let elements):
             if let notifications = elements.first {
                 return notifications
@@ -112,20 +116,14 @@ public class NotificationProcessor {
 
     private func _process(notifications: [Notification]) throws -> Completable {
 
-        guard let firstNotification = notifications.first else {
+        guard notifications.count > 0 else {
             // If the array is empty, do nothing
             return Completable.empty()
         }
 
-        var toProcess: [Notification]
         let previousId = sessionRepository.getLastNotificationId()
-        if firstNotification.previousId > previousId {
-            toProcess = try fetchNotificationsAfter(previousId, retries: 5)
-        } else {
-            toProcess = notifications
-        }
 
-        let results = toProcess
+        let results = notifications
             .filter { $0.id > previousId }
             .map { notification in
                 Completable.deferred { try self.process(notification: notification) }

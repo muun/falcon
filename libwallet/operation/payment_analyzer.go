@@ -534,6 +534,11 @@ func (a *PaymentAnalyzer) computeFeeForTFFASwap(payment *PaymentToInvoice, feeRa
 	return a.feeCalculator.Fee(onChainAmount, feeRate, true)
 }
 
+// MaxFeeRateToAddress computes the maximum fee rate that can be used when
+// paying a given amount. This does not imply that the payment _can be made_.
+// When given invalid parameters, it's likely to still obtain a value here and
+// the resulting analysis would be Unpayable. It's up to the caller to first
+// verify the amount is payable, and only then call this method.
 func (a *PaymentAnalyzer) MaxFeeRateToAddress(payment *PaymentToAddress) float64 {
 
 	if payment.AmountInSat > a.totalBalance() {

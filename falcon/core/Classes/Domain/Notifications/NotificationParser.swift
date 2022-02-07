@@ -13,7 +13,7 @@ public enum NotificationParser {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .customISO8601
 
-        let report = try decoder.decode(NotificationReportJson.self, from: data).message
+        let report = try decoder.decode(NotificationReportJsonContainer.self, from: data).message
 
         return NotificationReport(previousId: report.previousId,
                                   maximumId: report.maximumId,

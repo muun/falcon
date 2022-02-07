@@ -7,12 +7,11 @@
 //
 
 public struct NotificationReportJson: Decodable {
+    let previousId: Int
+    public let maximumId: Int
+    public let preview: [NotificationJson]
+}
 
-    public let message: Container
-
-    public struct Container: Decodable {
-        let previousId: Int
-        public let maximumId: Int
-        public let preview: [NotificationJson]
-    }
+public struct NotificationReportJsonContainer: Decodable {
+    public let message: NotificationReportJson
 }

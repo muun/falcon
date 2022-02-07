@@ -12,7 +12,7 @@ calc_sha1sum() {
             | grep -v "_test.go$" | grep -v "/build/" \
             | grep -v ".build/" | sort -z)
     shaeach=$(for file in $files; do sha1sum "$file"; done)
-    echo "$shaeach $(sha1sum "$1/go.mod")" | sha1sum | awk \{'print $1'\}
+    echo "$shaeach $(sha1sum $(which go)) $(sha1sum "$1/go.mod")" | sha1sum | awk \{'print $1'\}
 }
 
 if ! which gobind > /dev/null; then
@@ -24,6 +24,16 @@ if ! which gobind > /dev/null; then
     MAIN_GOPATH="$(cat $falcon_root/.gopath)"
     GOPATH="$MAIN_GOPATH:$PWD/libwallet"
     PATH="$PATH:$MAIN_GOPATH/bin"
+fi
+
+patched_go_folder="$repo_root/falcon/go/bin"
+if [[ -x "$patched_go_folder/go" ]] || [[ "$CONFIGURATION" = "Release" ]]; then
+    PATH="$patched_go_folder:$PATH"
+    if ! go version | grep "go1.17.6-muun" > /dev/null ; then
+        echo "Misconfigured golang version. Expected go1.17.6-muun."
+        go version
+        exit 1
+    fi
 fi
 
 cd "$repo_root"
@@ -54,7 +64,9 @@ mkdir -p "$build_dir/pkg"
 
 CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
     GOMODCACHE="$build_dir/pkg" \
-    go run golang.org/x/mobile/cmd/gomobile bind -target=ios -o "$libwallet" -cache "$build_dir/ios" . ./newop
+    go run golang.org/x/mobile/cmd/gomobile bind \
+    -target=ios -o "$libwallet" -cache "$build_dir/ios" \
+    . ./newop 
 
 st=$?
 

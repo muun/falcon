@@ -28,8 +28,10 @@ public class FetchNotificationsAction: AsyncAction<()>, Runnable {
 
     public func run() {
         let notifId = sessionRepository.getLastNotificationId()
-        runCompletable(houstonService.fetchNotificationsAfter(notificationId: notifId)
-            .flatMapCompletable(notificationProcessor.process))
+        runCompletable(
+            houstonService.fetchNotificationReportAfter(notificationId: notifId)
+                    .flatMapCompletable(notificationProcessor.process(report:))
+        )
     }
 
 }
