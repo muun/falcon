@@ -235,7 +235,7 @@ class NewOperationUITest: FalconUITests {
         let bip70Url = bip70Invoice()
         addSection("New op - 10.000 sats BIP0070")
         let newOpPage = homePage.enter(address: bip70Url)
-        newOpPage.wait()
+        newOpPage.waitForConfirm()
         assertConfirm(
             to: "bcrt1qcnjd3rs0pwh92qpmlvwj2p88tnf0qmpmxd5qfc",
             amount: formatBTCAmount(0.0001),
@@ -467,8 +467,11 @@ class NewOperationUITest: FalconUITests {
 
         // Continue button should be disabled
         XCTAssertFalse(newOpPage.isContinueEnabled())
+
         // Go back to amount state
         back()
+
+        descriptionPage.wait()
         back()
 
         return newAmountPage

@@ -333,11 +333,11 @@ class NotificationProcessorTests: MuunTestCase {
         XCTAssertEqual(fake.confirmCalls, 3)
     }
 
-    func moreThanPagePageBeforeReport() {
+    func testMoreThanPagePageBeforeReport() {
         let fake = replace(.singleton, HoustonService.self, FakeHoustonService.init)
 
-        fake.expectedAfterIds = [2, 3]
-        fake.expectedConfirmedIds = [2, 3, 4]
+        fake.expectedAfterIds = [0, 1, 2]
+        fake.expectedConfirmedIds = [1, 2, 3]
 
         fake.fetchResult = [
             buildReport(max: 3, buildSimpleNotification(id: 1)),
@@ -356,6 +356,26 @@ class NotificationProcessorTests: MuunTestCase {
         XCTAssertEqual(fake.fetchCalls, 3)
         XCTAssertEqual(fake.confirmCalls, 3)
     }
+
+    func testPollingPaginates() {
+        let fake = replace(.singleton, HoustonService.self, FakeHoustonService.init)
+
+        fake.expectedAfterIds = [0, 1, 2]
+        fake.expectedConfirmedIds = [1, 2, 3]
+
+        fake.fetchResult = [
+            buildReport(max: 3, buildSimpleNotification(id: 1)),
+            buildReport(max: 3, buildSimpleNotification(id: 2)),
+            buildReport(max: 3, buildSimpleNotification(id: 3)),
+        ]
+
+        let processor = resolve() as NotificationProcessor
+        _ = processor.poll().toBlocking().materialize()
+
+        XCTAssertEqual(fake.fetchCalls, 3)
+        XCTAssertEqual(fake.confirmCalls, 3)
+    }
+
 
     private func buildSimpleNotification(id: Int) -> Notification {
         return Notification(id: id, previousId: id - 1, senderSessionUuid: "", message: .sessionAuthorized)

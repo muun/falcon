@@ -13,7 +13,7 @@ protocol OpConfirmTransitions: NewOperationTransitions {
     func didConfirm()
 }
 
-class NewOpConfirmView: MUView {
+class NewOpConfirmView: MUView, PresenterInstantior {
 
     private let feeState: FeeState
     fileprivate lazy var presenter = instancePresenter(NewOpConfirmPresenter.init, delegate: self, state: feeState)
@@ -39,6 +39,15 @@ class NewOpConfirmView: MUView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+
+        if newSuperview == nil {
+            presenter.tearDown()
+        } else {
+            presenter.setUp()
+        }
+    }
 }
 
 extension NewOpConfirmView: NewOperationChildViewDelegate {

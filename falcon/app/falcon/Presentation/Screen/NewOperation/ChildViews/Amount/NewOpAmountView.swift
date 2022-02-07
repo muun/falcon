@@ -14,7 +14,7 @@ protocol OpAmountTransitions: NewOperationTransitions {
     func requestCurrencyPicker(data: NewOperationStateLoaded, currencyCode: String)
 }
 
-class NewOpAmountView: MUView {
+class NewOpAmountView: MUView, PresenterInstantior {
 
     @IBOutlet private weak var inputContainerView: UIView!
     @IBOutlet private weak var allFundsButton: LinkButtonView!
@@ -56,6 +56,16 @@ class NewOpAmountView: MUView {
         }
     }
 
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+
+        if newSuperview == nil {
+            presenter.tearDown()
+        } else {
+            presenter.setUp()
+        }
+    }
+    
     override func setUp() {
         super.setUp()
 

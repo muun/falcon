@@ -38,6 +38,45 @@ public class NotificationProcessor {
         self.queue = DispatchQueue(label: "notifications")
     }
 
+    public func poll() -> Completable {
+
+        let subject = BehaviorSubject.init(value: ())
+
+        queue.async {
+            do {
+                let previousId = self.sessionRepository.getLastNotificationId()
+
+                var maxProcessedId = previousId
+                var maxSeenId = 0
+                var reportToProcess = try self.fetchNotificationsAfter(previousId, retries: 3)
+
+                _ = try self._process(notifications: reportToProcess.preview).toBlocking().materialize()
+                maxSeenId = max(maxSeenId, reportToProcess.maximumId);
+                if let lastNotification = reportToProcess.preview.last {
+                    maxProcessedId = max(lastNotification.id, maxProcessedId)
+                }
+
+                while maxProcessedId < maxSeenId {
+
+                    reportToProcess = try self.fetchNotificationsAfter(maxProcessedId, retries: 3)
+                    _ = try self._process(notifications: reportToProcess.preview).toBlocking().materialize()
+
+                    maxSeenId = max(maxSeenId, reportToProcess.maximumId);
+                    if let lastNotification = reportToProcess.preview.last {
+                        maxProcessedId = max(lastNotification.id, maxProcessedId)
+                    }
+                }
+
+            } catch {
+                Logger.log(error: error)
+            }
+
+            subject.onCompleted()
+        }
+
+        return subject.asObservable().ignoreElements()
+    }
+
     public func process(report: NotificationReport) -> Completable {
 
         let subject = BehaviorSubject.init(value: ())

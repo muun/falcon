@@ -95,7 +95,6 @@ extension Resolver {
 protocol PresenterInstantior {}
 
 extension MUViewController: PresenterInstantior {}
-extension MUView: PresenterInstantior {}
 
 extension PresenterInstantior {
 

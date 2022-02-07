@@ -20,7 +20,7 @@ protocol OpLoadingTransitions: AnyObject {
     func invoiceMissingAmount()
 }
 
-class NewOpLoadingView: MUView {
+class NewOpLoadingView: MUView, PresenterInstantior {
 
     fileprivate lazy var presenter = instancePresenter(NewOpLoadingPresenter.init, delegate: self, state: paymentIntent)
 
@@ -45,6 +45,15 @@ class NewOpLoadingView: MUView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+
+        if newSuperview == nil {
+            presenter.tearDown()
+        } else {
+            presenter.setUp()
+        }
+    }
 }
 
 extension NewOpLoadingView: NewOpLoadingPresenterDelegate {

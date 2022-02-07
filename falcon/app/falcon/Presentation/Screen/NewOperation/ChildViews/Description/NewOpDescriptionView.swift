@@ -12,7 +12,7 @@ protocol OpDescriptionTransitions: NewOperationTransitions {
     func didEnter(description: String, data: NewOperationStateAmount)
 }
 
-class NewOpDescriptionView: MUView {
+class NewOpDescriptionView: MUView, PresenterInstantior {
 
     @IBOutlet fileprivate weak var textView: UITextView!
     @IBOutlet fileprivate weak var placeholder: UILabel!
@@ -66,6 +66,16 @@ class NewOpDescriptionView: MUView {
         makeViewTestable()
     }
 
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+
+        if newSuperview == nil {
+            presenter.tearDown()
+        } else {
+            presenter.setUp()
+        }
+    }
+    
     func setUpTextView() {
         textView.tintColor = Asset.Colors.muunBlue.color
         textView.textColor = Asset.Colors.title.color

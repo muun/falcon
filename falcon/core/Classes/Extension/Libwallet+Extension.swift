@@ -240,8 +240,10 @@ extension LibwalletMuunPaymentURI {
             toParse = self.bip70Url
         }
 
-        guard let uri = URL(string: toParse) else {
-            Logger.fatal("Failed to parse URL \(toParse)")
+        guard let actualUriString = toParse.trimmingCharacters(in: .whitespaces)
+            .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
+            let uri = URL(string: actualUriString) else {
+                Logger.fatal("Failed to parse URL \(toParse)")
         }
 
         return MuunPaymentURI(
