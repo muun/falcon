@@ -584,8 +584,8 @@
 		AA0626FC25346966A35C7A0A125D383A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = C554F1D8FD3E7C1C62ABFC6216CE8FB5 /* Build configuration list for PBXProject "RxSwift" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -630,20 +630,20 @@
 				A2EB589B06F453FFA9D91D418599A4A0 /* AsyncLock.swift in Sources */,
 				66A03F70765F347E8ADA459811A8434C /* AsyncSubject.swift in Sources */,
 				5C72898AFA236FB0B643CC7A862C8106 /* AtomicInt.swift in Sources */,
-				94F928AC2A66C64546433FCFEB0561AC /* Bag+Rx.swift in Sources */,
 				51327E4268E64CCD3F1AB3FED64001C2 /* Bag.swift in Sources */,
+				94F928AC2A66C64546433FCFEB0561AC /* Bag+Rx.swift in Sources */,
 				9182A92EB1A19C463AD9C526A36FA992 /* BehaviorSubject.swift in Sources */,
 				34CED7F21022F876E6FF3C6F56601339 /* BinaryDisposable.swift in Sources */,
 				DBAD6F948FE8FCB0D3EFE091AAD6D6C9 /* BooleanDisposable.swift in Sources */,
 				40B3A47380FCD88EF8DFFE9F011439A6 /* Buffer.swift in Sources */,
 				B2C87EA614B91CB95AF6CCED2DA1173C /* Cancelable.swift in Sources */,
 				ACC4E26D36BD2290FF334EE132FCE136 /* Catch.swift in Sources */,
+				C81641FD1E1D653B6165CA46983CB153 /* CombineLatest.swift in Sources */,
 				2A6A09491A487081F36FB78D72275D17 /* CombineLatest+arity.swift in Sources */,
 				4CA096298C04EF23549EC373F21F907B /* CombineLatest+Collection.swift in Sources */,
-				C81641FD1E1D653B6165CA46983CB153 /* CombineLatest.swift in Sources */,
 				3D7F15D1A8260B12D03681AFC48A62E5 /* CompactMap.swift in Sources */,
-				AAF83A01021419E1D91A37CC4A7FA10A /* Completable+AndThen.swift in Sources */,
 				B32996A79FD2A7D4BCF0602B3AD4F73F /* Completable.swift in Sources */,
+				AAF83A01021419E1D91A37CC4A7FA10A /* Completable+AndThen.swift in Sources */,
 				F5039C71EE7E079B0F69EDD56F542F03 /* CompositeDisposable.swift in Sources */,
 				2CEA9638BCE4AD66A2ED34F8CA439DEA /* Concat.swift in Sources */,
 				44EA8563963136BE29448227916AD3AE /* ConcurrentDispatchQueueScheduler.swift in Sources */,
@@ -698,9 +698,9 @@
 				2BD57577CC43A763A714692ECDC7D5D8 /* NopDisposable.swift in Sources */,
 				BAB06D44FF5E87684F26BB4143BA7FD3 /* Observable.swift in Sources */,
 				45FA5556898C6BB4A2406B732FE56F6C /* ObservableConvertibleType.swift in Sources */,
+				3086D7B3612A8CFA57E3A4F26F68751E /* ObservableType.swift in Sources */,
 				957F2CFAD2427F88766DF19B8D738371 /* ObservableType+Extensions.swift in Sources */,
 				157BDBA4CC69C3954575D03C4594776E /* ObservableType+PrimitiveSequence.swift in Sources */,
-				3086D7B3612A8CFA57E3A4F26F68751E /* ObservableType.swift in Sources */,
 				7C4D724041F6550BE093409ACF75E025 /* ObserveOn.swift in Sources */,
 				8906C79BA667B1ECF7455B5B9009E8ED /* ObserverBase.swift in Sources */,
 				6A147C3DCFB4B2532E0D3395874E634C /* ObserverType.swift in Sources */,
@@ -708,8 +708,8 @@
 				84D31DC1CE5FEFB0096208595B3990BC /* Optional.swift in Sources */,
 				5C2A174544E2E623DADAED89F2C094E9 /* Platform.Darwin.swift in Sources */,
 				0595D900FFD7528DA8AF024F701CC038 /* Platform.Linux.swift in Sources */,
-				A0ADC6ED137FF6DFEFF2CCB5AA929916 /* PrimitiveSequence+Zip+arity.swift in Sources */,
 				FCFA7B1A70FEAA3BF1FA02FC03FB6EA9 /* PrimitiveSequence.swift in Sources */,
+				A0ADC6ED137FF6DFEFF2CCB5AA929916 /* PrimitiveSequence+Zip+arity.swift in Sources */,
 				D2A20CDE1B778922C7F986B9B79F9C9A /* PriorityQueue.swift in Sources */,
 				43D615CD83C20AB5BFD24F3336CD04CD /* Producer.swift in Sources */,
 				F372FEF124F2CE3D1B5536EEF62F84F3 /* PublishSubject.swift in Sources */,
@@ -769,9 +769,9 @@
 				F029748FE0F81DB99889426CCDD08598 /* VirtualTimeScheduler.swift in Sources */,
 				8DDEBEB809A8FF7C220FC7B299FB78EE /* Window.swift in Sources */,
 				3904EFD46366A16B4EA4C04A044D09A0 /* WithLatestFrom.swift in Sources */,
+				9029E62ADD80DEA548065DAF4F7B58F5 /* Zip.swift in Sources */,
 				EEB733552AF03B9DF55064725195E850 /* Zip+arity.swift in Sources */,
 				9D2B4786A582A4C130756A3C8CEAB66D /* Zip+Collection.swift in Sources */,
-				9029E62ADD80DEA548065DAF4F7B58F5 /* Zip.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -276,8 +276,8 @@
 				62DED7288C1396C2C89827B5C6A159B9 /* GDTCORClock.h in Headers */,
 				9F8515399CEE37E72609868E26F7073B /* GDTCORConsoleLogger.h in Headers */,
 				486B6C7955627B21DAD9BE356FC60B59 /* GDTCORDirectorySizeTracker.h in Headers */,
-				E31967EE5369524FC304674C52FE2ED0 /* GDTCOREvent+GDTCCTSupport.h in Headers */,
 				82BB95A3B6DF5A8D1E91678E19F96F3E /* GDTCOREvent.h in Headers */,
+				E31967EE5369524FC304674C52FE2ED0 /* GDTCOREvent+GDTCCTSupport.h in Headers */,
 				FB83DB681F58E26126D945D9A4208B88 /* GDTCOREvent_Private.h in Headers */,
 				91F14C06D06B946CA9992BCA884AE9F0 /* GDTCOREventDataObject.h in Headers */,
 				43995C2DDD2AF736C2042D2C4B846BD2 /* GDTCOREventTransformer.h in Headers */,
@@ -297,8 +297,8 @@
 				C2E95C1EC4A9764E305DEFE6B150D9FA /* GDTCORTransport_Private.h in Headers */,
 				11CF69C04A2DF308B4F409501A11DD7B /* GDTCORUploadCoordinator.h in Headers */,
 				AA2013BD1FF9B3CABECF9495C10D412A /* GDTCORUploader.h in Headers */,
-				91CD163D3129A376D60A0CB0AD889A55 /* GoogleDataTransport-umbrella.h in Headers */,
 				E42A247A5D2F2FF9C5DF075DC0D78D6D /* GoogleDataTransport.h in Headers */,
+				91CD163D3129A376D60A0CB0AD889A55 /* GoogleDataTransport-umbrella.h in Headers */,
 				DB8CE4533C29133AA3174CB6B50C50A0 /* GoogleDataTransportInternal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,8 +331,8 @@
 		70488AE0197FA1D8AECC95F3D0C83D95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = D3ABC61DAAE9240B79C666E308E867FE /* Build configuration list for PBXProject "GoogleDataTransport" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -380,8 +380,8 @@
 				3A02CE30F197B1F2942DD85C43CFC616 /* GDTCORClock.m in Sources */,
 				5DADFC0A8F700F6FF65BB90A21BC4D7B /* GDTCORConsoleLogger.m in Sources */,
 				75EE5C7DFFF78DCB281AB54E452915F1 /* GDTCORDirectorySizeTracker.m in Sources */,
-				C2D5149D23D659B2814CB2376373F35E /* GDTCOREvent+GDTCCTSupport.m in Sources */,
 				CA6E8D058F8F3984EED3AEC67D88FA1F /* GDTCOREvent.m in Sources */,
+				C2D5149D23D659B2814CB2376373F35E /* GDTCOREvent+GDTCCTSupport.m in Sources */,
 				88CAE7D6CDC78C2D00C9C2A5EA96138C /* GDTCORFlatFileStorage.m in Sources */,
 				84B5E9AD6D6C956413D23E01BB7ED39D /* GDTCORLifecycle.m in Sources */,
 				6DEC5504DC90E4F841074B6E547D7383 /* GDTCORPlatform.m in Sources */,

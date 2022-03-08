@@ -133,8 +133,8 @@
 		28C41EAD48A757E8D1FCDDA7DEDC1CB5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = D793DE08A5FADAB3B5B50D308FC8C915 /* Build configuration list for PBXProject "GoogleSignIn" */;
 			compatibilityVersion = "Xcode 10.0";

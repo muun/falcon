@@ -72,8 +72,8 @@
 		0C8CC714D56A5AA4BEF1021242FDE836 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 09983F219F0DC35A3E634FE1DCCFF1F8 /* Build configuration list for PBXProject "SwiftGen" */;
 			compatibilityVersion = "Xcode 10.0";

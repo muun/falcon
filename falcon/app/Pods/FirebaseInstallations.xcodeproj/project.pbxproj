@@ -294,8 +294,8 @@
 				A3A3EC9F239DD429D5E71C758C2EF8EB /* FIRCurrentDateProvider.h in Headers */,
 				C87ED971AA5BF55882D394CA1C1B2BDF /* FIRDependency.h in Headers */,
 				BC7D9729E3421CA39BE4D22061B6007C /* FirebaseCoreInternal.h in Headers */,
-				FDE8607086066C545323F74581A3F848 /* FirebaseInstallations-umbrella.h in Headers */,
 				8E56E92355E5CF3C8F636FB5CC327E44 /* FirebaseInstallations.h in Headers */,
+				FDE8607086066C545323F74581A3F848 /* FirebaseInstallations-umbrella.h in Headers */,
 				D57C08F870D1EB28267C410682B96CF0 /* FirebaseInstallationsInternal.h in Headers */,
 				8FA6B631DD46F351FDEAF6AA788BD378 /* FIRHeartbeatInfo.h in Headers */,
 				1B87BA63623EE71CAB61741EF118EDC2 /* FIRInstallations.h in Headers */,
@@ -309,8 +309,8 @@
 				650D7D50F7268F1FE7E1AFE8C9588AE6 /* FIRInstallationsIDController.h in Headers */,
 				6C399615BB6DE87E556F15D6F33D3E8B /* FIRInstallationsIIDStore.h in Headers */,
 				ED6BAFF850F49A2009A2ADED2D240D5E /* FIRInstallationsIIDTokenStore.h in Headers */,
-				9DDEA40848E411434D5BA6991C19AEC6 /* FIRInstallationsItem+RegisterInstallationAPI.h in Headers */,
 				BA226C9537B4A42BFD6193AE967AA98F /* FIRInstallationsItem.h in Headers */,
+				9DDEA40848E411434D5BA6991C19AEC6 /* FIRInstallationsItem+RegisterInstallationAPI.h in Headers */,
 				70FCF166DB82E185B64AF045AE68D306 /* FIRInstallationsLogger.h in Headers */,
 				ADE797C521782010B82396D9C297BC32 /* FIRInstallationsSingleOperationPromiseCache.h in Headers */,
 				010C8CB5069741D96E56054EC441DF9D /* FIRInstallationsStatus.h in Headers */,
@@ -353,8 +353,8 @@
 		F8DABED711198052B06C32C6D7489762 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 783DB04B995DD3D7F716A1FC74010EB8 /* Build configuration list for PBXProject "FirebaseInstallations" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -411,8 +411,8 @@
 				33893BF503D30AD5A0E584710EA54EF2 /* FIRInstallationsIDController.m in Sources */,
 				9A8CFFFAB1DC2C5E3F07A01446ABBF50 /* FIRInstallationsIIDStore.m in Sources */,
 				C397A17D3EF0C4DADC57E85BA0FE5441 /* FIRInstallationsIIDTokenStore.m in Sources */,
-				9A667B817CD21AC0987003D10161CE60 /* FIRInstallationsItem+RegisterInstallationAPI.m in Sources */,
 				3F1E8957CE50749DCFA172F1D8EE8DAE /* FIRInstallationsItem.m in Sources */,
+				9A667B817CD21AC0987003D10161CE60 /* FIRInstallationsItem+RegisterInstallationAPI.m in Sources */,
 				7A0F852D02801EA71B51E617F1025138 /* FIRInstallationsLogger.m in Sources */,
 				E5C87BF7A89878A4C122146FECD6644A /* FIRInstallationsSingleOperationPromiseCache.m in Sources */,
 				9F70DC205233289E2F0D649998F5E988 /* FIRInstallationsStore.m in Sources */,

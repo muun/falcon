@@ -747,8 +747,8 @@
 			files = (
 				CE5E560FC04E2129F33C93334AFD97C7 /* crashlytics.nanopb.h in Headers */,
 				51DFD83F0B7448F42ABFC209EB5AE95E /* dwarf.h in Headers */,
-				8BC410C218895BC705E7DEE87D6B7552 /* FIRAEvent+Internal.h in Headers */,
 				04F85BEC00B2B8BD30938A4647334C50 /* FIRAEvent.h in Headers */,
+				8BC410C218895BC705E7DEE87D6B7552 /* FIRAEvent+Internal.h in Headers */,
 				E8962D30E8BFAE4B1B0867BB85ACB94E /* FIRAnalyticsInterop.h in Headers */,
 				D22F759B69573D755213208F9042B58C /* FIRAnalyticsInteropListener.h in Headers */,
 				F37A0A633A1A915164DA6181921F3463 /* FIRAppInternal.h in Headers */,
@@ -844,8 +844,8 @@
 				7DDE16FBD356EB9A4D12A26292B82162 /* FIRCrashlytics.h in Headers */,
 				A8514EF7F221C814B4D8D90EE02715AA /* FIRDependency.h in Headers */,
 				54B8CAAA747DE1745B4D8471EB291EAE /* FirebaseCoreInternal.h in Headers */,
-				D551B798773FAFEEFBEC6EF99CB117FF /* FirebaseCrashlytics-umbrella.h in Headers */,
 				2FF04A867A34CFDB4194899FA628B3B8 /* FirebaseCrashlytics.h in Headers */,
+				D551B798773FAFEEFBEC6EF99CB117FF /* FirebaseCrashlytics-umbrella.h in Headers */,
 				095A073231668CF5813C1CC14C96329C /* FirebaseInstallationsInternal.h in Headers */,
 				6AB5C7F8419E3A74CA89E48AABE6E1D6 /* FIRExceptionModel.h in Headers */,
 				AB8E4261DD057A2F97D7B8D3F834C919 /* FIRExceptionModel_Private.h in Headers */,
@@ -902,8 +902,8 @@
 		7CC2467FD0A94F8AF4E84193022DA6A1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 64905587A3A2E29DA94C2A82DFAD3F0C /* Build configuration list for PBXProject "FirebaseCrashlytics" */;
 			compatibilityVersion = "Xcode 10.0";

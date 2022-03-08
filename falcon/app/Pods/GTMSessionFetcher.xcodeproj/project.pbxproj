@@ -161,8 +161,8 @@
 				6E396E462248180E193F670240F6D142 /* GTMGatherInputStream.h in Headers */,
 				FEE6FBC1E5FD71747CE03E488F31E226 /* GTMMIMEDocument.h in Headers */,
 				AF3D2F940AC75D3B87452040711D2DC2 /* GTMReadMonitorInputStream.h in Headers */,
-				6BD4B809C641BECF5071A0F4F1BA279C /* GTMSessionFetcher-umbrella.h in Headers */,
 				C5187A8680713651D3672CAD48C28DF9 /* GTMSessionFetcher.h in Headers */,
+				6BD4B809C641BECF5071A0F4F1BA279C /* GTMSessionFetcher-umbrella.h in Headers */,
 				98238D563624B463CF61ADED4C5492B4 /* GTMSessionFetcherLogging.h in Headers */,
 				BC253B1CD8D19B46D8A58E15304DCBAD /* GTMSessionFetcherService.h in Headers */,
 				6E5FEBF23DAC4847B67C42D30D0D3C49 /* GTMSessionUploadFetcher.h in Headers */,
@@ -196,8 +196,8 @@
 		0C1728BD9F7A0B88B73CA7953E36DFB5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 08DD627DF5FCE3BDD85D726A7B3F9A44 /* Build configuration list for PBXProject "GTMSessionFetcher" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -235,8 +235,8 @@
 				DA62556D166F000C073BB7BB948B0AF2 /* GTMGatherInputStream.m in Sources */,
 				5F54353DFCF73DDDB88E7794D755489A /* GTMMIMEDocument.m in Sources */,
 				32037A4E53F5426332C4644B8EFC0F36 /* GTMReadMonitorInputStream.m in Sources */,
-				8724BE11D34D638124679669C98A3565 /* GTMSessionFetcher-dummy.m in Sources */,
 				8982C2C6C3E2B08B263B9A3B298D1A86 /* GTMSessionFetcher.m in Sources */,
+				8724BE11D34D638124679669C98A3565 /* GTMSessionFetcher-dummy.m in Sources */,
 				DF471F55905447DBD8DD4BABE812E8F2 /* GTMSessionFetcherLogging.m in Sources */,
 				60BEA88B0281075906D9C3342EAF27A5 /* GTMSessionFetcherService.m in Sources */,
 				ADFB3F4B067E9F02A7E350929BFD9EB0 /* GTMSessionUploadFetcher.m in Sources */,

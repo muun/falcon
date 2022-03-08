@@ -206,8 +206,8 @@
 				C278D7E6FB8B2CA4AD1CF36D4B18263F /* FirebaseCoreInternal.h */,
 				EB1069B53C072486EDA3DA1A47786BB0 /* FirebaseInstallationsInternal.h */,
 				F319CB7198855EDD3C43AAC26E224F6B /* FirebaseInstanceID.h */,
-				2533DB8928832963B755CB61CBEFB7A9 /* FirebaseMessaging.h */,
 				239847789E7AD109AC451652B08A4B09 /* FirebaseMessaging.h */,
+				2533DB8928832963B755CB61CBEFB7A9 /* FirebaseMessaging.h */,
 				EFCEB37FE349C87D072FCA605B3017B6 /* FIRHeartbeatInfo.h */,
 				196C70D3E094CB638ADC6E403BEA3EFC /* FIRInstanceID.h */,
 				6983827B12CC0DDF0EAFC8E418CDF609 /* FIRInstanceID+Private.h */,
@@ -327,12 +327,12 @@
 				27AB2203AF7245F92C312243674DAC47 /* FirebaseCoreInternal.h in Headers */,
 				339C18A1A914DEEAC6CBD444AD1ED57B /* FirebaseInstallationsInternal.h in Headers */,
 				4CC05235D7E4F1E9ECBD4937C20896B2 /* FirebaseInstanceID.h in Headers */,
-				D3F3BC64044662134FC8161D135E024B /* FirebaseMessaging-umbrella.h in Headers */,
-				C4BCE03FE4699742D90735F17A339CB4 /* FirebaseMessaging.h in Headers */,
 				106F41B97A2FD02DA20EC90F86B5F84C /* FirebaseMessaging.h in Headers */,
+				C4BCE03FE4699742D90735F17A339CB4 /* FirebaseMessaging.h in Headers */,
+				D3F3BC64044662134FC8161D135E024B /* FirebaseMessaging-umbrella.h in Headers */,
 				BDEE7F0F37B9530DA48AFA619A7147D6 /* FIRHeartbeatInfo.h in Headers */,
-				EACF8F97DD358E0A271A1ACE5EF39CBA /* FIRInstanceID+Private.h in Headers */,
 				B1A93781BCFE20BAE50DB9FA0EF63FF8 /* FIRInstanceID.h in Headers */,
+				EACF8F97DD358E0A271A1ACE5EF39CBA /* FIRInstanceID+Private.h in Headers */,
 				B1F078474D0F5378560F8ABF260A4AE3 /* FIRInstanceID_Private.h in Headers */,
 				25E9CAE67A660258F96D6671DA73A840 /* FIRInstanceIDCheckinPreferences.h in Headers */,
 				188D853BC99A9CC0247168B37927CC7D /* FIRInteropEventNames.h in Headers */,
@@ -394,8 +394,8 @@
 		E41B302956CC57F464518ABE77345045 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 41E09148E8B165EEF97C0BE725070F65 /* Build configuration list for PBXProject "FirebaseMessaging" */;
 			compatibilityVersion = "Xcode 10.0";

@@ -162,8 +162,8 @@
 		87855F192D4AD0703590B6DDC168BDDC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 198012EF7A45C9DD9AF96756AF40414F /* Build configuration list for PBXProject "Firebase" */;
 			compatibilityVersion = "Xcode 10.0";

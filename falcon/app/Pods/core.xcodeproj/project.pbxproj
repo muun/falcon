@@ -1616,8 +1616,8 @@
 		F586A8DB17DF3117A7CE4D82B0869E59 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 9984921E1E7F61A93E2181ABBCE2A59C /* Build configuration list for PBXProject "core" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -1787,8 +1787,8 @@
 				F4C358F21BB99CF534A42D9A49C9A757 /* EmergencyKitDataSelector.swift in Sources */,
 				6BBB89D4B11E2624D06DAEFED77F2327 /* EmergencyKitRepository.swift in Sources */,
 				C029CB8F29EAA75309B83D0788A86FAF /* EmptyJson.swift in Sources */,
-				D1A525D78E8714F2F668208EF189A6B4 /* Environment+Net.swift in Sources */,
 				5DA35DA83F311036C8F7EC30C6A2FEC4 /* Environment.swift in Sources */,
+				D1A525D78E8714F2F668208EF189A6B4 /* Environment+Net.swift in Sources */,
 				CA812BF3B5C017D8A97C5BFAAD315C11 /* Error+Extension.swift in Sources */,
 				B76B9DDE961F296315585520CB38619A /* ErrorReporter.swift in Sources */,
 				8ABE0A2188991DD5F33358A2EC3AC2D8 /* ExchangeRateWindowRepository.swift in Sources */,

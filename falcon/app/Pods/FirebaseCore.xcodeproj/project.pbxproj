@@ -269,8 +269,8 @@
 				1D22701E0B3D9207758CCB0E55F1EC1B /* FIRCoreDiagnosticsInterop.h in Headers */,
 				3C9EAE12C449CE0909E1E838F3BABE1C /* FIRDependency.h in Headers */,
 				0B323851BA760A83A50F95DF1AE0C964 /* FIRDiagnosticsData.h in Headers */,
-				52DD263B272D38329DE51DA35068F9A6 /* FirebaseCore-umbrella.h in Headers */,
 				3C1D7BC9F2157B063953BF78F9DFB74D /* FirebaseCore.h in Headers */,
+				52DD263B272D38329DE51DA35068F9A6 /* FirebaseCore-umbrella.h in Headers */,
 				DF1863D0C77F5508BA8052952781D6B0 /* FirebaseCoreInternal.h in Headers */,
 				82D62E62DEBA5A40987CA3FF07C8087F /* FIRFirebaseUserAgent.h in Headers */,
 				9CCDFE586A747ED216D333AC35EDB945 /* FIRHeartbeatInfo.h in Headers */,
@@ -312,8 +312,8 @@
 		F7103B281551A437136490C9EF2F0969 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 79937527AF0AEA5663B94DB81F24511B /* Build configuration list for PBXProject "FirebaseCore" */;
 			compatibilityVersion = "Xcode 10.0";

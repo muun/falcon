@@ -145,8 +145,8 @@
 		F154BCC1EC183799C5A4E6E008947EA9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 94BEE24D9EBC9A6A27050CD616B878DC /* Build configuration list for PBXProject "FirebaseAnalytics" */;
 			compatibilityVersion = "Xcode 10.0";

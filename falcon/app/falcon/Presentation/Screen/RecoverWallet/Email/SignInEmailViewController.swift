@@ -163,6 +163,7 @@ extension SignInEmailViewController: SignInEmailPresenterDelegate {
         button.isLoading = isLoading
         textInputView.isUserInteractionEnabled = !isLoading
         titleAndDescriptionView.isUserInteractionEnabled = !isLoading
+        useRecoveryCodeButton.isEnabled = !isLoading
     }
 
     func sessionResponseReceived(sessionOk: CreateSessionOk) {

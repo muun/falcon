@@ -113,8 +113,8 @@
 		9734F3A095509732DDB39E501DB2D7DA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 126CAB7AFD888E3BE809CFAB0D4121F4 /* Build configuration list for PBXProject "GoogleAppMeasurement" */;
 			compatibilityVersion = "Xcode 10.0";

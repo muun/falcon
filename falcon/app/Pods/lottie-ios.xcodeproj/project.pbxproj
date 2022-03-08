@@ -503,8 +503,8 @@
 		AADD4C69B98E9A3A640BDD9217BCC368 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 8397E5A1F00E2B46B5C5975FED957FCF /* Build configuration list for PBXProject "lottie-ios" */;
 			compatibilityVersion = "Xcode 10.0";

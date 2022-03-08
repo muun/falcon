@@ -156,10 +156,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				677E9D38AC704F8A3906632FAE653C91 /* GTMAppAuth-umbrella.h in Headers */,
 				E0F310768EAE594D1A1BA8B4B827EEF5 /* GTMAppAuth.h in Headers */,
-				3EA35B77BD5263544C4D7182D4F16188 /* GTMAppAuthFetcherAuthorization+Keychain.h in Headers */,
+				677E9D38AC704F8A3906632FAE653C91 /* GTMAppAuth-umbrella.h in Headers */,
 				AD85CFC6DD31689084AACC64A0A80589 /* GTMAppAuthFetcherAuthorization.h in Headers */,
+				3EA35B77BD5263544C4D7182D4F16188 /* GTMAppAuthFetcherAuthorization+Keychain.h in Headers */,
 				B68DAF50F76DA5754261CDAF72270A5B /* GTMKeychain.h in Headers */,
 				6B455D672BBB4C43889DC8D24CE2EFA2 /* GTMOAuth2KeychainCompatibility.h in Headers */,
 			);
@@ -194,8 +194,8 @@
 		13AB4C6D75DFAACF11D71970177019B0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 032C97852926C1DDB94218B7FEAEB244 /* Build configuration list for PBXProject "GTMAppAuth" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -239,8 +239,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				14BCCC53DBA26A2A8309C6A20D44C2CA /* GTMAppAuth-dummy.m in Sources */,
-				1999F0A3A5AA06720608E9FAD4BE2D52 /* GTMAppAuthFetcherAuthorization+Keychain.m in Sources */,
 				84A08BA20104920753A14F44DB5987EE /* GTMAppAuthFetcherAuthorization.m in Sources */,
+				1999F0A3A5AA06720608E9FAD4BE2D52 /* GTMAppAuthFetcherAuthorization+Keychain.m in Sources */,
 				78460253444313DE61ED33EFC0E55F69 /* GTMKeychain_iOS.m in Sources */,
 				CBAC2CD90F859B5E7FB55E8BAADF868D /* GTMOAuth2KeychainCompatibility.m in Sources */,
 			);

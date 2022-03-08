@@ -27,26 +27,28 @@ public class CreateInvoiceAction {
     }
 
     fileprivate func create(amount: Satoshis?,
-                            policy: ForwardingPolicy,
+                            policies: [ForwardingPolicy],
                             userPrivateKey: WalletPrivateKey) throws -> String {
 
-        let routeHints = LibwalletRouteHints()
-        routeHints.cltvExpiryDelta = Int32(policy.cltvExpiryDelta)
-        routeHints.feeBaseMsat = policy.feeBaseMsat
-        routeHints.feeProportionalMillionths = policy.feeProportionalMillionths
-        routeHints.pubkey = policy.identityKeyHex
-
-        let options = LibwalletInvoiceOptions()
-        options.amountSat = amount?.value ?? 0
-
-        let invoice = try doWithError { err in
-            LibwalletCreateInvoice(Environment.current.network,
-                                   userPrivateKey.key,
-                                   routeHints,
-                                   options,
-                                   err)
+        if policies.isEmpty {
+            throw MuunError(Errors.noPolicies)
         }
 
+        let builder = LibwalletInvoiceBuilder()
+                .network(Environment.current.network)?
+                .amountSat(amount?.value ?? 0)?
+                .userKey(userPrivateKey.key)
+
+        for policy in policies {
+            let routeHints = LibwalletRouteHints()
+            routeHints.cltvExpiryDelta = Int32(policy.cltvExpiryDelta)
+            routeHints.feeBaseMsat = policy.feeBaseMsat
+            routeHints.feeProportionalMillionths = policy.feeProportionalMillionths
+            routeHints.pubkey = policy.identityKeyHex
+            builder?.add(routeHints)
+        }
+
+        let invoice = try doWithError(builder!.build(_:))
         if invoice.isEmpty {
             throw MuunError(Errors.noInvoicesLeft)
         }
@@ -60,16 +62,12 @@ public class CreateInvoiceAction {
 
             func getInvoice(policies: [ForwardingPolicy]) throws -> Single<String> {
 
-                guard let policy = policies.randomElement() else {
-                    throw MuunError(Errors.noPolicies)
-                }
-
                 let userPrivateKey = try keysRepository.getBasePrivateKey()
 
                 return Single.deferred({
                     let invoice = try create(
                         amount: amount,
-                        policy: policy,
+                        policies: policies,
                         userPrivateKey: userPrivateKey
                     )
                     return Single.just(invoice)
@@ -80,7 +78,7 @@ public class CreateInvoiceAction {
                             .map { () in
                                 return try create(
                                     amount: amount,
-                                    policy: policy,
+                                    policies: policies,
                                     userPrivateKey: userPrivateKey
                                 )
                             }

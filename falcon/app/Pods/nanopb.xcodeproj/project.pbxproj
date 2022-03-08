@@ -172,8 +172,8 @@
 		71F8533AE75309759041404D25E534DE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 2A9D98A90AF7FA09325E25E198DA7FED /* Build configuration list for PBXProject "nanopb" */;
 			compatibilityVersion = "Xcode 10.0";

@@ -91,6 +91,7 @@
 			dstPath = "$(PUBLIC_HEADERS_FOLDER_PATH)/.";
 			dstSubfolderSpec = 16;
 			files = (
+				549278420319DE89B58FB8E75FE8EAE5 /* FBLPromise.h in Copy . Public Headers */,
 				4BAF9CDC9F9F0D697E03D2B2C20BCE54 /* FBLPromise+All.h in Copy . Public Headers */,
 				29DA5757484F9F7D2F5F53D12A951AD9 /* FBLPromise+Always.h in Copy . Public Headers */,
 				6B3BFE8DB07A18A4647B5EB113BAED0E /* FBLPromise+Any.h in Copy . Public Headers */,
@@ -108,7 +109,6 @@
 				0F9660ADC21D974A845DBE91A37DFB89 /* FBLPromise+Timeout.h in Copy . Public Headers */,
 				AC9B539557DA409C0088E140128FE2DD /* FBLPromise+Validate.h in Copy . Public Headers */,
 				D36490EB7E40CCC696A3D82E5129AF6A /* FBLPromise+Wrap.h in Copy . Public Headers */,
-				549278420319DE89B58FB8E75FE8EAE5 /* FBLPromise.h in Copy . Public Headers */,
 				05907CF389DF169D42CB020C9FFC4BF5 /* FBLPromiseError.h in Copy . Public Headers */,
 				DB2496E15B561725E24FC597729DB4C4 /* FBLPromises.h in Copy . Public Headers */,
 			);
@@ -283,6 +283,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13D06FC623556FA1300182DF2FFB026D /* FBLPromise.h in Headers */,
 				D4A3F77C3B82AB6FA8A8ABE19472C219 /* FBLPromise+All.h in Headers */,
 				52C5527BB7330092D738B3E4177C9BF5 /* FBLPromise+Always.h in Headers */,
 				CA3A7A41BD24FAD9FACBA0A827C9613F /* FBLPromise+Any.h in Headers */,
@@ -300,7 +301,6 @@
 				DC86BBC60D6274ACF7E8AA08CE0DDABB /* FBLPromise+Timeout.h in Headers */,
 				120EA88C932737809DA50AD4224110A2 /* FBLPromise+Validate.h in Headers */,
 				9EA6035E97B594D6BCE47165DBDD911D /* FBLPromise+Wrap.h in Headers */,
-				13D06FC623556FA1300182DF2FFB026D /* FBLPromise.h in Headers */,
 				533302857F331C8A2F7F926BF066D45C /* FBLPromiseError.h in Headers */,
 				455BBDEE9F0240056EFDEA8EA9BC8137 /* FBLPromisePrivate.h in Headers */,
 				16DC948D5817BAF60430A11E20F37A50 /* FBLPromises.h in Headers */,
@@ -337,8 +337,8 @@
 		0FFEA0A5A810D84BA172F48B6DF97BFE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 20DCB7389990541B9CBE27FD8A8B14FE /* Build configuration list for PBXProject "PromisesObjC" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -373,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF963A1781982764A937F2153343A827 /* FBLPromise.m in Sources */,
 				F9B2CC8196F6311B47D759EEA35FE571 /* FBLPromise+All.m in Sources */,
 				9923F06E405815E064B2C31095137801 /* FBLPromise+Always.m in Sources */,
 				087D64B7EFC4347CB030389CF159E16C /* FBLPromise+Any.m in Sources */,
@@ -390,7 +391,6 @@
 				4B550C47B37AB0D61085AFEACAC0C4F6 /* FBLPromise+Timeout.m in Sources */,
 				0157ED2B0C18E194ECC5C89105D2346E /* FBLPromise+Validate.m in Sources */,
 				1ADFE3DCCB14D1EEF434F3DD9209400D /* FBLPromise+Wrap.m in Sources */,
-				DF963A1781982764A937F2153343A827 /* FBLPromise.m in Sources */,
 				19B6EEA031D9BF356274E3E7597670ED /* FBLPromiseError.m in Sources */,
 				AD8EFCB785D736BD538A92F013A42C46 /* PromisesObjC-dummy.m in Sources */,
 			);

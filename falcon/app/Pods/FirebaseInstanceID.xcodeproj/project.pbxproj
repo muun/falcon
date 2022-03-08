@@ -336,19 +336,19 @@
 				FE765D81EA171A3811C31157CFA3D06F /* FIRDependency.h in Headers */,
 				A64222E69EAD8227592289B9F0C6B182 /* FirebaseCoreInternal.h in Headers */,
 				C87DD4985E135D59D4D4B2109B8BA52D /* FirebaseInstallationsInternal.h in Headers */,
-				E5E6A6742214C471EF81FEDECD85C5F3 /* FirebaseInstanceID-umbrella.h in Headers */,
 				A177F92E1845761CFC6B9BB2C42B6F6C /* FirebaseInstanceID.h in Headers */,
+				E5E6A6742214C471EF81FEDECD85C5F3 /* FirebaseInstanceID-umbrella.h in Headers */,
 				8DD07EBBEAF70A9F4DD49FC41AA3C90B /* FIRHeartbeatInfo.h in Headers */,
 				E4753B38EE99DBF28ECF4519BFFEF8B5 /* FIRIMessageCode.h in Headers */,
-				FEEEE43F93A04532BA1F1E046D73FC96 /* FIRInstanceID+Private.h in Headers */,
 				2A445C1FEADBB4487AF1C37CD0B68704 /* FIRInstanceID.h in Headers */,
+				FEEEE43F93A04532BA1F1E046D73FC96 /* FIRInstanceID+Private.h in Headers */,
 				16B1C5282647D2BFDE3E913F3AF72AD5 /* FIRInstanceID_Private.h in Headers */,
 				AFA706F9ED7B4AB71F2D19188F9B4EB2 /* FIRInstanceIDAPNSInfo.h in Headers */,
 				5B02636F51AA684A11A60C2B8374403C /* FIRInstanceIDAuthKeyChain.h in Headers */,
 				E933E2DFC843308B0FFEC9C9637C1D93 /* FIRInstanceIDAuthService.h in Headers */,
 				73950ABB2998F1447CE6075F782E367E /* FIRInstanceIDBackupExcludedPlist.h in Headers */,
-				ABB1BC0AC2A5E81541B63F03A90CCB06 /* FIRInstanceIDCheckinPreferences+Internal.h in Headers */,
 				D76645E20BEDB0E56199F135A01ACEBA /* FIRInstanceIDCheckinPreferences.h in Headers */,
+				ABB1BC0AC2A5E81541B63F03A90CCB06 /* FIRInstanceIDCheckinPreferences+Internal.h in Headers */,
 				A227981EF158D4D28C30BAD98AD1E9FC /* FIRInstanceIDCheckinPreferences_Private.h in Headers */,
 				E0C3D2315EBA3DE8AC4BF760F819AEDF /* FIRInstanceIDCheckinService.h in Headers */,
 				4811E8FCD456491981EF2E4CA2FD2B9F /* FIRInstanceIDCheckinStore.h in Headers */,
@@ -362,8 +362,8 @@
 				2E673C16CA4531887DB2B9F2669A4849 /* FIRInstanceIDTokenFetchOperation.h in Headers */,
 				EAC480A889219AF36C3155CD91DEE328 /* FIRInstanceIDTokenInfo.h in Headers */,
 				81C76415ED032260D66F3D8EE383E98B /* FIRInstanceIDTokenManager.h in Headers */,
-				59A9CC510AD2409A4DB456DF55A1F3AE /* FIRInstanceIDTokenOperation+Private.h in Headers */,
 				C61A4E81724DEB4B95938A9321298B83 /* FIRInstanceIDTokenOperation.h in Headers */,
+				59A9CC510AD2409A4DB456DF55A1F3AE /* FIRInstanceIDTokenOperation+Private.h in Headers */,
 				80C291B5FAD190BD4D9A04FFB54DE058 /* FIRInstanceIDTokenStore.h in Headers */,
 				21B7BC86C4AD0ECADF15BB670D04FB1F /* FIRInstanceIDUtilities.h in Headers */,
 				61BF6C90F34A7B6BFD860036DD8A6ABB /* FIRLibrary.h in Headers */,
@@ -403,8 +403,8 @@
 		CBE671DF1803C288A683DE347039B5FE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = BF187A90E5E2EA5BBB74DCAA5B1828CE /* Build configuration list for PBXProject "FirebaseInstanceID" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -451,14 +451,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				585EBE0A87EE4B5EFB8547A4D39CAFFF /* FirebaseInstanceID-dummy.m in Sources */,
-				446569A9868ABC0BAA6D32072761B509 /* FIRInstanceID+Private.m in Sources */,
 				B81F48A3F4C7A10EB94B145636A02FFF /* FIRInstanceID.m in Sources */,
+				446569A9868ABC0BAA6D32072761B509 /* FIRInstanceID+Private.m in Sources */,
 				49BFBC984E18560296AE56F08AE94FA4 /* FIRInstanceIDAPNSInfo.m in Sources */,
 				930A7BC459133C593131383221A4064A /* FIRInstanceIDAuthKeyChain.m in Sources */,
 				46A191A30981AE09B269DB3D88E9A7E9 /* FIRInstanceIDAuthService.m in Sources */,
 				21DEEFA35048722E3D77854EB375AE86 /* FIRInstanceIDBackupExcludedPlist.m in Sources */,
-				74A8FE07209BC7A457CFCC10B91E2407 /* FIRInstanceIDCheckinPreferences+Internal.m in Sources */,
 				AE6F740A90E1E68FED1E33739A64F1D0 /* FIRInstanceIDCheckinPreferences.m in Sources */,
+				74A8FE07209BC7A457CFCC10B91E2407 /* FIRInstanceIDCheckinPreferences+Internal.m in Sources */,
 				CCF51E06BAE9388EA3A4317DF8B4EDAE /* FIRInstanceIDCheckinService.m in Sources */,
 				74584589ECA8794C97F2802EFE25E765 /* FIRInstanceIDCheckinStore.m in Sources */,
 				1EDF9AC0B865A20C860ED8401CE0C8E4 /* FIRInstanceIDCombinedHandler.m in Sources */,

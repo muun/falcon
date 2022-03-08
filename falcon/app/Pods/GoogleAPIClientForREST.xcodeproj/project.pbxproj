@@ -295,8 +295,8 @@
 		88695A90E9BB6D92762264BFD65733AF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = A9FB7A1B5FAFF16EFA8580A07B5D9669 /* Build configuration list for PBXProject "GoogleAPIClientForREST" */;
 			compatibilityVersion = "Xcode 10.0";

@@ -170,8 +170,8 @@
 		0792DB42EAE7575C79F0920F7DA7F837 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = EA7C9A4B03D09D1D0DF89D9DE4C733EF /* Build configuration list for PBXProject "Dip" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -211,8 +211,8 @@
 				C899A805C2E004FD71C6D9C2D913DECF /* Compatibility.swift in Sources */,
 				8BDF8E7A12999692B93CC70C5F4796E2 /* ComponentScope.swift in Sources */,
 				3382DE3755D575FFC69CC94C54657CCC /* Definition.swift in Sources */,
-				1697526F9BF1635A6FAC5925B486E47E /* Dip-dummy.m in Sources */,
 				DEC8DCEE7B3F2B16780CE3F4CB92F1C9 /* Dip.swift in Sources */,
+				1697526F9BF1635A6FAC5925B486E47E /* Dip-dummy.m in Sources */,
 				7B40F214BA081F99248A98024DEFBA54 /* DipError.swift in Sources */,
 				BCD781DB2737A17C4FE9255B1B8A86D2 /* Register.swift in Sources */,
 				90F28483DFECD350972D8E57302C07FE /* Resolve.swift in Sources */,

@@ -194,8 +194,8 @@
 		40E692F192B73FBE7F2FC2CAA07ABFC8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 5DB721B394D04DE68363B715D7A5594C /* Build configuration list for PBXProject "RxBlocking" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -237,8 +237,8 @@
 			files = (
 				48A76DE17FBC85CC9B4C558932459E89 /* AtomicInt.swift in Sources */,
 				B09203AE55A0B2F7FDB2772E239E046C /* Bag.swift in Sources */,
-				8E7D6BB82A9296BA59D0823BA5542BF6 /* BlockingObservable+Operators.swift in Sources */,
 				D8EB0E47B619147DB033A6FD28B1660A /* BlockingObservable.swift in Sources */,
+				8E7D6BB82A9296BA59D0823BA5542BF6 /* BlockingObservable+Operators.swift in Sources */,
 				5F2D69E7EF71C08D7F8AE1A802C5FBA4 /* DispatchQueue+Extensions.swift in Sources */,
 				133A5896571C33000CB9CF094D60DA98 /* InfiniteSequence.swift in Sources */,
 				CEA5F552A2448C567EB18ADCFEFF5505 /* ObservableConvertibleType+Blocking.swift in Sources */,

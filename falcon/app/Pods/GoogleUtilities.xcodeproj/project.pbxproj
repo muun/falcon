@@ -424,12 +424,12 @@
 				59DC39B473605B8665C5952FA85462E2 /* GULNetworkMessageCode.h in Headers */,
 				33D72DCDB8A08244E94864F990B4BA71 /* GULNetworkURLSession.h in Headers */,
 				44441A1D5A6FB9EC66B20AAC2A073FAD /* GULNSData+zlib.h in Headers */,
-				8F772817EBA4355C9ECBA6BE607136B6 /* GULObjectSwizzler+Internal.h in Headers */,
 				1A63DD5F6427A6E628C3C02F7EBAF57F /* GULObjectSwizzler.h in Headers */,
+				8F772817EBA4355C9ECBA6BE607136B6 /* GULObjectSwizzler+Internal.h in Headers */,
 				8969FF7A42E4AF3BE316EA33CB09C247 /* GULOriginalIMPConvenienceMacros.h in Headers */,
 				6D50057C11CE2F25E288CC208F2A9DDB /* GULProxy.h in Headers */,
-				588032CD5771B1EE9A704507BF4F66E5 /* GULReachabilityChecker+Internal.h in Headers */,
 				F48E2C70BB8568FD7730DBE186D2106F /* GULReachabilityChecker.h in Headers */,
+				588032CD5771B1EE9A704507BF4F66E5 /* GULReachabilityChecker+Internal.h in Headers */,
 				42734651046B5EFF787305D280BA2407 /* GULReachabilityMessageCode.h in Headers */,
 				7D12B613AF2C67406C9D0C6AF810F540 /* GULRuntimeClassDiff.h in Headers */,
 				5350089177599DE0863A39A00C906936 /* GULRuntimeClassSnapshot.h in Headers */,
@@ -440,8 +440,8 @@
 				06CB12F2A0BB2342A6EA0FF87FDBF047 /* GULSceneDelegateSwizzler_Private.h in Headers */,
 				7BE87FE04E579E2F3EE506CFC4F32CAC /* GULSecureCoding.h in Headers */,
 				4D54FC3AFCBFF99108E620E4FE93627E /* GULSwizzledObject.h in Headers */,
-				677AA6CFB7510923CB5619E5CB91EB34 /* GULSwizzler+Unswizzle.h in Headers */,
 				3AE50FC07B8E30AC3F2DC2AFBB555D0A /* GULSwizzler.h in Headers */,
+				677AA6CFB7510923CB5619E5CB91EB34 /* GULSwizzler+Unswizzle.h in Headers */,
 				71ABBA6F09F04A5E4F6854D6D8DB9904 /* GULSwizzlingCache.h in Headers */,
 				B68216E2CFD5934F1EA8D4A4CFB9FE44 /* GULSwizzlingCache_Private.h in Headers */,
 				1FA590C2C6131090A0C4DAD9416C011C /* GULURLSessionDataResponse.h in Headers */,
@@ -478,8 +478,8 @@
 		919DA868E821EA5309A3CE0FA16180E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 6B13229435CF28956C145D9B803943B1 /* Build configuration list for PBXProject "GoogleUtilities" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -542,8 +542,8 @@
 				38084D923A8C04C90752760C6C6AA6DB /* GULSceneDelegateSwizzler.m in Sources */,
 				2DAEE3C1EC10B0295768B6C971289A9D /* GULSecureCoding.m in Sources */,
 				7C4796C876068E20B026C24078680463 /* GULSwizzledObject.m in Sources */,
-				F729F21D1CDC6EDE7A4F9747B7AD4CB7 /* GULSwizzler+Unswizzle.m in Sources */,
 				761F2EE3C0FD495CB76F48763CDDCE9F /* GULSwizzler.m in Sources */,
+				F729F21D1CDC6EDE7A4F9747B7AD4CB7 /* GULSwizzler+Unswizzle.m in Sources */,
 				5C6832CF9A8EBA2BB635B175C4385D53 /* GULSwizzlingCache.m in Sources */,
 				9D5EEA0A78CBCE4FAEBEFA7CBC97FB4D /* GULURLSessionDataResponse.m in Sources */,
 				6911DCABB4ED955A738F7575A64823F6 /* GULUserDefaults.m in Sources */,

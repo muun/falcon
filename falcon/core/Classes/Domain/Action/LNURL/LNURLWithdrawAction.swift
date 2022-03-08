@@ -79,29 +79,33 @@ public class LNURLWithdrawAction {
         return Observable.deferred {
 
             let userKey: WalletPrivateKey
-            let policy: ForwardingPolicy
+            let policies: [ForwardingPolicy]
             do {
                 userKey = try self.keysRepository.getBasePrivateKey()
-                let policies = self.forwardingPolicyRepository.fetch()
-                policy = policies.randomElement()!
+                policies = self.forwardingPolicyRepository.fetch()
             } catch {
                 Logger.log(error: error)
                 let wrappedError = MuunError(WithdrawError.unknown(message: error.localizedDescription))
                 return Observable.just(.failed(error: wrappedError))
             }
 
-            let routeHints = LibwalletRouteHints()
-            routeHints.cltvExpiryDelta = Int32(policy.cltvExpiryDelta)
-            routeHints.feeBaseMsat = policy.feeBaseMsat
-            routeHints.feeProportionalMillionths = policy.feeProportionalMillionths
-            routeHints.pubkey = policy.identityKeyHex
+            let builder = LibwalletInvoiceBuilder()
+                    .network(Environment.current.network)?
+                    .userKey(userKey.key)
+
+            for policy in policies {
+                let routeHints = LibwalletRouteHints()
+                routeHints.cltvExpiryDelta = Int32(policy.cltvExpiryDelta)
+                routeHints.feeBaseMsat = policy.feeBaseMsat
+                routeHints.feeProportionalMillionths = policy.feeProportionalMillionths
+                routeHints.pubkey = policy.identityKeyHex
+                builder?.add(routeHints)
+            }
 
             let listener = RxListener()
 
             LibwalletLNURLWithdraw(
-                Environment.current.network,
-                userKey.key,
-                routeHints,
+                builder,
                 qr,
                 listener
             )

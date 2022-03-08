@@ -164,8 +164,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85CE154D7169B2BB1D56C68E12903235 /* RxGRDB-umbrella.h in Headers */,
 				170CD0853192C4BDB780EFBC7134928F /* RxGRDB.h in Headers */,
+				85CE154D7169B2BB1D56C68E12903235 /* RxGRDB-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,8 +198,8 @@
 		E132000CCEAC9C5F25729062855B6551 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 218225AE4D13F9645C4B6C08D2CE3A12 /* Build configuration list for PBXProject "RxGRDB" */;
 			compatibilityVersion = "Xcode 10.0";
