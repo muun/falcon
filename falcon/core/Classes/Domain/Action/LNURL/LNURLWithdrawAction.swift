@@ -29,7 +29,7 @@ public class LNURLWithdrawAction {
         case noRoute(message: String, domain: String)
         case unknown(message: String)
         case expiredInvoice(domain: String)
-        case forbidden(message: String, domain: String)
+        case countryNotSupported(message: String, domain: String)
         case alreadyUsed(message: String, domain: String)
     }
 
@@ -160,8 +160,10 @@ public class LNURLWithdrawAction {
                     error = .noAvailableBalance(message: event.message, domain: event.metadata!.host)
                 case LibwalletLNURLErrNoRoute:
                     error = .noRoute(message: event.message, domain: event.metadata!.host)
+                case LibwalletLNURLErrCountryNotSupported:
+                    error = .countryNotSupported(message: event.message, domain: event.metadata!.host)
                 case LibwalletLNURLErrForbidden:
-                    error = .forbidden(message: event.message, domain: event.metadata!.host)
+                    error = .unknown(message: event.message)
                 case LibwalletLNURLErrAlreadyUsed:
                     error = .alreadyUsed(message: event.message, domain: event.metadata!.host)
                 default:

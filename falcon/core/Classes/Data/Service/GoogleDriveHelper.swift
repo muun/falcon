@@ -151,7 +151,7 @@ public enum GoogleDriveHelper {
 
         let withName = "name = '\(name)'" // Case insensitive!
         let pdfsOnly = "mimeType = '\(mimeTypePdf)'"
-        let ownedByUser = "'\(googleUser.profile!.email!)' in owners"
+        let ownedByUser = "'\(googleUser.profile!.email)' in owners"
         let insideFolder = "'\(folderId)' in parents"
         query.q = """
                   \(withName) 
@@ -225,7 +225,7 @@ public enum GoogleDriveHelper {
 
         let withName = "name = '\(name)'" // Case insensitive!
         let foldersOnly = "mimeType = 'application/vnd.google-apps.folder'"
-        let ownedByUser = "'\(user.profile!.email!)' in owners"
+        let ownedByUser = "'\(user.profile!.email)' in owners"
         query.q = "\(withName) and \(foldersOnly) and \(ownedByUser)"
 
         service.executeQuery(query) { (_, result, error) in

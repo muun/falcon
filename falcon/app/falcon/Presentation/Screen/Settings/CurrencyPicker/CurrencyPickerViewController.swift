@@ -14,26 +14,29 @@ protocol CurrencyPickerDelegate: AnyObject {
     func didSelectCurrency(_ currency: Currency)
 }
 
-class CurrencyPickerViewController: MUViewController {
+class CurrencyPickerViewController: MUViewController, Resolver {
 
     @IBOutlet private weak var tableView: UITableView!
 
     fileprivate let cellHeight: CGFloat = 48
     fileprivate lazy var presenter = instancePresenter(CurrencyPickerPresenter.init,
                                                        delegate: self,
-                                                       state: exchangeRateWindow)
-    let exchangeRateWindow: NewopExchangeRateWindow
-    var selectedCurrencyCode: String?
+                                                       state: currenciesForPickerRetrieverService)
+
+    private let currenciesForPickerRetrieverService: CurrenciesForPickerRetrieverService
+    private var selectedCurrency: Currency?
     private weak var delegate: CurrencyPickerDelegate?
 
     override var screenLoggingName: String {
         return "currency_picker"
     }
 
-    init(exchangeRateWindow: NewopExchangeRateWindow, delegate: CurrencyPickerDelegate?) {
-        self.exchangeRateWindow = exchangeRateWindow
+    init(delegate: CurrencyPickerDelegate?,
+         selectedCurrency: Currency?,
+         currenciesForPickerRetrieverService: CurrenciesForPickerRetrieverService) {
         self.delegate = delegate
-
+        self.selectedCurrency = selectedCurrency
+        self.currenciesForPickerRetrieverService = currenciesForPickerRetrieverService
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -88,6 +91,27 @@ class CurrencyPickerViewController: MUViewController {
         self.tableView.tableHeaderView = searchBar
     }
 
+    static func createForCurrencySelection(exchangeRateWindow: NewopExchangeRateWindow,
+                                           delegate: CurrencyPickerDelegate?,
+                                           selectedCurrency: Currency?) -> CurrencyPickerViewController {
+        let userSelector: UserSelector = resolve()
+        let currenciesRepository = InMemoryCurrenciesForPickerRetrieverService.createForContextualCurrencySelection(userSelector: userSelector,
+                                                                                                      exchangeRateWindow: exchangeRateWindow)
+        return CurrencyPickerViewController(delegate: delegate,
+                                            selectedCurrency: selectedCurrency,
+                                            currenciesForPickerRetrieverService: currenciesRepository)
+    }
+
+    static func createForCurrencySettings(exchangeRateWindow: NewopExchangeRateWindow,
+                                          delegate: CurrencyPickerDelegate?,
+                                          selectedCurrency: Currency?) -> CurrencyPickerViewController {
+        let userSelector: UserSelector = resolve()
+        let currenciesRepository = InMemoryCurrenciesForPickerRetrieverService.createForSettings(userSelector: userSelector,
+                                                                                   exchangeRateWindow: exchangeRateWindow)
+        return CurrencyPickerViewController(delegate: delegate,
+                                            selectedCurrency: selectedCurrency,
+                                            currenciesForPickerRetrieverService: currenciesRepository)
+    }
 }
 
 extension CurrencyPickerViewController: UISearchBarDelegate {
@@ -100,15 +124,15 @@ extension CurrencyPickerViewController: UISearchBarDelegate {
 }
 
 extension CurrencyPickerViewController: UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let currentCurrency = presenter.currency(forRowAt: indexPath)
 
-        delegate?.didSelectCurrency(presenter.currency(forRowAt: indexPath))
+        delegate?.didSelectCurrency(currentCurrency)
 
         if navigationIsBeingPresented() {
             navigationController?.dismiss(animated: true)
@@ -163,7 +187,7 @@ extension CurrencyPickerViewController: UITableViewDataSource {
         let cell = tableView.dequeue(type: CurrencyTableViewCell.self, indexPath: indexPath)
         let currencyToDisplay = presenter.currency(forRowAt: indexPath)
 
-        cell.setUp(currencyToDisplay, isSelected: currencyToDisplay.code == selectedCurrencyCode)
+        cell.setUp(currencyToDisplay, isSelected: currencyToDisplay.displayCode == selectedCurrency?.displayCode)
 
         return cell
     }
@@ -175,7 +199,6 @@ extension CurrencyPickerViewController: CurrencyPickerPresenterDelegate {
     func gotCurrencyList() {
         tableView.reloadData()
     }
-
 }
 
 extension CurrencyPickerViewController: UITestablePage {

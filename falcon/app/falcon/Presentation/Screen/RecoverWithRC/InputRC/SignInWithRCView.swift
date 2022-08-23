@@ -17,6 +17,7 @@ protocol SignInWithRCViewDelegate: AnyObject {
 
 final class SignInWithRCView: UIView {
 
+    private var scrollView: UIScrollView!
     private var contentVerticalStack: UIStackView!
     private var titleAndDescriptionView: TitleAndDescriptionView!
     private var recoveryCodeView: RecoveryView!
@@ -68,21 +69,36 @@ final class SignInWithRCView: UIView {
         NSLayoutConstraint.activate([
             bottomMarginConstraint,
             continueButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+            continueButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin),
+            scrollView.bottomAnchor.constraint(equalTo: continueButton.topAnchor)
         ])
     }
 
     private func setUpStackView() {
+        scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+        ])
+
         contentVerticalStack = UIStackView()
         contentVerticalStack.axis = .vertical
         contentVerticalStack.translatesAutoresizingMaskIntoConstraints = false
         contentVerticalStack.spacing = 32
+        contentVerticalStack.distribution = .equalSpacing
+        contentVerticalStack.alignment = .fill
 
-        addSubview(contentVerticalStack)
+        scrollView.addSubview(contentVerticalStack)
         NSLayoutConstraint.activate([
-            contentVerticalStack.topAnchor.constraint(equalTo: topAnchor),
-            contentVerticalStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            contentVerticalStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+            contentVerticalStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentVerticalStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentVerticalStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentVerticalStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentVerticalStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
 
         setUpTitleAndDescriptionView()

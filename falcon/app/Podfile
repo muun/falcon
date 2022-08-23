@@ -8,21 +8,22 @@ platform :ios, '11.0'
 target 'Muun' do
   use_frameworks! :linkage => :static
 
-  pod 'core', :path => '../core', :testspecs => ['Tests'] 
+  pod 'core/all', :path => '../core', :testspecs => ['Tests'] 
 
   # Animations
   pod 'lottie-ios', '3.0.6'
 
+  # This dependencies are fixed at core.podspec
   # Firebase
   pod 'GoogleUtilities'
-  pod 'Firebase/Core', '7.1.0'
-  pod 'Firebase/Messaging', '7.1.0'
-  pod 'Firebase/Analytics', '7.1.0'
-  pod 'Firebase/Crashlytics', '7.1.0'
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Crashlytics'
 
   # GoogleDrive
-  pod 'GoogleSignIn', '5.0.2'
-  pod 'GoogleAPIClientForREST/Drive', '1.5.1'
+  pod 'GoogleSignIn'
+  pod 'GoogleAPIClientForREST/Drive'
 
   pod 'SwiftGen', '~> 6.0'
   
@@ -43,4 +44,25 @@ pre_install do |installer|
     File.open('.gopath', 'w') {|f| f.write(ENV["GOPATH"]) }
 
     `../../tools/libwallet-ios.sh`
+end
+
+def fix_config(config)
+  # https://github.com/CocoaPods/CocoaPods/issues/8891#issuecomment-546636698
+  if config.build_settings['DEVELOPMENT_TEAM'].nil?
+    config.build_settings['DEVELOPMENT_TEAM'] = '5YYLBTUB6W'
+    config.build_settings['ENABLE_BITCODE'] = 'YES'
+  end
+end
+
+post_install do |installer|
+  installer.generated_projects.each do |project|
+    project.build_configurations.each do |config|
+        fix_config(config)
+    end
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+        fix_config(config)
+      end
+    end
+  end
 end

@@ -155,8 +155,8 @@ final class ReceiveOnChainView: UIView {
 
     // MARK: - View Controller Actions -
 
-    func setAmount(_ amount: BitcoinAmount?) {
-        customAmountInBTC = amount?.inSatoshis.toBTCDecimal()
+    func setAmount(_ amount: BitcoinAmountWithSelectedCurrency?) {
+        customAmountInBTC = amount?.bitcoinAmount.inSatoshis.toBTCDecimal()
 
         updateQRCode()
 

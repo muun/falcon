@@ -34,13 +34,17 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func cancel(confirm: Bool)
 }
 
+/// This class acts as new operations coordinator.
+/// It asks libWallet to validate each state of the operation and presents screens in order to complete an operation.
 class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresenter<Delegate> {
 
     let operationActions: OperationActions
 
     let stateMachine = NewOperationStateMachine()
 
-    var submarineSwap: SubmarineSwap? = nil // TODO(newop): can we remove this hack somehow?
+    var submarineSwap: SubmarineSwap? // TODO(newop): can we remove this hack somehow?
+
+    var lastSelectedCurrency: Currency?
 
     init(delegate: Delegate, operationActions: OperationActions) {
         self.operationActions = operationActions
@@ -72,6 +76,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         }
     }
 
+    // swiftlint:disable cyclomatic_complexity
     func onStateChanged(_ state: NewopStateProtocol) {
         // this is a dismiss from an abort dialog, so we can do nothing
         if state.getUpdate() == NewopUpdateEmpty {
@@ -119,6 +124,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
             Logger.fatal("unrecognized new operation state: \(state)")
         }
     }
+    // swiftlint:enable cyclomatic_complexity
 
     private func handleResolveState(_ state: NewopResolveState) {
         let paymentIntent = state.paymentIntent!.adapt()
@@ -144,12 +150,17 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let type = createPaymentRequestType(state.resolved!.paymentIntent!)
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
         let totalBalance = state.totalBalance!.adapt()
-
+        let amount = state.amount!.adapt()
+        if lastSelectedCurrency == nil {
+            let primaryCurrency = totalBalance.inPrimaryCurrency.currency
+            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: primaryCurrency)
+        }
         let newOpState = NewOpState.amount(
             NewOpData.Amount(
                 type: type,
-                amount: state.amount!.adapt(),
+                amount: amount,
                 primaryCurrency: primaryCurrency,
+                selectedCurrency: lastSelectedCurrency!,
                 totalBalance: totalBalance,
                 exchangeRateWindow: state.resolved!.paymentContext!.exchangeRateWindow!
             ))
@@ -168,10 +179,14 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let type = createPaymentRequestType(state.resolved!.paymentIntent!)
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
         let totalBalance = state.amountInfo!.totalBalance!.adapt()
-
+        if lastSelectedCurrency == nil {
+            let inputPrimaryCurrency = totalBalance.inPrimaryCurrency.currency
+            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: inputPrimaryCurrency)
+        }
         let newOpState = NewOpState.description(
             NewOpData.Description(
-                amount: amount,
+                amount: BitcoinAmountWithSelectedCurrency(bitcoinAmount: amount,
+                                                          selectedCurrency: lastSelectedCurrency!),
                 description: state.note,
                 type: type,
                 primaryCurrency: primaryCurrency,
@@ -207,17 +222,23 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let feeRate = FeeRate(satsPerVByte: Decimal(state.amountInfo!.feeRateInSatsPerVByte))
         let totalBalance = state.amountInfo!.totalBalance!.adapt()
 
+        if lastSelectedCurrency == nil {
+            let inPrimaryCurrency = totalBalance.inPrimaryCurrency.currency
+            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: inPrimaryCurrency)
+        }
+
         let feeState: FeeState
         if state.validated!.feeNeedsChange {
             feeState = .feeNeedsChange(displayFee: fee, rate: feeRate)
         } else {
             feeState = .finalFee(fee, rate: feeRate)
         }
-
+        let btcAmt = BitcoinAmountWithSelectedCurrency(bitcoinAmount: amount, selectedCurrency: lastSelectedCurrency!)
+        let satsPerVByte = Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)
         let newOpState = NewOpState.confirmation(
             NewOpData.Confirm(
                 type: type,
-                amount: amount,
+                amount: btcAmt,
                 total: total,
                 description: state.note,
                 feeState: feeState,
@@ -228,7 +249,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
                 debtType: nil,
                 exchangeRateWindow: state.resolved!.paymentContext!.exchangeRateWindow!,
                 feeWindow: state.resolved!.paymentContext!.feeWindow!,
-                minMempoolFeeRate: FeeRate(satsPerVByte: Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte))
+                minMempoolFeeRate: FeeRate(satsPerVByte: satsPerVByte)
             )
         )
 
@@ -242,11 +263,16 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let total = state.validated!.total!.adapt()
         let feeRate = FeeRate(satsPerVByte: Decimal(state.amountInfo!.feeRateInSatsPerVByte))
         let totalBalance = state.amountInfo!.totalBalance!.adapt()
-
+        let satsPerByte = Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)
+        if lastSelectedCurrency == nil {
+            let totalInPrimaryCurrency = totalBalance.inPrimaryCurrency.currency
+            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: totalInPrimaryCurrency)
+        }
         let newOpState = NewOpState.confirmation(
             NewOpData.Confirm(
                 type: type,
-                amount: amount,
+                amount: BitcoinAmountWithSelectedCurrency(bitcoinAmount: amount,
+                                                          selectedCurrency: lastSelectedCurrency!),
                 total: total,
                 description: state.note,
                 feeState: .finalFee(fee, rate: feeRate),
@@ -257,7 +283,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
                 debtType: DebtType(rawValue: state.validated!.swapInfo!.swapFees!.debtType),
                 exchangeRateWindow: state.resolved!.paymentContext!.exchangeRateWindow!,
                 feeWindow: state.resolved!.paymentContext!.feeWindow!,
-                minMempoolFeeRate: FeeRate(satsPerVByte: Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte))
+                minMempoolFeeRate: FeeRate(satsPerVByte: satsPerByte)
             )
         )
 
@@ -269,6 +295,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
         let calculateFee = { (rate: FeeRate) -> NewopFeeState in
             let feeRate = Double((rate.satsPerVByte as NSDecimalNumber).doubleValue)
+            // TODO currently forgets input currency, which is important for amount display
             return try! state.calculateFee(feeRate)
         }
 
@@ -290,18 +317,20 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
         let totalBalance = state.amountInfo!.totalBalance!.adapt()
         let maxFeeRate = FeeRate(satsPerVByte: Decimal(state.maxFeeRateInSatsPerVByte))
-
+        let satsPerByte = Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)
+        let selectedCurrency = getLastSelectedCurrencyWithBitcoinDefaultInCaseOfBitcoin()
         let newOpState = NewOpState.feeEditor(
             NewOpData.FeeEditor(
                 type: type,
-                amount: state.amountInfo!.amount!.adapt(),
+                amount: BitcoinAmountWithSelectedCurrency(bitcoinAmount: state.amountInfo!.amount!.adapt(),
+                                                          selectedCurrency: selectedCurrency),
                 total: state.validated!.total!.adapt(),
                 feeState: feeState,
                 takeFeeFromAmount: state.amountInfo!.takeFeeFromAmount,
                 primaryCurrency: primaryCurrency,
                 totalBalance: totalBalance,
                 feeWindow: state.resolved!.paymentContext!.feeWindow!,
-                minMempoolFeeRate: FeeRate(satsPerVByte: Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)),
+                minMempoolFeeRate: FeeRate(satsPerVByte: satsPerByte),
                 calculateFee: calculateFee,
                 minFeeRate: minFeeRate,
                 maxFeeRate: maxFeeRate
@@ -309,6 +338,14 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         )
 
         delegate.requestNextStep(newOpState)
+    }
+
+    /// Fee screens should not use bitcoin selected unit on contex.
+    private func getLastSelectedCurrencyWithBitcoinDefaultInCaseOfBitcoin() -> Currency {
+        if self.lastSelectedCurrency is BitcoinCurrency {
+            return BitcoinCurrency() // Bitcoin unit by default on a BitcoinCurrency comes from userDefaults
+        }
+        return lastSelectedCurrency!
     }
 
     private func handleErrorState(_ state: NewopErrorState) {
@@ -530,23 +567,27 @@ extension NewOperationPresenter: OpAmountTransitions {
         }
     }
 
-    func requestCurrencyPicker(data: NewOperationStateLoaded, currencyCode: String) {
+    func requestCurrencyPicker(data: NewOperationStateLoaded, currency: Currency) {
 
         try! stateMachine.withState({ (state: NewopEnterAmountState) in
-
             let type = createPaymentRequestType(state.resolved!.paymentIntent!)
             let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
             let totalBalance = state.totalBalance!.adapt()
+            let inInputCurrency = totalBalance.inPrimaryCurrency.currency
+            if lastSelectedCurrency == nil {
+                lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: inInputCurrency)
+            }
 
             let newOpState = NewOpState.currencyPicker(
                 NewOpData.Amount(
                     type: type,
                     amount: state.amount!.adapt(),
                     primaryCurrency: primaryCurrency,
+                    selectedCurrency: lastSelectedCurrency!,
                     totalBalance: totalBalance,
                     exchangeRateWindow: state.resolved!.paymentContext!.exchangeRateWindow!
                 ),
-                selectedCurrency: currencyCode
+                selectedCurrency: currency
             )
 
             delegate.requestNextStep(newOpState)
@@ -555,6 +596,7 @@ extension NewOperationPresenter: OpAmountTransitions {
     }
 
     func changeCurrency(_ currency: Currency) {
+        lastSelectedCurrency = currency
         try! stateMachine.withState { (state: NewopEnterAmountState) in
             try state.changeCurrency(currency.code)
         }
@@ -627,5 +669,4 @@ extension NewopFeeState {
             Logger.fatal("unrecognized fee state: \(state)")
         }
     }
-
 }

@@ -12,14 +12,18 @@ import RxSwift
 public class CreateRCLoginSessionAction: AsyncAction<Challenge> {
 
     private let houstonService: HoustonService
+    private let logoutAction: LogoutAction
 
-    init(houstonService: HoustonService) {
+    init(houstonService: HoustonService, logoutAction: LogoutAction) {
         self.houstonService = houstonService
+        self.logoutAction = logoutAction
 
         super.init(name: "CreateRCLoginSessionAction")
     }
 
     public func run(gcmToken: String, recoveryCode: String) {
+        // We have to wipe everything to avoid edgy bugs with the notifications
+        logoutAction.run(notifyHouston: false)
 
         do {
             let rc = try RecoveryCode(code: recoveryCode)

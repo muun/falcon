@@ -165,7 +165,6 @@ class MUViewController: UIViewController {
 
         appDelegate.resetWindowToGetStarted()
     }
-
 }
 
 extension MUViewController: DisplayableToast {
@@ -175,9 +174,8 @@ extension MUViewController: DisplayableToast {
 }
 
 extension MUViewController: DisplayablePopUp {
-    @objc func dismissPopUp() {
-        alreadyDismissedPopUp = true
-        navigationController!.dismiss(animated: true)
+    @objc func didTapDismissPopUp() {
+        self.dismissPopUp(completion: nil)
     }
 }
 
@@ -249,7 +247,6 @@ extension MUViewController {
 }
 
 extension MUViewController: BasePresenterDelegate {
-
     func pushTo(_ vc: MUViewController) {
         self.navigationController!.pushViewController(vc, animated: true)
     }
@@ -257,7 +254,6 @@ extension MUViewController: BasePresenterDelegate {
     func showMessage(_ message: String) {
         showToast(message: message)
     }
-
 }
 
 fileprivate extension Selector {

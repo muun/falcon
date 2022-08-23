@@ -10,6 +10,7 @@ import UIKit
 import GoogleSignIn
 import GoogleAPIClientForREST
 import AppAuth
+import core
 
 class ShareEmergencyKitViewController: MUViewController {
 
@@ -23,7 +24,6 @@ class ShareEmergencyKitViewController: MUViewController {
     private var shareView: ShareEmergencyKitView!
     private var uploadingEKLoadingView: LoadingView! = LoadingView()
     private var dismissLoading: DisplayablePopUp.Dismiss?
-
     private var emergencyKit: EmergencyKit?
     private var googleUser: GIDGoogleUser?
 
@@ -54,9 +54,6 @@ class ShareEmergencyKitViewController: MUViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        GIDSignIn.sharedInstance().presentingViewController = self
-        GIDSignIn.sharedInstance().delegate = self
-        GIDSignIn.sharedInstance().scopes = [kGTLRAuthScopeDriveFile]
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -140,10 +137,14 @@ class ShareEmergencyKitViewController: MUViewController {
         dismissLoading = show(popUp: loadingView, duration: nil, isDismissableOnTap: false)
     }
 
-    private func hideUploadingEKView() {
-        dismissLoading?()
+    func hideUploadingEKView(completion: (() -> Void)? = nil) {
+        guard let dismissLoading = dismissLoading else {
+            completion?()
+            return
+        }
+        
+        dismissLoading(completion)
     }
-
 }
 
 extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
@@ -161,12 +162,12 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
         case .drive:
             logEvent("ek_save_select", parameters: ["option": "drive"])
 
-            if GIDSignIn.sharedInstance().hasPreviousSignIn() {
+            if GIDSignIn.sharedInstance.hasPreviousSignIn() {
                 // This will call the sign in callback
-                GIDSignIn.sharedInstance().restorePreviousSignIn()
+                GIDSignIn.sharedInstance.restorePreviousSignIn(callback: sign(didSignInFor:withError:))
             } else {
                 logEvent("ek_drive", parameters: ["type": "sign_in_start"])
-                GIDSignIn.sharedInstance().signIn()
+                signInWithGoogle()
             }
 
         case .icloud:
@@ -178,7 +179,9 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
 
         case .anotherCloud:
             logScreen("emergency_kit_cloud_feedback", parameters: [:])
-            dismissSuggestCloud = show(popUp: RequestCloudView(delegate: self), duration: nil, isDismissableOnTap: false)
+            dismissSuggestCloud = show(popUp: RequestCloudView(delegate: self),
+                                       duration: nil,
+                                       isDismissableOnTap: false)
         }
     }
 
@@ -211,8 +214,6 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
     }
 
     private func presentErrorUploading(option: EmergencyKitSavingOption) {
-        dismissLoading?()
-
         let alert = UIAlertController(
             title: L10n.ShareEmergencyKitViewController.ekUploadErrorTitle,
             message: L10n.ShareEmergencyKitViewController.ekUploadErrorDescription,
@@ -231,7 +232,7 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
                     if let user = self.googleUser {
                         self.uploadEKToDrive(user)
                     } else {
-                        GIDSignIn.sharedInstance().signIn()
+                        self.signInWithGoogle()
                     }
                 } else if option == .icloud {
                     self.uploadEKToICloud()
@@ -240,8 +241,9 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
         )
 
         alert.view.tintColor = Asset.Colors.muunBlue.color
-
-        present(alert, animated: true)
+        hideUploadingEKView { [weak self] in
+            self?.present(alert, animated: true)
+        }
     }
 
 }
@@ -252,7 +254,7 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
         logEvent("emergency_kit_exported", parameters: ["share_option": "\(option)"])
         kit.dispose()
 
-        dismissLoading?()
+        dismissLoading?(nil)
 
         navigationController!.pushViewController(
             VerifyEmergencyKitViewController(option: option, link: link, flow: self.flow),
@@ -276,7 +278,7 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
                 (kGTLRErrorObjectDomain, 403):
 
                 // Retrigger a login
-                GIDSignIn.sharedInstance().signIn()
+                signInWithGoogle()
                 return
 
             default:
@@ -290,43 +292,82 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
     }
 }
 
-extension ShareEmergencyKitViewController: GIDSignInDelegate {
+extension ShareEmergencyKitViewController {
 
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-
+    func sign(didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         guard error == nil else {
-            // Show the error only if it's not an user cancel
-            if (error as NSError).code != GIDSignInErrorCode.canceled.rawValue {
-                logEvent("ek_drive", parameters: ["type": "sign_in_error"])
-                presentErrorUploading(option: .drive)
-            }
-
-            googleUser = nil
+            handleSignIn(error: error)
             return
         }
 
         googleUser = user
 
         // Check if the file scope has been given cause it's actually optional in spite of us requesting it
-        if user.grantedScopes.contains(where: { scope in scope as? String == kGTLRAuthScopeDriveFile }) {
+        if let userGrantedScopes = user.grantedScopes,
+           userGrantedScopes.contains(kGTLRAuthScopeDriveFile) {
             uploadEKToDrive(user)
         } else {
             // Re-request sign in so we get the missing scope
-            GIDSignIn.sharedInstance().signIn()
+            let scopes = [kGTLRAuthScopeDriveFile]
+            GIDSignIn.sharedInstance.addScopes(scopes,
+                                               presenting: self,
+                                               callback: sign(didSignInFor:withError:))
         }
     }
 
+    func signInWithGoogle() {
+        // This client id needs to be hardwired here, since it can't be in the info.plist schemes because apple rejects
+        // the build in that case
+
+        let configuration = GIDConfiguration(clientID: "31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com")
+        let scopes = [kGTLRAuthScopeDriveFile]
+        GIDSignIn.sharedInstance.signIn(with: configuration,
+                                        presenting: self,
+                                        hint: nil,
+                                        additionalScopes: scopes,
+                                        callback: sign(didSignInFor:withError:))
+    }
+
+    private func handleSignIn(error: Error) {
+        let errorCode = (error as NSError).code
+        // Show the error only if it's not an user cancel
+        guard errorCode != GIDSignInError.canceled.rawValue else {
+            hideUploadingEKView()
+            return
+        }
+
+        let nextVisualActionAfterDismiss: (() -> Void)
+        // This error is not handled by GIDSignIn
+        // ref: https://github.com/google/GoogleSignIn-iOS/issues/93
+        let isTokenExpiredOrRevoked = errorCode == OIDErrorCodeOAuth.invalidGrant.rawValue
+        if isTokenExpiredOrRevoked {
+            GIDSignIn.sharedInstance.signOut()
+            googleUser = nil
+            nextVisualActionAfterDismiss = { [weak self] in self?.signInWithGoogle() }
+            return
+        } else { // unhandled error
+            Logger.log(error: error)
+            logEvent("ek_drive", parameters: ["type": "sign_in_error"])
+            nextVisualActionAfterDismiss = { [weak self] in self?.presentErrorUploading(option: .drive) }
+            googleUser = nil
+        }
+
+        // ensure loading is dismissed before trying anything. Otherwise next visual action will be not executed
+        hideUploadingEKView {
+            nextVisualActionAfterDismiss()
+        }
+    }
 }
 
 extension ShareEmergencyKitViewController: ManualSaveEmergencyKitViewDelegate {
 
     func save() {
-        dismissManualExport?()
+        dismissManualExport?(nil)
         displayShareActivity()
     }
 
     func dismiss() {
-        dismissManualExport?()
+        dismissManualExport?(nil)
     }
 
 }
@@ -334,13 +375,13 @@ extension ShareEmergencyKitViewController: ManualSaveEmergencyKitViewDelegate {
 extension ShareEmergencyKitViewController: RequestCloudViewDelegate {
 
     func dismiss(requestCloud: UIView) {
-        dismissSuggestCloud?()
+        dismissSuggestCloud?(nil)
     }
 
     func request(cloud: String) {
         logScreen("emergency_kit_cloud_feedback_submit", parameters: ["cloud_name": cloud])
         presenter.request(cloud: cloud)
-        dismissSuggestCloud?()
+        dismissSuggestCloud?(nil)
     }
 
 }

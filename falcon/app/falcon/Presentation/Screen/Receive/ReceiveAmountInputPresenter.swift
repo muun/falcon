@@ -37,19 +37,18 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
         return sessionActions.getPrimaryCurrency()
     }
 
-    func amount(from value: String, in currency: String) -> BitcoinAmount {
-        return BitcoinAmount.from(
-            inputCurrency: LocaleAmountFormatter.number(from: value, in: currency),
-            with: getExchangeRateWindow(),
-            primaryCurrency: getUserPrimaryCurrency()
-        )
+    func amountWithCurrency(from value: String, in currency: Currency) -> BitcoinAmountWithSelectedCurrency {
+        let bitcoinAmount = BitcoinAmount.from(inputCurrency: currency.formattedNumber(from: value),
+                                               with: getExchangeRateWindow(),
+                                               primaryCurrency: getUserPrimaryCurrency())
+        return BitcoinAmountWithSelectedCurrency(bitcoinAmount: bitcoinAmount,
+                                                 selectedCurrency: currency)
     }
 
-    func convert(value: String, in currency: String, to newCurrency: String) -> MonetaryAmount {
+    func convert(value: String, in currency: Currency, to newCurrency: Currency) -> MonetaryAmount {
+        let satoshis = amountWithCurrency(from: value, in: currency).bitcoinAmount.inSatoshis
 
-        let satoshis = amount(from: value, in: currency).inSatoshis
-
-        return satoshis.valuation(at: rate(for: newCurrency), currency: newCurrency)
+        return satoshis.valuation(at: rate(for: newCurrency.code), currency: newCurrency.code)
     }
 
     private func rate(for currency: String) -> Decimal {
@@ -60,16 +59,16 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
             Logger.fatal(error: error)
         }
     }
-
+    // TODO: Tech debt. This is dangerous domain logic and must be thoroughly tested
     func validityCheck(amount value: String,
-                       currency: String,
+                       currency: Currency,
                        for receiveType: ReceiveType) -> AmountInputView.State {
 
-        let amount = LocaleAmountFormatter.number(from: value, in: currency)
+        let amount = currency.formattedNumber(from: value)
 
         let satoshiAmount: Satoshis
         do {
-            satoshiAmount = try Satoshis.bounded(amount: amount.amount, at: rate(for: currency))
+            satoshiAmount = try Satoshis.bounded(amount: amount.amount, at: rate(for: currency.code))
         } catch {
             return .tooBig
         }
@@ -88,15 +87,24 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
         return .valid
     }
 
-    func getSecondaryAmount(amount: String, currency: String) -> MonetaryAmount? {
-        if currency == "BTC" {
+    func getSecondaryAmount(amount: String, currency: Currency) -> MonetaryAmountWithCompleteDataOfCurrency? {
+        if currency.code == "BTC" {
             let primaryCurrency = getUserPrimaryCurrency()
             if primaryCurrency != "BTC" {
-                return convert(value: amount, in: currency, to: primaryCurrency)
+                let completedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: primaryCurrency)
+                let convertedMonetaryAmount = convert(value: amount, in: currency, to: completedCurrency)
+                return MonetaryAmountWithCompleteDataOfCurrency(monetaryAmount: convertedMonetaryAmount,
+                                                                currency: completedCurrency)
             }
             return nil
         }
-        return convert(value: amount, in: currency, to: "BTC")
+
+        // if currency code is not BTC then it is converting to BTC.
+        let currentCurrency = GetBTCDefaultSelectedUnit.run()
+        let convertedAmount = convert(value: amount, in: currency, to: currentCurrency)
+
+        return MonetaryAmountWithCompleteDataOfCurrency(monetaryAmount: convertedAmount,
+                                                        currency: currentCurrency)
     }
 
 }

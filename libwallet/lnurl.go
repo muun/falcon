@@ -14,26 +14,26 @@ type LNURLEvent struct {
 type LNURLEventMetadata struct {
 	Host      string
 	Invoice   string
-	RequestId string
 }
 
 const (
-	LNURLErrDecode             = lnurl.ErrDecode
-	LNURLErrUnsafeURL          = lnurl.ErrUnsafeURL
-	LNURLErrUnreachable        = lnurl.ErrUnreachable
-	LNURLErrInvalidResponse    = lnurl.ErrInvalidResponse
-	LNURLErrResponse           = lnurl.ErrResponse
-	LNURLErrUnknown            = lnurl.ErrUnknown
-	LNURLErrWrongTag           = lnurl.ErrWrongTag
-	LNURLErrNoAvailableBalance = lnurl.ErrNoAvailableBalance
-	LNURLErrRequestExpired     = lnurl.ErrRequestExpired
-	LNURLErrNoRoute            = lnurl.ErrNoRoute
-	LNURLErrTorNotSupported    = lnurl.ErrTorNotSupported
-	LNURLErrAlreadyUsed        = lnurl.ErrAlreadyUsed
-	LNURLErrForbidden          = lnurl.ErrForbidden
-	LNURLStatusContacting      = lnurl.StatusContacting
-	LNURLStatusInvoiceCreated  = lnurl.StatusInvoiceCreated
-	LNURLStatusReceiving       = lnurl.StatusReceiving
+	LNURLErrDecode              = lnurl.ErrDecode
+	LNURLErrUnsafeURL           = lnurl.ErrUnsafeURL
+	LNURLErrUnreachable         = lnurl.ErrUnreachable
+	LNURLErrInvalidResponse     = lnurl.ErrInvalidResponse
+	LNURLErrResponse            = lnurl.ErrResponse
+	LNURLErrUnknown             = lnurl.ErrUnknown
+	LNURLErrWrongTag            = lnurl.ErrWrongTag
+	LNURLErrNoAvailableBalance  = lnurl.ErrNoAvailableBalance
+	LNURLErrRequestExpired      = lnurl.ErrRequestExpired
+	LNURLErrNoRoute             = lnurl.ErrNoRoute
+	LNURLErrTorNotSupported     = lnurl.ErrTorNotSupported
+	LNURLErrAlreadyUsed         = lnurl.ErrAlreadyUsed
+	LNURLErrForbidden           = lnurl.ErrForbidden
+	LNURLErrCountryNotSupported = lnurl.ErrCountryNotSupported
+	LNURLStatusContacting       = lnurl.StatusContacting
+	LNURLStatusInvoiceCreated   = lnurl.StatusInvoiceCreated
+	LNURLStatusReceiving        = lnurl.StatusReceiving
 )
 
 type LNURLListener interface {
@@ -68,7 +68,6 @@ func LNURLWithdraw(invoiceBuilder *InvoiceBuilder, qr string, listener LNURLList
 			Metadata: &LNURLEventMetadata{
 				Host:      e.Metadata.Host,
 				Invoice:   e.Metadata.Invoice,
-				RequestId: e.Metadata.RequestId,
 			},
 		}
 		if event.Code < 100 {

@@ -40,9 +40,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
     }
 
     func getNextStep(state: NewOpState) -> NewOpNextStep {
-        let currentState = checkFlow(state: state)
-
-        switch currentState {
+        switch state {
 
         case .loading(let data):
             return .view(NewOpLoadingView(paymentIntent: data.type, delegate: transitionDelegate), filledData: [])
@@ -70,31 +68,28 @@ class OpToAddressViewBuilder: OpViewBuilder {
             return .view(view, filledData: [
                 buildDestinationView(type: data.type, confirm: true),
                 buildAmountView(data.amount, takeFeeFromAmount: data.takeFeeFromAmount, confirm: true),
-                buildOnChainFeeView(data),
+                buildOnChainFeeView(data, currency: data.amount.selectedCurrency),
                 buildTotalView(data),
                 NewOpDescriptionFilledDataView(descriptionText: data.description)
             ])
 
         case .feeEditor(let data):
-
-            return .modal(SelectFeeViewController(delegate: transitionDelegate, state: data))
+            return .modal(SelectFeeViewController(delegate: transitionDelegate,
+                                                  state: data))
 
         case .currencyPicker(let data, let selectedCurrency):
-            let currencyPicker = CurrencyPickerViewController(
+            let currencyPicker = CurrencyPickerViewController.createForCurrencySelection(
                 exchangeRateWindow: data.exchangeRateWindow,
-                delegate: amountDelegate
+                delegate: amountDelegate,
+                selectedCurrency: selectedCurrency
             )
-            currencyPicker.selectedCurrencyCode = selectedCurrency
 
             return .modal(currencyPicker)
         }
     }
 
     func getLoggingData(state: NewOpState) -> (logName: String, logParams: [String: Any]?)? {
-
-        let currentState = checkFlow(state: state)
-
-        switch currentState {
+        switch state {
 
         case .loading: return ("loading", nil)
         case .amount: return ("amount", nil)
@@ -163,7 +158,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
         }
     }
 
-    private func buildAmountView(_ amount: BitcoinAmount, takeFeeFromAmount: Bool, confirm: Bool = false) -> MUView {
+    private func buildAmountView(_ amount: BitcoinAmountWithSelectedCurrency, takeFeeFromAmount: Bool, confirm: Bool = false) -> MUView {
         var notice: Notice?
         if takeFeeFromAmount {
 
@@ -172,7 +167,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
             notice = Notice(notice: allText, bold: boldText, boldColor: Asset.Colors.muunWarning.color)
         }
 
-        let filledAmount = NewOpFilledAmount(type: .amount, amount: amount, notice: notice)
+        let filledAmount = NewOpFilledAmount(type: .amount, amountWithCurrency: amount, notice: notice)
         let view = NewOpAmountFilledDataView(filledData: filledAmount,
                                              delegate: amountDelegate,
                                              transitionsDelegate: transitionDelegate)
@@ -183,14 +178,14 @@ class OpToAddressViewBuilder: OpViewBuilder {
         return view
     }
 
-    private func buildOnChainFeeView(_ confirmState: NewOpData.Confirm) -> MUView {
+    private func buildOnChainFeeView(_ confirmState: NewOpData.Confirm, currency: Currency) -> MUView {
         let fee = getOnChainFee(data: confirmState)
         let text = L10n.OpToAddressViewBuilder.s2
         let notice: Notice? = fee.isValid
             ? nil
             : Notice(notice: text, bold: L10n.OpToAddressViewBuilder.s1, boldColor: Asset.Colors.muunWarning.color)
         let feeFilled = NewOpFilledAmount(type: .onchainFee,
-                                          amount: fee.value,
+                                          amountWithCurrency: BitcoinAmountWithSelectedCurrency(bitcoinAmount: fee.value, selectedCurrency: currency),
                                           notice: notice)
 
         let view = NewOpAmountFilledDataView(
@@ -208,9 +203,10 @@ class OpToAddressViewBuilder: OpViewBuilder {
 
     private func buildTotalView(_ confirmState: NewOpData.Confirm) -> MUView {
         let fee = getOnChainFee(data: confirmState)
-
+        let bitcoinAmount = BitcoinAmountWithSelectedCurrency(bitcoinAmount: confirmState.total,
+                                                              selectedCurrency: confirmState.amount.selectedCurrency)
         let totalFilled = NewOpFilledAmount(type: .total,
-                                            amount: confirmState.total)
+                                            amountWithCurrency: bitcoinAmount)
 
         let totalView = NewOpAmountFilledDataView(filledData: totalFilled,
                                                   delegate: amountDelegate,
@@ -222,14 +218,6 @@ class OpToAddressViewBuilder: OpViewBuilder {
         }
 
         return totalView
-    }
-
-    private func checkFlow(state: NewOpState) -> NewOpState {
-        guard let currentState = state as? NewOpState else {
-            Logger.fatal("Wrong state: \(state) in Op To Address flow")
-        }
-
-        return currentState
     }
 
     private func getToAddressFlow(type: PaymentRequestType) -> FlowToAddress {

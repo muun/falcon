@@ -59,6 +59,7 @@ struct OperationFormatter {
             var text = L10n.OperationFormatter.s3
 
             if let alias = operation.submarineSwap?._receiver._alias {
+                text = L10n.OperationFormatter.s6
                 text.append(" \(alias)")
             }
             return text

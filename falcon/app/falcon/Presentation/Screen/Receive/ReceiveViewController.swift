@@ -87,7 +87,10 @@ class ReceiveViewController: MUViewController {
             presenter.refreshLightningInvoice()
         }
 
-        let buttonItem = UIBarButtonItem(image: Asset.Assets.scan.image, style: .plain, target: self, action: #selector(ReceiveViewController.didTapLNURL))
+        let buttonItem = UIBarButtonItem(image: Asset.Assets.scan.image,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(ReceiveViewController.didTapLNURL))
         buttonItem.tintColor = Asset.Colors.muunBlue.color
         buttonItem.accessibilityIdentifier = "Receive with LNURL"
         navigationItem.rightBarButtonItem = buttonItem
@@ -390,9 +393,16 @@ extension ReceiveViewController: ReceiveOnChainViewDelegate {
 
     func didTapOnAddAmount() {
         let customAmount = presenter.getCustomAmount()
+        var inputCurrency: MonetaryAmountWithCompleteDataOfCurrency?
+        if let customAmount = customAmount {
+            let realCurrencyForAmount = customAmount.selectedCurrency
+            let inputCurrencyCode = customAmount.bitcoinAmount.inInputCurrency
+            inputCurrency = MonetaryAmountWithCompleteDataOfCurrency(monetaryAmount: inputCurrencyCode,
+                                                                     currency: realCurrencyForAmount)
+        }
         let vc = ReceiveAmountInputViewController(
             delegate: self,
-            amount: customAmount?.inInputCurrency,
+            amount: inputCurrency,
             receiveType: receiveType
         )
         let nc = UINavigationController(rootViewController: vc)
@@ -468,7 +478,7 @@ extension ReceiveViewController: NotificationsPrimingViewDelegate {
 
 extension ReceiveViewController: ReceiveAmountInputViewControllerDelegate {
 
-    func didConfirm(bitcoinAmount: BitcoinAmount?) {
+    func didConfirm(bitcoinAmount: BitcoinAmountWithSelectedCurrency?) {
         presenter.setCustomAmount(bitcoinAmount)
 
         if receiveType == .onChain {

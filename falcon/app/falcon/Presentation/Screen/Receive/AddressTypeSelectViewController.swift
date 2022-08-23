@@ -86,7 +86,7 @@ class ReceiveAddressTypeSelectViewController: UIViewController, PresenterInstant
 
         for addressType in presenter.addressTypes() {
             let status: AddressTypeCard.Status
-            var highlight: String? = nil
+            var highlight: String?
 
             if addressType.type == selectedAddressType {
                 status = .selected

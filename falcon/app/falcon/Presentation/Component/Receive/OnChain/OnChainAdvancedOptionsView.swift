@@ -123,7 +123,7 @@ class OnChainAdvancedOptionsView: UIView {
 
     // MARK: - View Controller Actions -
 
-    func setAmount(_ bitcoinAmount: BitcoinAmount?) {
+    func setAmount(_ bitcoinAmount: BitcoinAmountWithSelectedCurrency?) {
         amountOptionView.setAmount(bitcoinAmount)
     }
 

@@ -42,17 +42,19 @@ class ManuallyEnterFeeViewController: MUViewController {
     private let lowImage = Asset.Assets.warningLow.image
     private let redColor = Asset.Colors.muunRed.color
     private let warnColor = Asset.Colors.muunWarning.color
+    private let selectedCurrency: Currency
 
     override var screenLoggingName: String {
         return "manually_enter_fee"
     }
 
-    init(delegate: SelectFeeDelegate?, state: FeeEditorState, showUseMaxButton: Bool) {
+    init(delegate: SelectFeeDelegate?, state: FeeEditorState, showUseMaxButton: Bool, selectedCurrency: Currency) {
         self.delegate = delegate
         self.originalFeeState = state.feeState
         self.selectedFee = state.feeState
         self.shouldShowUseMaxButton = showUseMaxButton
         self.state = state
+        self.selectedCurrency = selectedCurrency
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -179,6 +181,7 @@ class ManuallyEnterFeeViewController: MUViewController {
             timeImageView.isHidden = false
             timeLabel.isHidden = false
 
+            // TODO currently forgets input currency, which is important for amount display
             let fee = state.calculateFee(feeRate)
             let feeState = fee.adapt()
 
@@ -192,14 +195,23 @@ class ManuallyEnterFeeViewController: MUViewController {
                 return
             }
 
-            btcLabel.setAmount(from: feeAmount, in: .inBTC)
+            var feeAmountWithCurrency = BitcoinAmountWithSelectedCurrency(bitcoinAmount: feeAmount,
+                                                                          selectedCurrency: selectedCurrency)
+            btcLabel.setAmount(from: feeAmountWithCurrency,
+                               in: .inBTC)
             btcLabel.isHidden = false
 
             if feeAmount.inInputCurrency.currency != "BTC" {
-                inInputLabel.setHelperText(for: feeAmount, in: .inInput)
+                let currency = GetCurrencyForCode().runAssumingCrashPosibility(code: feeAmount.inInputCurrency.currency)
+                feeAmountWithCurrency = BitcoinAmountWithSelectedCurrency(bitcoinAmount: feeAmount,
+                                                                          selectedCurrency: currency)
+                inInputLabel.setHelperText(for: feeAmountWithCurrency, in: .inInput)
                 inInputLabel.isHidden = false
             } else if feeAmount.inPrimaryCurrency.currency != "BTC" {
-                inInputLabel.setHelperText(for: feeAmount, in: .inPrimary)
+                let currency = GetCurrencyForCode().runAssumingCrashPosibility(code: feeAmount.inInputCurrency.currency)
+                feeAmountWithCurrency = BitcoinAmountWithSelectedCurrency(bitcoinAmount: feeAmount,
+                                                                          selectedCurrency: currency)
+                inInputLabel.setHelperText(for: feeAmountWithCurrency, in: .inPrimary)
                 inInputLabel.isHidden = false
             } else {
                 inInputLabel.isHidden = true

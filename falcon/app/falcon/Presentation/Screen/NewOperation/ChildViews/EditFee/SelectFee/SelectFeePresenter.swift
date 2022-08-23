@@ -18,7 +18,6 @@ enum SelectFeeSection {
 class SelectFeePresenter<Delegate: BasePresenterDelegate>: FeeEditorPresenter<Delegate> {
 
     lazy var fees: [FeeState] = calculateFees()
-
     var targetBlocks: [UInt] {
         return [feeConfirmationTargets.fast, feeConfirmationTargets.medium, feeConfirmationTargets.slow]
     }

@@ -58,35 +58,9 @@ struct LocaleAmountFormatter: Resolver {
         return formatter
     }()
 
-    static func formatter(for currency: String,
-                          style: NumberFormatter.Style = .currency,
-                          btcCurrencyFormat: BitcoinCurrencyFormat = .long) -> NumberFormatter {
+    static func format(string: String, in currency: Currency) -> String {
 
-        if currency == "BTC" {
-            if preferences.bool(forKey: .displayBTCasSAT) {
-                return satFormatter
-            }
-            return btcFormatter(format: btcCurrencyFormat)
-        }
-
-        // This obtains the current locale targetted at the given currency
-        let id = "\(locale.identifier)@currency=\(currency)"
-        let canonical = NSLocale.canonicalLocaleIdentifier(from: id)
-        let currencyLocale = Locale(identifier: canonical)
-
-        let formatter = NumberFormatter()
-        formatter.currencyCode = currency
-        formatter.locale = currencyLocale
-        formatter.numberStyle = style
-        formatter.currencySymbol = ""
-        formatter.roundingMode = .halfEven // Half even is the other name for bankers
-
-        return formatter
-    }
-
-    static func format(string: String, in currency: String) -> String {
-
-        let scale = formatter(for: currency).maximumFractionDigits
+        let scale = currency.maximumFractionDigits
 
         var newString = string
         // Remove thousand separators so that the number can be parsed when adding things in the middle
@@ -122,39 +96,8 @@ struct LocaleAmountFormatter: Resolver {
         return decimalFormatter.number(from: value)?.decimalValue
     }
 
-    static func number(from value: String, in currency: String) -> MonetaryAmount {
-        // Try to parse the amount or return 0 if it's not a valid input like ","
-        var amount = formatter(for: currency, style: .decimal).number(from: value)?.decimalValue ?? 0
-
-        if let currency = CurrencyHelper.allCurrencies[currency] {
-            amount = amount.multiplyByPowerOf10(power: -currency.displayExponent)
-        }
-
-        return MonetaryAmount(amount: amount, currency: currency)
-    }
-
     static func isSeparator(_ string: String) -> Bool {
         return locale.decimalSeparator == string || locale.groupingSeparator == string
-    }
-
-    static func string(from amount: MonetaryAmount, btcCurrencyFormat: BitcoinCurrencyFormat = .long) -> String {
-
-        let amt: Decimal
-        if let currency = CurrencyHelper.allCurrencies[amount.currency] {
-            amt = amount.amount.multiplyByPowerOf10(power: currency.displayExponent)
-        } else {
-            amt = amount.amount
-        }
-
-        guard let value = formatter(for: amount.currency, btcCurrencyFormat: btcCurrencyFormat).string(for: amt) else {
-            Logger.fatal(error: MuunError(Errors.format(value: amount.amount,
-                                                        currency: amount.currency,
-                                                        locale: locale.description)))
-        }
-
-        // The currency formatter returns a leading space in numbers so kill it
-        return value.trimmingCharacters(in: .whitespaces)
-
     }
 
     static private func addGroupingSeparator(_ locale: Locale, _ string: String) -> String {

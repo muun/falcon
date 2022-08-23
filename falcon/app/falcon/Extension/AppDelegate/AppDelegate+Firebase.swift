@@ -14,9 +14,6 @@ extension AppDelegate {
 
     internal func configureFirebase() {
         AnalyticsHelper.configure()
-        // This client id needs to be hardwired here, since it can't be in the info.plist schemes because apple rejects
-        // the build in that case
-        GIDSignIn.sharedInstance().clientID = "31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com"
 
         Messaging.messaging().delegate = self
         AnalyticsHelper.setAnalyticsCollection(enabled: true)

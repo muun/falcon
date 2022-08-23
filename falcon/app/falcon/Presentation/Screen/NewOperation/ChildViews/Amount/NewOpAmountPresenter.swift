@@ -31,11 +31,12 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         super.init(delegate: delegate)
     }
 
-    func validityCheck(_ value: String, currency: String) -> AmountInputView.State {
-        precondition(currency == data.totalBalance.inInputCurrency.currency)
+    // TODO: Tech debt. This is dangerous domain logic and must be thoroughly tested
+    func validityCheck(_ value: String, currency: Currency) -> AmountInputView.State {
+        precondition(currency.code == data.totalBalance.inInputCurrency.currency)
 
-        let amount = LocaleAmountFormatter.number(from: value, in: currency)
-        let satoshiAmount = Satoshis.from(amount: amount.amount, at: rate(for: currency))
+        let amount = currency.formattedNumber(from: value)
+        let satoshiAmount = Satoshis.from(amount: amount.amount, at: rate(for: currency.code))
 
         if satoshiAmount == Satoshis(value: 0) {
             return .zero
@@ -53,8 +54,8 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         }
 
         let validAmount =
-            amount.amount <= totalBalance(in: currency).amount
-                || isSendingAllFundsManually(value: value, currency: currency)
+        amount.amount <= totalBalance(in: currency.code).amount
+        || isSendingAllFundsManually(value: value, currency: currency)
 
         if !validAmount {
             return .tooBig
@@ -79,8 +80,8 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         )
     }
 
-    func amount(from value: String, in currency: String) -> BitcoinAmount {
-        return BitcoinAmount.from(inputCurrency: LocaleAmountFormatter.number(from: value, in: currency),
+    func amount(from value: String, in currency: Currency) -> BitcoinAmount {
+        return BitcoinAmount.from(inputCurrency: currency.formattedNumber(from: value),
                                   rate: data.rate,
                                   primaryCurrency: data.primaryCurrency)
     }
@@ -89,7 +90,7 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
         return data.rate(for: currency)
     }
 
-    func convert(value: String, in currency: String, to newCurrency: String) -> MonetaryAmount {
+    func convert(value: String, in currency: Currency, to newCurrency: Currency) -> MonetaryAmount {
 
         var satoshis = amount(from: value, in: currency).inSatoshis
 
@@ -97,15 +98,16 @@ class NewOpAmountPresenter<Delegate: NewOpAmountPresenterDelegate>: BasePresente
             satoshis = data.totalBalance.inSatoshis
         }
 
-        return satoshis.valuation(at: rate(for: newCurrency), currency: newCurrency)
+        return satoshis.valuation(at: rate(for: newCurrency.code), currency: newCurrency.code)
     }
 
-    func isSendingAllFundsManually(value: String, currency: String) -> Bool {
+    func isSendingAllFundsManually(value: String, currency: Currency) -> Bool {
         // This is to avoid bad roundings to stop users manually entering all their funds
         // I.E: User has 10000 Sats, conversion to usd is 10.009 USD, so muun displays max balance as 10.01 USD
         // Then without this code if the user enters 10.01 the conversion to sats will be more than 10000 sats, and
         // the flow will be interrupted.
-        let totalBalanceAmountString = LocaleAmountFormatter.string(from: totalBalance(in: currency))
+        let totalBalanceAmountString = currency.toAmountWithoutCode(amount: totalBalance(in: currency.code).amount,
+                                                                btcCurrencyFormat: .long)
         return totalBalanceAmountString == value
     }
 

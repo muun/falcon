@@ -11,7 +11,7 @@ import core
 
 protocol OpAmountTransitions: NewOperationTransitions {
     func didEnter(amount: BitcoinAmount, data: NewOperationStateLoaded, takeFeeFromAmount: Bool)
-    func requestCurrencyPicker(data: NewOperationStateLoaded, currencyCode: String)
+    func requestCurrencyPicker(data: NewOperationStateLoaded, currency: Currency)
 }
 
 class NewOpAmountView: MUView, PresenterInstantior {
@@ -24,8 +24,8 @@ class NewOpAmountView: MUView, PresenterInstantior {
     weak var transitionsDelegate: OpAmountTransitions?
     private let data: NewOperationStateLoaded
     private var useAllFunds = false
-    private var currency: String {
-        return amountInputView?.currency ?? presenter.getUserPrimaryCurrency()
+    private var inputCurrency: Currency {
+        return amountInputView.currency
     }
 
     fileprivate lazy var presenter = instancePresenter(NewOpAmountPresenter.init, delegate: self, state: data)
@@ -101,18 +101,19 @@ class NewOpAmountView: MUView, PresenterInstantior {
         // NOTE: it's important that we set the currency before the value to avoid
         // unwanted currency conversions.
 
-        amountInputView.currency = data.amount.inInputCurrency.currency
+        amountInputView.currency = data.selectedCurrency
+
+        let currency = data.selectedCurrency
+
         if data.amount.inSatoshis.asDecimal() > 0 {
-            amountInputView.value = LocaleAmountFormatter.string(
-                from: data.amount.inInputCurrency,
-                btcCurrencyFormat: .short
-            )
+            amountInputView.value = data.amount.inInputCurrency.toAmountWithoutCode(btcCurrencyFormat: .short,
+                                                                                    currencyOfAmount: currency)
         }
 
-        let totalBalance = data.totalBalance.inInputCurrency
+        let amount = data.totalBalance.inInputCurrency.toAmountWithoutCode(currencyOfAmount: currency)
         amountInputView?.subtitle = L10n.NewOpAmountView.s2(
-            LocaleAmountFormatter.string(from: totalBalance),
-            CurrencyHelper.string(for: totalBalance.currency)
+            amount,
+            currency.displayCode
         )
 
         allFundsButton.isEnabled = data.totalBalance.inSatoshis > Satoshis.zero
@@ -121,7 +122,7 @@ class NewOpAmountView: MUView, PresenterInstantior {
     }
 
     func validate(amount: String) {
-        let newState = presenter.validityCheck(amount, currency: currency)
+        let newState = presenter.validityCheck(amount, currency: inputCurrency)
 
         amountInputView.state = newState
         switch newState {
@@ -151,7 +152,9 @@ extension NewOpAmountView: NewOperationChildView {
 extension NewOpAmountView: LinkButtonViewDelegate {
 
     func linkButton(didPress linkButton: LinkButtonView) {
-        let allFundsString = LocaleAmountFormatter.string(from: presenter.totalBalance(in: currency))
+        let totalBalanceAmount = presenter.totalBalance(in: inputCurrency.code).amount
+        let allFundsString = inputCurrency.toAmountWithoutCode(amount: totalBalanceAmount,
+                                                           btcCurrencyFormat: .long)
         amountInputView.value = allFundsString
         useAllFunds = true
 
@@ -162,13 +165,13 @@ extension NewOpAmountView: LinkButtonViewDelegate {
 
 extension NewOpAmountView: AmountInputViewDelegate {
 
-    func didInput(amount: String, currency: String) {
+    func didInput(amount: String, currency: Currency) {
         useAllFunds = false
         validate(amount: amount)
     }
 
     func didTapCurrency() {
-        transitionsDelegate?.requestCurrencyPicker(data: data, currencyCode: currency)
+        transitionsDelegate?.requestCurrencyPicker(data: data, currency: inputCurrency)
     }
 
 }
@@ -178,12 +181,12 @@ extension NewOpAmountView: NewOperationChildViewDelegate {
     func pushNextState() {
         let input = amountInputView.value
         let amount: BitcoinAmount
-        let isUsingAllFunds = useAllFunds || presenter.isSendingAllFundsManually(value: input, currency: currency)
+        let isUsingAllFunds = useAllFunds || presenter.isSendingAllFundsManually(value: input, currency: inputCurrency)
 
         if isUsingAllFunds {
-            amount = presenter.allFunds(in: currency)
+            amount = presenter.allFunds(in: inputCurrency.code)
         } else {
-            amount = presenter.amount(from: input, in: currency)
+            amount = presenter.amount(from: input, in: inputCurrency)
         }
 
         transitionsDelegate?.didEnter(amount: amount, data: data, takeFeeFromAmount: isUsingAllFunds)

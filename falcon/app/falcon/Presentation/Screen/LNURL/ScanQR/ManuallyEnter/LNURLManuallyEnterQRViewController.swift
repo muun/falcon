@@ -137,7 +137,7 @@ extension LNURLManuallyEnterQRViewController: LNURLScanQRPresenterDelegate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension LNURLManuallyEnterQRViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

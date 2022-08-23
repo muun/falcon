@@ -129,7 +129,7 @@ class DetailViewController: MUViewController {
     }
 
     fileprivate func addSummary() {
-        let amount = operation.amount.inInputCurrency.toString()
+        let amount = operation.amount.inInputCurrency.toAmountPlusCode()
 
         let summary = """
         \(formatter.title)
@@ -293,7 +293,6 @@ class DetailViewController: MUViewController {
     }
 
     fileprivate func add(receiver: SubmarineSwapReceiver) {
-
         guard let pubKey = receiver._publicKey else {
             return
         }
@@ -305,16 +304,12 @@ class DetailViewController: MUViewController {
             name = pubKey
         }
 
-        let row = DetailRowView.link(name, title: L10n.DetailViewController.s14) {
-            let url = "\(Environment.current.nodeExplorer)\(pubKey)"
-            let params = ["name": "node_explorer", "url": url]
-            self.logEvent("open_web", parameters: params)
-            UIApplication.shared.open(URL(string: url)!,
-                                      options: [:],
-                                      completionHandler: nil)
-        }
+        let rowView = DetailRowView.clipboard(name,
+                                              title: L10n.DetailViewController.s14,
+                                              valueToBeCopied: pubKey,
+                                              controller: self)
 
-        stackView.addArrangedSubview(row)
+        stackView.addArrangedSubview(rowView)
     }
 
     fileprivate func add(paymentHash: String) {

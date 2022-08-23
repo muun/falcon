@@ -27,7 +27,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     private let addressSet: AddressSet
     private var numberOfOperations: Int?
 
-    private var customAmount: BitcoinAmount?
+    private var customAmount: BitcoinAmountWithSelectedCurrency?
     private var amountChanged: Bool = false
 
     init(delegate: Delegate,
@@ -66,11 +66,11 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         return addressSet
     }
 
-    func getCustomAmount() -> BitcoinAmount? {
+    func getCustomAmount() -> BitcoinAmountWithSelectedCurrency? {
         return customAmount
     }
 
-    func setCustomAmount(_ amount: BitcoinAmount?) {
+    func setCustomAmount(_ amount: BitcoinAmountWithSelectedCurrency?) {
         amountChanged = customAmount != amount
         customAmount = amount
     }
@@ -79,7 +79,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
 
         self.delegate.show(invoice: nil)
 
-        let amount = customAmount?.inSatoshis
+        let amount = customAmount?.bitcoinAmount.inSatoshis
 
         var action = createInvoiceAction.run(amount: amount)
         if amountChanged {
@@ -125,8 +125,8 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
             if newOp.incomingSwap != nil {
                 refreshLightningInvoice()
             }
-
-            let amount = newOp.amount.inInputCurrency.toString()
+            let newOpInputCurrency = newOp.amount.inInputCurrency
+            let amount = newOpInputCurrency.toAmountPlusCode()
             let message = L10n.ReceivePresenter.s1(amount)
             delegate.didReceiveNewOperation(message: message)
         }

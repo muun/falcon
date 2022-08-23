@@ -250,9 +250,9 @@ internal enum L10n {
     internal static let preimage = L10n.tr("Localizable", "DetailViewController.preimage")
     /// How?
     internal static let rbfCta = L10n.tr("Localizable", "DetailViewController.rbfCta")
-    /// This transaction has RBF (replace-by-fee) enabled. This allows the sender to raise the original fee for faster confirmation, but can also be used to cancel transactions.\n\nUnless you know and trust the sender, consider this a risk until the transaction is confirmed.
+    /// This transaction has RBF (replace-by-fee) enabled. RBF allows the sender to raise the original fee for faster confirmation, but they can also use it to cancel the transaction.\n\nUnless you know and trust the sender, consider it a risk until the transaction is confirmed.
     internal static let rbfInfoDesc = L10n.tr("Localizable", "DetailViewController.rbfInfoDesc")
-    /// How can this be canceled?
+    /// How can this transaction be canceled?
     internal static let rbfInfoTitle = L10n.tr("Localizable", "DetailViewController.rbfInfoTitle")
     /// Until confirmed, this transaction can be canceled by the sender. How?
     internal static let rbfNotice = L10n.tr("Localizable", "DetailViewController.rbfNotice")
@@ -422,7 +422,7 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "GetStartedViewController.s1")
     /// CREATE A NEW WALLET
     internal static let s5 = L10n.tr("Localizable", "GetStartedViewController.s5")
-    /// I ALREADY HAVE A WALLET
+    /// RECOVER EXISTING WALLET
     internal static let s6 = L10n.tr("Localizable", "GetStartedViewController.s6")
   }
 
@@ -508,6 +508,10 @@ internal enum L10n {
     internal static let alreadyUsedDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.alreadyUsedDescription")
     /// Code already used
     internal static let alreadyUsedTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.alreadyUsedTitle")
+    /// The service that created this code is not available in your country.
+    internal static let countryNotSupportedDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.countryNotSupportedDescription")
+    /// Country not supported
+    internal static let countryNotSupportedTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.countryNotSupportedTitle")
     /// Your lightning invoice expired, and %@ didn't complete the payment. Please, contact them for more information.
     internal static func expiredInvoiceDescription(_ p1: Any) -> String {
       return L10n.tr("Localizable", "LNURLWithdrawPresenter.expiredInvoiceDescription", String(describing: p1))
@@ -520,10 +524,6 @@ internal enum L10n {
     }
     /// Your payment failed
     internal static let failedNotificationTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.failedNotificationTitle")
-    /// The service that created this code is not available in your country.
-    internal static let forbiddenDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.forbiddenDescription")
-    /// Country not supported
-    internal static let forbiddenTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.forbiddenTitle")
     /// It doesn't seem to be one. Please, double-check its source. Keep in mind you can only use LNURL with services that support it.
     internal static let invalidCodeDescription = L10n.tr("Localizable", "LNURLWithdrawPresenter.invalidCodeDescription")
     /// Is it a LNURL code?
@@ -775,7 +775,7 @@ internal enum L10n {
   internal enum NewOpError {
     /// This payment is too small
     internal static let s10 = L10n.tr("Localizable", "NewOpError.s10")
-    /// This invoice is missing a valid amount
+    /// This invoice doesn't include an amount
     internal static let s11 = L10n.tr("Localizable", "NewOpError.s11")
     /// An unexpected error occurred
     internal static let s12 = L10n.tr("Localizable", "NewOpError.s12")
@@ -789,7 +789,7 @@ internal enum L10n {
     internal static let s17 = L10n.tr("Localizable", "NewOpError.s17")
     /// You don’t have enough funds to cover this payment and the network fee.
     internal static let s18 = L10n.tr("Localizable", "NewOpError.s18")
-    /// Invoices must have an amount of at least 1 satoshi. Please, create or request a new one.
+    /// At the moment, you can only pay to invoices that include an amount. Please, create or request a new one.
     internal static let s19 = L10n.tr("Localizable", "NewOpError.s19")
     /// This is not a BTC address
     internal static let s2 = L10n.tr("Localizable", "NewOpError.s2")
@@ -805,7 +805,7 @@ internal enum L10n {
     internal static let s25 = L10n.tr("Localizable", "NewOpError.s25")
     /// Your payment was not completed because bitcoin exchange rates changed since you started. Please start a new payment.
     internal static let s26 = L10n.tr("Localizable", "NewOpError.s26")
-    /// This payment requires an invoice with a longer expiration time. Please, create or request a new invoice (suggested expiration time: 1 hour or more).
+    /// Please request a new invoice with an expiration time of at least one hour, or try scanning an invoice with a smaller amount.
     internal static let s27 = L10n.tr("Localizable", "NewOpError.s27")
     /// This invoice has already been scanned or paid by another wallet. Please, create or request a new one.
     internal static let s28 = L10n.tr("Localizable", "NewOpError.s28")
@@ -969,6 +969,8 @@ internal enum L10n {
     internal static let s4 = L10n.tr("Localizable", "OperationFormatter.s4")
     /// Failed
     internal static let s5 = L10n.tr("Localizable", "OperationFormatter.s5")
+    /// You paid
+    internal static let s6 = L10n.tr("Localizable", "OperationFormatter.s6")
     /// Confirmed
     internal static let s9 = L10n.tr("Localizable", "OperationFormatter.s9")
   }

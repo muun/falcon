@@ -19,7 +19,6 @@ protocol ManuallyEnterFeePresenterDelegate: BasePresenterDelegate {
 }
 
 class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: FeeEditorPresenter<Delegate> {
-
     func calculateMaximumFeePossible() -> FeeRate {
         return maxFeeRate
     }

@@ -176,9 +176,17 @@ class NewOperationViewController: MUViewController {
 extension NewOperationViewController: NewOpViewDelegate {
 
     private func showInsufficientFundsScreen(amountPlusFee: MonetaryAmount, totalBalance: MonetaryAmount) {
+        var amountPlusFeeValue = amountPlusFee.toAmountPlusCode()
+        var totalBalanceValue = totalBalance.toAmountPlusCode()
+
+        if let lastSelectedCurrency = presenter.lastSelectedCurrency {
+            amountPlusFeeValue = amountPlusFee.toAmountPlusCode(currencyOfAmount: lastSelectedCurrency)
+            totalBalanceValue = totalBalance.toAmountPlusCode(currencyOfAmount: lastSelectedCurrency)
+        }
+
         displayErrorView(type: .insufficientFunds(
-            amountPlusFee: amountPlusFee.toString(),
-            maxBalance: totalBalance.toString()
+            amountPlusFee: amountPlusFeeValue,
+            maxBalance: totalBalanceValue
         ))
     }
 

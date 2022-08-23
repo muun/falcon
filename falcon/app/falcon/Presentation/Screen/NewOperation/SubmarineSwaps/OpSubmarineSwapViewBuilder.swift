@@ -41,7 +41,6 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     }
 
     func getNextStep(state: NewOpState) -> NewOpNextStep {
-
         switch state {
 
         case .loading(let data):
@@ -89,11 +88,11 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
 
         case .currencyPicker(let data, let selectedCurrency):
 
-            let currencyPicker = CurrencyPickerViewController(
+            let currencyPicker = CurrencyPickerViewController.createForCurrencySelection(
                 exchangeRateWindow: data.exchangeRateWindow,
-                delegate: amountDelegate
+                delegate: amountDelegate,
+                selectedCurrency: selectedCurrency
             )
-            currencyPicker.selectedCurrencyCode = selectedCurrency
 
             return .modal(currencyPicker)
 
@@ -198,8 +197,8 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         return attrDesc
     }
 
-    private func buildAmountView(_ amount: BitcoinAmount, confirm: Bool = false) -> MUView {
-        let filledAmount = NewOpFilledAmount(type: .amount, amount: amount)
+    private func buildAmountView(_ amount: BitcoinAmountWithSelectedCurrency, confirm: Bool = false) -> MUView {
+        let filledAmount = NewOpFilledAmount(type: .amount, amountWithCurrency: amount)
         let view = NewOpAmountFilledDataView(filledData: filledAmount, delegate: amountDelegate)
         if !confirm {
             view.showSeparator()
@@ -209,16 +208,22 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     }
 
     private func buildLightningFeeView(_ confirmState: NewOpData.Confirm) -> MUView {
-        guard case .finalFee(let fee, rate: let _) = confirmState.feeState else {
+        guard case .finalFee(let fee, rate: _) = confirmState.feeState else {
             Logger.fatal("expected fee to be final for lightning payments")
         }
-
-        let lightningFeeFilled = NewOpFilledAmount(type: .lightningFee, amount: fee)
+        let selectedCurrency = confirmState.amount.selectedCurrency
+        let amountWithCurrency = BitcoinAmountWithSelectedCurrency(bitcoinAmount: fee,
+                                                                   selectedCurrency: selectedCurrency)
+        let lightningFeeFilled = NewOpFilledAmount(type: .lightningFee, amountWithCurrency: amountWithCurrency)
         return NewOpAmountFilledDataView(filledData: lightningFeeFilled, delegate: amountDelegate)
     }
 
     private func buildTotalView(_ confirmState: NewOpData.Confirm) -> MUView {
-        let totalFilled = NewOpFilledAmount(type: .total, amount: confirmState.total)
+        let selectedCurrency = confirmState.amount.selectedCurrency
+        let bitcoinAmountWithCurrency = BitcoinAmountWithSelectedCurrency(bitcoinAmount: confirmState.total,
+                                                                          selectedCurrency: selectedCurrency)
+        let totalFilled = NewOpFilledAmount(type: .total,
+                                            amountWithCurrency: bitcoinAmountWithCurrency)
         let totalView = NewOpAmountFilledDataView(filledData: totalFilled, delegate: amountDelegate)
 
         totalView.showSeparator()

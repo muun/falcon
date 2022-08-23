@@ -48,9 +48,8 @@ class TargetedFeeTableViewCell: UITableViewCell {
         inputValueLabel.font = Constant.Fonts.system(size: .helper)
     }
 
-    func setUp(fee: FeeState, confirmationTime: String) {
-
-        let feeAmount: BitcoinAmount
+    func setUp(fee: FeeState, confirmationTime: String, currencyToShow: Currency) {
+        var feeAmount: BitcoinAmount
         let feeRate: FeeRate
 
         switch fee {
@@ -74,9 +73,14 @@ class TargetedFeeTableViewCell: UITableViewCell {
             .set(bold: confirmationTime, color: Asset.Colors.title.color)
 
         targetLabel.text = "\(feeRate.stringValue()) sat/vbyte"
-        bitcoinValueLabel.setAmount(from: feeAmount, in: .inBTC)
+
+        bitcoinValueLabel.setAmount(from: BitcoinAmountWithSelectedCurrency(bitcoinAmount: feeAmount,
+                                                                            selectedCurrency: currencyToShow),
+                                    in: .inBTC)
         if feeAmount.inInputCurrency.currency != "BTC" {
-            inputValueLabel.setHelperText(for: feeAmount, in: .inInput)
+            inputValueLabel.setHelperText(for: BitcoinAmountWithSelectedCurrency(bitcoinAmount: feeAmount,
+                                                                                 selectedCurrency: currencyToShow),
+                                          in: .inInput)
         } else {
             inputValueLabel.isHidden = true
         }

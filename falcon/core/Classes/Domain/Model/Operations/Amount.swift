@@ -8,11 +8,13 @@
 
 import Foundation
 
+
+/// An absolute value represented in satoshis, currency selected by user (inputCurrency) and currency selected by default (primaryCurrency)
 public struct BitcoinAmount {
     public let inSatoshis: Satoshis
     public let inInputCurrency: MonetaryAmount
     public let inPrimaryCurrency: MonetaryAmount
-
+    
     public init(inSatoshis: Satoshis, inInputCurrency: MonetaryAmount, inPrimaryCurrency: MonetaryAmount) {
         self.inSatoshis = inSatoshis
         self.inInputCurrency = inInputCurrency

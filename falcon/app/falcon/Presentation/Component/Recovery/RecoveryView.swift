@@ -84,6 +84,7 @@ class RecoveryView: MUView {
             textfield.delegate = self
             textfield.deleteDelegate = self
             textfield.autocorrectionType = .no
+            textfield.spellCheckingType = .no
 
             let hasPreset = presetValues.count > index && !presetValues[index].isEmpty
             if hasPreset {

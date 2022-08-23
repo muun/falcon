@@ -10,8 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
-
 	"github.com/fiatjaf/go-lnurl"
 	"github.com/lightningnetwork/lnd/lnwire"
 )
@@ -62,25 +60,31 @@ type WithdrawResponse struct {
 // After adding new codes here, remember to export them in the root libwallet
 // module so that the apps can consume them.
 const (
-	ErrNone               int = 0
-	ErrDecode             int = 1
-	ErrUnsafeURL          int = 2
-	ErrUnreachable        int = 3
-	ErrInvalidResponse    int = 4
-	ErrResponse           int = 5
-	ErrUnknown            int = 6
-	ErrWrongTag           int = 7
-	ErrNoAvailableBalance int = 8
-	ErrRequestExpired     int = 9
-	ErrNoRoute            int = 10
-	ErrTorNotSupported    int = 11
-	ErrAlreadyUsed        int = 12
-	ErrForbidden          int = 13
+	ErrNone                int = 0
+	ErrDecode              int = 1
+	ErrUnsafeURL           int = 2
+	ErrUnreachable         int = 3
+	ErrInvalidResponse     int = 4
+	ErrResponse            int = 5
+	ErrUnknown             int = 6
+	ErrWrongTag            int = 7
+	ErrNoAvailableBalance  int = 8
+	ErrRequestExpired      int = 9
+	ErrNoRoute             int = 10
+	ErrTorNotSupported     int = 11
+	ErrAlreadyUsed         int = 12
+	ErrForbidden           int = 13
+	ErrCountryNotSupported int = 14 // By LNURL Service Provider
 
 	StatusContacting     int = 100
 	StatusInvoiceCreated int = 101
 	StatusReceiving      int = 102
 )
+
+const zebedeeHostConst = "api.zebedee.io"
+
+// This should definitely be a const but to simplify testing we treat it as a "conf var"
+var zebedeeHost = zebedeeHostConst
 
 type Event struct {
 	Code     int
@@ -89,9 +93,8 @@ type Event struct {
 }
 
 type EventMetadata struct {
-	Host      string
-	Invoice   string
-	RequestId string
+	Host    string
+	Invoice string
 }
 
 var httpClient = http.Client{Timeout: 15 * time.Second}
@@ -132,11 +135,6 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 
 	// update contacting
 	notifier.Status(StatusContacting)
-
-	// add request id to enhance error reports and troubleshooting with LNURL service providers
-	requestId := uuid.New().String()
-	qrUrl.Query().Add("requestId", requestId)
-	notifier.SetRequestId(requestId)
 
 	// start withdraw with service
 	resp, err := httpClient.Get(qrUrl.String())
@@ -188,11 +186,11 @@ func Withdraw(qr string, createInvoiceFunc CreateInvoiceFunction, allowUnsafe bo
 	notifier.Status(StatusInvoiceCreated)
 
 	// Mutate the query params so we keep those the original URL had
-	query := callbackURL.Query()
-	query.Add("k1", wr.K1)
-	query.Add("pr", invoice)
+	callbackQuery := callbackURL.Query()
+	callbackQuery.Add("k1", wr.K1)
+	callbackQuery.Add("pr", invoice)
+	callbackURL.RawQuery = callbackQuery.Encode()
 
-	callbackURL.RawQuery = query.Encode()
 	// Confirm withdraw with service
 	// Use an httpClient with a higher timeout for reliability with slow LNURL services
 	withdrawClient := http.Client{Timeout: 3 * time.Minute}
@@ -231,7 +229,11 @@ func validateHttpResponse(resp *http.Response) (int, string) {
 		if bytesBody, err := ioutil.ReadAll(resp.Body); err == nil {
 			code := ErrInvalidResponse
 			if resp.StatusCode == 403 {
-				code = ErrForbidden
+				if strings.Contains(resp.Request.URL.Host, zebedeeHost) {
+					code = ErrCountryNotSupported
+				} else {
+					code = ErrForbidden
+				}
 			}
 
 			return code, fmt.Sprintf("unexpected status code in response: %v, body: %s", resp.StatusCode, string(bytesBody))
@@ -328,10 +330,10 @@ func decode(qr string) (*url.URL, error) {
 		}
 
 		if len(uri.Opaque) > 0 {
-			// This catches scheme:LNURL
+			// This catches lightning:LNURL
 			toParse = uri.Opaque
 		} else {
-			// And this catches scheme://LNURL which is needed for iOS
+			// And this catches lightning://LNURL which is needed for iOS
 			toParse = uri.Host
 		}
 	}
@@ -355,10 +357,6 @@ type notifier struct {
 
 func (n *notifier) SetHost(host string) {
 	n.metadata.Host = host
-}
-
-func (n *notifier) SetRequestId(requestId string) {
-	n.metadata.RequestId = requestId
 }
 
 func (n *notifier) SetInvoice(invoice string) {

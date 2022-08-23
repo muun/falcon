@@ -108,7 +108,7 @@ class AmountOptionView: UIStackView {
 
     // MARK: - View Controller Actions -
 
-    func setAmount(_ bitcoinAmount: BitcoinAmount?) {
+    func setAmount(_ bitcoinAmount: BitcoinAmountWithSelectedCurrency?) {
 
         if let bitcoinAmount = bitcoinAmount {
             addButton.isHidden = true

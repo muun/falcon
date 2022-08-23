@@ -160,11 +160,11 @@ class NotificationService: UNNotificationServiceExtension {
     // swiftlint:enable cyclomatic_complexity
 
     private func message(newOp: OperationJson) -> (title: String, body: String) {
-
+        // swiftlint:disable avoid_legacy_currency_formatter_ussage
         let amount = MonetaryAmount(amount: newOp.amount.inInputCurrency.amount,
                                     currency: newOp.amount.inInputCurrency.currency)!
         let amountString = "\(LocaleAmountFormatter.string(from: amount)) \(amount.currency)"
-
+        // swiftlint:enable avoid_legacy_currency_formatter_ussage
         if newOp.direction == .OUTGOING {
             return (L10n.NotificationService.opSentTitle(amount), "")
         }

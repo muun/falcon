@@ -9,7 +9,7 @@
 import UIKit
 import core
 
-fileprivate enum RequestType {
+private enum RequestType {
     case feedback
     case help
     case support
@@ -246,7 +246,7 @@ extension SupportViewController: SupportPresenterDelegeate {
 
 }
 
-//Keyboard actions
+// Keyboard actions
 extension SupportViewController {
 
     override func keyboardWillHide(notification: NSNotification) {

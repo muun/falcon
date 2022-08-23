@@ -20,6 +20,7 @@ enum NewOpData {
         let type: PaymentRequestType
         let amount: BitcoinAmount
         let primaryCurrency: String
+        let selectedCurrency: Currency
         let totalBalance: BitcoinAmount
 
         let exchangeRateWindow: NewopExchangeRateWindow
@@ -30,7 +31,7 @@ enum NewOpData {
     }
 
     struct Description: NewOperationStateAmount {
-        let amount: BitcoinAmount
+        let amount: BitcoinAmountWithSelectedCurrency
         let description: String
         let type: PaymentRequestType
         let primaryCurrency: String
@@ -47,7 +48,7 @@ enum NewOpData {
 
     struct Confirm: NewOperationStateAmount {
         let type: PaymentRequestType
-        let amount: BitcoinAmount
+        let amount: BitcoinAmountWithSelectedCurrency
         let total: BitcoinAmount
         let description: String
         let feeState: FeeState
@@ -69,7 +70,7 @@ enum NewOpData {
 
     struct FeeEditor {
         let type: PaymentRequestType
-        let amount: BitcoinAmount
+        let amount: BitcoinAmountWithSelectedCurrency
         let total: BitcoinAmount
         let feeState: FeeState
         let takeFeeFromAmount: Bool

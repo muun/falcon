@@ -71,11 +71,11 @@ class SettingsViewController: MUViewController {
 
     private func showCurrencyPicker() {
         if let window = presenter.getExchangeRateWindow() {
-            let currencyPicker = CurrencyPickerViewController(
+            let currencyPicker = CurrencyPickerViewController.createForCurrencySettings(
                 exchangeRateWindow: window.toLibwallet(),
-                delegate: self
+                delegate: self,
+                selectedCurrency: GetCurrencyForCode().runAssumingCrashPosibility(code: presenter.getPrimaryCurrency())
             )
-            currencyPicker.selectedCurrencyCode = presenter.getPrimaryCurrency()
 
             navigationController!.pushViewController(currencyPicker, animated: true)
         }

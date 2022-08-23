@@ -15,7 +15,7 @@ public enum Environment: String, RawRepresentable {
     case prod
 
     // If you change this constant, change it also in the push notification extension
-    public static let current: Environment = .debug
+    public static let current: Environment = .prod
 }
 
 extension Environment {

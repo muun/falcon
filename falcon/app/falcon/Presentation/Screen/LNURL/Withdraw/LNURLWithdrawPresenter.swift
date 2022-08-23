@@ -193,8 +193,8 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return L10n.LNURLWithdrawPresenter.unknownErrorTitle
         case .expiredInvoice:
             return L10n.LNURLWithdrawPresenter.expiredInvoiceTitle
-        case .forbidden:
-            return L10n.LNURLWithdrawPresenter.forbiddenTitle
+        case .countryNotSupported:
+            return L10n.LNURLWithdrawPresenter.countryNotSupportedTitle
         case .alreadyUsed:
             return L10n.LNURLWithdrawPresenter.alreadyUsedTitle
         }
@@ -229,10 +229,10 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return L10n.LNURLWithdrawPresenter.expiredInvoiceDescription(domain)
                 .attributedForDescription(alignment: .center)
                 .set(bold: domain, color: Asset.Colors.muunGrayDark.color)
-        case .forbidden(_, let domain):
-            return L10n.LNURLWithdrawPresenter.forbiddenDescription
+        case .countryNotSupported:
+            return L10n.LNURLWithdrawPresenter.countryNotSupportedDescription
                 .attributedForDescription(alignment: .center)
-        case .alreadyUsed(_, let domain):
+        case .alreadyUsed:
             return L10n.LNURLWithdrawPresenter.alreadyUsedDescription
                 .attributedForDescription(alignment: .center)
         }
@@ -258,8 +258,8 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
             return "lnurl_expired_invoice"
         case .alreadyUsed:
             return "lnurl_already_used"
-        case .forbidden:
-            return "lnurl_forbidden"
+        case .countryNotSupported:
+            return "lnurl_countryNotSupported"
         }
     }
 

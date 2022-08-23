@@ -40,6 +40,7 @@ Switch to legacy addresses";
 "OperationFormatter.s3" = "You paid";
 "OperationFormatter.s4" = "Confirming";
 "OperationFormatter.s5" = "Failed";
+"OperationFormatter.s6" = "You paid";
 "OperationFormatter.s9" = "Confirmed";
 "OperationFormatter.s10" = "%@ paid you";
 "OperationFormatter.cancelable" = "Cancelable";
@@ -75,16 +76,16 @@ Switch to legacy addresses";
 "DetailViewController.outgoingTxFee" = "Fee paid to miners";
 "DetailViewController.rbfNotice" = "Until confirmed, this transaction can be canceled by the sender. How?";
 "DetailViewController.rbfCta" = "How?";
-"DetailViewController.rbfInfoTitle" = "How can this be canceled?";
-"DetailViewController.rbfInfoDesc" = "This transaction has RBF (replace-by-fee) enabled. This allows the sender to raise the original fee for faster confirmation, but can also be used to cancel transactions.
+"DetailViewController.rbfInfoTitle" = "How can this transaction be canceled?";
+"DetailViewController.rbfInfoDesc" = "This transaction has RBF (replace-by-fee) enabled. RBF allows the sender to raise the original fee for faster confirmation, but they can also use it to cancel the transaction.
 
-Unless you know and trust the sender, consider this a risk until the transaction is confirmed.";
+Unless you know and trust the sender, consider it a risk until the transaction is confirmed.";
 "DetailViewController.paymentHash" = "Payment hash";
 /* Presentation/Screen/GetStarted/GetStartedViewController.swift */
 "GetStartedViewController.s1" = "Self-custodial wallet
 for bitcoin and lightning.";
 "GetStartedViewController.s5" = "CREATE A NEW WALLET";
-"GetStartedViewController.s6" = "I ALREADY HAVE A WALLET";
+"GetStartedViewController.s6" = "RECOVER EXISTING WALLET";
 /* Presentation/Screen/Home/Cell/Operation/OperationTableViewCell.swift */
 "OperationTableViewCell.s1" = "From the bitcoin network";
 "OperationTableViewCell.s2" = "From the lightning network";
@@ -145,21 +146,21 @@ Tap or swipe up to see your transactions.";
 "NewOpError.s8" = "There is no available route";
 "NewOpError.s9" = "You don't have enough funds";
 "NewOpError.s10" = "This payment is too small";
-"NewOpError.s11" = "This invoice is missing a valid amount";
+"NewOpError.s11" = "This invoice doesn't include an amount";
 "NewOpError.s12" = "An unexpected error occurred";
 "NewOpError.s13" = "This invoice can't be paid";
 "NewOpError.s15" = "This invoice expired before the payment was made. Please, create or request a new one.";
 "NewOpError.s16" = "Please try with another invoice";
 "NewOpError.s17" = "support team";
 "NewOpError.s18" = "You don’t have enough funds to cover this payment and the network fee.";
-"NewOpError.s19" = "Invoices must have an amount of at least 1 satoshi. Please, create or request a new one.";
+"NewOpError.s19" = "At the moment, you can only pay to invoices that include an amount. Please, create or request a new one.";
 "NewOpError.s21" = "You can't pay an invoice to yourself.";
 "NewOpError.s22" = "Scanned text";
 "NewOpError.s23" = "Total (Amount + Minimum Fee)";
 "NewOpError.s24" = "Your balance";
 "NewOpError.s25" = "This is not a BTC address or a lightning invoice. Double-check its source and make sure the address is properly formatted.";
 "NewOpError.s26" = "Your payment was not completed because bitcoin exchange rates changed since you started. Please start a new payment.";
-"NewOpError.s27" = "This payment requires an invoice with a longer expiration time. Please, create or request a new invoice (suggested expiration time: 1 hour or more).";
+"NewOpError.s27" = "Please request a new invoice with an expiration time of at least one hour, or try scanning an invoice with a smaller amount.";
 "NewOpError.s28" = "This invoice has already been scanned or paid by another wallet. Please, create or request a new one.";
 "NewOpError.s29" = "There's no route with enough capacity to make this payment. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
 "NewOpError.s30" = "The amount you are trying too send is too small. It must be greater than %@ satoshis.";
@@ -358,8 +359,8 @@ receive bitcoin";
 "LNURLWithdrawPresenter.expiredInvoiceDescription" = "Your lightning invoice expired, and %@ didn't complete the payment. Please, contact them for more information.";
 "LNURLWithdrawPresenter.alreadyUsedTitle" = "Code already used";
 "LNURLWithdrawPresenter.alreadyUsedDescription" = "This code was used by another wallet, and can't be used again.";
-"LNURLWithdrawPresenter.forbiddenTitle" = "Country not supported";
-"LNURLWithdrawPresenter.forbiddenDescription" = "The service that created this code is not available in your country.";
+"LNURLWithdrawPresenter.countryNotSupportedTitle" = "Country not supported";
+"LNURLWithdrawPresenter.countryNotSupportedDescription" = "The service that created this code is not available in your country.";
 "LNURLWithdrawPresenter.pendingNotificationTitle" = "Your payment is on the way";
 "LNURLWithdrawPresenter.pendingNotificationBody" = "You'll receive your payment as soon as %@ completes it.";
 "LNURLWithdrawPresenter.failedNotificationTitle" = "Your payment failed";

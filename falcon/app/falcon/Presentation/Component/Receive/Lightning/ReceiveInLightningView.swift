@@ -49,6 +49,8 @@ struct IncomingInvoiceInfo {
             formatter.dateFormat = "HH:mm:ss"
         }
         formatter.timeZone = TimeZone(identifier: "UTC")
+        // Override 24-hour vs 12-hour device setting
+        formatter.locale = Locale(identifier: "en_US_POSIX")
 
         let timeInterval = Double(seconds)
         let timeRemaining = Date(timeIntervalSince1970: timeInterval)
@@ -277,7 +279,7 @@ final class ReceiveInLightningView: UIView {
 
     // MARK: - View Controller actions -
 
-    func setAmount(_ bitcoinAmount: BitcoinAmount?) {
+    func setAmount(_ bitcoinAmount: BitcoinAmountWithSelectedCurrency?) {
         advancedOptionsView.setAmount(bitcoinAmount)
     }
 

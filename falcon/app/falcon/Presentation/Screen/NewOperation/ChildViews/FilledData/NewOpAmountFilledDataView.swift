@@ -25,14 +25,13 @@ struct NewOpFilledAmount {
     }
 
     let type: AmountType
-    let amount: BitcoinAmount
-
+    let amountWithCurrency: BitcoinAmountWithSelectedCurrency
     let notice: Notice?
     let moreInfo: MoreInfo?
 
-    init(type: AmountType, amount: BitcoinAmount, notice: Notice? = nil, moreInfo: MoreInfo? = nil) {
+    init(type: AmountType, amountWithCurrency: BitcoinAmountWithSelectedCurrency, notice: Notice? = nil, moreInfo: MoreInfo? = nil) {
         self.type = type
-        self.amount = amount
+        self.amountWithCurrency = amountWithCurrency
         self.notice = notice
         self.moreInfo = moreInfo
     }
@@ -100,7 +99,9 @@ class NewOpAmountFilledDataView: MUView {
         amountLabel.textColor = Asset.Colors.muunGrayDark.color
         amountLabel.shouldCycle = true
         amountLabel.delegate = self
-        amountLabel.setAmount(from: filledData.amount, in: .inInput)
+
+        amountLabel.setAmount(from: filledData.amountWithCurrency,
+                              in: .inInput)
 
         noticeLabel.textColor = Asset.Colors.muunGrayDark.color
         noticeLabel.font = Constant.Fonts.system(size: .notice)

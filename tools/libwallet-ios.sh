@@ -38,7 +38,7 @@ fi
 
 cd "$repo_root"
 
-libwallet="$repo_root/falcon/core/Libwallet.framework"
+libwallet="$repo_root/falcon/core/Libwallet.xcframework"
 
 # if there is an existing build, check if it is up-to-date
 if [ -e "$libwallet/libwallet.sha1sum" ]; then
@@ -57,6 +57,10 @@ cd libwallet/
 mkdir -p "$build_dir/ios"
 mkdir -p "$build_dir/pkg"
 
+# Gomobile crashes if these files exist already
+rm -r "$build_dir"/ios/ios/iphoneos/*.framework || true
+rm -r "$build_dir"/ios/iossimulator/iphonesimulator/*.framework || true
+
 # Use a shared dependency cache between iOS and Android by setting GOMODCACHE
 
 # Setting CGO_LDFLAGS_ALLOW is a hack to build with golang 1.15.5
@@ -65,7 +69,7 @@ mkdir -p "$build_dir/pkg"
 CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
     GOMODCACHE="$build_dir/pkg" \
     go run golang.org/x/mobile/cmd/gomobile bind \
-    -target=ios -o "$libwallet" -cache "$build_dir/ios" \
+    -target=ios,iossimulator -o "$libwallet" -cache "$build_dir/ios" \
     . ./newop 
 
 st=$?

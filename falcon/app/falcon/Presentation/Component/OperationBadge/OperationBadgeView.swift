@@ -75,10 +75,11 @@ final class OperationBadgeView: UIView {
 
     func setText(_ bitcoinAmount: MonetaryAmount, direction: OperationDirection) {
         let message: String
+        let formattedCurrency = bitcoinAmount.toAmountPlusCode(btcCurrencyFormat: .short)
         if direction == .OUTGOING || direction == .CYCLICAL {
-            message = "- \(bitcoinAmount.toString(btcCurrencyFormat: .short))"
+            message = "- \(formattedCurrency)"
         } else {
-            message = "+ \(bitcoinAmount.toString(btcCurrencyFormat: .short))"
+            message = "+ \(formattedCurrency)"
         }
         amountLabel.text = message
         setStyle(direction)

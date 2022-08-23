@@ -18,7 +18,6 @@ public struct MonetaryAmount {
     }
 
     public init?(amount: String, currency: String) {
-
         guard let amount = Decimal(string: amount, locale: Locale.init(identifier: "en_US")) else {
             return nil
         }

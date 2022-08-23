@@ -11,7 +11,7 @@ import UIKit
 import core
 
 protocol AmountInputViewDelegate: AnyObject {
-    func didInput(amount: String, currency: String)
+    func didInput(amount: String, currency: Currency)
     func didTapCurrency()
 }
 
@@ -25,7 +25,7 @@ class AmountInputView: UIView {
         case tooBig
     }
 
-    typealias CurrencyConverter = (String, String, String) -> MonetaryAmount
+    typealias CurrencyConverter = (String, Currency, Currency) -> MonetaryAmount
 
     private var textField: UITextField!
     private var currencyLabel: UILabel!
@@ -40,7 +40,7 @@ class AmountInputView: UIView {
     private var mirrorTextField: UITextField!
 
     // The last amount actually typed by the user
-    private var typedAmount: MonetaryAmount?
+    private var typedAmount: MonetaryAmountWithCompleteDataOfCurrency?
 
     var value: String {
         get {
@@ -52,13 +52,13 @@ class AmountInputView: UIView {
         }
     }
 
-    var currency: String {
+    var currency: Currency {
         willSet {
             // This needs to happen before we forget the old value!
             convert(to: newValue)
         }
         didSet {
-            currencyLabel.text = CurrencyHelper.string(for: currency)
+            currencyLabel.text = currency.displayCode
         }
     }
 
@@ -85,7 +85,7 @@ class AmountInputView: UIView {
     }
 
     init(delegate: AmountInputViewDelegate?, converter: @escaping CurrencyConverter) {
-        self.currency = CurrencyHelper.bitcoinCurrency.code
+        self.currency = GetBTCDefaultSelectedUnit.run()
         self.state = .zero
         self.converter = converter
         self.delegate = delegate
@@ -100,7 +100,7 @@ class AmountInputView: UIView {
         return textField.becomeFirstResponder()
     }
 
-    private func convert(to newCurrency: String) {
+    private func convert(to newCurrency: Currency) {
 
         // So, why the weird typedAmount thingy? 
         // This allows us to avoid reconverting the amount back and forth when the user changes currencies
@@ -108,10 +108,10 @@ class AmountInputView: UIView {
         // If the user switches from BTC to USD and back, the amount will be exactly the same without
 
         let toConvert: String
-        let fromCurrency: String
-        if let amount = typedAmount {
-            toConvert = LocaleAmountFormatter.string(from: amount, btcCurrencyFormat: .short)
-            fromCurrency = amount.currency
+        let fromCurrency: Currency
+        if let typedAmount = typedAmount {
+            toConvert = typedAmount.toAmountWithoutCode(btcCurrencyFormat: .short)
+            fromCurrency = typedAmount.currency
         } else {
             toConvert = value
             fromCurrency = currency
@@ -121,7 +121,8 @@ class AmountInputView: UIView {
         if newAmount.amount == 0 {
             value = ""
         } else {
-            value = LocaleAmountFormatter.string(from: newAmount)
+            value = newCurrency.toAmountWithoutCode(amount: newAmount.amount,
+                                                    btcCurrencyFormat: .long)
         }
     }
 
@@ -177,8 +178,9 @@ extension AmountInputView: UITextFieldDelegate {
                 return false
             }
 
-            let newAmount = LocaleAmountFormatter.number(from: updatedText, in: currency)
-            typedAmount = newAmount
+            let newAmount = currency.formattedNumber(from: updatedText)
+            typedAmount = MonetaryAmountWithCompleteDataOfCurrency(monetaryAmount: newAmount,
+                                                                   currency: currency)
 
             delegate?.didInput(amount: updatedText, currency: currency)
 
@@ -399,7 +401,7 @@ fileprivate extension AmountInputView {
 
         currencyLabel.setContentHuggingPriority(.defaultLow + 1, for: .vertical)
 
-        currencyLabel.text = CurrencyHelper.string(for: currency)
+        currencyLabel.text = currency.displayCode
         currencyLabel.font = Constant.Fonts.system(size: .h1)
         currencyLabel.numberOfLines = 1
         currencyLabel.textColor = Asset.Colors.muunGrayDark.color

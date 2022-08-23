@@ -9,13 +9,6 @@
 import UIKit
 import core
 
-struct VisualCurrency: Currency {
-    let code: String
-    let symbol: String
-    let name: String
-    let flag: String?
-}
-
 protocol BitcoinUnitPickerPresenterDelegate: BasePresenterDelegate {}
 
 class BitcoinUnitPickerPresenter<Delegate: BitcoinUnitPickerPresenterDelegate>: BasePresenter<Delegate> {
@@ -33,11 +26,11 @@ class BitcoinUnitPickerPresenter<Delegate: BitcoinUnitPickerPresenterDelegate>: 
         super.setUp()
 
         currencies = [VisualCurrency(code: "BTC", symbol: "", name: "Bitcoin", flag: nil),
-                      VisualCurrency(code: satSymbol, symbol: "", name: "Satoshi", flag: nil)]
+                      VisualCurrency(code: satSymbol, symbol: "", name: "Bitcoin", flag: nil)]
     }
 
     func isSelected(_ currency: Currency) -> Bool {
-        return currency.name == CurrencyHelper.bitcoinCurrency.name
+        return currency.code == CurrencyHelper.bitcoinCurrency.displayCode
     }
 
     func selectUnit(_ currency: Currency) {

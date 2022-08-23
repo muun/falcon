@@ -193,15 +193,15 @@ final class BalanceView: UIView {
         if animated {
             hideLabelsForAnimationInitialState()
         }
-
-        bitcoinBalanceLabel.text = LocaleAmountFormatter.string(from: btcBalance, btcCurrencyFormat: .short)
-        bitcoinCurrencyLabel.text = CurrencyHelper.string(for: btcBalance.currency)
-
+        let currencyByCode = GetCurrencyForCode().runDefaultingFiat(code: btcBalance.currency)
+        bitcoinBalanceLabel.text = currencyByCode.toAmountWithoutCode(amount: btcBalance.amount,
+                                                                      btcCurrencyFormat: .long)
+        bitcoinCurrencyLabel.text = currencyByCode.displayCode
         if primaryBalance.currency == btcBalance.currency {
             primaryBalanceLabel.isHidden = true
         } else {
             primaryBalanceLabel.isHidden = false
-            primaryBalanceLabel.text = primaryBalance.toString()
+            primaryBalanceLabel.text = primaryBalance.toAmountPlusCode()
         }
 
         if animated {

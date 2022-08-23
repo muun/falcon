@@ -14,36 +14,45 @@ protocol DisplayablePopUp {
     var view: UIView! { get }
     var alreadyDismissedPopUp: Bool { get set }
 
-    @objc func dismissPopUp()
+    @objc func didTapDismissPopUp()
 }
 
 extension DisplayablePopUp {
 
-    typealias Dismiss = () -> ()
+    typealias Dismiss = ((() -> Void)?) -> ()
 
-    func show(popUp: UIView, duration: Double? = 2, isDismissableOnTap: Bool = true) -> Dismiss {
+    func show(popUp: UIView,
+              duration: Double? = 2,
+              isDismissableOnTap: Bool = true,
+              dismissByDurationCompletion: (() -> Void)? = nil) -> Dismiss {
         view.endEditing(true)
 
         let newNavigation = buildNewNavigation(popUp, isDismissableOnTap: isDismissableOnTap)
-        let dismiss = { [weak self] in
-            guard let self = self else {
-                return
-            }
-
-            if !self.alreadyDismissedPopUp {
-                self.dismissPopUp()
-            }
-        }
+        let dismiss = onDismiss
+        alreadyDismissedPopUp = false
         navigationController.present(newNavigation, animated: true) {
-            self.alreadyDismissedPopUp = false
             if let duration = duration {
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                    dismiss()
+                    dismiss(dismissByDurationCompletion)
                 }
             }
         }
 
         return dismiss
+    }
+
+    private func onDismiss(completion: (() -> Void)?) {
+        guard !self.alreadyDismissedPopUp else {
+            completion?()
+            return
+        }
+
+        dismissPopUp(completion: completion)
+    }
+
+    func dismissPopUp(completion: (() -> Void)? = nil) {
+        alreadyDismissedPopUp = true
+        navigationController!.dismiss(animated: true, completion: completion)
     }
 
     private func buildNewNavigation(_ popUp: UIView, isDismissableOnTap: Bool) -> UINavigationController {
@@ -84,11 +93,11 @@ extension DisplayablePopUp {
     }
 
     private func addDismissAction(view: UIView) {
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .dismissPopUp))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapDismissPopUp))
     }
 
 }
 
 fileprivate extension Selector {
-    static let dismissPopUp = #selector(DisplayablePopUp.dismissPopUp)
+    static let didTapDismissPopUp = #selector(DisplayablePopUp.didTapDismissPopUp)
 }

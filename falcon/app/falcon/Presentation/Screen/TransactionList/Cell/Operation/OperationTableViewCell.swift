@@ -87,10 +87,8 @@ class OperationTableViewCell: UITableViewCell {
     }
 
     private func setAmountText(operation: core.Operation) {
-        let amountString = LocaleAmountFormatter.string(
-            from: operation.amount.inInputCurrency,
-            btcCurrencyFormat: .short
-        )
+        let amount = operation.amount.inInputCurrency
+        let amountString = amount.toAmountWithoutCode(btcCurrencyFormat: .short)
         amountLabel.text = amountString
         currencyLabel.text = CurrencyHelper.string(for: operation.amount.inInputCurrency.currency)
 

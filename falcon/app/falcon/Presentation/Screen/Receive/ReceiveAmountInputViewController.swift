@@ -10,25 +10,28 @@ import UIKit
 import core
 
 protocol ReceiveAmountInputViewControllerDelegate: AnyObject {
-    func didConfirm(bitcoinAmount: BitcoinAmount?)
+    func didConfirm(bitcoinAmount: BitcoinAmountWithSelectedCurrency?)
 }
 
 class ReceiveAmountInputViewController: MUViewController {
 
     private var amountInput: AmountInputView!
     private let confirmButton = ButtonView()
-
-    private lazy var bottomConstraint = confirmButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+    private var bottomAnchorOnSafeArea: NSLayoutYAxisAnchor {
+        view.safeAreaLayoutGuide.bottomAnchor
+    }
+    private lazy var bottomConstraint = confirmButton.bottomAnchor.constraint(equalTo: bottomAnchorOnSafeArea)
 
     private weak var delegate: ReceiveAmountInputViewControllerDelegate?
 
     private lazy var presenter = instancePresenter(ReceiveAmountInputPresenter.init, delegate: self)
 
-    private var initialAmount: MonetaryAmount?
+    private var initialAmount: MonetaryAmountWithCompleteDataOfCurrency?
+
     private let receiveType: ReceiveType
 
     init(delegate: ReceiveAmountInputViewControllerDelegate,
-         amount: MonetaryAmount?,
+         amount: MonetaryAmountWithCompleteDataOfCurrency?,
          receiveType: ReceiveType) {
 
         self.delegate = delegate
@@ -88,7 +91,9 @@ class ReceiveAmountInputViewController: MUViewController {
 
         if let amount = initialAmount {
             amountInput.currency = amount.currency
-            amountInput.value = LocaleAmountFormatter.string(from: amount, btcCurrencyFormat: .short)
+            if amount.monetaryAmount.amount != 0 {
+                amountInput.value = amount.toAmountWithoutCode(btcCurrencyFormat: .short)
+            }
         }
 
         validate(amount: amountInput.value, currency: amountInput.currency)
@@ -116,7 +121,7 @@ class ReceiveAmountInputViewController: MUViewController {
         ])
     }
 
-    private func validate(amount: String, currency: String) {
+    private func validate(amount: String, currency: Currency) {
         let state = presenter.validityCheck(
             amount: amount,
             currency: currency,
@@ -142,16 +147,18 @@ class ReceiveAmountInputViewController: MUViewController {
             confirmButton.buttonText = L10n.ReceiveAmountInputViewController.confirm
         }
 
-        let secondaryAmount = presenter.getSecondaryAmount(amount: amount, currency: currency)
         if state == .tooBig {
             amountInput.subtitle = ""
         } else {
-            amountInput.subtitle = secondaryAmount?.toString() ?? ""
+            let secondaryAmount = presenter.getSecondaryAmount(amount: amount, currency: currency)
+            secondaryAmount.map {
+                amountInput.subtitle = $0.toAmountPlusCode()
+            }
         }
     }
 
     func updateInfo(newCurrency: Currency) {
-        amountInput.currency = newCurrency.code
+        amountInput.currency = newCurrency
         validate(amount: amountInput.value, currency: amountInput.currency)
     }
 
@@ -165,15 +172,15 @@ extension ReceiveAmountInputViewController: ButtonViewDelegate {
         if amountInput.value.isEmpty {
             delegate?.didConfirm(bitcoinAmount: nil)
         } else {
-            let bitcoinAmount = presenter.amount(
+            let bitcoinAmountWithCurrency = presenter.amountWithCurrency(
                 from: amountInput.value,
                 in: amountInput.currency
             )
 
-            if bitcoinAmount.inSatoshis == Satoshis(value: 0) {
+            if bitcoinAmountWithCurrency.bitcoinAmount.inSatoshis == Satoshis(value: 0) {
                 delegate?.didConfirm(bitcoinAmount: nil)
             } else {
-                delegate?.didConfirm(bitcoinAmount: bitcoinAmount)
+                delegate?.didConfirm(bitcoinAmount: bitcoinAmountWithCurrency)
             }
         }
     }
@@ -182,14 +189,15 @@ extension ReceiveAmountInputViewController: ButtonViewDelegate {
 
 extension ReceiveAmountInputViewController: AmountInputViewDelegate {
 
-    func didInput(amount: String, currency: String) {
+    func didInput(amount: String, currency: Currency) {
         validate(amount: amount, currency: currency)
     }
 
     func didTapCurrency() {
-        let vc = CurrencyPickerViewController(
+        let vc = CurrencyPickerViewController.createForCurrencySelection(
             exchangeRateWindow: presenter.getExchangeRateWindow().toLibwallet(),
-            delegate: self
+            delegate: self,
+            selectedCurrency: nil
         )
         let nc = UINavigationController(rootViewController: vc)
         nc.modalPresentationStyle = .fullScreen

@@ -160,9 +160,12 @@ extension DetailRowView {
                              titleColor: DetailRowView.contentColor)
     }
 
-    static func clipboard(_ content: String, title: String, controller: MUViewController) -> DetailRowView {
+    static func clipboard(_ content: String,
+                          title: String,
+                          valueToBeCopied: String? = nil,
+                          controller: MUViewController) -> DetailRowView {
         let onTap = { [weak controller] in
-            UIPasteboard.general.string = content
+            UIPasteboard.general.string = valueToBeCopied ?? content
 
             if let controller = controller {
                 controller.showToast(message: L10n.DetailRowView.s1)
@@ -177,7 +180,7 @@ extension DetailRowView {
 
     static func copyableAmount(_ amount: BitcoinAmount, title: String, controller: MUViewController) -> DetailRowView {
         let onTap = { [weak controller] in
-            UIPasteboard.general.string = amount.inSatoshis.toBTC().toString()
+            UIPasteboard.general.string = amount.inSatoshis.toBTC().toAmountPlusCode()
 
             if let controller = controller {
                 controller.showToast(message: L10n.DetailRowView.s1)

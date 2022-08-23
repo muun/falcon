@@ -7,22 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1425E049E020E7B71D3B71EAECA4476C /* Dip-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B0C46B22DAF68132DF362357DA5FB48 /* Dip-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1697526F9BF1635A6FAC5925B486E47E /* Dip-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D65477E47D2152B7483E29664BEDB0 /* Dip-dummy.m */; };
-		3382DE3755D575FFC69CC94C54657CCC /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8F8A412962AEDC7F91FD61D499C0FD /* Definition.swift */; };
-		4F27B20FB6CDD859C7A039764B7DFADB /* TypeForwarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB2DC57D6E43FF569E88E6C24BF43E0 /* TypeForwarding.swift */; };
-		684134C75CE20054CA8DBB324D83F6FE /* AutoInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7EA4EA8ECF3F5FC0A82457743545F9 /* AutoInjection.swift */; };
-		7B40F214BA081F99248A98024DEFBA54 /* DipError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402A9F0609907BA87774AF492D755EA7 /* DipError.swift */; };
-		7C5999CD62E3C35F16441256956A51BD /* StoryboardInstantiatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105348C77EE9313388CFAF02C8DA2552 /* StoryboardInstantiatable.swift */; };
-		8BDF8E7A12999692B93CC70C5F4796E2 /* ComponentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD9B6CB395F3D6CC5D9878C7813F2FE /* ComponentScope.swift */; };
-		90F28483DFECD350972D8E57302C07FE /* Resolve.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9D86017FB707DC4374482101EBEDE9 /* Resolve.swift */; };
-		BCD781DB2737A17C4FE9255B1B8A86D2 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9D16CB75B820B6A2C78D85B08102C /* Register.swift */; };
-		C132BE470A2318723AACF45E43E016A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63D4A49FA5073626F04C7BB8218DF26 /* Foundation.framework */; };
-		C899A805C2E004FD71C6D9C2D913DECF /* Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B14F99CC9D99CAB343CE60AE0FA3A48 /* Compatibility.swift */; };
-		DEC8DCEE7B3F2B16780CE3F4CB92F1C9 /* Dip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E749D26F416EFD86F9CCC29E63D0265 /* Dip.swift */; };
-		F36D262F49938A84CA29EF2AC93FBDF9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87931364A27D0460A51EB76D96AD3A87 /* Utils.swift */; };
-		F420CE0BDE5B4E6459A4FAF9FC92B7EB /* RuntimeArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1DD8D45F1F14B408E2235C920A53F0 /* RuntimeArguments.swift */; };
-		FD9FC729DF8D223BC7973D47ECEFE11B /* AutoWiring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975E46C336B35B9370BCA1789B264248 /* AutoWiring.swift */; };
+		076E60F70C2A33087905F061FB234B82 /* Dip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E749D26F416EFD86F9CCC29E63D0265 /* Dip.swift */; };
+		0BAF19DBFFFE248229BB9614A38387EB /* Definition.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8F8A412962AEDC7F91FD61D499C0FD /* Definition.swift */; };
+		13047542C222CC59BC536D451DAEBDAC /* StoryboardInstantiatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105348C77EE9313388CFAF02C8DA2552 /* StoryboardInstantiatable.swift */; };
+		1933DE087D9D7FC0BC84BC030D2A6F76 /* AutoWiring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975E46C336B35B9370BCA1789B264248 /* AutoWiring.swift */; };
+		32ED954DA10B2C9FCE6C4FEBC479D4D0 /* Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B14F99CC9D99CAB343CE60AE0FA3A48 /* Compatibility.swift */; };
+		43334C9E75AE6466A55F1B6826532817 /* ComponentScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD9B6CB395F3D6CC5D9878C7813F2FE /* ComponentScope.swift */; };
+		4B8B0514DA9AAA5125BB7CC6B0331B8A /* DipError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402A9F0609907BA87774AF492D755EA7 /* DipError.swift */; };
+		6ECE0B2299EBE552541A0E97CE216E38 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63D4A49FA5073626F04C7BB8218DF26 /* Foundation.framework */; };
+		7763BAEF43214C7F971E624C14F14929 /* RuntimeArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1DD8D45F1F14B408E2235C920A53F0 /* RuntimeArguments.swift */; };
+		82D1F17BDF0431BC0FA45B327BC35EEF /* Resolve.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9D86017FB707DC4374482101EBEDE9 /* Resolve.swift */; };
+		9BCEB2430F662E8A1BCC8E600CF46111 /* Dip-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D65477E47D2152B7483E29664BEDB0 /* Dip-dummy.m */; };
+		B8AFBA7FA0DE1AD689FF6213F456D7E2 /* AutoInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7EA4EA8ECF3F5FC0A82457743545F9 /* AutoInjection.swift */; };
+		BC2317DCA18AB05075B17C67ED878E81 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87931364A27D0460A51EB76D96AD3A87 /* Utils.swift */; };
+		D544F1B6DCF48852B3817BD86511E81E /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9D16CB75B820B6A2C78D85B08102C /* Register.swift */; };
+		F851DB90E587C573110695635240F9DA /* Dip-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B0C46B22DAF68132DF362357DA5FB48 /* Dip-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9F107701DEFE8D17B46B31DD5EE5C20 /* TypeForwarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB2DC57D6E43FF569E88E6C24BF43E0 /* TypeForwarding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,16 +46,16 @@
 		CF8F8A412962AEDC7F91FD61D499C0FD /* Definition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Definition.swift; path = Sources/Definition.swift; sourceTree = "<group>"; };
 		D63D4A49FA5073626F04C7BB8218DF26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		DC2F10A099112AB938323E7F0A7FA17A /* Dip.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Dip.modulemap; sourceTree = "<group>"; };
-		E89B65EED1EDC9BAD120CEBC5FC0E2FA /* Dip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Dip.framework; path = Dip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E89B65EED1EDC9BAD120CEBC5FC0E2FA /* Dip */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Dip; path = Dip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D65477E47D2152B7483E29664BEDB0 /* Dip-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Dip-dummy.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1B82A91B21A3A9FC3CEB6B7A65F256D0 /* Frameworks */ = {
+		02A5FFBE5684A110C20DBD86B3944604 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C132BE470A2318723AACF45E43E016A4 /* Foundation.framework in Frameworks */,
+				6ECE0B2299EBE552541A0E97CE216E38 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,12 +78,20 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		85672BED917B7DE3EAAA55FC8D10E78C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E89B65EED1EDC9BAD120CEBC5FC0E2FA /* Dip */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		90FCBE4B773DEBB5B1E329131114F46D = {
 			isa = PBXGroup;
 			children = (
 				ADBDF70F3CE1D4DAEF026387D8CCC09D /* Dip */,
 				405932601EE49115425162EC34961BF3 /* Frameworks */,
-				CA2A23468A098BF29F5EDB8FAAF5673D /* Products */,
+				85672BED917B7DE3EAAA55FC8D10E78C /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -124,22 +132,14 @@
 			path = Dip;
 			sourceTree = "<group>";
 		};
-		CA2A23468A098BF29F5EDB8FAAF5673D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E89B65EED1EDC9BAD120CEBC5FC0E2FA /* Dip.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		C17FBC29FC7FAC12F26AE215690EA28F /* Headers */ = {
+		6E55806DE779289D1AFA4ABFEE545679 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1425E049E020E7B71D3B71EAECA4476C /* Dip-umbrella.h in Headers */,
+				F851DB90E587C573110695635240F9DA /* Dip-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,12 +148,12 @@
 /* Begin PBXNativeTarget section */
 		501C5CCDEC7C0091AFD7691259C66AC9 /* Dip */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DD27F49025B8FDD462F3DD5CAF8CB8B5 /* Build configuration list for PBXNativeTarget "Dip" */;
+			buildConfigurationList = 4D1BB257AB442BD6E625D498868E08CF /* Build configuration list for PBXNativeTarget "Dip" */;
 			buildPhases = (
-				C17FBC29FC7FAC12F26AE215690EA28F /* Headers */,
-				D820EB8B579BC632FEC297A6081AEE07 /* Sources */,
-				1B82A91B21A3A9FC3CEB6B7A65F256D0 /* Frameworks */,
-				AEB2919B3635305C78BFA2E886A11C43 /* Resources */,
+				6E55806DE779289D1AFA4ABFEE545679 /* Headers */,
+				22CAD288024672C0CD632EB7539BF459 /* Sources */,
+				02A5FFBE5684A110C20DBD86B3944604 /* Frameworks */,
+				C69A29B97EA5AAB629D406CFB4979990 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -161,7 +161,7 @@
 			);
 			name = Dip;
 			productName = Dip;
-			productReference = E89B65EED1EDC9BAD120CEBC5FC0E2FA /* Dip.framework */;
+			productReference = E89B65EED1EDC9BAD120CEBC5FC0E2FA /* Dip */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -178,11 +178,11 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
 			mainGroup = 90FCBE4B773DEBB5B1E329131114F46D;
-			productRefGroup = CA2A23468A098BF29F5EDB8FAAF5673D /* Products */;
+			productRefGroup = 85672BED917B7DE3EAAA55FC8D10E78C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -192,7 +192,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AEB2919B3635305C78BFA2E886A11C43 /* Resources */ = {
+		C69A29B97EA5AAB629D406CFB4979990 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -202,31 +202,31 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D820EB8B579BC632FEC297A6081AEE07 /* Sources */ = {
+		22CAD288024672C0CD632EB7539BF459 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				684134C75CE20054CA8DBB324D83F6FE /* AutoInjection.swift in Sources */,
-				FD9FC729DF8D223BC7973D47ECEFE11B /* AutoWiring.swift in Sources */,
-				C899A805C2E004FD71C6D9C2D913DECF /* Compatibility.swift in Sources */,
-				8BDF8E7A12999692B93CC70C5F4796E2 /* ComponentScope.swift in Sources */,
-				3382DE3755D575FFC69CC94C54657CCC /* Definition.swift in Sources */,
-				DEC8DCEE7B3F2B16780CE3F4CB92F1C9 /* Dip.swift in Sources */,
-				1697526F9BF1635A6FAC5925B486E47E /* Dip-dummy.m in Sources */,
-				7B40F214BA081F99248A98024DEFBA54 /* DipError.swift in Sources */,
-				BCD781DB2737A17C4FE9255B1B8A86D2 /* Register.swift in Sources */,
-				90F28483DFECD350972D8E57302C07FE /* Resolve.swift in Sources */,
-				F420CE0BDE5B4E6459A4FAF9FC92B7EB /* RuntimeArguments.swift in Sources */,
-				7C5999CD62E3C35F16441256956A51BD /* StoryboardInstantiatable.swift in Sources */,
-				4F27B20FB6CDD859C7A039764B7DFADB /* TypeForwarding.swift in Sources */,
-				F36D262F49938A84CA29EF2AC93FBDF9 /* Utils.swift in Sources */,
+				B8AFBA7FA0DE1AD689FF6213F456D7E2 /* AutoInjection.swift in Sources */,
+				1933DE087D9D7FC0BC84BC030D2A6F76 /* AutoWiring.swift in Sources */,
+				32ED954DA10B2C9FCE6C4FEBC479D4D0 /* Compatibility.swift in Sources */,
+				43334C9E75AE6466A55F1B6826532817 /* ComponentScope.swift in Sources */,
+				0BAF19DBFFFE248229BB9614A38387EB /* Definition.swift in Sources */,
+				076E60F70C2A33087905F061FB234B82 /* Dip.swift in Sources */,
+				9BCEB2430F662E8A1BCC8E600CF46111 /* Dip-dummy.m in Sources */,
+				4B8B0514DA9AAA5125BB7CC6B0331B8A /* DipError.swift in Sources */,
+				D544F1B6DCF48852B3817BD86511E81E /* Register.swift in Sources */,
+				82D1F17BDF0431BC0FA45B327BC35EEF /* Resolve.swift in Sources */,
+				7763BAEF43214C7F971E624C14F14929 /* RuntimeArguments.swift in Sources */,
+				13047542C222CC59BC536D451DAEBDAC /* StoryboardInstantiatable.swift in Sources */,
+				F9F107701DEFE8D17B46B31DD5EE5C20 /* TypeForwarding.swift in Sources */,
+				BC2317DCA18AB05075B17C67ED878E81 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2353B3BA92FBC5A527BC0D2DFD5C3B79 /* Debug */ = {
+		3C168C8FEFF4575948426F765D4324D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3CF260974039492FC2F3FD955CEDD0F6 /* Dip.debug.xcconfig */;
 			buildSettings = {
@@ -235,9 +235,11 @@
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Dip/Dip-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Dip/Dip-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -260,42 +262,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
-		};
-		7E8B139E82CB36EC6C1B17863C258835 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C73E240235D4B3AA6B9B1F1732A45163 /* Dip.release.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Dip/Dip-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Dip/Dip-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Dip/Dip.modulemap";
-				PRODUCT_MODULE_NAME = Dip;
-				PRODUCT_NAME = Dip;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
 		};
 		D7BDFC8E12C99DDD1028AFABAB360C93 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -333,6 +299,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -356,6 +324,44 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		FA12EE3642642212811FB20ECFE211BD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C73E240235D4B3AA6B9B1F1732A45163 /* Dip.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Dip/Dip-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Dip/Dip-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Dip/Dip.modulemap";
+				PRODUCT_MODULE_NAME = Dip;
+				PRODUCT_NAME = Dip;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -395,6 +401,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -428,11 +436,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DD27F49025B8FDD462F3DD5CAF8CB8B5 /* Build configuration list for PBXNativeTarget "Dip" */ = {
+		4D1BB257AB442BD6E625D498868E08CF /* Build configuration list for PBXNativeTarget "Dip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2353B3BA92FBC5A527BC0D2DFD5C3B79 /* Debug */,
-				7E8B139E82CB36EC6C1B17863C258835 /* Release */,
+				3C168C8FEFF4575948426F765D4324D5 /* Debug */,
+				FA12EE3642642212811FB20ECFE211BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

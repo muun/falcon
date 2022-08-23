@@ -20,7 +20,7 @@ protocol NewOperationStateLoaded: NewOperationStateDelegate {
 }
 
 protocol NewOperationStateAmount: NewOperationStateLoaded {
-    var amount: BitcoinAmount { get }
+    var amount: BitcoinAmountWithSelectedCurrency { get }
 }
 
 protocol NewOperationStateDescription: NewOperationStateAmount {
@@ -34,18 +34,18 @@ enum NewOpState {
     case confirmation(_ data: NewOpData.Confirm)
 
     case feeEditor(_ data: NewOpData.FeeEditor)
-    case currencyPicker(_ data: NewOpData.Amount, selectedCurrency: String)
+    case currencyPicker(_ data: NewOpData.Amount, selectedCurrency: Currency)
 }
 
 extension NewOperationStateAmount {
 
     private func amountInInput(satoshis: Satoshis) -> MonetaryAmount {
-        let currency = amount.inInputCurrency.currency
+        let currency = amount.bitcoinAmount.inInputCurrency.currency
         return satoshis.valuation(at: rate(for: currency), currency: currency)
     }
 
     private func amountInPrimary(satoshis: Satoshis) -> MonetaryAmount {
-        let currency = amount.inPrimaryCurrency.currency
+        let currency = amount.bitcoinAmount.inPrimaryCurrency.currency
         return satoshis.valuation(at: rate(for: currency), currency: currency)
     }
 

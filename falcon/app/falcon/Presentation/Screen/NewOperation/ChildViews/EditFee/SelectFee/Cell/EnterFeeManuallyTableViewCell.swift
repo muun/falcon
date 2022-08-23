@@ -41,7 +41,7 @@ class EnterFeeManuallyTableViewCell: UITableViewCell {
         feeLabel.font = Constant.Fonts.system(size: .helper)
     }
 
-    func setUp(fee: BitcoinAmount?) {
+    func setUp(fee: BitcoinAmountWithSelectedCurrency?) {
         if let fee = fee {
             titleLabel.text = L10n.EnterFeeManuallyTableViewCell.s1
             feeLabel.setAmount(from: fee, in: .inBTC)

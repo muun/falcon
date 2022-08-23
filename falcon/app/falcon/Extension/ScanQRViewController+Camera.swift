@@ -21,8 +21,10 @@ extension ScanQRViewController {
         case .blank, .scanning:
             break
         case .paused:
-            captureSession.startRunning()
-            status = .scanning
+            DispatchQueue.global().async {
+                self.captureSession.startRunning()
+                self.status = .scanning
+            }
         case .disabled:
             pushToManuallyEnterQR(removeFromStack: true)
         }

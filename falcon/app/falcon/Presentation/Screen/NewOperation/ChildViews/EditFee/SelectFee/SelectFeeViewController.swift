@@ -155,7 +155,8 @@ extension SelectFeeViewController: UITableViewDelegate {
         case .enterManually:
             let vc = ManuallyEnterFeeViewController(delegate: delegate,
                                                     state: state,
-                                                    showUseMaxButton: shouldShowUseMaxButton())
+                                                    showUseMaxButton: shouldShowUseMaxButton(),
+                                                    selectedCurrency: state.amount.selectedCurrency)
             navigationController!.pushViewController(vc, animated: true)
             tableView.reloadData()
 
@@ -255,7 +256,10 @@ extension SelectFeeViewController: UITableViewDataSource {
 
         let fee = presenter.fee(for: indexPath)
         let timeText = presenter.timeText(for: indexPath)
-        cell.setUp(fee: fee, confirmationTime: timeText)
+
+        cell.setUp(fee: fee,
+                   confirmationTime: timeText,
+                   currencyToShow: state.amount.selectedCurrency)
         cell.selectionStyle = .none
 
         return cell
@@ -277,7 +281,13 @@ extension SelectFeeViewController: UITableViewDataSource {
             finalFee = nil
         }
 
-        cell.setUp(fee: finalFee)
+        var fee: BitcoinAmountWithSelectedCurrency?
+
+        if let finalFee = finalFee {
+            fee = BitcoinAmountWithSelectedCurrency(bitcoinAmount: finalFee,
+                                                    selectedCurrency: state.amount.selectedCurrency)
+        }
+        cell.setUp(fee: fee)
         return cell
     }
 

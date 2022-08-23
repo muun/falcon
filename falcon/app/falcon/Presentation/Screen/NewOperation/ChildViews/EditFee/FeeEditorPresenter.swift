@@ -26,7 +26,7 @@ class FeeEditorPresenter<Delegate: BasePresenterDelegate>: BasePresenter<Delegat
     init(delegate: Delegate, state: FeeEditorState) {
         self.feeState = state.feeState
         self.calculateFee = state.calculateFee
-        self.amount = state.amount.inSatoshis
+        self.amount = state.amount.bitcoinAmount.inSatoshis
         self.takeFeeFromAmount = state.takeFeeFromAmount
         self.minMempoolFeeRate = state.minMempoolFeeRate
         self.minFeeRate = state.minFeeRate

@@ -38,7 +38,7 @@ enum AnimationDirection {
 extension UIView {
 
     func circleView() {
-        //Only for perfect square views (width == height)
+        // Only for perfect square views (width == height)
         let cornerRadius = self.frame.size.width / 2
         roundCorners(cornerRadius: cornerRadius)
     }

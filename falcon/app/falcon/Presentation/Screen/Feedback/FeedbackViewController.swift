@@ -114,7 +114,6 @@ class FeedbackViewController: MUViewController {
         ble.priority = .defaultLow
         NSLayoutConstraint.activate([ble])
 
-
         descriptionLabel.isUserInteractionEnabled = true
         descriptionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .descriptionTouched))
     }
@@ -137,7 +136,8 @@ class FeedbackViewController: MUViewController {
             height,
             width,
 
-            feedbackIImageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, constant: -2 * .sideMargin),
+            feedbackIImageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor,
+                                                      constant: -2 * .sideMargin),
         ])
     }
 
@@ -175,7 +175,7 @@ class FeedbackViewController: MUViewController {
             if self.blockClock.superview != nil {
                 self.blockClock.animate(direction: .topToBottom, duration: .short)
             }
-            
+
             self.titleLabel.animate(direction: .topToBottom, duration: .short) {
                 self.descriptionLabel.animate(direction: .topToBottom, duration: .short)
             }

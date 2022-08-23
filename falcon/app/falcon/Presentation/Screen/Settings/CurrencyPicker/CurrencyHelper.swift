@@ -9,64 +9,9 @@
 import UIKit
 import core
 
-public let satSymbol = "SAT"
-
-protocol Currency {
-    var code: String { get }
-    var symbol: String { get }
-    var name: String { get }
-    var flag: String? { get }
-    var displayExponent: Int16 { get }
-    var displayCode: String { get }
-}
-
-extension Currency {
-    var displayCode: String {
-        return code
-    }
-
-    var displayExponent: Int16 {
-        return Int16(0)
-    }
-}
-
-func == (lhs: Currency, rhs: Currency) -> Bool {
-    return lhs.code == rhs.code
-}
-
-private struct FiatCurrency: Currency {
-    let code: String
-    let symbol: String
-    let name: String
-    let flag: String?
-}
-
-struct BitcoinCurrency: Currency {
-    let code = "BTC"
-
-    let symbol = ""
-
-    var name: String {
-        CurrencyHelper.preferences.bool(forKey: .displayBTCasSAT)
-            ? "Satoshi" : "Bitcoin"
-    }
-
-    let flag: String? = nil
-
-    var displayExponent: Int16 {
-        CurrencyHelper.preferences.bool(forKey: .displayBTCasSAT) ?
-            Satoshis.magnitude : 0
-    }
-
-    var displayCode: String {
-        CurrencyHelper.preferences.bool(forKey: .displayBTCasSAT)
-            ? satSymbol : code
-    }
-}
-
 class CurrencyHelper: Resolver {
 
-    fileprivate static let preferences: Preferences = resolve()
+    static let preferences: Preferences = resolve()
     static let dollarCurrency: Currency = FiatCurrency(code: "USD", symbol: "$", name: "US Dollar", flag: "🇺🇸")
     static let euroCurrency: Currency = FiatCurrency(code: "EUR", symbol: "€", name: "Eurozone Euro", flag: "🇪🇺")
     static let bitcoinCurrency = BitcoinCurrency()
@@ -284,5 +229,4 @@ class CurrencyHelper: Resolver {
         // If we cannot find a currency for a currency code, we default to USD
         return dollarCurrency
     }
-
 }

@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   # Only deps for notifications extension
-  s.dependency 'Firebase/Crashlytics', '7.1'
+  s.dependency 'Firebase/Crashlytics', '7.9.0'
   s.dependency 'GoogleUtilities'
 
   s.subspec 'all' do |sp|
@@ -30,27 +30,27 @@ Pod::Spec.new do |s|
     sp.dependency 'RxBlocking', '5.0.1'
 
     # GoogleDrive
-    sp.dependency 'GoogleSignIn', '5.0.2'
+    sp.dependency 'GoogleSignIn', '6.2.2'
     sp.dependency 'GoogleAPIClientForREST/Drive', '1.5.1'
 
-    sp.vendored_framework = 'Libwallet.framework'
+    sp.test_spec 'Tests' do |ts|
+      ts.source_files = 'Tests/**/*'
+    end
+
+    sp.vendored_framework = 'Libwallet.xcframework'
   end
 
   s.subspec 'notifications' do |sp|
-    sp.vendored_framework = 'Libwallet.framework'
-  end
-
-  s.test_spec 'Tests' do |ts|
-    ts.source_files = 'Tests/**/*'
+    sp.vendored_framework = 'Libwallet.xcframework'
   end
 
   s.script_phases = [{ 
         :name => 'Swiftlint', 
         :script => 'cd "$PODS_TARGET_SRCROOT"; if which swiftlint >/dev/null; then swiftlint; else echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"; fi',
         :execution_position => :before_compile 
-    }, { 
-        :name => 'Libwallet', 
+    }, {
+        :name => 'Libwallet',
         :script => 'cd "$(git rev-parse --show-toplevel)"; ./tools/libwallet-ios.sh',
-        :execution_position => :before_compile 
+        :execution_position => :before_compile
     }]
 end

@@ -10,11 +10,15 @@ import core
 import RxSwift
 import GoogleSignIn
 import GoogleAPIClientForREST
+import Foundation
 
 protocol ShareEmergencyKitPresenterDelegate: BasePresenterDelegate {
     func gotEmergencyKit(_ kit: EmergencyKit)
     func errorUploadingToCloud(option: EmergencyKitSavingOption, error: Error)
-    func uploadToCloudSuccessful(kit:EmergencyKit, option: EmergencyKitSavingOption, link: URL?)
+    func uploadToCloudSuccessful(kit: EmergencyKit,
+                                 option: EmergencyKitSavingOption,
+                                 link: URL?)
+    func hideUploadingEKView(completion: (() -> Void)?)
 }
 
 class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: BasePresenter<Delegate> {
@@ -82,7 +86,6 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
     }
 
     private func reportExportedViaCloud(kit: EmergencyKit, option: EmergencyKitSavingOption, link: URL?) {
-        
         emergencyKitExportedAction.reset()
         subscribeTo(emergencyKitExportedAction.getState()) { state in
             switch state.type {
@@ -90,7 +93,9 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
                 self.delegate.uploadToCloudSuccessful(kit: kit, option: option, link: link)
             case .ERROR:
                 if let error = state.error {
-                    self.handleError(error)
+                    self.delegate.hideUploadingEKView {
+                        self.handleError(error)
+                    }
                 }
             case .EMPTY, .LOADING:
                 // Nothing to do
