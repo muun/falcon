@@ -75,7 +75,7 @@ class NewOpDescriptionView: MUView, PresenterInstantior {
             presenter.setUp()
         }
     }
-    
+
     func setUpTextView() {
         textView.tintColor = Asset.Colors.muunBlue.color
         textView.textColor = Asset.Colors.title.color

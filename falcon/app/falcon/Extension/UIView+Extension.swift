@@ -174,4 +174,38 @@ extension UIView {
                        completion: nil)
     }
 
+    func addSubviewWrappingParent(child: UIView) {
+        child.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(child)
+
+        addConstraint(NSLayoutConstraint(item: child,
+                                         attribute: .top,
+                                         relatedBy: .equal,
+                                         toItem: self,
+                                         attribute: .top,
+                                         multiplier: 1.0,
+                                         constant: 0.0))
+        addConstraint(NSLayoutConstraint(item: child,
+                                         attribute: .leading,
+                                         relatedBy: .equal,
+                                         toItem: self,
+                                         attribute: .leading,
+                                         multiplier: 1.0,
+                                         constant: 0.0))
+        addConstraint(NSLayoutConstraint(item: self,
+                                         attribute: .bottom,
+                                         relatedBy: .equal,
+                                         toItem: child,
+                                         attribute: .bottom,
+                                         multiplier: 1.0,
+                                         constant: 0.0))
+        addConstraint(NSLayoutConstraint(item: self,
+                                         attribute: .trailing,
+                                         relatedBy: .equal,
+                                         toItem: child,
+                                         attribute: .trailing,
+                                         multiplier: 1.0,
+                                         constant: 0.0))
+    }
 }

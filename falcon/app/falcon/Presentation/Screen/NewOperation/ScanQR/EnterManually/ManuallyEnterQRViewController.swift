@@ -15,8 +15,9 @@ class ManuallyEnterQRViewController: MUViewController {
     @IBOutlet private weak var linkButton: LinkButtonView!
     @IBOutlet private weak var buttonView: ButtonView!
     @IBOutlet private weak var buttonBottomConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var pasteControlContainer: UIView!
 
-    fileprivate lazy var presenter = instancePresenter(ScanQRPresenter.init, delegate: self)
+    fileprivate lazy var presenter = instancePresenter(AddressInputPresenter.init, delegate: self)
 
     override var screenLoggingName: String {
         return "manually_enter_qr"
@@ -27,7 +28,10 @@ class ManuallyEnterQRViewController: MUViewController {
 
         setUpNavigation()
 
-        addClipboardObserver()
+        if #unavailable(iOS 16.0) {
+            addClipboardObserver()
+        }
+
         addKeyboardObservers()
 
         presenter.setUp()
@@ -43,15 +47,19 @@ class ManuallyEnterQRViewController: MUViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        removeClipboardObserver()
+        if #unavailable(iOS 16.0) {
+            removeClipboardObserver()
+        }
         removeKeyboardObservers()
 
         presenter.tearDown()
     }
 
     private func setUpView() {
-        setUpTextView()
         setUpButtons()
+        setUpNativePasteControl()
+        setUpTextView()
+        setUpCopyButton()
     }
 
     fileprivate func setUpTextView() {
@@ -65,19 +73,24 @@ class ManuallyEnterQRViewController: MUViewController {
         buttonView.delegate = self
         buttonView.buttonText = L10n.ManuallyEnterQRViewController.s2
         buttonView.isEnabled = false
-
-        linkButton.delegate = self
-        linkButton.buttonText = L10n.ManuallyEnterQRViewController.s3
-        linkButton.isEnabled = false
+        if #unavailable(iOS 16.0) {
+            linkButton.delegate = self
+            linkButton.buttonText = L10n.ManuallyEnterQRViewController.s3
+            linkButton.isEnabled = false
+        }
     }
 
     override func clipboardChanged() {
-        checkClipboard()
+        if #unavailable(iOS 16.0) {
+            checkClipboard()
+        }
     }
 
     fileprivate func checkClipboard() {
-        if let theString = UIPasteboard.general.string, !presenter.isOwnAddress(theString) {
-            linkButton.isEnabled = presenter.isValid(rawAddress: theString)
+        if #unavailable(iOS 16.0) {
+            if let theString = UIPasteboard.general.string {
+                linkButton.isEnabled = presenter.isValid(rawAddress: theString)
+            }
         }
     }
 
@@ -129,6 +142,7 @@ extension ManuallyEnterQRViewController: LinkButtonViewDelegate {
             largeTextInputView.bottomText = ""
             largeTextInputView.text = myString
             buttonView.isEnabled = true
+            setUserOwnAddressWarningIfNeeded(address: myString)
         } else {
             linkButton.isEnabled = false
         }
@@ -145,23 +159,24 @@ extension ManuallyEnterQRViewController: LargeTextInputViewDelegate {
             let validAddress = presenter.isValid(rawAddress: text)
             buttonView.isEnabled = validAddress
 
-            if !validAddress {
+            guard validAddress else {
                 textInputView.setError(L10n.ManuallyEnterQRViewController.s5)
+                return
             }
 
+            setUserOwnAddressWarningIfNeeded(address: text)
         } else {
             buttonView.isEnabled = false
         }
     }
-
 }
 
-extension ManuallyEnterQRViewController: ScanQRPresenterDelegate {
-
+extension ManuallyEnterQRViewController: AddressInputPresenterDelegate {
     func checkForClipboardChange() {
-        checkClipboard()
+        if #unavailable(iOS 16.0) {
+            checkClipboard()
+        }
     }
-
 }
 
 // Keyboard actions
@@ -195,5 +210,98 @@ extension ManuallyEnterQRViewController: UITestablePage {
         makeViewTestable(self.view, using: .root)
         makeViewTestable(largeTextInputView, using: .input)
         makeViewTestable(buttonView, using: .submit)
+    }
+}
+
+extension ManuallyEnterQRViewController {
+    override func canPaste(_ itemProviders: [NSItemProvider]) -> Bool {
+        return itemProviders.first?.canLoadObject(ofClass: String.self) ?? false
+    }
+
+    override func paste(itemProviders: [NSItemProvider]) {
+        if #available(iOS 16.0, *) {
+            guard let clipboardValue = itemProviders.first else {
+                return
+            }
+
+            if clipboardValue.canLoadObject(ofClass: String.self) {
+                _ = clipboardValue.loadObject(ofClass: String.self) { [weak self] textFromClipboard, error in
+                    guard error == nil else {
+                        error.map { Logger.log(error: $0) }
+                        self?.showError(error: L10n.ManuallyEnterQRViewController.s8)
+                        return
+                    }
+                    textFromClipboard.map { self?.onTextRetrievedFromUIPasteControl(textFromClipboard: $0) }
+                }
+            } else {
+                // paste button should never be enabled with something that is not an String.
+                Logger.log(error: NSError(domain: "paste_button_enabled_with_not_supported_content", code: 19993))
+            }
+        }
+    }
+}
+
+private extension ManuallyEnterQRViewController {
+    func onTextRetrievedFromUIPasteControl(textFromClipboard: String) {
+        let address = textFromClipboard.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
+
+        guard address.count > 0 else {
+            self.showError(error: L10n.ManuallyEnterQRViewController.s7)
+            return
+        }
+
+        guard self.presenter.isValid(rawAddress: address) else {
+            DispatchQueue.main.async {
+                self.largeTextInputView.text = address
+            }
+            self.showError(error: L10n.ManuallyEnterQRViewController.s5)
+            return
+        }
+
+        DispatchQueue.main.async {
+            if self.presenter.isOwnAddress(address) {
+                self.largeTextInputView.setWarning(L10n.ManuallyEnterQRViewController.s6)
+            } else {
+                self.largeTextInputView.bottomText = ""
+            }
+            self.largeTextInputView.text = address
+            self.buttonView.isEnabled = true
+        }
+    }
+
+    func setUpNativePasteControl() {
+        if #available(iOS 16.0, *) {
+            let configuration = UIPasteControl.Configuration()
+            configuration.cornerStyle = .medium
+            configuration.displayMode = .labelOnly
+            configuration.baseBackgroundColor = Asset.Colors.muunBlue.color
+            let pasteControl = UIPasteControl(configuration: configuration)
+            pasteControl.target = self
+
+            pasteConfiguration = UIPasteConfiguration(forAccepting: String.self)
+            pasteControlContainer.addSubviewWrappingParent(child: pasteControl)
+        }
+    }
+
+    func showError(error: String) {
+        DispatchQueue.main.async {
+            self.buttonView.isEnabled = false
+            self.largeTextInputView.setError(error)
+        }
+    }
+
+    func setUserOwnAddressWarningIfNeeded(address: String) {
+        if presenter.isOwnAddress(address) {
+            self.largeTextInputView.setWarning(L10n.ManuallyEnterQRViewController.s6)
+        }
+    }
+
+    func setUpCopyButton() {
+        if #available(iOS 16.0, *) {
+            linkButton.isHidden = true
+            pasteControlContainer.isHidden = false
+        } else {
+            pasteControlContainer.isHidden = true
+        }
     }
 }

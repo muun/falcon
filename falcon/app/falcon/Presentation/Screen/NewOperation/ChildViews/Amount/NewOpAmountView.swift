@@ -65,7 +65,7 @@ class NewOpAmountView: MUView, PresenterInstantior {
             presenter.setUp()
         }
     }
-    
+
     override func setUp() {
         super.setUp()
 

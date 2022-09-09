@@ -76,7 +76,7 @@ class InMemoryCurrenciesForPickerRetrieverService: CurrenciesForPickerRetrieverS
 
         let currenciesOnExchangeRateWindow = exchangeRateWindow.currencies()!.adapt()
         let candidatesForAllCurrencies = CurrencyHelper.currencyList(currencyCodes: currenciesOnExchangeRateWindow)
-        
+
         return InMemoryCurrenciesForPickerRetrieverService(candidatesForMostUsedCurrency: candidates,
                                              candidatesForAllCurrencies: candidatesForAllCurrencies)
     }

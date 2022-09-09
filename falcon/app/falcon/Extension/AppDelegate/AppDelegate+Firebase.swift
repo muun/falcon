@@ -11,32 +11,31 @@ import GoogleSignIn
 import Firebase
 
 extension AppDelegate {
-
-    internal func configureFirebase() {
+    func configureFirebase() {
         AnalyticsHelper.configure()
 
         Messaging.messaging().delegate = self
         AnalyticsHelper.setAnalyticsCollection(enabled: true)
         UNUserNotificationCenter.current().delegate = self
 
-        PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
-            if status == .authorized {
-                // Attempt registration for remote notifications
-                if !UIApplication.shared.isRegisteredForRemoteNotifications {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            }
-        }
+        requestAPNSTokenOnlyAfterPermissionsApproval()
     }
 
-    internal func setApnsToken(_ deviceToken: Data) {
+    func setApnsToken(_ deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
 
+    fileprivate func requestAPNSTokenOnlyAfterPermissionsApproval() {
+        PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
+            if status == .authorized {
+                // Attempt registration for remote notifications
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+    }
 }
 
 extension AppDelegate: MessagingDelegate {
-
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken = fcmToken else {
             return
@@ -48,8 +47,8 @@ extension AppDelegate: MessagingDelegate {
         preferences.set(value: fcmToken, forKey: .gcmToken)
         if sessionActions.isLoggedIn() {
             fcmTokenAction.run(token: fcmToken)
+            requestAPNSTokenOnlyAfterPermissionsApproval()
         }
-
     }
 
 }

@@ -7,12 +7,14 @@ build_dir="$repo_root/libwallet/.build"
 
 falcon_root="$repo_root/falcon/app"
 
+this_file_sha=$(sha1sum "$0")
+
 calc_sha1sum() {
     files=$(find "$1" -xdev -type f -name "*.go" -print \
             | grep -v "_test.go$" | grep -v "/build/" \
             | grep -v ".build/" | sort -z)
     shaeach=$(for file in $files; do sha1sum "$file"; done)
-    echo "$shaeach $(sha1sum $(which go)) $(sha1sum "$1/go.mod")" | sha1sum | awk \{'print $1'\}
+    echo "$shaeach "$this_file_sha" $(sha1sum $(which go)) $(sha1sum "$1/go.mod")" | sha1sum | awk \{'print $1'\}
 }
 
 if ! which gobind > /dev/null; then
@@ -70,6 +72,7 @@ CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
     GOMODCACHE="$build_dir/pkg" \
     go run golang.org/x/mobile/cmd/gomobile bind \
     -target=ios,iossimulator -o "$libwallet" -cache "$build_dir/ios" \
+    -iosversion="11.4" \
     . ./newop 
 
 st=$?

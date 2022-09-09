@@ -236,7 +236,8 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F, S>(_ factory: ((U, S, A, B, C, D, E, F)) -> T, delegate: U, state: S) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F, S>(_ factory: ((U, S, A, B, C, D, E, F)) -> T,
+                                                      delegate: U, state: S) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -251,7 +252,8 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F, G>(_ factory: ((U, A, B, C, D, E, F, G)) -> T, delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F, G>(_ factory: ((U, A, B, C, D, E, F, G)) -> T,
+                                                      delegate: U) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -283,7 +285,8 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F, G, H>(_ factory: ((U, A, B, C, D, E, F, G, H)) -> T, delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H>(_ factory: ((U, A, B, C, D, E, F, G, H)) -> T,
+                                                         delegate: U) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -317,7 +320,8 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I>(_ factory: ((U, A, B, C, D, E, F, G, H, I)) -> T, delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I>(_ factory: ((U, A, B, C, D, E, F, G, H, I)) -> T,
+                                                            delegate: U) -> T
         where T: BasePresenter<U> {
 
             return factory((

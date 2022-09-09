@@ -68,8 +68,10 @@ final class ShareEmergencyKitView: UIView {
         scrollView.addSubview(titleAndDescriptionView)
 
         NSLayoutConstraint.activate([
-            titleAndDescriptionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: .sideMargin),
-            titleAndDescriptionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -.sideMargin),
+            titleAndDescriptionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor,
+                                                             constant: .sideMargin),
+            titleAndDescriptionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,
+                                                              constant: -.sideMargin),
             titleAndDescriptionView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             titleAndDescriptionView.topAnchor.constraint(equalTo: scrollView.topAnchor)
         ])

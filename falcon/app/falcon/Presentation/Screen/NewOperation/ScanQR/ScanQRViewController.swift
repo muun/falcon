@@ -15,11 +15,7 @@ class ScanQRViewController: MUViewController {
     @IBOutlet fileprivate weak var enterManuallyButtonView: ButtonView!
     @IBOutlet internal weak var cameraView: UIView!
     @IBOutlet private weak var overlayView: UIView!
-    @IBOutlet private weak var sendToAddressView: UIView!
-    @IBOutlet private weak var sendToAddressLabel: UILabel!
-    @IBOutlet private weak var addressLabel: UILabel!
     @IBOutlet private weak var helperLabel: UILabel!
-    @IBOutlet private weak var sendToAddressViewSeparator: UIView!
 
     private var overlayFillLayer: CAShapeLayer = CAShapeLayer()
     internal var videoLayer: AVCaptureVideoPreviewLayer?
@@ -37,7 +33,7 @@ class ScanQRViewController: MUViewController {
     internal let permissionsView = CameraPermissionView()
     internal var blurEffectView = UIVisualEffectView()
 
-    internal lazy var presenter = instancePresenter(ScanQRPresenter.init, delegate: self)
+    internal lazy var presenter = instancePresenter(AddressInputPresenter.init, delegate: self)
 
     override var screenLoggingName: String {
         return "scan_qr"
@@ -48,7 +44,6 @@ class ScanQRViewController: MUViewController {
 
         setUpNavigation()
         additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        addClipboardObserver()
 
         presenter.setUp()
 
@@ -60,7 +55,6 @@ class ScanQRViewController: MUViewController {
         super.viewWillDisappear(animated)
 
         pauseCapture()
-        removeClipboardObserver()
 
         presenter.tearDown()
     }
@@ -74,31 +68,8 @@ class ScanQRViewController: MUViewController {
     private func setUpView() {
         decideFirstView()
         setUpButtons()
-        setUpSendToAddressView()
+
         setUpHelperLabel()
-    }
-
-    override func clipboardChanged() {
-        checkClipboard()
-    }
-
-    fileprivate func checkClipboard() {
-        if let theString = UIPasteboard.general.string {
-
-            if presenter.isValid(lnurl: theString) {
-                sendToAddressView.isHidden = false
-                sendToAddressLabel.text = L10n.ScanQRViewController.s7
-                addressLabel.text = theString
-
-            } else if !presenter.isOwnAddress(theString) && presenter.isValid(rawAddress: theString) {
-                sendToAddressView.isHidden = false
-                sendToAddressLabel.text = L10n.ScanQRViewController.s2
-                addressLabel.text = theString
-
-            } else {
-                sendToAddressView.isHidden = true
-            }
-        }
     }
 
     private func setUpButtons() {
@@ -112,19 +83,6 @@ class ScanQRViewController: MUViewController {
         helperLabel.font = Constant.Fonts.system(size: .desc, weight: .medium)
         helperLabel.textColor = .white
         helperLabel.text = L10n.ScanQRViewController.s6
-    }
-
-    private func setUpSendToAddressView() {
-        sendToAddressView.backgroundColor = Asset.Colors.cellBackground.color
-        sendToAddressLabel.textColor = Asset.Colors.muunBlue.color
-        sendToAddressLabel.font = Constant.Fonts.system(size: .opTitle, weight: .semibold)
-
-        addressLabel.style = .description
-
-        sendToAddressView.isHidden = true
-        sendToAddressView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .sendToAddressTouched))
-
-        sendToAddressViewSeparator.backgroundColor = Asset.Colors.separator.color
     }
 
     fileprivate func setUpNavigation() {
@@ -163,7 +121,6 @@ class ScanQRViewController: MUViewController {
         // At this point permissionView is at the top of the view herarchy, therefore the buttons arent reachables.
         // Thats why we need to bring them to the front of the view.
         view.bringSubviewToFront(enterManuallyButtonView)
-        view.bringSubviewToFront(sendToAddressView)
     }
 
     internal func hidePermissionView() {
@@ -226,20 +183,6 @@ class ScanQRViewController: MUViewController {
         }
     }
 
-    @objc func sendToAddress() {
-        let address = addressLabel.text!
-
-        if presenter.isValid(lnurl: address) {
-            navigationController!.pushViewController(
-                LNURLFromSendViewController(qr: address),
-                animated: true
-            )
-        } else if presenter.isValid(rawAddress: address) {
-            pushToNewOp(address, origin: .clipboard)
-
-        }
-    }
-
     override func viewDidLayoutSubviews() {
         updateOverlayPath()
         videoLayer?.frame = cameraView.bounds
@@ -255,10 +198,8 @@ extension ScanQRViewController: ButtonViewDelegate {
 
 }
 
-extension ScanQRViewController: ScanQRPresenterDelegate {
-    func checkForClipboardChange() {
-        checkClipboard()
-    }
+extension ScanQRViewController: AddressInputPresenterDelegate {
+    func checkForClipboardChange() {}
 }
 
 extension ScanQRViewController: ErrorViewDelegate {
@@ -270,10 +211,6 @@ extension ScanQRViewController: ErrorViewDelegate {
     func backToHomeTouched() {
         navigationController!.popToRootViewController(animated: true)
     }
-}
-
-fileprivate extension Selector {
-    static let sendToAddressTouched = #selector(ScanQRViewController.sendToAddress)
 }
 
 extension ScanQRViewController: UITestablePage {

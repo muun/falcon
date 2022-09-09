@@ -19,7 +19,10 @@ class LNURLScanQRPresenter<Delegate: LNURLScanQRPresenterDelegate>: BasePresente
     private let preferences: Preferences
     private let lnurlWithdrawAction: LNURLWithdrawAction
 
-    init(delegate: Delegate, userRepository: UserRepository, preferences: Preferences, lnurlWithdrawAction: LNURLWithdrawAction) {
+    init(delegate: Delegate,
+         userRepository: UserRepository,
+         preferences: Preferences,
+         lnurlWithdrawAction: LNURLWithdrawAction) {
         self.userRepository = userRepository
         self.preferences = preferences
         self.lnurlWithdrawAction = lnurlWithdrawAction

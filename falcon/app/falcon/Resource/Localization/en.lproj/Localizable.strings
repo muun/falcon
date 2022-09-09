@@ -236,11 +236,14 @@ Fees rise when there is more activity on the network. If fees increase while you
 "NewOperationViewController.s5" = "Continue";
 "NewOperationViewController.s6" = "Yes, quit";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
-"ManuallyEnterQRViewController.s1" = "Text address";
+"ManuallyEnterQRViewController.s1" = "Text address or invoice";
 "ManuallyEnterQRViewController.s2" = "CONTINUE";
 "ManuallyEnterQRViewController.s3" = "PASTE FROM CLIPBOARD";
 "ManuallyEnterQRViewController.s4" = "Send bitcoin";
-"ManuallyEnterQRViewController.s5" = "Invalid address";
+"ManuallyEnterQRViewController.s5" = "Not an address or invoice";
+"ManuallyEnterQRViewController.s6" = "You'll send funds to your Muun wallet";
+"ManuallyEnterQRViewController.s7" = "Your clipboard is empty";
+"ManuallyEnterQRViewController.s8" = "An error occurred. Copy and paste it again";
 /* Presentation/Screen/NewOperation/ScanQR/ScanQRViewController.swift */
 "ScanQRViewController.s1" = "ENTER TEXT ADDRESS";
 "ScanQRViewController.s2" = "SEND TO ADDRESS IN CLIPBOARD";
@@ -331,7 +334,10 @@ receive bitcoin";
 "LNURLManuallyEnterQRViewController.inputLabel" = "LNURL link";
 "LNURLManuallyEnterQRViewController.confirm" = "CONFIRM LINK";
 "LNURLManuallyEnterQRViewController.pasteFromClipboard" = "PASTE FROM CLIPBOARD";
-"LNURLManuallyEnterQRViewController.invalid" = "Invalid LNURL link";
+"LNURLManuallyEnterQRViewController.invalid" = "Not an LNURLw link";
+"LNURLManuallyEnterQRViewController.emptyClipboard" = "Your clipboard is empty";
+"LNURLManuallyEnterQRViewController.unexpectedError" = "An error occurred. Copy and paste it again";
+
 /* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawViewController.swift */
 "LNURLWithdrawViewController.title" = "Receive";
 "LNURLWithdrawViewController.loading" = "Loading...";

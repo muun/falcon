@@ -70,11 +70,15 @@ class ChangePasswordEnterNewViewController: MUViewController {
         let alert = UIAlertController(title: L10n.ChangePasswordEnterNewViewController.s2,
                                       message: L10n.ChangePasswordEnterNewViewController.s3,
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: L10n.ChangePasswordEnterNewViewController.s4, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: L10n.ChangePasswordEnterNewViewController.s4,
+                                      style: .default,
+                                      handler: { _ in
             alert.dismiss(animated: true)
         }))
 
-        alert.addAction(UIAlertAction(title: L10n.ChangePasswordEnterNewViewController.s5, style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: L10n.ChangePasswordEnterNewViewController.s5,
+                                      style: .destructive,
+                                      handler: { _ in
             self.logEvent("password_change_aborted")
             self.navigationController!.popToRootViewController(animated: true)
         }))

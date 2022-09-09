@@ -93,7 +93,6 @@ class ErrorView: UIView {
 
     func setUpView() {
         backgroundColor = Asset.Colors.background.color
-        
         setUpLabels()
         setUpButtons()
 

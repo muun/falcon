@@ -76,7 +76,7 @@ class OnchainSettingsPresenter<Delegate: OnchainSettingsPresenterDelegate>: Base
             }
         }
     }
-    
+
     func handleUpdateState(_ state: (UserPreferences, ActionState<Void>)) {
 
         let (prefs, action) = state

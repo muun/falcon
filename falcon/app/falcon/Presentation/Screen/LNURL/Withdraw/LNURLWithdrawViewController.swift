@@ -146,7 +146,8 @@ extension LNURLWithdrawViewController: ErrorViewDelegate {
             actionSheet.addAction(action)
         }
 
-        if let action = openAction(withURL: "ms-outlook://compose?to=\(muunEmail)&\(query)", andTitleActionTitle: "Outlook") {
+        if let action = openAction(withURL: "ms-outlook://compose?to=\(muunEmail)&\(query)",
+                                   andTitleActionTitle: "Outlook") {
             actionSheet.addAction(action)
         }
 

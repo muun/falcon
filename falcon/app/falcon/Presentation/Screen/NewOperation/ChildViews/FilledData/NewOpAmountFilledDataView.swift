@@ -29,7 +29,10 @@ struct NewOpFilledAmount {
     let notice: Notice?
     let moreInfo: MoreInfo?
 
-    init(type: AmountType, amountWithCurrency: BitcoinAmountWithSelectedCurrency, notice: Notice? = nil, moreInfo: MoreInfo? = nil) {
+    init(type: AmountType,
+         amountWithCurrency: BitcoinAmountWithSelectedCurrency,
+         notice: Notice? = nil,
+         moreInfo: MoreInfo? = nil) {
         self.type = type
         self.amountWithCurrency = amountWithCurrency
         self.notice = notice

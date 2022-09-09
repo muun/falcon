@@ -12,6 +12,7 @@ enum LabelStyle {
     case title
     case description
     case error
+    case warning
 }
 
 extension UILabel {
@@ -32,7 +33,9 @@ extension UILabel {
             case .error:
                 self.textColor = Asset.Colors.muunRed.color
                 self.font = Constant.Fonts.system(size: .helper, weight: .medium)
-
+            case .warning:
+                self.textColor = Asset.Colors.muunWarning.color
+                self.font = Constant.Fonts.system(size: .helper, weight: .medium)
             }
         }
     }

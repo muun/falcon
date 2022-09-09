@@ -71,7 +71,9 @@ extension LightningNetworkSettingsViewController: LightningNetworkSettingsViewDe
                 self.lightningNetworkSettingsView.enabled = true
             }))
 
-            alert.addAction(UIAlertAction(title: L10n.LightningNetworkSettings.disable, style: .destructive, handler: { _ in
+            alert.addAction(UIAlertAction(title: L10n.LightningNetworkSettings.disable,
+                                          style: .destructive,
+                                          handler: { _ in
                 self.presenter.toggle()
             }))
 

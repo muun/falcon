@@ -236,11 +236,14 @@ El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si est
 "NewOperationViewController.s5" = "Continuar";
 "NewOperationViewController.s6" = "Sí, salir";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
-"ManuallyEnterQRViewController.s1" = "Texto de dirección";
+"ManuallyEnterQRViewController.s1" = "Texto de dirección o factura";
 "ManuallyEnterQRViewController.s2" = "CONTINUAR";
 "ManuallyEnterQRViewController.s3" = "PEGAR DEL PORTAPAPELES";
 "ManuallyEnterQRViewController.s4" = "Enviar bitcoin";
-"ManuallyEnterQRViewController.s5" = "Dirección inválida";
+"ManuallyEnterQRViewController.s5" = "No es una dirección o factura";
+"ManuallyEnterQRViewController.s6" = "Enviarás los fondos a tu monedero Muun";
+"ManuallyEnterQRViewController.s7" = "Tu portapapeles está vacío";
+"ManuallyEnterQRViewController.s8" = "Ocurrió un error. Copia y pega de nuevo";
 /* Presentation/Screen/NewOperation/ScanQR/ScanQRViewController.swift */
 "ScanQRViewController.s1" = "INGRESAR POR TEXTO";
 "ScanQRViewController.s2" = "ENVIAR A DIRECCIÓN EN PORTAPAPELES";
@@ -331,7 +334,10 @@ recibir bitcoin";
 "LNURLManuallyEnterQRViewController.inputLabel" = "Enlace LNURL";
 "LNURLManuallyEnterQRViewController.confirm" = "CONFIRMAR ENLACE";
 "LNURLManuallyEnterQRViewController.pasteFromClipboard" = "PEGAR DEL PORTAPAPELES";
-"LNURLManuallyEnterQRViewController.invalid" = "Enlace LNURL inválido";
+"LNURLManuallyEnterQRViewController.invalid" = "No es un enlace de LNURLw";
+"LNURLManuallyEnterQRViewController.emptyClipboard" = "Tu portapapeles está vacío";
+"LNURLManuallyEnterQRViewController.unexpectedError" = "Ocurrió un error. Copia y pega de nuevo";
+
 /* Presentation/Screen/LNURL/Withdraw/LNURLWithdrawViewController.swift */
 "LNURLWithdrawViewController.title" = "Recibir";
 "LNURLWithdrawViewController.loading" = "Cargando...";

@@ -85,6 +85,13 @@ class LargeTextInputView: MUView {
         topLabel.style = .error
     }
 
+    func setWarning(_ message: String) {
+        bottomLabel.text = message
+        bottomLabel.style = .warning
+
+        bottomBar.backgroundColor = Asset.Colors.muunWarning.color
+        topLabel.style = .warning
+    }
 }
 
 extension LargeTextInputView: UITextViewDelegate {

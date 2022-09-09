@@ -436,7 +436,7 @@ public class DatabaseCoordinator {
         }
 
         migrator.registerMigration("create exported ek in user") { [self] _ in
-            var user: User? = preferences.object(forKey: .user)
+            let user: User? = preferences.object(forKey: .user)
             guard var user = user  else {
                 return
             }

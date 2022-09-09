@@ -9,11 +9,11 @@
 import RxSwift
 import core
 
-protocol ScanQRPresenterDelegate: BasePresenterDelegate {
+protocol AddressInputPresenterDelegate: BasePresenterDelegate {
     func checkForClipboardChange()
 }
 
-class ScanQRPresenter<Delegate: ScanQRPresenterDelegate>: BasePresenter<Delegate> {
+class AddressInputPresenter<Delegate: AddressInputPresenterDelegate>: BasePresenter<Delegate> {
 
     private let userRepository: UserRepository
     private let preferences: Preferences

@@ -111,11 +111,15 @@ class GenerateRecoveryCodeViewController: MUViewController {
         let alert = UIAlertController(title: L10n.GenerateRecoveryCodeViewController.s4,
                                       message: desc,
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: L10n.GenerateRecoveryCodeViewController.s5, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: L10n.GenerateRecoveryCodeViewController.s5,
+                                      style: .default,
+                                      handler: { _ in
             alert.dismiss(animated: true)
         }))
 
-        alert.addAction(UIAlertAction(title: L10n.GenerateRecoveryCodeViewController.s6, style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: L10n.GenerateRecoveryCodeViewController.s6,
+                                      style: .destructive,
+                                      handler: { _ in
             self.logEvent("setup_recovery_code_aborted")
             self.navigationController!.popTo(type: SecurityCenterViewController.self)
         }))

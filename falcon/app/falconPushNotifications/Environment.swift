@@ -15,7 +15,7 @@ public enum Environment: String, RawRepresentable {
     case prod
 
     // If you change this constant, change it also in the core pod
-    public static let current: Environment = .prod
+    public static let current: Environment = .debug
 }
 
 extension Environment {

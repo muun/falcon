@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21169.4"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManuallyEnterQRViewController" customModule="falcon" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManuallyEnterQRViewController" customModule="Muun" customModuleProvider="target">
             <connections>
                 <outlet property="buttonBottomConstraint" destination="j7d-uE-aXL" id="2z8-z4-gLO"/>
                 <outlet property="buttonView" destination="NAl-qI-OoA" id="NUL-ja-ql0"/>
                 <outlet property="largeTextInputView" destination="KBJ-pa-1UC" id="5hl-Md-zih"/>
                 <outlet property="linkButton" destination="3vB-q1-Hkg" id="HyB-hB-Luf"/>
+                <outlet property="pasteControlContainer" destination="NqO-UY-CT6" id="53H-cL-hVY"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,18 +24,22 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KBJ-pa-1UC" customClass="LargeTextInputView" customModule="falcon" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="44" width="375" height="82"/>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="82" translatesAutoresizingMaskIntoConstraints="NO" id="KBJ-pa-1UC" customClass="LargeTextInputView" customModule="Muun" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="24" width="375" height="82"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3vB-q1-Hkg" customClass="LinkButtonView" customModule="falcon" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="134" width="375" height="48"/>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="359" placeholderIntrinsicHeight="34" translatesAutoresizingMaskIntoConstraints="NO" id="NqO-UY-CT6" userLabel="pasteControlContainer">
+                    <rect key="frame" x="0.0" y="114" width="375" height="34"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3vB-q1-Hkg" customClass="LinkButtonView" customModule="Muun" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="114" width="375" height="48"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="Va4-vP-TL4"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NAl-qI-OoA" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NAl-qI-OoA" customClass="ButtonView" customModule="Muun" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="587" width="375" height="80"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -43,19 +47,33 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="NAl-qI-OoA" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="Aj6-DV-5sg"/>
                 <constraint firstItem="NAl-qI-OoA" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="BX4-wW-fRG"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="KBJ-pa-1UC" secondAttribute="trailing" id="KKY-lL-ge2"/>
                 <constraint firstItem="3vB-q1-Hkg" firstAttribute="top" secondItem="KBJ-pa-1UC" secondAttribute="bottom" constant="8" id="WG3-Le-ypm"/>
+                <constraint firstItem="NqO-UY-CT6" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Xdk-1e-YK6"/>
+                <constraint firstItem="NqO-UY-CT6" firstAttribute="top" secondItem="KBJ-pa-1UC" secondAttribute="bottom" constant="8" id="aiM-BO-nOL"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="NqO-UY-CT6" secondAttribute="trailing" id="bAA-xG-IwM"/>
                 <constraint firstItem="KBJ-pa-1UC" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="24" id="dpC-Xf-dYG"/>
                 <constraint firstItem="KBJ-pa-1UC" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="iOC-JE-1pF"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="NAl-qI-OoA" secondAttribute="bottom" id="j7d-uE-aXL"/>
                 <constraint firstItem="3vB-q1-Hkg" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="rvb-U7-56p"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="3vB-q1-Hkg" secondAttribute="trailing" id="vwN-En-Eth"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="140" y="0.0"/>
         </view>
     </objects>
+    <designables>
+        <designable name="KBJ-pa-1UC">
+            <size key="intrinsicContentSize" width="375" height="82"/>
+        </designable>
+    </designables>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

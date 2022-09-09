@@ -482,14 +482,18 @@ internal enum L10n {
   internal enum LNURLManuallyEnterQRViewController {
     /// CONFIRM LINK
     internal static let confirm = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.confirm")
+    /// Your clipboard is empty
+    internal static let emptyClipboard = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.emptyClipboard")
     /// LNURL link
     internal static let inputLabel = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.inputLabel")
-    /// Invalid LNURL link
+    /// Not an LNURLw link
     internal static let invalid = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.invalid")
     /// PASTE FROM CLIPBOARD
     internal static let pasteFromClipboard = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.pasteFromClipboard")
     /// Receive
     internal static let title = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.title")
+    /// An error occurred. Copy and paste it again
+    internal static let unexpectedError = L10n.tr("Localizable", "LNURLManuallyEnterQRViewController.unexpectedError")
   }
 
   internal enum LNURLScanQRViewController {
@@ -689,7 +693,7 @@ internal enum L10n {
   }
 
   internal enum ManuallyEnterQRViewController {
-    /// Text address
+    /// Text address or invoice
     internal static let s1 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s1")
     /// CONTINUE
     internal static let s2 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s2")
@@ -697,8 +701,14 @@ internal enum L10n {
     internal static let s3 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s3")
     /// Send bitcoin
     internal static let s4 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s4")
-    /// Invalid address
+    /// Not an address or invoice
     internal static let s5 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s5")
+    /// You'll send funds to your Muun wallet
+    internal static let s6 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s6")
+    /// Your clipboard is empty
+    internal static let s7 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s7")
+    /// An error occurred. Copy and paste it again
+    internal static let s8 = L10n.tr("Localizable", "ManuallyEnterQRViewController.s8")
   }
 
   internal enum NewOp {
