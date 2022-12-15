@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BottomDrawerOverlayViewController" customModule="falcon" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BottomDrawerOverlayViewController" customModule="Muun" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="HM2-Sx-Mha" id="ETX-er-xTT"/>
                 <outlet property="descriptionLabel" destination="BHN-Hq-hpP" id="h6o-91-I1K"/>
@@ -23,16 +23,19 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view alpha="0.95999999999999996" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HM2-Sx-Mha">
-                    <rect key="frame" x="0.0" y="341" width="375" height="471"/>
+                    <rect key="frame" x="0.0" y="348.33333333333326" width="375" height="463.66666666666674"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" text="Why is this?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ooM-Bk-0gK">
-                            <rect key="frame" x="24" y="32" width="327" height="19.333333333333329"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" preservesSuperviewLayoutMargins="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ooM-Bk-0gK">
+                            <rect key="frame" x="24" y="32" width="327" height="12"/>
+                            <constraints>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="12" id="O43-cv-kau"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHN-Hq-hpP">
-                            <rect key="frame" x="24" y="59.333333333333314" width="327" height="305.66666666666669"/>
+                            <rect key="frame" x="24" y="52" width="327" height="305.66666666666669"/>
                             <string key="text">Your personal key can be cryptographically rebuilt by any two of the following three factors: your password, your email or a cold recovery code. Your personal key can be cryptographically rebuilt by any two of the following three factors: your password, your email or a cold recovery code. Your personal key can be cryptographically rebuilt by any two of the following three factors: your password, your email or a cold recovery code.
 
 Your personal key can be cryptographically rebuilt by any two of the following three factors: your password, your email or a cold recovery code.</string>
@@ -40,8 +43,8 @@ Your personal key can be cryptographically rebuilt by any two of the following t
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Vz-Bn-MhH" customClass="LinkButtonView" customModule="falcon" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="381" width="375" height="56"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Vz-Bn-MhH" customClass="LinkButtonView" customModule="Muun" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="373.66666666666669" width="375" height="56"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="56" id="GjR-QE-2lE"/>
@@ -51,6 +54,7 @@ Your personal key can be cryptographically rebuilt by any two of the following t
                     <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="BHN-Hq-hpP" firstAttribute="top" secondItem="ooM-Bk-0gK" secondAttribute="bottom" constant="8" id="AfW-h4-X3C"/>
+                        <constraint firstItem="BHN-Hq-hpP" firstAttribute="top" secondItem="HM2-Sx-Mha" secondAttribute="top" priority="750" constant="32" id="CIW-j0-6DO"/>
                         <constraint firstItem="6Vz-Bn-MhH" firstAttribute="top" secondItem="BHN-Hq-hpP" secondAttribute="bottom" constant="16" id="N9c-Zl-3nh"/>
                         <constraint firstAttribute="trailing" secondItem="6Vz-Bn-MhH" secondAttribute="trailing" id="jdW-Il-ElN"/>
                         <constraint firstItem="6Vz-Bn-MhH" firstAttribute="leading" secondItem="HM2-Sx-Mha" secondAttribute="leading" id="pZc-OY-CkA"/>
@@ -58,6 +62,7 @@ Your personal key can be cryptographically rebuilt by any two of the following t
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="HM2-Sx-Mha" secondAttribute="bottom" id="0d4-ex-oDY"/>
@@ -71,7 +76,6 @@ Your personal key can be cryptographically rebuilt by any two of the following t
                 <constraint firstItem="6Vz-Bn-MhH" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="zKb-EW-5NE"/>
             </constraints>
             <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="24" bottom="0.0" trailing="24"/>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="138" y="133"/>
         </view>
     </objects>

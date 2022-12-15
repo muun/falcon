@@ -165,7 +165,6 @@ extension SignInEmailAndRCViewController {
 }
 
 extension SignInEmailAndRCViewController: SignInEmailAndRCPresenterDelegate {
-
     func setLoading(_ isLoading: Bool) {
         recoveryView.isLoading = isLoading
     }
@@ -180,6 +179,38 @@ extension SignInEmailAndRCViewController: SignInEmailAndRCPresenterDelegate {
 
     func invalidCode() {
         errorLabel.isHidden = false
+    }
+
+    func showStaleRcError() {
+        AnalyticsHelper.logEvent("rc_stale_error")
+        let desc = L10n.SignInEmailAndRCViewController.s10
+        let alert = UIAlertController(title: L10n.SignInEmailAndRCViewController.s9,
+                                      message: desc,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.SignInEmailAndRCViewController.s13,
+                                      style: .destructive,
+                                      handler: { _ in
+            alert.dismiss(animated: true)
+        }))
+
+        self.navigationController!.present(alert, animated: true)
+    }
+
+    func showCredentialsDontMatchError(userEmail: String) {
+        AnalyticsHelper.logEvent("rc_credentials_dont_match_error")
+        let desc = L10n.SignInEmailAndRCViewController.s12(userEmail)
+        let alert = UIAlertController(title: L10n.SignInEmailAndRCViewController.s11,
+                                      message: desc,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.SignInEmailAndRCViewController.s13,
+                                      style: .destructive,
+                                      handler: { _ in
+            alert.dismiss(animated: true)
+        }))
+
+        alert.view.tintColor = Asset.Colors.muunGrayDark.color
+
+        self.navigationController!.present(alert, animated: true)
     }
 }
 

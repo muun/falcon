@@ -15,7 +15,7 @@ class BottomDrawerOverlayViewController: UIViewController {
     @IBOutlet private weak var descriptionLabel: UILabel!
     @IBOutlet private weak var linkButtonView: LinkButtonView!
 
-    private var titleText = ""
+    private var titleText: String?
     private var descriptionText: NSAttributedString = NSAttributedString(string: "")
     private var type: MoreInfoType = .password
     private var action: MoreInfoAction?
@@ -65,9 +65,15 @@ class BottomDrawerOverlayViewController: UIViewController {
 
     private func setUpLabels() {
         titleLabel.textColor = Asset.Colors.title.color
-        titleLabel.attributedText = titleText.set(font: Constant.Fonts.system(size: .desc, weight: .semibold),
-                                                  lineSpacing: Constant.FontAttributes.lineSpacing,
-                                                  kerning: Constant.FontAttributes.kerning)
+
+        if let titleText = titleText {
+            titleLabel.attributedText = titleText.set(font: Constant.Fonts.system(size: .desc,
+                                                                                           weight: .semibold),
+                                                               lineSpacing: Constant.FontAttributes.lineSpacing,
+                                                               kerning: Constant.FontAttributes.kerning)
+        } else {
+            titleLabel.removeFromSuperview()
+        }
 
         descriptionLabel.textColor = Asset.Colors.muunGrayDark.color
         descriptionLabel.attributedText = descriptionText
@@ -131,8 +137,8 @@ fileprivate extension Selector {
         #selector(BottomDrawerOverlayViewController.overlayTouched)
 
 }
-
-typealias MoreInfo = (title: String, description: NSAttributedString, type: MoreInfoType, action: MoreInfoAction?)
+// swiftlint:disable large_tuple
+typealias MoreInfo = (title: String?, description: NSAttributedString, type: MoreInfoType, action: MoreInfoAction?)
 typealias MoreInfoAction = (text: String, action: () -> Void)
 enum BottomDrawerInfo {}
 

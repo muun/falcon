@@ -69,20 +69,3 @@ class AddressActionsTests: MuunTestCase {
         XCTAssertEqual(fake.updateCalls, 0)
     }
 }
-
-fileprivate class FakeHoustonService: HoustonService {
-    
-    var updateCalls = 0
-    
-    override func update(externalAddressesRecord: ExternalAddressesRecord) -> Single<ExternalAddressesRecord> {
-        
-        let maxIndex = max(externalAddressesRecord.maxUsedIndex, externalAddressesRecord.maxWatchingIndex ?? -1)
-        
-        return Single.just(ExternalAddressesRecord(
-            maxUsedIndex: externalAddressesRecord.maxUsedIndex,
-            maxWatchingIndex: maxIndex + 10))
-            .do(onSubscribe: {
-                self.updateCalls += 1
-            })
-    }
-}

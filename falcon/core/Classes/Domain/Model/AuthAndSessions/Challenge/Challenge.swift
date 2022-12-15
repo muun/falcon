@@ -59,3 +59,9 @@ struct ChallengeUpdate {
     let uuid: String
     let challengeSetup: ChallengeSetup
 }
+
+struct LoginJson: Encodable {
+    let type: ChallengeTypeJson
+    let hex: String
+    let challengePublicKey: ChallengeKeyJson
+}

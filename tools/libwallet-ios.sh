@@ -7,14 +7,14 @@ build_dir="$repo_root/libwallet/.build"
 
 falcon_root="$repo_root/falcon/app"
 
-this_file_sha=$(sha1sum "$0")
+this_file_sha=$(shasum "$0")
 
-calc_sha1sum() {
+calc_shasum() {
     files=$(find "$1" -xdev -type f -name "*.go" -print \
             | grep -v "_test.go$" | grep -v "/build/" \
             | grep -v ".build/" | sort -z)
-    shaeach=$(for file in $files; do sha1sum "$file"; done)
-    echo "$shaeach "$this_file_sha" $(sha1sum $(which go)) $(sha1sum "$1/go.mod")" | sha1sum | awk \{'print $1'\}
+    shaeach=$(for file in $files; do shasum "$file"; done)
+    echo "$shaeach "$this_file_sha" $(shasum $(which go)) $(shasum "$1/go.mod")" | shasum | awk \{'print $1'\}
 }
 
 if ! which gobind > /dev/null; then
@@ -31,8 +31,8 @@ fi
 patched_go_folder="$repo_root/falcon/go/bin"
 if [[ -x "$patched_go_folder/go" ]] || [[ "$CONFIGURATION" = "Release" ]]; then
     PATH="$patched_go_folder:$PATH"
-    if ! go version | grep "go1.17.6-muun" > /dev/null ; then
-        echo "Misconfigured golang version. Expected go1.17.6-muun."
+    if ! go version | grep "go1.18.1-muun" > /dev/null ; then
+        echo "Misconfigured golang version. Expected go1.18.1-muun."
         go version
         exit 1
     fi
@@ -43,11 +43,11 @@ cd "$repo_root"
 libwallet="$repo_root/falcon/core/Libwallet.xcframework"
 
 # if there is an existing build, check if it is up-to-date
-if [ -e "$libwallet/libwallet.sha1sum" ]; then
-    current_sha1sum=$(calc_sha1sum "libwallet/")
-    previous_sha1sum=$(cat "${libwallet}/libwallet.sha1sum")
+if [ -e "$libwallet/libwallet.shasum" ]; then
+    current_shasum=$(calc_shasum "libwallet/")
+    previous_shasum=$(cat "${libwallet}/libwallet.shasum")
 
-    if [[ "$current_sha1sum" == "$previous_sha1sum" ]]; then
+    if [[ "$current_shasum" == "$previous_shasum" ]]; then
         echo "no rebuild needed"
         exit
     fi
@@ -79,8 +79,8 @@ st=$?
 
 cd "$repo_root"
 
-sha1sum=$(calc_sha1sum "libwallet/")
-echo "$sha1sum" > "${libwallet}/libwallet.sha1sum"
+shasum=$(calc_shasum "libwallet/")
+echo "$shasum" > "${libwallet}/libwallet.shasum"
 
-echo "rebuilt gomobile with status $? to $libwallet. source files sha1sum: $sha1sum"
+echo "rebuilt gomobile with status $? to $libwallet. source files shasum: $shasum"
 exit $st

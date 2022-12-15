@@ -18,7 +18,7 @@ extension UIElement where Self: RawRepresentable {
     }
 }
 
-// swiftlint:disable nesting
+// swiftlint:disable nesting type_body_length
 enum UIElements {
 
     enum Pages {
@@ -289,6 +289,10 @@ enum UIElements {
         enum LightningNetworkSettingsPage: String, UIElement {
             case root
             case turboChannels
+        }
+
+        enum ReceiveFormatActionSheetPage: String, UIElement {
+            case root
         }
 
         enum LNURLFirstTimePage: String, UIElement {

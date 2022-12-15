@@ -50,7 +50,6 @@ def fix_config(config)
   # https://github.com/CocoaPods/CocoaPods/issues/8891#issuecomment-546636698
   if config.build_settings['DEVELOPMENT_TEAM'].nil?
     config.build_settings['DEVELOPMENT_TEAM'] = '5YYLBTUB6W'
-    config.build_settings['ENABLE_BITCODE'] = 'YES'
   end
 end
 

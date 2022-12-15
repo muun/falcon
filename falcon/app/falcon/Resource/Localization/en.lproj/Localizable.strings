@@ -8,6 +8,8 @@
 "ErrorView.goToHome" = "GO TO HOME";
 "ErrorView.retry" = "RETRY";
 "ErrorView.sendReport" = "SEND REPORT";
+"ErrorView.goBack" = "GO BACK";
+"ErrorView.goToSecurityCenter" = "GO TO SECURITY CENTER";
 /* Presentation/Component/PopUp/WelcomePopUpView.swift */
 "WelcomePopUpView.message" = "You created a new wallet.
 Welcome to Muun!";
@@ -25,6 +27,8 @@ Welcome to Muun!";
 "ReceiveInLightningView.s5" = "This invoice expired before the payment was made. Please, create or request a new one.";
 "ReceiveInLightningView.s6" = "CREATE INVOICE";
 "ReceiveInLightningView.loading" = "Generating invoice";
+/* Presentation/Component/Receive/ReceiveUnifiedView.swift */
+"ReceiveUnifiedView.loading" = "Generating QR code";
 /* Presentation/Component/Receive/ReceiveOnChainView.swift */
 "ReceiveOnChainView.s1" = "Bitcoin legacy address";
 "ReceiveOnChainView.s4" = "Switch to legacy addresses";
@@ -288,8 +292,13 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 "ReceiveViewController.s1" = "Bitcoin";
 "ReceiveViewController.s2" = "Lightning";
 "ReceiveViewController.s3" = "Receive";
+"ReceiveViewController.receiveBitcoin" = "Receive Bitcoin";
 "ReceiveViewController.s4" = "Copied to clipboard";
 "ReceiveViewController.s5" = "Copied to clipboard. This invoice expires in %@.";
+"ReceiveViewController.detailedURIDisclaimer" = "🧪 Unified QR codes are experimental";
+"ReceiveViewController.detailedURIBTCTitle" = "Your bitcoin address";
+"ReceiveViewController.detailedURILNTitle" = "Your lightning invoice";
+
 /* Presentation/Screen/Receive/AddressTypeSelectViewController.swift */
 "AddressTypeSelectViewController.title" = "Choose your address type";
 /* Presentation/Component/Receive/OnChain/OnChainAdvancedOptionsView.swift */
@@ -307,6 +316,8 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 /* Presentation/Component/Receive/Lightning/LightningAdvancedOptionsView.swift */
 "LightningAdvancedOptionsView.header" = "Invoice settings";
 "LightningAdvancedOptionsView.hide" = "Hide settings";
+/* Presentation/Component/Receive/Lightning/UnifiedAdvancedOptionsView.swift */
+"UnifiedAdvancedOptionsView.header" = "Settings";
 /* Presentation/Component/Receive/Lightning/ExpirationTimeOptionView.swift */
 "ExpirationTimeOptionView.label" = "Expiration time";
 /* Presentation/Component/Receive/AmountOptionView.swift */
@@ -315,6 +326,7 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 /* Presentation/Screen/Receive/ReceiveAmountInputViewController.swift */
 "ReceiveAmountInputViewController.titleLightning" = "Edit Invoice Amount";
 "ReceiveAmountInputViewController.titleOnChain" = "Edit Address Amount";
+"ReceiveAmountInputViewController.editAmount" = "Edit amount";
 "ReceiveAmountInputViewController.confirm" = "CONFIRM AMOUNT";
 "ReceiveAmountInputViewController.remove" = "REMOVE AMOUNT";
 "ReceiveAmountInputViewController.tooSmall" = "AMOUNT IS TOO SMALL";
@@ -417,6 +429,11 @@ Try to remember it.";
 "SignInEmailAndRCViewController.s5" = "You most likely wrote it on a paper. What's this?";
 "SignInEmailAndRCViewController.s7" = "Wrong Recovery Code. Please try again.";
 "SignInEmailAndRCViewController.s8" = "ENTER RECOVERY CODE";
+"SignInEmailAndRCViewController.s9" = "Invalid Recovery Code";
+"SignInEmailAndRCViewController.s10" = "You haven't completed setting up this Recovery Code. You should have a newer one. Please, find it and try again.";
+"SignInEmailAndRCViewController.s11" = "Your credentials (email and Recovery Code) don't match.";
+"SignInEmailAndRCViewController.s12" = "Please make sure you enter the Recovery Code that recovers the wallet using the email %@";
+"SignInEmailAndRCViewController.s13" = "Accept";
 /* Presentation/Screen/RecoverWallet/VerifyEmail/SignInAuthorizeEmailViewController.swift */
 "SignInAuthorizeEmailViewController.s1" = "Authorize wallet recovery";
 "SignInAuthorizeEmailViewController.s2" = "Recover your wallet";
@@ -657,6 +674,13 @@ This enables multi-factor authentication, improving security when you use your R
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Confirm/FinishRecoveryCodeSetupViewController.swift */
 "FinishRecoveryCodeSetupViewController.s1" = "Two things you must understand";
 "FinishRecoveryCodeSetupViewController.s2" = "FINISH";
+"FinishRecoveryCodeSetupViewController.s3" = "Failed to create the backup";
+"FinishRecoveryCodeSetupViewController.s4" = "Your Recovery Code is used to create an encrypted backup of your private key. To save the backup, you need internet connection.
+
+Please check your connection and try again.";
+"FinishRecoveryCodeSetupViewController.s5" = "Retry";
+"FinishRecoveryCodeSetupViewController.s6" = "Cancel";
+
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Generate/GenerateRecoveryCodeViewController.swift */
 "GenerateRecoveryCodeViewController.s1" = "Write down your Recovery Code";
 "GenerateRecoveryCodeViewController.s2" = "Use pen and paper. For security, don't save this on your phone or in the cloud.";
@@ -667,6 +691,12 @@ This enables multi-factor authentication, improving security when you use your R
 "GenerateRecoveryCodeViewController.s7" = "Your Recovery Code won't work unless you finish.";
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Priming/RecoveryCodePrimingViewController.swift */
 "RecoveryCodePrimingViewController.s1" = "START";
+"RecoveryCodePrimingViewController.s2" = "Failed to create the backup";
+"RecoveryCodePrimingViewController.s3" = "You are about to create an encrypted backup of your private key. To save it, you need an internet connection.
+
+Please check your connection and try again.";
+"RecoveryCodePrimingViewController.s4" = "Retry";
+"RecoveryCodePrimingViewController.s5" = "Cancel";
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/SetUpRecoveryCodeWording.swift */
 "SetUpRecoveryCodeWording.s1" = "Create an alternative backup";
 "SetUpRecoveryCodeWording.s2" = "Write down a code on paper to recover your wallet.";
@@ -786,6 +816,14 @@ This enables multi-factor authentication, improving security when you use your R
 /* Presentation/Screen/Sync/SyncViewController.swift */
 "SyncViewController.s1" = "Loading your wallet";
 "SyncViewController.s2" = "Creating your wallet";
+"SyncViewController.s3" = "Warning";
+"SyncViewController.s4" = "You haven't completed the setup for the Recovery Code you just used to recover your wallet.
+
+Please visit the Security Center to back up your wallet with a new Recovery Code, and make sure you finish the setup this time.
+
+As soon as you create a new Recovery Code, the current one will be invalidated.
+";
+"SyncViewController.s5" = "GOT IT!";
 /* Presentation/Screen/ApiMigrations/ApiMigrationsViewController.swift */
 "ApiMigrationsViewController.loading" = "Loading your wallet";
 "ApiMigrationsViewController.failedAlertTitle" = "Error loading wallet";
@@ -812,6 +850,10 @@ This enables multi-factor authentication, improving security when you use your R
 "LightningNetworkSettings.turboChannels" = "Turbo channels";
 "LightningNetworkSettings.learnMore" = "Learn more about the trade-offs of turbo channels.";
 "LightningNetworkSettings.learnMoreUnderline" = "Learn more";
+"LightningNetworkSettings.lightningDefaultTitle" = "Default to Lightning on Receive";
+"LightningNetworkSettings.lightningDefaultDescription" = "In Muun, you can receive funds via the Bitcoin Network or the Lightning Network.
+
+Many services don't support Lightning yet, so when you tap on the Receive button, your wallet defaults to the Bitcoin Network and shows a bitcoin address. By defaulting to Lightning, your wallet will show a lightning invoice, and you'll need to manually switch to Bitcoin each time you need a bitcoin address.";
 "LightningNetworkSettings.disable" = "Disable";
 "LightningNetworkSettings.blogPost" = "https://blog.muun.com/turbo-channels/";
 /* OnchainSettings */
@@ -841,3 +883,19 @@ Many services are not yet compatible with Taproot and may label your addresses a
 "NotificationService.opSentTitle" = "%@ sent";
 "NotificationService.opReceivedTitle" = "%@ received";
 "NotificationService.opFromContactTitle" = "%@ sent you %@";
+
+/* ReceiveFormatSettingDropdownView */
+"ReceiveFormatSettingDropdownView.title" = "Receiving protocol";
+"ReceiveFormatSettingDropdownView.description" = "When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network.
+In the future, you won’t need to do it anymore (learn more).";
+"ReceiveFormatSettingDropdownView.learnMoreUnderline" = "learn more";
+"ReceiveFormatSettingDropdownView.learnMoreLink" = "https://bitcoinqr.dev/";
+"ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle" = "Choose your receiving protocol";
+"ReceiveFormatSettingDropdownView.ReceiveFormatBTCOption" = "Bitcoin first";
+"ReceiveFormatSettingDropdownView.ReceiveFormatBTCDescription" = "Default to show a bitcoin address. The most widely accepted and reliable way of transacting in bitcoin.";
+"ReceiveFormatSettingDropdownView.ReceiveFormatLNOption" = "Lightning first";
+"ReceiveFormatSettingDropdownView.ReceiveFormatLNDescription" = "Default to show a lightning invoice. Lightning payments can be faster and cheaper, but some services don't support them yet.";
+"ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedOption" = "Unified";
+"ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription" = "🧪 Experimental. Default to a unified QR code that encodes both a bitcoin address and a lightning invoice. Many services don’t support this unified format yet.";
+"ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescriptionUnderline" = "Experimental.";
+

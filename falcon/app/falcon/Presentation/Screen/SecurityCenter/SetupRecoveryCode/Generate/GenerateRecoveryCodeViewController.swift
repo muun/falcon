@@ -18,7 +18,7 @@ class GenerateRecoveryCodeViewController: MUViewController {
     @IBOutlet private weak var buttonBottomConstraint: NSLayoutConstraint!
 
     fileprivate lazy var presenter = instancePresenter(GenerateRecoveryCodePresenter.init, delegate: self)
-    fileprivate var recoveryCode: RecoveryCode?
+    fileprivate let recoveryCode: RecoveryCode
 
     private var wording: SetUpRecoveryCodeWording
 
@@ -26,8 +26,9 @@ class GenerateRecoveryCodeViewController: MUViewController {
         return "set_up_recovery_code_generate"
     }
 
-    init(wording: SetUpRecoveryCodeWording) {
+    init(wording: SetUpRecoveryCodeWording, recoveryCode: RecoveryCode) {
         self.wording = wording
+        self.recoveryCode = recoveryCode
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -38,6 +39,8 @@ class GenerateRecoveryCodeViewController: MUViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        recoveryView.presetValues = recoveryCode.segments
 
         setUpView()
     }
@@ -88,13 +91,11 @@ class GenerateRecoveryCodeViewController: MUViewController {
         recoveryView.delegate = self
         recoveryView.alpha = 0
         recoveryView.style = .display
-        recoveryView.isLoading = true
     }
 
     fileprivate func setUpButton() {
         buttonView.delegate = self
         buttonView.buttonText = L10n.GenerateRecoveryCodeViewController.s3
-        buttonView.isEnabled = false
         buttonView.alpha = 0
     }
 
@@ -132,15 +133,6 @@ class GenerateRecoveryCodeViewController: MUViewController {
 }
 
 extension GenerateRecoveryCodeViewController: GenerateRecoveryCodePresenterDelegate {
-
-    func didGenerate(code: RecoveryCode) {
-        recoveryCode = code
-
-        recoveryView.presetValues = code.segments
-        recoveryView.isLoading = false
-        buttonView.isEnabled = true
-    }
-
 }
 
 extension GenerateRecoveryCodeViewController: RecoveryViewDelegate {}
@@ -148,12 +140,6 @@ extension GenerateRecoveryCodeViewController: RecoveryViewDelegate {}
 extension GenerateRecoveryCodeViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
-
-        guard let recoveryCode = recoveryCode else {
-            Logger.log(.err, "button was tapped with no recovery code")
-            return
-        }
-
         navigationController?.pushViewController(
             VerifyRecoveryCodeViewController(code: recoveryCode, wording: wording),
             animated: true

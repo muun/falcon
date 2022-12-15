@@ -12,6 +12,7 @@ import core
 protocol BasePresenterDelegate: AnyObject {
     func showMessage(_ message: String)
     func pushTo(_ vc: MUViewController)
+    func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
 }
 
 class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
@@ -106,7 +107,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
                 case .tooManyRequests:
                     delegate.showMessage(L10n.BasePresenter.s1)
 
-                case .defaultError:
+                case .defaultError, .staleChallengeKey, .credentialsDontMatch:
                     Logger.log(error: e)
                     delegate.showMessage(L10n.BasePresenter.s2)
                 }
@@ -138,12 +139,20 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
     }
 
     func tearDown() {
-        compositeDisposable?.dispose()
-        compositeDisposable = nil
+        releaseDisposeBag()
 
         Logger.log(.debug, "\(className) Tear Down")
     }
 
+    private func releaseDisposeBag() {
+        compositeDisposable?.dispose()
+        compositeDisposable = nil
+    }
+
+    func resetRxDisposable() {
+        releaseDisposeBag()
+        compositeDisposable = CompositeDisposable()
+    }
 }
 
 extension BasePresenter: Resolver {}

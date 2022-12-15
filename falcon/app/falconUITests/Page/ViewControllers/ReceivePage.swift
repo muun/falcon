@@ -23,18 +23,15 @@ final class ReceivePage: UIElementPage<UIElements.Pages.ReceivePage> {
 
     func address() -> String {
         segmentControl.buttons[L10n.ReceiveViewController.s1].tap()
-
-        _ = qrCodeWithActions.exists()
-        if !qrCodeWithActions.displayed {
-            enablePushButton.mainButtonTap()
-            falconTests.allowNotifications(true)
-        }
-
-        return qrCodeWithActions.address()
+        return getStringInQr()
     }
 
     func invoice() -> String {
         segmentControl.buttons[L10n.ReceiveViewController.s2].tap()
+        return getStringInQr()
+    }
+
+    func getStringInQr() -> String {
         _ = qrCodeWithActions.exists()
         if !qrCodeWithActions.displayed {
             enablePushButton.mainButtonTap()
@@ -43,4 +40,11 @@ final class ReceivePage: UIElementPage<UIElements.Pages.ReceivePage> {
         return qrCodeWithActions.address()
     }
 
+    func isLightningSelected() -> Bool {
+        return segmentControl.buttons[L10n.ReceiveViewController.s2].isSelected
+    }
+    
+    func isOnChainSelected() -> Bool {
+        return segmentControl.buttons[L10n.ReceiveViewController.s1].isSelected
+    }
 }

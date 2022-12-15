@@ -10,15 +10,15 @@ import UIKit
 import core
 
 protocol ErrorViewDelegate: AnyObject {
-    func retryTouched()
+    func retryTouched(button: ButtonView)
     func sendReportTouched()
-    func backToHomeTouched()
+    func secondaryButtonTouched()
     func logErrorView(_ name: String, params: [String: Any]?)
     func descriptionTouched(type: ErrorViewModel)
 }
 
 extension ErrorViewDelegate {
-    func retryTouched() {} // default implementation
+    func retryTouched(button: ButtonView) {} // default implementation
     func sendReportTouched() {} // default implementation
 }
 
@@ -40,6 +40,7 @@ protocol ErrorViewModel {
     func secondBoxTexts() -> (title: String, content: NSAttributedString)?
     func loggingName() -> String
     func kind() -> ErrorViewKind
+    func secondaryButtonText() -> String
 }
 
 extension ErrorViewModel {
@@ -187,7 +188,6 @@ class ErrorView: UIView {
         addSubview(buttonsStackView)
 
         secondaryButton.delegate = self
-        secondaryButton.buttonText = L10n.ErrorView.goToHome
         secondaryButton.isEnabled = true
         secondaryButton.translatesAutoresizingMaskIntoConstraints = false
         buttonsStackView.addArrangedSubview(secondaryButton)
@@ -200,6 +200,8 @@ class ErrorView: UIView {
     private func updateView() {
         titleLabel.text = model?.title()
         descriptionLabel.attributedText = model?.description()
+        model.map { secondaryButton.buttonText = $0.secondaryButtonText() }
+
         setFirstBox()
         setSecondBox()
         setButtons()
@@ -277,7 +279,7 @@ extension ErrorView: ButtonViewDelegate {
     func button(didPress button: ButtonView) {
         switch model?.kind() {
         case .retryable:
-            delegate?.retryTouched()
+            delegate?.retryTouched(button: button)
         case .reportable:
             delegate?.sendReportTouched()
         default:
@@ -288,7 +290,7 @@ extension ErrorView: ButtonViewDelegate {
 
 extension ErrorView: LinkButtonViewDelegate {
     func linkButton(didPress linkButton: LinkButtonView) {
-        delegate?.backToHomeTouched()
+        delegate?.secondaryButtonTouched()
     }
 }
 

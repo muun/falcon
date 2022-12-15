@@ -13,8 +13,12 @@ public class CreateRCLoginSessionAction: AsyncAction<Challenge> {
 
     private let houstonService: HoustonService
     private let logoutAction: LogoutAction
+    private let preferences: Preferences
 
-    init(houstonService: HoustonService, logoutAction: LogoutAction) {
+    init(houstonService: HoustonService,
+         logoutAction: LogoutAction,
+         preferences: Preferences) {
+        self.preferences = preferences
         self.houstonService = houstonService
         self.logoutAction = logoutAction
 
@@ -36,7 +40,11 @@ public class CreateRCLoginSessionAction: AsyncAction<Challenge> {
                 gcmToken: gcmToken,
                 challengeKey: try rc.toKey()
             )
-            runSingle(houstonService.createRecoveryCodeLoginSession(createRcSession))
+            runSingle(houstonService.createRecoveryCodeLoginSession(createRcSession).flatMap { [weak self] challenge in
+                self?.preferences.set(value: true, forKey: .hasResolvedARcChallenge)
+                self?.preferences.set(value: true, forKey: .welcomeMessageSeen)
+                return Single.just(challenge)
+            })
 
         } catch {
             runSingle(Single.error(error))

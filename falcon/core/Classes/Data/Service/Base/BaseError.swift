@@ -26,6 +26,8 @@ public struct DeveloperError: Codable, LocalizedError {
         case 2045: return .invalidChallengeSignature
         case 2052: return .invalidEmail
         case 2062: return .recoveryCodeNotSetUp
+        case 2063: return .staleChallengeKey
+        case 2064: return .credentialsDontMatch
         case 2074: return .incomingSwapAlreadyFulfilled
 
         case 4002: return .forceUpdate
@@ -64,6 +66,8 @@ public enum ExactDeveloperError {
     case nonUserFacing
     case invalidChallengeSignature
     case recoveryCodeNotSetUp
+    case staleChallengeKey
+    case credentialsDontMatch
     case exchangeRateWindowTooOld
 
     // Swaps

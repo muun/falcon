@@ -19,6 +19,9 @@ public class UserRepository {
 
     func setUser(_ user: User) {
         preferences.set(object: user, forKey: .user)
+        if user.hasRecoveryCodeChallengeKey {
+            preferences.set(value: true, forKey: .hasRecoveryCode)
+        }
     }
 
     // FIXME: This shouldn't be public

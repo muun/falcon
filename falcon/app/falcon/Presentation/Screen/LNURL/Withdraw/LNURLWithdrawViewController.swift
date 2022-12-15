@@ -92,7 +92,6 @@ class LNURLWithdrawViewController: MUViewController {
     }
 
     private func setUpNavigation() {
-        // TODO: how to hide back button
         title = L10n.LNURLWithdrawViewController.title
     }
 
@@ -127,7 +126,7 @@ class LNURLWithdrawViewController: MUViewController {
 }
 
 extension LNURLWithdrawViewController: ErrorViewDelegate {
-    func retryTouched() {
+    func retryTouched(button: ButtonView) {
         presenter.retry()
         hideError()
     }
@@ -168,7 +167,7 @@ extension LNURLWithdrawViewController: ErrorViewDelegate {
         logScreen(name, parameters: params)
     }
 
-    func backToHomeTouched() {
+    func secondaryButtonTouched() {
         navigationController!.popToRootViewController(animated: true)
     }
 
@@ -181,13 +180,15 @@ extension LNURLWithdrawViewController: LNURLWithdrawPresenterDelegate {
 
         switch state {
         case .contacting(let domain):
-            loading.attributedTitleText = NSMutableAttributedString(string: L10n.LNURLWithdrawViewController.contacting(domain))
+            let localizedDescription = L10n.LNURLWithdrawViewController.contacting(domain)
+            loading.attributedTitleText = NSMutableAttributedString(string: localizedDescription)
                 .set(bold: domain, color: Asset.Colors.title.color)
             loading.descriptionText = ""
             loading.isTakingTooLong = false
 
         case .receiving(let domain):
-            loading.attributedTitleText = NSMutableAttributedString(string: L10n.LNURLWithdrawViewController.receiving(domain))
+            let localizedDescription = L10n.LNURLWithdrawViewController.receiving(domain)
+            loading.attributedTitleText = NSMutableAttributedString(string: localizedDescription)
                 .set(bold: domain, color: Asset.Colors.title.color)
             loading.descriptionText = ""
             loading.isTakingTooLong = false

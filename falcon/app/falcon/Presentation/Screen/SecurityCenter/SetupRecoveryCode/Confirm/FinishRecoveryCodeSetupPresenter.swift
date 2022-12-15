@@ -10,40 +10,48 @@ import Foundation
 import core
 
 protocol FinishRecoveryCodeSetupPresenterDelegate: BasePresenterDelegate {
-
     func challengeSuccess()
-    func challengeFailed()
-
+    func showFinishErrorSetupError()
+    func finishButtonIs(loading: Bool)
 }
 
 class FinishRecoveryCodeSetupPresenter<Delegate: FinishRecoveryCodeSetupPresenterDelegate>: BasePresenter<Delegate> {
 
     fileprivate let recoveryCode: RecoveryCode
-    fileprivate let setupChallengeAction: SetupChallengeAction
-    fileprivate let preferences: Preferences
+    fileprivate let finishRecoveryCodeSetupAction: FinishRecoverCodeSetupAction
 
     init(delegate: Delegate,
          state: RecoveryCode,
-         setupChallengeAction: SetupChallengeAction,
-         preferences: Preferences) {
+         finishRecoveryCodeSetupAction: FinishRecoverCodeSetupAction) {
         self.recoveryCode = state
-        self.setupChallengeAction = setupChallengeAction
-        self.preferences = preferences
+        self.finishRecoveryCodeSetupAction = finishRecoveryCodeSetupAction
         super.init(delegate: delegate)
     }
 
     func confirm() {
-        subscribeTo(setupChallengeAction.getValue(), onSuccess: setupSuccess)
+        subscribeTo(finishRecoveryCodeSetupAction.getState(), onNext: onStartRecoverySetupStateChanged)
+        finishRecoveryCodeSetupAction.run(type: .RECOVERY_CODE,
+                                          recoveryCode: recoveryCode)
+    }
 
-        setupChallengeAction.run(type: .RECOVERY_CODE, userInput: recoveryCode.description)
+    private func onStartRecoverySetupStateChanged(_ result: ActionState<Void>) {
+        switch result.type {
+        case .EMPTY, .LOADING: break
+        case .VALUE:
+            setupSuccess()
+        case .ERROR:
+            delegate.finishButtonIs(loading: false)
+            delegate.showFinishErrorSetupError()
+        }
     }
 
     private func setupSuccess() {
         delegate.challengeSuccess()
     }
 
-    override func handleError(_ e: Error) {
-        delegate.challengeFailed()
+    func retryTappedAfterError() {
+        delegate.finishButtonIs(loading: true)
+        finishRecoveryCodeSetupAction.run(type: .RECOVERY_CODE,
+                                          recoveryCode: recoveryCode)
     }
-
 }

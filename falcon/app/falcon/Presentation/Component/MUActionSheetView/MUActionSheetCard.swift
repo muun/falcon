@@ -1,5 +1,5 @@
 //
-//  AddressTypeView.swift
+//  selectedOptionTypeView.swift
 //  falcon
 //
 //  Created by Juan Pablo Civile on 22/10/2021.
@@ -10,11 +10,25 @@ import Foundation
 import UIKit
 import core
 
-protocol AddressTypeCardDelegate: AnyObject {
-    func tapped(addressTypeCard: AddressTypeCard)
+struct MUActionSheetOptionViewModel {
+    let type: any MUActionSheetOption
+    let status: MUActionSheetCard.Status
+    let highlight: String?
+    let blocksLeft: UInt
+
+    init(type: any MUActionSheetOption, status: MUActionSheetCard.Status, highlight: String?, blocksLeft: UInt = 0) {
+        self.type = type
+        self.blocksLeft = blocksLeft
+        self.status = status
+        self.highlight = highlight
+    }
 }
 
-class AddressTypeCard: UIStackView {
+protocol MUActionSheetCardDelegate: AnyObject {
+    func tapped(actionSheetCard: MUActionSheetCard)
+}
+
+class MUActionSheetCard: UIStackView {
 
     enum Status {
         case selected,
@@ -22,16 +36,16 @@ class AddressTypeCard: UIStackView {
              disabled
     }
 
-    let addressType: AddressType
-    private weak var delegate: AddressTypeCardDelegate?
+    let selectedOptionType: any MUActionSheetOption
+    private weak var delegate: MUActionSheetCardDelegate?
     let status: Status
 
-    init(addressType: AddressType,
+    init(selectedOptionType: any MUActionSheetOption,
          status: Status,
-         delegate: AddressTypeCardDelegate?,
+         delegate: MUActionSheetCardDelegate?,
          highlight: String?
     ) {
-        self.addressType = addressType
+        self.selectedOptionType = selectedOptionType
         self.delegate = delegate
         self.status = status
         super.init(frame: CGRect.zero)
@@ -80,7 +94,7 @@ class AddressTypeCard: UIStackView {
 
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = addressType.name
+        titleLabel.text = selectedOptionType.name
         titleLabel.font = Constant.Fonts.system(size: .desc, weight: .semibold)
         titleLabel.textColor = titleColor.color
         titleLabel.setContentHuggingPriority(.required, for: .vertical)
@@ -93,11 +107,11 @@ class AddressTypeCard: UIStackView {
         descriptionLabel.font = descriptionFont
         descriptionLabel.textColor = Asset.Colors.muunGrayDark.color
         if let highlight = highlight {
-            descriptionLabel.attributedText = "\(highlight) \(addressType.description)"
+            descriptionLabel.attributedText = "\(highlight) \(selectedOptionType.description)"
                 .set(font: descriptionFont)
                 .set(bold: highlight, weight: .medium)
         } else {
-            descriptionLabel.text = addressType.description
+            descriptionLabel.attributedText = selectedOptionType.description
         }
 
         descriptionLabel.numberOfLines = 0
@@ -113,7 +127,7 @@ class AddressTypeCard: UIStackView {
 
     @objc private func tapped(sender: UIView) {
         if status != .disabled {
-            delegate?.tapped(addressTypeCard: self)
+            delegate?.tapped(actionSheetCard: self)
         }
     }
 }

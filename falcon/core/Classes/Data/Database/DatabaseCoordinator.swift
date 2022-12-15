@@ -466,6 +466,17 @@ public class DatabaseCoordinator {
             }
         }
 
+        migrator.registerMigration("fix .hasRecoveryCode") { [self] _ in
+            let user: User? = preferences.object(forKey: .user)
+            guard let user = user else {
+                return
+            }
+
+            if user.hasRecoveryCodeChallengeKey {
+                preferences.set(value: true, forKey: .hasRecoveryCode)
+            }
+        }
+
         return migrator
     }
     // swiftlint:enable function_body_length

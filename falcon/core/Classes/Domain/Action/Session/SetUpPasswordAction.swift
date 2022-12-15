@@ -44,7 +44,7 @@ public class SetUpPasswordAction: AsyncAction<()> {
                 return self.houstonService.setUpPassword(passwordSetup)
             })
             .do(onSuccess: { _ in
-                try self.keysRepository.store(challengeKey: key)
+                try self.keysRepository.storeVerified(challengeKey: key)
             }
         )
 

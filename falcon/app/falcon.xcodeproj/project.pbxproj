@@ -52,7 +52,7 @@
 		0FEE3E4C2631EB4600FB794C /* LNURLLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEE3E4B2631EB4600FB794C /* LNURLLoadingView.swift */; };
 		0FF4E25225D4A3B000EEAFB6 /* LightningAdvancedOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E25125D4A3B000EEAFB6 /* LightningAdvancedOptionsView.swift */; };
 		0FF4E25E25D4EBAD00EEAFB6 /* ExpirationTimeOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E25D25D4EBAD00EEAFB6 /* ExpirationTimeOptionView.swift */; };
-		0FF4E27025D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E26F25D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift */; };
+		0FF4E27025D6BA2400EEAFB6 /* MUActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E26F25D6BA2400EEAFB6 /* MUActionSheetView.swift */; };
 		0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */; };
 		0FF90789262B311300889E0F /* NewOpError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF90788262B311300889E0F /* NewOpError.swift */; };
 		0FFF339526CABFC80050F69F /* NewOperationStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */; };
@@ -384,13 +384,13 @@
 		B3085CD521DE75DF00B159F4 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3085CD321DE75DF00B159F4 /* ReceiveViewController.swift */; };
 		B3085CD821DE75FA00B159F4 /* ReceivePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3085CD721DE75FA00B159F4 /* ReceivePresenter.swift */; };
 		B30D5A572225E456008F4B20 /* NewOperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30D5A562225E456008F4B20 /* NewOperationView.swift */; };
-		B30F9374258A594300045301 /* LightningNetworkSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30F9373258A594300045301 /* LightningNetworkSettingsView.swift */; };
+		B30F9374258A594300045301 /* SettingsToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30F9373258A594300045301 /* SettingsToggleView.swift */; };
 		B30F937A258A59C000045301 /* LightningNetworkSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30F9379258A59C000045301 /* LightningNetworkSettingsViewController.swift */; };
 		B30F9380258A59CB00045301 /* LightningNetworkSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30F937F258A59CB00045301 /* LightningNetworkSettingsPresenter.swift */; };
 		B30F9387258A6BFF00045301 /* HairlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30F9386258A6BFF00045301 /* HairlineView.swift */; };
 		B30F93D6258AA33C00045301 /* LightningNetworkSettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30F93D5258AA33C00045301 /* LightningNetworkSettingsPage.swift */; };
 		B3297E9B272317C00035FEB8 /* ReceiveAddressTypeSelectPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297E9A272317C00035FEB8 /* ReceiveAddressTypeSelectPresenter.swift */; };
-		B3297E9D27231CDA0035FEB8 /* AddressTypeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297E9C27231CDA0035FEB8 /* AddressTypeCard.swift */; };
+		B3297E9D27231CDA0035FEB8 /* MUActionSheetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297E9C27231CDA0035FEB8 /* MUActionSheetCard.swift */; };
 		B3297E9F2723206B0035FEB8 /* UIEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297E9E2723206B0035FEB8 /* UIEdgeInsets+Extension.swift */; };
 		B3297EA427234DE60035FEB8 /* OnchainSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297EA127234DE60035FEB8 /* OnchainSettingsViewController.swift */; };
 		B3297EA527234DE60035FEB8 /* OnchainSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297EA227234DE60035FEB8 /* OnchainSettingsPresenter.swift */; };
@@ -483,7 +483,22 @@
 		F9D2DEA862D8852273DC87B5 /* Pods_falconPushNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72C8B50BB75E5801CCB1AEE /* Pods_falconPushNotifications.framework */; };
 		FE0066D028787C0E00788DD1 /* GetCurrencyForCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0066CF28787C0E00788DD1 /* GetCurrencyForCode.swift */; };
 		FE0066D228787C1A00788DD1 /* GetBTCDefaultSelectedUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0066D128787C1A00788DD1 /* GetBTCDefaultSelectedUnit.swift */; };
+		FE1518B5292EA99400D3730A /* ReceiveUnifiedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1518B4292EA99400D3730A /* ReceiveUnifiedView.swift */; };
+		FE1518BC292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1518BB292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift */; };
+		FE21354E28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */; };
+		FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */; };
+		FE3A50C629355C3200006363 /* BitcoinURIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */; };
+		FE560CDB291AE3D900FACF78 /* UnverifiedRcWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */; };
+		FE560D6C291AE3EC00FACF78 /* UnverifiedRcWarningViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */; };
+		FE560D6E291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */; };
 		FE56FE75287F113A00F6D011 /* FiatCurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE56FE74287F113A00F6D011 /* FiatCurrencyTests.swift */; };
+		FE5B0C3B292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5B0C3A292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift */; };
+		FE5B0C3D292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5B0C3C292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift */; };
+		FE5B0C3F292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5B0C3E292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift */; };
+		FE64761628EB54A700EA4A77 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761528EB54A700EA4A77 /* UIStackView+Extension.swift */; };
+		FE64761928ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */; };
+		FE64761D28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */; };
+		FE69B2D128F09D4F00A48050 /* SettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */; };
 		FE7879C6287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879C5287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift */; };
 		FE7879C92878866400CB4198 /* FiatCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879C82878866400CB4198 /* FiatCurrency.swift */; };
 		FE7879CB2878868400CB4198 /* BitcoinCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879CA2878868400CB4198 /* BitcoinCurrency.swift */; };
@@ -493,6 +508,18 @@
 		FE7879D5287B910800CB4198 /* BitcoinCurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D4287B910800CB4198 /* BitcoinCurrencyTests.swift */; };
 		FE7879D7287B991900CB4198 /* NewOpAmountPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D6287B991900CB4198 /* NewOpAmountPresenterTest.swift */; };
 		FE7879DA287C583E00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D8287C583B00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift */; };
+		FEB749B729030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */; };
+		FEB74C7F2909E2C8002C08D1 /* SetupRecoveryCodeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */; };
+		FEB74C812909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C802909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift */; };
+		FEB74C84290ABE93002C08D1 /* RecoveryCodePrimingPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C83290ABE93002C08D1 /* RecoveryCodePrimingPresenterTest.swift */; };
+		FEB74C8C290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C8B290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift */; };
+		FEB74C8F290B20A9002C08D1 /* StartRecoverySetupActionStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C8E290B20A9002C08D1 /* StartRecoverySetupActionStub.swift */; };
+		FEB74C92290B2108002C08D1 /* FakeHoustonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C91290B2108002C08D1 /* FakeHoustonService.swift */; };
+		FEB74C94290B2323002C08D1 /* BuildChallengeSetupActionFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C93290B2323002C08D1 /* BuildChallengeSetupActionFake.swift */; };
+		FEB74C96290B2376002C08D1 /* FakeKeysRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C95290B2376002C08D1 /* FakeKeysRepository.swift */; };
+		FEB74C982911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */; };
+		FEB74C9A2911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */; };
+		FEB74C9C2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -581,7 +608,7 @@
 		0FEE3E4B2631EB4600FB794C /* LNURLLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LNURLLoadingView.swift; sourceTree = "<group>"; };
 		0FF4E25125D4A3B000EEAFB6 /* LightningAdvancedOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningAdvancedOptionsView.swift; sourceTree = "<group>"; };
 		0FF4E25D25D4EBAD00EEAFB6 /* ExpirationTimeOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirationTimeOptionView.swift; sourceTree = "<group>"; };
-		0FF4E26F25D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTypeSelectViewController.swift; sourceTree = "<group>"; };
+		0FF4E26F25D6BA2400EEAFB6 /* MUActionSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MUActionSheetView.swift; sourceTree = "<group>"; };
 		0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioGroupView.swift; sourceTree = "<group>"; };
 		0FF90788262B311300889E0F /* NewOpError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpError.swift; sourceTree = "<group>"; };
 		0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewOperationStateMachine.swift; sourceTree = "<group>"; };
@@ -918,13 +945,13 @@
 		B3085CD321DE75DF00B159F4 /* ReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewController.swift; sourceTree = "<group>"; };
 		B3085CD721DE75FA00B159F4 /* ReceivePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivePresenter.swift; sourceTree = "<group>"; };
 		B30D5A562225E456008F4B20 /* NewOperationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOperationView.swift; sourceTree = "<group>"; };
-		B30F9373258A594300045301 /* LightningNetworkSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningNetworkSettingsView.swift; sourceTree = "<group>"; };
+		B30F9373258A594300045301 /* SettingsToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToggleView.swift; sourceTree = "<group>"; };
 		B30F9379258A59C000045301 /* LightningNetworkSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningNetworkSettingsViewController.swift; sourceTree = "<group>"; };
 		B30F937F258A59CB00045301 /* LightningNetworkSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningNetworkSettingsPresenter.swift; sourceTree = "<group>"; };
 		B30F9386258A6BFF00045301 /* HairlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairlineView.swift; sourceTree = "<group>"; };
 		B30F93D5258AA33C00045301 /* LightningNetworkSettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightningNetworkSettingsPage.swift; sourceTree = "<group>"; };
 		B3297E9A272317C00035FEB8 /* ReceiveAddressTypeSelectPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveAddressTypeSelectPresenter.swift; sourceTree = "<group>"; };
-		B3297E9C27231CDA0035FEB8 /* AddressTypeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTypeCard.swift; sourceTree = "<group>"; };
+		B3297E9C27231CDA0035FEB8 /* MUActionSheetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MUActionSheetCard.swift; sourceTree = "<group>"; };
 		B3297E9E2723206B0035FEB8 /* UIEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		B3297EA127234DE60035FEB8 /* OnchainSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnchainSettingsViewController.swift; sourceTree = "<group>"; };
 		B3297EA227234DE60035FEB8 /* OnchainSettingsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnchainSettingsPresenter.swift; sourceTree = "<group>"; };
@@ -1017,7 +1044,22 @@
 		FBD7C98E94F17B20252432EC /* Pods-Muun.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun.release.xcconfig"; path = "Target Support Files/Pods-Muun/Pods-Muun.release.xcconfig"; sourceTree = "<group>"; };
 		FE0066CF28787C0E00788DD1 /* GetCurrencyForCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrencyForCode.swift; sourceTree = "<group>"; };
 		FE0066D128787C1A00788DD1 /* GetBTCDefaultSelectedUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBTCDefaultSelectedUnit.swift; sourceTree = "<group>"; };
+		FE1518B4292EA99400D3730A /* ReceiveUnifiedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveUnifiedView.swift; sourceTree = "<group>"; };
+		FE1518BB292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdvancedOptionsView.swift; sourceTree = "<group>"; };
+		FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenterDelegate.swift; sourceTree = "<group>"; };
+		FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenter.swift; sourceTree = "<group>"; };
+		FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURIViewModel.swift; sourceTree = "<group>"; };
+		FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnverifiedRcWarningViewController.swift; sourceTree = "<group>"; };
+		FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnverifiedRcWarningViewController.xib; sourceTree = "<group>"; };
+		FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupActionTest.swift; sourceTree = "<group>"; };
 		FE56FE74287F113A00F6D011 /* FiatCurrencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatCurrencyTests.swift; sourceTree = "<group>"; };
+		FE5B0C3A292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFormatSettingDropdownView.swift; sourceTree = "<group>"; };
+		FE5B0C3C292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFormatPreferenceDropdownPresenter.swift; sourceTree = "<group>"; };
+		FE5B0C3E292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFormatPreferenceMUActionSheetPresenter.swift; sourceTree = "<group>"; };
+		FE64761528EB54A700EA4A77 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
+		FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboChannelSettingsTogglePresenter.swift; sourceTree = "<group>"; };
+		FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggleUserPreferenciesResolver.swift; sourceTree = "<group>"; };
+		FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUITest.swift; sourceTree = "<group>"; };
 		FE7879C5287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinAmountWithSelectedCurrency.swift; sourceTree = "<group>"; };
 		FE7879C82878866400CB4198 /* FiatCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatCurrency.swift; sourceTree = "<group>"; };
 		FE7879CA2878868400CB4198 /* BitcoinCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCurrency.swift; sourceTree = "<group>"; };
@@ -1027,6 +1069,18 @@
 		FE7879D4287B910800CB4198 /* BitcoinCurrencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCurrencyTests.swift; sourceTree = "<group>"; };
 		FE7879D6287B991900CB4198 /* NewOpAmountPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpAmountPresenterTest.swift; sourceTree = "<group>"; };
 		FE7879D8287C583B00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetaryAmountWithCompleteDataOfCurrency.swift; sourceTree = "<group>"; };
+		FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartRecoverCodeSetupActionTests.swift; sourceTree = "<group>"; };
+		FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupRecoveryCodeError.swift; sourceTree = "<group>"; };
+		FEB74C802909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryCodePrimingPresenter.swift; sourceTree = "<group>"; };
+		FEB74C83290ABE93002C08D1 /* RecoveryCodePrimingPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryCodePrimingPresenterTest.swift; sourceTree = "<group>"; };
+		FEB74C8B290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryCodePrimingPresenterDelegateSpy.swift; sourceTree = "<group>"; };
+		FEB74C8E290B20A9002C08D1 /* StartRecoverySetupActionStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartRecoverySetupActionStub.swift; sourceTree = "<group>"; };
+		FEB74C91290B2108002C08D1 /* FakeHoustonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeHoustonService.swift; sourceTree = "<group>"; };
+		FEB74C93290B2323002C08D1 /* BuildChallengeSetupActionFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildChallengeSetupActionFake.swift; sourceTree = "<group>"; };
+		FEB74C95290B2376002C08D1 /* FakeKeysRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeKeysRepository.swift; sourceTree = "<group>"; };
+		FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupPresenterTest.swift; sourceTree = "<group>"; };
+		FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupActionStub.swift; sourceTree = "<group>"; };
+		FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupPresenterDelegateSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1077,6 +1131,7 @@
 		0F18C6CB2130993500BC5BFE /* falconTests */ = {
 			isa = PBXGroup;
 			children = (
+				FEB74C8A290B2014002C08D1 /* Mocking */,
 				0F98214F25E05AE3006CE957 /* Extension */,
 				0F9340D525AFE8CC00F766A9 /* Factories */,
 				B3085CC721CA7B6300B159F4 /* Domain */,
@@ -1241,7 +1296,6 @@
 				A0EB4AFF2525091900B89DB6 /* ReceiveOnChainView.swift */,
 				0F22E69125D245FC00EBFA06 /* OnChainAdvancedOptionsView.swift */,
 				0F22E69725D24A0200EBFA06 /* SelectAddressTypeOptionView.swift */,
-				B3297E9C27231CDA0035FEB8 /* AddressTypeCard.swift */,
 			);
 			path = OnChain;
 			sourceTree = "<group>";
@@ -1335,6 +1389,7 @@
 		A00BAE6921221F0100126F94 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				FE561A62292BC13B00FACF78 /* MUActionSheetView */,
 				B349566E25CC8326008797A4 /* AmountInput */,
 				0FE40504258A4F59001DAA43 /* Tooltip */,
 				A077681F258939EF009D2D25 /* OperationBadge */,
@@ -2393,6 +2448,7 @@
 				B3743029253101080097B746 /* IncomingSwapUITests.swift */,
 				B36B079C22440F6F00E7D16B /* Regtest.swift */,
 				A0E0F777220C74F5001B99AC /* SignInUITests.swift */,
+				FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */,
 				A082096B2281C4A700E63CE2 /* TestLapp.swift */,
 				B3E131B423282D7D00D55759 /* XCUIElement+Extension.swift */,
 			);
@@ -2546,6 +2602,7 @@
 				A0611B8622676B68003C4BF8 /* UIApplication+Extension.swift */,
 				A02110202454A668004564B1 /* UIButton+Extension.swift */,
 				A018410C211E03D600337895 /* UIColor+Extension.swift */,
+				FE64761528EB54A700EA4A77 /* UIStackView+Extension.swift */,
 				A0DD3835224578DF0099FC20 /* UIImage+Extension.swift */,
 				A0EAE8532209C68C000FD8FA /* UILabel+Extension.swift */,
 				A0FE143A21B049B5008F99C4 /* UINavigationController+Extension.swift */,
@@ -2602,6 +2659,7 @@
 		A0EB4AFE2525090200B89DB6 /* Receive */ = {
 			isa = PBXGroup;
 			children = (
+				FE1518BA292FBC2900D3730A /* Unified */,
 				0FF4E25825D4A4F000EEAFB6 /* OnChain */,
 				0FF4E25725D4A4EA00EEAFB6 /* Lightning */,
 				A0A1E9AA2526631000CBC03C /* NotificationsPrimingView.swift */,
@@ -2674,6 +2732,8 @@
 				0F7666DE264DB96F007121DF /* Model */,
 				0F9340EC25AFF06800F766A9 /* Action */,
 				B3394AB725BF615E00460DB7 /* FulfillincomingSwapActionTest.swift */,
+				FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */,
+				FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */,
 				B36ABD9421ECDFA000ECA5EA /* Crypto */,
 				B36ABD9321ECDFA000ECA5EA /* AddressActionsTests.swift */,
 				B3CBAC2521F6665600A591C8 /* FeeCalculatorTests.swift */,
@@ -2688,6 +2748,7 @@
 		B3085CC821CA7B6F00B159F4 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				FEB74C82290ABE83002C08D1 /* SecurityCenter */,
 				FE7879D3287B90FB00CB4198 /* Models */,
 				B3085CC521CA7B4700B159F4 /* HomePresenterTests.swift */,
 				B3BDBE30221CDF97006490B9 /* LocaleNumberFormatterTests.swift */,
@@ -2706,8 +2767,8 @@
 				A0DFCD1624520B5100D1EBC4 /* Receive+MoreInfo.swift */,
 				0F22E6F625D3469C00EBFA06 /* ReceiveAmountInputViewController.swift */,
 				0F22E70025D349ED00EBFA06 /* ReceiveAmountInputPresenter.swift */,
-				0FF4E26F25D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift */,
 				B3297E9A272317C00035FEB8 /* ReceiveAddressTypeSelectPresenter.swift */,
+				FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */,
 			);
 			path = Receive;
 			sourceTree = "<group>";
@@ -2715,7 +2776,7 @@
 		B30F9372258A592300045301 /* LightningNetwork */ = {
 			isa = PBXGroup;
 			children = (
-				B30F9373258A594300045301 /* LightningNetworkSettingsView.swift */,
+				FE64761728ECB7EF00EA4A77 /* Toggles */,
 				B30F9379258A59C000045301 /* LightningNetworkSettingsViewController.swift */,
 				B30F937F258A59CB00045301 /* LightningNetworkSettingsPresenter.swift */,
 			);
@@ -2793,6 +2854,7 @@
 		B36B07932243EF8200E7D16B /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				FE21354F28F8536400AFCCA6 /* SettingsToggleView */,
 				B3297EA027234DB30035FEB8 /* Onchain */,
 				B30F9372258A592300045301 /* LightningNetwork */,
 				A0DA93C524CF1AF400377124 /* ChangePassword */,
@@ -2838,6 +2900,7 @@
 			children = (
 				B3A0FFEE231EA4800092633D /* RecoveryCodePrimingViewController.swift */,
 				B3A0FFEF231EA4800092633D /* RecoveryCodePrimingViewController.xib */,
+				FEB74C802909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift */,
 			);
 			path = Priming;
 			sourceTree = "<group>";
@@ -2850,6 +2913,7 @@
 				B3A4AC96220B88A500FF0A8C /* Generate */,
 				B3EAC850220C96AD00D765D5 /* Verify */,
 				A04A4A6C2502C8D6006EEA40 /* SetUpRecoveryCodeWording.swift */,
+				FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */,
 			);
 			path = SetupRecoveryCode;
 			sourceTree = "<group>";
@@ -2953,6 +3017,8 @@
 			children = (
 				B3E6CD8721B996A500E0A6D5 /* SyncPresenter.swift */,
 				B3E6CD8921B996D400E0A6D5 /* SyncViewController.swift */,
+				FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */,
+				FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */,
 			);
 			path = Sync;
 			sourceTree = "<group>";
@@ -2986,6 +3052,46 @@
 				FE0066D128787C1A00788DD1 /* GetBTCDefaultSelectedUnit.swift */,
 			);
 			path = Actions;
+			sourceTree = "<group>";
+		};
+		FE1518BA292FBC2900D3730A /* Unified */ = {
+			isa = PBXGroup;
+			children = (
+				FE1518B4292EA99400D3730A /* ReceiveUnifiedView.swift */,
+				FE1518BB292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift */,
+			);
+			path = Unified;
+			sourceTree = "<group>";
+		};
+		FE21354F28F8536400AFCCA6 /* SettingsToggleView */ = {
+			isa = PBXGroup;
+			children = (
+				FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */,
+				FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */,
+				FE5B0C3C292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift */,
+				FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */,
+				B30F9373258A594300045301 /* SettingsToggleView.swift */,
+				FE5B0C3A292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift */,
+				FE5B0C3E292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift */,
+			);
+			path = SettingsToggleView;
+			sourceTree = "<group>";
+		};
+		FE561A62292BC13B00FACF78 /* MUActionSheetView */ = {
+			isa = PBXGroup;
+			children = (
+				B3297E9C27231CDA0035FEB8 /* MUActionSheetCard.swift */,
+				0FF4E26F25D6BA2400EEAFB6 /* MUActionSheetView.swift */,
+			);
+			path = MUActionSheetView;
+			sourceTree = "<group>";
+		};
+		FE64761728ECB7EF00EA4A77 /* Toggles */ = {
+			isa = PBXGroup;
+			children = (
+				FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */,
+			);
+			path = Toggles;
 			sourceTree = "<group>";
 		};
 		FE7879C4287884D200CB4198 /* Models */ = {
@@ -3024,6 +3130,45 @@
 				FE56FE74287F113A00F6D011 /* FiatCurrencyTests.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		FEB74C82290ABE83002C08D1 /* SecurityCenter */ = {
+			isa = PBXGroup;
+			children = (
+				FEB74C83290ABE93002C08D1 /* RecoveryCodePrimingPresenterTest.swift */,
+				FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */,
+			);
+			path = SecurityCenter;
+			sourceTree = "<group>";
+		};
+		FEB74C8A290B2014002C08D1 /* Mocking */ = {
+			isa = PBXGroup;
+			children = (
+				FEB74C90290B20F7002C08D1 /* Infrastructure */,
+				FEB74C8D290B206D002C08D1 /* SecurityCenter */,
+			);
+			path = Mocking;
+			sourceTree = "<group>";
+		};
+		FEB74C8D290B206D002C08D1 /* SecurityCenter */ = {
+			isa = PBXGroup;
+			children = (
+				FEB74C8E290B20A9002C08D1 /* StartRecoverySetupActionStub.swift */,
+				FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */,
+				FEB74C8B290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift */,
+				FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */,
+			);
+			path = SecurityCenter;
+			sourceTree = "<group>";
+		};
+		FEB74C90290B20F7002C08D1 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				FEB74C91290B2108002C08D1 /* FakeHoustonService.swift */,
+				FEB74C93290B2323002C08D1 /* BuildChallengeSetupActionFake.swift */,
+				FEB74C95290B2376002C08D1 /* FakeKeysRepository.swift */,
+			);
+			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3284,6 +3429,7 @@
 				A0F7165825432BB7009ECECF /* Localizable.strings in Resources */,
 				A0BB7A7E21235EF00043F7FD /* PinViewController.xib in Resources */,
 				A0E35FFD221EEF6F00FE06A5 /* CurrencyPickerViewController.xib in Resources */,
+				FE560D6C291AE3EC00FACF78 /* UnverifiedRcWarningViewController.xib in Resources */,
 				B33735C8221DA54E00185403 /* NewOpDestinationFilledDataView.xib in Resources */,
 				A0E35FF8221DE3A300FE06A5 /* ManuallyEnterQRViewController.xib in Resources */,
 				A03C3EF023A01D5300D4DE71 /* BitcoinUnitPickerViewController.xib in Resources */,
@@ -3400,7 +3546,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n    swiftlint --config .swiftlint.yml\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		B3E0EF7A2230616C00527A72 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3440,12 +3586,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3CBAC5221F66B8400A591C8 /* FeeCalculatorTests.swift in Sources */,
+				FEB74C96290B2376002C08D1 /* FakeKeysRepository.swift in Sources */,
 				B3953CF425841C52002FA194 /* UpdateUserPreferencesActionTest.swift in Sources */,
 				FE7879D7287B991900CB4198 /* NewOpAmountPresenterTest.swift in Sources */,
+				FEB74C8F290B20A9002C08D1 /* StartRecoverySetupActionStub.swift in Sources */,
 				B3CBAC4C21F66B8400A591C8 /* SatoshisTests.swift in Sources */,
 				B3CBAC4B21F66B8000A591C8 /* WalletPrivateKeyTests.swift in Sources */,
 				0F9340E725AFECC000F766A9 /* IncomingSwapRepositoryTests.swift in Sources */,
 				0F9340D725AFE8DF00F766A9 /* Factory.swift in Sources */,
+				FEB74C9A2911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift in Sources */,
 				B3CBAC5521F66B8C00A591C8 /* ExpectationUtils.swift in Sources */,
 				FE56FE75287F113A00F6D011 /* FiatCurrencyTests.swift in Sources */,
 				B3CBAC5321F66B8900A591C8 /* HomePresenterTests.swift in Sources */,
@@ -3454,18 +3603,26 @@
 				B3CBAC4F21F66B8400A591C8 /* AddressActionsTests.swift in Sources */,
 				B3CBAC4E21F66B8400A591C8 /* TransactionSchemeV2Tests.swift in Sources */,
 				0F9EFBE525A4E490007BAD8F /* OperationRepositoryTests.swift in Sources */,
+				FEB74C982911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift in Sources */,
+				FEB74C8C290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift in Sources */,
 				B3CBAC4D21F66B8400A591C8 /* KeyCrypterTests.swift in Sources */,
+				FEB74C9C2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift in Sources */,
 				B3394AB825BF615E00460DB7 /* FulfillincomingSwapActionTest.swift in Sources */,
 				B3BDBE31221CDF97006490B9 /* LocaleNumberFormatterTests.swift in Sources */,
 				A07D404624A295A200844C44 /* UserTests.swift in Sources */,
+				FEB74C84290ABE93002C08D1 /* RecoveryCodePrimingPresenterTest.swift in Sources */,
 				0F9340E125AFEB9000F766A9 /* Factory+Operation.swift in Sources */,
 				B3CBAC4921F66B8000A591C8 /* KeyDerivationTests.swift in Sources */,
 				FE7879D5287B910800CB4198 /* BitcoinCurrencyTests.swift in Sources */,
 				A0DB38B424BF6EDB002973C4 /* BlockHelper.swift in Sources */,
 				0F9340EF25AFF07D00F766A9 /* BalanceActionsTests.swift in Sources */,
+				FE560D6E291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift in Sources */,
 				0F98215125E05AF5006CE957 /* StringExtensionTests.swift in Sources */,
+				FEB749B729030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift in Sources */,
+				FEB74C94290B2323002C08D1 /* BuildChallengeSetupActionFake.swift in Sources */,
 				B3CBAC5121F66B8400A591C8 /* NotificationProcessorTests.swift in Sources */,
 				A03FE03522C3BB0100E97FA9 /* AmountLabelTests.swift in Sources */,
+				FEB74C92290B2108002C08D1 /* FakeHoustonService.swift in Sources */,
 				A05CA3B522F4C5AD0087A23E /* BlockHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3512,6 +3669,7 @@
 				A0192E8722944DF2002FB5F3 /* OperationCellPage.swift in Sources */,
 				A0D43FB4220E16F500442165 /* PinPage.swift in Sources */,
 				A0E0F778220C74F5001B99AC /* SignInUITests.swift in Sources */,
+				FE69B2D128F09D4F00A48050 /* SettingsUITest.swift in Sources */,
 				B3D93BBC2224873B00ABEF15 /* ManuallyEnterQRPage.swift in Sources */,
 				A025A2E9246EEFD500D909A8 /* PrimingEmailPage.swift in Sources */,
 				A0D43FA9220DD0E400442165 /* SmallButtonViewPage.swift in Sources */,
@@ -3578,7 +3736,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FF4E27025D6BA2400EEAFB6 /* AddressTypeSelectViewController.swift in Sources */,
+				FE1518B5292EA99400D3730A /* ReceiveUnifiedView.swift in Sources */,
+				0FF4E27025D6BA2400EEAFB6 /* MUActionSheetView.swift in Sources */,
 				A0B77A032433C91E0093CB2A /* AnalyticsHelper.swift in Sources */,
 				0F22E70125D349ED00EBFA06 /* ReceiveAmountInputPresenter.swift in Sources */,
 				A053FAF42271039D00A212E2 /* DisplayableToast.swift in Sources */,
@@ -3601,6 +3760,7 @@
 				A03FE03822C3BF8800E97FA9 /* AmountLabel.swift in Sources */,
 				A0611B8722676B68003C4BF8 /* UIApplication+Extension.swift in Sources */,
 				0FF4E25E25D4EBAD00EEAFB6 /* ExpirationTimeOptionView.swift in Sources */,
+				FEB74C812909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift in Sources */,
 				A05CA3B322F4C3250087A23E /* BlockHelper.swift in Sources */,
 				A053FAF22270F3BB00A212E2 /* ToastView.swift in Sources */,
 				B3B9C0CF224E7BB1009C3617 /* DetailViewController.swift in Sources */,
@@ -3633,6 +3793,7 @@
 				A0E295D024A40018001317F6 /* ShareEmergencyKitView.swift in Sources */,
 				A0D737312244196C00547A77 /* TwoLinesSettingsTableViewCell.swift in Sources */,
 				A0E11ACA2450A12E00B068F8 /* SecurityCenter+ActionCard.swift in Sources */,
+				FE5B0C3D292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift in Sources */,
 				0F22E69E25D2506500EBFA06 /* AmountOptionView.swift in Sources */,
 				0F9233A225E459860048A293 /* ModalAnimationController.swift in Sources */,
 				FE7879D2287B879F00CB4198 /* CurrenciesForPickerRetrieverService.swift in Sources */,
@@ -3671,6 +3832,7 @@
 				A0E11AC72450819700B068F8 /* ActionCardModel.swift in Sources */,
 				A00A89512121D05D006F619A /* SignUpPasswordPresenter.swift in Sources */,
 				A032C0A424D4A82000A111A0 /* ChangePasswordEnterRecoveryCodeViewController.swift in Sources */,
+				FE3A50C629355C3200006363 /* BitcoinURIViewModel.swift in Sources */,
 				A0BB7A78212348040043F7FD /* BottomDrawerOverlayViewController.swift in Sources */,
 				B33735CC221DC77200185403 /* NewOpAmountFilledDataView.swift in Sources */,
 				A0A1E9AB2526631000CBC03C /* NotificationsPrimingView.swift in Sources */,
@@ -3682,6 +3844,7 @@
 				B3E131A62326DF2400D55759 /* RecoveryToolViewController.swift in Sources */,
 				A0E295D224A40285001317F6 /* EmailAlreadyUsedView.swift in Sources */,
 				A06C88DF2125E9D700940EB3 /* MUViewController.swift in Sources */,
+				FE5B0C3F292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift in Sources */,
 				B3B9C0D2224E82B0009C3617 /* DetailRowView.swift in Sources */,
 				A032C0A624D4A95E00A111A0 /* ChangePasswordEnterRecoveryCodePresenter.swift in Sources */,
 				B3297EA527234DE60035FEB8 /* OnchainSettingsPresenter.swift in Sources */,
@@ -3716,6 +3879,7 @@
 				FE7879C6287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift in Sources */,
 				A089FFDF21383606006915FC /* SignInPasswordViewController.swift in Sources */,
 				A06100D923396F9E00CC3192 /* DetailPresenter.swift in Sources */,
+				FE64761D28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift in Sources */,
 				0F50769C25719C990020FC08 /* ApiMigrationsViewController.swift in Sources */,
 				0FCB0E802694EA6400FE764C /* NewOperationPresenter.swift in Sources */,
 				A0A1E9B125266A8C00CBC03C /* PushNotificationsHelper.swift in Sources */,
@@ -3732,6 +3896,7 @@
 				B349567025CC8339008797A4 /* AmountInputView.swift in Sources */,
 				A01B3CD2212EF923004E6288 /* PinPresenter.swift in Sources */,
 				A0BB9EF1244E47C7002D864D /* LightButtonView.swift in Sources */,
+				FE64761928ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift in Sources */,
 				A0E0860622BD62FE003A4226 /* TitleTableViewCell.swift in Sources */,
 				FE7879CF2878870B00CB4198 /* VisualCurrency.swift in Sources */,
 				A0EAE8542209C68C000FD8FA /* UILabel+Extension.swift in Sources */,
@@ -3739,6 +3904,7 @@
 				A0FD55852487FAF300F942AB /* DeletableTextField.swift in Sources */,
 				A0811AA8222080980008F5D7 /* NewOpDescriptionFilledDataView.swift in Sources */,
 				A0DA93C724CF1B2F00377124 /* ChangePasswordPrimingViewController.swift in Sources */,
+				FE1518BC292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift in Sources */,
 				B3BDBE2F221CDF7A006490B9 /* LocaleNumberFormatter.swift in Sources */,
 				A0E35FF9221DE3A300FE06A5 /* ManuallyEnterQRViewController.swift in Sources */,
 				A0D0E0BD244F4FFA001F3F88 /* FinishEmailSetupViewController.swift in Sources */,
@@ -3746,6 +3912,7 @@
 				A0D43F9A220DC84D00442165 /* UIElement.swift in Sources */,
 				B3B9C0D6224E9330009C3617 /* OperationFormatter.swift in Sources */,
 				A0B4DBAE222583A30029D149 /* ErrorView.swift in Sources */,
+				FE5B0C3B292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift in Sources */,
 				A0481280255D84CC002F76DD /* EmergencyKitSavingOptions.swift in Sources */,
 				B36B07962243EFC600E7D16B /* SettingsViewController.swift in Sources */,
 				A0B60FE621F0C97600F6C266 /* NewOpAmountView.swift in Sources */,
@@ -3762,12 +3929,13 @@
 				A0D9CC11250967AA00F7DA4C /* SignInWithRCViewController.swift in Sources */,
 				A012F2B124D068DB002278F4 /* ChangePasswordEnterCurrentPresenter.swift in Sources */,
 				B3E76FAD2729D0A500618C90 /* SlidesViewConfiguration.swift in Sources */,
+				FE560CDB291AE3D900FACF78 /* UnverifiedRcWarningViewController.swift in Sources */,
 				A04B49C322089ECD001DD436 /* SmallButtonView.swift in Sources */,
 				0FFF339526CABFC80050F69F /* NewOperationStateMachine.swift in Sources */,
 				0FE40506258A4F64001DAA43 /* TooltipView.swift in Sources */,
 				0FEE3E20262FC9E300FB794C /* LNURLFromSendViewController.swift in Sources */,
 				A0480E54255C5F76002F76DD /* VerifyEmergencyKitViewController.swift in Sources */,
-				B30F9374258A594300045301 /* LightningNetworkSettingsView.swift in Sources */,
+				B30F9374258A594300045301 /* SettingsToggleView.swift in Sources */,
 				0F50769225719C880020FC08 /* ApiMigrationsPresenter.swift in Sources */,
 				FE7879CB2878868400CB4198 /* BitcoinCurrency.swift in Sources */,
 				A0E295C224A3F8F4001317F6 /* ShareEmergencyKitPresenter.swift in Sources */,
@@ -3779,6 +3947,7 @@
 				B3085CD521DE75DF00B159F4 /* ReceiveViewController.swift in Sources */,
 				A04A4A6B2502BBE8006EEA40 /* SetupEmailWording.swift in Sources */,
 				A0B2367C224E5B1E009E5B1E /* UITableView+Extension.swift in Sources */,
+				FE64761628EB54A700EA4A77 /* UIStackView+Extension.swift in Sources */,
 				A0EB36B823535BB200350ECD /* NewOpStates.swift in Sources */,
 				0F1F266425D1C2160016E3C7 /* QRCodeView.swift in Sources */,
 				A0A8A9E7257557EE00D36095 /* ChevronView.swift in Sources */,
@@ -3801,6 +3970,7 @@
 				B3BF3B582215AD960009F76D /* SupportPresenter.swift in Sources */,
 				A0658D322522501C0054EB3A /* EmailPrimingPresenter.swift in Sources */,
 				A0E0860A22BD662A003A4226 /* TargetedFeeTableViewCell.swift in Sources */,
+				FEB74C7F2909E2C8002C08D1 /* SetupRecoveryCodeError.swift in Sources */,
 				A0BB7A7A21234D3B0043F7FD /* UIViewController+Extension.swift in Sources */,
 				B3085CAE21C2A96B00B159F4 /* DependencyContainer.swift in Sources */,
 				A0ED8A9324A5374F00AD54D4 /* HelpEmergencyKitView.swift in Sources */,
@@ -3825,6 +3995,7 @@
 				B3BF3B5B2215ADA50009F76D /* SupportViewController.swift in Sources */,
 				B33735C7221DA54E00185403 /* NewOpDestinationFilledDataView.swift in Sources */,
 				0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */,
+				FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */,
 				A012F2D824D1EFEC002278F4 /* ChangePasswordVerifyViewController.swift in Sources */,
 				A0DFCD1D24520CCA00D1EBC4 /* Recover+MoreInfo.swift in Sources */,
 				A012F2DC24D1F0EB002278F4 /* ChangePasswordVerifyPresenter.swift in Sources */,
@@ -3832,6 +4003,7 @@
 				A0ED8A9524A5375A00AD54D4 /* HelpEmergencyKitViewController.swift in Sources */,
 				A0C842532458CCEA00325B0B /* EmailAlreadyUsedViewController.swift in Sources */,
 				A077682125893A09009D2D25 /* OperationBadgeView.swift in Sources */,
+				FE21354E28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift in Sources */,
 				A098C221212DD8F5006CA5A7 /* KeyboardView.swift in Sources */,
 				FE7879C92878866400CB4198 /* FiatCurrency.swift in Sources */,
 				A0F7166925432BEA009ECECF /* Strings+Generated.swift in Sources */,
@@ -3841,7 +4013,7 @@
 				A0E6F2F6211C785700821A80 /* AppDelegate.swift in Sources */,
 				A03CE69022FB4ED300B94C81 /* Optional+Extension.swift in Sources */,
 				A096D6152127622B006B1815 /* SignUpEmailViewController.swift in Sources */,
-				B3297E9D27231CDA0035FEB8 /* AddressTypeCard.swift in Sources */,
+				B3297E9D27231CDA0035FEB8 /* MUActionSheetCard.swift in Sources */,
 				A0587D11244F41CE004FECBF /* EmailPrimingViewController.swift in Sources */,
 				B3E6CD8A21B996D400E0A6D5 /* SyncViewController.swift in Sources */,
 				A032C0A224D4A1AF00A111A0 /* ChangePasswordEnterRecoveryCodeView.swift in Sources */,
@@ -3965,10 +4137,10 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 907;
+				CURRENT_PROJECT_VERSION = 1007;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -4016,9 +4188,9 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 907;
+				CURRENT_PROJECT_VERSION = 1007;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "FALCON=0";
 				INFOPLIST_FILE = falconPushNotifications/Info.plist;
@@ -4144,7 +4316,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 907;
+				CURRENT_PROJECT_VERSION = 1007;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4209,7 +4381,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 907;
+				CURRENT_PROJECT_VERSION = 1007;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4242,10 +4414,10 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 907;
+				CURRENT_PROJECT_VERSION = 1007;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -4330,9 +4502,9 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 907;
+				CURRENT_PROJECT_VERSION = 1007;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

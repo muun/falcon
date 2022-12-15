@@ -63,11 +63,11 @@ class SyncViewController: MUViewController {
         canPushToHome = true
 
         if syncDidFinish {
-            pushToHome()
+            presenter.onReadyForHome()
         }
     }
 
-    func pushToHome() {
+    func goToHome() {
         if !isExistingUser {
             logEvent("wallet_created")
         }
@@ -75,6 +75,17 @@ class SyncViewController: MUViewController {
         self.navigationController!.setViewControllers([MuunTabBarController()], animated: true)
     }
 
+    func dismissUnverifiedRecoveryCodeWarning() {
+        navigationController?.dismiss(animated: false)
+    }
+
+    func presentUnverifiedRecoveryCodeWarning() {
+        let warningScreen = UnverifiedRcWarningViewController(actionButtonTapped: { [weak self] in
+            self?.presenter.onUserAcknowledgeRecoveryCodeUnverified()
+        })
+
+        self.navigationController!.present(warningScreen, animated: true)
+    }
 }
 
 extension SyncViewController: SyncDelegate {
@@ -87,7 +98,7 @@ extension SyncViewController: SyncDelegate {
         syncDidFinish = true
 
         if canPushToHome {
-            pushToHome()
+            presenter.onReadyForHome()
         }
     }
 

@@ -13,6 +13,9 @@ import core
 protocol SyncDelegate: BasePresenterDelegate {
     func onSyncFinished()
     func syncFailed()
+    func goToHome()
+    func presentUnverifiedRecoveryCodeWarning()
+    func dismissUnverifiedRecoveryCodeWarning()
 }
 
 class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
@@ -21,6 +24,7 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
     private var preferences: Preferences
     private var signFlow: SignFlow
     private var syncAttemptsLeft = 2
+    private var hasUserAcknowledgedIsUsingAnUnverifiedRecoveryCode = false
 
     init(delegate: Delegate, state: Bool, syncAction: SyncAction, preferences: Preferences) {
 
@@ -71,4 +75,22 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
         )
     }
 
+    func onReadyForHome() {
+        if hasUserLoggedInWithAnUnverifiedRecoveryCodeAndDidNotAcknowledgedTheIssue() {
+            delegate.presentUnverifiedRecoveryCodeWarning()
+        } else {
+            delegate.goToHome()
+        }
+    }
+
+    func onUserAcknowledgeRecoveryCodeUnverified() {
+        hasUserAcknowledgedIsUsingAnUnverifiedRecoveryCode = true
+        delegate.dismissUnverifiedRecoveryCodeWarning()
+    }
+
+    func hasUserLoggedInWithAnUnverifiedRecoveryCodeAndDidNotAcknowledgedTheIssue() -> Bool {
+        return preferences.bool(forKey: .hasResolvedARcChallenge)
+        && !preferences.bool(forKey: .hasRecoveryCode)
+        && !hasUserAcknowledgedIsUsingAnUnverifiedRecoveryCode
+    }
 }

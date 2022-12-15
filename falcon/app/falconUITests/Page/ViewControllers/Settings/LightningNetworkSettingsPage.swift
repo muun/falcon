@@ -20,4 +20,27 @@ final class LightningNetworkSettingsPage: UIElementPage<UIElements.Pages.Lightni
         turboChannels.tap()
     }
 
+    func openDropdownFromBtcOption() -> ReceiveFormatActionSheetPage {
+        Page.app.staticTexts[L10n.ReceiveFormatSettingDropdownView.receiveFormatBTCOption].tap()
+        return ReceiveFormatActionSheetPage()
+    }
+
+    func openDropdownFromLnOption() -> ReceiveFormatActionSheetPage {
+        Page.app.staticTexts[L10n.ReceiveFormatSettingDropdownView.receiveFormatLNOption].tap()
+        return ReceiveFormatActionSheetPage()
+    }
+}
+
+final class ReceiveFormatActionSheetPage: UIElementPage<UIElements.Pages.ReceiveFormatActionSheetPage> {
+    init() {
+        super.init(root: Root.root)
+    }
+
+    func tapOnLnOption() {
+        Page.app.staticTexts[L10n.ReceiveFormatSettingDropdownView.receiveFormatLNOption].tap()
+    }
+
+    func tapOnUnifiedOption() {
+        Page.app.staticTexts[L10n.ReceiveFormatSettingDropdownView.receiveFormatUnifiedOption].tap()
+    }
 }

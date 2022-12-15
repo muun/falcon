@@ -41,7 +41,9 @@ private struct StoredUserPreferences: Codable {
     var receiveStrictMode: Bool?
     var seenNewHome: Bool?
     var seenLnurlFirstTime: Bool?
+    var lightningDefaultForReceiving: Bool?
     var defaultAddressType: AddressType?
+    var receiveFormatPreference: ReceiveFormatPreference?
 
     init() {
     }
@@ -51,6 +53,8 @@ private struct StoredUserPreferences: Codable {
         self.seenNewHome = prefs.seenNewHome
         self.seenLnurlFirstTime = prefs.seenLnurlFirstTime
         self.defaultAddressType = prefs.defaultAddressType
+        self.lightningDefaultForReceiving = prefs.lightningDefaultForReceiving
+        self.receiveFormatPreference = prefs.receiveFormatPreference
     }
 
     func toModel() -> UserPreferences {
@@ -58,7 +62,9 @@ private struct StoredUserPreferences: Codable {
             receiveStrictMode: receiveStrictMode ?? false,
             seenNewHome: seenNewHome ?? false,
             seenLnurlFirstTime: seenLnurlFirstTime ?? false,
-            defaultAddressType: defaultAddressType ?? .segwit
+            lightningDefaultForReceiving: lightningDefaultForReceiving ?? false,
+            defaultAddressType: defaultAddressType ?? .segwit,
+            receiveFormatPreference: receiveFormatPreference ?? .ONCHAIN
         )
     }
 }

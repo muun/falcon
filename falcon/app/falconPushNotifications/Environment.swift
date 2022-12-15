@@ -38,7 +38,7 @@ extension Environment {
     public var houstonURL: String {
         switch self {
         case .debug:
-            return "http://localhost:8080"
+            return "http://\(getLocalhostByIp()):8080"
         case .regtest:
             return "https://pub.reg.api.muun.wtf/houston"
         case .dev:
@@ -53,7 +53,7 @@ extension Environment {
     var muunWebURL: String {
         switch self {
         case .debug:
-            return "http://localhost:3000"
+            return "http://\(getLocalhostByIp()):3000"
         case .regtest:
             return "https://reg.muun.com"
         case .dev:
@@ -70,4 +70,7 @@ extension Environment {
             ofType: "plist")!
     }
 
+    private func getLocalhostByIp() -> String {
+            return "localhost"
+    }
 }

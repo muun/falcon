@@ -91,6 +91,20 @@ extension SignInWithRCViewController: SignInWithRCViewDelegate {
 }
 
 extension SignInWithRCViewController: SignInWithRCPresenterDelegate {
+    func showStaleRcError() {
+        AnalyticsHelper.logEvent("rc_stale_error")
+        let desc = L10n.SignInEmailAndRCViewController.s10
+        let alert = UIAlertController(title: L10n.SignInEmailAndRCViewController.s9,
+                                      message: desc,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.SignInEmailAndRCViewController.s13,
+                                      style: .destructive,
+                                      handler: { _ in
+            alert.dismiss(animated: true)
+        }))
+
+        self.navigationController!.present(alert, animated: true)
+    }
 
     func invalidRecoveryCodeVersion() {
         enterRCView.wrongRecoveryCodeVersion()

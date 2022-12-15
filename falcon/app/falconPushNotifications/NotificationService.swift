@@ -45,7 +45,6 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     private func processNotification(_ notification: NotificationReportJson) throws {
-
         let preview = notification.message.preview
         if let notification = preview.first {
             showNotification(notification)
@@ -56,7 +55,6 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     private func showNotification(_ notification: NotificationJson) {
-
         if let bestAttemptContent = bestAttemptContent,
            let contentHandler = contentHandler {
 
@@ -66,22 +64,36 @@ class NotificationService: UNNotificationServiceExtension {
 
             contentHandler(bestAttemptContent)
         }
-
     }
 
     private func getNotificationReport(_ userInfo: [AnyHashable: Any]) throws -> NotificationReportJson {
+        if let aps = userInfo["aps"] as? [String: Any],
+           let alertReport = aps["alert"] as? [String: Any],
+           let data = try? JSONSerialization.data(withJSONObject: alertReport, options: []) {
+            return try getDecoded(data: data)
+        } else {
+            return try getNotificationReportLegacy(userInfo)
+        }
+    }
 
+    private func getDecoded(data: Data) throws -> NotificationReportJson {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .customISO8601
+        do {
+            return try decoder.decode(NotificationReportJson.self, from: data)
+        } catch {
+            throw InvalidNotificationStructureError()
+        }
+    }
+
+    private func getNotificationReportLegacy(_ userInfo: [AnyHashable: Any]) throws -> NotificationReportJson {
         if let aps = userInfo["aps"] as? [String: Any],
            let alert = aps["alert"] as? String,
            let data = alert.data(using: .utf8) {
 
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .customISO8601
-
-            return try decoder.decode(NotificationReportJson.self, from: data)
-        } else {
-            throw InvalidNotificationStructureError()
+            return try getDecoded(data: data)
         }
+        throw InvalidNotificationStructureError()
     }
 
     // We can't split an enum and we can't reduce the number of notifications

@@ -116,7 +116,7 @@ class QRCodeWithActionsView: UIView {
 
     fileprivate func setUpAddressLabel() {
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
-        labelStackView.spacing = 8
+        labelStackView.spacing = 4
         labelStackView.distribution = .equalSpacing
         labelStackView.isUserInteractionEnabled = true
         labelStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapLabel))

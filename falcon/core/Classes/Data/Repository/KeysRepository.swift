@@ -154,7 +154,18 @@ class KeysRepository {
         }
     }
 
-    func store(challengeKey: ChallengeKey) throws {
+    func storeVerified(challengeKey: ChallengeKey) throws {
+        let type = challengeKey.type
+        try storeUnverified(challengeKey: challengeKey)
+
+        if type == .RECOVERY_CODE {
+            markChallengeKeyAsVerifiedForRecoveryCode()
+        } else if type == .PASSWORD {
+            markChallengeKeyAsVerifiedForPassword()
+        }
+    }
+    
+    func storeUnverified(challengeKey: ChallengeKey) throws {
         let type = challengeKey.type
         if let salt = challengeKey.salt {
             try secureStorage.store(salt.toHexString(), at: saltKey(for: type))
@@ -164,20 +175,20 @@ class KeysRepository {
             String(describing: challengeKey.getChallengeVersion()),
             at: challengeVersionKey(for: type)
         )
+    }
 
+    private func markChallengeKeyAsVerifiedForPassword() {
         if var user = userRepository.getUser() {
-            if type == .RECOVERY_CODE {
-                user.hasRecoveryCodeChallengeKey = true
-                preferences.set(value: true, forKey: .hasRecoveryCode)
-            } else if type == .PASSWORD {
-                user.hasPasswordChallengeKey = true
-            }
+            user.hasPasswordChallengeKey = true
             userRepository.setUser(user)
         }
     }
-
-    func hasChallengeKey(type: ChallengeType) throws -> Bool {
-        return try secureStorage.has(publicKeyKey(for: type))
+    
+    func markChallengeKeyAsVerifiedForRecoveryCode() {
+        if var user = userRepository.getUser() {
+            user.hasRecoveryCodeChallengeKey = true
+            userRepository.setUser(user)
+        }
     }
 
     func getChallengeKey(with type: ChallengeType) throws -> ChallengeKey {

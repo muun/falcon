@@ -120,18 +120,24 @@ public struct UserPreferences: Codable {
     public let receiveStrictMode: Bool
     public let seenNewHome: Bool
     public let seenLnurlFirstTime: Bool
+    public let lightningDefaultForReceiving: Bool
     public let defaultAddressType: AddressType
+    public let receiveFormatPreference: ReceiveFormatPreference
 
     public func copy(receiveStrictMode: Bool? = nil,
                      seenNewHome: Bool? = nil,
                      seenLnurlFirstTime: Bool? = nil,
-                     defaultAddressType: AddressType? = nil) -> UserPreferences {
+                     lightningDefaultForReceiving: Bool? = nil,
+                     defaultAddressType: AddressType? = nil,
+                     receiveFormatPreference: ReceiveFormatPreference? = nil) -> UserPreferences {
 
         return UserPreferences(
             receiveStrictMode: receiveStrictMode ?? self.receiveStrictMode,
             seenNewHome: seenNewHome ?? self.seenNewHome,
             seenLnurlFirstTime: seenLnurlFirstTime ?? self.seenLnurlFirstTime,
-            defaultAddressType: defaultAddressType ?? self.defaultAddressType
+            lightningDefaultForReceiving: lightningDefaultForReceiving ?? self.lightningDefaultForReceiving,
+            defaultAddressType: defaultAddressType ?? self.defaultAddressType,
+            receiveFormatPreference: receiveFormatPreference ?? self.receiveFormatPreference
         )
     }
 }

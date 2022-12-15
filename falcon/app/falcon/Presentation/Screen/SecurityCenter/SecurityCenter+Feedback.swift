@@ -37,16 +37,6 @@ extension FeedbackInfo {
         )
     }
 
-    static let recoveryCodeSetupFail = FeedbackModel(
-        title: L10n.SecurityCenter.s9,
-        description: L10n.SecurityCenter.s10.attributedForDescription(),
-        buttonText: L10n.SecurityCenter.s11,
-        buttonAction: .popToRoot,
-        image: Asset.Assets.stateError.image,
-        lottieAnimationName: nil,
-        loggingParameters: ["type": "recovery_code_fail"]
-    )
-
     static let emergencyKit = FeedbackModel(
         title: L10n.SecurityCenter.s12,
         description: L10n.SecurityCenter.ekSuccessDescription.attributedForDescription(),
@@ -90,7 +80,8 @@ extension FeedbackInfo {
     static func taprootPreactivationCountdown(blocksLeft: UInt) -> FeedbackModel {
         FeedbackModel(
             title: L10n.SecurityCenter.TaprootActivationCountdown.title,
-            description: L10n.SecurityCenter.TaprootActivationCountdown.description(6, blocksLeft).attributedForDescription(),
+            description: L10n.SecurityCenter.TaprootActivationCountdown.description(6, blocksLeft)
+                .attributedForDescription(),
             buttonText: nil,
             buttonAction: nil,
             image: Asset.Assets.taprootCountdown.image,

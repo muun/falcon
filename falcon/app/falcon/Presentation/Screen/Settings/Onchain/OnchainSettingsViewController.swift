@@ -61,7 +61,9 @@ extension OnchainSettingsViewController: OnchainSettingsViewDelegate {
                 preferredStyle: .alert
             )
 
-            alert.addAction(UIAlertAction(title: L10n.SettingsViewController.cancel, style: .destructive, handler: { _ in
+            alert.addAction(UIAlertAction(title: L10n.SettingsViewController.cancel,
+                                          style: .destructive,
+                                          handler: { _ in
                 self.settingsView.enabled = false
             }))
 

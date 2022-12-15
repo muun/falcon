@@ -70,6 +70,8 @@ public enum Persistence: String, CaseIterable {
     case forwardingPolicies
 
     case minFeeRate
+    
+    case hasResolvedARcChallenge
 
     case emergencyKitVerificationCodes // [String]
 

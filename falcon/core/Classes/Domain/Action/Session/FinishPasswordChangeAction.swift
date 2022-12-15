@@ -32,7 +32,7 @@ public class FinishPasswordChangeAction: AsyncAction<()> {
         let update = ChallengeUpdate(uuid: uuid, challengeSetup: setup)
         runSingle(
             houstonService.finishPasswordChange(challengeUpdate: update).map({ _ in
-                try self.keysRepository.store(challengeKey: key)
+                try self.keysRepository.storeVerified(challengeKey: key)
             })
         )
 

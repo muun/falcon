@@ -57,6 +57,27 @@ struct IncomingInvoiceInfo {
 
         return formatter.string(from: timeRemaining)
     }
+
+    static func from(raw: String) -> IncomingInvoiceInfo {
+        let unixExpiration = getUnixExpirationTime(raw)
+        let info = IncomingInvoiceInfo(rawInvoice: raw, expiresAt: unixExpiration)
+
+        return info
+    }
+
+    static private func getUnixExpirationTime(_ rawInvoice: String) -> Double {
+        do {
+            let paymentIntent = try AddressHelper.parse(rawInvoice)
+            switch paymentIntent {
+            case .submarineSwap(let invoice):
+                return Double(invoice.expiry)
+            default:
+                Logger.fatal("Trying to parse something that is not a lightning invoice: \(rawInvoice)")
+            }
+        } catch {
+            Logger.fatal("Trying to parse something that is not a lightning invoice: \(rawInvoice)")
+        }
+    }
 }
 
 final class ReceiveInLightningView: UIView {

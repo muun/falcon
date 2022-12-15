@@ -13,8 +13,6 @@ class LightningNetworkSettingsViewController: MUViewController {
 
     private lazy var presenter = instancePresenter(LightningNetworkSettingsPresenter.init, delegate: self)
 
-    internal var lightningNetworkSettingsView: LightningNetworkSettingsView!
-
     init() {
         super.init(nibName: nil, bundle: nil)
         self.title = L10n.LightningNetworkSettings.title
@@ -28,9 +26,15 @@ class LightningNetworkSettingsViewController: MUViewController {
         return "settings_lightning_network"
     }
 
-    override func loadView() {
-        lightningNetworkSettingsView = LightningNetworkSettingsView(delegate: self)
-        view = lightningNetworkSettingsView
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = Asset.Colors.muunHomeBackgroundColor.color
+
+        let mainStackView = addMainStackView()
+
+        addReceiveFormatPreferenceSetting(to: mainStackView)
+        addTurboChannelsSettings(to: mainStackView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -47,57 +51,35 @@ class LightningNetworkSettingsViewController: MUViewController {
         presenter.tearDown()
     }
 
-}
-
-extension LightningNetworkSettingsViewController: LightningNetworkSettingsViewDelegate {
-
-    func didTapLearnMore() {
-        UIApplication.shared.open(
-            URL(string: L10n.LightningNetworkSettings.blogPost)!, options: [:]
-        )
+    private func addTurboChannelsSettings(to stackView: UIStackView) {
+        let toggleView = TurboChannelSettingsTogglePresenter<SettingsToggleView>.createView()
+        stackView.addArrangedSubviewWrappingLeadingAndTrailing(toggleView)
     }
 
-    func toggle() {
-        if !lightningNetworkSettingsView.enabled {
-            presenter.toggle()
-        } else {
-            let alert = UIAlertController(
-                title: L10n.LightningNetworkSettings.confirmTitle,
-                message: L10n.LightningNetworkSettings.confirmDescription,
-                preferredStyle: .alert
-            )
-
-            alert.addAction(UIAlertAction(title: L10n.SettingsViewController.cancel, style: .cancel, handler: { _ in
-                self.lightningNetworkSettingsView.enabled = true
-            }))
-
-            alert.addAction(UIAlertAction(title: L10n.LightningNetworkSettings.disable,
-                                          style: .destructive,
-                                          handler: { _ in
-                self.presenter.toggle()
-            }))
-
-            present(alert, animated: true)
-        }
-
+    private func addReceiveFormatPreferenceSetting(to stackView: UIStackView) {
+        let view = ReceiveFormatPreferenceDropdownPresenter<ReceiveFormatSettingDropdownView>.createView()
+        stackView.addArrangedSubviewWrappingLeadingAndTrailing(view)
     }
 
+    private func addMainStackView() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .top
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 0
+
+        view.addSubviewWrappingParent(child: stackView, skipBottomContraint: true)
+
+        return stackView
+    }
 }
 
 extension LightningNetworkSettingsViewController: LightningNetworkSettingsPresenterDelegate {
-
-    func update(enabled: Bool) {
-        lightningNetworkSettingsView.enabled = enabled
-    }
-
     func setLoading(_ loading: Bool) {
-        lightningNetworkSettingsView.loading = loading
-
         if loading {
             showLoading("")
         } else {
             dismissLoading()
         }
     }
-
 }

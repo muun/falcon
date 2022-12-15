@@ -25,7 +25,8 @@ public class CreateSessionAction: AsyncAction<CreateSessionOk> {
     public func run(email: String, gcmToken: String) {
         // We have to wipe everything to avoid edgy bugs with the notifications
         logoutAction.run(notifyHouston: false)
-
+        self.preferences.set(value: false, forKey: .hasResolvedARcChallenge)
+        self.preferences.set(value: false, forKey: .welcomeMessageSeen)
         let session = CreateLoginSession(client: Client.buildCurrent(), email: email, gcmToken: gcmToken)
 
         let single = logoutAction.getValue()

@@ -39,7 +39,6 @@ enum NewOpError: ErrorViewModel {
         }
     }
 
-    // swiftlint:disable function_body_length
     func description() -> NSAttributedString {
         switch self {
         case .invalidAddress:
@@ -134,6 +133,10 @@ enum NewOpError: ErrorViewModel {
         case .invoiceUnreachableNode: return "invoice_unreachable_node"
         case .cyclicalSwap: return "cyclical_swap"
         }
+    }
+
+    func secondaryButtonText() -> String {
+        return L10n.ErrorView.goToHome
     }
 }
 // swiftlint:enable cyclomatic_complexity

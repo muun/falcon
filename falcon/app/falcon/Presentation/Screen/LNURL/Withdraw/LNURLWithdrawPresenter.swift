@@ -294,6 +294,9 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
         return nil
     }
 
+    func secondaryButtonText() -> String {
+        return L10n.ErrorView.goToHome
+    }
 }
 
 extension LNURLWithdrawPresenter: NotificationsFetcher {}

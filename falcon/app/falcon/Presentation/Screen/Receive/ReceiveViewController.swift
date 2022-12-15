@@ -13,18 +13,20 @@ import core
 enum ReceiveType {
     case onChain
     case lightning
+    case unified
 }
 
-class ReceiveViewController: MUViewController {
-
+class ReceiveViewController: MUViewController, Resolver {
     private var scrollView = UIScrollView()
     private var segmentControlView: UISegmentedControl!
     private var receiveOnChainView: ReceiveOnChainView!
     private var receiveInLightningView: ReceiveInLightningView!
+    private var receiveUnifiedView: ReceiveUnifiedView!
     private var notificationsPrimingView: NotificationsPrimingView!
 
     private var receiveInLightningViewConstraints: [NSLayoutConstraint] = []
     private var receiveOnChainViewConstraints: [NSLayoutConstraint] = []
+    private var receiveUnifiedViewConstraints: [NSLayoutConstraint] = []
 
     fileprivate lazy var presenter = instancePresenter(ReceivePresenter.init, delegate: self)
     fileprivate lazy var typeLogParams = segwitLogParams
@@ -33,6 +35,7 @@ class ReceiveViewController: MUViewController {
     fileprivate let taprootLogParams = ["type": "taproot_address"]
     fileprivate let onChainAddressLogParams = ["type": "on_chain_address"]
     fileprivate let lightningInvoiceLogParams = ["type": "lightning_invoice"]
+    fileprivate let unifiedFormatLogParams = ["type": "unified_format"]
     fileprivate let notificationLogParams = ["type": "notifications_priming"]
 
     fileprivate let receiveLogName = "receive"
@@ -66,7 +69,6 @@ class ReceiveViewController: MUViewController {
     required init?(coder aDecoder: NSCoder) {
         preconditionFailure()
     }
-
     override func loadView() {
         setUpView()
 
@@ -74,6 +76,17 @@ class ReceiveViewController: MUViewController {
     }
 
     override func viewDidLoad() {
+        switch presenter.retrieveReceivePreference() {
+        case .ONCHAIN:
+            receiveType = .onChain
+            segmentControlView.selectedSegmentIndex = 0
+        case .LIGHTNING:
+            receiveType = .lightning
+            segmentControlView.selectedSegmentIndex = 0
+        case .UNIFIED:
+            receiveType = .unified
+        }
+
         showViewForCurrentReceiveType()
         additionalSafeAreaInsets = .zero
     }
@@ -83,7 +96,9 @@ class ReceiveViewController: MUViewController {
         setUpNavigation()
 
         presenter.setUp()
-        if receiveType == .lightning {
+        if receiveType == .unified {
+            presenter.refreshUnifiedQR()
+        } else if receiveType == .lightning {
             presenter.refreshLightningInvoice()
         }
 
@@ -110,6 +125,7 @@ class ReceiveViewController: MUViewController {
         setUpSegmentedControl()
         setUpOnChainView()
         setUpLightningView()
+        setUpUnifiedView()
         setUpNotificationsPrimingView()
     }
 
@@ -127,8 +143,16 @@ class ReceiveViewController: MUViewController {
 
     private func setUpSegmentedControl() {
         segmentControlView = UISegmentedControl()
-        segmentControlView.insertSegment(withTitle: L10n.ReceiveViewController.s1, at: 0, animated: true)
-        segmentControlView.insertSegment(withTitle: L10n.ReceiveViewController.s2, at: 1, animated: true)
+
+        if isOnchainDefaultPreference() {
+            segmentControlView.insertSegment(withTitle: L10n.ReceiveViewController.s1, at: 0, animated: true)
+            segmentControlView.insertSegment(withTitle: L10n.ReceiveViewController.s2, at: 1, animated: true)
+
+        } else {
+            segmentControlView.insertSegment(withTitle: L10n.ReceiveViewController.s2, at: 0, animated: true)
+            segmentControlView.insertSegment(withTitle: L10n.ReceiveViewController.s1, at: 1, animated: true)
+        }
+
         segmentControlView.addTarget(self, action: #selector(segmentSelected(sender:)), for: .valueChanged)
         segmentControlView.selectedSegmentIndex = 0
         segmentControlView.translatesAutoresizingMaskIntoConstraints = false
@@ -177,6 +201,23 @@ class ReceiveViewController: MUViewController {
         receiveInLightningView.isHidden = true
     }
 
+    private func setUpUnifiedView() {
+        receiveUnifiedView = ReceiveUnifiedView(delegate: self,
+                                                addressType: presenter.defaultAddressType())
+        receiveUnifiedView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(receiveUnifiedView)
+
+        receiveUnifiedViewConstraints = [
+            receiveUnifiedView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            receiveUnifiedView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            receiveUnifiedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            receiveUnifiedView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            receiveUnifiedView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        ]
+
+        receiveUnifiedView.isHidden = true
+    }
+
     private func setUpNotificationsPrimingView() {
         notificationsPrimingView = NotificationsPrimingView(delegate: self)
         notificationsPrimingView.translatesAutoresizingMaskIntoConstraints = false
@@ -185,17 +226,31 @@ class ReceiveViewController: MUViewController {
         NSLayoutConstraint.activate([
             notificationsPrimingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             notificationsPrimingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            // Add some space below the segmented control
-            notificationsPrimingView.topAnchor.constraint(equalTo: segmentControlView.bottomAnchor, constant: 4),
             notificationsPrimingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+
+        if presenter.retrieveReceivePreference() == .UNIFIED {
+            NSLayoutConstraint.activate([
+                // Add some space below the top of the screen
+                notificationsPrimingView.topAnchor.constraint(equalTo: view.topAnchor,
+                                                              constant: 4)])
+        } else {
+            NSLayoutConstraint.activate([
+                // Add some space below the segmented control
+                notificationsPrimingView.topAnchor.constraint(equalTo: segmentControlView.bottomAnchor,
+                                                              constant: 4)])
+        }
 
         notificationsPrimingView.isHidden = true
     }
 
     private func setUpNavigation() {
         navigationController!.setNavigationBarHidden(false, animated: true)
-        title = L10n.ReceiveViewController.s3
+        if presenter.retrieveReceivePreference() == .UNIFIED {
+            title = L10n.ReceiveViewController.receiveBitcoin
+        } else {
+            title = L10n.ReceiveViewController.s3
+        }
     }
 
     private func animateView() {
@@ -211,13 +266,16 @@ class ReceiveViewController: MUViewController {
     @objc func segmentSelected(sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
 
-        if index == 0 {
-            receiveType = .onChain
+        if isOnchainDefaultPreference() {
+            receiveType = index == 0 ? .onChain : .lightning
         } else {
-            receiveType = .lightning
+            receiveType = index == 0 ? .lightning : .onChain
         }
     }
 
+    private func isOnchainDefaultPreference() -> Bool {
+        return presenter.retrieveReceivePreference() == .ONCHAIN
+    }
     private func showNotificationsPriming(isLightning: Bool) {
         notificationsPrimingView.isHidden = false
         if isLightning {
@@ -236,6 +294,8 @@ class ReceiveViewController: MUViewController {
             showOnChain()
         case .lightning:
             showLightning()
+        case .unified:
+            showUnifiedQR()
         }
     }
 
@@ -308,7 +368,40 @@ class ReceiveViewController: MUViewController {
                 displayInvoiceView()
             }
         }
+    }
 
+    // We display the push notifications priming view for o lightning if we know that the permissions are not granted
+    private func showUnifiedQR() {
+        NSLayoutConstraint.deactivate(receiveOnChainViewConstraints)
+        segmentControlView.removeFromSuperview()
+        receiveOnChainView.isHidden = true
+        receiveInLightningView.isHidden = true
+        func displayPermissionsView() {
+            notificationsPrimingView.isHidden = false
+        }
+
+        func displayUnifiedView() {
+            typeLogParams = unifiedFormatLogParams
+            logScreen(receiveLogName, parameters: getLogParams())
+
+            // Always update the invoice before displaying the view
+            presenter.refreshUnifiedQR()
+
+            notificationsPrimingView.isHidden = true
+            receiveUnifiedView.setAmount(nil)
+            receiveUnifiedView.isHidden = false
+            NSLayoutConstraint.activate(receiveUnifiedViewConstraints)
+            receiveUnifiedView.alpha = 0
+            receiveUnifiedView.animate(direction: .topToBottom, duration: .short)
+        }
+
+        PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
+            if status == .notDetermined || status == .denied {
+                self.showNotificationsPriming(isLightning: true)
+            } else {
+                displayUnifiedView()
+            }
+        }
     }
 
     @objc func didTapLNURL() {
@@ -324,7 +417,6 @@ class ReceiveViewController: MUViewController {
 }
 
 extension ReceiveViewController: ReceivePresenterDelegate {
-
     func didReceiveNewOperation(message: String) {
         showToast(message: message)
     }
@@ -334,13 +426,24 @@ extension ReceiveViewController: ReceivePresenterDelegate {
         receiveInLightningView.displayInvoice(invoice)
     }
 
+    func show(bitcoinURIViewModel: BitcoinURIViewModel?) {
+        receiveUnifiedView.display(bitcoinURIViewModel: bitcoinURIViewModel)
+    }
 }
 
 extension ReceiveViewController: ReceiveOnChainViewDelegate {
 
     func didTapOnAddressTypeControl() {
-        let vc = ReceiveAddressTypeSelectViewController(
-            delegate: self, addressType: receiveOnChainView.addressType)
+        let userActivatedFeature: UserActivatedFeaturesSelector = ReceiveViewController.resolve()
+        let blockchainHeightRepository: BlockchainHeightRepository = ReceiveViewController.resolve()
+        let optionsRetriever = AddressTypeOptionsRetriever(userActivatedFeatureSelector: userActivatedFeature,
+                                                           blockheightRepository: blockchainHeightRepository)
+        let options = optionsRetriever.run(selectedOption: receiveOnChainView.addressType)
+        let vc = MUActionSheetView(
+            delegate: self,
+            headerTitle: L10n.AddressTypeSelectViewController.title,
+            screenNameForLogs: "receive_address_type_select",
+            viewOptions: options)
 
         present(vc, animated: true)
     }
@@ -437,7 +540,18 @@ extension ReceiveViewController: ReceiveInLightningViewDelegate {
     func didTapOnRequestNewInvoice() {
         presenter.refreshLightningInvoice()
     }
+}
 
+extension ReceiveViewController: ReceiveUnifiedViewDelegate {
+    func didTapOn(URI: BitcoinURIViewModel) {
+        let URI = BottomDrawerInfo.unifiedAddress(URI.detailedURIForDescription())
+        let overlayVc = BottomDrawerOverlayViewController(info: URI)
+        self.present(overlayVc, animated: true)
+    }
+
+    func didTapOnRequestNewUnfiedQR() {
+        presenter.refreshUnifiedQR()
+    }
 }
 
 extension ReceiveViewController: NotificationsPrimingViewDelegate {
@@ -490,19 +604,37 @@ extension ReceiveViewController: ReceiveAmountInputViewControllerDelegate {
                 // the amount modal. So we need to trigger a refresh of the invoice manually.
                 // For older versions, the viewWillAppear will take care of it. And we actually want that, since
                 // this method requires the view to be fully shown and will crash otherwise.
-                presenter.refreshLightningInvoice()
+                if receiveType == .unified {
+                    presenter.refreshUnifiedQR()
+                } else {
+                    presenter.refreshLightningInvoice()
+                }
             }
-
-            receiveInLightningView.setAmount(bitcoinAmount)
+            if receiveType == .unified {
+                receiveUnifiedView.setAmount(bitcoinAmount)
+            } else {
+                receiveInLightningView.setAmount(bitcoinAmount)
+            }
         }
     }
 
 }
 
-extension ReceiveViewController: ReceiveAddressTypeSelectViewControllerDelegate {
+extension ReceiveViewController: MUActionSheetViewDelegate {
 
-    func didSelect(addressType: AddressType) {
+    func didSelect(option: any MUActionSheetOption) {
+
+        guard let addressType = option as? AddressTypeViewModel else {
+            let optionName = option.name
+            Logger.fatal("receive actionSheet is working with something that is not an AddressViewModel \(optionName)")
+        }
+
         receiveOnChainView.addressType = addressType
+
+        if presenter.retrieveReceivePreference() == .UNIFIED {
+            receiveUnifiedView.addressType = addressType
+            presenter.refreshUnifiedQR(replacingSelectedAddressTypeBy: addressType)
+        }
 
         switch addressType {
         case .segwit:

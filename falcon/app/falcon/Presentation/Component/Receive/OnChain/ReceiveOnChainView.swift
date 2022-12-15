@@ -9,7 +9,10 @@
 import UIKit
 import core
 
-extension AddressType {
+enum AddressTypeViewModel: String, MUActionSheetOption {
+    case segwit
+    case legacy
+    case taproot
 
     var name: String {
         switch self {
@@ -19,15 +22,19 @@ extension AddressType {
         }
     }
 
-    var description: String {
+    var description: NSAttributedString {
         switch self {
         case .legacy:
-            return L10n.AddressTypeOptionView.legacyDescription
+            return L10n.AddressTypeOptionView.legacyDescription.toAttributedString()
         case .segwit:
-            return L10n.AddressTypeOptionView.segwitDescription
+            return L10n.AddressTypeOptionView.segwitDescription.toAttributedString()
         case .taproot:
-            return L10n.AddressTypeOptionView.taprootDescription
+            return L10n.AddressTypeOptionView.taprootDescription.toAttributedString()
         }
+    }
+
+    static func from(model: AddressType) -> AddressTypeViewModel {
+        return AddressTypeViewModel(rawValue: model.rawValue)!
     }
 }
 
@@ -46,13 +53,13 @@ final class ReceiveOnChainView: UIView {
     private let addressSet: AddressSet
     private weak var delegate: ReceiveOnChainViewDelegate?
 
-    var addressType: AddressType {
+    var addressType: AddressTypeViewModel {
         didSet {
             updateQRCode()
             advancedOptionsView.setAddressType(addressType)
         }
     }
-    let defaultAddressType: AddressType
+    let defaultAddressType: AddressTypeViewModel
 
     private var currentAddress: String {
         switch addressType {
@@ -69,7 +76,7 @@ final class ReceiveOnChainView: UIView {
 
     init(addressSet: AddressSet,
          delegate: ReceiveOnChainViewDelegate?,
-         defaultAddressType: AddressType) {
+         defaultAddressType: AddressTypeViewModel) {
         self.defaultAddressType = defaultAddressType
         self.addressType = defaultAddressType
         self.addressSet = addressSet

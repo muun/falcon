@@ -31,7 +31,7 @@ public class SetupChallengeAction: AsyncAction<()> {
 
         runSingle(
             houstonService.setupChallenge(challengeSetup: setup).map({ response in
-                try self.keysRepository.store(challengeKey: key)
+                try self.keysRepository.storeVerified(challengeKey: key)
 
                 if let muunKey = response.muunKey {
                     try self.keysRepository.store(muunPrivateKey: muunKey)
@@ -42,5 +42,4 @@ public class SetupChallengeAction: AsyncAction<()> {
             })
         )
     }
-
 }

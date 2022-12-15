@@ -16,6 +16,7 @@ protocol SignInWithRCPresenterDelegate: BasePresenterDelegate {
     func invalidRecoveryCodeVersion()
     func loggedIn()
     func needsEmailVerify(obfuscatedEmail: String)
+    func showStaleRcError()
 }
 
 class SignInWithRCPresenter<Delegate: SignInWithRCPresenterDelegate>: BasePresenter<Delegate> {
@@ -84,13 +85,11 @@ class SignInWithRCPresenter<Delegate: SignInWithRCPresenterDelegate>: BasePresen
 
         case .ERROR:
             if let e = result.error {
-
                 if e.isKindOf(.recoveryCodeNotSetUp) {
                     delegate.recoveryCodeNotSetUp()
                 } else {
                     handleError(e)
                 }
-
             } else {
                 handleError(ServiceError.defaultError)
             }
@@ -113,8 +112,11 @@ class SignInWithRCPresenter<Delegate: SignInWithRCPresenterDelegate>: BasePresen
 
         case .ERROR:
             if let e = value.error {
-                handleError(e)
-
+                if e.isKindOf(.staleChallengeKey) {
+                    delegate.showStaleRcError()
+                } else {
+                    handleError(e)
+                }
             } else {
                 handleError(ServiceError.defaultError)
             }

@@ -13,6 +13,7 @@ import core
 protocol ReceivePresenterDelegate: BasePresenterDelegate {
     func didReceiveNewOperation(message: String)
     func show(invoice: IncomingInvoiceInfo?)
+    func show(bitcoinURIViewModel: BitcoinURIViewModel?)
 }
 
 class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delegate> {
@@ -20,21 +21,29 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     private let addressActions: AddressActions
     private let operationActions: OperationActions
     private let createInvoiceAction: CreateInvoiceAction
+    private let createBitcoinURIAction: CreateBitcoinURIAction
     private let preferences: Preferences
     internal let fetchNotificationsAction: FetchNotificationsAction
     private let userPreferencesSelector: UserPreferencesSelector
 
     private let addressSet: AddressSet
+    private var currentAddressType: AddressTypeViewModel?
     private var numberOfOperations: Int?
 
-    private var customAmount: BitcoinAmountWithSelectedCurrency?
+    private var customAmount: BitcoinAmountWithSelectedCurrency? {
+        didSet {
+            lastGeneratedBitcoinUri = nil // The existing bitcoinURI is invalid if amount change.
+        }
+    }
     private var amountChanged: Bool = false
+    private var lastGeneratedBitcoinUri: BitcoinURIViewModel?
 
     init(delegate: Delegate,
          addressActions: AddressActions,
          preferences: Preferences,
          operationActions: OperationActions,
          createInvoiceAction: CreateInvoiceAction,
+         createBitcoinURIAction: CreateBitcoinURIAction,
          fetchNotificationsAction: FetchNotificationsAction,
          userPreferencesSelector: UserPreferencesSelector) {
         self.addressActions = addressActions
@@ -43,6 +52,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         self.createInvoiceAction = createInvoiceAction
         self.fetchNotificationsAction = fetchNotificationsAction
         self.userPreferencesSelector = userPreferencesSelector
+        self.createBitcoinURIAction = createBitcoinURIAction
         do {
             self.addressSet = try addressActions.generateExternalAddresses()
         } catch {
@@ -76,7 +86,6 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     }
 
     func refreshLightningInvoice() {
-
         self.delegate.show(invoice: nil)
 
         let amount = customAmount?.bitcoinAmount.inSatoshis
@@ -89,23 +98,52 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         }
 
         subscribeTo(action) { rawInvoice in
-            let unixExpiration = self.getUnixExpirationTime(rawInvoice)
-            let info = IncomingInvoiceInfo(rawInvoice: rawInvoice, expiresAt: unixExpiration)
+            let info = IncomingInvoiceInfo.from(raw: rawInvoice)
             self.delegate.show(invoice: info)
         }
     }
 
-    private func getUnixExpirationTime(_ rawInvoice: String) -> Double {
-        do {
-            let paymentIntent = try AddressHelper.parse(rawInvoice)
-            switch paymentIntent {
-            case .submarineSwap(let invoice):
-                return Double(invoice.expiry)
-            default:
-                Logger.fatal("Trying to parse something that is not a lightning invoice: \(rawInvoice)")
-            }
-        } catch {
-            Logger.fatal("Trying to parse something that is not a lightning invoice: \(rawInvoice)")
+    func refreshUnifiedQR(replacingSelectedAddressTypeBy newAddressType: AddressTypeViewModel? = nil) {
+        self.currentAddressType = newAddressType ?? currentAddressType
+        self.delegate.show(bitcoinURIViewModel: nil)
+
+        let amount = customAmount?.bitcoinAmount.inSatoshis
+
+        let address = getAddressBy(addressType: getCurrentAddressTypeOrDefault())
+
+        var action = createBitcoinURIAction.run(amount: amount,
+                                                reusableInvoice: retrieveReusableInvoice(),
+                                                address: address)
+        if amountChanged {
+            action = action.delay(.seconds(1), scheduler: MainScheduler.instance)
+            amountChanged = false
+        }
+
+        subscribeTo(action) { [weak self] rawBitcoinUri in
+            self?.lastGeneratedBitcoinUri = BitcoinURIViewModel.from(raw: rawBitcoinUri)
+            self?.delegate.show(bitcoinURIViewModel: self?.lastGeneratedBitcoinUri)
+        }
+    }
+
+    private func retrieveReusableInvoice() -> ReusableInvoiceForURICreation? {
+        var reusableInvoice: ReusableInvoiceForURICreation?
+        lastGeneratedBitcoinUri.map {
+            reusableInvoice = ReusableInvoiceForURICreation(raw: $0.invoice.rawInvoice,
+                                                            expiresAt: $0.invoice.expiresAt)
+        }
+
+        return reusableInvoice
+    }
+
+    private func getCurrentAddressTypeOrDefault() -> AddressTypeViewModel {
+        return currentAddressType ?? defaultAddressType()
+    }
+
+    private func getAddressBy(addressType: AddressTypeViewModel) -> String {
+        switch addressType {
+        case .taproot: return getOnChainAddresses().taproot
+        case .segwit: return getOnChainAddresses().segwit
+        case .legacy: return getOnChainAddresses().legacy
         }
     }
 
@@ -123,8 +161,13 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
             }
 
             if newOp.incomingSwap != nil {
-                refreshLightningInvoice()
+                if retrieveReceivePreference() == .UNIFIED {
+                    refreshUnifiedQR()
+                } else {
+                    refreshLightningInvoice()
+                }
             }
+
             let newOpInputCurrency = newOp.amount.inInputCurrency
             let amount = newOpInputCurrency.toAmountPlusCode()
             let message = L10n.ReceivePresenter.s1(amount)
@@ -152,13 +195,21 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         return !(preferences?.seenLnurlFirstTime ?? false)
     }
 
-    func defaultAddressType() -> AddressType {
+    func retrieveReceivePreference() -> ReceiveFormatPreference {
+        let preferences = try? userPreferencesSelector.get()
+            .toBlocking()
+            .first()
+
+        return preferences?.receiveFormatPreference ?? .ONCHAIN
+    }
+
+    func defaultAddressType() -> AddressTypeViewModel {
         do {
             let preferences = try userPreferencesSelector.get()
                 .toBlocking()
                 .single()
 
-            return preferences.defaultAddressType
+            return AddressTypeViewModel.from(model: preferences.defaultAddressType)
         } catch {
             return .segwit
         }

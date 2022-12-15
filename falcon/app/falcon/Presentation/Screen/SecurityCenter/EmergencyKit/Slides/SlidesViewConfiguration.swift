@@ -106,13 +106,17 @@ extension SlidesViewConfiguration {
                     preferredStyle: .alert
                 )
 
-                let stayAction = UIAlertAction(title: L10n.TaprootActivationSlides.stay, style: .default, handler: { _ in
+                let stayAction = UIAlertAction(title: L10n.TaprootActivationSlides.stay,
+                                               style: .default,
+                                               handler: { _ in
                     alert.dismiss(animated: true)
                 })
                 alert.addAction(stayAction)
                 alert.preferredAction = stayAction
 
-                alert.addAction(UIAlertAction(title: L10n.TaprootActivationSlides.leave, style: .destructive, handler: { _ in
+                alert.addAction(UIAlertAction(title: L10n.TaprootActivationSlides.leave,
+                                              style: .destructive,
+                                              handler: { _ in
                     vc.navigationController?.popToRootViewController(animated: true)
                 }))
 

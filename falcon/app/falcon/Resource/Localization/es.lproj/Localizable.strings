@@ -8,6 +8,8 @@
 "ErrorView.goToHome" = "VOLVER AL INICIO";
 "ErrorView.retry" = "REINTENTAR";
 "ErrorView.sendReport" = "ENVIAR REPORTE";
+"ErrorView.goBack" = "VOLVER";
+"ErrorView.goToSecurityCenter" = "IR AL CENTRO DE SEGURIDAD";
 /* Presentation/Component/PopUp/WelcomePopUpView.swift */
 "WelcomePopUpView.message" = "Creaste tu monedero.
 ¡Bienvenido a Muun!";
@@ -25,6 +27,8 @@
 "ReceiveInLightningView.s5" = "Esta factura expiró. Creá una nueva.";
 "ReceiveInLightningView.s6" = "CREAR FACTURA";
 "ReceiveInLightningView.loading" = "Generando factura";
+/* Presentation/Component/Receive/ReceiveUnifiedView.swift */
+"ReceiveUnifiedView.loading" = "Generando código QR";
 /* Presentation/Component/Receive/ReceiveOnChainView.swift */
 "ReceiveOnChainView.s1" = "Dirección de compatibilidad";
 "ReceiveOnChainView.s4" = "Cambiar a dirección de compatibilidad";
@@ -288,8 +292,13 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "ReceiveViewController.s1" = "Bitcoin";
 "ReceiveViewController.s2" = "Lightning";
 "ReceiveViewController.s3" = "Recibir";
+"ReceiveViewController.receiveBitcoin" = "Recibir Bitcoin";
 "ReceiveViewController.s4" = "Copiado al portapapeles";
 "ReceiveViewController.s5" = "Copiado al portapapeles. Esta factura expirará en %@.";
+"ReceiveViewController.detailedURIDisclaimer" = "🧪 Los códigos QR unificados son experimentales";
+"ReceiveViewController.detailedURIBTCTitle" = "Tu dirección de bitcoin";
+"ReceiveViewController.detailedURILNTitle" = "Tu factura de lightning";
+
 /* Presentation/Screen/Receive/AddressTypeSelectViewController.swift */
 "AddressTypeSelectViewController.title" = "Elige tu tipo de dirección";
 /* Presentation/Screen/Receive/OnChain/OnChainAdvancedOptionsView.swift */
@@ -307,6 +316,8 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 /* Presentation/Screen/Receive/Lightning/LightningAdvancedOptionsView.swift */
 "LightningAdvancedOptionsView.header" = "Configuración de factura";
 "LightningAdvancedOptionsView.hide" = "Ocultar configuración";
+/* Presentation/Component/Receive/Lightning/UnifiedAdvancedOptionsView.swift */
+"UnifiedAdvancedOptionsView.header" = "Configuración";
 /* Presentation/Screen/Receive/Lightning/ExpirationTimeOptionView.swift */
 "ExpirationTimeOptionView.label" = "Tiempo de expiración";
 /* Presentation/Screen/Receive/AmountOptionView.swift */
@@ -315,6 +326,7 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 /* Presentation/Screen/Receive/ReceiveAmountInputViewController.swift */
 "ReceiveAmountInputViewController.titleLightning" = "Editar monto de factura";
 "ReceiveAmountInputViewController.titleOnChain" = "Editar monto de dirección";
+"ReceiveAmountInputViewController.editAmount" = "Editar monto";
 "ReceiveAmountInputViewController.confirm" = "CONFIRMAR MONTO";
 "ReceiveAmountInputViewController.remove" = "ELIMINAR MONTO";
 "ReceiveAmountInputViewController.tooSmall" = "MONTO DEMASIADO PEQUEÑO";
@@ -417,6 +429,11 @@ Intenta recordarla.";
 "SignInEmailAndRCViewController.s5" = "Probablemente lo escribiste en un papel. ¿Qué es esto?";
 "SignInEmailAndRCViewController.s7" = "Código de Recuperación incorrecto. Intenta de nuevo.";
 "SignInEmailAndRCViewController.s8" = "INGRESAR CÓDIGO";
+"SignInEmailAndRCViewController.s9" = "Código de Recuperación inválido";
+"SignInEmailAndRCViewController.s10" = "No has completado la configuración de este Código de Recuperación. Deberías tener uno más nuevo. Por favor, encuéntralo e inténtalo nuevamente.";
+"SignInEmailAndRCViewController.s11" = "Tus credenciales (correo electrónico y Código de Recuperación) no coinciden.";
+"SignInEmailAndRCViewController.s12" = "Por favor, asegúrarte de ingresar el Código de Recuperación que recupera el monedero que usa el correo %@";
+"SignInEmailAndRCViewController.s13" = "Aceptar";
 /* Presentation/Screen/RecoverWallet/VerifyEmail/SignInAuthorizeEmailViewController.swift */
 "SignInAuthorizeEmailViewController.s1" = "Autoriza tu inicio de sesión";
 "SignInAuthorizeEmailViewController.s2" = "Recupera tu monedero";
@@ -661,6 +678,13 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Confirm/FinishRecoveryCodeSetupViewController.swift */
 "FinishRecoveryCodeSetupViewController.s1" = "Dos cosas que debes entender";
 "FinishRecoveryCodeSetupViewController.s2" = "FINALIZAR";
+"FinishRecoveryCodeSetupViewController.s3" = "Error al crear el respaldo";
+"FinishRecoveryCodeSetupViewController.s4" = "Tu Código de Recuperación se usa para crear un respaldo encriptado de tu clave privada. Para guardarlo, necesitas conexión a Internet.
+
+Por favor revisa tu conexión e inténtalo de nuevo.";
+"FinishRecoveryCodeSetupViewController.s5" = "Reintentar";
+"FinishRecoveryCodeSetupViewController.s6" = "Cancelar";
+
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Generate/GenerateRecoveryCodeViewController.swift */
 "GenerateRecoveryCodeViewController.s1" = "Escribe tu Código de Recuperación";
 "GenerateRecoveryCodeViewController.s2" = "Usa lapicera y papel. Por seguridad, no lo guardes en tu teléfono o en la nube.";
@@ -671,6 +695,12 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "GenerateRecoveryCodeViewController.s7" = "No has terminado de configurar tu Código de Recuperación. Si abortas ahora, éste código no funcionará para acceder a tu monedero o exportar tus Claves Privadas";
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/Priming/RecoveryCodePrimingViewController.swift */
 "RecoveryCodePrimingViewController.s1" = "EMPEZAR";
+"RecoveryCodePrimingViewController.s2" = "Error al crear el respaldo";
+"RecoveryCodePrimingViewController.s3" = "Estás a punto de crear un respaldo encriptado de tu clave privada. Para guardarlo, necesitas conexión a Internet.
+
+Por favor revisa tu conexión e inténtalo de nuevo.";
+"RecoveryCodePrimingViewController.s4" = "Reintentar";
+"RecoveryCodePrimingViewController.s5" = "Cancelar";
 /* Presentation/Screen/SecurityCenter/SetupRecoveryCode/SetUpRecoveryCodeWording.swift */
 "SetUpRecoveryCodeWording.s1" = "Crea otro respaldo";
 "SetUpRecoveryCodeWording.s2" = "Escribe un código en papel para recuperar tu monedero.";
@@ -790,6 +820,13 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 /* Presentation/Screen/Sync/SyncViewController.swift */
 "SyncViewController.s1" = "Cargando tu monedero";
 "SyncViewController.s2" = "Creando tu monedero";
+"SyncViewController.s3" = "Advertencia";
+"SyncViewController.s4" = "No has completado la configuración del Código de Recuperación que acabas de usar para recuperar tu monedero.
+
+Visita el Centro de seguridad para respaldar tu monedero con un nuevo Código de Recuperación y asegúrate de terminar la configuración esta vez.
+
+Tan pronto como crees un nuevo Código de Recuperación, el actual será invalidado.";
+"SyncViewController.s5" = "¡ENTENDIDO!";
 /* Presentation/Screen/ApiMigrations/ApiMigrationsViewController.swift */
 "ApiMigrationsViewController.loading" = "Cargando tu monedero";
 "ApiMigrationsViewController.failedAlertTitle" = "Ha ocurrido un error al cargar tu monedero";
@@ -816,6 +853,10 @@ Esto habilita la autenticación multi-factor, mejorando la seguridad cuando usas
 "LightningNetworkSettings.turboChannels" = "Turbo channels";
 "LightningNetworkSettings.learnMore" = "Aprende más sobre las implicancias de los turbo channels.";
 "LightningNetworkSettings.learnMoreUnderline" = "Aprende más";
+"LightningNetworkSettings.lightningDefaultTitle" = "Predeterminar a Lightning";
+"LightningNetworkSettings.lightningDefaultDescription" = "En Muun, puedes recibir fondos a través de la Red de Bitcoin o la Red de Lightning.
+
+Muchos servicios no son compatibles con Lightning aún, así que cuando aprietas el botón de Recibir, tu monedero prioriza a la Red de Bitcoin y muestra una dirección de bitcoin. Al predeterminar a Lightning, tu monedero mostrará una factura de lightning, y deberás cambiar manualmente a Bitcoin cada vez que necesites una dirección de bitcoin.";
 "LightningNetworkSettings.disable" = "Apagar";
 "LightningNetworkSettings.blogPost" = "https://blog.muun.com/turbo-channels-es/";
 /* OnchainSettings */
@@ -845,3 +886,18 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 "NotificationService.opSentTitle" = "%@ sent";
 "NotificationService.opReceivedTitle" = "%@ recibidos";
 "NotificationService.opFromContactTitle" = "%@ te ha enviado %@";
+
+/* ReceiveFormatSettingDropdownView */
+"ReceiveFormatSettingDropdownView.title" = "Protocolo para recibir";
+"ReceiveFormatSettingDropdownView.description" = "Al recibir fondos, debes elegir entre usar la Red de Bitcoin o la Red de Lightning.
+En el futuro, ya no necesitarás hacerlo (más información)";
+"ReceiveFormatSettingDropdownView.learnMoreUnderline" = "más información";
+"ReceiveFormatSettingDropdownView.learnMoreLink" = "https://bitcoinqr.dev/";
+"ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle" = "Elige tu protocolo para recibir";
+"ReceiveFormatSettingDropdownView.ReceiveFormatBTCOption" = "Priorizar bitcoin";
+"ReceiveFormatSettingDropdownView.ReceiveFormatBTCDescription" = "Mostrar primero una dirección de bitcoin. La forma más aceptada y confiable de realizar transacciones en bitcoin.";
+"ReceiveFormatSettingDropdownView.ReceiveFormatLNOption" = "Priorizar lightning";
+"ReceiveFormatSettingDropdownView.ReceiveFormatLNDescription" = "Mostrar primero una factura de lightning. Los pagos en lightning pueden ser más rápidos y económicos, pero algunos servicios aún no los soportan.";
+"ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedOption" = "Unificado";
+"ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription" = "🧪 Experimental. Mostrar un código QR unificado que codifica tanto una dirección de bitcoin como una factura de lightning. Muchos servicios no soportan este formato unificado aún.";
+"ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetUnifiedDescriptionUnderline" = "Experimental.";

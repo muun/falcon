@@ -45,6 +45,11 @@ struct SetupChallengeResponseJson: Codable {
     let muunKeyFingerprint: String?
 }
 
+struct ChallengeSetupVerifyJson: Codable {
+    var type: ChallengeTypeJson
+    var publicKey: String
+}
+
 struct PendingChallengeUpdateJson: Codable {
     let uuid: String
     let type: ChallengeTypeJson

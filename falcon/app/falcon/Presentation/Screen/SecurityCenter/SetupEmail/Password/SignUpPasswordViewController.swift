@@ -130,7 +130,9 @@ class SignUpPasswordViewController: MUViewController {
 
     @objc func presentAlertView() {
         let msg = L10n.SignUpPasswordViewController.s10
-        let alert = UIAlertController(title: L10n.SignUpPasswordViewController.s11, message: msg, preferredStyle: .alert)
+        let alert = UIAlertController(title: L10n.SignUpPasswordViewController.s11,
+                                      message: msg,
+                                      preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: L10n.SignUpPasswordViewController.s12, style: .default, handler: { _ in
             alert.dismiss(animated: true)
         }))

@@ -34,11 +34,13 @@ class MuunTestCase: XCTestCase {
     
     var containers: [DependencyContainer] = []
     var userDefaults: UserDefaults!
+    var compositeDisposable: CompositeDisposable?
     
     override func setUp() {
         try? FileManager.default.removeItem(at: libwalletStorageURL)
 
         setupTestingContext()
+        compositeDisposable = CompositeDisposable()
         
         try! (resolve() as DatabaseCoordinator).wipeAll()
     }
@@ -165,6 +167,25 @@ class MuunTestCase: XCTestCase {
         
         XCTFail("expected observable \(observable) to timeout instead got \(result)")
     }
+    
+    @discardableResult
+    public func subscribeTo<T>(_ single: Single<T>, onSuccess: @escaping (_ t: T) -> Void, onError: ((Error) -> Void)?)
+        -> CompositeDisposable.DisposeKey? {
+        let disp = single
+            .subscribeOn(Scheduler.backgroundScheduler)
+            .observeOn(Scheduler.foregroundScheduler)
+            .subscribe(
+                onSuccess: onSuccess,
+                onError: onError
+            )
+
+        return compositeDisposable?.insert(disp)
+    }
+    
+    deinit {
+        compositeDisposable?.dispose()
+        compositeDisposable = nil
+    }
 }
 
 extension MuunTestCase {
@@ -258,7 +279,6 @@ extension MuunTestCase {
 extension MuunTestCase: PresenterInstantior {}
 
 class ExpectablePresenterDelegate: BasePresenterDelegate {
-    
     let expectation: XCTestExpectation
     let expectsMessage: Bool
     
@@ -283,5 +303,8 @@ class ExpectablePresenterDelegate: BasePresenterDelegate {
     func pushTo(_ vc: MUViewController) {
 
     }
-    
+ 
+    func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
+
+    }
 }

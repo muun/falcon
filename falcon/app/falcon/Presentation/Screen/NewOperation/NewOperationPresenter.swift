@@ -34,6 +34,7 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func cancel(confirm: Bool)
 }
 
+// swiftlint:disable type_body_length
 /// This class acts as new operations coordinator.
 /// It asks libWallet to validate each state of the operation and presents screens in order to complete an operation.
 class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresenter<Delegate> {

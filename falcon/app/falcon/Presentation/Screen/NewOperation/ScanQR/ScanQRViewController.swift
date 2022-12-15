@@ -208,7 +208,7 @@ extension ScanQRViewController: ErrorViewDelegate {
         logScreen(name, parameters: params)
     }
 
-    func backToHomeTouched() {
+    func secondaryButtonTouched() {
         navigationController!.popToRootViewController(animated: true)
     }
 }

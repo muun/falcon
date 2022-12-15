@@ -138,20 +138,11 @@ public class SessionActions {
     }
 
     public func hasRecoveryCode() -> Bool {
-        do {
-            return try keysRepository.hasChallengeKey(type: .RECOVERY_CODE)
-        } catch {
-            // Default to true to avoid users double registering
-            return true
-        }
+        return getUser()?.hasRecoveryCodeChallengeKey ?? false
     }
 
     public func hasPasswordChallengeKey() -> Bool {
-        do {
-            return try keysRepository.hasChallengeKey(type: .PASSWORD)
-        } catch {
-            return false
-        }
+        return getUser()?.hasPasswordChallengeKey ?? false
     }
 
     public func getUserEmail() -> String? {
@@ -190,10 +181,6 @@ public class SessionActions {
             updatedUser.email = email
             setUser(updatedUser)
         }
-    }
-
-    public func watchHasRecoveryCode() -> Observable<Bool?> {
-        return sessionRepository.watchHasRecoveryCode()
     }
 
     public func getPrimaryCurrency() -> String {

@@ -142,7 +142,7 @@ class ShareEmergencyKitViewController: MUViewController {
             completion?()
             return
         }
-        
+
         dismissLoading(completion)
     }
 }
@@ -318,8 +318,8 @@ extension ShareEmergencyKitViewController {
     func signInWithGoogle() {
         // This client id needs to be hardwired here, since it can't be in the info.plist schemes because apple rejects
         // the build in that case
-
-        let configuration = GIDConfiguration(clientID: "31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com")
+        let clientId = "31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com"
+        let configuration = GIDConfiguration(clientID: clientId)
         let scopes = [kGTLRAuthScopeDriveFile]
         GIDSignIn.sharedInstance.signIn(with: configuration,
                                         presenting: self,

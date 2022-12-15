@@ -76,8 +76,4 @@ class SessionRepository {
     func getBiometricIdStatus() -> Bool? {
         return preferences.object(forKey: .isBiometricIdSet)
     }
-
-    func watchHasRecoveryCode() -> Observable<Bool?> {
-        return preferences.watchBool(key: .hasRecoveryCode)
-    }
 }

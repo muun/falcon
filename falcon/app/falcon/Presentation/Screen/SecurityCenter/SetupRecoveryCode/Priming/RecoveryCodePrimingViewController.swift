@@ -14,6 +14,11 @@ class RecoveryCodePrimingViewController: MUViewController {
     @IBOutlet fileprivate weak var buttonView: ButtonView!
     @IBOutlet fileprivate weak var titleLabel: UILabel!
     @IBOutlet fileprivate weak var subtitleLabel: UILabel!
+    fileprivate weak var errorViewRetryButton: ButtonView?
+    fileprivate var errorView: ErrorView?
+
+    fileprivate lazy var presenter = instancePresenter(RecoveryCodePrimingPresenter.init,
+                                                       delegate: self)
 
     private var wording: SetUpRecoveryCodeWording
 
@@ -40,7 +45,14 @@ class RecoveryCodePrimingViewController: MUViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        presenter.setUp()
+
         setUpNavigation()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        presenter.tearDown()
     }
 
     private func setUpNavigation() {
@@ -81,15 +93,12 @@ class RecoveryCodePrimingViewController: MUViewController {
 
         buttonView.animate(direction: .bottomToTop, duration: .short, delay: .short)
     }
-
 }
 
 extension RecoveryCodePrimingViewController: ButtonViewDelegate {
-
     func button(didPress button: ButtonView) {
-        navigationController?.pushViewController(GenerateRecoveryCodeViewController(wording: wording), animated: true)
+        presenter.onContinueButtonTapped()
     }
-
 }
 
 extension RecoveryCodePrimingViewController: UITestablePage {
@@ -100,5 +109,45 @@ extension RecoveryCodePrimingViewController: UITestablePage {
         self.makeViewTestable(view, using: .root)
         self.makeViewTestable(buttonView, using: .next)
     }
+}
 
+extension RecoveryCodePrimingViewController: ErrorViewDelegate {
+    func secondaryButtonTouched() {
+        navigationController?.popToRootViewController(animated: true)
+    }
+
+    func retryTouched(button: ButtonView) {
+        errorViewRetryButton = button
+        presenter.retryTappedAfterError()
+    }
+
+    func logErrorView(_ name: String, params: [String: Any]?) {
+        logScreen(name, parameters: params)
+    }
+}
+
+extension RecoveryCodePrimingViewController: RecoveryCodePrimingPresenterDelegate {
+    func goToNextScreen(recoveryCode: RecoveryCode) {
+        navigationController?.pushViewController(GenerateRecoveryCodeViewController(wording: wording,
+                                                                                    recoveryCode: recoveryCode),
+                                                 animated: true)
+    }
+
+    func continueButtonIs(loading: Bool) {
+        buttonView.isLoading = loading
+        errorViewRetryButton?.isLoading = loading
+    }
+
+    func showStartRecoveryCodeSetupError() {
+        navigationController?.setNavigationBarHidden(true, animated: true)
+
+        if errorView == nil {
+            errorView = ErrorView()
+            errorView?.delegate = self
+            errorView?.model = SetupRecoveryCodeError.failedToStartSetup
+            errorView?.addTo(self.view)
+        }
+
+        self.view.gestureRecognizers?.removeAll()
+    }
 }

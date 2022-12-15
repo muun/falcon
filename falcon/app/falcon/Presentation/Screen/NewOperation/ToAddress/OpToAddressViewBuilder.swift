@@ -158,7 +158,9 @@ class OpToAddressViewBuilder: OpViewBuilder {
         }
     }
 
-    private func buildAmountView(_ amount: BitcoinAmountWithSelectedCurrency, takeFeeFromAmount: Bool, confirm: Bool = false) -> MUView {
+    private func buildAmountView(_ amount: BitcoinAmountWithSelectedCurrency,
+                                 takeFeeFromAmount: Bool,
+                                 confirm: Bool = false) -> MUView {
         var notice: Notice?
         if takeFeeFromAmount {
 
@@ -184,8 +186,10 @@ class OpToAddressViewBuilder: OpViewBuilder {
         let notice: Notice? = fee.isValid
             ? nil
             : Notice(notice: text, bold: L10n.OpToAddressViewBuilder.s1, boldColor: Asset.Colors.muunWarning.color)
+        let btcAmountWithSelectedCurrency = BitcoinAmountWithSelectedCurrency(bitcoinAmount: fee.value,
+                                                                              selectedCurrency: currency)
         let feeFilled = NewOpFilledAmount(type: .onchainFee,
-                                          amountWithCurrency: BitcoinAmountWithSelectedCurrency(bitcoinAmount: fee.value, selectedCurrency: currency),
+                                          amountWithCurrency: btcAmountWithSelectedCurrency,
                                           notice: notice)
 
         let view = NewOpAmountFilledDataView(

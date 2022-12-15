@@ -127,7 +127,7 @@ class OnChainAdvancedOptionsView: UIView {
         amountOptionView.setAmount(bitcoinAmount)
     }
 
-    func setAddressType(_ addressType: AddressType) {
+    func setAddressType(_ addressType: AddressTypeViewModel) {
         addressTypeOptionView.setValue(addressType)
     }
 

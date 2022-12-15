@@ -60,15 +60,3 @@ class UpdateUserPreferencesActionTest: MuunTestCase {
             .first()!
     }
 }
-
-fileprivate class FakeHoustonService: HoustonService {
-
-    var calls = 0
-
-    override func updateUserPreferences(_ preferences: UserPreferences) -> Completable {
-        return Completable.empty()
-            .do(afterCompleted: {
-                    self.calls += 1
-            })
-    }
-}

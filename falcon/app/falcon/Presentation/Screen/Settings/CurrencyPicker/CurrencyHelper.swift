@@ -168,7 +168,7 @@ class CurrencyHelper: Resolver {
         add(FiatCurrency(code: "UYU", symbol: "$U", name: "Uruguayan Peso", flag: "🇺🇾"))
         add(FiatCurrency(code: "UZS", symbol: "лв", name: "Uzbekistan Som", flag: "🇺🇿"))
         add(FiatCurrency(code: "VEF", symbol: "Bs.F", name: "Venezuelan Bolívar Fuerte", flag: "🇻🇪"))
-        add(FiatCurrency(code: "VES", symbol: "Bs.S", name: "Venezuelan Bolívar Soberano", flag: "🇻🇪"))
+        add(FiatCurrency(code: "VES", symbol: "Bs.", name: "Venezuelan Bolívar", flag: "🇻🇪"))
         add(FiatCurrency(code: "VND", symbol: "₫", name: "Vietnamese Dong", flag: "🇻🇳"))
         add(FiatCurrency(code: "VUV", symbol: "Vt", name: "Vanuatu Vatu", flag: "🇻🇺"))
         add(FiatCurrency(code: "WST", symbol: "WS$", name: "Samoan Tala", flag: "🇼🇸"))

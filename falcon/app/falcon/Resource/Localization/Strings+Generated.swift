@@ -358,8 +358,12 @@ internal enum L10n {
   }
 
   internal enum ErrorView {
+    /// GO BACK
+    internal static let goBack = L10n.tr("Localizable", "ErrorView.goBack")
     /// GO TO HOME
     internal static let goToHome = L10n.tr("Localizable", "ErrorView.goToHome")
+    /// GO TO SECURITY CENTER
+    internal static let goToSecurityCenter = L10n.tr("Localizable", "ErrorView.goToSecurityCenter")
     /// RETRY
     internal static let retry = L10n.tr("Localizable", "ErrorView.retry")
     /// SEND REPORT
@@ -398,6 +402,14 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "FinishRecoveryCodeSetupViewController.s1")
     /// FINISH
     internal static let s2 = L10n.tr("Localizable", "FinishRecoveryCodeSetupViewController.s2")
+    /// Failed to create the backup
+    internal static let s3 = L10n.tr("Localizable", "FinishRecoveryCodeSetupViewController.s3")
+    /// Your Recovery Code is used to create an encrypted backup of your private key. To save the backup, you need internet connection.\n\nPlease check your connection and try again.
+    internal static let s4 = L10n.tr("Localizable", "FinishRecoveryCodeSetupViewController.s4")
+    /// Retry
+    internal static let s5 = L10n.tr("Localizable", "FinishRecoveryCodeSetupViewController.s5")
+    /// Cancel
+    internal static let s6 = L10n.tr("Localizable", "FinishRecoveryCodeSetupViewController.s6")
   }
 
   internal enum GenerateRecoveryCodeViewController {
@@ -619,6 +631,10 @@ internal enum L10n {
     internal static let learnMore = L10n.tr("Localizable", "LightningNetworkSettings.learnMore")
     /// Learn more
     internal static let learnMoreUnderline = L10n.tr("Localizable", "LightningNetworkSettings.learnMoreUnderline")
+    /// In Muun, you can receive funds via the Bitcoin Network or the Lightning Network.\n\nMany services don't support Lightning yet, so when you tap on the Receive button, your wallet defaults to the Bitcoin Network and shows a bitcoin address. By defaulting to Lightning, your wallet will show a lightning invoice, and you'll need to manually switch to Bitcoin each time you need a bitcoin address.
+    internal static let lightningDefaultDescription = L10n.tr("Localizable", "LightningNetworkSettings.lightningDefaultDescription")
+    /// Default to Lightning on Receive
+    internal static let lightningDefaultTitle = L10n.tr("Localizable", "LightningNetworkSettings.lightningDefaultTitle")
     /// Lightning Network
     internal static let title = L10n.tr("Localizable", "LightningNetworkSettings.title")
     /// Turbo channels
@@ -1043,6 +1059,8 @@ internal enum L10n {
   internal enum ReceiveAmountInputViewController {
     /// CONFIRM AMOUNT
     internal static let confirm = L10n.tr("Localizable", "ReceiveAmountInputViewController.confirm")
+    /// Edit amount
+    internal static let editAmount = L10n.tr("Localizable", "ReceiveAmountInputViewController.editAmount")
     /// REMOVE AMOUNT
     internal static let remove = L10n.tr("Localizable", "ReceiveAmountInputViewController.remove")
     /// Edit Invoice Amount
@@ -1053,6 +1071,33 @@ internal enum L10n {
     internal static let tooBig = L10n.tr("Localizable", "ReceiveAmountInputViewController.tooBig")
     /// AMOUNT IS TOO SMALL
     internal static let tooSmall = L10n.tr("Localizable", "ReceiveAmountInputViewController.tooSmall")
+  }
+
+  internal enum ReceiveFormatSettingDropdownView {
+    /// When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network.\nIn the future, you won’t need to do it anymore (learn more).
+    internal static let description = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.description")
+    /// https://bitcoinqr.dev/
+    internal static let learnMoreLink = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.learnMoreLink")
+    /// learn more
+    internal static let learnMoreUnderline = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.learnMoreUnderline")
+    /// Choose your receiving protocol
+    internal static let receiveFormatActionSheetTitle = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle")
+    /// Default to show a bitcoin address. The most widely accepted and reliable way of transacting in bitcoin.
+    internal static let receiveFormatBTCDescription = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatBTCDescription")
+    /// Bitcoin first
+    internal static let receiveFormatBTCOption = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatBTCOption")
+    /// Default to show a lightning invoice. Lightning payments can be faster and cheaper, but some services don't support them yet.
+    internal static let receiveFormatLNDescription = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatLNDescription")
+    /// Lightning first
+    internal static let receiveFormatLNOption = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatLNOption")
+    /// 🧪 Experimental. Default to a unified QR code that encodes both a bitcoin address and a lightning invoice. Many services don’t support this unified format yet.
+    internal static let receiveFormatUnifiedDescription = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription")
+    /// Experimental.
+    internal static let receiveFormatUnifiedDescriptionUnderline = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescriptionUnderline")
+    /// Unified
+    internal static let receiveFormatUnifiedOption = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedOption")
+    /// Receiving protocol
+    internal static let title = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.title")
   }
 
   internal enum ReceiveInLightningView {
@@ -1088,7 +1133,20 @@ internal enum L10n {
     }
   }
 
+  internal enum ReceiveUnifiedView {
+    /// Generating QR code
+    internal static let loading = L10n.tr("Localizable", "ReceiveUnifiedView.loading")
+  }
+
   internal enum ReceiveViewController {
+    /// Your bitcoin address
+    internal static let detailedURIBTCTitle = L10n.tr("Localizable", "ReceiveViewController.detailedURIBTCTitle")
+    /// 🧪 Unified QR codes are experimental
+    internal static let detailedURIDisclaimer = L10n.tr("Localizable", "ReceiveViewController.detailedURIDisclaimer")
+    /// Your lightning invoice
+    internal static let detailedURILNTitle = L10n.tr("Localizable", "ReceiveViewController.detailedURILNTitle")
+    /// Receive Bitcoin
+    internal static let receiveBitcoin = L10n.tr("Localizable", "ReceiveViewController.receiveBitcoin")
     /// Bitcoin
     internal static let s1 = L10n.tr("Localizable", "ReceiveViewController.s1")
     /// Lightning
@@ -1134,6 +1192,14 @@ internal enum L10n {
   internal enum RecoveryCodePrimingViewController {
     /// START
     internal static let s1 = L10n.tr("Localizable", "RecoveryCodePrimingViewController.s1")
+    /// Failed to create the backup
+    internal static let s2 = L10n.tr("Localizable", "RecoveryCodePrimingViewController.s2")
+    /// You are about to create an encrypted backup of your private key. To save it, you need an internet connection.\n\nPlease check your connection and try again.
+    internal static let s3 = L10n.tr("Localizable", "RecoveryCodePrimingViewController.s3")
+    /// Retry
+    internal static let s4 = L10n.tr("Localizable", "RecoveryCodePrimingViewController.s4")
+    /// Cancel
+    internal static let s5 = L10n.tr("Localizable", "RecoveryCodePrimingViewController.s5")
   }
 
   internal enum RecoveryToolViewController {
@@ -1497,6 +1563,16 @@ internal enum L10n {
   internal enum SignInEmailAndRCViewController {
     /// Recover your wallet
     internal static let s1 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s1")
+    /// You haven't completed setting up this Recovery Code. You should have a newer one. Please, find it and try again.
+    internal static let s10 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s10")
+    /// Your credentials (email and Recovery Code) don't match.
+    internal static let s11 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s11")
+    /// Please make sure you enter the Recovery Code that recovers the wallet using the email %@
+    internal static func s12(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SignInEmailAndRCViewController.s12", String(describing: p1))
+    }
+    /// Accept
+    internal static let s13 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s13")
     /// Enter your Recovery Code
     internal static let s2 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s2")
     /// You set it up on %@ and most likely wrote it on a paper. What's this?
@@ -1511,6 +1587,8 @@ internal enum L10n {
     internal static let s7 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s7")
     /// ENTER RECOVERY CODE
     internal static let s8 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s8")
+    /// Invalid Recovery Code
+    internal static let s9 = L10n.tr("Localizable", "SignInEmailAndRCViewController.s9")
   }
 
   internal enum SignInEmailViewController {
@@ -1691,6 +1769,12 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "SyncViewController.s1")
     /// Creating your wallet
     internal static let s2 = L10n.tr("Localizable", "SyncViewController.s2")
+    /// Warning
+    internal static let s3 = L10n.tr("Localizable", "SyncViewController.s3")
+    /// You haven't completed the setup for the Recovery Code you just used to recover your wallet.\n\nPlease visit the Security Center to back up your wallet with a new Recovery Code, and make sure you finish the setup this time.\n\nAs soon as you create a new Recovery Code, the current one will be invalidated.\n
+    internal static let s4 = L10n.tr("Localizable", "SyncViewController.s4")
+    /// GOT IT!
+    internal static let s5 = L10n.tr("Localizable", "SyncViewController.s5")
   }
 
   internal enum TaprootActivatedPopup {
@@ -1758,6 +1842,11 @@ internal enum L10n {
     internal static func s1(_ p1: Any, _ p2: Any) -> String {
       return L10n.tr("Localizable", "UIBarButtonItem.s1", String(describing: p1), String(describing: p2))
     }
+  }
+
+  internal enum UnifiedAdvancedOptionsView {
+    /// Settings
+    internal static let header = L10n.tr("Localizable", "UnifiedAdvancedOptionsView.header")
   }
 
   internal enum UpdateAppViewController {

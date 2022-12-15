@@ -18,7 +18,7 @@ public struct KeySet {
 
 }
 
-public struct ChallengeKey {
+public struct ChallengeKey: Equatable {
 
     let type: ChallengeType
     let publicKey: Data

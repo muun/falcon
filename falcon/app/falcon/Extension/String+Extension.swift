@@ -10,17 +10,28 @@ import UIKit
 
 extension String {
 
-    func attributedForDescription(alignment: NSTextAlignment = .natural) -> NSMutableAttributedString {
+    func attributedForDescription(alignment: NSTextAlignment = .natural,
+                                  paragraphLineBreakMode: NSLineBreakMode? = nil) -> NSMutableAttributedString {
         return self.set(font: Constant.Fonts.description,
                         lineSpacing: Constant.FontAttributes.lineSpacing,
                         kerning: Constant.FontAttributes.kerning,
-                        alignment: alignment)
+                        alignment: alignment,
+                        paragraphLineBreakMode: paragraphLineBreakMode)
     }
 
-    func set(font: UIFont, lineSpacing: CGFloat = 0, kerning: CGFloat? = nil, alignment: NSTextAlignment? = nil)
+    func toAttributedString() -> NSMutableAttributedString {
+        NSMutableAttributedString(string: self)
+    }
+
+    func set(font: UIFont,
+             lineSpacing: CGFloat = 0,
+             kerning: CGFloat? = nil,
+             alignment: NSTextAlignment? = nil,
+             paragraphLineBreakMode: NSLineBreakMode? = nil)
         -> NSMutableAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.setParagraphStyle(NSParagraphStyle.default)
+        paragraphLineBreakMode.map { paragraphStyle.lineBreakMode = $0 }
         paragraphStyle.lineSpacing = lineSpacing
         if let alignment = alignment {
             paragraphStyle.alignment = alignment

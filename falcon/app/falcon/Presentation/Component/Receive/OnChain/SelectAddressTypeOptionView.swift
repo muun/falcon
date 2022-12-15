@@ -17,7 +17,7 @@ class SelectAddressTypeOptionView: UIStackView {
 
     private let label = UILabel()
     private let controlView = UIStackView()
-    private let controlLabel = UILabel()
+    private let controlButton = UIButton()
 
     weak var delegate: AddressTypeOptionViewDelegate?
 
@@ -54,21 +54,18 @@ class SelectAddressTypeOptionView: UIStackView {
     }
 
     private func setUpControlView() {
+        controlButton.addTarget(self, action: .didTapControl, for: .touchUpInside)
+        controlButton.semanticContentAttribute = .forceRightToLeft
+        controlButton.setImage(Asset.Assets.chevronAlt.image, for: .normal)
+        controlButton.titleLabel?.font = Constant.Fonts.system(size: .desc)
+        controlButton.setTitleColor(Asset.Colors.muunGrayDark.color, for: .normal)
+        controlButton.setTitleColor(UIColor.black, for: .selected)
         controlView.axis = .horizontal
         controlView.distribution = .equalCentering
         controlView.alignment = .center
         controlView.isUserInteractionEnabled = true
-        controlView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapControl))
 
-        controlLabel.font = Constant.Fonts.system(size: .desc)
-        controlLabel.textColor = Asset.Colors.muunGrayDark.color
-        controlLabel.translatesAutoresizingMaskIntoConstraints = false
-        controlView.addArrangedSubview(controlLabel)
-
-        let chevron = UIImageView()
-        chevron.image = Asset.Assets.chevronAlt.image
-        chevron.translatesAutoresizingMaskIntoConstraints = false
-        controlView.addArrangedSubview(chevron)
+        controlView.addArrangedSubview(controlButton)
 
         controlView.translatesAutoresizingMaskIntoConstraints = false
         addArrangedSubview(controlView)
@@ -76,8 +73,8 @@ class SelectAddressTypeOptionView: UIStackView {
 
     // MARK: - View Controller Actions -
 
-    func setValue(_ addressType: AddressType) {
-        controlLabel.text = addressType.name
+    func setValue(_ addressType: AddressTypeViewModel) {
+        controlButton.setTitle(addressType.name, for: .normal)
     }
 
     // MARK: - UI Handlers -
@@ -89,7 +86,5 @@ class SelectAddressTypeOptionView: UIStackView {
 }
 
 fileprivate extension Selector {
-
     static let didTapControl = #selector(SelectAddressTypeOptionView.didTapControl)
-
 }

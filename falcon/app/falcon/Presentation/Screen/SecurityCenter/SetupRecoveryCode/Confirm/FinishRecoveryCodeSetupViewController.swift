@@ -15,6 +15,8 @@ class FinishRecoveryCodeSetupViewController: MUViewController {
     @IBOutlet fileprivate weak var firstCheckView: CheckView!
     @IBOutlet fileprivate weak var secondCheckView: CheckView!
     @IBOutlet fileprivate weak var buttonView: ButtonView!
+    fileprivate weak var errorViewRetryButton: ButtonView?
+    fileprivate var errorView: ErrorView?
 
     fileprivate lazy var presenter = instancePresenter(FinishRecoveryCodeSetupPresenter.init,
                                                        delegate: self,
@@ -103,7 +105,6 @@ class FinishRecoveryCodeSetupViewController: MUViewController {
 }
 
 extension FinishRecoveryCodeSetupViewController: FinishRecoveryCodeSetupPresenterDelegate {
-
     func challengeSuccess() {
         logEvent("recovery_code_set_up")
 
@@ -113,8 +114,8 @@ extension FinishRecoveryCodeSetupViewController: FinishRecoveryCodeSetupPresente
         )
         // When finished, pop to change password flow or security center (depending on the initial flow)
         let popToVc = isChangePasswordFlow
-            ? ChangePasswordEnterCurrentViewController.self
-            : SecurityCenterViewController.self
+        ? ChangePasswordEnterCurrentViewController.self
+        : SecurityCenterViewController.self
 
         navigationController!.pushViewController(
             FeedbackViewController(feedback: FeedbackInfo.recoveryCodeSetupSuccess(popTo: popToVc, wording: wording)),
@@ -122,13 +123,38 @@ extension FinishRecoveryCodeSetupViewController: FinishRecoveryCodeSetupPresente
         )
     }
 
-    func challengeFailed() {
-        navigationController!.pushViewController(
-            FeedbackViewController(feedback: FeedbackInfo.recoveryCodeSetupFail),
-            animated: true
-        )
+    func showFinishErrorSetupError() {
+        navigationController?.setNavigationBarHidden(true, animated: true)
+
+        if errorView == nil {
+            errorView = ErrorView()
+            errorView?.delegate = self
+            errorView?.model = SetupRecoveryCodeError.failedToFinishSetup
+            errorView?.addTo(self.view)
+        }
+
+        self.view.gestureRecognizers?.removeAll()
     }
 
+    func finishButtonIs(loading: Bool) {
+        buttonView.isLoading = loading
+        errorViewRetryButton?.isLoading = loading
+    }
+}
+
+extension FinishRecoveryCodeSetupViewController: ErrorViewDelegate {
+    func secondaryButtonTouched() {
+        navigationController?.popToRootViewController(animated: true)
+    }
+
+    func retryTouched(button: ButtonView) {
+        errorViewRetryButton = button
+        presenter.retryTappedAfterError()
+    }
+
+    func logErrorView(_ name: String, params: [String: Any]?) {
+        logScreen(name, parameters: params)
+    }
 }
 
 extension FinishRecoveryCodeSetupViewController: CheckViewDelegate {

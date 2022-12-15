@@ -68,7 +68,7 @@ enum Constant {
     }
 
     enum NewOpAnalytics {
-
+// swiftlint:disable nesting
         enum OpType: String {
             case toAddress = "to_address"
             case submarineSwap = "submarine_swap"

@@ -15,6 +15,10 @@ class NewOpAmountPresenterTest: XCTestCase, PresenterInstantior, NewOpAmountPres
     
     func pushTo(_ vc: Muun.MUViewController) {
     }
+
+    func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
+    }
+
     
     lazy var presenter = instancePresenter(NewOpAmountPresenter.init, delegate: self)
     

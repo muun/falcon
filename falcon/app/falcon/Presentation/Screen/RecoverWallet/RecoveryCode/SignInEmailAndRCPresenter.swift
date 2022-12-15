@@ -13,6 +13,8 @@ protocol SignInEmailAndRCPresenterDelegate: BasePresenterDelegate {
     func keySetResponseReceived(keySet: KeySet)
     func setLoading(_ isLoading: Bool)
     func invalidCode()
+    func showStaleRcError()
+    func showCredentialsDontMatchError(userEmail: String)
 }
 
 class SignInEmailAndRCPresenter<Delegate: SignInEmailAndRCPresenterDelegate>: BasePresenter<Delegate> {
@@ -21,10 +23,15 @@ class SignInEmailAndRCPresenter<Delegate: SignInEmailAndRCPresenterDelegate>: Ba
     private let logInAction: LogInAction
 
     private var recoveryCode: RecoveryCode?
+    private let preferences: Preferences
 
-    init(delegate: Delegate, requestChallengeAction: RequestChallengeAction, logInAction: LogInAction) {
+    init(delegate: Delegate,
+         requestChallengeAction: RequestChallengeAction,
+         logInAction: LogInAction,
+         preferences: Preferences) {
         self.requestChallengeAction = requestChallengeAction
         self.logInAction = logInAction
+        self.preferences = preferences
 
         super.init(delegate: delegate)
     }
@@ -77,13 +84,15 @@ class SignInEmailAndRCPresenter<Delegate: SignInEmailAndRCPresenterDelegate>: Ba
 
         case .ERROR:
             if let e = result.error {
-
                 if e.isKindOf(.invalidChallengeSignature) {
                     delegate.invalidCode()
+                } else if e.isKindOf(.staleChallengeKey) {
+                    delegate.showStaleRcError()
+                } else if e.isKindOf(.credentialsDontMatch) {
+                    delegate.showCredentialsDontMatchError(userEmail: preferences.string(forKey: .email) ?? "")
                 } else {
                     handleError(e)
                 }
-
             } else {
                 handleError(ServiceError.defaultError)
             }

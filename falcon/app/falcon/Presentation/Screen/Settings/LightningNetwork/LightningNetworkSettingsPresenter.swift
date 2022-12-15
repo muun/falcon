@@ -11,12 +11,10 @@ import core
 import RxSwift
 
 protocol LightningNetworkSettingsPresenterDelegate: BasePresenterDelegate {
-    func update(enabled: Bool)
     func setLoading(_ loading: Bool)
 }
 
 class LightningNetworkSettingsPresenter<Delegate: LightningNetworkSettingsPresenterDelegate>: BasePresenter<Delegate> {
-
     private let updateUserPreferences: UpdateUserPreferencesAction
     private let userPreferencesSelector: UserPreferencesSelector
 
@@ -39,20 +37,12 @@ class LightningNetworkSettingsPresenter<Delegate: LightningNetworkSettingsPresen
         subscribeTo(combined, onNext: self.handleUpdateState)
     }
 
-    func toggle() {
-        updateUserPreferences.run { prefs in
-            prefs.copy(receiveStrictMode: !prefs.receiveStrictMode)
-        }
-    }
-
     func handleUpdateState(_ state: (UserPreferences, ActionState<Void>)) {
-
-        let (prefs, action) = state
+        let (_, action) = state
 
         switch action.type {
         case .EMPTY, .ERROR:
             delegate?.setLoading(false)
-            delegate?.update(enabled: !prefs.receiveStrictMode)
         case .LOADING:
             delegate?.setLoading(true)
         case .VALUE:

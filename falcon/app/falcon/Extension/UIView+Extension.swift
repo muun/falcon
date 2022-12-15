@@ -174,7 +174,8 @@ extension UIView {
                        completion: nil)
     }
 
-    func addSubviewWrappingParent(child: UIView) {
+    func addSubviewWrappingParent(child: UIView,
+                                  skipBottomContraint: Bool = false) {
         child.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(child)
@@ -193,13 +194,16 @@ extension UIView {
                                          attribute: .leading,
                                          multiplier: 1.0,
                                          constant: 0.0))
-        addConstraint(NSLayoutConstraint(item: self,
-                                         attribute: .bottom,
-                                         relatedBy: .equal,
-                                         toItem: child,
-                                         attribute: .bottom,
-                                         multiplier: 1.0,
-                                         constant: 0.0))
+        if !skipBottomContraint {
+            addConstraint(NSLayoutConstraint(item: self,
+                                             attribute: .bottom,
+                                             relatedBy: .equal,
+                                             toItem: child,
+                                             attribute: .bottom,
+                                             multiplier: 1.0,
+                                             constant: 0.0))
+        }
+
         addConstraint(NSLayoutConstraint(item: self,
                                          attribute: .trailing,
                                          relatedBy: .equal,

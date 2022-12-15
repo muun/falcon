@@ -125,9 +125,27 @@ public class HoustonService: BaseService {
         return post("user/challenge/setup", body: jsonData, andReturn: SetupChallengeResponseJson.self)
             .map({ $0.toModel() })
     }
+    
+    func startChallenge(challengeSetup: ChallengeSetup) -> Single<SetupChallengeResponse> {
+        let jsonData = JSONEncoder.data(from: challengeSetup)
 
-    func logIn(challengeSignature: ChallengeSignature) -> Single<KeySet> {
-        let jsonData = JSONEncoder.data(from: challengeSignature)
+        return post("user/challenge/setup/start", body: jsonData, andReturn: SetupChallengeResponseJson.self)
+            .map({ $0.toModel() })
+    }
+    
+    func finishChallenge(challengeType: ChallengeType, challengeSetupPublicKey: String) -> Completable {
+        precondition(challengeType == .RECOVERY_CODE)
+
+        let challengeSetup = ChallengeSetupVerifyJson(type: ChallengeTypeJson.RECOVERY_CODE,
+                                                      publicKey: challengeSetupPublicKey)
+        
+        let jsonData = JSONEncoder.data(json: challengeSetup)
+
+        return post("user/challenge/setup/finish", body: jsonData, andReturn: EmptyJson.self).asCompletable()
+    }
+
+    func logIn(loginJson: LoginJson) -> Single<KeySet> {
+        let jsonData = JSONEncoder.data(json: loginJson)
 
         return post("sessions/current/login", body: jsonData, andReturn: KeySetJson.self)
             .map({ $0.toModel() })

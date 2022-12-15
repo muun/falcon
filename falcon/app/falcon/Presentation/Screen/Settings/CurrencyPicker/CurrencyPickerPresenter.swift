@@ -14,7 +14,6 @@ protocol CurrencyPickerPresenterDelegate: BasePresenterDelegate {
     func gotCurrencyList()
 }
 
-// TODO: Test
 class CurrencyPickerPresenter<Delegate: CurrencyPickerPresenterDelegate>: BasePresenter<Delegate> {
 
     private let currenciesRepostory: CurrenciesForPickerRetrieverService

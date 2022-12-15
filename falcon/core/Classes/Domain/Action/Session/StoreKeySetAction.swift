@@ -24,7 +24,7 @@ public class StoreKeySetAction {
             }
 
             for key in keySet.challengeKeys {
-                try self.keysRepository.store(challengeKey: key)
+                try self.keysRepository.storeVerified(challengeKey: key)
             }
 
             let privateKey = try KeyCrypter.decrypt(keySet.encryptedPrivateKey, passphrase: userInput)

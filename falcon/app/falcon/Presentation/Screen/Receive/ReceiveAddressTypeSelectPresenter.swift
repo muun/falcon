@@ -1,5 +1,5 @@
 //
-//  ReceiveAddressTypeSelectPresenter.swift
+//  AddressTypeOptionsRetriever.swift
 //  falcon
 //
 //  Created by Juan Pablo Civile on 22/10/2021.
@@ -10,45 +10,65 @@ import Foundation
 import core
 import Libwallet
 
-struct AddressTypeOption {
-    let type: AddressType
-    let enabled: Bool
-    let blocksLeft: UInt
-
-    init(type: AddressType, enabled: Bool, blocksLeft: UInt = 0) {
-        self.type = type
-        self.enabled = enabled
-        self.blocksLeft = blocksLeft
-    }
-}
-
-class ReceiveAddressTypeSelectPresenter<Delegate: BasePresenterDelegate>: BasePresenter<Delegate> {
+class AddressTypeOptionsRetriever {
 
     private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
     private let blockheightRepository: BlockchainHeightRepository
 
-    init(delegate: Delegate,
-         userActivatedFeatureSelector: UserActivatedFeaturesSelector,
+    init(userActivatedFeatureSelector: UserActivatedFeaturesSelector,
          blockheightRepository: BlockchainHeightRepository
     ) {
         self.userActivatedFeatureSelector = userActivatedFeatureSelector
         self.blockheightRepository = blockheightRepository
-        super.init(delegate: delegate)
     }
 
-    func addressTypes() -> [AddressTypeOption] {
+    private func getStatus(selectedOption: any MUActionSheetOption,
+                           enabled: Bool,
+                           type: AddressTypeViewModel) -> MUActionSheetCard.Status {
+        guard let addressType = selectedOption as? AddressTypeViewModel else {
+            let optionName = selectedOption.name
+            Logger.fatal("receive actionSheet is working with something that is not an AddressViewModel \(optionName)")
+        }
+
+        if addressType == type {
+            return .selected
+        }
+
+        return enabled ? .enabled : .disabled
+    }
+}
+
+extension AddressTypeOptionsRetriever {
+    func run(selectedOption: any MUActionSheetOption) -> [MUActionSheetOptionViewModel] {
         var types = [
-            AddressTypeOption(type: .legacy, enabled: true),
-            AddressTypeOption(type: .segwit, enabled: true)
+            MUActionSheetOptionViewModel(type: AddressTypeViewModel.legacy,
+                              status: getStatus(selectedOption: selectedOption,
+                                                enabled: true,
+                                                type: .legacy),
+                             highlight: nil),
+            MUActionSheetOptionViewModel(type: AddressTypeViewModel.segwit,
+                              status: getStatus(selectedOption: selectedOption,
+                                                enabled: true,
+                                                type: .segwit),
+                             highlight: nil)
         ]
-        
+
         let taprootStatus = userActivatedFeatureSelector.get(for: Libwallet.userActivatedFeatureTaproot()!)
         switch taprootStatus {
         case .active:
-            types.append(AddressTypeOption(type: .taproot, enabled: true))
-        case .preactivated(let blocksLeft),
+            types.append(MUActionSheetOptionViewModel(type: AddressTypeViewModel.taproot,
+                                           status: getStatus(selectedOption: selectedOption,
+                                                             enabled: true,
+                                                             type: .taproot),
+                                          highlight: nil))
+        case .preactivated(let blocksLeft), // TODO: This code is not needed anymore
              .scheduledActivation(let blocksLeft):
-            types.append(AddressTypeOption(type: .taproot, enabled: false, blocksLeft: blocksLeft))
+            types.append(MUActionSheetOptionViewModel(type: AddressTypeViewModel.taproot,
+                                           status: getStatus(selectedOption: selectedOption,
+                                                             enabled: false,
+                                                             type: .taproot),
+                                           highlight: nil,
+                                           blocksLeft: blocksLeft))
         case .off, .canActivate, .canPreactivate:
             // Nothing to show
             ()

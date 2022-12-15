@@ -10,9 +10,6 @@ import Foundation
 import core
 
 protocol GenerateRecoveryCodePresenterDelegate: BasePresenterDelegate {
-
-    func didGenerate(code: RecoveryCode)
-
 }
 
 class GenerateRecoveryCodePresenter<Delegate: GenerateRecoveryCodePresenterDelegate>: BasePresenter<Delegate> {
@@ -22,8 +19,5 @@ class GenerateRecoveryCodePresenter<Delegate: GenerateRecoveryCodePresenterDeleg
     init(delegate: Delegate, preferences: Preferences) {
         self.preferences = preferences
         super.init(delegate: delegate)
-
-        delegate.didGenerate(code: RecoveryCode.random())
     }
-
 }

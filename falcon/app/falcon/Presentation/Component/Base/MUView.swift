@@ -36,6 +36,10 @@ class MUView: UIView {
             .components(separatedBy: ".")
             .first!
 
+        guard Bundle.main.path(forResource: className, ofType: "nib") != nil else {
+            return
+        }
+
         let nib = UINib(nibName: className, bundle: Bundle(for: type(of: self)))
 
         if let view = nib.instantiate(withOwner: self, options: nil).first as? UIView {
@@ -76,6 +80,14 @@ extension MUView: BasePresenterDelegate {
     func pushTo(_ vc: MUViewController) {
         if let currentVc = self.parentViewController {
             currentVc.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+
+    func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
+        if let currentVc = self.parentViewController {
+            currentVc.navigationController?.present(viewControllerToPresent,
+                                                    animated: flag,
+                                                    completion: completion)
         }
     }
 

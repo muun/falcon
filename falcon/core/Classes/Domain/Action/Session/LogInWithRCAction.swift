@@ -13,10 +13,11 @@ public class LogInWithRCAction: AsyncAction<(hasEmailSetup: Bool, obfuscatedEmai
 
     private let houstonService: HoustonService
     private let storeKeySetAction: StoreKeySetAction
-
-    init(houstonService: HoustonService, storeKeySetAction: StoreKeySetAction) {
+    private let preferences: Preferences
+    init(houstonService: HoustonService, storeKeySetAction: StoreKeySetAction, preferences: Preferences) {
         self.houstonService = houstonService
         self.storeKeySetAction = storeKeySetAction
+        self.preferences = preferences
 
         super.init(name: "LogInWithRCAction")
     }
@@ -37,6 +38,10 @@ public class LogInWithRCAction: AsyncAction<(hasEmailSetup: Bool, obfuscatedEmai
                 .do(onSuccess: { rcSessionOk in
                     if let keySet = rcSessionOk.keySet {
                         self.storeKeySetAction.run(keySet: keySet, userInput: recoveryCode)
+                        if challenge.type == .RECOVERY_CODE {
+                            self.preferences.set(value: true, forKey: .hasResolvedARcChallenge)
+                            self.preferences.set(value: true, forKey: .welcomeMessageSeen)
+                        }
                     }
                 })
                 .map({ sessionOk in

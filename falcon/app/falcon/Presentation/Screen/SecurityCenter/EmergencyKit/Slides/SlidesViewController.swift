@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class SlidesViewController: MUViewController {
 
     @IBOutlet fileprivate weak var scrollView: UIScrollView!

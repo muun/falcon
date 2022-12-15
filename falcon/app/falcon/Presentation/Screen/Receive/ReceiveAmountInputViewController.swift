@@ -56,6 +56,8 @@ class ReceiveAmountInputViewController: MUViewController {
             title = L10n.ReceiveAmountInputViewController.titleLightning
         case .onChain:
             title = L10n.ReceiveAmountInputViewController.titleOnChain
+        case .unified:
+            title = L10n.ReceiveAmountInputViewController.editAmount
         }
 
         setUpView()
