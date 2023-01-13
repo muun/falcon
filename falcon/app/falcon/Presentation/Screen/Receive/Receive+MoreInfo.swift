@@ -20,14 +20,6 @@ extension BottomDrawerInfo {
         )
     }
 
-    static func unifiedAddress(_ description: NSAttributedString) -> MoreInfo {
-        return MoreInfo(
-            title: nil,
-            description: description,
-            type: .onChainAddress,
-            action: nil)
-    }
-
     static func lightningInvoice(_ invoice: String) -> MoreInfo {
         return MoreInfo(
             title: L10n.Receive.s2,

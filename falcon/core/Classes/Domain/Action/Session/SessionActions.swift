@@ -13,23 +13,27 @@ public class SessionActions {
 
     private let sessionRepository: SessionRepository
     private let userRepository: UserRepository
-    private let keysRepository: KeysRepository
     private let exchangeRateWindowRepository: ExchangeRateWindowRepository
     private let secureStorage: SecureStorage
     private let preferences: Preferences
+    private let updateUserPreferences: UpdateUserPreferencesAction
+    private let userPreferencesSelector: UserPreferencesSelector
 
     init(repository: SessionRepository,
          userRepository: UserRepository,
          keysRepository: KeysRepository,
          exchangeRateWindowRepository: ExchangeRateWindowRepository,
          secureStorage: SecureStorage,
-         preferences: Preferences) {
+         preferences: Preferences,
+         updateUserPreferences: UpdateUserPreferencesAction,
+         userPreferencesSelector: UserPreferencesSelector) {
         self.sessionRepository = repository
         self.userRepository = userRepository
-        self.keysRepository = keysRepository
         self.exchangeRateWindowRepository = exchangeRateWindowRepository
         self.secureStorage = secureStorage
         self.preferences = preferences
+        self.updateUserPreferences = updateUserPreferences
+        self.userPreferencesSelector = userPreferencesSelector
     }
 
     public func isLoggedIn() -> Bool {
@@ -251,12 +255,18 @@ public class SessionActions {
             return false
         }
 
-        let isEmailSkippedPreference = userRepository.isEmailSkippedByPreference()
+        let userPreferences = try? userPreferencesSelector.get()
+            .toBlocking()
+            .first()
+
+        let isEmailSkippedPreference: Bool = userPreferences?.skippedEmailSetup ?? false
 
         return isEmailSkippedPreference || (hasRecoveryCode() && !hasPasswordChallengeKey())
     }
 
     public func setEmailSkipped() {
-        userRepository.setEmailSkipped()
+        updateUserPreferences.runPersistingLocallyEvenOnSyncFailure { prefs in
+            return prefs.copy(skippedEmailSetup: true)
+        }
     }
 }

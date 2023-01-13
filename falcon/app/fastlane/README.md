@@ -23,13 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 publish to testflight beta
 
-### ios stg
+### ios internalPrd
 
 ```sh
-[bundle exec] fastlane ios stg
+[bundle exec] fastlane ios internalPrd
 ```
 
-publish to testflight staging
+publish an internal build pointing to prod by default to testflight. 
+  If you want to change the env create a new lane
 
 ### ios dev
 

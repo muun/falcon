@@ -115,34 +115,11 @@ class QRCodeWithActionsView: UIView {
     }
 
     fileprivate func setUpAddressLabel() {
-        labelStackView.translatesAutoresizingMaskIntoConstraints = false
-        labelStackView.spacing = 4
-        labelStackView.distribution = .equalSpacing
-        labelStackView.isUserInteractionEnabled = true
-        labelStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapLabel))
-
-        addressLabel.translatesAutoresizingMaskIntoConstraints = false
-        addressLabel.textColor = Asset.Colors.muunGrayDark.color
-        addressLabel.font = Constant.Fonts.system(size: .desc)
-        addressLabel.numberOfLines = 1
-        addressLabel.lineBreakMode = .byTruncatingMiddle
-        stackView.addArrangedSubview(labelStackView)
-        stackView.setCustomSpacing(24, after: labelStackView)
-        labelStackView.addArrangedSubview(addressLabel)
-
-        checkLabelImage.translatesAutoresizingMaskIntoConstraints = false
-        checkLabelImage.image = Asset.Assets.passwordShow.image
-        labelStackView.addArrangedSubview(checkLabelImage)
-
-        NSLayoutConstraint.activate([
-            checkLabelImage.heightAnchor.constraint(equalToConstant: 18),
-            checkLabelImage.widthAnchor.constraint(equalToConstant: 18),
-            checkLabelImage.centerYAnchor.constraint(equalTo: addressLabel.centerYAnchor),
-            labelStackView.widthAnchor.constraint(
-                lessThanOrEqualTo: stackView.widthAnchor,
-                constant: -.sideMargin * 2
-            )
-        ])
+        setupLabelStackView()
+        setupAddress()
+        setupExpandIcon()
+        let extendedTappableFrame = addTouchExpandedFrameForCheckLabel()
+        setupConstraints(extendedTappableFrame: extendedTappableFrame)
     }
 
     fileprivate func setUpLoadingView() {
@@ -183,7 +160,6 @@ class QRCodeWithActionsView: UIView {
     @objc func didTapLabel() {
         delegate?.didTapLabel()
     }
-
 }
 
 extension QRCodeWithActionsView: QRCodeViewDelegate {
@@ -220,4 +196,59 @@ extension QRCodeWithActionsView: UITestablePage {
 
 fileprivate extension Selector {
     static let didTapLabel = #selector(QRCodeWithActionsView.didTapLabel)
+}
+
+private extension QRCodeWithActionsView {
+    func setupLabelStackView() {
+        labelStackView.translatesAutoresizingMaskIntoConstraints = false
+        labelStackView.spacing = 4
+        labelStackView.distribution = .equalSpacing
+        labelStackView.isUserInteractionEnabled = true
+        labelStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapLabel))
+        stackView.addArrangedSubview(labelStackView)
+        stackView.setCustomSpacing(24, after: labelStackView)
+    }
+
+    func setupAddress() {
+        addressLabel.translatesAutoresizingMaskIntoConstraints = false
+        addressLabel.textColor = Asset.Colors.muunGrayDark.color
+        addressLabel.font = Constant.Fonts.system(size: .desc)
+        addressLabel.numberOfLines = 1
+        addressLabel.lineBreakMode = .byTruncatingMiddle
+
+        labelStackView.addArrangedSubview(addressLabel)
+    }
+
+    func setupExpandIcon() {
+        checkLabelImage.translatesAutoresizingMaskIntoConstraints = false
+        checkLabelImage.image = Asset.Assets.passwordShow.image
+        checkLabelImage.clipsToBounds = false
+        labelStackView.addArrangedSubview(checkLabelImage)
+    }
+
+    func addTouchExpandedFrameForCheckLabel() -> UIView {
+        let extendedTappableFrame = UIView()
+        addSubview(extendedTappableFrame)
+        extendedTappableFrame.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapLabel))
+        extendedTappableFrame.backgroundColor = .clear
+        extendedTappableFrame.translatesAutoresizingMaskIntoConstraints = false
+        extendedTappableFrame.isUserInteractionEnabled = true
+        return extendedTappableFrame
+    }
+
+    func setupConstraints(extendedTappableFrame: UIView) {
+        NSLayoutConstraint.activate([
+            checkLabelImage.heightAnchor.constraint(equalToConstant: 18),
+            checkLabelImage.widthAnchor.constraint(equalToConstant: 18),
+            checkLabelImage.centerYAnchor.constraint(equalTo: addressLabel.centerYAnchor),
+            labelStackView.widthAnchor.constraint(
+                lessThanOrEqualTo: stackView.widthAnchor,
+                constant: -.sideMargin * 2
+            ),
+            extendedTappableFrame.heightAnchor.constraint(equalToConstant: 36),
+            extendedTappableFrame.widthAnchor.constraint(equalToConstant: 36),
+            extendedTappableFrame.centerXAnchor.constraint(equalTo: checkLabelImage.centerXAnchor),
+            extendedTappableFrame.centerYAnchor.constraint(equalTo: checkLabelImage.centerYAnchor)
+        ])
+    }
 }

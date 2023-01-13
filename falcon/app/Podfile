@@ -24,7 +24,7 @@ target 'Muun' do
   # GoogleDrive
   pod 'GoogleSignIn'
   pod 'GoogleAPIClientForREST/Drive'
-
+  pod 'SwiftLint', '0.50.1' # Keep in mind you will need to modify swiftlint.yml
   pod 'SwiftGen', '~> 6.0'
   
   target 'falconTests' do

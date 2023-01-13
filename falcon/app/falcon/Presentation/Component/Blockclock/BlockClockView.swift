@@ -47,7 +47,7 @@ class BlockClockView: UIView {
 
         layer.borderColor = Asset.Colors.muunBlue.color.cgColor
         layer.borderWidth = 1
-        // TODO: I think it needs moar corner
+
         roundCorners(cornerRadius: 6, clipsToBounds: true)
 
         var digitBoxes = [UIView]()

@@ -13,6 +13,7 @@ public class SetUpPasswordAction: AsyncAction<()> {
 
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
+    private let updateUserPreferences: UpdateUserPreferencesAction
     private let preferences: Preferences
     private let signChallengeWithUserKeyAction: SignChallengeWithUserKeyAction
     private let buildChallengeSetupAction: BuildChallengeSetupAction
@@ -21,13 +22,14 @@ public class SetUpPasswordAction: AsyncAction<()> {
          keysRepository: KeysRepository,
          preferences: Preferences,
          signChallengeWithUserKeyAction: SignChallengeWithUserKeyAction,
-         buildChallengeSetupAction: BuildChallengeSetupAction) {
+         buildChallengeSetupAction: BuildChallengeSetupAction,
+         updateUserPreferences: UpdateUserPreferencesAction) {
         self.houstonService = houstonService
         self.keysRepository = keysRepository
         self.preferences = preferences
         self.signChallengeWithUserKeyAction = signChallengeWithUserKeyAction
         self.buildChallengeSetupAction = buildChallengeSetupAction
-
+        self.updateUserPreferences = updateUserPreferences
         super.init(name: "SetUpPasswordAction")
     }
 
@@ -43,8 +45,11 @@ public class SetUpPasswordAction: AsyncAction<()> {
                 let passwordSetup = PasswordSetup(challengeSignature: $0, challengeSetup: setup)
                 return self.houstonService.setUpPassword(passwordSetup)
             })
-            .do(onSuccess: { _ in
-                try self.keysRepository.storeVerified(challengeKey: key)
+            .do(onSuccess: { [weak self] _ in
+                self?.updateUserPreferences.runOnlyLocally {
+                    $0.copy(skippedEmailSetup: false)
+                }
+                try self?.keysRepository.storeVerified(challengeKey: key)
             }
         )
 

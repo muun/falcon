@@ -120,14 +120,14 @@ public struct UserPreferences: Codable {
     public let receiveStrictMode: Bool
     public let seenNewHome: Bool
     public let seenLnurlFirstTime: Bool
-    public let lightningDefaultForReceiving: Bool
+    public let skippedEmailSetup: Bool
     public let defaultAddressType: AddressType
     public let receiveFormatPreference: ReceiveFormatPreference
 
     public func copy(receiveStrictMode: Bool? = nil,
                      seenNewHome: Bool? = nil,
                      seenLnurlFirstTime: Bool? = nil,
-                     lightningDefaultForReceiving: Bool? = nil,
+                     skippedEmailSetup: Bool? = nil,
                      defaultAddressType: AddressType? = nil,
                      receiveFormatPreference: ReceiveFormatPreference? = nil) -> UserPreferences {
 
@@ -135,7 +135,7 @@ public struct UserPreferences: Codable {
             receiveStrictMode: receiveStrictMode ?? self.receiveStrictMode,
             seenNewHome: seenNewHome ?? self.seenNewHome,
             seenLnurlFirstTime: seenLnurlFirstTime ?? self.seenLnurlFirstTime,
-            lightningDefaultForReceiving: lightningDefaultForReceiving ?? self.lightningDefaultForReceiving,
+            skippedEmailSetup: skippedEmailSetup ?? self.skippedEmailSetup,
             defaultAddressType: defaultAddressType ?? self.defaultAddressType,
             receiveFormatPreference: receiveFormatPreference ?? self.receiveFormatPreference
         )

@@ -15,10 +15,11 @@ platform :ios do
     upload_testflight(env: "prod")
   end
 
-  desc "publish to testflight staging"
-  lane :stg do
+  desc "publish an internal build pointing to prod by default to testflight. 
+  If you want to change the env create a new lane"
+  lane :internalPrd do
     ensure_git_status_clean
-    upload_testflight(env: "stg")
+    upload_testflight(env: "internalPrd")
   end
 
   desc "publish to testflight dev"
@@ -29,65 +30,88 @@ platform :ios do
 
   private_lane :set_env do |params|
     env = params[:env]
-    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{env}/", "../../core/Classes/Environment.swift")
-    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{env}/", "../../app/falconPushNotifications/Environment.swift")
+    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../core/Classes/Environment.swift")
+    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../app/falconPushNotifications/Environment.swift")
+    sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{get_env_for_app_identification(env:env)}\"/", "../../app/falconPushNotifications/Environment.swift")
+    sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{get_env_for_app_identification(env:env)}\"/", "../../app/falcon/Resource/Environment+Extension.swift")
   end
 
-  private_lane :upload_testflight do |params|
+  private_lane :get_env_for_app_identification do |params| # This is because I prefer to avoid changing app id in internal distr because of the extra work (signing and creating the app)
     env = params[:env]
+    env == "internalPrd" ? "stg" : env
+  end
 
-    muun_email = prompt(text: "Your muun email: ")
+  private_lane :get_env_for_app_env_case do |params|
+    env = params[:env]
+    env == "internalPrd" ? "prod" : env
+  end
 
-    is_prod = env == "prod"
-    git_prefix = is_prod ? "" : "-#{env}"
+  private_lane :customize_app_for_a_not_production_environment do |params|
+    env = params[:env]
+    app_identifier = params[:app_identifier]
+    extension_identifier = params[:extension_identifier]
+
+    # Change the display name
+    update_info_plist(
+      plist_path: "falcon/Info.plist",
+      display_name: "(#{env.upcase}) Muun",
+    )
+
+    # Change the app id
+    update_app_identifier(
+      plist_path: "falcon/Info.plist",
+      app_identifier: app_identifier
+    )
+
+    # Update the extensions id
+    update_app_identifier(
+      plist_path: "falconPushNotifications/Info.plist",
+      app_identifier: extension_identifier
+    )
+
+    # Replace the bundle id for the iCloud container
+    sh("sed", "-i", "", "s/<key>iCloud.[^<]*</<key>iCloud.#{app_identifier}</", "../../app/falcon/Info.plist")
+  end
+
+  private_lane :get_app_identifier do |params|
+    env = params[:env]
+    is_prod = params[:is_prod]
     if is_prod then
       app_identifier = "com.muun.falcon"
     else 
-      app_identifier = "com.muun.falcon.#{env}"
+      app_identifier = "com.muun.falcon.#{get_env_for_app_identification(env: env)}"
     end
+    app_identifier
+  end
 
-    extension_identifier = "#{app_identifier}.falconPushNotifications"
+  private_lane :update_signing_provisioning do |params|
+    app_identifier = params[:app_identifier]
+    extension_identifier = params[:extension_identifier]
+    muun_email = params[:muun_email]
 
     sigh(app_identifier: app_identifier, username: muun_email)
     sigh(app_identifier: extension_identifier, username: muun_email)
+  end
 
-    set_env(env: env)
+  private_lane :update_build_number do |params|
+    env = params[:env]
+    muun_email = params[:muun_email]
+    app_identifier = params[:app_identifier]
 
-    sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
-
-    if !is_prod then
-      # Change the display name
-      update_info_plist(
-        plist_path: "falcon/Info.plist",
-        display_name: "(#{env.upcase}) Muun",
-      )
-
-      # Change the app id
-      update_app_identifier(
-        plist_path: "falcon/Info.plist",
-        app_identifier: app_identifier
-      )
-
-      # Update the extensions id
-      update_app_identifier(
-        plist_path: "falconPushNotifications/Info.plist",
-        app_identifier: extension_identifier
-      )
-
-      # Replace the bundle id for the iCloud container
-      sh("sed", "-i", "", "s/<key>iCloud.[^<]*</<key>iCloud.#{app_identifier}</", "../../app/falcon/Info.plist")
+    if env == "internalPrd" then 
+      build_number = latest_testflight_build_number(username: muun_email, app_identifier: app_identifier)
+      increment_build_number({
+        build_number: build_number + 1
+      })
+    else
+      increment_build_number
     end
+  end
 
-    increment_build_number
-
-    version_number = get_version_number(target: "Muun")
-
-    build_app(
-      scheme: "Muun", 
-      workspace: "falcon.xcworkspace", 
-      include_symbols: true,
-      export_method: "app-store"
-    )
+  private_lane :upload_build_with_dsyms do |params|
+    env = params[:env]
+    muun_email = params[:muun_email]
+    app_identifier = params[:app_identifier]
 
     upload_to_testflight(
       username: muun_email,
@@ -103,20 +127,33 @@ platform :ios do
 
     # Upload them to crashlytics
     upload_symbols_to_crashlytics(
-      gsp_path:"falcon/GoogleService-Info-#{env}.plist",
+      gsp_path:"falcon/GoogleService-Info-#{get_env_for_app_identification(env: env)}.plist",
       dsym_worker_threads: 10
     )
+  end
+
+  private_lane :clean_up_build_dir do |params|
+    env = params[:env]
+    is_prod = params[:is_prod]
 
     # Clean up preparing for the tag
     clean_build_artifacts
-    reset_git_repo(
-      force: true,
-      files: [
+
+    if env == "internalPrd" then # Revert version updates for internalPrd
+      reset_git_repo(
+        force: true
+      )
+    else
+      reset_git_repo(
+        force: true,
+        files: [
         "../core/Classes/Environment.swift",
         "../app/falconPushNotifications/Environment.swift",
-        "../app/falcon/Resource/Identifiers.swift"
-      ]
-    )
+        "../app/falcon/Resource/Identifiers.swift",
+        "../app/falcon/Resource/Environment+Extension.swift"
+        ]
+      )
+    end
 
     # Revert the visual name changes
     if !is_prod then
@@ -140,15 +177,54 @@ platform :ios do
       # Replace the bundle id for the iCloud container
       sh("sed", "-i", "", "s/<key>iCloud.[^<]*</<key>iCloud.com.muun.falcon</", "../../app/falcon/Info.plist")
     end
+  end
 
-    # We're done, tag it
-    commit_version_bump(
-      message: "falcon: Bump version #{get_build_number}",
-      xcodeproj: "falcon.xcodeproj"
+  private_lane :upload_testflight do |params|
+    env = params[:env]
+    muun_email = prompt(text: "Your muun email: ")
+    is_prod = env == "prod"
+    git_prefix = is_prod ? "" : "-#{env}"
+    app_identifier = get_app_identifier(env: env, is_prod: is_prod)
+    extension_identifier = "#{app_identifier}.falconPushNotifications"
+
+    update_signing_provisioning(app_identifier: app_identifier,
+                                extension_identifier: extension_identifier,
+                                muun_email: muun_email)
+
+    set_env(env: env)
+
+    sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
+
+    if !is_prod then
+      customize_app_for_a_not_production_environment(env: env, 
+                                                     app_identifier: app_identifier,
+                                                     extension_identifier: extension_identifier)
+    end
+
+    update_build_number(env: env, muun_email: muun_email, app_identifier: app_identifier)
+
+    version_number = get_version_number(target: "Muun")
+
+    build_app(
+      scheme: "Muun", 
+      workspace: "falcon.xcworkspace", 
+      include_symbols: true,
+      export_method: "app-store"
     )
+    
+    upload_build_with_dsyms(env: env, muun_email: muun_email, app_identifier: app_identifier)
+
+    clean_up_build_dir(env: env, is_prod: is_prod)
+
+    if is_prod then # nothing to commit for envs that are not prod
+        # We're done, tag it
+        commit_version_bump(
+        message: "falcon: Bump version #{get_build_number}",
+        xcodeproj: "falcon.xcodeproj"
+        )
+    end
     add_git_tag(tag: "falcon#{git_prefix}-#{version_number}-#{get_build_number}")
     push_to_git_remote
-
   end
 
   desc "Upload symbols to crashlytics"
@@ -167,7 +243,7 @@ platform :ios do
 
     # Upload them to crashlytics
     upload_symbols_to_crashlytics(
-    	gsp_path:"falcon/GoogleService-Info-prod.plist",
+    	gsp_path:"falcon/GoogleService-Info-#{get_env_for_app_identification(env: env)}.plist",
     	dsym_worker_threads: 10
     )
 

@@ -26,7 +26,16 @@ public extension DependencyContainer {
             container.register(.singleton, factory: CompatLogInAction.init)
             container.register(.singleton, factory: RequestChallengeAction.init)
             container.register(.singleton, factory: SetUpPasswordAction.init)
-            container.register(.singleton, factory: SessionActions.init)
+            container.register(.singleton) {
+                SessionActions(repository: $0,
+                               userRepository: $1,
+                               keysRepository: $2,
+                               exchangeRateWindowRepository: $3,
+                               secureStorage: $4,
+                               preferences: $5,
+                               updateUserPreferences: try container.resolve(),
+                               userPreferencesSelector: try container.resolve())
+            }
             container.register(.singleton, factory: AddressActions.init)
             container.register(.singleton) {
                 OperationActions(operationRepository: $0,
@@ -78,9 +87,9 @@ public extension DependencyContainer {
             container.register(.singleton, factory: CreateBitcoinURIAction.init)
             container.register(.singleton, factory: RefreshInvoicesAction.init)
             container.register(.singleton, factory: FulfillIncomingSwapAction.init)
-            container.register(.singleton, factory: ComputeSwapFeesAction.init)
             container.register(.singleton, factory: FetchSwapServerKeyAction.init)
             container.register(.singleton, factory: MigrateFingerprintsAction.init)
+            container.register(.singleton, factory: MigrateUserSkippedEmailAction.init)
             container.register(.singleton, factory: ApiMigrationAction.init)
             container.register(.singleton, factory: UpdateUserPreferencesAction.init)
             container.register(.singleton, factory: VerifyFulfillableAction.init)

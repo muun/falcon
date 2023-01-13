@@ -236,11 +236,6 @@ internal enum L10n {
     }
   }
 
-  internal enum DetailRowView {
-    /// Copied to clipboard
-    internal static let s1 = L10n.tr("Localizable", "DetailRowView.s1")
-  }
-
   internal enum DetailViewController {
     /// Fee paid to miners
     internal static let outgoingTxFee = L10n.tr("Localizable", "DetailViewController.outgoingTxFee")
@@ -648,6 +643,11 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "LogOutViewController.s2")
     /// You entered a wrong pin 3 times in a row. As a security measure, you were logged out. Please restart Muun to recover your wallet.
     internal static let s3 = L10n.tr("Localizable", "LogOutViewController.s3")
+  }
+
+  internal enum MUDetailRowView {
+    /// Copied to clipboard
+    internal static let s1 = L10n.tr("Localizable", "MUDetailRowView.s1")
   }
 
   internal enum ManualSaveEmergencyKitView {
@@ -1074,7 +1074,7 @@ internal enum L10n {
   }
 
   internal enum ReceiveFormatSettingDropdownView {
-    /// When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network.\nIn the future, you won’t need to do it anymore (learn more).
+    /// When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network. In the future, you won’t need to do it anymore (learn more).
     internal static let description = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.description")
     /// https://bitcoinqr.dev/
     internal static let learnMoreLink = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.learnMoreLink")
@@ -1141,7 +1141,7 @@ internal enum L10n {
   internal enum ReceiveViewController {
     /// Your bitcoin address
     internal static let detailedURIBTCTitle = L10n.tr("Localizable", "ReceiveViewController.detailedURIBTCTitle")
-    /// 🧪 Unified QR codes are experimental
+    /// 🧪 Unified QR codes are experimental (learn more)
     internal static let detailedURIDisclaimer = L10n.tr("Localizable", "ReceiveViewController.detailedURIDisclaimer")
     /// Your lightning invoice
     internal static let detailedURILNTitle = L10n.tr("Localizable", "ReceiveViewController.detailedURILNTitle")

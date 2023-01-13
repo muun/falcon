@@ -161,6 +161,7 @@ PODS:
     - RxSwift (~> 5.0)
   - RxSwift (5.0.1)
   - SwiftGen (6.4.0)
+  - SwiftLint (0.50.1)
 
 DEPENDENCIES:
   - core/all (from `../core`)
@@ -175,6 +176,7 @@ DEPENDENCIES:
   - GoogleUtilities
   - lottie-ios (= 3.0.6)
   - SwiftGen (~> 6.0)
+  - SwiftLint (= 0.50.1)
 
 SPEC REPOS:
   trunk:
@@ -203,6 +205,7 @@ SPEC REPOS:
     - RxGRDB
     - RxSwift
     - SwiftGen
+    - SwiftLint
 
 EXTERNAL SOURCES:
   core:
@@ -235,7 +238,8 @@ SPEC CHECKSUMS:
   RxGRDB: 41dfd8f987aad7a7bdd7c420319d3eb23ee383f3
   RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
   SwiftGen: 67860cc7c3cfc2ed25b9b74cfd55495fc89f9108
+  SwiftLint: 6b0cf1f4d619808dbc16e4fab064ce6fc79f090b
 
-PODFILE CHECKSUM: 42dbe5adcd5b6bad09372c2ce311aab490c8890c
+PODFILE CHECKSUM: 18e99ba64671ae1df0a04ef5f408e4dc516073ab
 
 COCOAPODS: 1.11.3

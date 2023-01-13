@@ -211,8 +211,9 @@ extension HomeViewController: HomeViewDelegate {
             ))
 
         case .preactiveTaproot(let blocksLeft):
+            let feedbackInfo = FeedbackInfo.taprootPreactived(blocksLeft: blocksLeft)
             pushTo(SlidesViewController(
-                configuration: .taprootActivation(successFeedback: FeedbackInfo.taprootPreactived(blocksLeft: blocksLeft))
+                configuration: .taprootActivation(successFeedback: feedbackInfo)
             ))
 
         case .blockClock(let blocksLeft):

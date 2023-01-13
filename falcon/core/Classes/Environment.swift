@@ -11,7 +11,6 @@ public enum Environment: String, RawRepresentable {
     case debug
     case regtest
     case dev
-    case stg
     case prod
 
     // If you change this constant, change it also in the push notification extension
@@ -28,8 +27,6 @@ extension Environment {
             return "regtest"
         case .dev:
             return "developmentDebug"
-        case .stg:
-            return "staging"
         case .prod:
             return "release"
         }
@@ -43,8 +40,6 @@ extension Environment {
             return "https://pub.reg.api.muun.wtf/houston"
         case .dev:
             return "https://dev.api.muun.wtf/houston"
-        case .stg:
-            return "https://stg.api.muun.wtf/houston"
         case .prod:
             return "https://pub.api.muun.io/houston"
         }
@@ -58,8 +53,6 @@ extension Environment {
             return "https://reg.muun.com"
         case .dev:
             return "https://dev.muun.com"
-        case .stg:
-            return "https://stg.muun.com"
         case .prod:
             return "https://muun.com"
         }

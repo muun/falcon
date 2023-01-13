@@ -41,7 +41,7 @@ private struct StoredUserPreferences: Codable {
     var receiveStrictMode: Bool?
     var seenNewHome: Bool?
     var seenLnurlFirstTime: Bool?
-    var lightningDefaultForReceiving: Bool?
+    var skippedEmailSetup: Bool?
     var defaultAddressType: AddressType?
     var receiveFormatPreference: ReceiveFormatPreference?
 
@@ -53,7 +53,7 @@ private struct StoredUserPreferences: Codable {
         self.seenNewHome = prefs.seenNewHome
         self.seenLnurlFirstTime = prefs.seenLnurlFirstTime
         self.defaultAddressType = prefs.defaultAddressType
-        self.lightningDefaultForReceiving = prefs.lightningDefaultForReceiving
+        self.skippedEmailSetup = prefs.skippedEmailSetup
         self.receiveFormatPreference = prefs.receiveFormatPreference
     }
 
@@ -62,7 +62,7 @@ private struct StoredUserPreferences: Codable {
             receiveStrictMode: receiveStrictMode ?? false,
             seenNewHome: seenNewHome ?? false,
             seenLnurlFirstTime: seenLnurlFirstTime ?? false,
-            lightningDefaultForReceiving: lightningDefaultForReceiving ?? false,
+            skippedEmailSetup: skippedEmailSetup ?? false,
             defaultAddressType: defaultAddressType ?? .segwit,
             receiveFormatPreference: receiveFormatPreference ?? .ONCHAIN
         )

@@ -262,7 +262,7 @@ class NotificationService: UNNotificationServiceExtension {
             network = LibwalletRegtest()!
         case .dev:
             network = LibwalletTestnet()!
-        case .stg, .prod:
+        case .prod:
             network = LibwalletMainnet()!
         }
 

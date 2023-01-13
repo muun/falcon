@@ -37,4 +37,32 @@ public class UpdateUserPreferencesAction: AsyncAction<Void> {
         )
     }
 
+    public func runPersistingLocallyEvenOnSyncFailure(_ mutator: @escaping (UserPreferences) -> UserPreferences) {
+        runCompletable(
+            userPreferencesRepository
+                .watch()
+                .take(1)
+                .asSingle()
+                .map(mutator)
+                .flatMap({ prefs in
+                    self.userPreferencesRepository.update(prefs)
+                    return Single.just(prefs)
+                })
+                .flatMapCompletable(houstonService.updateUserPreferences(_:))
+        )
+    }
+
+    public func runOnlyLocally(_ mutator: @escaping (UserPreferences) -> UserPreferences) {
+        runCompletable(
+            userPreferencesRepository
+                .watch()
+                .take(1)
+                .asSingle()
+                .map(mutator)
+                .flatMapCompletable({ prefs in
+                    self.userPreferencesRepository.update(prefs)
+                    return Completable.empty()
+                })
+        )
+    }
 }

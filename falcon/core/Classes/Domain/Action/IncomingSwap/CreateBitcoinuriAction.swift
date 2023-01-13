@@ -66,7 +66,7 @@ public class CreateBitcoinURIAction {
                 LibwalletGenerateBip21Uri(paymentURI, error)
             })
 
-            return Single.just(RawBitcoinURI(uri: uri, rawInvoice: invoice, address: address))
+            return Single.just(RawBitcoinURI(uri: uri, rawInvoice: invoice, address: address, amount: amount))
         }
     }
 }
@@ -75,4 +75,5 @@ public struct RawBitcoinURI {
     public let uri: String
     public let rawInvoice: String
     public let address: String
+    public let amount: Satoshis?
 }

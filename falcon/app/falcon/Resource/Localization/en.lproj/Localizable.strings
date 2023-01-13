@@ -56,8 +56,8 @@ Switch to legacy addresses";
 /* Presentation/Screen/Detail/DetailPresenter.swift */
 "DetailPresenter.s1" = "%@ hours";
 "DetailPresenter.s2" = "(%@ blocks)";
-/* Presentation/Screen/Detail/DetailRowView.swift */
-"DetailRowView.s1" = "Copied to clipboard";
+/* Presentation/Screen/Detail/MUDetailRowView.swift */
+"MUDetailRowView.s1" = "Copied to clipboard";
 /* Presentation/Screen/Detail/DetailViewController.swift */
 "DetailViewController.s1" = "This payment failed. You received a refund.";
 "DetailViewController.s2" = "Payment detail";
@@ -295,7 +295,7 @@ To make your transactions more cost-effective, Muun displays Segwit addresses by
 "ReceiveViewController.receiveBitcoin" = "Receive Bitcoin";
 "ReceiveViewController.s4" = "Copied to clipboard";
 "ReceiveViewController.s5" = "Copied to clipboard. This invoice expires in %@.";
-"ReceiveViewController.detailedURIDisclaimer" = "🧪 Unified QR codes are experimental";
+"ReceiveViewController.detailedURIDisclaimer" = "🧪 Unified QR codes are experimental (learn more)";
 "ReceiveViewController.detailedURIBTCTitle" = "Your bitcoin address";
 "ReceiveViewController.detailedURILNTitle" = "Your lightning invoice";
 
@@ -886,8 +886,7 @@ Many services are not yet compatible with Taproot and may label your addresses a
 
 /* ReceiveFormatSettingDropdownView */
 "ReceiveFormatSettingDropdownView.title" = "Receiving protocol";
-"ReceiveFormatSettingDropdownView.description" = "When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network.
-In the future, you won’t need to do it anymore (learn more).";
+"ReceiveFormatSettingDropdownView.description" = "When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network. In the future, you won’t need to do it anymore (learn more).";
 "ReceiveFormatSettingDropdownView.learnMoreUnderline" = "learn more";
 "ReceiveFormatSettingDropdownView.learnMoreLink" = "https://bitcoinqr.dev/";
 "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle" = "Choose your receiving protocol";

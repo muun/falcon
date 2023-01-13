@@ -75,12 +75,8 @@ public class UserRepository {
         return preferences.watchBool(key: .rcSignInAuthorization)
     }
 
+    @available(*, deprecated, message: "use userPreferences instead")
     func isEmailSkippedByPreference() -> Bool {
         return preferences.bool(forKey: .isEmailSkipped)
     }
-
-    func setEmailSkipped() {
-        preferences.set(value: true, forKey: .isEmailSkipped)
-    }
-
 }

@@ -30,7 +30,6 @@ class RequestCloudView: UIView {
     }
 
     private func setupView() {
-
         stack.axis = .vertical
         stack.distribution = .fill
         stack.spacing = .spacing

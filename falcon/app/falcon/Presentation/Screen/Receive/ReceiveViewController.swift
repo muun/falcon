@@ -301,7 +301,6 @@ class ReceiveViewController: MUViewController, Resolver {
 
     // We only display the push notifications priming view for on-chain addresses if we have never asked before
     private func showOnChain() {
-
         receiveInLightningView.isHidden = true
         NSLayoutConstraint.deactivate(receiveInLightningViewConstraints)
 
@@ -337,7 +336,6 @@ class ReceiveViewController: MUViewController, Resolver {
 
     // We display the push notifications priming view for o lightning if we know that the permissions are not granted
     private func showLightning() {
-
         receiveOnChainView.isHidden = true
         NSLayoutConstraint.deactivate(receiveOnChainViewConstraints)
 
@@ -544,9 +542,9 @@ extension ReceiveViewController: ReceiveInLightningViewDelegate {
 
 extension ReceiveViewController: ReceiveUnifiedViewDelegate {
     func didTapOn(URI: BitcoinURIViewModel) {
-        let URI = BottomDrawerInfo.unifiedAddress(URI.detailedURIForDescription())
-        let overlayVc = BottomDrawerOverlayViewController(info: URI)
-        self.present(overlayVc, animated: true)
+        let dialog = DetailedUnifiedURIView(bitcoinURIViewModel: URI,
+                                            screenNameForLogs: "more_info")
+        self.present(dialog, animated: true)
     }
 
     func didTapOnRequestNewUnfiedQR() {
@@ -648,7 +646,6 @@ extension ReceiveViewController: MUActionSheetViewDelegate {
             logScreen(receiveLogName, parameters: getLogParams())
         }
     }
-
 }
 
 extension ReceiveViewController: UITestablePage {

@@ -15,8 +15,6 @@ extension Environment {
             return LibwalletRegtest()!
         case .dev:
             return LibwalletTestnet()!
-        case .stg:
-            return LibwalletMainnet()!
         case .prod:
             return LibwalletMainnet()!
         }

@@ -136,8 +136,9 @@ extension LNURLScanQRViewController: AVCaptureMetadataOutputObjectsDelegate {
         let view = ErrorView()
 
         view.delegate = self
+        let errorMessage = "LNURL code is not valid: \(qr)"
         view.model = LNURLWithdrawErrorViewModel(
-            wrappedError: MuunError(LNURLWithdrawAction.WithdrawError.invalidCode(message: "LNURL code is not valid: \(qr)")),
+            wrappedError: MuunError(LNURLWithdrawAction.WithdrawError.invalidCode(message: errorMessage)),
             invoice: nil
         )
 

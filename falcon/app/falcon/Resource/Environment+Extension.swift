@@ -11,7 +11,8 @@ import core
 
 extension Environment {
     var firebaseOptionsPath: String {
-        return Bundle.main.path(forResource: "GoogleService-Info-\(rawValue)",
+        let env = rawValue
+        return Bundle.main.path(forResource: "GoogleService-Info-\(env)",
             ofType: "plist")!
     }
 
@@ -21,7 +22,7 @@ extension Environment {
             return "https://live.blockcypher.com/btc-testnet/tx/"
         case .debug, .regtest:
             return "http://totally-explorer/tx/"
-        case .stg, .prod:
+        case .prod:
             return "https://mempool.space/tx/"
         }
     }
@@ -32,7 +33,7 @@ extension Environment {
             return "https://live.blockcypher.com/btc-testnet/address/"
         case .debug, .regtest:
             return "http://totally-explorer/address/"
-        case .stg, .prod:
+        case .prod:
             return "https://mempool.space/address/"
         }
     }
@@ -43,7 +44,7 @@ extension Environment {
             return "http://totally-1ml/node/"
         case .dev:
             return "https://1ml.com/testnet/node/"
-        case .stg, .prod:
+        case .prod:
             return "https://1ml.com/node/"
         }
     }

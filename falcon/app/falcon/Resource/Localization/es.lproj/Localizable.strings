@@ -56,8 +56,8 @@ Cambiar a dirección de compatibilidad";
 /* Presentation/Screen/Detail/DetailPresenter.swift */
 "DetailPresenter.s1" = "%@ horas";
 "DetailPresenter.s2" = "(%@ bloques)";
-/* Presentation/Screen/Detail/DetailRowView.swift */
-"DetailRowView.s1" = "Copiado al portapapeles";
+/* Presentation/Screen/Detail/MUDetailRowView.swift */
+"MUDetailRowView.s1" = "Copiado al portapapeles";
 /* Presentation/Screen/Detail/DetailViewController.swift */
 "DetailViewController.s1" = "Este pago falló. Recibiste un reembolso.";
 "DetailViewController.s2" = "Detalle de pago";
@@ -295,7 +295,7 @@ Para que tus transacciones sean más eficientes, Muun muestra las direcciones de
 "ReceiveViewController.receiveBitcoin" = "Recibir Bitcoin";
 "ReceiveViewController.s4" = "Copiado al portapapeles";
 "ReceiveViewController.s5" = "Copiado al portapapeles. Esta factura expirará en %@.";
-"ReceiveViewController.detailedURIDisclaimer" = "🧪 Los códigos QR unificados son experimentales";
+"ReceiveViewController.detailedURIDisclaimer" = "🧪 Los códigos QR unificados son experimentales (más información)";
 "ReceiveViewController.detailedURIBTCTitle" = "Tu dirección de bitcoin";
 "ReceiveViewController.detailedURILNTitle" = "Tu factura de lightning";
 
@@ -889,8 +889,7 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 
 /* ReceiveFormatSettingDropdownView */
 "ReceiveFormatSettingDropdownView.title" = "Protocolo para recibir";
-"ReceiveFormatSettingDropdownView.description" = "Al recibir fondos, debes elegir entre usar la Red de Bitcoin o la Red de Lightning.
-En el futuro, ya no necesitarás hacerlo (más información)";
+"ReceiveFormatSettingDropdownView.description" = "Al recibir fondos, debes elegir entre usar la Red de Bitcoin o la Red de Lightning. En el futuro, ya no necesitarás hacerlo (más información)";
 "ReceiveFormatSettingDropdownView.learnMoreUnderline" = "más información";
 "ReceiveFormatSettingDropdownView.learnMoreLink" = "https://bitcoinqr.dev/";
 "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle" = "Elige tu protocolo para recibir";

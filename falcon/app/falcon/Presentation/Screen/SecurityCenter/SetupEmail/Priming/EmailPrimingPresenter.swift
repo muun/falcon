@@ -13,6 +13,7 @@ protocol EmailPrimingPresenterDelegate: BasePresenterDelegate {}
 class EmailPrimingPresenter<Delegate: EmailPrimingPresenterDelegate>: BasePresenter<Delegate> {
 
     private let sessionActions: SessionActions
+    private var wasEmailJustSkipped = false
 
     init(delegate: Delegate, sessionActions: SessionActions) {
         self.sessionActions = sessionActions
