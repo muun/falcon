@@ -27,10 +27,41 @@ class ManualSaveEmergencyKitView: UIScrollView {
         makeViewTestable()
     }
 
-    private func setupView() {
-        roundCorners(cornerRadius: 10, clipsToBounds: true)
-        backgroundColor = Asset.Colors.white.color
+    @objc func tapClose() {
+        viewDelegate?.dismiss()
+    }
 
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+
+        if let parent = superview {
+
+            NSLayoutConstraint.activate([
+                leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: .sideMargin),
+                parent.trailingAnchor.constraint(equalTo: trailingAnchor, constant: .sideMargin),
+                topAnchor.constraint(greaterThanOrEqualTo: parent.topAnchor, constant: .sideMargin),
+                parent.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: .sideMargin)
+            ])
+        }
+    }
+}
+
+extension ManualSaveEmergencyKitView: SmallButtonViewDelegate {
+    func button(didPress button: SmallButtonView) {
+        viewDelegate?.save()
+    }
+}
+
+extension ManualSaveEmergencyKitView: UITestablePage {
+    typealias UIElementType = UIElements.Pages.EmergencyKit.SharePDF
+
+    func makeViewTestable() {
+        makeViewTestable(self.button, using: .confirm)
+    }
+}
+
+private extension ManualSaveEmergencyKitView {
+    func createBaseStackView() -> UIStackView {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fill
@@ -51,9 +82,13 @@ class ManualSaveEmergencyKitView: UIScrollView {
 
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackHeight,
+            stackHeight
         ])
 
+        return stack
+    }
+
+    func addCrossReturningCrossContainer(to stack: UIStackView) -> UIView {
         let cross = UIButton()
         cross.translatesAutoresizingMaskIntoConstraints = false
         cross.setImage(Asset.Assets.navClose.image, for: .normal)
@@ -71,9 +106,20 @@ class ManualSaveEmergencyKitView: UIScrollView {
             crossContainer.topAnchor.constraint(equalTo: cross.topAnchor),
             crossContainer.bottomAnchor.constraint(equalTo: cross.bottomAnchor),
             crossContainer.leadingAnchor.constraint(equalTo: cross.leadingAnchor),
-            crossContainer.trailingAnchor.constraint(greaterThanOrEqualTo: cross.trailingAnchor),
+            crossContainer.trailingAnchor.constraint(greaterThanOrEqualTo: cross.trailingAnchor)
         ])
         stack.addArrangedSubview(crossContainer)
+
+        return crossContainer
+    }
+
+    private func setupView() {
+        roundCorners(cornerRadius: 10, clipsToBounds: true)
+        backgroundColor = Asset.Colors.white.color
+
+        let stack = createBaseStackView()
+
+        let crossContainer = addCrossReturningCrossContainer(to: stack)
 
         let title = TitleAndDescriptionView()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -116,11 +162,9 @@ class ManualSaveEmergencyKitView: UIScrollView {
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 40)
         ])
-
     }
 
     private func buildRow(number: Int, text: String, bold: String) -> UIView {
-
         let iconView = UILabel()
         iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.text = "\(number)."
@@ -154,40 +198,4 @@ class ManualSaveEmergencyKitView: UIScrollView {
 
         return container
     }
-
-    @objc func tapClose() {
-        viewDelegate?.dismiss()
-    }
-
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-
-        if let parent = superview {
-
-            NSLayoutConstraint.activate([
-                leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: .sideMargin),
-                parent.trailingAnchor.constraint(equalTo: trailingAnchor, constant: .sideMargin),
-                topAnchor.constraint(greaterThanOrEqualTo: parent.topAnchor, constant: .sideMargin),
-                parent.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: .sideMargin),
-            ])
-        }
-    }
-}
-
-extension ManualSaveEmergencyKitView: SmallButtonViewDelegate {
-
-    func button(didPress button: SmallButtonView) {
-        viewDelegate?.save()
-    }
-
-}
-
-extension ManualSaveEmergencyKitView: UITestablePage {
-
-    typealias UIElementType = UIElements.Pages.EmergencyKit.SharePDF
-
-    func makeViewTestable() {
-        makeViewTestable(self.button, using: .confirm)
-    }
-
 }

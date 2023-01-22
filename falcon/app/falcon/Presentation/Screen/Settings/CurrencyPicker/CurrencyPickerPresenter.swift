@@ -16,14 +16,14 @@ protocol CurrencyPickerPresenterDelegate: BasePresenterDelegate {
 
 class CurrencyPickerPresenter<Delegate: CurrencyPickerPresenterDelegate>: BasePresenter<Delegate> {
 
-    private let currenciesRepostory: CurrenciesForPickerRetrieverService
+    private let currenciesRepostory: CurrenciesForPickerRetriever
     private var currencies: [Currency] = []
     private var mostUsedCurrencies: [Currency] = []
     private var displayableCurrencies: [Currency] = []
     private var userSelector: UserSelector
 
     init(delegate: Delegate,
-         state: CurrenciesForPickerRetrieverService,
+         state: CurrenciesForPickerRetriever,
          userSelector: UserSelector) {
         self.currenciesRepostory = state
         self.userSelector = userSelector

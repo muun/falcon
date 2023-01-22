@@ -137,7 +137,7 @@ class FeedbackViewController: MUViewController {
             width,
 
             feedbackIImageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor,
-                                                      constant: -2 * .sideMargin),
+                                                      constant: -2 * .sideMargin)
         ])
     }
 

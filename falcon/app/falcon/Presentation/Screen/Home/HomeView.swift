@@ -65,7 +65,7 @@ final class HomeView: UIView {
             blockClock.heightAnchor.constraint(equalTo: blockClockContainer.heightAnchor),
 
             blockClockContainer.leadingAnchor.constraint(lessThanOrEqualTo: blockClock.leadingAnchor),
-            blockClock.trailingAnchor.constraint(lessThanOrEqualTo: blockClockContainer.trailingAnchor),
+            blockClock.trailingAnchor.constraint(lessThanOrEqualTo: blockClockContainer.trailingAnchor)
         ])
 
         blockClock.isUserInteractionEnabled = true

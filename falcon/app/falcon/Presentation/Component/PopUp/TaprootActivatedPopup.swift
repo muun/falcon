@@ -54,7 +54,7 @@ class TaprootActivatedPopup: UIView {
         NSLayoutConstraint.activate([
             card.leadingAnchor.constraint(equalTo: image.leadingAnchor),
             card.trailingAnchor.constraint(equalTo: image.trailingAnchor),
-            image.topAnchor.constraint(equalTo: card.topAnchor, constant: .closeSpacing),
+            image.topAnchor.constraint(equalTo: card.topAnchor, constant: .closeSpacing)
         ])
 
         let blockClock = BlockClockView()
@@ -64,7 +64,7 @@ class TaprootActivatedPopup: UIView {
         card.addSubview(blockClock)
         NSLayoutConstraint.activate([
             card.centerXAnchor.constraint(equalTo: blockClock.centerXAnchor),
-            blockClock.topAnchor.constraint(equalTo: image.bottomAnchor, constant: -.closeSpacing),
+            blockClock.topAnchor.constraint(equalTo: image.bottomAnchor, constant: -.closeSpacing)
         ])
 
         let title = UILabel()
@@ -78,7 +78,7 @@ class TaprootActivatedPopup: UIView {
         NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: blockClock.bottomAnchor, constant: .bigSpacing),
             title.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: .sideMargin),
-            card.trailingAnchor.constraint(equalTo: title.trailingAnchor, constant: .sideMargin),
+            card.trailingAnchor.constraint(equalTo: title.trailingAnchor, constant: .sideMargin)
         ])
 
         let description = UILabel()
@@ -93,7 +93,7 @@ class TaprootActivatedPopup: UIView {
         NSLayoutConstraint.activate([
             description.topAnchor.constraint(equalTo: title.bottomAnchor, constant: .closeSpacing),
             description.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: .sideMargin),
-            card.trailingAnchor.constraint(equalTo: description.trailingAnchor, constant: .sideMargin),
+            card.trailingAnchor.constraint(equalTo: description.trailingAnchor, constant: .sideMargin)
         ])
 
         let button = SmallButtonView()
@@ -108,7 +108,7 @@ class TaprootActivatedPopup: UIView {
             button.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: .sideMargin),
             card.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: .sideMargin),
             card.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: .bigSpacing),
-            button.heightAnchor.constraint(equalToConstant: 40),
+            button.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 

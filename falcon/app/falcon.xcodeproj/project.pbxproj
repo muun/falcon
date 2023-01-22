@@ -507,7 +507,7 @@
 		FE7879CB2878868400CB4198 /* BitcoinCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879CA2878868400CB4198 /* BitcoinCurrency.swift */; };
 		FE7879CD287886B300CB4198 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879CC287886B300CB4198 /* Currency.swift */; };
 		FE7879CF2878870B00CB4198 /* VisualCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879CE2878870B00CB4198 /* VisualCurrency.swift */; };
-		FE7879D2287B879F00CB4198 /* CurrenciesForPickerRetrieverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D1287B879F00CB4198 /* CurrenciesForPickerRetrieverService.swift */; };
+		FE7879D2287B879F00CB4198 /* CurrenciesForPickerRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D1287B879F00CB4198 /* CurrenciesForPickerRetriever.swift */; };
 		FE7879D5287B910800CB4198 /* BitcoinCurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D4287B910800CB4198 /* BitcoinCurrencyTests.swift */; };
 		FE7879D7287B991900CB4198 /* NewOpAmountPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D6287B991900CB4198 /* NewOpAmountPresenterTest.swift */; };
 		FE7879DA287C583E00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D8287C583B00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift */; };
@@ -1072,7 +1072,7 @@
 		FE7879CA2878868400CB4198 /* BitcoinCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCurrency.swift; sourceTree = "<group>"; };
 		FE7879CC287886B300CB4198 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		FE7879CE2878870B00CB4198 /* VisualCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualCurrency.swift; sourceTree = "<group>"; };
-		FE7879D1287B879F00CB4198 /* CurrenciesForPickerRetrieverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesForPickerRetrieverService.swift; sourceTree = "<group>"; };
+		FE7879D1287B879F00CB4198 /* CurrenciesForPickerRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesForPickerRetriever.swift; sourceTree = "<group>"; };
 		FE7879D4287B910800CB4198 /* BitcoinCurrencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCurrencyTests.swift; sourceTree = "<group>"; };
 		FE7879D6287B991900CB4198 /* NewOpAmountPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpAmountPresenterTest.swift; sourceTree = "<group>"; };
 		FE7879D8287C583B00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetaryAmountWithCompleteDataOfCurrency.swift; sourceTree = "<group>"; };
@@ -3130,7 +3130,7 @@
 		FE7879D0287B86B100CB4198 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				FE7879D1287B879F00CB4198 /* CurrenciesForPickerRetrieverService.swift */,
+				FE7879D1287B879F00CB4198 /* CurrenciesForPickerRetriever.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -3817,7 +3817,7 @@
 				FE5B0C3D292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift in Sources */,
 				0F22E69E25D2506500EBFA06 /* AmountOptionView.swift in Sources */,
 				0F9233A225E459860048A293 /* ModalAnimationController.swift in Sources */,
-				FE7879D2287B879F00CB4198 /* CurrenciesForPickerRetrieverService.swift in Sources */,
+				FE7879D2287B879F00CB4198 /* CurrenciesForPickerRetriever.swift in Sources */,
 				A021592B2283C304000FE58B /* UIResponder+Extension.swift in Sources */,
 				B3A4AC92220B690C00FF0A8C /* GenerateRecoveryCodeViewController.swift in Sources */,
 				B30F937A258A59C000045301 /* LightningNetworkSettingsViewController.swift in Sources */,
@@ -4161,7 +4161,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1009;
+				CURRENT_PROJECT_VERSION = 1010;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4212,7 +4212,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1009;
+				CURRENT_PROJECT_VERSION = 1010;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4340,7 +4340,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1009;
+				CURRENT_PROJECT_VERSION = 1010;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4405,7 +4405,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1009;
+				CURRENT_PROJECT_VERSION = 1010;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4438,7 +4438,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1009;
+				CURRENT_PROJECT_VERSION = 1010;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4526,7 +4526,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1009;
+				CURRENT_PROJECT_VERSION = 1010;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

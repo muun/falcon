@@ -50,31 +50,7 @@ class BlockClockView: UIView {
 
         roundCorners(cornerRadius: 6, clipsToBounds: true)
 
-        var digitBoxes = [UIView]()
-        for digit in digits {
-            digit.translatesAutoresizingMaskIntoConstraints = false
-            digit.tintColor = Asset.Colors.grayDarkest.color
-
-            let digitBox = UIView()
-            digitBox.translatesAutoresizingMaskIntoConstraints = false
-
-            digitBox.backgroundColor = Asset.Colors.white.color
-
-            digitBox.layer.borderColor = Asset.Colors.muunBlue.color.cgColor
-            digitBox.layer.borderWidth = 1
-            digitBox.roundCorners(cornerRadius: 4, clipsToBounds: true)
-
-            addSubview(digitBox)
-            addSubview(digit)
-            digitBoxes.append(digitBox)
-
-            NSLayoutConstraint.activate([
-                digitBox.centerXAnchor.constraint(equalTo: digit.centerXAnchor),
-                digitBox.centerYAnchor.constraint(equalTo: digit.centerYAnchor),
-                digitBox.topAnchor.constraint(equalTo: topAnchor, constant: .closeSpacing),
-                digitBox.heightAnchor.constraint(equalToConstant: 30),
-            ])
-        }
+        let digitBoxes = createDigitBoxes()
 
         let taproot = UIImageView(image: Asset.Assets.clockTaproot.image)
         taproot.translatesAutoresizingMaskIntoConstraints = false
@@ -129,5 +105,35 @@ class BlockClockView: UIView {
             digits[digit].image = Self.digitImages[Int(blocks % 10)]
             blocks /= 10
         }
+    }
+
+    private func createDigitBoxes() -> [UIView] {
+        var digitBoxes = [UIView]()
+        for digit in digits {
+            digit.translatesAutoresizingMaskIntoConstraints = false
+            digit.tintColor = Asset.Colors.grayDarkest.color
+
+            let digitBox = UIView()
+            digitBox.translatesAutoresizingMaskIntoConstraints = false
+
+            digitBox.backgroundColor = Asset.Colors.white.color
+
+            digitBox.layer.borderColor = Asset.Colors.muunBlue.color.cgColor
+            digitBox.layer.borderWidth = 1
+            digitBox.roundCorners(cornerRadius: 4, clipsToBounds: true)
+
+            addSubview(digitBox)
+            addSubview(digit)
+            digitBoxes.append(digitBox)
+
+            NSLayoutConstraint.activate([
+                digitBox.centerXAnchor.constraint(equalTo: digit.centerXAnchor),
+                digitBox.centerYAnchor.constraint(equalTo: digit.centerYAnchor),
+                digitBox.topAnchor.constraint(equalTo: topAnchor, constant: .closeSpacing),
+                digitBox.heightAnchor.constraint(equalToConstant: 30)
+            ])
+        }
+
+        return digitBoxes
     }
 }

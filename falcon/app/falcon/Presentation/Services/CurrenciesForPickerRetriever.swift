@@ -9,12 +9,12 @@
 import core
 import Libwallet
 
-protocol CurrenciesForPickerRetrieverService {
+protocol CurrenciesForPickerRetriever {
     func executeForMostUsed() -> [Currency]
     func executeForDisplayable() -> [Currency]
 }
 
-class InMemoryCurrenciesForPickerRetrieverService: CurrenciesForPickerRetrieverService {
+class InMemoryCurrenciesForPickerRetriever: CurrenciesForPickerRetriever {
     private let candidatesForMostUsedCurrency: [Currency]
     private let candidatesForAllCurrencies: [Currency]
 
@@ -40,7 +40,7 @@ class InMemoryCurrenciesForPickerRetrieverService: CurrenciesForPickerRetrieverS
     }
 
     static func createForSettings(userSelector: UserSelector,
-                                  exchangeRateWindow: NewopExchangeRateWindow) -> InMemoryCurrenciesForPickerRetrieverService {
+                                  exchangeRateWindow: NewopExchangeRateWindow) -> InMemoryCurrenciesForPickerRetriever {
         let userPrimaryCurrency = [getUserPrimaryCurrency(userSelector: userSelector,
                                                           exchangeRateWindow: exchangeRateWindow)]
         let candidates = CurrencyHelper.currencyList(currencyCodes: userPrimaryCurrency) + [
@@ -53,12 +53,12 @@ class InMemoryCurrenciesForPickerRetrieverService: CurrenciesForPickerRetrieverS
         let currencesOnExchangeRateWindow = exchangeRateWindow.currencies()!.adapt()
         let candidatesForAllCurrencies = CurrencyHelper.currencyList(currencyCodes: currencesOnExchangeRateWindow)
 
-        return InMemoryCurrenciesForPickerRetrieverService(candidatesForMostUsedCurrency: candidates,
+        return InMemoryCurrenciesForPickerRetriever(candidatesForMostUsedCurrency: candidates,
                                              candidatesForAllCurrencies: candidatesForAllCurrencies)
     }
 
     static func createForContextualCurrencySelection(userSelector: UserSelector,
-                                                     exchangeRateWindow: NewopExchangeRateWindow) -> InMemoryCurrenciesForPickerRetrieverService {
+                                                     exchangeRateWindow: NewopExchangeRateWindow) -> InMemoryCurrenciesForPickerRetriever {
         let userPrimaryCurrency = [getUserPrimaryCurrency(userSelector: userSelector,
                                                           exchangeRateWindow: exchangeRateWindow)]
         let primaryCurrency = CurrencyHelper.currencyList(currencyCodes: userPrimaryCurrency).first
@@ -77,7 +77,7 @@ class InMemoryCurrenciesForPickerRetrieverService: CurrenciesForPickerRetrieverS
         let currenciesOnExchangeRateWindow = exchangeRateWindow.currencies()!.adapt()
         let candidatesForAllCurrencies = CurrencyHelper.currencyList(currencyCodes: currenciesOnExchangeRateWindow)
 
-        return InMemoryCurrenciesForPickerRetrieverService(candidatesForMostUsedCurrency: candidates,
+        return InMemoryCurrenciesForPickerRetriever(candidatesForMostUsedCurrency: candidates,
                                              candidatesForAllCurrencies: candidatesForAllCurrencies)
     }
 

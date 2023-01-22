@@ -111,7 +111,77 @@ class ErrorView: UIView {
         makeViewTestable()
     }
 
-    fileprivate func setUpLabels() {
+    func addTo(_ view: UIView) {
+        self.alpha = 0
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(self)
+        self.frame = view.bounds
+
+        self.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+
+        self.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        self.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+
+        if let model = model {
+            // Special-casing for NewOpError to avoid changing behavior
+            if model is NewOpError {
+                delegate?.logErrorView("new_op_error", params: ["type": model.loggingName()])
+            } else {
+                delegate?.logErrorView("error", params: ["type": model.loggingName()])
+            }
+        }
+
+        UIView.animate(withDuration: 0.25) {
+            self.alpha = 1
+        }
+    }
+
+    @objc fileprivate func descriptionTouched() {
+        if let model = model {
+            delegate?.descriptionTouched(type: model)
+        }
+    }
+}
+
+extension ErrorView: ButtonViewDelegate {
+    func button(didPress button: ButtonView) {
+        switch model?.kind() {
+        case .retryable:
+            delegate?.retryTouched(button: button)
+        case .reportable:
+            delegate?.sendReportTouched()
+        default:
+            break
+        }
+    }
+}
+
+extension ErrorView: LinkButtonViewDelegate {
+    func linkButton(didPress linkButton: LinkButtonView) {
+        delegate?.secondaryButtonTouched()
+    }
+}
+
+extension ErrorView: UITestablePage {
+    typealias UIElementType = UIElements.Pages.ErrorPage
+
+    func makeViewTestable() {
+        makeViewTestable(self, using: .root)
+        makeViewTestable(titleLabel, using: .titleLabel)
+        makeViewTestable(descriptionLabel, using: .descriptionLabel)
+        makeViewTestable(primaryButton, using: .primaryButton)
+        makeViewTestable(secondaryButton, using: .secondaryButton)
+    }
+}
+
+fileprivate extension Selector {
+    static let descriptionTouched = #selector(ErrorView.descriptionTouched)
+}
+
+private extension ErrorView {
+    func setUpLabels() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(scrollView)
 
@@ -128,17 +198,7 @@ class ErrorView: UIView {
             labelsStackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor)
         ])
 
-        let imageView = UIImageView()
-        imageView.image = Asset.Assets.stateError.image
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        labelsStackView.addArrangedSubview(imageView)
-        labelsStackView.setCustomSpacing(24, after: imageView)
-
-        NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(equalToConstant: 96),
-            imageView.widthAnchor.constraint(equalToConstant: 96),
-            imageView.topAnchor.constraint(equalTo: labelsStackView.topAnchor, constant: 120)
-        ])
+        let imageView = createImageView()
 
         titleLabel.textAlignment = .center
         titleLabel.textColor = Asset.Colors.title.color
@@ -181,7 +241,23 @@ class ErrorView: UIView {
         labelsStackView.addArrangedSubview(secondLabel)
     }
 
-    fileprivate func setUpButtons() {
+    func createImageView() -> UIImageView {
+        let imageView = UIImageView()
+        imageView.image = Asset.Assets.stateError.image
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        labelsStackView.addArrangedSubview(imageView)
+        labelsStackView.setCustomSpacing(24, after: imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(equalToConstant: 96),
+            imageView.widthAnchor.constraint(equalToConstant: 96),
+            imageView.topAnchor.constraint(equalTo: labelsStackView.topAnchor, constant: 120)
+        ])
+
+        return imageView
+    }
+
+    func setUpButtons() {
         buttonsStackView.axis = .vertical
         buttonsStackView.alignment = .fill
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -197,7 +273,7 @@ class ErrorView: UIView {
         buttonsStackView.addArrangedSubview(primaryButton)
     }
 
-    private func updateView() {
+    func updateView() {
         titleLabel.text = model?.title()
         descriptionLabel.attributedText = model?.description()
         model.map { secondaryButton.buttonText = $0.secondaryButtonText() }
@@ -209,7 +285,7 @@ class ErrorView: UIView {
         descriptionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .descriptionTouched))
     }
 
-    private func setButtons() {
+    func setButtons() {
         switch model?.kind() ?? .final {
         case .retryable:
             primaryButton.isHidden = false
@@ -222,13 +298,7 @@ class ErrorView: UIView {
         }
     }
 
-    @objc fileprivate func descriptionTouched() {
-        if let model = model {
-            delegate?.descriptionTouched(type: model)
-        }
-    }
-
-    private func setFirstBox() {
+    func setFirstBox() {
         if let firstBoxInfo = model?.firstBoxTexts() {
             firstTitleLabel.text = firstBoxInfo.title.uppercased()
             firstLabel.attributedText = firstBoxInfo.content
@@ -237,7 +307,7 @@ class ErrorView: UIView {
         }
     }
 
-    private func setSecondBox() {
+    func setSecondBox() {
         if let secondBoxInfo = model?.secondBoxTexts() {
             secondTitleLabel.text = secondBoxInfo.title.uppercased()
             secondLabel.attributedText = secondBoxInfo.content
@@ -245,67 +315,4 @@ class ErrorView: UIView {
             secondBox.isHidden = true
         }
     }
-
-    func addTo(_ view: UIView) {
-        self.alpha = 0
-        self.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(self)
-        self.frame = view.bounds
-
-        self.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-
-        self.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        self.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-
-        if let model = model {
-            // Special-casing for NewOpError to avoid changing behavior
-            if model is NewOpError {
-                delegate?.logErrorView("new_op_error", params: ["type": model.loggingName()])
-            } else {
-                delegate?.logErrorView("error", params: ["type": model.loggingName()])
-            }
-        }
-
-        UIView.animate(withDuration: 0.25) {
-            self.alpha = 1
-        }
-    }
-
-}
-
-extension ErrorView: ButtonViewDelegate {
-    func button(didPress button: ButtonView) {
-        switch model?.kind() {
-        case .retryable:
-            delegate?.retryTouched(button: button)
-        case .reportable:
-            delegate?.sendReportTouched()
-        default:
-            break
-        }
-    }
-}
-
-extension ErrorView: LinkButtonViewDelegate {
-    func linkButton(didPress linkButton: LinkButtonView) {
-        delegate?.secondaryButtonTouched()
-    }
-}
-
-extension ErrorView: UITestablePage {
-    typealias UIElementType = UIElements.Pages.ErrorPage
-
-    func makeViewTestable() {
-        makeViewTestable(self, using: .root)
-        makeViewTestable(titleLabel, using: .titleLabel)
-        makeViewTestable(descriptionLabel, using: .descriptionLabel)
-        makeViewTestable(primaryButton, using: .primaryButton)
-        makeViewTestable(secondaryButton, using: .secondaryButton)
-    }
-}
-
-fileprivate extension Selector {
-    static let descriptionTouched = #selector(ErrorView.descriptionTouched)
 }

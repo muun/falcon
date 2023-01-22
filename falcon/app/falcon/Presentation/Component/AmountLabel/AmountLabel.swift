@@ -37,62 +37,6 @@ class AmountLabel: UILabel {
         delegate?.didTouchBitcoinLabel()
     }
 
-    /// Become a value readable.
-    /// bitcoin unit on formatting is inferred from selectedCurrency on bitcoinAmountWithCurrency.
-    /// - Parameters:
-    ///   - bitcoinAmountWithCurrency: Value to be parsed
-    ///   - type: Desired output type
-    /// - Returns: A formatted output (25 USD)
-    private func readableAmount(from bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency,
-                                in type: AmountLabelType) -> NSAttributedString {
-        let selectedCurrency = bitcoinAmountWithCurrency.selectedCurrency
-        let contextBitcoinCurrency = getBitcoinCurrencyGiven(selectedCurrency: selectedCurrency)
-        self.contextBitcoinCurrency = contextBitcoinCurrency
-
-        let value = getValueToBecomeReadableIn(bitcoinAmount: bitcoinAmountWithCurrency.bitcoinAmount, type: type)
-        return getFormattedStringFor(value: value,
-                                     contextBitcoinCurrency: contextBitcoinCurrency)
-    }
-
-    /// Retrieves bitcoinCurrency.
-    /// If user selection is already a bitcoinCurrency this method chooses
-    /// user selection in order to keep bitcoin unit selected by user.
-    private func getBitcoinCurrencyGiven(selectedCurrency: Currency) -> BitcoinCurrency {
-        guard let bitcoinCurrency = selectedCurrency as? BitcoinCurrency else {
-            return GetBTCDefaultSelectedUnit.run()
-        }
-        return bitcoinCurrency
-    }
-
-    private func getValueToBecomeReadableIn(bitcoinAmount: BitcoinAmount, type: AmountLabelType) -> MonetaryAmount {
-        switch type {
-        case .inBTC:
-            return bitcoinAmount.inSatoshis.toBTC()
-        case .inInput:
-            return bitcoinAmount.inInputCurrency
-        case .inPrimary:
-            return bitcoinAmount.inPrimaryCurrency
-        }
-    }
-
-    private func getFormattedStringFor(value: MonetaryAmount,
-                                       contextBitcoinCurrency: Currency) -> NSAttributedString {
-        let currency: Currency
-
-        if value.currency == "BTC" {
-            currency = contextBitcoinCurrency
-        } else {
-            currency = GetCurrencyForCode().runAssumingCrashPosibility(code: value.currency)
-        }
-
-        var attributedString = NSMutableAttributedString()
-        let amountString = currency.toAmountWithoutCode(amount: value.amount, btcCurrencyFormat: .long)
-        attributedString = NSMutableAttributedString(
-            string: "\(amountString) \(currency.displayCode)",
-            attributes: [NSAttributedString.Key.font: font as Any])
-        return attributedString.set(tint: amountString, color: Asset.Colors.title.color)
-    }
-
     /*
      This method switches between the readable values
      I.E.:
@@ -112,7 +56,51 @@ class AmountLabel: UILabel {
         }
     }
 
-    private func nextValue(for bitcoinAmountWithSelectedCurrency: BitcoinAmountWithSelectedCurrency) -> NSAttributedString {
+    /// Set amount passing the different kind of values to be switched on tap inside BitcoinAmount
+    /// - Parameters:
+    ///   - bitcoinAmountWithCurrency: value to be displayed. Keep in mind by default value will be switched
+    ///   in between selectedCurrency, defaultCurrency and BTC on users tap
+    ///   - type: default value type to ve displayed (selected, default or BTC currency)
+    func setAmount(from bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency, in type: AmountLabelType) {
+        self.bitcoinAmountWithCurrency = bitcoinAmountWithCurrency
+        self.attributedText = readableAmount(from: bitcoinAmountWithCurrency, in: type)
+    }
+
+    // This set texts inside () brackets
+    // I.E: (100.53 ARS)
+    func setHelperText(for bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency,
+                       in type: AmountLabelType) {
+        self.bitcoinAmountWithCurrency = bitcoinAmountWithCurrency
+        let amountString = readableAmount(from: bitcoinAmountWithCurrency, in: type).string
+        self.text = "(\(amountString))"
+    }
+}
+
+fileprivate extension Selector {
+    static let amountTouched = #selector(AmountLabel.amountTouched)
+}
+
+private extension AmountLabel {
+    func setTextAnimated(_ text: NSAttributedString, completion: (() -> Void)? = nil) {
+        if attributedText == text {
+            return
+        }
+        UIView.animate(withDuration: 0.15, animations: {
+            self.alpha = 0.2
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.15, animations: {
+                self.attributedText = text
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.15, animations: {
+                    self.alpha = 1
+                }, completion: { _ in
+                    completion?()
+                })
+            })
+        })
+    }
+
+    func nextValue(for bitcoinAmountWithSelectedCurrency: BitcoinAmountWithSelectedCurrency) -> NSAttributedString {
         let currentValue = self.attributedText!.string
         let amountInInput = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inInput)
         let amountInPrimary = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inPrimary)
@@ -137,46 +125,59 @@ class AmountLabel: UILabel {
         return amountInBTC
     }
 
-    /// Set amount passing the different kind of values to be switched on tap inside BitcoinAmount
+    /// Become a value readable.
+    /// bitcoin unit on formatting is inferred from selectedCurrency on bitcoinAmountWithCurrency.
     /// - Parameters:
-    ///   - bitcoinAmountWithCurrency: value to be displayed. Keep in mind by default value will be switched
-    ///   in between selectedCurrency, defaultCurrency and BTC on users tap
-    ///   - type: default value type to ve displayed (selected, default or BTC currency)
-    func setAmount(from bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency, in type: AmountLabelType) {
-        self.bitcoinAmountWithCurrency = bitcoinAmountWithCurrency
-        self.attributedText = readableAmount(from: bitcoinAmountWithCurrency, in: type)
+    ///   - bitcoinAmountWithCurrency: Value to be parsed
+    ///   - type: Desired output type
+    /// - Returns: A formatted output (25 USD)
+    func readableAmount(from bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency,
+                        in type: AmountLabelType) -> NSAttributedString {
+        let selectedCurrency = bitcoinAmountWithCurrency.selectedCurrency
+        let contextBitcoinCurrency = getBitcoinCurrencyGiven(selectedCurrency: selectedCurrency)
+        self.contextBitcoinCurrency = contextBitcoinCurrency
+
+        let value = getValueToBecomeReadableIn(bitcoinAmount: bitcoinAmountWithCurrency.bitcoinAmount, type: type)
+        return getFormattedStringFor(value: value,
+                                     contextBitcoinCurrency: contextBitcoinCurrency)
     }
 
-    // This set texts inside () brackets
-    // I.E: (100.53 ARS)
-    func setHelperText(for bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency,
-                       in type: AmountLabelType) {
-        self.bitcoinAmountWithCurrency = bitcoinAmountWithCurrency
-        let amountString = readableAmount(from: bitcoinAmountWithCurrency, in: type).string
-        self.text = "(\(amountString))"
-    }
-
-    private func setTextAnimated(_ text: NSAttributedString, completion: (() -> Void)? = nil) {
-        if attributedText == text {
-            return
+    /// Retrieves bitcoinCurrency.
+    /// If user selection is already a bitcoinCurrency this method chooses
+    /// user selection in order to keep bitcoin unit selected by user.
+    func getBitcoinCurrencyGiven(selectedCurrency: Currency) -> BitcoinCurrency {
+        guard let bitcoinCurrency = selectedCurrency as? BitcoinCurrency else {
+            return GetBTCDefaultSelectedUnit.run()
         }
-        UIView.animate(withDuration: 0.15, animations: {
-            self.alpha = 0.2
-        }, completion: { _ in
-            UIView.animate(withDuration: 0.15, animations: {
-                self.attributedText = text
-            }, completion: { _ in
-                UIView.animate(withDuration: 0.15, animations: {
-                    self.alpha = 1
-                }, completion: { _ in
-                    completion?()
-                })
-            })
-        })
+        return bitcoinCurrency
     }
 
-}
+    func getValueToBecomeReadableIn(bitcoinAmount: BitcoinAmount, type: AmountLabelType) -> MonetaryAmount {
+        switch type {
+        case .inBTC:
+            return bitcoinAmount.inSatoshis.toBTC()
+        case .inInput:
+            return bitcoinAmount.inInputCurrency
+        case .inPrimary:
+            return bitcoinAmount.inPrimaryCurrency
+        }
+    }
 
-fileprivate extension Selector {
-    static let amountTouched = #selector(AmountLabel.amountTouched)
+    func getFormattedStringFor(value: MonetaryAmount,
+                               contextBitcoinCurrency: Currency) -> NSAttributedString {
+        let currency: Currency
+
+        if value.currency == "BTC" {
+            currency = contextBitcoinCurrency
+        } else {
+            currency = GetCurrencyForCode().runAssumingCrashPosibility(code: value.currency)
+        }
+
+        var attributedString = NSMutableAttributedString()
+        let amountString = currency.toAmountWithoutCode(amount: value.amount, btcCurrencyFormat: .long)
+        attributedString = NSMutableAttributedString(
+            string: "\(amountString) \(currency.displayCode)",
+            attributes: [NSAttributedString.Key.font: font as Any])
+        return attributedString.set(tint: amountString, color: Asset.Colors.title.color)
+    }
 }

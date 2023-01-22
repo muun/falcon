@@ -23,7 +23,7 @@ class CurrencyPickerViewController: MUViewController, Resolver {
                                                        delegate: self,
                                                        state: currenciesForPickerRetrieverService)
 
-    private let currenciesForPickerRetrieverService: CurrenciesForPickerRetrieverService
+    private let currenciesForPickerRetrieverService: CurrenciesForPickerRetriever
     private var selectedCurrency: Currency?
     private weak var delegate: CurrencyPickerDelegate?
 
@@ -33,7 +33,7 @@ class CurrencyPickerViewController: MUViewController, Resolver {
 
     init(delegate: CurrencyPickerDelegate?,
          selectedCurrency: Currency?,
-         currenciesForPickerRetrieverService: CurrenciesForPickerRetrieverService) {
+         currenciesForPickerRetrieverService: CurrenciesForPickerRetriever) {
         self.delegate = delegate
         self.selectedCurrency = selectedCurrency
         self.currenciesForPickerRetrieverService = currenciesForPickerRetrieverService
@@ -95,7 +95,7 @@ class CurrencyPickerViewController: MUViewController, Resolver {
                                            delegate: CurrencyPickerDelegate?,
                                            selectedCurrency: Currency?) -> CurrencyPickerViewController {
         let userSelector: UserSelector = resolve()
-        let currenciesRepository = InMemoryCurrenciesForPickerRetrieverService.createForContextualCurrencySelection(userSelector: userSelector,
+        let currenciesRepository = InMemoryCurrenciesForPickerRetriever.createForContextualCurrencySelection(userSelector: userSelector,
                                                                                                       exchangeRateWindow: exchangeRateWindow)
         return CurrencyPickerViewController(delegate: delegate,
                                             selectedCurrency: selectedCurrency,
@@ -106,7 +106,7 @@ class CurrencyPickerViewController: MUViewController, Resolver {
                                           delegate: CurrencyPickerDelegate?,
                                           selectedCurrency: Currency?) -> CurrencyPickerViewController {
         let userSelector: UserSelector = resolve()
-        let repository = InMemoryCurrenciesForPickerRetrieverService.createForSettings(userSelector: userSelector,
+        let repository = InMemoryCurrenciesForPickerRetriever.createForSettings(userSelector: userSelector,
                                                                                        exchangeRateWindow: exchangeRateWindow)
         return CurrencyPickerViewController(delegate: delegate,
                                             selectedCurrency: selectedCurrency,
