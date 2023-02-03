@@ -10,6 +10,7 @@ import UIKit
 import core
 import Libwallet
 import os
+import DeviceCheck
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -52,13 +53,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         configureFirebase()
-
+        ConectivityCapabilitiesProvider.shared.startMonitoring()
         if sessionActions.isFirstLaunch() {
             lockManager.firstLaunch()
         }
         configureLibwallet()
 
         registerUserData()
+        generateDeviceToken()
         checkEnvironment()
 
         DeviceUtils.appState = application.applicationState
@@ -92,6 +94,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         set {
             _window = newValue
+        }
+    }
+
+    func generateDeviceToken() {
+        let keychainRepository = KeychainRepository()
+        let deviceTokenKey = KeychainRepository.storedKeys.deviceCheckToken.rawValue
+        let deviceToken = try? keychainRepository.get(deviceTokenKey)
+        if deviceToken != nil
+            && deviceToken != DeviceTokenErrorValues.failToRetrieve.rawValue
+            && deviceToken != DeviceTokenErrorValues.unsupported.rawValue {
+            return
+        }
+
+        if DCDevice.current.isSupported { // Always test for availability.
+            DCDevice.current.generateToken { token, error in
+                guard let deviceToken = token, error == nil else {
+                    error.map { Logger.log(error: $0) }
+                    try? keychainRepository.store(DeviceTokenErrorValues.failToRetrieve.rawValue,
+                                                  at: deviceTokenKey)
+                    return
+                }
+                try? keychainRepository.store(deviceToken.base64EncodedString(),
+                                              at: deviceTokenKey)
+            }
+        } else {
+            try? keychainRepository.store(DeviceTokenErrorValues.unsupported.rawValue,
+                                          at: deviceTokenKey)
         }
     }
 

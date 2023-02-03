@@ -27,7 +27,7 @@ private let libwalletStorageURL = try! FileManager.default
 private let databaseCoordinator = try! DatabaseCoordinator(
     queue: DatabaseQueue(path: databaseURL.path),
     preferences: Preferences(userDefaults: UserDefaults(suiteName: userDefaultsDomain)!),
-    secureStorage: SecureStorage(keyPrefix: secureStoragePrefix, group: Identifiers.group)
+    secureStorage: SecureStorage(keyPrefix: secureStoragePrefix, group: core.Identifiers.group)
 )
 
 class MuunTestCase: XCTestCase {
@@ -71,7 +71,7 @@ class MuunTestCase: XCTestCase {
                 secureStoragePrefix
             }
             container.register(.singleton, type: String.self, tag: DependencyContainer.DataTags.secureStorageGroup) {
-                Identifiers.group
+                core.Identifiers.group
             }
 
             container.register { URLSession.shared }

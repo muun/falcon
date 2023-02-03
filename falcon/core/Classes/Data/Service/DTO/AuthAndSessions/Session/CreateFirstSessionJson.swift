@@ -25,7 +25,6 @@ struct CreateFirstSessionOkJson: Codable {
 }
 
 struct ClientJson: Codable {
-
     let type: String
     let buildType: String
     let version: Int
@@ -33,5 +32,7 @@ struct ClientJson: Codable {
     let deviceModel: String
     let timezoneOffsetInSeconds: Int64
     let language: String
-
+    let totalInternalStorage: Int64
+    let totalRamStorage: UInt64
+    let deviceCheckToken: String
 }

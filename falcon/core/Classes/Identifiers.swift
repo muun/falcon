@@ -7,11 +7,11 @@
 //
 
 import Foundation
-// Keep it sync with Identifiers file on core project
-enum Identifiers {
-    static let group = "5YYLBTUB6W.group.com.muun.falcon"
+// This field will be deleted, keep it sync with Identifiers file on main project
+public enum Identifiers {
+    public static let group = "5YYLBTUB6W.group.com.muun.falcon"
 
     // This string is hardcoded because it has to be the same one we use in PushNotification Extension
     // This is to allow sharing the Keychain
-    static let bundleId = "com.muun.falcon"
+    public static let bundleId = "com.muun.falcon"
 }

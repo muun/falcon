@@ -85,7 +85,6 @@ extension CreateSessionRcOkJson: ModelConvertible {
 }
 
 extension Client: APIConvertible {
-
     func toJson() -> ClientJson {
         ClientJson(
             type: type,
@@ -94,10 +93,12 @@ extension Client: APIConvertible {
             versionName: versionName,
             deviceModel: deviceModel,
             timezoneOffsetInSeconds: timezoneOffsetInSeconds,
-            language: language
+            language: language,
+            totalInternalStorage: totalInternalStorage,
+            totalRamStorage: totalRamStorage,
+            deviceCheckToken: deviceCheckToken
         )
     }
-
 }
 
 extension VerificationType: APIConvertible {
