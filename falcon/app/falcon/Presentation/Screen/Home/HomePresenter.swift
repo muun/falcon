@@ -191,10 +191,15 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     }
 
     private func onOperationsChange(_ change: core.OperationsChange) {
+        guard areThereVisualChangesToApply(change: change) else {
+            return
+        }
 
         // Whenever the operations change, we check if there has been any new operation (incoming or outgoing)
         // to display a component in the homescreen indicating the money diff in BTC
-        if let ops = numberOfOperations, change.numberOfOperations > ops, let newOp = change.lastOperation {
+        if let ops = numberOfOperations,
+           change.numberOfOperations > ops,
+           let newOp = change.lastOperation {
 
             delegate.didReceiveNewOperation(
                 amount: diffAmount(newOp),
@@ -203,7 +208,17 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
 
         numberOfOperations = change.numberOfOperations
+
         delegate.onOperationsChange()
+    }
+
+    private func areThereVisualChangesToApply(change: core.OperationsChange) -> Bool {
+        if let lastOperation = change.lastOperation,
+           lastOperation.isFailedAndOutgoing() {
+            return false
+        }
+
+        return true
     }
 
     private func diffAmount(_ op: core.Operation) -> MonetaryAmount {

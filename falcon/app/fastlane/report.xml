@@ -5,192 +5,192 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.00037">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000575">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: get_version_number" time="0.155689">
+      <testcase classname="fastlane.lanes" name="01: get_version_number" time="0.166981">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: ensure_git_branch" time="0.031503">
+      <testcase classname="fastlane.lanes" name="02: ensure_git_branch" time="0.04211">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: ensure_git_status_clean" time="0.137782">
+      <testcase classname="fastlane.lanes" name="03: ensure_git_status_clean" time="0.16236">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: Switch to ios upload_testflight lane" time="0.000167">
+      <testcase classname="fastlane.lanes" name="04: Switch to ios upload_testflight lane" time="0.000243">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: prompt" time="2.970028">
+      <testcase classname="fastlane.lanes" name="05: prompt" time="4.12108">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: Switch to ios get_app_identifier lane" time="0.001567">
+      <testcase classname="fastlane.lanes" name="06: Switch to ios get_app_identifier lane" time="0.000975">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: Switch to ios update_signing_provisioning lane" time="0.000355">
+      <testcase classname="fastlane.lanes" name="07: Switch to ios update_signing_provisioning lane" time="0.000213">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: sigh" time="6.524451">
+      <testcase classname="fastlane.lanes" name="08: sigh" time="4.437965">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: sigh" time="4.904264">
+      <testcase classname="fastlane.lanes" name="09: sigh" time="10.145538">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: Switch to ios set_env lane" time="0.000142">
+      <testcase classname="fastlane.lanes" name="10: Switch to ios set_env lane" time="0.000154">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="11: Switch to ios get_env_for_app_env_case lane" time="0.000104">
+      <testcase classname="fastlane.lanes" name="11: Switch to ios get_env_for_app_env_case lane" time="0.000119">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="12: sed -i '' s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../core/Classes/Environment.swift" time="0.012795">
+      <testcase classname="fastlane.lanes" name="12: sed -i '' s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../core/Classes/Environment.swift" time="0.015653">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="13: Switch to ios get_env_for_app_env_case lane" time="0.00028">
+      <testcase classname="fastlane.lanes" name="13: Switch to ios get_env_for_app_env_case lane" time="0.000304">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="14: sed -i '' s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../app/falconPushNotifications/Environment.swift" time="0.011827">
+      <testcase classname="fastlane.lanes" name="14: sed -i '' s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../app/falconPushNotifications/Environment.swift" time="0.015321">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="15: Switch to ios get_env_for_app_identification lane" time="0.000258">
+      <testcase classname="fastlane.lanes" name="15: Switch to ios get_env_for_app_identification lane" time="0.000329">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="16: sed -i '' s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falconPushNotifications/Environment.swift" time="0.011608">
+      <testcase classname="fastlane.lanes" name="16: sed -i '' s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falconPushNotifications/Environment.swift" time="0.01746">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="17: Switch to ios get_env_for_app_identification lane" time="0.000317">
+      <testcase classname="fastlane.lanes" name="17: Switch to ios get_env_for_app_identification lane" time="0.000315">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="18: sed -i '' s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falcon/Resource/Environment\+Extension.swift" time="0.012809">
+      <testcase classname="fastlane.lanes" name="18: sed -i '' s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falcon/Resource/Environment\+Extension.swift" time="0.015667">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="19: sed -i '' s/static\ let\ bundleId\ \=\ \&quot;\[\^\&quot;\]\*\&quot;/static\ let\ bundleId\ \=\ \&quot;com.muun.falcon\&quot;/ ../../app/falcon/Resource/Identifiers.swift" time="0.011086">
+      <testcase classname="fastlane.lanes" name="19: sed -i '' s/static\ let\ bundleId\ \=\ \&quot;\[\^\&quot;\]\*\&quot;/static\ let\ bundleId\ \=\ \&quot;com.muun.falcon\&quot;/ ../../app/falcon/Resource/Identifiers.swift" time="0.015612">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="20: Switch to ios update_build_number lane" time="0.000263">
+      <testcase classname="fastlane.lanes" name="20: Switch to ios update_build_number lane" time="0.000296">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="21: increment_build_number" time="2.71044">
+      <testcase classname="fastlane.lanes" name="21: increment_build_number" time="3.258133">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="22: get_version_number" time="0.149017">
+      <testcase classname="fastlane.lanes" name="22: get_version_number" time="0.157463">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="23: build_app" time="181.024397">
+      <testcase classname="fastlane.lanes" name="23: build_app" time="156.057607">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="24: Switch to ios upload_build_with_dsyms lane" time="0.000139">
+      <testcase classname="fastlane.lanes" name="24: Switch to ios upload_build_with_dsyms lane" time="0.000245">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="25: upload_to_testflight" time="651.019388">
+      <testcase classname="fastlane.lanes" name="25: upload_to_testflight" time="768.555497">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="26: get_build_number" time="0.792181">
+      <testcase classname="fastlane.lanes" name="26: get_build_number" time="1.015832">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="27: download_dsyms" time="4.893305">
+      <testcase classname="fastlane.lanes" name="27: download_dsyms" time="6.853163">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="28: Switch to ios get_env_for_app_identification lane" time="0.000963">
+      <testcase classname="fastlane.lanes" name="28: Switch to ios get_env_for_app_identification lane" time="0.000756">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="29: upload_symbols_to_crashlytics" time="14.893248">
+      <testcase classname="fastlane.lanes" name="29: upload_symbols_to_crashlytics" time="15.945709">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="30: Switch to ios clean_up_build_dir lane" time="0.000269">
+      <testcase classname="fastlane.lanes" name="30: Switch to ios clean_up_build_dir lane" time="0.000554">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="31: clean_build_artifacts" time="0.011079">
+      <testcase classname="fastlane.lanes" name="31: clean_build_artifacts" time="0.042134">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="32: reset_git_repo" time="0.170606">
+      <testcase classname="fastlane.lanes" name="32: reset_git_repo" time="0.196414">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="33: get_build_number" time="0.817244">
+      <testcase classname="fastlane.lanes" name="33: get_build_number" time="0.856073">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="34: commit_version_bump" time="0.400308">
+      <testcase classname="fastlane.lanes" name="34: commit_version_bump" time="2.408305">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="35: get_build_number" time="0.867521">
+      <testcase classname="fastlane.lanes" name="35: get_build_number" time="0.844416">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="36: add_git_tag" time="0.033852">
+      <testcase classname="fastlane.lanes" name="36: add_git_tag" time="0.037758">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="37: push_to_git_remote" time="1.927969">
+      <testcase classname="fastlane.lanes" name="37: push_to_git_remote" time="2.052955">
         
       </testcase>
     

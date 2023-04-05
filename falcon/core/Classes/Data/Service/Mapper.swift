@@ -94,8 +94,6 @@ extension Client: APIConvertible {
             deviceModel: deviceModel,
             timezoneOffsetInSeconds: timezoneOffsetInSeconds,
             language: language,
-            totalInternalStorage: totalInternalStorage,
-            totalRamStorage: totalRamStorage,
             deviceCheckToken: deviceCheckToken
         )
     }

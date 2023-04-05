@@ -99,4 +99,13 @@ public enum ServiceError: Error {
             return false
         }
     }
+
+    public func isTimeout() -> Bool {
+        switch self {
+        case .timeOut:
+            return true
+        default:
+            return false
+        }
+    }
 }

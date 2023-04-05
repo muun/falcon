@@ -19,6 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		017E89F477FD031F6F4965F61FE66E2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 73481B17ABB4145A6F20D95F8D75956C /* core.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D3F43BD3D2229C98805AF36A5700DC83;
+			remoteInfo = "core-all";
+		};
 		0671EBA7886CEBFBDCBE6A18CC971328 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8A8C29F5408A739D4C01FC56699E4F9 /* FirebaseCore.xcodeproj */;
@@ -33,12 +40,12 @@
 			remoteGlobalIDString = 0CE453D8DBD3396B4C74B9ACD7A09387;
 			remoteInfo = FirebaseCoreDiagnostics;
 		};
-		0887F29DF869EA14A5BFBB6268CF290A /* PBXContainerItemProxy */ = {
+		106BB76BA232C99ED4DD47F19F0DCD46 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 73481B17ABB4145A6F20D95F8D75956C /* core.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = D3F43BD3D2229C98805AF36A5700DC83;
-			remoteInfo = "core-all";
+			remoteGlobalIDString = 92580119A98632473D9298D8A4A1EBA2;
+			remoteInfo = "core-notifications";
 		};
 		1146A00E025C2AA6D21729E5AEAC0382 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -221,13 +228,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0CE453D8DBD3396B4C74B9ACD7A09387;
 			remoteInfo = FirebaseCoreDiagnostics;
-		};
-		BFFCB714FC4B618C52C6DE8781117634 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 73481B17ABB4145A6F20D95F8D75956C /* core.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 92580119A98632473D9298D8A4A1EBA2;
-			remoteInfo = "core-notifications";
 		};
 		C72E843D00C82F1616E7664509C23F28 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -563,7 +563,7 @@
 				A147E22F36619B9A5122BD71F526ACC4 /* PBXTargetDependency */,
 				6841C5FCBDEF7296123FA814CA5F9EB4 /* PBXTargetDependency */,
 				AFC76B6A8BA456966EC2D3422661A99A /* PBXTargetDependency */,
-				CF9287C47A6CD5C1CA0464FE6A6D8689 /* PBXTargetDependency */,
+				DD3653DE74B28882B963D26F09B487A9 /* PBXTargetDependency */,
 				5D294D82B9162051279E7379ABA2B1D5 /* PBXTargetDependency */,
 			);
 			name = "Pods-falconPushNotifications";
@@ -626,7 +626,7 @@
 				EEE674367D1611D15ACFB44C6D41A03A /* PBXTargetDependency */,
 				B5AD8E24E8A3A5F60D70E265257D4722 /* PBXTargetDependency */,
 				B059052AB4C991352C9F0634A5C79DED /* PBXTargetDependency */,
-				913B0DDA4D5B7F00E188A82904CCD234 /* PBXTargetDependency */,
+				0C18DEBC2AA3D2A3EF6C95F8A5971FC8 /* PBXTargetDependency */,
 				CBF050FC8F772DEA3A4326FB7B4C93E7 /* PBXTargetDependency */,
 				70C172DB2AA6CDC4D3ADCDAAB4C65EE6 /* PBXTargetDependency */,
 			);
@@ -804,6 +804,11 @@
 			name = FirebaseCore;
 			targetProxy = 0671EBA7886CEBFBDCBE6A18CC971328 /* PBXContainerItemProxy */;
 		};
+		0C18DEBC2AA3D2A3EF6C95F8A5971FC8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "core-all";
+			targetProxy = 017E89F477FD031F6F4965F61FE66E2E /* PBXContainerItemProxy */;
+		};
 		0D462F59987DC0F2ADED807F8A743AD5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Firebase-CoreOnly-Crashlytics";
@@ -880,11 +885,6 @@
 			name = GoogleAPIClientForREST;
 			targetProxy = 1146A00E025C2AA6D21729E5AEAC0382 /* PBXContainerItemProxy */;
 		};
-		913B0DDA4D5B7F00E188A82904CCD234 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "core-all";
-			targetProxy = 0887F29DF869EA14A5BFBB6268CF290A /* PBXContainerItemProxy */;
-		};
 		931F52DA4F5BBBC390716688054B9D46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GoogleAppMeasurement;
@@ -955,11 +955,6 @@
 			name = "lottie-ios";
 			targetProxy = 68EF4E515817F89DA01491F700787F58 /* PBXContainerItemProxy */;
 		};
-		CF9287C47A6CD5C1CA0464FE6A6D8689 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "core-notifications";
-			targetProxy = BFFCB714FC4B618C52C6DE8781117634 /* PBXContainerItemProxy */;
-		};
 		D0075FA357C15D62EEA2704FB4FA985C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GTMAppAuth;
@@ -969,6 +964,11 @@
 			isa = PBXTargetDependency;
 			name = FirebaseCoreDiagnostics;
 			targetProxy = AC23105C930255DB40A71EB59954B37C /* PBXContainerItemProxy */;
+		};
+		DD3653DE74B28882B963D26F09B487A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "core-notifications";
+			targetProxy = 106BB76BA232C99ED4DD47F19F0DCD46 /* PBXContainerItemProxy */;
 		};
 		E2E260E5541B8356E7C6E0D21C59AD98 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

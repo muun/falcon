@@ -42,8 +42,11 @@ public class HoustonService: BaseService {
     func createFirstSession(firstSession: CreateFirstSession) -> Single<CreateFirstSessionOk> {
         let jsonData = JSONEncoder.data(from: firstSession)
 
-        return post("sessions-v2/first", body: jsonData, andReturn: CreateFirstSessionOkJson.self)
-            .map({ $0.toModel() })
+        return post("sessions-v2/first",
+                    body: jsonData,
+                    andReturn: CreateFirstSessionOkJson.self,
+                    shouldForceDeviceCheckToken: true)
+        .map({ $0.toModel() })
     }
 
     func resendVerificationCode(verificationType: VerificationType) -> Single<()> {

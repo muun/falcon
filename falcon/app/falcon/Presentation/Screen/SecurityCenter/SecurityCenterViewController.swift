@@ -201,7 +201,11 @@ class SecurityCenterViewController: MUViewController {
 
 }
 
-extension SecurityCenterViewController: SecurityCenterPresenterDelegate {}
+extension SecurityCenterViewController: SecurityCenterPresenterDelegate {
+    func updateCardsStateDueToEmailSkippedPreferenceChange() {
+        setUpStepViewsContent()
+    }
+}
 
 extension SecurityCenterViewController: LightButtonViewDelegate {
 

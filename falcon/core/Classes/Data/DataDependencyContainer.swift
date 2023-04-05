@@ -30,8 +30,9 @@ public extension DependencyContainer {
             container.register(.singleton, factory: DatabaseCoordinator.init)
 
             container.register {
-                SecureStorage(keyPrefix: try container.resolve(tag: DataTags.secureStoragePrefix),
-                              group: try container.resolve(tag: DataTags.secureStorageGroup))
+                let keychainRepository = KeychainRepository(keyPrefix: try container.resolve(tag: DataTags.secureStoragePrefix),
+                                                            group: try container.resolve(tag: DataTags.secureStorageGroup))
+                return SecureStorage(keychainRepository: keychainRepository)
             }
             container.register(.singleton, factory: Preferences.init)
 

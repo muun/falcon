@@ -7,12 +7,26 @@
 
 import Foundation
 
-class HardwareCapabilitiesProvider {
-    static func getBatterylevel() -> Float {
+public class HardwareCapabilitiesProvider {
+    public static let shared = HardwareCapabilitiesProvider()
+
+    private var timer: Timer?
+    private var freeStorage: Int64?
+    private var totalStorage: Int64?
+
+    private let totalStorageRefreshTimeInSedonds = 10
+
+    public func startRefreshingCacheableValues() {
+        refreshFreeStorage()
+        refreshTotalStorageAsync()
+        startKeepingTotalStorageUpToDate()
+    }
+
+    func getBatterylevel() -> Float {
         return UIDevice.current.batteryLevel
     }
 
-    static func getBatteryState() -> String {
+    func getBatteryState() -> String {
         switch (UIDevice.current.batteryState) {
         case .unknown: return "UNKNOWN"
         case .charging: return "CHARGING"
@@ -20,16 +34,23 @@ class HardwareCapabilitiesProvider {
         case .unplugged: return "UNPLUGGED"
         }
     }
-    
-    static func getFreeStorage() -> Int64 {
-        return getDiskValue(resourceKey: .volumeAvailableCapacityForImportantUsageKey)
+
+    @discardableResult
+    public func refreshFreeStorage() -> Int64 {
+        let freeStorage = getDiskValue(resourceKey: .volumeAvailableCapacityForImportantUsageKey)
+        self.freeStorage = freeStorage
+        return freeStorage;
     }
     
-    static func getTotalStorage() -> Int64 {
-        return getDiskValue(resourceKey: .volumeTotalCapacityKey)
+    func getFreeStorage() -> Int64 {
+        return freeStorage ?? refreshFreeStorage()
     }
     
-    private static func getDiskValue(resourceKey: URLResourceKey) -> Int64 {
+    func getTotalStorage() -> Int64 {
+        return totalStorage ?? refreshTotalStorage()
+    }
+    
+    private func getDiskValue(resourceKey: URLResourceKey) -> Int64 {
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         
         let values = try? url.resourceValues(forKeys:
@@ -47,7 +68,7 @@ class HardwareCapabilitiesProvider {
     }
 
     // thanks to https://stackoverflow.com/questions/5012886/determining-the-available-amount-of-ram-on-an-ios-device
-    static func getFreeRam() -> Int64 {
+    func getFreeRam() -> Int64 {
         let host_port: mach_port_t = mach_host_self()
 
         var pagesize: vm_size_t = 0
@@ -61,11 +82,11 @@ class HardwareCapabilitiesProvider {
         return mem_free
     }
     
-    public static func getTotalRam() -> UInt64 {
+    public func getTotalRam() -> UInt64 {
         return ProcessInfo.processInfo.physicalMemory;
     }
     
-    private static func load(vm_stat: inout vm_statistics, host_port: mach_port_t) {
+    private func load(vm_stat: inout vm_statistics, host_port: mach_port_t) {
         withUnsafeMutablePointer(to: &vm_stat) { (vmStatPointer) -> Void in
             // swiftlint:disable line_length
             var host_size: mach_msg_type_number_t = mach_msg_type_number_t(MemoryLayout<vm_statistics_data_t>.stride / MemoryLayout<integer_t>.stride)
@@ -77,5 +98,29 @@ class HardwareCapabilitiesProvider {
                 }
             }
         }
+    }
+
+    private func startKeepingTotalStorageUpToDate() {
+        DispatchQueue.main.async {
+            self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(self.totalStorageRefreshTimeInSedonds),
+                                         target: self,
+                                         selector: #selector(self.refreshTotalStorageAsync),
+                                         userInfo: nil,
+                                         repeats: true)
+        }
+    }
+
+    @objc
+    private func refreshTotalStorageAsync() {
+        DispatchQueue.global().async {
+            self.refreshTotalStorage()
+        }
+    }
+
+    @discardableResult
+    private func refreshTotalStorage() -> Int64 {
+        let totalStorage = getDiskValue(resourceKey: .volumeTotalCapacityKey)
+        self.totalStorage = totalStorage
+        return totalStorage
     }
 }

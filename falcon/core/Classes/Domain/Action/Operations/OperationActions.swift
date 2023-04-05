@@ -241,6 +241,19 @@ public class OperationActions {
                             Single.just(op)
                         )
                     })
+                    .catchError({ error in
+                        if let muunError = error as? MuunError,
+                           let serviceError = muunError.kind as? ServiceError,
+                           serviceError.isTimeout() {
+
+                            operationUpdated.status = .FAILED
+                            return self.operationRepository.storeOperations([operationUpdated]).andThen(
+                                Single.error(error)
+                            )
+                        }
+
+                        return Single.error(error)
+                    })
             })
     }
 

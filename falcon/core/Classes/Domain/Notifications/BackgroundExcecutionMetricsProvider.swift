@@ -11,14 +11,18 @@ struct BackgroundExcecutionMetricsProvider {
     static func run() -> String? {
         /// isBatteryMonitoringEnabled is required in order to get battery metrics.
         UIDevice.current.isBatteryMonitoringEnabled = true
+
+        let hardwareCapabilities = HardwareCapabilitiesProvider.shared
         let metrics = BackgroundExcecutionMetrics(epochInMilliseconds: createEpoch(),
-                                                  batteryLevel: HardwareCapabilitiesProvider.getBatterylevel(),
-                                                  batteryState: HardwareCapabilitiesProvider.getBatteryState(),
-                                                  freeRAMStorage: HardwareCapabilitiesProvider.getFreeRam(),
-                                                  freeTotalStorage: HardwareCapabilitiesProvider.getFreeStorage(),
+                                                  batteryLevel: hardwareCapabilities.getBatterylevel(),
+                                                  batteryState: hardwareCapabilities.getBatteryState(),
+                                                  freeRamStorage: hardwareCapabilities.getFreeRam(),
+                                                  freeInternalStorage: hardwareCapabilities.getFreeStorage(),
                                                   simState: ConectivityCapabilitiesProvider.shared.getSimState().rawValue,
                                                   hasInternetConnectionProvidedByCarrier: ConectivityCapabilitiesProvider.shared.hasInternetConnectionProvidedByCarrier(),
-                                                  currentlyOverWifi: ConectivityCapabilitiesProvider.shared.isOverWifi
+                                                  currentlyOverWifi: ConectivityCapabilitiesProvider.shared.isOverWifi,
+                                                  totalInternalStorage: hardwareCapabilities.getTotalStorage(),
+                                                  totalRamStorage: hardwareCapabilities.getTotalRam()
         )
         let encoder = JSONEncoder()
         guard let metricsAsData = try? encoder.encode(metrics) else {
@@ -38,9 +42,11 @@ struct BackgroundExcecutionMetrics: Encodable {
     let epochInMilliseconds: Int64
     let batteryLevel: Float
     let batteryState: String
-    let freeRAMStorage: Int64
-    let freeTotalStorage: Int64
+    let freeRamStorage: Int64
+    let freeInternalStorage: Int64
     let simState: String
     let hasInternetConnectionProvidedByCarrier: Bool?
     let currentlyOverWifi: Bool?
+    let totalInternalStorage: Int64
+    let totalRamStorage: UInt64
 }

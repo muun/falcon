@@ -259,7 +259,7 @@ final class ReceiveUnifiedView: UIView {
             return
         }
 
-        qrCodeView.data = bitcoinURIViewModel.uri.lowercased().data(using: .utf8)
+        qrCodeView.data = bitcoinURIViewModel.uri.data(using: .utf8)
         qrCodeView.label = "🧪 " + bitcoinURIViewModel.address
         qrCodeView.isLoading = false
 

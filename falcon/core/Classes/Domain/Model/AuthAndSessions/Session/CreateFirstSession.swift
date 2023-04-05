@@ -35,20 +35,16 @@ struct Client {
     let deviceModel: String
     let timezoneOffsetInSeconds: Int64
     let language: String
-    let totalInternalStorage: Int64
-    let totalRamStorage: UInt64
     let deviceCheckToken: String
 
     static func buildCurrent() -> Client {
-        Client(
+        return Client(
             buildType: Environment.current.buildType,
             version: Int(core.Constant.buildVersion)!,
             versionName: core.Constant.buildVersionName,
             deviceModel: DeviceUtils.deviceInfo().model,
             timezoneOffsetInSeconds: Int64(TimeZone.current.secondsFromGMT()),
             language: Locale.current.identifier,
-            totalInternalStorage: HardwareCapabilitiesProvider.getTotalStorage(),
-            totalRamStorage: HardwareCapabilitiesProvider.getTotalRam(),
             deviceCheckToken: getDeviceCheckToken()
         )
     }

@@ -8,16 +8,28 @@
 
 import core
 
-protocol SecurityCenterPresenterDelegate: BasePresenterDelegate {}
+protocol SecurityCenterPresenterDelegate: BasePresenterDelegate {
+    func updateCardsStateDueToEmailSkippedPreferenceChange()
+}
 
 class SecurityCenterPresenter<Delegate: SecurityCenterPresenterDelegate>: BasePresenter<Delegate> {
 
     private let sessionActions: SessionActions
+    private let userPreferencesRepository: UserPreferencesRepository
 
-    init(delegate: Delegate, sessionActions: SessionActions) {
+    init(delegate: Delegate,
+         sessionActions: SessionActions,
+         userPreferencesRepository: UserPreferencesRepository) {
         self.sessionActions = sessionActions
+        self.userPreferencesRepository = userPreferencesRepository
 
         super.init(delegate: delegate)
+    }
+
+    override func setUp() {
+        super.setUp()
+
+        startListeningUserPreferencesChanges()
     }
 
     func getEmailCard() -> ActionCardModel {
@@ -86,6 +98,14 @@ class SecurityCenterPresenter<Delegate: SecurityCenterPresenterDelegate>: BasePr
 
         // 4. User does have recovery code setup -> Card = active
         return ActionCard.emergencyKitIncomplete(state: .active)
+    }
+
+    private func startListeningUserPreferencesChanges() {
+        subscribeTo(userPreferencesRepository.watch()) { [weak self] in
+            if $0.skippedEmailSetup {
+                self?.delegate.updateCardsStateDueToEmailSkippedPreferenceChange()
+            }
+        }
     }
 
     private func hasRecoveryCode() -> Bool {

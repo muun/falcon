@@ -71,8 +71,15 @@ public class BaseService {
                             body: Data? = nil,
                             queryParams: [String: Any]? = [:],
                             andReturn model: T.Type,
-                            maxRetries: Int = BaseService.maxRetries) -> Single<T> {
-        return doRequest(.post, path, body: body, queryParams: queryParams, andReturn: model, maxRetries: maxRetries)
+                            maxRetries: Int = BaseService.maxRetries,
+                            shouldForceDeviceCheckToken: Bool = false) -> Single<T> {
+        return doRequest(.post,
+                         path,
+                         body: body,
+                         queryParams: queryParams,
+                         andReturn: model,
+                         maxRetries: maxRetries,
+                         shouldForceDeviceCheckToken: shouldForceDeviceCheckToken)
     }
 
     func patch<T: Decodable>(_ path: String,
@@ -182,11 +189,12 @@ private extension BaseService {
     }
 
     func doRequest<T: Decodable>(_ method: HTTPMethod,
-                                         _ path: String,
-                                         body: Data? = nil,
-                                         queryParams: [String: Any]? = [:],
-                                         andReturn model: T.Type,
-                                         maxRetries: Int = BaseService.maxRetries) -> Single<T> {
+                                 _ path: String,
+                                 body: Data? = nil,
+                                 queryParams: [String: Any]? = [:],
+                                 andReturn model: T.Type,
+                                 maxRetries: Int = BaseService.maxRetries,
+                                 shouldForceDeviceCheckToken: Bool = false) -> Single<T> {
 
         guard let url = URL(string: "\(self.baseURL)/\(path)") else {
             fatalError("URL NOT VALID")
@@ -213,6 +221,10 @@ private extension BaseService {
                 request = request.addHeader(key: authorizationHeader, value: authKey)
             }
         }
+
+        let tokenProvider = DeviceCheckTokenProvider.shared
+        let token = tokenProvider.provide(ignoreRateLimit: shouldForceDeviceCheckToken)
+        token.map { request = request.addHeader(key: "X-Device-Token", value: $0) }
 
         return Single.create { single in
 

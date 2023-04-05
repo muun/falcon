@@ -111,6 +111,9 @@ public struct Operation {
         return Satoshis(value: 0)
     }
 
+    public func isFailedAndOutgoing() -> Bool {
+        return status == .FAILED && direction == .OUTGOING
+    }
 }
 
 public enum OperationDirection: String, Codable {

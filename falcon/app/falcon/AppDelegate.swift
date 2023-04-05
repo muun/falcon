@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         configureFirebase()
         ConectivityCapabilitiesProvider.shared.startMonitoring()
+        DeviceCheckTokenProvider.shared.start()
         if sessionActions.isFirstLaunch() {
             lockManager.firstLaunch()
         }
@@ -78,6 +79,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // This is to handle the app being open with a force touch action
         if let item = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
             return handleShortcut(application, item: item)
+        }
+
+        DispatchQueue.global().async {
+            HardwareCapabilitiesProvider.shared.startRefreshingCacheableValues()
         }
 
         return true
@@ -156,6 +161,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         blurEffectView.removeFromSuperview()
 
         DeviceUtils.appState = application.applicationState
+        DispatchQueue.global().async {
+            HardwareCapabilitiesProvider.shared.refreshFreeStorage()
+        }
         AnalyticsHelper.logEvent("app_will_enter_foreground")
     }
 

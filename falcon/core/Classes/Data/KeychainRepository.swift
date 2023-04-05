@@ -14,11 +14,6 @@ public class KeychainRepository {
     public enum storedKeys: String {
         case deviceCheckToken
     }
-    
-    enum Errors: Error {
-        case KeychainRepositoryError
-        case invalidData
-    }
 
     public init(keyPrefix: String = Identifiers.bundleId,
                 group: String = Identifiers.group) {
@@ -71,7 +66,7 @@ public class KeychainRepository {
         }
 
         guard status == errSecSuccess else {
-            throw MuunError(Errors.KeychainRepositoryError)
+            throw MuunError(SecureStorage.Errors.secureStorageError)
         }
     }
 
@@ -84,13 +79,25 @@ public class KeychainRepository {
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         guard status == errSecSuccess,
             let value = item as? Data else {
-                throw MuunError(Errors.KeychainRepositoryError)
+            throw MuunError(SecureStorage.Errors.secureStorageError)
         }
 
         guard let ret = String(data: value, encoding: .utf8) else {
-            throw MuunError(Errors.invalidData)
+            throw MuunError(SecureStorage.Errors.invalidData)
         }
 
         return ret
+    }
+
+    func has(_ key: String) throws -> Bool {
+
+        let query = buildQuery(for: key, forInsert: false)
+        let status = SecItemCopyMatching(query as CFDictionary, nil)
+
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw MuunError(SecureStorage.Errors.secureStorageError)
+        }
+
+        return status == errSecSuccess
     }
 }
