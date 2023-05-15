@@ -22,6 +22,7 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     // Errors
     func operationError()
     func showExchangeRateWindowTooOldError()
+    func showSwapFailedError()
     func notEnoughBalance(amountPlusFee: MonetaryAmount, totalBalance: MonetaryAmount)
     func expiredInvoice()
     func invalidAddress()
@@ -464,6 +465,8 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     override func handleError(_ e: Error) {
         if e.isKindOf(.exchangeRateWindowTooOld) {
             delegate.showExchangeRateWindowTooOldError()
+        } else if e.isKindOf(.swapFailed) {
+            delegate.showSwapFailedError()
         } else {
             super.handleError(e)
             delegate.operationError()

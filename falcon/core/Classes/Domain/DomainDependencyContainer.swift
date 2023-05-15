@@ -99,6 +99,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: EmergencyKitDataSelector.init)
             container.register(.singleton, factory: UserPreferencesSelector.init)
             container.register(.singleton, factory: UserActivatedFeaturesSelector.init)
+            container.register(.singleton, factory: FeatureFlagsSelector.init)
 
             container.register(.singleton, factory: ApiMigrationsManager.init)
 

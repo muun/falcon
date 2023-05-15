@@ -19,6 +19,7 @@ enum HomeOperationsState {
 enum HomeCompanion {
     case backUp
     case activateTaproot
+    case highFeesHomeBanner
     case preactiveTaproot(blocksLeft: UInt)
     case blockClock(blocksLeft: UInt)
     case none
@@ -45,6 +46,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     private let sessionActions: SessionActions
     internal let fetchNotificationsAction: FetchNotificationsAction
     private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
+    private let featureFlagsSelector: FeatureFlagsSelector
     private var balance: MonetaryAmount = MonetaryAmount(amount: 0, currency: "BTC")
 
     private var numberOfOperations: Int?
@@ -58,7 +60,8 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
          userPreferencesSelector: UserPreferencesSelector,
          updateUserPreferencesAction: UpdateUserPreferencesAction,
          fetchNotificationsAction: FetchNotificationsAction,
-         userActivatedFeatureSelector: UserActivatedFeaturesSelector) {
+         userActivatedFeatureSelector: UserActivatedFeaturesSelector,
+         featureFlagsSelector: FeatureFlagsSelector) {
 
         self.operationActions = operationActions
         self.balanceActions = balanceActions
@@ -69,6 +72,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         self.updateUserPreferencesAction = updateUserPreferencesAction
         self.fetchNotificationsAction = fetchNotificationsAction
         self.userActivatedFeatureSelector = userActivatedFeatureSelector
+        self.featureFlagsSelector = featureFlagsSelector
 
         super.init(delegate: delegate)
     }
@@ -84,8 +88,11 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
 
         let taproot = Libwallet.userActivatedFeatureTaproot()!
         subscribeTo(
-                Observable.combineLatest(sessionActions.watchUser(), userActivatedFeatureSelector.watch(for: taproot))
-        ) { [self] (_, taprootStatus) in
+                Observable.combineLatest(sessionActions.watchUser(),
+                                         userActivatedFeatureSelector.watch(for: taproot),
+                                         featureFlagsSelector.run())
+        ) { [self] (_, taprootStatus, featureFlags) in
+            let isHighFeesBannerTurnedOn = featureFlags.contains(.highFeesHomeBanner)
 
             if case .active = taprootStatus,
                preferences.bool(forKey: .preactivedTaproot) {
@@ -99,7 +106,8 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
                 preferences.set(value: true, forKey: .preactivedTaproot)
             }
 
-            delegate.onCompanionChange(decideCompanion(taprootStatus: taprootStatus))
+            delegate.onCompanionChange(decideCompanion(taprootStatus: taprootStatus,
+                                                       isHighFeesBannerTurnedOn: isHighFeesBannerTurnedOn))
         }
 
         decidePollNotificationsPolicy()
@@ -353,7 +361,8 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
-    private func decideCompanion(taprootStatus: UserActivatedFeatureStatus) -> HomeCompanion {
+    private func decideCompanion(taprootStatus: UserActivatedFeatureStatus,
+                                 isHighFeesBannerTurnedOn: Bool) -> HomeCompanion {
         if isUnrecoverableUser() {
             return .backUp
         }
@@ -369,8 +378,14 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
             return .blockClock(blocksLeft: blocksLeft)
 
         case .active, .off, .scheduledActivation:
-            return .none
+            break
         }
+
+        if isHighFeesBannerTurnedOn {
+            return .highFeesHomeBanner
+        }
+
+        return .none
     }
 }
 

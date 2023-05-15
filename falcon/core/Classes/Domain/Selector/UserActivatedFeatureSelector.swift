@@ -21,11 +21,11 @@ public enum UserActivatedFeatureStatus {
 public class UserActivatedFeaturesSelector {
 
     private let blockheightRepository: BlockchainHeightRepository
-    private let featureFlagsRepository: FeaturesFlagsRepository
+    private let featureFlagsRepository: FeatureFlagsRepository
     private let userRepository: UserRepository
 
     init(blockheightRepository: BlockchainHeightRepository,
-         featureFlagsRepository: FeaturesFlagsRepository,
+         featureFlagsRepository: FeatureFlagsRepository,
          userRepository: UserRepository) {
         self.blockheightRepository = blockheightRepository
         self.featureFlagsRepository = featureFlagsRepository

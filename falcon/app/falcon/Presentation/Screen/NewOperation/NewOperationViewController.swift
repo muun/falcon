@@ -279,6 +279,10 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         displayErrorView(type: .exchangeRateWindowTooOld)
     }
 
+    func showSwapFailedError() {
+        displayErrorView(type: .swapFailed)
+    }
+
     func swapError(_ error: NewOpError) {
         displayErrorView(type: error)
     }

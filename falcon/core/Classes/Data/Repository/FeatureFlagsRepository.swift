@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-public class FeaturesFlagsRepository {
+public class FeatureFlagsRepository {
 
     private let preferences: Preferences
 

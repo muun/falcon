@@ -29,6 +29,7 @@ public struct DeveloperError: Codable, LocalizedError {
         case 2063: return .staleChallengeKey
         case 2064: return .credentialsDontMatch
         case 2074: return .incomingSwapAlreadyFulfilled
+        case 2084: return .swapFailed
 
         case 4002: return .forceUpdate
 
@@ -75,6 +76,7 @@ public enum ExactDeveloperError {
     case invoiceExpiresTooSoon
     case invoiceAlreadyUsed
     case noPaymentRoute
+    case swapFailed
     case invoiceUnreachableNode
     case cyclicalSwap
     case amountLessInvoicesNotSupported

@@ -488,6 +488,8 @@
 		FE1120AC295641B000D4B532 /* UITapGestureRecognizer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1120AB295641B000D4B532 /* UITapGestureRecognizer+Extension.swift */; };
 		FE1518B5292EA99400D3730A /* ReceiveUnifiedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1518B4292EA99400D3730A /* ReceiveUnifiedView.swift */; };
 		FE1518BC292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1518BB292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift */; };
+		FE211A382A0BE75A00F6BBA5 /* CreateInvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE211A372A0BE75A00F6BBA5 /* CreateInvoiceView.swift */; };
+		FE211A3B2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE211A3A2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift */; };
 		FE21354E28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */; };
 		FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */; };
 		FE3A50C629355C3200006363 /* BitcoinURIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */; };
@@ -1053,6 +1055,8 @@
 		FE1120AB295641B000D4B532 /* UITapGestureRecognizer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITapGestureRecognizer+Extension.swift"; sourceTree = "<group>"; };
 		FE1518B4292EA99400D3730A /* ReceiveUnifiedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveUnifiedView.swift; sourceTree = "<group>"; };
 		FE1518BB292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdvancedOptionsView.swift; sourceTree = "<group>"; };
+		FE211A372A0BE75A00F6BBA5 /* CreateInvoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateInvoiceView.swift; sourceTree = "<group>"; };
+		FE211A3A2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MUPlainInfoDisplayerViewController.swift; sourceTree = "<group>"; };
 		FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenterDelegate.swift; sourceTree = "<group>"; };
 		FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenter.swift; sourceTree = "<group>"; };
 		FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURIViewModel.swift; sourceTree = "<group>"; };
@@ -1432,6 +1436,7 @@
 		A00BAE6A21221F1100126F94 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				FE211A392A0D425100F6BBA5 /* ReusableGenericViews */,
 				A044183B257158EC002D959B /* TransactionList */,
 				A044181C257128E3002D959B /* TabBar */,
 				0F50769025719C770020FC08 /* ApiMigrations */,
@@ -2679,6 +2684,7 @@
 				0F1F267125D1D3D70016E3C7 /* QRCodeWithActionsView.swift */,
 				0FB0144625E42D9E009953BF /* QRLoadingView.swift */,
 				0F22E69D25D2506500EBFA06 /* AmountOptionView.swift */,
+				FE211A372A0BE75A00F6BBA5 /* CreateInvoiceView.swift */,
 			);
 			path = Receive;
 			sourceTree = "<group>";
@@ -3073,6 +3079,14 @@
 				FE1518BB292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift */,
 			);
 			path = Unified;
+			sourceTree = "<group>";
+		};
+		FE211A392A0D425100F6BBA5 /* ReusableGenericViews */ = {
+			isa = PBXGroup;
+			children = (
+				FE211A3A2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift */,
+			);
+			path = ReusableGenericViews;
 			sourceTree = "<group>";
 		};
 		FE21354F28F8536400AFCCA6 /* SettingsToggleView */ = {
@@ -3882,6 +3896,7 @@
 				A04C8A862343B9B800A89A73 /* OpToAddressViewBuilder.swift in Sources */,
 				A04FAA1621BB049900CD08D3 /* Date+Extension.swift in Sources */,
 				A0E3600B221F09D400FE06A5 /* CurrencyHelper.swift in Sources */,
+				FE211A3B2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift in Sources */,
 				0FB0144725E42D9E009953BF /* QRLoadingView.swift in Sources */,
 				A01840EC211DC95D00337895 /* Constant.swift in Sources */,
 				A0480CFC255B163B002F76DD /* LoadingPopUpView.swift in Sources */,
@@ -3976,6 +3991,7 @@
 				0F1F266425D1C2160016E3C7 /* QRCodeView.swift in Sources */,
 				A0A8A9E7257557EE00D36095 /* ChevronView.swift in Sources */,
 				A0000997257A7BB900B69008 /* TransactionListPresenter.swift in Sources */,
+				FE211A382A0BE75A00F6BBA5 /* CreateInvoiceView.swift in Sources */,
 				0F14C5FE26217E0A00BAE8B5 /* LNURLScanQRViewController+Camera.swift in Sources */,
 				A0F627BC227B6DD400496987 /* AppDelegate+Pin.swift in Sources */,
 				A01840F1211DC9CD00337895 /* GetStartedViewController.swift in Sources */,
@@ -4161,7 +4177,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1015;
+				CURRENT_PROJECT_VERSION = 1016;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4212,7 +4228,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1015;
+				CURRENT_PROJECT_VERSION = 1016;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4340,7 +4356,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1015;
+				CURRENT_PROJECT_VERSION = 1016;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4405,7 +4421,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1015;
+				CURRENT_PROJECT_VERSION = 1016;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4438,7 +4454,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1015;
+				CURRENT_PROJECT_VERSION = 1016;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4526,7 +4542,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1015;
+				CURRENT_PROJECT_VERSION = 1016;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

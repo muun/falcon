@@ -14,7 +14,7 @@ enum NewOpError: ErrorViewModel {
     case invalidAddress(_ input: String)
     case expiredInvoice, exchangeRateWindowTooOld
     // Swaps
-    case invalidInvoice, invoiceExpiresTooSoon, invoiceAlreadyUsed, noPaymentRoute, invoiceMissingAmount
+    case invalidInvoice, invoiceExpiresTooSoon, invoiceAlreadyUsed, noPaymentRoute, invoiceMissingAmount, swapFailed
     case invoiceUnreachableNode, cyclicalSwap
     // Fees
     case insufficientFunds(amountPlusFee: String, maxBalance: String)
@@ -36,6 +36,7 @@ enum NewOpError: ErrorViewModel {
         case .unexpected: return L10n.NewOpError.s12
         case .invoiceUnreachableNode: return L10n.NewOpError.s13
         case .cyclicalSwap: return L10n.NewOpError.s13
+        case .swapFailed: return L10n.NewOpError.s14
         }
     }
 
@@ -63,6 +64,9 @@ enum NewOpError: ErrorViewModel {
             return L10n.NewOpError.s29
                 .attributedForDescription(alignment: .center)
                 .set(underline: L10n.NewOpError.s17, color: Asset.Colors.muunBlue.color)
+        case .swapFailed:
+            return L10n.NewOpError.s33
+                .attributedForDescription(alignment: .center)
         case .insufficientFunds:
             return L10n.NewOpError.s18
                 .attributedForDescription(alignment: .center)
@@ -98,7 +102,7 @@ enum NewOpError: ErrorViewModel {
                 .set(bold: amountPlusFee, color: Asset.Colors.title.color)
             return (L10n.NewOpError.s23, attText)
         case .expiredInvoice, .invalidInvoice, .invoiceExpiresTooSoon, .invoiceAlreadyUsed, .noPaymentRoute,
-             .amountBelowDust, .exchangeRateWindowTooOld, .invoiceMissingAmount, .unexpected,
+                .swapFailed, .amountBelowDust, .exchangeRateWindowTooOld, .invoiceMissingAmount, .unexpected,
              .invoiceUnreachableNode, .cyclicalSwap:
             return nil
         }
@@ -111,7 +115,7 @@ enum NewOpError: ErrorViewModel {
                 .set(bold: balance, color: Asset.Colors.muunRed.color)
             return (L10n.NewOpError.s24, attText)
         case .invalidAddress, .expiredInvoice, .invalidInvoice, .invoiceExpiresTooSoon, .invoiceAlreadyUsed,
-             .noPaymentRoute, .amountBelowDust, .exchangeRateWindowTooOld, .invoiceMissingAmount,
+                .noPaymentRoute, .swapFailed, .amountBelowDust, .exchangeRateWindowTooOld, .invoiceMissingAmount,
              .unexpected, .invoiceUnreachableNode, .cyclicalSwap:
             return nil
         }
@@ -125,6 +129,7 @@ enum NewOpError: ErrorViewModel {
         case .invoiceExpiresTooSoon: return "invoice_expires_too_soon"
         case .invoiceAlreadyUsed: return "invoice_already_used"
         case .noPaymentRoute: return "no_payment_route"
+        case .swapFailed: return "swap_failed"
         case .insufficientFunds: return "insufficient_funds"
         case .amountBelowDust: return "amount_below_dust"
         case .exchangeRateWindowTooOld: return "exchange_rate_window_too_old"

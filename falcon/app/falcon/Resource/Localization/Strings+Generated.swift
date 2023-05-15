@@ -451,6 +451,8 @@ internal enum L10n {
     internal static let backUp = L10n.tr("Localizable", "Home.backUp")
     /// Back up your wallet
     internal static let boldBackUp = L10n.tr("Localizable", "Home.boldBackUp")
+    /// The bitcoin network is at top capacity, making fees high.
+    internal static let highFeesBannerTitle = L10n.tr("Localizable", "Home.highFeesBannerTitle")
     /// RECEIVE
     internal static let receiveCTA = L10n.tr("Localizable", "Home.receiveCTA")
     /// SEND
@@ -807,6 +809,8 @@ internal enum L10n {
     internal static let s12 = L10n.tr("Localizable", "NewOpError.s12")
     /// This invoice can't be paid
     internal static let s13 = L10n.tr("Localizable", "NewOpError.s13")
+    /// Payment failed
+    internal static let s14 = L10n.tr("Localizable", "NewOpError.s14")
     /// This invoice expired before the payment was made. Please, create or request a new one.
     internal static let s15 = L10n.tr("Localizable", "NewOpError.s15")
     /// Please try with another invoice
@@ -847,6 +851,8 @@ internal enum L10n {
     internal static let s31 = L10n.tr("Localizable", "NewOpError.s31")
     /// This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.
     internal static let s32 = L10n.tr("Localizable", "NewOpError.s32")
+    /// The receiving wallet can’t process lightning payments right now, so the payment has failed.
+    internal static let s33 = L10n.tr("Localizable", "NewOpError.s33")
     /// The bitcoin rates changed
     internal static let s4 = L10n.tr("Localizable", "NewOpError.s4")
     /// Unable to pay this invoice
@@ -1113,6 +1119,10 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "ReceiveInLightningView.s5")
     /// CREATE INVOICE
     internal static let s6 = L10n.tr("Localizable", "ReceiveInLightningView.s6")
+    /// Receiving lightning payments is temporarily disabled while we upgrade our payment infrastructure.
+    internal static let s7 = L10n.tr("Localizable", "ReceiveInLightningView.s7")
+    /// UNDERSTOOD
+    internal static let s8 = L10n.tr("Localizable", "ReceiveInLightningView.s8")
   }
 
   internal enum ReceiveOnChainView {

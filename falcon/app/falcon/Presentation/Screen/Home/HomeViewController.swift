@@ -175,6 +175,8 @@ extension HomeViewController: HomePresenterDelegate {
             homeView.show(actionCard: .activateTaproot())
         case .blockClock(let blocksLeft):
             homeView.show(blocksLeft: blocksLeft)
+        case .highFeesHomeBanner:
+            homeView.show(actionCard: .highFeesHomeBanner())
         case .none:
             homeView.hideCompanion()
         }
@@ -209,6 +211,9 @@ extension HomeViewController: HomeViewDelegate {
             pushTo(SlidesViewController(
                 configuration: .taprootActivation(successFeedback: FeedbackInfo.taprootActive)
             ))
+
+        case .highFeesHomeBanner:
+            break
 
         case .preactiveTaproot(let blocksLeft):
             let feedbackInfo = FeedbackInfo.taprootPreactived(blocksLeft: blocksLeft)

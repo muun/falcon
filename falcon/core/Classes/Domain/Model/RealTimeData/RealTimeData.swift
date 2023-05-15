@@ -21,6 +21,8 @@ public struct RealTimeData {
 public enum FeatureFlags: String, RawRepresentable {
     case Taproot = "TAPROOT"
     case TaprootPreactivation = "TAPROOT_PREACTIVATION"
+    case highFeesHomeBanner = "HIGH_FEES_HOME_BANNER"
+    case highFeesReceiveFlow = "HIGH_FEES_RECEIVE_FLOW"
 }
 
 public struct FeeWindow: Codable {

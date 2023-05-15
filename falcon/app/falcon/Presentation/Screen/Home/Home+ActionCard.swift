@@ -38,4 +38,17 @@ extension ActionCardModel {
         )
     }
 
+    static func highFeesHomeBanner() -> ActionCardModel {
+        return ActionCardModel(
+            title: L10n.Home.highFeesBannerTitle
+                .set(font: Constant.Fonts.system(size: .opHelper, weight: .medium),
+                     lineSpacing: Constant.FontAttributes.lineSpacing),
+            description: "".attributedForDescription(),
+            nextViewController: UIViewController(), // Any controller sufices here. This should be refactored.
+            stemNumber: nil,
+            stepImage: Asset.Assets.notice.image,
+            state: .home
+        )
+    }
+
 }

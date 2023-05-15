@@ -123,6 +123,8 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
             return .invoiceExpiresTooSoon
         } else if e.isKindOf(.noPaymentRoute) {
             return .noPaymentRoute
+        } else if e.isKindOf(.swapFailed) {
+            return .swapFailed
         } else if e.isKindOf(.invoiceUnreachableNode) {
             return .invoiceUnreachableNode
         } else if e.isKindOf(.cyclicalSwap) {

@@ -100,7 +100,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
                 case .nonUserFacing, .emailNotRegistered, .invoiceUnreachableNode, .recoveryCodeNotSetUp,
                      .invalidEmail, .emailAlreadyUsed, .invalidChallengeSignature, .exchangeRateWindowTooOld,
                      .invalidInvoice, .invoiceAlreadyUsed, .invoiceExpiresTooSoon, .noPaymentRoute, .cyclicalSwap,
-                     .incomingSwapAlreadyFulfilled, .amountLessInvoicesNotSupported:
+                     .incomingSwapAlreadyFulfilled, .amountLessInvoicesNotSupported, .swapFailed:
                     let error = devError.developerMessage ?? devError.message
                     Logger.log(LogLevel.debug, error)
 

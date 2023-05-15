@@ -19,7 +19,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     private let blockchainHeightRepository: BlockchainHeightRepository
     private let forwardingPoliciesRepository: ForwardingPolicyRepository
     private let minFeeRateRepository: MinFeeRateRepository
-    private let featureFlagsRepository: FeaturesFlagsRepository
+    private let featureFlagsRepository: FeatureFlagsRepository
 
     private let secondsForFreshData: Double = 5 * 60
 
@@ -29,7 +29,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
          blockchainHeightRepository: BlockchainHeightRepository,
          forwardingPoliciesRepository: ForwardingPolicyRepository,
          minFeeRateRepository: MinFeeRateRepository,
-         featureFlagsRepository: FeaturesFlagsRepository) {
+         featureFlagsRepository: FeatureFlagsRepository) {
 
         self.houstonService = houstonService
 

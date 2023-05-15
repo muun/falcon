@@ -41,6 +41,11 @@ class ReceiveViewController: MUViewController, Resolver {
     fileprivate let receiveLogName = "receive"
     fileprivate var origin: String
 
+    // Allow invoice creation on lightning tab tap.
+    private var isHighFeesFlowAccepted = false
+
+    private var isHighFeesFlowVisible: Bool?
+
     private var receiveType: ReceiveType = .onChain {
         didSet {
             presenter.setCustomAmount(nil)
@@ -87,7 +92,8 @@ class ReceiveViewController: MUViewController, Resolver {
             receiveType = .unified
         }
 
-        showViewForCurrentReceiveType()
+        presenter.onViewLoaded()
+
         additionalSafeAreaInsets = .zero
     }
 
@@ -96,10 +102,15 @@ class ReceiveViewController: MUViewController, Resolver {
         setUpNavigation()
 
         presenter.setUp()
-        if receiveType == .unified {
-            presenter.refreshUnifiedQR()
-        } else if receiveType == .lightning {
-            presenter.refreshLightningInvoice()
+
+        // Wait for this value to be loaded, if it is not loaded for the first time yet, this will be executed as soon
+        // as flags repositories respondes
+        if isHighFeesFlowVisible != nil {
+            if receiveType == .unified {
+                presenter.refreshUnifiedQR()
+            } else if receiveType == .lightning {
+                presenter.refreshLightningInvoice()
+            }
         }
 
         let buttonItem = UIBarButtonItem(image: Asset.Assets.scan.image,
@@ -299,6 +310,15 @@ class ReceiveViewController: MUViewController, Resolver {
         }
     }
 
+    func updateHighFeesFlowState(isVisible: Bool) {
+        // If we are not seeing high fees flow refresh invoices.
+        showViewForCurrentReceiveType()
+
+        isHighFeesFlowVisible = isVisible
+        self.receiveInLightningView.isHighFeesFlow = isVisible
+        self.receiveUnifiedView.isHighFeesFlow = isVisible
+    }
+
     // We only display the push notifications priming view for on-chain addresses if we have never asked before
     private func showOnChain() {
         receiveInLightningView.isHidden = true
@@ -348,8 +368,13 @@ class ReceiveViewController: MUViewController, Resolver {
             typeLogParams = lightningInvoiceLogParams
             logScreen(receiveLogName, parameters: getLogParams())
 
-            // Always update the invoice before displaying the view
-            presenter.refreshLightningInvoice()
+            // Always update the invoice before displaying the view unless we don't know if the view is high fees yet.
+            // In that case Invoices will be refreshed as soon as we know the flags status.
+            // The other flag, is HighFeesFlowAccepted is for lightning tab pressed. Once a new invoice is requested
+            // manually we start recreating invoices even if high flow fees is turned on.
+            if isHighFeesFlowVisible == false || isHighFeesFlowAccepted {
+                presenter.refreshLightningInvoice()
+            }
 
             notificationsPrimingView.isHidden = true
             receiveInLightningView.setAmount(nil)
@@ -382,8 +407,11 @@ class ReceiveViewController: MUViewController, Resolver {
             typeLogParams = unifiedFormatLogParams
             logScreen(receiveLogName, parameters: getLogParams())
 
-            // Always update the invoice before displaying the view
-            presenter.refreshUnifiedQR()
+            // Always update the invoice before displaying the view unless we don't know if the view is high fees flow
+            // yet. In that case Invoices will be refreshed as soon as we know the flags status
+            if isHighFeesFlowVisible == false {
+                presenter.refreshUnifiedQR()
+            }
 
             notificationsPrimingView.isHidden = true
             receiveUnifiedView.setAmount(nil)
@@ -536,6 +564,7 @@ extension ReceiveViewController: ReceiveInLightningViewDelegate {
     }
 
     func didTapOnRequestNewInvoice() {
+        isHighFeesFlowAccepted = true
         presenter.refreshLightningInvoice()
     }
 }

@@ -21,8 +21,7 @@ final class ReceiveUnifiedView: UIView {
     private let expirationNoticeView = NoticeView()
     private let qrCodeView = QRCodeWithActionsView()
     private let advancedOptionsView = UnifiedAdvancedOptionsView()
-    private let overlayView = UIView()
-    private let createAnotherInvoiceButton = SmallButtonView()
+    private let createInvoiceView = CreateInvoiceView()
 
     private var invoiceInfo: IncomingInvoiceInfo?
     private var bitcoinUri: BitcoinURIViewModel?
@@ -31,6 +30,24 @@ final class ReceiveUnifiedView: UIView {
     var addressType: AddressTypeViewModel {
         didSet {
             advancedOptionsView.setAddressType(addressType)
+        }
+    }
+
+    var isHighFeesFlow = false {
+        willSet {
+            if newValue {
+                displayHighFeesAndStopTimer()
+            } else {
+                hideInvoiceExpiredView()
+            }
+        }
+    }
+
+    override var isHidden: Bool {
+        willSet {
+            if !newValue && isHighFeesFlow {
+                displayHighFeesAndStopTimer()
+            }
         }
     }
 
@@ -146,56 +163,28 @@ final class ReceiveUnifiedView: UIView {
     }
 
     private func setUpOverlayView() {
-        overlayView.backgroundColor = Asset.Colors.background.color
-        overlayView.translatesAutoresizingMaskIntoConstraints = false
-        overlayView.isHidden = true
-
-        addSubview(overlayView)
-        NSLayoutConstraint.activate([
-            overlayView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            overlayView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            overlayView.topAnchor.constraint(equalTo: topAnchor),
-            overlayView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-
-        let overlayStackView = UIStackView()
-        overlayStackView.translatesAutoresizingMaskIntoConstraints = false
-        overlayStackView.spacing = 16
-        overlayStackView.alignment = .center
-        overlayStackView.axis = .vertical
-        overlayView.addSubview(overlayStackView)
-
-        NSLayoutConstraint.activate([
-            overlayStackView.leadingAnchor.constraint(equalTo: overlayView.leadingAnchor, constant: .sideMargin),
-            overlayStackView.trailingAnchor.constraint(equalTo: overlayView.trailingAnchor, constant: -.sideMargin),
-            overlayStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-
-        let expiredLabel = UILabel()
-        expiredLabel.style = .description
-        expiredLabel.attributedText = L10n.ReceiveInLightningView.s5
-            .attributedForDescription(alignment: .center)
-        expiredLabel.translatesAutoresizingMaskIntoConstraints = false
-        expiredLabel.numberOfLines = 0
-        overlayStackView.addArrangedSubview(expiredLabel)
-        NSLayoutConstraint.activate([
-            expiredLabel.leadingAnchor.constraint(equalTo: overlayStackView.leadingAnchor),
-            expiredLabel.trailingAnchor.constraint(equalTo: overlayStackView.trailingAnchor)
-        ])
-
-        createAnotherInvoiceButton.isEnabled = true
-        createAnotherInvoiceButton.buttonText = L10n.ReceiveInLightningView.s6
-        createAnotherInvoiceButton.delegate = self
-        createAnotherInvoiceButton.backgroundColor = .clear
-        overlayStackView.addArrangedSubview(createAnotherInvoiceButton)
-
-        NSLayoutConstraint.activate([
-            createAnotherInvoiceButton.heightAnchor.constraint(equalToConstant: 40)
-        ])
+        createInvoiceView.addAsFullSizeSubviewBindingDelegateTo(superView: self)
+        hideInvoiceExpiredView()
     }
 
-    private func displayInvoiceExpiredView() {
-        overlayView.isHidden = false
+    private func hideInvoiceExpiredView() {
+        createInvoiceView.hide()
+    }
+
+    private func displayInvoiceExpiredViewAndStopTimer() {
+        let text = L10n.ReceiveInLightningView.s5
+            .attributedForDescription(alignment: .center)
+        createInvoiceView.display(text: text,
+                                  buttonText: L10n.ReceiveInLightningView.s6)
+        timer.invalidate()
+    }
+
+    private func displayHighFeesAndStopTimer() {
+        let text = L10n.ReceiveInLightningView.s7
+            .attributedForDescription(alignment: .center)
+        createInvoiceView.display(text: text,
+                                  buttonText: L10n.ReceiveInLightningView.s8)
+        timer.invalidate()
     }
 
     private func startTimer() {
@@ -220,8 +209,7 @@ final class ReceiveUnifiedView: UIView {
         }
 
         if expirationTimeRemainingInSecs <= 0 {
-            displayInvoiceExpiredView()
-            timer.invalidate()
+            displayInvoiceExpiredViewAndStopTimer()
             return
         }
 
@@ -264,7 +252,7 @@ final class ReceiveUnifiedView: UIView {
         qrCodeView.isLoading = false
 
         // Reset the view to initial state when displaying a new invoice
-        overlayView.isHidden = true
+        hideInvoiceExpiredView()
         setExpirationNoticeHidden(true)
         timer.invalidate()
 
@@ -275,12 +263,10 @@ final class ReceiveUnifiedView: UIView {
     }
 }
 
-extension ReceiveUnifiedView: SmallButtonViewDelegate {
+extension ReceiveUnifiedView: CreateInvoiceViewDelegate {
 
     internal func button(didPress button: SmallButtonView) {
-        if button == createAnotherInvoiceButton {
-            delegate?.didTapOnRequestNewUnfiedQR()
-        }
+        delegate?.didTapOnRequestNewUnfiedQR()
     }
 
 }

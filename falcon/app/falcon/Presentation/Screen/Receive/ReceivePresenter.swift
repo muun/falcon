@@ -14,6 +14,7 @@ protocol ReceivePresenterDelegate: BasePresenterDelegate {
     func didReceiveNewOperation(message: String)
     func show(invoice: IncomingInvoiceInfo?)
     func show(bitcoinURIViewModel: BitcoinURIViewModel?)
+    func updateHighFeesFlowState(isVisible: Bool)
 }
 
 class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delegate> {
@@ -24,6 +25,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     private let createBitcoinURIAction: CreateBitcoinURIAction
     private let preferences: Preferences
     internal let fetchNotificationsAction: FetchNotificationsAction
+    private let featureFlagsSelector: FeatureFlagsSelector
     private let userPreferencesSelector: UserPreferencesSelector
 
     private let addressSet: AddressSet
@@ -35,6 +37,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
             lastGeneratedBitcoinUri = nil // The existing bitcoinURI is invalid if amount change.
         }
     }
+
     private var amountChanged: Bool = false
     private var lastGeneratedBitcoinUri: BitcoinURIViewModel?
 
@@ -45,7 +48,8 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
          createInvoiceAction: CreateInvoiceAction,
          createBitcoinURIAction: CreateBitcoinURIAction,
          fetchNotificationsAction: FetchNotificationsAction,
-         userPreferencesSelector: UserPreferencesSelector) {
+         userPreferencesSelector: UserPreferencesSelector,
+         featureFlagsSelector: FeatureFlagsSelector) {
         self.addressActions = addressActions
         self.preferences = preferences
         self.operationActions = operationActions
@@ -53,6 +57,8 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
         self.fetchNotificationsAction = fetchNotificationsAction
         self.userPreferencesSelector = userPreferencesSelector
         self.createBitcoinURIAction = createBitcoinURIAction
+        self.featureFlagsSelector = featureFlagsSelector
+
         do {
             self.addressSet = try addressActions.generateExternalAddresses()
         } catch {
@@ -70,6 +76,12 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
 
         subscribeTo(periodicFetch, onNext: { _ in })
         subscribeTo(operationActions.getOperationsChange(), onNext: self.onOperationsChange)
+    }
+
+    func onViewLoaded() {
+        subscribeTo(featureFlagsSelector.run().distinctUntilChanged()) { [weak self] flags in
+            self?.delegate.updateHighFeesFlowState(isVisible: flags.contains(.highFeesReceiveFlow))
+        }
     }
 
     func getOnChainAddresses() -> AddressSet {

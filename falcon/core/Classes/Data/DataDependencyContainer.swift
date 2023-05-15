@@ -53,7 +53,7 @@ public extension DependencyContainer {
             container.register(factory: ApiMigrationsVersionRepository.init)
             container.register(factory: UserPreferencesRepository.init)
             container.register(factory: MinFeeRateRepository.init)
-            container.register(factory: FeaturesFlagsRepository.init)
+            container.register(factory: FeatureFlagsRepository.init)
 
             container.register(factory: NotificationScheduler.init)
             container.register(.singleton, factory: ErrorReporter.init)
