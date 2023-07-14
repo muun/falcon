@@ -899,8 +899,10 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 "ReceiveFormatSettingDropdownView.learnMoreLink" = "https://bitcoinqr.dev/";
 "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle" = "Elige tu protocolo para recibir";
 "ReceiveFormatSettingDropdownView.ReceiveFormatBTCOption" = "Priorizar bitcoin";
+"ReceiveFormatSettingDropdownView.BitcoinCurrentValue" = "Bitcoin";
 "ReceiveFormatSettingDropdownView.ReceiveFormatBTCDescription" = "Mostrar primero una dirección de bitcoin. La forma más aceptada y confiable de realizar transacciones en bitcoin.";
 "ReceiveFormatSettingDropdownView.ReceiveFormatLNOption" = "Priorizar lightning";
+"ReceiveFormatSettingDropdownView.LightningCurrentValue" = "Lightning";
 "ReceiveFormatSettingDropdownView.ReceiveFormatLNDescription" = "Mostrar primero una factura de lightning. Los pagos en lightning pueden ser más rápidos y económicos, pero algunos servicios aún no los soportan.";
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedOption" = "Unificado";
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription" = "🧪 Experimental. Mostrar un código QR unificado que codifica tanto una dirección de bitcoin como una factura de lightning. Muchos servicios no soportan este formato unificado aún.";

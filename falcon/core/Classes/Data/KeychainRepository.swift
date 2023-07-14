@@ -13,6 +13,8 @@ public class KeychainRepository {
     
     public enum storedKeys: String {
         case deviceCheckToken
+        case fallbackDeviceToken
+        case iCloudRecordId
     }
 
     public init(keyPrefix: String = Identifiers.bundleId,

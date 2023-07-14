@@ -1080,12 +1080,16 @@ internal enum L10n {
   }
 
   internal enum ReceiveFormatSettingDropdownView {
+    /// Bitcoin
+    internal static let bitcoinCurrentValue = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.BitcoinCurrentValue")
     /// When receiving funds, you have to choose between using the Bitcoin Network or the Lightning Network. In the future, you won’t need to do it anymore (learn more).
     internal static let description = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.description")
     /// https://bitcoinqr.dev/
     internal static let learnMoreLink = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.learnMoreLink")
     /// learn more
     internal static let learnMoreUnderline = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.learnMoreUnderline")
+    /// Lightning
+    internal static let lightningCurrentValue = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.LightningCurrentValue")
     /// Choose your receiving protocol
     internal static let receiveFormatActionSheetTitle = L10n.tr("Localizable", "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle")
     /// Default to show a bitcoin address. The most widely accepted and reliable way of transacting in bitcoin.

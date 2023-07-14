@@ -87,6 +87,7 @@ class CurrencyHelper: Resolver {
         add(FiatCurrency(code: "INR", symbol: "₹", name: "Indian Rupee", flag: "🇮🇳"))
         add(FiatCurrency(code: "IQD", symbol: "ع.د", name: "Iraqi Dinar", flag: "🇮🇶"))
         add(FiatCurrency(code: "IRR", symbol: "﷼", name: "Iranian Rial", flag: "🇮🇷"))
+        add(FiatCurrency(code: "IRT", symbol: "تومان", name: "Iranian Toman", flag: "🇮🇷"))
         add(FiatCurrency(code: "ISK", symbol: "kr", name: "Icelandic Króna", flag: "🇮🇸"))
         add(FiatCurrency(code: "JMD", symbol: "J$", name: "Jamaican Dollar", flag: "🇯🇲"))
         add(FiatCurrency(code: "JOD", symbol: "د.ا", name: "Jordanian Dinar", flag: "🇯🇴"))

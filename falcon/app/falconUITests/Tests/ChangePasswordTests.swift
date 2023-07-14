@@ -11,12 +11,10 @@ import XCTest
 class ChangePasswordTests: FalconUITests {
 
     private var homePage: HomePage!
-    private var securityCenterTests: SecurityCenterTests! = SecurityCenterTests()
     private var signInTests: SignInUITests! = SignInUITests()
 
     override func tearDown() {
         homePage = nil
-        securityCenterTests = nil
         signInTests = nil
 
         super.tearDown()

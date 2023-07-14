@@ -15,13 +15,16 @@ public class LogInAction: AsyncAction<KeySet> {
     private let houstonService: HoustonService
     private let storeKeySetAction: StoreKeySetAction
     private let preferences: Preferences
+    private let clientSelector: ClientSelector
 
     init(houstonService: HoustonService,
          storeKeySetAction: StoreKeySetAction,
-         preferences: Preferences) {
+         preferences: Preferences,
+         clientSelector: ClientSelector) {
         self.houstonService = houstonService
         self.storeKeySetAction = storeKeySetAction
         self.preferences = preferences
+        self.clientSelector = clientSelector
 
         super.init(name: "LogInAction")
     }
@@ -60,7 +63,8 @@ public class LogInAction: AsyncAction<KeySet> {
                                                   challengeVersion: challengeKeyVersion)
         let loginJson = LoginJson(type: challengeTypeJson,
                                   hex: signatureHex,
-                                  challengePublicKey: challengePublicKey)
+                                  challengePublicKey: challengePublicKey,
+                                  deviceCheckToken: clientSelector.run().deviceCheckToken)
 
         return loginJson
     }

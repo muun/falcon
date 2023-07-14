@@ -548,4 +548,28 @@ class NewOperationUITest: FalconUITests {
         app.alerts[L10n.NewOperationViewController.s3].buttons[L10n.NewOperationViewController.s6].tap()
     }
 
+    func spendAllFundsOnchain(homePage: HomePage) {
+        let address = "2N2y9wGHh7AfqwQ8dk5cQfhjvEAAq6xhjb6"
+
+        let mempoolStartingSize = mempoolCount()
+
+        // Enter a valid address
+        let newOpPage = homePage.enter(address: address)
+        let amountPage = NewOpAmountPage()
+        let descriptionPage = NewOpDescriptionPage()
+
+        addSection("pay to address - amount")
+
+        assertAmountPage(amountPage, newOpPage)
+
+        amountPage.useAllFunds()
+
+        addSection("pay to address - description")
+
+        enterDescription(newOpPage, descriptionPage)
+
+        addSection("pay to address - send and wait for home screen")
+
+        assertPay(newOpPage, homePage)
+    }
 }

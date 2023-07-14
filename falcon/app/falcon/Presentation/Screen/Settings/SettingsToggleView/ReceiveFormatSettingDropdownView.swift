@@ -23,7 +23,7 @@ final class ReceiveFormatSettingDropdownView: MUView, PresenterInstantior {
 
     var state: ReceiveFormatPreferenceViewModel = .ONCHAIN {
         didSet {
-            controlButton.setTitle(state.name, for: .normal)
+            controlButton.setTitle(state.shortName, for: .normal)
         }
     }
 
@@ -206,6 +206,12 @@ enum ReceiveFormatPreferenceViewModel: String, MUActionSheetOption {
     var name: String {
         return getValue(onChain: L10n.ReceiveFormatSettingDropdownView.receiveFormatBTCOption,
                         lightning: L10n.ReceiveFormatSettingDropdownView.receiveFormatLNOption,
+                        unified: L10n.ReceiveFormatSettingDropdownView.receiveFormatUnifiedOption)
+    }
+
+    var shortName: String {
+        return getValue(onChain: L10n.ReceiveFormatSettingDropdownView.bitcoinCurrentValue,
+                        lightning: L10n.ReceiveFormatSettingDropdownView.lightningCurrentValue,
                         unified: L10n.ReceiveFormatSettingDropdownView.receiveFormatUnifiedOption)
     }
 

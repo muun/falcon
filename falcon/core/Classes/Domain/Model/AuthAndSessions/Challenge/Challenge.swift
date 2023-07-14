@@ -64,4 +64,5 @@ struct LoginJson: Encodable {
     let type: ChallengeTypeJson
     let hex: String
     let challengePublicKey: ChallengeKeyJson
+    let deviceCheckToken: String
 }

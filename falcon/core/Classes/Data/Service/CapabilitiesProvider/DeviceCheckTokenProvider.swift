@@ -34,6 +34,7 @@ public class DeviceCheckTokenProvider {
     }
 
     public func start() {
+        checkForToken()
         timer = Timer.scheduledTimer(timeInterval: TimeInterval(refreshTimeInSedonds),
                                      target: self,
                                      selector: #selector(self.checkForToken),

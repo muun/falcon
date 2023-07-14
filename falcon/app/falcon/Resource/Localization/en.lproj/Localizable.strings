@@ -896,8 +896,10 @@ Many services are not yet compatible with Taproot and may label your addresses a
 "ReceiveFormatSettingDropdownView.learnMoreLink" = "https://bitcoinqr.dev/";
 "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetTitle" = "Choose your receiving protocol";
 "ReceiveFormatSettingDropdownView.ReceiveFormatBTCOption" = "Bitcoin first";
+"ReceiveFormatSettingDropdownView.BitcoinCurrentValue" = "Bitcoin";
 "ReceiveFormatSettingDropdownView.ReceiveFormatBTCDescription" = "Default to show a bitcoin address. The most widely accepted and reliable way of transacting in bitcoin.";
 "ReceiveFormatSettingDropdownView.ReceiveFormatLNOption" = "Lightning first";
+"ReceiveFormatSettingDropdownView.LightningCurrentValue" = "Lightning";
 "ReceiveFormatSettingDropdownView.ReceiveFormatLNDescription" = "Default to show a lightning invoice. Lightning payments can be faster and cheaper, but some services don't support them yet.";
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedOption" = "Unified";
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription" = "🧪 Experimental. Default to a unified QR code that encodes both a bitcoin address and a lightning invoice. Many services don’t support this unified format yet.";

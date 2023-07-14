@@ -116,6 +116,8 @@ public extension DependencyContainer {
                            apiMigrationsManager: try container.resolve(),
                            userPreferencesRepository: try container.resolve())
             }
+
+            container.register(.singleton, factory: ClientSelector.init)
         }
     }
 }

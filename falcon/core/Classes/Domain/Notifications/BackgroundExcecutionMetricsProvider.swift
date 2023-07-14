@@ -13,16 +13,25 @@ struct BackgroundExcecutionMetricsProvider {
         UIDevice.current.isBatteryMonitoringEnabled = true
 
         let hardwareCapabilities = HardwareCapabilitiesProvider.shared
-        let metrics = BackgroundExcecutionMetrics(epochInMilliseconds: createEpoch(),
-                                                  batteryLevel: hardwareCapabilities.getBatterylevel(),
-                                                  batteryState: hardwareCapabilities.getBatteryState(),
-                                                  freeRamStorage: hardwareCapabilities.getFreeRam(),
-                                                  freeInternalStorage: hardwareCapabilities.getFreeStorage(),
-                                                  simState: ConectivityCapabilitiesProvider.shared.getSimState().rawValue,
-                                                  hasInternetConnectionProvidedByCarrier: ConectivityCapabilitiesProvider.shared.hasInternetConnectionProvidedByCarrier(),
-                                                  currentlyOverWifi: ConectivityCapabilitiesProvider.shared.isOverWifi,
-                                                  totalInternalStorage: hardwareCapabilities.getTotalStorage(),
-                                                  totalRamStorage: hardwareCapabilities.getTotalRam()
+        let hasInternetConnectionProvidedByCarrier =
+            ConectivityCapabilitiesProvider.shared.hasInternetConnectionProvidedByCarrier()
+
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let osVersionString =
+            "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
+
+        let metrics = BackgroundExcecutionMetrics(
+            epochInMilliseconds: createEpoch(),
+            batteryLevel: hardwareCapabilities.getBatterylevel(),
+            batteryState: hardwareCapabilities.getBatteryState(),
+            freeRamStorage: hardwareCapabilities.getFreeRam(),
+            freeInternalStorage: hardwareCapabilities.getFreeStorage(),
+            simState: ConectivityCapabilitiesProvider.shared.getSimState().rawValue,
+            hasInternetConnectionProvidedByCarrier: hasInternetConnectionProvidedByCarrier,
+            currentlyOverWifi: ConectivityCapabilitiesProvider.shared.isOverWifi,
+            totalInternalStorage: hardwareCapabilities.getTotalStorage(),
+            totalRamStorage: hardwareCapabilities.getTotalRam(),
+            osVersion: osVersionString
         )
         let encoder = JSONEncoder()
         guard let metricsAsData = try? encoder.encode(metrics) else {
@@ -49,4 +58,5 @@ struct BackgroundExcecutionMetrics: Encodable {
     let currentlyOverWifi: Bool?
     let totalInternalStorage: Int64
     let totalRamStorage: UInt64
+    let osVersion: String
 }

@@ -15,15 +15,19 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
     private let userRepository: UserRepository
     private let logoutAction: LogoutAction
     private let houstonService: HoustonService
+    private let clientSelector: ClientSelector
 
     init(keysRepository: KeysRepository,
          userRepository: UserRepository,
          logoutAction: LogoutAction,
-         houstonService: HoustonService) {
+         houstonService: HoustonService,
+         clientSelector: ClientSelector
+    ) {
         self.keysRepository = keysRepository
         self.userRepository = userRepository
         self.logoutAction = logoutAction
         self.houstonService = houstonService
+        self.clientSelector = clientSelector
 
         super.init(name: "CreateFirstSessionAction")
     }
@@ -60,7 +64,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         createBasePrivateKey()
 
         let firstSession = CreateFirstSession(
-            client: Client.buildCurrent(),
+            client: clientSelector.run(),
             gcmToken: gcmToken,
             primaryCurrency: currencyCode,
             basePublicKey: try keysRepository.getBasePublicKey()

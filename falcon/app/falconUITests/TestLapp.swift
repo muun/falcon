@@ -100,6 +100,13 @@ func payWithLapp(invoice: String, amountInSats: Int64, onComplete: @escaping () 
     }
 }
 
+func dropLastTx() {
+
+    DispatchQueue.global(qos: .background).async {
+        request("dropLastTx", timeout: 3 * 60, { _ in () })
+    }
+}
+
 func lnurlWithdraw(variant: String = "normal") -> String {
     return request("lnurl/withdrawStart?variant=\(variant)", { body in
         return String(data: body, encoding: .utf8)!

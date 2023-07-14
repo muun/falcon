@@ -12,6 +12,7 @@ class FalconUITests: XCTestCase {
 
     let app = XCUIApplication()
     var createWalletTests: CreateWalletTests!
+    var securityCenterTests: SecurityCenterTests!
 
     let genericPassword = "MuunRulesTheWorld"
     let genericPin = "1111"
@@ -21,6 +22,7 @@ class FalconUITests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
         createWalletTests = CreateWalletTests()
+        securityCenterTests = SecurityCenterTests()
 
         app.launchArguments = ["testMode"]
         app.launch()
@@ -52,6 +54,17 @@ class FalconUITests: XCTestCase {
         }
 
         return homePage
+    }
+
+    func createRecoverableUser(utxos: [Decimal] = []) -> (homePage: HomePage,
+                                                          email: String,
+                                                          password: String,
+                                                          recoveryCode: [String]) {
+        let homePage = createUser(utxos: utxos)
+
+        let (email, password, rc) = securityCenterTests.fullSecuritySetup(in: homePage)
+
+        return (homePage, email, password, rc)
     }
 
     private func sendTo(_ address: String, in homePage: HomePage, utxos: [Decimal]) {
@@ -124,4 +137,9 @@ class FalconUITests: XCTestCase {
         }
     }
 
+    override func tearDown() {
+        super.tearDown()
+
+        securityCenterTests = nil
+    }
 }

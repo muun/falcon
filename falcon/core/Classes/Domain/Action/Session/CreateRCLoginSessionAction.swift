@@ -14,13 +14,16 @@ public class CreateRCLoginSessionAction: AsyncAction<Challenge> {
     private let houstonService: HoustonService
     private let logoutAction: LogoutAction
     private let preferences: Preferences
+    private let clientSelector: ClientSelector
 
     init(houstonService: HoustonService,
          logoutAction: LogoutAction,
-         preferences: Preferences) {
+         preferences: Preferences,
+         clientSelector: ClientSelector) {
         self.preferences = preferences
         self.houstonService = houstonService
         self.logoutAction = logoutAction
+        self.clientSelector = clientSelector
 
         super.init(name: "CreateRCLoginSessionAction")
     }
@@ -36,7 +39,7 @@ public class CreateRCLoginSessionAction: AsyncAction<Challenge> {
             }
 
             let createRcSession = CreateRcLoginSession(
-                client: Client.buildCurrent(),
+                client: clientSelector.run(),
                 gcmToken: gcmToken,
                 challengeKey: try rc.toKey()
             )

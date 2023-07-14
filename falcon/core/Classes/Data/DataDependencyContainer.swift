@@ -30,10 +30,10 @@ public extension DependencyContainer {
             container.register(.singleton, factory: DatabaseCoordinator.init)
 
             container.register {
-                let keychainRepository = KeychainRepository(keyPrefix: try container.resolve(tag: DataTags.secureStoragePrefix),
-                                                            group: try container.resolve(tag: DataTags.secureStorageGroup))
-                return SecureStorage(keychainRepository: keychainRepository)
+                KeychainRepository(keyPrefix: try container.resolve(tag: DataTags.secureStoragePrefix),
+                                   group: try container.resolve(tag: DataTags.secureStorageGroup))
             }
+            container.register(factory: SecureStorage.init)
             container.register(.singleton, factory: Preferences.init)
 
             container.register(factory: FeeWindowRepository.init)
@@ -54,6 +54,8 @@ public extension DependencyContainer {
             container.register(factory: UserPreferencesRepository.init)
             container.register(factory: MinFeeRateRepository.init)
             container.register(factory: FeatureFlagsRepository.init)
+
+            container.register(factory: ICloudCapabilitiesProvider.init)
 
             container.register(factory: NotificationScheduler.init)
             container.register(.singleton, factory: ErrorReporter.init)

@@ -11,12 +11,14 @@ import XCTest
 
 class IncomingSwapUITests: FalconUITests {
 
-    var securityCenterTests: SecurityCenterTests!
+    var signInUITest: SignInUITests? = SignInUITests()
+    var newOperationUITest: NewOperationUITest? = NewOperationUITest()
 
-    override func setUp() {
-        super.setUp()
+    override func tearDown() {
+        super.tearDown()
 
-        securityCenterTests = SecurityCenterTests()
+        newOperationUITest = nil
+        signInUITest = nil
     }
 
     public func testChangingInvoice() {
@@ -51,7 +53,7 @@ class IncomingSwapUITests: FalconUITests {
         }, timeout: 60, description: "wait for the invoice to change after a payment arrives")
 
         waitUntil(condition: { mempoolCount() == 2 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
-        assertPaid(isPaid: { paid })
+        waitForPayment(isPaid: { paid })
     }
 
     public func testIncomingSwap() {
@@ -147,11 +149,49 @@ class IncomingSwapUITests: FalconUITests {
         generate(blocks: 1)
         waitUntil(condition: { mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
 
-        assertPaid(isPaid: isPaid)
+        waitForPayment(isPaid: isPaid)
 
         // Go to settings and log out
         let getStarted = homePage.goToSettings().logout()
         getStarted.wait()
+    }
+
+    public func testCooperativeHtlcExpendingDueToForgottenPreimage() {
+        addSection("setup recoverable user")
+        let (homePage, email, _, rc) = createRecoverableUser()
+
+        addSection("clear the mempool")
+        generate(blocks: 1)
+
+        addSection("big amount incoming swap")
+        let expectedBalance = formatBTCAmount(0.00100000, format: .short)
+        let isPaid = receive(homePage,
+                             amount: 100_000,
+                             balance: expectedBalance,
+                             operations: 0,
+                             oneConf: false)
+
+        // Wait for htlc avoiding can't logout alert.
+        waitForPayment(isPaid: isPaid,
+                   blocksToGenerate: 0)
+
+        homePage.assert(balance: expectedBalance)
+
+        addSection("log out and drop fullfillment tx")
+
+        _ = signInUITest?.logOut(homePage: homePage)
+
+        dropLastTx()
+        sleep(1)
+
+        addSection("login in and spend all funds using preimage and htlcKeypath from IncomingSwapJson")
+        _ = signInUITest?.signIn(email: email, code: rc, pin: "1111")
+
+        homePage.assert(balance: expectedBalance)
+
+        newOperationUITest?.spendAllFundsOnchain(homePage: homePage)
+
+        homePage.assert(balance: formatBTCAmount(0.00000000, format: .short))
     }
 
     typealias isPaid = () -> Bool
@@ -191,12 +231,15 @@ class IncomingSwapUITests: FalconUITests {
         return { paid }
     }
 
-    fileprivate func assertPaid(isPaid: @escaping IncomingSwapUITests.isPaid) {
+    fileprivate func waitForPayment(isPaid: @escaping IncomingSwapUITests.isPaid,
+                                blocksToGenerate: Int = 6) {
         // Wait for LND to see the payment
         waitUntil(condition: isPaid, timeout: 60, description: "waiting for LND to see payment")
 
         // Settle the swap
-        generate(blocks: 6)
+        if blocksToGenerate > 0 {
+            generate(blocks: blocksToGenerate)
+        }
 
         // Give the app time to process all the notifications
         sleep(10)
@@ -213,7 +256,7 @@ class IncomingSwapUITests: FalconUITests {
                              oneConf: false,
                              fullDebt: true)
 
-        assertPaid(isPaid: isPaid)
+        waitForPayment(isPaid: isPaid)
     }
 
     fileprivate func receiveZeroConfSpend(_ homePage: HomePage,
@@ -222,7 +265,7 @@ class IncomingSwapUITests: FalconUITests {
                                           operations: Int) {
         let isPaid = receive(homePage, amount: amount, balance: balance, operations: operations, oneConf: false)
 
-        assertPaid(isPaid: isPaid)
+        waitForPayment(isPaid: isPaid)
     }
 
     fileprivate func receiveOneConfSpend(_ homePage: HomePage,
@@ -234,7 +277,7 @@ class IncomingSwapUITests: FalconUITests {
         generate(blocks: 1)
         waitUntil(condition: { mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
 
-        assertPaid(isPaid: isPaid)
+        waitForPayment(isPaid: isPaid)
     }
 
     fileprivate func sweepWallet(_ homePage: HomePage,

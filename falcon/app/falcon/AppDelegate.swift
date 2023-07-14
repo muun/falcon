@@ -26,9 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     internal let lockManager: ApplicationLockManager = resolve()
     internal let notificationProcessor: NotificationProcessor = resolve()
+    internal let houstonService: HoustonService = resolve()
+    internal var unhandledVisualNotification: [AnyHashable: Any]?
     internal let preferences: Preferences = resolve()
     fileprivate let taskRunner: TaskRunner = resolve()
-
     internal let sessionActions: SessionActions = resolve()
     internal let fcmTokenAction: FCMTokenAction = resolve()
     internal let userRepository: UserRepository = resolve()
@@ -37,6 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // Instance this as early as possible to load schema and migrations and crash early
     internal let databaseCoordinator: DatabaseCoordinator = resolve()
+
+    internal let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider = resolve()
+    internal let keychainRepository: KeychainRepository = resolve()
 
     internal let gcmMessageIDKey = "gcm.message_id"
 
@@ -61,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureLibwallet()
 
         registerUserData()
+        iCloudCapabilitiesProvider.setup()
         generateDeviceToken()
         checkEnvironment()
 
@@ -74,11 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if let url = launchOptions?[UIApplication.LaunchOptionsKey.url] as? URL {
             return self.application(application, open: url, options: [:])
-        }
-
-        // This is to handle the app being open with a force touch action
-        if let item = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
-            return handleShortcut(application, item: item)
         }
 
         DispatchQueue.global().async {
@@ -103,7 +103,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func generateDeviceToken() {
-        let keychainRepository = KeychainRepository()
+        // Always store a fallback token in case we can't generate the real one
+        let fallbackDeviceTokenKey = KeychainRepository.storedKeys.fallbackDeviceToken.rawValue
+        if (try? keychainRepository.get(fallbackDeviceTokenKey)) == nil {
+            try? keychainRepository.store(
+                SecureRandom.randomBytes(count: 32).toHexString(),
+                at: fallbackDeviceTokenKey
+            )
+        }
+
         let deviceTokenKey = KeychainRepository.storedKeys.deviceCheckToken.rawValue
         let deviceToken = try? keychainRepository.get(deviceTokenKey)
         if deviceToken != nil
@@ -112,16 +120,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
 
-        if DCDevice.current.isSupported { // Always test for availability.
+        if DCDevice.current.isSupported {
             DCDevice.current.generateToken { token, error in
                 guard let deviceToken = token, error == nil else {
                     error.map { Logger.log(error: $0) }
-                    try? keychainRepository.store(DeviceTokenErrorValues.failToRetrieve.rawValue,
-                                                  at: deviceTokenKey)
+                    try? self.keychainRepository.store(
+                        DeviceTokenErrorValues.failToRetrieve.rawValue,
+                        at: deviceTokenKey
+                    )
                     return
                 }
-                try? keychainRepository.store(deviceToken.base64EncodedString(),
-                                              at: deviceTokenKey)
+                try? self.keychainRepository.store(deviceToken.base64EncodedString(),
+                                                   at: deviceTokenKey)
             }
         } else {
             try? keychainRepository.store(DeviceTokenErrorValues.unsupported.rawValue,
@@ -157,7 +167,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         if lockManager.shouldShowLockScreen() {
             presentLockWindow()
+            // If we're entering from background and we'll not show lock scren then we show notificationFlow
+        } else if let unhandledVisualNotification = unhandledVisualNotification {
+            displayVisualNotificationFlow(unhandledVisualNotification)
         }
+
         blurEffectView.removeFromSuperview()
 
         DeviceUtils.appState = application.applicationState
@@ -176,9 +190,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DeviceUtils.appState = application.applicationState
     }
 
-    func getRootNavigationController(_ application: UIApplication) -> UINavigationController? {
+    func getRootNavigationControllerOnMainWindow() -> UINavigationController? {
         // Since we might be presenting the PIN, we don't want active. We want the first.
-        let rootController = application.windows[0].rootViewController
+        let rootController = window?.rootViewController
 
         if let rootNav = rootController as? UINavigationController {
             return rootNav
@@ -209,7 +223,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             let paymentIntent = try AddressHelper.parse(url.absoluteString)
 
-            guard let navController = getRootNavigationController(application) else {
+            guard let navController = getRootNavigationControllerOnMainWindow() else {
                 return false
             }
 

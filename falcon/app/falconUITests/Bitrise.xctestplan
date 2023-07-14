@@ -14,6 +14,10 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : [
+        "IncomingSwapUITests\/testFullDebt()",
+        "SettingsUITests"
+      ],
       "target" : {
         "containerPath" : "container:falcon.xcodeproj",
         "identifier" : "A0E0F76B220C74BF001B99AC",

@@ -24,7 +24,7 @@ struct FeeWindowJson: Codable {
     let fetchDate: Date
 
     // Here targeted fees is in sats/WU
-    let targetedFees: [Int: Double]
+    let targetedFees: [Int: Double?]
 
     let fastConfTarget: UInt
     let mediumConfTarget: UInt

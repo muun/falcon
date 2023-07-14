@@ -17,13 +17,6 @@ class SignInUITests: FalconUITests {
     private var logOutPage: LogOutPage!
     private var homePage: HomePage!
 
-    var securityCenterTests: SecurityCenterTests!
-
-    override func setUp() {
-        super.setUp()
-
-        securityCenterTests = SecurityCenterTests()
-    }
 
     override func tearDown() {
         getStartedPage = nil
@@ -32,22 +25,21 @@ class SignInUITests: FalconUITests {
         pinPage = nil
         logOutPage = nil
         homePage = nil
-        securityCenterTests = nil
 
         super.tearDown()
     }
 
     func testFullCreateWalletSignIn() {
-        homePage = createUser()
+        let (homePage, email, password, rc) = createRecoverableUser()
+        self.homePage = homePage
 
-        let (email, password, rc) = securityCenterTests.fullSecuritySetup(in: homePage)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         fullSignIn(email: email, password: password, pin: genericPin)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         _ = signIn(email: email, code: rc, pin: genericPin)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         tryUserFacingErrors(registeredEmail: email)
     }
@@ -57,26 +49,26 @@ class SignInUITests: FalconUITests {
 
         addSection("1. skip email, set up rc and export keys")
         let rc = securityCenterTests.skipEmailSetUpRCAndExportKeys(in: homePage)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         addSection("2. log in with RC flow")
         homePage = signIn(code: rc, checkEmail: false, pin: genericPin)
 
         addSection("3. set up email + pw")
         let (email, pass) = securityCenterTests.setUpEmailAndPassword(in: homePage)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         addSection("4. log in with rc + email")
         homePage = signIn(code: rc, checkEmail: true, pin: genericPin)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         addSection("5. log in with email + password")
         fullSignIn(email: email, password: pass, pin: genericPin)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
 
         addSection("6. log in with email + rc")
         homePage = signIn(email: email, code: rc, pin: genericPin)
-        _ = logOut()
+        _ = logOut(homePage: homePage)
     }
 
     private func startSignInFlow() {
@@ -209,7 +201,7 @@ class SignInUITests: FalconUITests {
         homePage.toggleBalanceVisibility()
     }
 
-    private func logOut() -> GetStartedPage {
+    func logOut(homePage: HomePage) -> GetStartedPage {
         return homePage.goToSettings().logout()
     }
 

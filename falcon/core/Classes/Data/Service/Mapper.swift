@@ -94,7 +94,10 @@ extension Client: APIConvertible {
             deviceModel: deviceModel,
             timezoneOffsetInSeconds: timezoneOffsetInSeconds,
             language: language,
-            deviceCheckToken: deviceCheckToken
+            deviceCheckToken: deviceCheckToken,
+            fallbackDeviceToken: fallbackDeviceToken,
+            iosSystemUptimeInMilliseconds: Int64(floor(systemUptime * 1000)),
+            iCloudRecordId: iCloudRecordId
         )
     }
 }
@@ -1093,12 +1096,18 @@ extension InputSubmarineSwapV2Json: ModelConvertible {
 extension InputIncomingSwapJson: ModelConvertible {
 
     public func toModel() -> InputIncomingSwap {
+        var preimage: Data?
+        if let preimageHex = preimageHex {
+            preimage = Data(hex: preimageHex)
+        }
         return InputIncomingSwap(sphinx: Data(hex: sphinxHex),
                                  htlcTx: Data(hex: htlcTxHex),
                                  paymentHash256: Data(hex: paymentHash256Hex),
                                  swapServerPublicKey: Data(hex: swapServerPublicKeyHex),
                                  expirationHeight: expirationHeight,
-                                 collect: Satoshis(value: collectInSats))
+                                 collect: Satoshis(value: collectInSats),
+                                 preimage: preimage,
+                                 htlcOutputKeyPath: htlcOutputKeyPath)
     }
 }
 
@@ -1126,8 +1135,12 @@ extension FeeWindowJson: ModelConvertible {
 
     public func toModel() -> FeeWindow {
         var newTargetedFees: [UInt: FeeRate] = [:]
-        for value in targetedFees {
-            newTargetedFees[UInt(value.key)] = FeeRate(satsPerWeightUnit: Decimal(value.value))
+
+        targetedFees.forEach {
+            // Avoid an issue in which backend sends nil values for some targetedFees.
+            if let value = $0.value {
+                newTargetedFees[UInt($0.key)] = FeeRate(satsPerWeightUnit: Decimal(value))
+            }
         }
 
         return FeeWindow(

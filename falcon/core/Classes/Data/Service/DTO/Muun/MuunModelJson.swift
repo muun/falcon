@@ -54,4 +54,6 @@ struct InputIncomingSwapJson: Codable {
     let paymentHash256Hex: String
     let expirationHeight: Int64
     let collectInSats: Int64
+    let preimageHex: String?
+    let htlcOutputKeyPath: String
 }

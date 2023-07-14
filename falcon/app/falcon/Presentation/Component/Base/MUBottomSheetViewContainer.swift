@@ -8,8 +8,8 @@
 
 import UIKit
 
-/// This view is a bottom sheet container with a vertical stackview in it. Just add whatever you want into dialogView overriding setUpView method and call super
-/// before anything and it wil lbe displayed as a bottomSheet.
+/// This view is a bottom sheet container with a vertical stackview in it. Just add whatever you want into dialogView
+/// overriding setUpView method and call super before anything and it wil lbe displayed as a bottomSheet.
 class MUBottomSheetViewContainer: UIViewController {
     var dialogView = UIStackView()
     private let screenNameForLogs: String

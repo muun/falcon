@@ -33,4 +33,7 @@ struct ClientJson: Codable {
     let timezoneOffsetInSeconds: Int64
     let language: String
     let deviceCheckToken: String
+    let fallbackDeviceToken: String
+    let iosSystemUptimeInMilliseconds: Int64
+    let iCloudRecordId: String?
 }

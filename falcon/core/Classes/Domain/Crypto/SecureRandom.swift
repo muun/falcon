@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum SecureRandom {
+public enum SecureRandom {
 
-    static func randomBytes(count: Int) -> Data {
+    public static func randomBytes(count: Int) -> Data {
 
         var bytes = [UInt8](repeating: 0, count: count)
         let status = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)

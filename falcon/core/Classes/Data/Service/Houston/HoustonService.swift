@@ -86,6 +86,11 @@ public class HoustonService: BaseService {
             .map({ $0.toModel() })
     }
 
+    public func fetchNotification(notificationId: Int) -> Single<Notification?> {
+        return get("sessions/notifications/\(notificationId)", andReturn: NotificationJson.self)
+            .map({ $0.toModel(decrypter: self.decrypter) })
+    }
+
     func fetchNotificationReportAfter(notificationId: Int?) -> Single<NotificationReport> {
         var queryParams: [String: Any] = [:]
 
@@ -150,7 +155,10 @@ public class HoustonService: BaseService {
     func logIn(loginJson: LoginJson) -> Single<KeySet> {
         let jsonData = JSONEncoder.data(json: loginJson)
 
-        return post("sessions/current/login", body: jsonData, andReturn: KeySetJson.self)
+        return post("sessions/current/login",
+                    body: jsonData,
+                    andReturn: KeySetJson.self,
+                    shouldForceDeviceCheckToken: true)
             .map({ $0.toModel() })
     }
 
@@ -163,7 +171,10 @@ public class HoustonService: BaseService {
     func createRecoveryCodeLoginSession(_ rcLoginSession: CreateRcLoginSession) -> Single<(Challenge)> {
         let jsonData = JSONEncoder.data(from: rcLoginSession)
 
-        return post("sessions-v2/recovery-code/start", body: jsonData, andReturn: ChallengeJson.self)
+        return post("sessions-v2/recovery-code/start",
+                    body: jsonData,
+                    andReturn: ChallengeJson.self,
+                    shouldForceDeviceCheckToken: true)
             .map({ $0.toModel() })
     }
 

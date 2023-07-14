@@ -24,8 +24,6 @@ public struct CreateFirstSessionOk {
 
 }
 
-import core
-
 struct Client {
 
     let type: String = "FALCON"
@@ -36,23 +34,8 @@ struct Client {
     let timezoneOffsetInSeconds: Int64
     let language: String
     let deviceCheckToken: String
+    let fallbackDeviceToken: String
+    let systemUptime: TimeInterval
+    let iCloudRecordId: String?
 
-    static func buildCurrent() -> Client {
-        return Client(
-            buildType: Environment.current.buildType,
-            version: Int(core.Constant.buildVersion)!,
-            versionName: core.Constant.buildVersionName,
-            deviceModel: DeviceUtils.deviceInfo().model,
-            timezoneOffsetInSeconds: Int64(TimeZone.current.secondsFromGMT()),
-            language: Locale.current.identifier,
-            deviceCheckToken: getDeviceCheckToken()
-        )
-    }
-    
-    static func getDeviceCheckToken() -> String {
-        let deviceTokenKey = KeychainRepository.storedKeys.deviceCheckToken.rawValue
-        let keychainRepository = KeychainRepository()
-        let deviceToken = try? keychainRepository.get(deviceTokenKey)
-        return deviceToken ?? DeviceTokenErrorValues.failToRetrieve.rawValue
-    }
 }

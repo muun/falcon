@@ -42,6 +42,7 @@ extension AppDelegate {
         var initialVC: UIViewController?
 
         if sessionActions.isLoggedIn() {
+            // The user is setting up the pin for the first time.
             if lockManager.shouldStartSetUpPinFlow() && !isDisplayingPin() {
                 initialVC = PinViewController(state: .choosePin, isExistingUser: true)
                 lockManager.isShowingLockScreen = true
@@ -72,10 +73,19 @@ extension AppDelegate {
             _window!.rootViewController = MuunTabBarController()
         }
 
-        _window!.makeKeyAndVisible()
-
+        // User already has a pin but has to show the pin due to security reasons.
         if lockManager.shouldShowLockScreen() {
             presentLockWindow()
+        } else if !lockManager.isShowingLockScreen {
+            // When opening the app from a push notification, if the app is killed, the first method to run
+            // is willEnterForeground, which makes the pinWindow visible. Then, didFinishLaunchWithOptions
+            // runs, making the mainWindow visible and overlapping the pinWindow. This code avoids that
+            // issue.
+            _window?.makeKeyAndVisible()
+            if let unhandledVisualNotification = unhandledVisualNotification {
+                // Everything went well, we're not displaying lock screen
+                displayVisualNotificationFlow(unhandledVisualNotification)
+            }
         }
     }
 
@@ -175,7 +185,7 @@ extension AppDelegate {
             return false
         }
 
-        guard let navController = getRootNavigationController(application) else {
+        guard let navController = getRootNavigationControllerOnMainWindow() else {
             return false
         }
 

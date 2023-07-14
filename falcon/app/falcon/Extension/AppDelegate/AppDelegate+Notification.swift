@@ -16,42 +16,26 @@ extension AppDelegate {
                          completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         /*
          The server is sending three different dictionaries as notifications, so we need to handle all of them 🤷‍♂️.
-         1. notification["aps"["alert"]] = message
-         2. notification["message"] = message
-         3. notification["notification"["body"]] = message
+         1. notification["aps"["alert"]] = message // Visual Notification
+         2. notification["message"] = message // Background notification
+         3. notification["notification"["body"]] = message // Visual Notification
         */
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .customISO8601
-            let report: NotificationReportJson
+            var notificationReport = getReportFromVisualNotification(notification)
 
-            if let aps = notification["aps"] as? [String: Any],
-                let alert = aps["alert"] as? String,
-                let data = alert.data(using: .utf8) {
-
-                report = try decoder.decode(NotificationReportJsonContainer.self, from: data).message
-            } else {
-                if let message = notification["message"] as? String, let data = message.data(using: .utf8) {
-                    report = try decoder.decode(NotificationReportJson.self, from: data)
-                } else {
-                    guard let notif = notification["notification"] as? [AnyHashable: Any],
-                        let body = notif["body"] as? String,
-                        let data = body.data(using: .utf8) else {
-                            Logger.log(.warn, "Failed to handle notification: \(notification)")
-                            completionHandler(.failed)
-                            return
-                    }
-                    report = try decoder.decode(NotificationReportJsonContainer.self, from: data).message
-                }
+            if notificationReport == nil {
+                notificationReport = try getReportFromBackgroundNotification(completionHandler, notification)
             }
 
-            _ = notificationProcessor.process(report: report.toModel(decrypter: operationMetadataDecrypter))
-                .subscribe(onCompleted: {
-                    completionHandler(.newData)
-                }, onError: { err in
-                    AnalyticsHelper.recordErrorToCrashlytics(err, additionalInfo: notification)
-                    completionHandler(.failed)
-                })
+            notificationReport.map {
+                _ = notificationProcessor.process(report: $0)
+                    .subscribe(onCompleted: {
+                        completionHandler(.newData)
+                    }, onError: { err in
+                        AnalyticsHelper.recordErrorToCrashlytics(err, additionalInfo: notification)
+                        completionHandler(.failed)
+                    })
+            }
 
         } catch {
             AnalyticsHelper.recordErrorToCrashlytics(error, additionalInfo: notification)
@@ -60,6 +44,29 @@ extension AppDelegate {
 
     }
 
+    private func getReportFromBackgroundNotification(_ completionHandler: (UIBackgroundFetchResult) -> Void,
+                                                     _ notification: [AnyHashable: Any]) throws -> NotificationReport? {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .customISO8601
+
+        let notificationReportJson: NotificationReportJson
+
+        if let message = notification["message"] as? String, let data = message.data(using: .utf8) {
+            notificationReportJson = try decoder.decode(NotificationReportJson.self, from: data)
+        } else {
+            guard let notif = notification["notification"] as? [AnyHashable: Any],
+                  let body = notif["body"] as? String,
+                  let data = body.data(using: .utf8) else {
+                Logger.log(.warn, "Failed to handle notification: \(notification)")
+                completionHandler(.failed)
+                return nil
+            }
+            notificationReportJson = try decoder.decode(NotificationReportJsonContainer.self,
+                                                        from: data).message
+        }
+
+        return notificationReportJson.toModel(decrypter: operationMetadataDecrypter)
+    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
@@ -92,38 +99,62 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         // This method is called once the user taps a notification
 
         let userInfo = response.notification.request.content.userInfo
+        // I will always want to open a visual notification if the user tapped on it.
+        unhandledVisualNotification = userInfo
         if let messageID = userInfo[gcmMessageIDKey] {
             Logger.log(.info, "Message ID: \(messageID)")
         }
 
         let application = UIApplication.shared
-
         if application.applicationState == .active || application.applicationState == .inactive {
             // .active = user tapped the notification when the app was in foreground
             // .inactive = user tapped the notification when the app was in background
-            processNotification(userInfo)
+            // If the app is not terminated and we're showing mainWindow then we show the notification flow in that moment
+            if window?.isKeyWindow == true {
+                displayVisualNotificationFlow(userInfo)
+            }
         }
 
         completionHandler()
     }
 
-    fileprivate func processNotification(_ userInfo: [AnyHashable: Any]) {
-        if let report = getNotificationReport(userInfo) {
+    func displayVisualNotificationFlow(_ userInfo: [AnyHashable: Any]) {
+        unhandledVisualNotification = nil
+        if let report = getReportFromVisualNotification(userInfo) {
             let preview = report.preview
+
             if let notification = preview.first {
-                switch notification.message {
-                case .newOperation(let op):
-                    presentOpDetail(op: op.operation)
-                default:
-                    return
-                }
+                displayNotificationFlowIfAvailable(message: notification.message)
+            } else {
+                displayNotificationFlowFetchingDetailsFromBackend(report)
             }
-            // If the notification doesnt have a preview we cannot know the operation id
-            // Therefore touching on the notification will do absolutly nothing 🙃
         }
     }
 
-    fileprivate func getNotificationReport(_ userInfo: [AnyHashable: Any]) -> NotificationReport? {
+    private func displayNotificationFlowFetchingDetailsFromBackend(_ report: NotificationReport) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let notification = try? self.houstonService.fetchNotification(notificationId: report.maximumId)
+                .toBlocking()
+                .single()
+
+            DispatchQueue.main.async {
+                if let notification = notification {
+                    self.displayNotificationFlowIfAvailable(message: notification.message)
+                }
+            }
+        }
+    }
+
+    private func displayNotificationFlowIfAvailable(message: core.Notification.Message) {
+        switch message {
+        case .newOperation(let op):
+            presentOpDetail(op: op.operation)
+        default:
+            return
+        }
+    }
+
+    fileprivate func getNotificationReportLegacy(_ userInfo: [AnyHashable: Any]) -> NotificationReport? {
         do {
             if let aps = userInfo["aps"] as? [String: Any],
                 let alert = aps["alert"] as? String,
@@ -138,10 +169,25 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         return nil
     }
 
+    fileprivate func getReportFromVisualNotification(_ userInfo: [AnyHashable: Any]) -> NotificationReport? {
+        do {
+            if let aps = userInfo["aps"] as? [String: Any],
+               let alertReport = aps["alert"] as? [String: Any],
+               let data = try? JSONSerialization.data(withJSONObject: alertReport, options: []) {
+                return try NotificationParser.parseReport(data, decrypter: operationMetadataDecrypter)
+            } else {
+                return getNotificationReportLegacy(userInfo)
+            }
+        } catch {
+            return nil
+        }
+    }
+
     fileprivate func presentOpDetail(op: core.Operation) {
         let detailVc = DetailViewController(operation: op)
         let detailNavController = UINavigationController(rootViewController: detailVc)
-        navController.present(detailNavController, animated: true)
+        let navController = getRootNavigationControllerOnMainWindow()
+        navController?.present(detailNavController, animated: true)
     }
 
     internal func clearNotifications() {
@@ -153,7 +199,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         if let userInfo = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any] {
 
             if UIApplication.shared.applicationState != .background {
-                processNotification(userInfo)
+                unhandledVisualNotification = userInfo
             } else {
                 handle(notification: userInfo, completionHandler: { _ in })
             }
