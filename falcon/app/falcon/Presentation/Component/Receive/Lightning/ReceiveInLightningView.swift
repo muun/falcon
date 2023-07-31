@@ -84,7 +84,7 @@ final class ReceiveInLightningView: UIView {
 
     private let stackView = UIStackView()
     private let expirationNoticeView = NoticeView()
-    private let qrCodeView = QRCodeWithActionsView()
+    private let qrCodeView: QRCodeWithActionsView
     private let advancedOptionsView = LightningAdvancedOptionsView()
     private let createInvoiceView = CreateInvoiceView()
 
@@ -114,8 +114,9 @@ final class ReceiveInLightningView: UIView {
     private weak var delegate: ReceiveInLightningViewDelegate?
 
     init(delegate: ReceiveInLightningViewDelegate?) {
+        let qrAccessibilityLabel = L10n.QRCodeWithActionsView.lightningQRAccessibilityLabel
+        self.qrCodeView = QRCodeWithActionsView(tapQRAccessibilityLabel: qrAccessibilityLabel)
         self.delegate = delegate
-
         super.init(frame: .zero)
         setUpView()
     }

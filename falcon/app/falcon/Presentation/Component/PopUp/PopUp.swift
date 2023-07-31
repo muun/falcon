@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol DisplayedPopupDelegate: AnyObject {
+    func dismiss(popup: UIView)
+}
+
 @objc
 protocol DisplayablePopUp {
     var navigationController: UINavigationController! { get }

@@ -19,7 +19,7 @@ final class ReceiveUnifiedView: UIView {
 
     private let stackView = UIStackView()
     private let expirationNoticeView = NoticeView()
-    private let qrCodeView = QRCodeWithActionsView()
+    private let qrCodeView: QRCodeWithActionsView
     private let advancedOptionsView = UnifiedAdvancedOptionsView()
     private let createInvoiceView = CreateInvoiceView()
 
@@ -65,6 +65,8 @@ final class ReceiveUnifiedView: UIView {
 
     init(delegate: ReceiveUnifiedViewDelegate?,
          addressType: AddressTypeViewModel) {
+        let qrAccessibilityLabel = L10n.QRCodeWithActionsView.unifiedQRAccessibilityLabel
+        self.qrCodeView = QRCodeWithActionsView(tapQRAccessibilityLabel: qrAccessibilityLabel)
         self.delegate = delegate
         self.addressType = addressType
         super.init(frame: .zero)

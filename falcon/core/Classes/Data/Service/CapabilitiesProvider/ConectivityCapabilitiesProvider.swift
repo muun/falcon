@@ -11,23 +11,28 @@ import CoreTelephony
 
 public class ConectivityCapabilitiesProvider {
     public static let shared = ConectivityCapabilitiesProvider()
+    // Maintained for legacy backward compability.
     var isOverWifi: Bool?
+    var availableNetworks: AvailableNetworks?
+
+    private var storedNetworkMonitor: Any?
+
+    @available(iOS 12.0, *)
+    private var networkMonitor: NWPathMonitor {
+        if storedNetworkMonitor == nil {
+            storedNetworkMonitor = NWPathMonitor()
+        }
+
+        return storedNetworkMonitor as! NWPathMonitor
+    }
     
     public func startMonitoring() {
         if #available(iOS 12.0, *) {
-            let networkMonitor = NWPathMonitor(requiredInterfaceType: .wifi)
             networkMonitor.pathUpdateHandler = { [weak self] path in
-                /// This closure is called every time the connection status changes
-                DispatchQueue.main.async {
-                    switch path.status {
-                    case .satisfied:
-                        self?.isOverWifi = true
-                    default:
-                        self?.isOverWifi = false
-                    }
-                }
+                self?.availableNetworks = self?.retrieveAvailableNetworksBasedOn(availableInterfaces: path.availableInterfaces)
             }
-            networkMonitor.start(queue: DispatchQueue(label: "monitorWiFi"))
+
+            networkMonitor.start(queue: DispatchQueue(label: "availableNetworksMonitor"))
         }
     }
 
@@ -61,6 +66,35 @@ public class ConectivityCapabilitiesProvider {
         }
         return nil
     }
+
+    private func resetCachedAvailableNetworks() {
+        availableNetworks = AvailableNetworks()
+        isOverWifi = false
+    }
+
+    @available(iOS 12.0, *)
+    private func retrieveAvailableNetworksBasedOn(availableInterfaces: [NWInterface]) -> AvailableNetworks {
+        var availableNetworks = AvailableNetworks()
+
+        isOverWifi = availableInterfaces.contains(where: { $0.type == .wifi })
+
+        availableInterfaces.forEach {
+            switch($0.type) {
+            case .wifi:
+                availableNetworks.wifi = true
+            case .cellular:
+                availableNetworks.cellular = true
+            case .loopback:
+                availableNetworks.loopback = true
+            case .wiredEthernet:
+                availableNetworks.wiredEthernet = true
+            case .other:
+                availableNetworks.other = true
+            }
+        }
+
+        return availableNetworks
+    }
 }
 
 enum SimState: String {
@@ -68,4 +102,20 @@ enum SimState: String {
     case unknown = "SIM_STATE_UNKNOWN"
     case deprecated = "SIM_SDK_DEPRECATED"
     case absent = "SIM_STATE_ABSENT"
+}
+
+struct AvailableNetworks {
+    var wifi: Bool
+    var loopback: Bool
+    var wiredEthernet: Bool
+    var cellular: Bool
+    var other: Bool
+
+    init() {
+        wifi = false
+        loopback = false
+        wiredEthernet = false
+        cellular = false
+        other = false
+    }
 }

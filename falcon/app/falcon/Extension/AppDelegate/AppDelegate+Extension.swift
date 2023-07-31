@@ -42,7 +42,8 @@ extension AppDelegate {
         var initialVC: UIViewController?
 
         if sessionActions.isLoggedIn() {
-            // The user is setting up the pin for the first time.
+            // The user tapped on create wallet and then killed the app. We're recovering for that
+            // situation. We have to create a new pin for the user.
             if lockManager.shouldStartSetUpPinFlow() && !isDisplayingPin() {
                 initialVC = PinViewController(state: .choosePin, isExistingUser: true)
                 lockManager.isShowingLockScreen = true
@@ -86,6 +87,11 @@ extension AppDelegate {
                 // Everything went well, we're not displaying lock screen
                 displayVisualNotificationFlow(unhandledVisualNotification)
             }
+        } else if pinWindow?.isKeyWindow != true {
+            // In this case lockManager.isShowingLockScreen is true because pinView is being
+            // displayed over mainWindow. We're recovering a user who tapped in create wallet and
+            // then killed the app.
+            _window?.makeKeyAndVisible()
         }
     }
 

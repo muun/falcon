@@ -59,6 +59,7 @@ class KeyboardView: MUView {
 
     fileprivate func addNumberViewActions() {
         for view in numberViews {
+            view.isAccessibilityElement = true
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(
                 UITapGestureRecognizer(target: self, action: .keyboardViewTouched)

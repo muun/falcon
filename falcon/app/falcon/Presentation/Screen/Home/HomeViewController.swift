@@ -134,13 +134,12 @@ class HomeViewController: MUViewController {
             isBalanceHidden: presenter.isBalanceHidden()
         )
     }
-
 }
 
 extension HomeViewController: HomePresenterDelegate {
 
     func showWelcome() {
-        _ = show(popUp: WelcomePopUpView(), duration: nil)
+        _ = show(popUp: WelcomePopUpView(delegate: self), duration: nil)
     }
 
     func showTaprootActivated() {
@@ -251,9 +250,9 @@ extension HomeViewController: TransactionListViewControllerDelegate {
 
 }
 
-extension HomeViewController: TaprootActivatedPopupDelegate {
+extension HomeViewController: DisplayedPopupDelegate {
 
-    func dismiss(taprootActivated: TaprootActivatedPopup) {
+    func dismiss(popup: UIView) {
         self.dismissPopUp()
     }
 }

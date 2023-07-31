@@ -47,7 +47,7 @@ protocol ReceiveOnChainViewDelegate: ReceiveDelegate {
 final class ReceiveOnChainView: UIView {
 
     private let stackView = UIStackView()
-    private let qrCodeView = QRCodeWithActionsView()
+    private let qrCodeView: QRCodeWithActionsView
     private let advancedOptionsView = OnChainAdvancedOptionsView()
 
     private let addressSet: AddressSet
@@ -77,6 +77,8 @@ final class ReceiveOnChainView: UIView {
     init(addressSet: AddressSet,
          delegate: ReceiveOnChainViewDelegate?,
          defaultAddressType: AddressTypeViewModel) {
+        let qrAccessibilityLabel = L10n.QRCodeWithActionsView.onChainQRAccessibilityLabel
+        self.qrCodeView = QRCodeWithActionsView(tapQRAccessibilityLabel: qrAccessibilityLabel)
         self.defaultAddressType = defaultAddressType
         self.addressType = defaultAddressType
         self.addressSet = addressSet

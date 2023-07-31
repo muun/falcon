@@ -9,19 +9,15 @@
 import Foundation
 import UIKit
 
-protocol TaprootActivatedPopupDelegate: AnyObject {
-    func dismiss(taprootActivated: TaprootActivatedPopup)
-}
-
 class TaprootActivatedPopup: UIView {
 
-    private weak var delegate: TaprootActivatedPopupDelegate?
+    private weak var delegate: DisplayedPopupDelegate?
 
     required init?(coder: NSCoder) {
         preconditionFailure()
     }
 
-    init(delegate: TaprootActivatedPopupDelegate) {
+    init(delegate: DisplayedPopupDelegate) {
         self.delegate = delegate
         super.init(frame: .zero)
 
@@ -126,6 +122,6 @@ class TaprootActivatedPopup: UIView {
 extension TaprootActivatedPopup: SmallButtonViewDelegate {
 
     func button(didPress button: SmallButtonView) {
-        delegate?.dismiss(taprootActivated: self)
+        delegate?.dismiss(popup: self)
     }
 }

@@ -68,6 +68,7 @@ class CreateInvoiceView: UIView, SmallButtonViewDelegate {
     }
 
     private func setUpView() {
+        accessibilityViewIsModal = true
         backgroundColor = Asset.Colors.background.color
         translatesAutoresizingMaskIntoConstraints = false
 

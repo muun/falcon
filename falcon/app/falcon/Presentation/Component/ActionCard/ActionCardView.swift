@@ -75,6 +75,12 @@ class ActionCardView: MUView {
         stepNumberLabel.text = actionCard.stemNumber
         nextViewController = actionCard.nextViewController
 
+        if let accessibilityLabel = actionCard.accessibilityLabel {
+            cardView.isAccessibilityElement = true
+            cardView.accessibilityLabel = accessibilityLabel
+            cardView.accessibilityTraits = actionCard.accessibilityTrait
+        }
+
         if let image = actionCard.stepImage {
             stepImageView.image = image
         }

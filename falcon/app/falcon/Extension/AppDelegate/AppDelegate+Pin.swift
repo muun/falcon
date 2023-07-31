@@ -24,6 +24,7 @@ extension AppDelegate {
         pinWindow = UIWindow(frame: UIScreen.main.bounds)
         pinWindow!.rootViewController = lockNavController
         pinWindow!.makeKeyAndVisible()
+        pinWindow!.accessibilityViewIsModal = true
 
         lockManager.isShowingLockScreen = true
     }
@@ -61,12 +62,12 @@ extension AppDelegate: LockDelegate {
     }
 
     fileprivate func dismissPinWindow(completion: (() -> Void)? = nil) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.pinWindow?.alpha = 0
-        }, completion: { _ in
-            self.lockNavController.dismiss(animated: true, completion: completion)
-            self.window?.makeKeyAndVisible()
+        self.lockNavController.dismiss(animated: true, completion: {
+            self.pinWindow?.removeFromSuperview()
+            self.pinWindow?.resignKey()
+            self.pinWindow = nil
+            self._window?.makeKeyAndVisible()
+            completion?()
         })
     }
-
 }

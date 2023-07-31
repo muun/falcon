@@ -12,13 +12,19 @@ struct BackgroundExcecutionMetricsProvider {
         /// isBatteryMonitoringEnabled is required in order to get battery metrics.
         UIDevice.current.isBatteryMonitoringEnabled = true
 
+        let conectivityCapabilities = ConectivityCapabilitiesProvider.shared
         let hardwareCapabilities = HardwareCapabilitiesProvider.shared
         let hasInternetConnectionProvidedByCarrier =
-            ConectivityCapabilitiesProvider.shared.hasInternetConnectionProvidedByCarrier()
+            conectivityCapabilities.hasInternetConnectionProvidedByCarrier()
 
         let osVersion = ProcessInfo.processInfo.operatingSystemVersion
         let osVersionString =
             "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
+
+        var availableNetworksDTO: AvailableNetworksDTO?
+        conectivityCapabilities.availableNetworks.map {
+            availableNetworksDTO = AvailableNetworksDTO.from(model: $0)
+        }
 
         let metrics = BackgroundExcecutionMetrics(
             epochInMilliseconds: createEpoch(),
@@ -26,9 +32,10 @@ struct BackgroundExcecutionMetricsProvider {
             batteryState: hardwareCapabilities.getBatteryState(),
             freeRamStorage: hardwareCapabilities.getFreeRam(),
             freeInternalStorage: hardwareCapabilities.getFreeStorage(),
-            simState: ConectivityCapabilitiesProvider.shared.getSimState().rawValue,
+            simState: conectivityCapabilities.getSimState().rawValue,
             hasInternetConnectionProvidedByCarrier: hasInternetConnectionProvidedByCarrier,
-            currentlyOverWifi: ConectivityCapabilitiesProvider.shared.isOverWifi,
+            currentlyOverWifi: conectivityCapabilities.isOverWifi,
+            availableNetworks: availableNetworksDTO,
             totalInternalStorage: hardwareCapabilities.getTotalStorage(),
             totalRamStorage: hardwareCapabilities.getTotalRam(),
             osVersion: osVersionString
@@ -56,7 +63,24 @@ struct BackgroundExcecutionMetrics: Encodable {
     let simState: String
     let hasInternetConnectionProvidedByCarrier: Bool?
     let currentlyOverWifi: Bool?
+    let availableNetworks: AvailableNetworksDTO?
     let totalInternalStorage: Int64
     let totalRamStorage: UInt64
     let osVersion: String
+}
+
+struct AvailableNetworksDTO: Encodable {
+    var wifi: Bool
+    var loopback: Bool
+    var wiredEthernet: Bool
+    var cellular: Bool
+    var other: Bool
+
+    static func from(model: AvailableNetworks) -> AvailableNetworksDTO {
+        return AvailableNetworksDTO(wifi: model.wifi,
+                                    loopback: model.loopback,
+                                    wiredEthernet: model.wiredEthernet,
+                                    cellular: model.cellular,
+                                    other: model.other)
+    }
 }

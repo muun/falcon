@@ -14,10 +14,12 @@ class WelcomePopUpView: UIView {
     private let astronautImage: UIImageView! = UIImageView()
     private let messageLabel: UILabel! = UILabel()
     private let continueButton: SmallButtonView! = SmallButtonView()
+    private weak var delegate: DisplayedPopupDelegate?
 
-    init() {
+    init(delegate: DisplayedPopupDelegate) {
         super.init(frame: .zero)
         setUpView()
+        self.delegate = delegate
     }
 
     required init?(coder: NSCoder) {
@@ -39,7 +41,8 @@ class WelcomePopUpView: UIView {
         NSLayoutConstraint.activate([
             card.leadingAnchor.constraint(equalTo: leadingAnchor),
             card.trailingAnchor.constraint(equalTo: trailingAnchor),
-            card.centerYAnchor.constraint(equalTo: centerYAnchor)
+            card.bottomAnchor.constraint(equalTo: bottomAnchor),
+            card.topAnchor.constraint(equalTo: topAnchor)
         ])
     }
 
@@ -77,6 +80,7 @@ class WelcomePopUpView: UIView {
     }
 
     fileprivate func setUpButton() {
+        continueButton.delegate = self
         continueButton.translatesAutoresizingMaskIntoConstraints = false
         continueButton.isEnabled = true
         continueButton.buttonText = L10n.WelcomePopUpView.button
@@ -89,5 +93,10 @@ class WelcomePopUpView: UIView {
             continueButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
+}
 
+extension WelcomePopUpView: SmallButtonViewDelegate {
+    func button(didPress button: SmallButtonView) {
+        delegate?.dismiss(popup: self)
+    }
 }

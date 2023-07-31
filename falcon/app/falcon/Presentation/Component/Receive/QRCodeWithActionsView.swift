@@ -25,6 +25,7 @@ class QRCodeWithActionsView: UIView {
     private let loadingView = QRLoadingView()
     private let shareButton = SmallButtonView()
     private let copyButton = SmallButtonView()
+    private let tapQRAccessibilityLabel: String
 
     var data: Data? {
         get {
@@ -69,7 +70,9 @@ class QRCodeWithActionsView: UIView {
 
     weak var delegate: QRCodeWithActionsViewDelegate?
 
-    init() {
+    init(tapQRAccessibilityLabel: String) {
+        self.tapQRAccessibilityLabel = tapQRAccessibilityLabel
+
         super.init(frame: .zero)
         setUpView()
     }
@@ -103,6 +106,8 @@ class QRCodeWithActionsView: UIView {
     fileprivate func setUpQR() {
         qrCodeView.translatesAutoresizingMaskIntoConstraints = false
         qrCodeView.delegate = self
+//        qrCodeView.isAccessibilityElement = true
+//        qrCodeView.accessibilityLabel = tapQRAccessibilityLabel
 
         stackView.addArrangedSubview(qrCodeView)
 

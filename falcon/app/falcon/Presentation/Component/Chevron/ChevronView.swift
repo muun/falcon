@@ -33,8 +33,15 @@ final class ChevronView: UIView {
     }
 
     private func setUpView() {
+        setupAccessibility()
         setUpContentView()
         setUpLottieView()
+    }
+
+    private func setupAccessibility() {
+        contentView.isAccessibilityElement = true
+        contentView.accessibilityTraits = .button
+        contentView.accessibilityLabel = L10n.TransactionListViewController.vcTitle
     }
 
     private func setUpContentView() {

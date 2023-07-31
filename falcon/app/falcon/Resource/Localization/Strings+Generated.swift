@@ -1047,8 +1047,14 @@ internal enum L10n {
   internal enum QRCodeWithActionsView {
     /// COPY
     internal static let copy = L10n.tr("Localizable", "QRCodeWithActionsView.copy")
+    /// Tap to copy your lightning invoice
+    internal static let lightningQRAccessibilityLabel = L10n.tr("Localizable", "QRCodeWithActionsView.lightningQRAccessibilityLabel")
+    /// Tap to copy your bitcoin address
+    internal static let onChainQRAccessibilityLabel = L10n.tr("Localizable", "QRCodeWithActionsView.onChainQRAccessibilityLabel")
     /// SHARE
     internal static let share = L10n.tr("Localizable", "QRCodeWithActionsView.share")
+    /// Tap to copy your unified URI
+    internal static let unifiedQRAccessibilityLabel = L10n.tr("Localizable", "QRCodeWithActionsView.unifiedQRAccessibilityLabel")
   }
 
   internal enum Receive {

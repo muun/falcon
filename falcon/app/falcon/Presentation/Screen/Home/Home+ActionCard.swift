@@ -20,7 +20,8 @@ extension ActionCardModel {
             nextViewController: SecurityCenterViewController(origin: .emptyAnonUser),
             stemNumber: nil,
             stepImage: Asset.Assets.actionCardBackUp.image,
-            state: .home
+            state: .home,
+            accessibilityLabel: L10n.Home.backUp
         )
     }
 
@@ -34,7 +35,8 @@ extension ActionCardModel {
             nextViewController: UIViewController(), // Any controller sufices here. This should be refactored.
             stemNumber: nil,
             stepImage: Asset.Assets.levelUp.image,
-            state: .home
+            state: .home,
+            accessibilityLabel: nil
         )
     }
 
@@ -47,7 +49,9 @@ extension ActionCardModel {
             nextViewController: UIViewController(), // Any controller sufices here. This should be refactored.
             stemNumber: nil,
             stepImage: Asset.Assets.notice.image,
-            state: .home
+            state: .home,
+            accessibilityLabel: L10n.Home.highFeesBannerTitle,
+            accessibilityTrait: .staticText
         )
     }
 

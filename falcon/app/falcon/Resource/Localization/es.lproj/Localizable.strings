@@ -40,6 +40,10 @@ Cambiar a dirección de compatibilidad";
 /* Presentation/Component/Receive/QRCodeWithActionsView.swift */
 "QRCodeWithActionsView.share" = "COMPARTIR";
 "QRCodeWithActionsView.copy" = "COPIAR";
+"QRCodeWithActionsView.onChainQRAccessibilityLabel" = "Selecciona para copiar tu dirección de bitcoin";
+"QRCodeWithActionsView.lightningQRAccessibilityLabel" = "Selecciona para copiar tu factura de lightning";
+"QRCodeWithActionsView.unifiedQRAccessibilityLabel" = "Selecciona para copiar tu URI de bitcoin";
+
 /* Presentation/OperationFormatter.swift */
 "OperationFormatter.s1" = "Te pagaste";
 "OperationFormatter.s2" = "Recibiste";
