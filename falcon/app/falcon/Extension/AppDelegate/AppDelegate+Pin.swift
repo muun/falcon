@@ -34,12 +34,12 @@ extension AppDelegate {
 extension AppDelegate: LockDelegate {
 
     public func unlockApp() {
-        dismissPinWindow { [weak self] in
-            if let unhandledVisualNotification = self?.unhandledVisualNotification {
-                // Adding some magic time to smooth the animations.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    self?.displayVisualNotificationFlow(unhandledVisualNotification)
-                }
+        dismissPinWindow()
+
+        if let unhandledVisualNotification = unhandledVisualNotification {
+            // Adding some magic time to smooth the animations.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.displayVisualNotificationFlow(unhandledVisualNotification)
             }
         }
 
@@ -61,13 +61,10 @@ extension AppDelegate: LockDelegate {
         _window!.makeKeyAndVisible()
     }
 
-    fileprivate func dismissPinWindow(completion: (() -> Void)? = nil) {
-        self.lockNavController.dismiss(animated: true, completion: {
-            self.pinWindow?.removeFromSuperview()
-            self.pinWindow?.resignKey()
-            self.pinWindow = nil
-            self._window?.makeKeyAndVisible()
-            completion?()
-        })
+    fileprivate func dismissPinWindow() {
+        self.pinWindow?.removeFromSuperview()
+        self.pinWindow?.resignKey()
+        self.pinWindow = nil
+        self.window?.makeKeyAndVisible()
     }
 }

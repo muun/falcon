@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 publish to testflight beta
 
+### ios export_prod_ipa
+
+```sh
+[bundle exec] fastlane ios export_prod_ipa
+```
+
+Export an IPA pointing to prod env
+
 ### ios internalPrd
 
 ```sh
