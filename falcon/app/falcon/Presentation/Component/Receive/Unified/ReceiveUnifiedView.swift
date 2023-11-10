@@ -182,10 +182,9 @@ final class ReceiveUnifiedView: UIView {
     }
 
     private func displayHighFeesAndStopTimer() {
-        let text = L10n.ReceiveInLightningView.s7
+        let text = L10n.ReceiveUnifiedView.highFeesMessage
             .attributedForDescription(alignment: .center)
-        createInvoiceView.display(text: text,
-                                  buttonText: L10n.ReceiveInLightningView.s8)
+        createInvoiceView.display(text: text, buttonText: nil)
         timer.invalidate()
     }
 

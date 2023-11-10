@@ -231,8 +231,7 @@ final class ReceiveInLightningView: UIView {
     private func displayHighFeesAndStopTimer() {
         let text = L10n.ReceiveInLightningView.s7
             .attributedForDescription(alignment: .center)
-        createInvoiceView.display(text: text,
-                                  buttonText: L10n.ReceiveInLightningView.s8)
+        createInvoiceView.display(text: text, buttonText: nil)
         timer.invalidate()
     }
 

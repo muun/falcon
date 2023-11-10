@@ -57,9 +57,13 @@ class CreateInvoiceView: UIView, SmallButtonViewDelegate {
         ])
     }
 
-    func display(text: NSAttributedString, buttonText: String) {
+    func display(text: NSAttributedString, buttonText: String?) {
         expiredLabel.attributedText = text
-        createAnotherInvoiceButton.buttonText = buttonText
+        if let buttonText = buttonText {
+            createAnotherInvoiceButton.buttonText = buttonText
+        } else {
+            createAnotherInvoiceButton.isHidden = true
+        }
         super.isHidden = false
     }
 

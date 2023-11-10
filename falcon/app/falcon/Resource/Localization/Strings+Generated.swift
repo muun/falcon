@@ -451,7 +451,7 @@ internal enum L10n {
     internal static let backUp = L10n.tr("Localizable", "Home.backUp")
     /// Back up your wallet
     internal static let boldBackUp = L10n.tr("Localizable", "Home.boldBackUp")
-    /// The bitcoin network is at top capacity, making fees high.
+    /// The Bitcoin Network is congested. Fees are high, and confirmation times are slow.
     internal static let highFeesBannerTitle = L10n.tr("Localizable", "Home.highFeesBannerTitle")
     /// RECEIVE
     internal static let receiveCTA = L10n.tr("Localizable", "Home.receiveCTA")
@@ -851,7 +851,7 @@ internal enum L10n {
     internal static let s31 = L10n.tr("Localizable", "NewOpError.s31")
     /// This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.
     internal static let s32 = L10n.tr("Localizable", "NewOpError.s32")
-    /// The receiving wallet can’t process lightning payments right now, so the payment has failed.
+    /// The receiving wallet can't process Lightning payments right now.\n\nYour payment failed immediately, and the funds are in your wallet.
     internal static let s33 = L10n.tr("Localizable", "NewOpError.s33")
     /// The bitcoin rates changed
     internal static let s4 = L10n.tr("Localizable", "NewOpError.s4")
@@ -1129,10 +1129,8 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "ReceiveInLightningView.s5")
     /// CREATE INVOICE
     internal static let s6 = L10n.tr("Localizable", "ReceiveInLightningView.s6")
-    /// Receiving lightning payments is temporarily disabled while we upgrade our payment infrastructure.
+    /// Your wallet is temporarily unable to receive Lightning payments due to the high congestion of the Bitcoin Network.\n\nTo receive a payment, please switch to the Bitcoin tab.
     internal static let s7 = L10n.tr("Localizable", "ReceiveInLightningView.s7")
-    /// UNDERSTOOD
-    internal static let s8 = L10n.tr("Localizable", "ReceiveInLightningView.s8")
   }
 
   internal enum ReceiveOnChainView {
@@ -1154,6 +1152,8 @@ internal enum L10n {
   }
 
   internal enum ReceiveUnifiedView {
+    /// Your wallet is temporarily unable to receive Lightning payments due to the high congestion of the Bitcoin Network.\n\nTo receive a payment, please visit Settings > Lightning Network and set Bitcoin as your receiving protocol.
+    internal static let highFeesMessage = L10n.tr("Localizable", "ReceiveUnifiedView.highFeesMessage")
     /// Generating QR code
     internal static let loading = L10n.tr("Localizable", "ReceiveUnifiedView.loading")
   }

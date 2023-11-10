@@ -27,10 +27,14 @@ Welcome to Muun!";
 "ReceiveInLightningView.s5" = "This invoice expired before the payment was made. Please, create or request a new one.";
 "ReceiveInLightningView.s6" = "CREATE INVOICE";
 "ReceiveInLightningView.loading" = "Generating invoice";
-"ReceiveInLightningView.s7" = "Receiving lightning payments is temporarily disabled while we upgrade our payment infrastructure.";
-"ReceiveInLightningView.s8" = "UNDERSTOOD";
+"ReceiveInLightningView.s7" = "Your wallet is temporarily unable to receive Lightning payments due to the high congestion of the Bitcoin Network.
+
+To receive a payment, please switch to the Bitcoin tab.";
 /* Presentation/Component/Receive/ReceiveUnifiedView.swift */
 "ReceiveUnifiedView.loading" = "Generating QR code";
+"ReceiveUnifiedView.highFeesMessage" = "Your wallet is temporarily unable to receive Lightning payments due to the high congestion of the Bitcoin Network.
+
+To receive a payment, please visit Settings > Lightning Network and set Bitcoin as your receiving protocol.";
 /* Presentation/Component/Receive/ReceiveOnChainView.swift */
 "ReceiveOnChainView.s1" = "Bitcoin legacy address";
 "ReceiveOnChainView.s4" = "Switch to legacy addresses";
@@ -124,7 +128,7 @@ Tap or swipe up to see your transactions.";
 
 "Home.activateTaproot" = "Level-up your payments. Save with each payment by activating Taproot.";
 "Home.activateTaprootHighlight" = "Level-up your payments.";
-"Home.highFeesBannerTitle" = "The bitcoin network is at top capacity, making fees high.";
+"Home.highFeesBannerTitle" = "The Bitcoin Network is congested. Fees are high, and confirmation times are slow.";
 
 /* Presentation/Screen/Home/HomeViewController.swift */
 "HomeViewController.s1" = "Report a problem";
@@ -177,7 +181,9 @@ Tap or swipe up to see your transactions.";
 "NewOpError.s30" = "The amount you are trying too send is too small. It must be greater than %@ satoshis.";
 "NewOpError.s31" = "Something went wrong, but we don’t know what. Please, reach out to our support team and let us know what happened. We'll be happy to help.";
 "NewOpError.s32" = "This invoice was created by a private node that can't be reached. To reach it, the invoice must include extra data (RouteHints). This issue can only be fixed by the invoice creator.";
-"NewOpError.s33" = "The receiving wallet can’t process lightning payments right now, so the payment has failed.";
+"NewOpError.s33" = "The receiving wallet can't process Lightning payments right now.
+
+Your payment failed immediately, and the funds are in your wallet.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/ManuallyEnterFee/ManuallyEnterFeeViewController.swift */
 "ManuallyEnterFeeViewController.s1" = "Edit network fee";
 "ManuallyEnterFeeViewController.s2" = "Enter a fee manually. What's this?";

@@ -27,10 +27,14 @@
 "ReceiveInLightningView.s5" = "Esta factura expiró. Creá una nueva.";
 "ReceiveInLightningView.s6" = "CREAR FACTURA";
 "ReceiveInLightningView.loading" = "Generando factura";
-"ReceiveInLightningView.s7" = "Recibir pagos en lightning está temporalmente deshabilitado mientras actualizamos nuestra infraestructura de pagos.";
-"ReceiveInLightningView.s8" = "ENTENDIDO";
+"ReceiveInLightningView.s7" = "Tu monedero está temporalmente inhabilitado para recibir pagos a través de Lightning debido a la alta congestión de la Red de Bitcoin.
+
+Para recibir un pago, por favor cambia a la pestaña de Bitcoin.";
 /* Presentation/Component/Receive/ReceiveUnifiedView.swift */
 "ReceiveUnifiedView.loading" = "Generando código QR";
+"ReceiveUnifiedView.highFeesMessage" = "Tu monedero está temporalmente inhabilitado para recibir pagos a través de Lightning debido a la alta congestión de la Red de Bitcoin.
+
+Para recibir un pago, por favor visita Ajustes > Lightning Network y configura a Bitcoin como tu protocolo para recibir.";
 /* Presentation/Component/Receive/ReceiveOnChainView.swift */
 "ReceiveOnChainView.s1" = "Dirección de compatibilidad";
 "ReceiveOnChainView.s4" = "Cambiar a dirección de compatibilidad";
@@ -125,7 +129,7 @@ Haz clic o desliza para ver tus pagos.";
 
 "Home.activateTaproot" = "Mejora tus pagos. Ahorra con cada pago activando Taproot.";
 "Home.activateTaprootHighlight" = "Mejora tus pagos.";
-"Home.highFeesBannerTitle" = "La red de bitcoin está a máxima capacidad, haciendo altas las comisiones.";
+"Home.highFeesBannerTitle" = "La red de Bitcoin está congestionada. Los pagos están más lentos y costosos.";
 
 /* Presentation/Screen/Home/HomeViewController.swift */
 "HomeViewController.s1" = "Reportar un problema";
@@ -178,7 +182,9 @@ Haz clic o desliza para ver tus pagos.";
 "NewOpError.s30" = "El monto que estás intentando enviar es demasiado pequeño para completar esta transacción. Debe superar los %@ satoshis.";
 "NewOpError.s31" = "Algo salió mal, pero no sabemos qué. Se generó un reporte de error que ayudará a resolverlo. Por favor, envíanoslo por email.";
 "NewOpError.s32" = "Esta factura fue creada por un nodo privado al que no se puede acceder. Para poder accederlo, la factura debe incluir datos adicionales (RouteHints). Sólo el creador de la factura puede solucionar este problema.";
-"NewOpError.s33" = "El monedero receptor no puede procesar pagos de lightning en este momento, por lo que el pago ha fallado.";
+"NewOpError.s33" = "El monedero receptor no puede procesar pagos de Lightning en este momento.
+
+Tu pago falló de inmediato, y los fondos están en tu monedero.";
 /* Presentation/Screen/NewOperation/ChildViews/EditFee/ManuallyEnterFee/ManuallyEnterFeeViewController.swift */
 "ManuallyEnterFeeViewController.s1" = "Editar la comisión de la red";
 "ManuallyEnterFeeViewController.s2" = "Ingresa la comisión manualmente. ¿Qué es esto?";
