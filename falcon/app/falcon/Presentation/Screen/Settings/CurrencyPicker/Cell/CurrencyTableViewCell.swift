@@ -40,11 +40,7 @@ class CurrencyTableViewCell: UITableViewCell {
             tickImageView.image = Asset.Assets.tick.image
         }
 
-        let displayCode = currency.displayCode
-        // Workaround needed to display Satoshi(SAT) as Bitcoin(BTC). This is required because I was not able to change
-        // name in BitcoinCurrency for sats because name is being use to identify bitcoin from satoshis in some places.
-        let currencyNameForDisplay = (currency == BitcoinCurrency(unit: .SAT) ? BitcoinCurrency(unit: .BTC).name
-        : currency.name) + " (\(displayCode))"
+        let currencyNameForDisplay = currency.name + " (\(currency.displayCode))"
         if let flag = currency.flag {
             currencyNameLabel.text = "\(flag) \(currencyNameForDisplay)"
         } else {

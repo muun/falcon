@@ -65,10 +65,7 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
             ])
 
         case .confirmation(let data):
-            // This is the first time where we can know the debt type
-            if let debtType = data.debtType {
-                addDebtTypeParam(debtType)
-            }
+            addAnalyticsParams(data: data)
 
             let view = NewOpConfirmView(feeState: data.feeState,
                                         delegate: newOpViewDelegate,
@@ -100,6 +97,12 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
             Logger.fatal("unhandled state: \(state)")
         }
 
+    }
+
+    private func addAnalyticsParams(data: NewOpData.Confirm) {
+        data.getLightningAnalyticsParams().forEach {
+            params[$0] = $1
+        }
     }
 
     func getLoggingData(state: NewOpState) -> (logName: String, logParams: [String: Any]?)? {
@@ -142,14 +145,6 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         case .finalFee(_, let rate):
             params["sats_per_virtual_byte"] = "\(rate.satsPerVByte)"
         }
-    }
-
-    private func addDebtTypeParam(_ debtType: DebtType) {
-        if params["debt_type"] != nil {
-            return
-        }
-
-        params["debt_type"] = debtType.rawValue.lowercased()
     }
 
     private func buildDestination(type: PaymentRequestType, confirm: Bool = false) -> MUView {

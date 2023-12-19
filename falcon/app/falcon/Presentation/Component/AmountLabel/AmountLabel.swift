@@ -61,7 +61,8 @@ class AmountLabel: UILabel {
     ///   - bitcoinAmountWithCurrency: value to be displayed. Keep in mind by default value will be switched
     ///   in between selectedCurrency, defaultCurrency and BTC on users tap
     ///   - type: default value type to ve displayed (selected, default or BTC currency)
-    func setAmount(from bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency, in type: AmountLabelType) {
+    func setAmount(from bitcoinAmountWithCurrency: BitcoinAmountWithSelectedCurrency,
+                   in type: AmountLabelType) {
         self.bitcoinAmountWithCurrency = bitcoinAmountWithCurrency
         self.attributedText = readableAmount(from: bitcoinAmountWithCurrency, in: type)
     }
@@ -103,7 +104,8 @@ private extension AmountLabel {
     func nextValue(for bitcoinAmountWithSelectedCurrency: BitcoinAmountWithSelectedCurrency) -> NSAttributedString {
         let currentValue = self.attributedText!.string
         let amountInInput = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inInput)
-        let amountInPrimary = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inPrimary)
+        let amountInPrimary = readableAmount(from: bitcoinAmountWithSelectedCurrency,
+                                             in: .inPrimary)
         let amountInBTC = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inBTC)
 
         if currentValue == amountInInput.string {
@@ -152,7 +154,8 @@ private extension AmountLabel {
         return bitcoinCurrency
     }
 
-    func getValueToBecomeReadableIn(bitcoinAmount: BitcoinAmount, type: AmountLabelType) -> MonetaryAmount {
+    func getValueToBecomeReadableIn(bitcoinAmount: BitcoinAmount,
+                                    type: AmountLabelType) -> MonetaryAmount {
         switch type {
         case .inBTC:
             return bitcoinAmount.inSatoshis.toBTC()
@@ -174,7 +177,8 @@ private extension AmountLabel {
         }
 
         var attributedString = NSMutableAttributedString()
-        let amountString = currency.toAmountWithoutCode(amount: value.amount, btcCurrencyFormat: .long)
+        let amountString = currency.toAmountWithoutCode(amount: value.amount,
+                                                        btcCurrencyFormat: .long)
         attributedString = NSMutableAttributedString(
             string: "\(amountString) \(currency.displayCode)",
             attributes: [NSAttributedString.Key.font: font as Any])

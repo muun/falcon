@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import core
 
 class FalconUITests: XCTestCase {
 
@@ -67,15 +68,25 @@ class FalconUITests: XCTestCase {
         return (homePage, email, password, rc)
     }
 
+    func createRecoverableUser(utxos: [Decimal] = []) -> (homePage: HomePage,
+                                                          email: String,
+                                                          password: String) {
+        let homePage = createUser(utxos: utxos)
+
+        let (email, password) = securityCenterTests.setUpEmailAndPassword(in: homePage)
+
+        return (homePage, email, password)
+    }
+
     private func sendTo(_ address: String, in homePage: HomePage, utxos: [Decimal]) {
 
         XCTAssert(!address.isEmpty, "expected address to be non-empty")
 
         _ = homePage.openOperationsList()
         // Pre generate to make sure regtest has funds to send
-        generate(blocks: 10)
+        TestLapp.generate(blocks: 10)
         for utxo in utxos {
-            send(to: address, amount: utxo)
+            TestLapp.send(to: address, amount: utxo)
         }
 
         // Wait for ops to come in from firebase

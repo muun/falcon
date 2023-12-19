@@ -126,13 +126,13 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
 
         #if targetEnvironment(simulator)
         // We are OK with polling every 10 seconds on simulator builds
-        let simulatorFetch: Observable<Int> = buildFetchNotificationsPeriodicAction(intervalInSeconds: 10)
+        let simulatorFetch = buildFetchNotificationsPeriodicAction(intervalInSeconds: 10)
         self.subscribeTo(simulatorFetch, onNext: { _ in })
         return
         #endif
 
         PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
-            let periodicFetch: Observable<Int>
+            let periodicFetch: Observable<ActionState<()>>
 
             switch status {
             case .authorized, .ephemeral, .provisional:
@@ -145,7 +145,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
-    private func buildPeriodicAction(isPermissionEnabled: Bool) -> Observable<Int> {
+    private func buildPeriodicAction(isPermissionEnabled: Bool) -> Observable<ActionState<()>> {
 
         return operationActions.getOperationsChange().flatMap({ _ -> Observable<Int> in
             if self.operationActions.hasPendingSwaps() {

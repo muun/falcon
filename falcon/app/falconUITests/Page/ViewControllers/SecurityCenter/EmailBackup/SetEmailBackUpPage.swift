@@ -21,9 +21,11 @@ final class SetEmailBackUpPage: UIElementPage<UIElements.Pages.SetEmailBackUpPag
         buttonView.mainButtonTap()
     }
 
-    func type(email: String) {
+    func type(email: String, shouldTapContinue: Bool = true) {
         textInputView.type(text: email)
-        tapContinueButton()
+        if shouldTapContinue {
+            tapContinueButton()
+        }
     }
 
 }

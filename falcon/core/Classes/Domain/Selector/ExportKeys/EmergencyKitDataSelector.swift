@@ -25,7 +25,9 @@ public class EmergencyKitDataSelector: BaseOptionalSelector<EmergencyKitData> {
                 let privateKey = try keysRepository.getBasePrivateKey()
                 let challengeKey = try keysRepository.getChallengeKey(with: .RECOVERY_CODE)
 
-                let encryptedKey = try challengeKey.encryptKey(privateKey)
+                let encryptedKey = try Self.getOrCreateEncriptedUserPrivateKey(keysRepository: keysRepository,
+                                                                               challengeKey: challengeKey,
+                                                                               privateKey: privateKey)
 
                 let data = EmergencyKitData(
                     userKey: encryptedKey,
@@ -40,5 +42,24 @@ public class EmergencyKitDataSelector: BaseOptionalSelector<EmergencyKitData> {
             }
         })
     }
+    
+    // Avoid user private key rotation on emergency kit. 
+    private static func getOrCreateEncriptedUserPrivateKey(keysRepository: KeysRepository,
+                                                           challengeKey: ChallengeKey,
+                                                           privateKey: WalletPrivateKey) throws -> String {
+        do {
+            let storedEncriptedPrivateKey = try keysRepository.getEncriptedUserPrivateKey()
+            return storedEncriptedPrivateKey
+        } catch where error.isKindOf(KeyStorageError.missingKey) {
+            let newEncriptedPrivateKey = try challengeKey.encryptKey(privateKey)
+            try keysRepository.store(encriptedUserPrivateKey: newEncriptedPrivateKey)
 
+            return newEncriptedPrivateKey
+        } catch {
+            Logger.log(.err, error.localizedDescription)
+            // Something happened and I need the UI to show an error withouth exposing the keychain
+            // data errors
+            throw MuunError(DomainError.emergencyKitExportError)
+        }
+    }
 }

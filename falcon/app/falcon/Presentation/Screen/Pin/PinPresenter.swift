@@ -12,7 +12,8 @@ import UIKit
 protocol PinPresenterDelegate: BasePresenterDelegate {
     func pinRepeated(isValid: Bool)
     func pinChoosed()
-    func unlockSuccessful()
+    func displayAttemptsLeftHint(attemptsLeft: Int)
+    func unlockSuccessful(authMethod: AuthMethod)
     func unlockUnsuccessful(attemptsLeft: Int, isUnrecoverableUser: Bool)
     func noMoreAttempts()
 }
@@ -78,16 +79,24 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
     func setUp(isExistingUser: Bool) {
         super.setUp()
 
+        if shouldDisplayAttemptsLeftOnScreenStartup() {
+            delegate.displayAttemptsLeftHint(attemptsLeft: getAttemptsLeft())
+        }
+
         if state == .choosePin {
             let signFlow: SignFlow = (isExistingUser) ? .recover : .create
             let primaryCurrency = CurrencyHelper.currencyForLocale().code
 
             if getGcmToken() == "" {
                 subscribeTo(fcmTokenAction.getValue().catchErrorJustReturn(()), onSuccess: { _ in
-                    self.syncAction.run(signFlow: signFlow, gcmToken: self.getGcmToken(), currencyCode: primaryCurrency)
+                    self.syncAction.run(signFlow: signFlow,
+                                        gcmToken: self.getGcmToken(),
+                                        currencyCode: primaryCurrency)
                 })
             } else {
-                syncAction.run(signFlow: signFlow, gcmToken: getGcmToken(), currencyCode: primaryCurrency)
+                syncAction.run(signFlow: signFlow,
+                               gcmToken: getGcmToken(),
+                               currencyCode: primaryCurrency)
             }
         }
     }
@@ -116,14 +125,25 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
 
             switch applicationLockManager.isValid(pin: pin) {
             case .valid:
-                delegate.unlockSuccessful()
+                delegate.unlockSuccessful(authMethod: .pin)
             case .invalid(let isUnrecoverableUser):
-                delegate.unlockUnsuccessful(attemptsLeft: getAttemptsLeft(), isUnrecoverableUser: isUnrecoverableUser)
+                delegate.unlockUnsuccessful(attemptsLeft: getAttemptsLeft(),
+                                            isUnrecoverableUser: isUnrecoverableUser)
             case .noMoreAttempts:
                 delegate.noMoreAttempts()
             }
         }
+    }
 
+    func onBiometricsAuthFailed() {
+        if applicationLockManager.getBiometricIdStatus() == true
+            && applicationLockManager.recoverableUserHasAttemptsAlreadySpent() {
+            delegate.displayAttemptsLeftHint(attemptsLeft: getAttemptsLeft())
+        }
+    }
+
+    func onUserUnlockedAppSuccessfullyWithBiometrics() {
+        try? applicationLockManager.resetNumberOfAttemptsAfterValidAuthMethod()
     }
 
     func resetChoose() {
@@ -134,6 +154,7 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
         return applicationLockManager.attemptsLeft()
     }
 
+    /// Get if biometrics is setted up.
     func getBiometricIdStatus() -> Bool {
         return applicationLockManager.getBiometricIdStatus() ?? false
     }
@@ -146,4 +167,13 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
         return preferences.string(forKey: .gcmToken) ?? ""
     }
 
+    // When setting up the view if the user has biometrics we need to avoid displaying
+    // attempts left under the biometrics alert. Otherwise we show the hint to users
+    // that are not being affected by it since they are using biometrics. In that case we
+    // show the hint as soon as biometrics fails
+    private func shouldDisplayAttemptsLeftOnScreenStartup() -> Bool {
+        return state == .locked
+        && applicationLockManager.recoverableUserHasAttemptsAlreadySpent()
+        && applicationLockManager.getBiometricIdStatus() != true
+    }
 }

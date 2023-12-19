@@ -18,6 +18,7 @@ class RequestCloudView: UIView {
     private let button = SmallButtonView()
     private let input = TextInputView()
     private let stack = UIStackView()
+    private let feedbackView = RequestCloudFeedbackView()
 
     required init?(coder: NSCoder) {
         preconditionFailure()
@@ -30,6 +31,72 @@ class RequestCloudView: UIView {
     }
 
     private func setupView() {
+        addKeyboardWillHideNotification()
+
+        setupStackView()
+
+        addCrossToStackView()
+        addDescriptionToStackView()
+        addInputLabelToStackview()
+        addButtonToStackView()
+        addFeedbackView()
+    }
+
+    @objc func tapClose() {
+        delegate?.dismiss(requestCloud: self)
+    }
+
+    override func didMoveToSuperview() {
+        guard let parent = superview else {
+            return
+        }
+
+        setStackCentering(parent)
+
+        _ = input.becomeFirstResponder()
+    }
+}
+
+extension RequestCloudView: TextInputViewDelegate {
+
+    func onTextChange(textInputView: TextInputView, text: String) {
+        button.isEnabled = text.count > 0
+    }
+
+}
+
+extension RequestCloudView: SmallButtonViewDelegate {
+
+    func button(didPress button: SmallButtonView) {
+        feedbackView.isHidden = false
+        self.delegate?.request(cloud: self.input.text)
+
+        let dismissTimeInSeconds: CGFloat = 3
+        endEditing(true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + dismissTimeInSeconds) {
+            self.delegate?.dismiss(requestCloud: self)
+        }
+    }
+}
+
+private extension RequestCloudView {
+    @objc
+    func keyboardWillHide(_ notification: NSNotification) {
+        self.layoutIfNeeded()
+        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
+        let duration = notification.userInfo?[durationKey] as? Double ?? 0
+
+        let stackCenterYConstraint = stack.centerYAnchor.constraint(equalTo: centerYAnchor)
+        stackCenterYConstraint.isActive = true
+
+        self.setNeedsLayout()
+
+        UIView.animate(withDuration: duration, animations: {
+            self.layoutIfNeeded()
+        })
+    }
+
+    func setupStackView() {
         stack.axis = .vertical
         stack.distribution = .fill
         stack.spacing = .spacing
@@ -43,11 +110,12 @@ class RequestCloudView: UIView {
             trailingAnchor.constraint(equalTo: stack.trailingAnchor),
 
             stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            stack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
         ])
-        stack.roundCorners(cornerRadius: 10, clipsToBounds: true)
-        stack.backgroundColor = Asset.Colors.white.color
+        roundCornersAndSetBgColortTo(container: stack)
+    }
 
+    func addCrossToStackView() {
         let cross = UIButton()
         cross.translatesAutoresizingMaskIntoConstraints = false
         cross.setImage(Asset.Assets.navClose.image, for: .normal)
@@ -65,10 +133,12 @@ class RequestCloudView: UIView {
             crossContainer.topAnchor.constraint(equalTo: cross.topAnchor),
             crossContainer.bottomAnchor.constraint(equalTo: cross.bottomAnchor),
             crossContainer.leadingAnchor.constraint(equalTo: cross.leadingAnchor),
-            crossContainer.trailingAnchor.constraint(greaterThanOrEqualTo: cross.trailingAnchor),
+            crossContainer.trailingAnchor.constraint(greaterThanOrEqualTo: cross.trailingAnchor)
         ])
         stack.addArrangedSubview(crossContainer)
+    }
 
+    func addDescriptionToStackView() {
         let description = UILabel()
         description.translatesAutoresizingMaskIntoConstraints = false
         description.font = Constant.Fonts.description
@@ -76,14 +146,18 @@ class RequestCloudView: UIView {
         description.numberOfLines = 0
         description.text = L10n.RequestCloudView.description
         stack.addArrangedSubview(description)
+    }
 
+    func addInputLabelToStackview() {
         input.topLabel = ""
         input.bottomLabel = ""
         input.style = .small
         input.delegate = self
         input.translatesAutoresizingMaskIntoConstraints = false
         stack.addArrangedSubview(input)
+    }
 
+    func addButtonToStackView() {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.buttonText = L10n.RequestCloudView.send
         button.delegate = self
@@ -93,39 +167,44 @@ class RequestCloudView: UIView {
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 40)
         ])
-
     }
 
-    @objc func tapClose() {
-        delegate?.dismiss(requestCloud: self)
+    func addFeedbackView() {
+        feedbackView.translatesAutoresizingMaskIntoConstraints = false
+        roundCornersAndSetBgColortTo(container: feedbackView)
+        addSubview(feedbackView)
+
+        NSLayoutConstraint.activate([
+            feedbackView.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            feedbackView.heightAnchor.constraint(equalTo: stack.heightAnchor),
+            feedbackView.centerXAnchor.constraint(equalTo: stack.centerXAnchor),
+            feedbackView.centerYAnchor.constraint(equalTo: stack.centerYAnchor)
+        ])
+
+        feedbackView.isHidden = true
     }
 
-    override func didMoveToSuperview() {
-        guard let parent = superview else {
-            return
-        }
+    func addKeyboardWillHideNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+
+    func roundCornersAndSetBgColortTo(container: UIView) {
+        container.roundCorners(cornerRadius: 10, clipsToBounds: true)
+        container.backgroundColor = Asset.Colors.white.color
+    }
+
+    func setStackCentering(_ parent: UIView) {
+        let stackCenterYConstraint = stack.bottomAnchor.constraint(equalTo: parent.centerYAnchor)
+        stackCenterYConstraint.priority = .defaultLow
 
         NSLayoutConstraint.activate([
             parent.widthAnchor.constraint(equalTo: widthAnchor, constant: 2 * .sideMargin),
-            stack.bottomAnchor.constraint(equalTo: parent.centerYAnchor)
+            stackCenterYConstraint
         ])
-
-        _ = input.becomeFirstResponder()
     }
-}
-
-extension RequestCloudView: TextInputViewDelegate {
-
-    func onTextChange(textInputView: TextInputView, text: String) {
-        button.isEnabled = text.count > 0
-    }
-
-}
-
-extension RequestCloudView: SmallButtonViewDelegate {
-
-    func button(didPress button: SmallButtonView) {
-        delegate?.request(cloud: input.text)
-    }
-
 }

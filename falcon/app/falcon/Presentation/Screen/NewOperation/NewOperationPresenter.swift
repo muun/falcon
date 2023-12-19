@@ -217,41 +217,39 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     }
 
     private func handleConfirmState(_ state: NewopConfirmState) {
-        let type = createPaymentRequestType(state.resolved!.paymentIntent!)
-        let amount = state.amountInfo!.amount!.adapt()
-        let fee = state.validated!.fee!.adapt()
-        let total = state.validated!.total!.adapt()
-        let feeRate = FeeRate(satsPerVByte: Decimal(state.amountInfo!.feeRateInSatsPerVByte))
-        let totalBalance = state.amountInfo!.totalBalance!.adapt()
+        handleConfirmState(ConfirmStateViewModel.fromConfirm(state: state))
+    }
 
-        if lastSelectedCurrency == nil {
-            let inPrimaryCurrency = totalBalance.inPrimaryCurrency.currency
-            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: inPrimaryCurrency)
-        }
+    private func handleConfirmState(_ state: ConfirmStateViewModel) {
+        let type = createPaymentRequestType(state.paymentIntent)
+        let amount = state.getAmount(lastSelectedCurrency: lastSelectedCurrency)
+        let total = state.total
+        let totalBalance = state.totalBalance
+        let feeState = state.feeState
+        let minMempoolFeeRate = state.minMempoolFeeRate
 
-        let feeState: FeeState
-        if state.validated!.feeNeedsChange {
-            feeState = .feeNeedsChange(displayFee: fee, rate: feeRate)
-        } else {
-            feeState = .finalFee(fee, rate: feeRate)
-        }
-        let btcAmt = BitcoinAmountWithSelectedCurrency(bitcoinAmount: amount, selectedCurrency: lastSelectedCurrency!)
-        let satsPerVByte = Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)
         let newOpState = NewOpState.confirmation(
             NewOpData.Confirm(
                 type: type,
-                amount: btcAmt,
+                amount: amount,
                 total: total,
                 description: state.note,
                 feeState: feeState,
                 takeFeeFromAmount: false,
-                primaryCurrency: state.resolved!.paymentContext!.primaryCurrency,
+                primaryCurrency: state.primaryCurrency,
                 totalBalance: totalBalance,
-                isOneConf: false,
-                debtType: nil,
-                exchangeRateWindow: state.resolved!.paymentContext!.exchangeRateWindow!,
-                feeWindow: state.resolved!.paymentContext!.feeWindow!,
-                minMempoolFeeRate: FeeRate(satsPerVByte: satsPerVByte)
+                onchainFee: state.onchainFee,
+                feeNeedsChange: state.feeNeedsChange,
+                routingFeeInSat: state.routingFeesInSats,
+                confirmationsNeeded: state.confirmationsNeeded,
+                debtAmountInSat: state.debtAmountInSat,
+                outputAmountInSat: state.outputAmountInSat,
+                outputPaddingInSat: state.outputPaddingInSat,
+                isOneConf: state.isOneConf,
+                debtType: state.debtType,
+                exchangeRateWindow: state.exchangeRateWindow,
+                feeWindow: state.feeWindow,
+                minMempoolFeeRate: minMempoolFeeRate
             )
         )
 
@@ -259,37 +257,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     }
 
     private func handleConfirmLightningState(_ state: NewopConfirmLightningState) {
-        let type = createPaymentRequestType(state.resolved!.paymentIntent!)
-        let amount = state.amountInfo!.amount!.adapt()
-        let fee = state.validated!.fee!.adapt()
-        let total = state.validated!.total!.adapt()
-        let feeRate = FeeRate(satsPerVByte: Decimal(state.amountInfo!.feeRateInSatsPerVByte))
-        let totalBalance = state.amountInfo!.totalBalance!.adapt()
-        let satsPerByte = Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)
-        if lastSelectedCurrency == nil {
-            let totalInPrimaryCurrency = totalBalance.inPrimaryCurrency.currency
-            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: totalInPrimaryCurrency)
-        }
-        let newOpState = NewOpState.confirmation(
-            NewOpData.Confirm(
-                type: type,
-                amount: BitcoinAmountWithSelectedCurrency(bitcoinAmount: amount,
-                                                          selectedCurrency: lastSelectedCurrency!),
-                total: total,
-                description: state.note,
-                feeState: .finalFee(fee, rate: feeRate),
-                takeFeeFromAmount: false,
-                primaryCurrency: state.resolved!.paymentContext!.primaryCurrency,
-                totalBalance: totalBalance,
-                isOneConf: state.validated!.swapInfo!.isOneConf,
-                debtType: DebtType(rawValue: state.validated!.swapInfo!.swapFees!.debtType),
-                exchangeRateWindow: state.resolved!.paymentContext!.exchangeRateWindow!,
-                feeWindow: state.resolved!.paymentContext!.feeWindow!,
-                minMempoolFeeRate: FeeRate(satsPerVByte: satsPerByte)
-            )
-        )
-
-        delegate.requestNextStep(newOpState)
+        handleConfirmState(ConfirmStateViewModel.fromConfirmLightning(state: state))
     }
 
     func handleEditFeeState(_ state: NewopEditFeeState) {

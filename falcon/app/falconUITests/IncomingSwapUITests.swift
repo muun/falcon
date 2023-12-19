@@ -8,6 +8,7 @@
 
 import Foundation
 import XCTest
+import core
 
 class IncomingSwapUITests: FalconUITests {
 
@@ -26,7 +27,7 @@ class IncomingSwapUITests: FalconUITests {
         let homePage = createUser()
 
         // clear the mempool
-        generate(blocks: 1)
+        TestLapp.generate(blocks: 1)
 
         let receivePage = homePage.tapReceive()
 
@@ -38,13 +39,13 @@ class IncomingSwapUITests: FalconUITests {
         XCTAssertNotEqual(firstInvoice, secondInvoice)
 
         var paid = false
-        payWithLapp(invoice: secondInvoice, amountInSats: 100) {
+        TestLapp.payWithLapp(invoice: secondInvoice, amountInSats: 100) {
             paid = true
         }
 
         // Wait until we receive the payment
         waitUntil(condition: { () -> Bool in
-            mempoolCount() == 1
+            TestLapp.mempoolCount() == 1
         }, timeout: 60, description: "waiting for lightning payment to show up in mempool")
 
         // Receiving a payment should change the QR too
@@ -52,7 +53,7 @@ class IncomingSwapUITests: FalconUITests {
                     receivePage.invoice() != secondInvoice
         }, timeout: 60, description: "wait for the invoice to change after a payment arrives")
 
-        waitUntil(condition: { mempoolCount() == 2 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
+        waitUntil(condition: { TestLapp.mempoolCount() == 2 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
         waitForPayment(isPaid: { paid })
     }
 
@@ -63,7 +64,7 @@ class IncomingSwapUITests: FalconUITests {
         let homePage = createUser()
 
         // Clear the mempool
-        generate(blocks: 1)
+        TestLapp.generate(blocks: 1)
 
         addSection("small amount incoming swap")
         var expectedBalance = formatBTCAmount(0.00000100, format: .short)
@@ -93,14 +94,14 @@ class IncomingSwapUITests: FalconUITests {
         let homePage = createUser()
 
         // Clear the mempool
-        generate(blocks: 1)
+        TestLapp.generate(blocks: 1)
 
         addSection("small amount incoming swap with TX to accumulate debt")
         var expectedBalance = formatBTCAmount(0.00000100, format: .short)
         receiveZeroConfSpend(homePage, amount: 100, balance: expectedBalance, operations: 1)
 
         // Settle the debt we just acquired
-        generate(blocks: 6)
+        TestLapp.generate(blocks: 6)
         sleep(5) // Give syncer time to process the block
 
         addSection("small amount incoming swap without TX")
@@ -132,7 +133,7 @@ class IncomingSwapUITests: FalconUITests {
         disableTurboChannels(homePage)
 
         // Clear the mempool
-        generate(blocks: 1)
+        TestLapp.generate(blocks: 1)
 
         addSection("big amount incoming swap")
         let expectedBalance = formatBTCAmount(0.00100000, format: .short)
@@ -146,8 +147,8 @@ class IncomingSwapUITests: FalconUITests {
         _ = settingsPage.goToHome()
 
         addSection("confirm swap and logout")
-        generate(blocks: 1)
-        waitUntil(condition: { mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
+        TestLapp.generate(blocks: 1)
+        waitUntil(condition: { TestLapp.mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
 
         waitForPayment(isPaid: isPaid)
 
@@ -161,7 +162,7 @@ class IncomingSwapUITests: FalconUITests {
         let (homePage, email, _, rc) = createRecoverableUser()
 
         addSection("clear the mempool")
-        generate(blocks: 1)
+        TestLapp.generate(blocks: 1)
 
         addSection("big amount incoming swap")
         let expectedBalance = formatBTCAmount(0.00100000, format: .short)
@@ -181,7 +182,7 @@ class IncomingSwapUITests: FalconUITests {
 
         _ = signInUITest?.logOut(homePage: homePage)
 
-        dropLastTx()
+        TestLapp.dropLastTx()
         sleep(1)
 
         addSection("login in and spend all funds using preimage and htlcKeypath from IncomingSwapJson")
@@ -207,7 +208,7 @@ class IncomingSwapUITests: FalconUITests {
         back()
 
         var paid = false
-        payWithLapp(invoice: invoice, amountInSats: amount) {
+        TestLapp.payWithLapp(invoice: invoice, amountInSats: amount) {
             paid = true
         }
 
@@ -216,15 +217,15 @@ class IncomingSwapUITests: FalconUITests {
 
         if fullDebt {
             waitUntil(condition: { paid }, timeout: 60, description: "waiting for LND to see payment for full debt")
-            XCTAssertEqual(0, mempoolCount())
+            XCTAssertEqual(0, TestLapp.mempoolCount())
         } else if oneConf {
             // Wait a bit to ensure the node has seen updates
             sleep(10)
 
             XCTAssertFalse(paid, "LND shouldn't see payment yet")
-            XCTAssertEqual(1, mempoolCount())
+            XCTAssertEqual(1, TestLapp.mempoolCount())
         } else {
-            waitUntil(condition: { mempoolCount() == 2 }, timeout: 60, description: "waiting for the fulfillment to be broadcast")
+            waitUntil(condition: { TestLapp.mempoolCount() == 2 }, timeout: 60, description: "waiting for the fulfillment to be broadcast")
             waitUntil(condition: { paid }, timeout: 60, description: "waiting for LND to see payment for zero conf")
         }
 
@@ -238,7 +239,7 @@ class IncomingSwapUITests: FalconUITests {
 
         // Settle the swap
         if blocksToGenerate > 0 {
-            generate(blocks: blocksToGenerate)
+            TestLapp.generate(blocks: blocksToGenerate)
         }
 
         // Give the app time to process all the notifications
@@ -274,8 +275,8 @@ class IncomingSwapUITests: FalconUITests {
                                          operations: Int) {
         let isPaid = receive(homePage, amount: amount, balance: balance, operations: operations, oneConf: true)
 
-        generate(blocks: 1)
-        waitUntil(condition: { mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
+        TestLapp.generate(blocks: 1)
+        waitUntil(condition: { TestLapp.mempoolCount() == 1 }, timeout: 60, description: "waiting for fulfillment to be broadcast")
 
         waitForPayment(isPaid: isPaid)
     }
@@ -284,7 +285,7 @@ class IncomingSwapUITests: FalconUITests {
                                  amount expectedAmount: Decimal,
                                  fee expectedFee: Decimal) {
 
-        let address = getBech32Address()
+        let address = TestLapp.getBech32Address()
         let newOpPage = homePage.enter(address: address)
 
         let amountPage = NewOpAmountPage()

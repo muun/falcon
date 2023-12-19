@@ -103,9 +103,10 @@ class AmountInputView: UIView {
     private func convert(to newCurrency: Currency) {
 
         // So, why the weird typedAmount thingy? 
-        // This allows us to avoid reconverting the amount back and forth when the user changes currencies
-        // We keep record of the amount actually typed in by the user and convert that between currencies
-        // If the user switches from BTC to USD and back, the amount will be exactly the same without
+        // This allows us to avoid reconverting the amount back and forth when the user changes
+        // currencies. We keep record of the amount actually typed in by the user and convert that
+        // between currencies. If the user switches from BTC to USD and back, the amount will be
+        // exactly the same without
 
         let toConvert: String
         let fromCurrency: Currency
@@ -160,7 +161,9 @@ class AmountInputView: UIView {
 extension AmountInputView: UITextFieldDelegate {
 
     // swiftlint:disable function_body_length
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String)
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String)
         -> Bool {
 
         if let text = textField.text,
@@ -194,7 +197,9 @@ extension AmountInputView: UITextFieldDelegate {
             var indexInOriginal = text.startIndex
             var indexInNew = updatedText.startIndex
 
-            guard let rangeStart = text.index(text.startIndex, offsetBy: range.lowerBound, limitedBy: text.endIndex)
+            guard let rangeStart = text.index(text.startIndex,
+                                              offsetBy: range.lowerBound,
+                                              limitedBy: text.endIndex)
                 else { return false }
 
             func advance(index: String.Index, in text: String, by offset: Int) -> String.Index {
@@ -204,9 +209,10 @@ extension AmountInputView: UITextFieldDelegate {
 
                 while consumed < offset && nextIndex < text.endIndex {
 
-                    // We usually advance once more than the string can take (since the caret might reach the end)
-                    // so check before subscripting
-                    if nextIndex < text.endIndex && !LocaleAmountFormatter.isSeparator(String(text[nextIndex])) {
+                    // We usually advance once more than the string can take (since the caret might
+                    // reach the end) so check before subscripting.
+                    if nextIndex < text.endIndex
+                        && !LocaleAmountFormatter.isSeparator(String(text[nextIndex])) {
                         consumed += 1
                     }
 
@@ -235,7 +241,8 @@ extension AmountInputView: UITextFieldDelegate {
 
             }
 
-            // indexInNew now has the updated index of the range start so we offset it by the changed text
+            // indexInNew now has the updated index of the range start so we offset it by the
+            // changed text
             if string.isEmpty {
                 // The previous code leaves us one char after for deletions, so back up
                 indexInNew = advance(index: indexInNew, in: updatedText, by: -1)
@@ -284,9 +291,10 @@ fileprivate extension AmountInputView {
         inputContainer.addSubview(chevron)
 
         // textField is slightly larger than mirrorTextField
-        // mirrorTextField has no size constraints so when it decides it's instrinsic size it uses as much
-        // space as it wants. But textField is has limits due to the size available to it's parent. Adding
-        // those magic constants keeps iOS from deciding it needs to reduce the font size magically.
+        // mirrorTextField has no size constraints so when it decides it's instrinsic size it uses
+        // as much space as it wants. But textField is has limits due to the size available to it's
+        // parent. Adding those magic constants keeps iOS from deciding it needs to reduce the font
+        // size magically.
         let heightConstraint = textField.heightAnchor.constraint(equalTo: mirrorTextField.heightAnchor, constant: 2)
         let widthConstraint = textField.widthAnchor.constraint(equalTo: mirrorTextField.widthAnchor, constant: 12)
 
@@ -297,7 +305,8 @@ fileprivate extension AmountInputView {
             // Position inputContainer horizontally to be centered but not exceed its parent
             centerXAnchor.constraint(equalTo: inputContainer.centerXAnchor),
             leadingAnchor.constraint(lessThanOrEqualTo: inputContainer.leadingAnchor, constant: 8),
-            trailingAnchor.constraint(greaterThanOrEqualTo: inputContainer.trailingAnchor, constant: 8),
+            trailingAnchor.constraint(greaterThanOrEqualTo: inputContainer.trailingAnchor,
+                                      constant: 8),
 
             // inputContainer sits below the top border
             topAnchor.constraint(equalTo: inputContainer.topAnchor, constant: 8),
@@ -407,7 +416,8 @@ fileprivate extension AmountInputView {
         currencyLabel.textColor = Asset.Colors.muunGrayDark.color
         currencyLabel.isUserInteractionEnabled = true
 
-        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapCurrency))
+        currencyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                  action: .didTapCurrency))
 
         return currencyLabel
     }

@@ -29,6 +29,7 @@ class NewOperationViewController: MUViewController {
 
     private var expiresTime: Double = 0
     private var newOpParams: [String: Any] = [:]
+    private let blockingFlowErrorView = ErrorView()
 
     fileprivate var viewBuilder: OpViewBuilder?
 
@@ -159,13 +160,20 @@ class NewOperationViewController: MUViewController {
         }
     }
 
+    private func isBlockingFlowErrorViewAlreadyShown() -> Bool {
+        return blockingFlowErrorView.superview != nil
+    }
+
     private func displayErrorView(type: NewOpError) {
+        guard !isBlockingFlowErrorViewAlreadyShown() else {
+            return
+        }
+
         navigationController?.setNavigationBarHidden(true, animated: true)
 
-        let view = ErrorView()
-        view.delegate = self
-        view.model = type
-        view.addTo(self.view)
+        blockingFlowErrorView.delegate = self
+        blockingFlowErrorView.model = type
+        blockingFlowErrorView.addTo(self.view)
 
         forceHideKeyboard()
         self.view.gestureRecognizers?.removeAll()
@@ -325,6 +333,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         }))
 
         alert.addAction(UIAlertAction(title: L10n.NewOperationViewController.s6, style: .destructive, handler: { _ in
+            AnalyticsHelper.logEvent("NEW_OP_ABORTED")
             self.forceHideKeyboard()
             self.navigationController!.popToRootViewController(animated: true)
         }))

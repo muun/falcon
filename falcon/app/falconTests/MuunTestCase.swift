@@ -257,6 +257,45 @@ extension MuunTestCase {
         return (resolve() as U) as! T
     }
     
+    func replace<T, U, A, B, C, D, E>(_ scope: ComponentScope,
+                                   _ type: U.Type = U.self,
+                                   _ factory: @escaping ((A, B, C, D, E)) -> T) -> T {
+
+        replace { container in
+            return container.register(scope, type: type) { (a: A, b: B, c: C, d: D, e: E) in
+                factory((a, b, c, d, e)) as! U
+            }
+        }
+
+        return (resolve() as U) as! T
+    }
+
+    func replace<T, U, A, B, C, D, E, F>(_ scope: ComponentScope,
+                                   _ type: U.Type = U.self,
+                                   _ factory: @escaping ((A, B, C, D, E, F)) -> T) -> T {
+
+        replace { container in
+            return container.register(scope, type: type) { (a: A, b: B, c: C, d: D, e: E, f: F) in
+                factory((a, b, c, d, e, f)) as! U
+            }
+        }
+
+        return (resolve() as U) as! T
+    }
+
+    func replace<T, U, A, B, C, D, E, F, G>(_ scope: ComponentScope,
+                                   _ type: U.Type = U.self,
+                                   _ factory: @escaping ((A, B, C, D, E, F, G)) -> T) -> T {
+
+        replace { container in
+            return container.register(scope, type: type) { (a: A, b: B, c: C, d: D, e: E, f: F, g: G) in
+                factory((a, b, c, d, e, f, g)) as! U
+            }
+        }
+
+        return (resolve() as U) as! T
+    }
+
     private func replace<T, U>(using builder: (DependencyContainer) -> Definition<T, U>) {
         // Well, there's a perfectly rational explication for this.
         // We need to scrub the existing definition to make sure only ours survives

@@ -140,4 +140,20 @@ class FakeHoustonService: HoustonService {
                     self.calls += 1
             })
     }
+
+    var canReachServerExpected = true
+    var canReachServerCalledCount = 0
+    override func publicStatus() -> Single<()> {
+        canReachServerCalledCount += 1
+        return Single.create { completion in
+            guard self.canReachServerExpected else {
+                completion(.error(NSError(domain: "", code: 1)))
+                return Disposables.create()
+            }
+
+            completion(.success(()))
+
+            return Disposables.create()
+        }
+    }
 }

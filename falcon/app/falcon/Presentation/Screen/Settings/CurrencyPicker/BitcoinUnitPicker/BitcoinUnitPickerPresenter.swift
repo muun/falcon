@@ -26,7 +26,7 @@ class BitcoinUnitPickerPresenter<Delegate: BitcoinUnitPickerPresenterDelegate>: 
         super.setUp()
 
         currencies = [VisualCurrency(code: "BTC", symbol: "", name: "Bitcoin", flag: nil),
-                      VisualCurrency(code: satSymbol, symbol: "", name: "Bitcoin", flag: nil)]
+                      VisualCurrency(code: satSymbol, symbol: "", name: "Satoshi", flag: nil)]
     }
 
     func isSelected(_ currency: Currency) -> Bool {

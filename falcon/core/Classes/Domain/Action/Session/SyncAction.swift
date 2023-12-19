@@ -90,7 +90,7 @@ public class SyncAction: AsyncAction<()> {
             fetchNextTransactionSize(),
             fetchUserInfo(),
             addressActions.syncPublicKeySet(),
-            fetchNotificationsAction.getValue().asCompletable(),
+            fetchNotificationsAction.getValue().catchErrorJustReturn(()).asCompletable(),
             resetApiMigrations()
         ).andThen(
             // We need the public key set before the invoices refreshing action

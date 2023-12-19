@@ -39,7 +39,7 @@ class SignUpVerifyEmailPresenter<Delegate: SignUpVerifyEmailPresenterDelegate>: 
         super.setUp()
 
         // Delay by one second to avoid hammering the backend with requests
-        let periodicFetch: Observable<Int> = buildFetchNotificationsPeriodicAction(intervalInSeconds: 1)
+        let periodicFetch = buildFetchNotificationsPeriodicAction(intervalInSeconds: 1)
 
         subscribeTo(periodicFetch, onNext: { _ in })
         subscribeTo(sessionActions.watchEmailAuthorization(), onComplete: self.onEmailAuthorization)

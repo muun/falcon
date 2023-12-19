@@ -181,7 +181,7 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
             logScreen("emergency_kit_cloud_feedback", parameters: [:])
             dismissSuggestCloud = show(popUp: RequestCloudView(delegate: self),
                                        duration: nil,
-                                       isDismissableOnTap: false)
+                                       isDismissableOnTap: true)
         }
     }
 
@@ -290,6 +290,23 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
         logEvent("emergency_kit_fail", parameters: ["type": "upload_error", "shared_option": "\(option)"])
         presentErrorUploading(option: option)
     }
+
+    func abortExportBecauseOfError() {
+        let alert = UIAlertController(
+            title: L10n.ShareEmergencyKitViewController.generateEmergencyKitError,
+            message: nil,
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(
+            title: L10n.ShareEmergencyKitViewController.alertRetry,
+            style: .default,
+            handler: { _ in
+                self.navigationController?.popTo(type: SecurityCenterViewController.self)
+            }
+        )
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 extension ShareEmergencyKitViewController {
@@ -381,7 +398,6 @@ extension ShareEmergencyKitViewController: RequestCloudViewDelegate {
     func request(cloud: String) {
         logScreen("emergency_kit_cloud_feedback_submit", parameters: ["cloud_name": cloud])
         presenter.request(cloud: cloud)
-        dismissSuggestCloud?(nil)
     }
 
 }

@@ -100,6 +100,13 @@ public extension DependencyContainer {
             container.register(.singleton, factory: UserPreferencesSelector.init)
             container.register(.singleton, factory: UserActivatedFeaturesSelector.init)
             container.register(.singleton, factory: FeatureFlagsSelector.init)
+            container.register(.singleton, factory: DeviceCheckTokenProvider.init)
+            container.register {
+                BackgroundExecutionMetricsProvider()
+            }.resolvingProperties {
+                $1.reachabilityService = try container.resolve()
+            }
+
 
             container.register(.singleton, factory: ApiMigrationsManager.init)
 
@@ -118,6 +125,24 @@ public extension DependencyContainer {
             }
 
             container.register(.singleton, factory: ClientSelector.init)
+
+            container.register(.singleton) {
+                ApiReachabilityService(sessionActions: $0,
+                                       flagsRepository: $1,
+                                       reachabilityStatusRepository: $2,
+                                       pingService: $3) as ReachabilityService
+            }.resolvingProperties { container, service in
+                (service as! ApiReachabilityService).houstonService = try container.resolve()
+            }
+
+            container.register {
+                [AppSyncingGroup.init(realTimeData: $0),
+                 AddressGenerationGroup(),
+                 WalletFundingGroup.init(addressActions: $1,
+                                         createInvoice: $2,
+                                         userPreferencesSelector: $3),
+                 NodeHandlingGroup()] as [DebugExecutablesGroup]
+            }
         }
     }
 }

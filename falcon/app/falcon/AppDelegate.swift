@@ -35,12 +35,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal let userRepository: UserRepository = resolve()
     internal let operationMetadataDecrypter: OperationMetadataDecrypter = resolve()
     internal let apiMigrationsManager: ApiMigrationsManager = resolve()
-
+    private let deviceCheckTokenProvider: DeviceCheckTokenProvider = resolve()
+    private let reachabilityService: ReachabilityService = resolve()
     // Instance this as early as possible to load schema and migrations and crash early
     internal let databaseCoordinator: DatabaseCoordinator = resolve()
 
     internal let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider = resolve()
     internal let keychainRepository: KeychainRepository = resolve()
+    var debugModeDisplayer: DebugModeDisplayer?
 
     internal let gcmMessageIDKey = "gcm.message_id"
 
@@ -58,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         configureFirebase()
         ConectivityCapabilitiesProvider.shared.startMonitoring()
-        DeviceCheckTokenProvider.shared.start()
+        deviceCheckTokenProvider.start()
         if sessionActions.isFirstLaunch() {
             lockManager.firstLaunch()
         }
@@ -84,6 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.global().async {
             HardwareCapabilitiesProvider.shared.startRefreshingCacheableValues()
         }
+
+        setupDebugModeIfNeeded()
 
         return true
     }
@@ -128,6 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         DeviceTokenErrorValues.failToRetrieve.rawValue,
                         at: deviceTokenKey
                     )
+                    self.reachabilityService.collectReachabilityStatusIfNeeded()
                     return
                 }
                 try? self.keychainRepository.store(deviceToken.base64EncodedString(),
@@ -167,7 +172,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         if lockManager.shouldShowLockScreen() {
             presentLockWindow()
-            // If we're entering from background and we'll not show lock scren then we show notificationFlow
+            // If we're entering from background and we'll not show lock scren then we show
+            // notificationFlow
         } else if let unhandledVisualNotification = unhandledVisualNotification {
             displayVisualNotificationFlow(unhandledVisualNotification)
         }
@@ -179,6 +185,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             HardwareCapabilitiesProvider.shared.refreshFreeStorage()
         }
         AnalyticsHelper.logEvent("app_will_enter_foreground")
+        deviceCheckTokenProvider.reactToForegroundAppState()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -277,7 +284,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false
         }
 
-        // Use the first window to avoid hitting the pin lock screen if the users been gone of the app for a while
+        // Use the first window to avoid hitting the pin lock screen if the users been gone of the
+        // app for a while
         let rootViewController = UIApplication.shared.windows[0].rootViewController
         let topViewController = UIApplication.topViewController(base: rootViewController)
 
@@ -303,7 +311,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // Notifications
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken
+                     deviceToken: Data) {
 
         setApnsToken(deviceToken)
 

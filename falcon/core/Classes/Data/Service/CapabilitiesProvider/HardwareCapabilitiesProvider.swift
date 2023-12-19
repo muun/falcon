@@ -14,7 +14,7 @@ public class HardwareCapabilitiesProvider {
     private var freeStorage: Int64?
     private var totalStorage: Int64?
 
-    private let totalStorageRefreshTimeInSedonds = 10
+    private let totalStorageRefreshTimeInSeconds = 10
 
     public func startRefreshingCacheableValues() {
         refreshFreeStorage()
@@ -102,7 +102,7 @@ public class HardwareCapabilitiesProvider {
 
     private func startKeepingTotalStorageUpToDate() {
         DispatchQueue.main.async {
-            self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(self.totalStorageRefreshTimeInSedonds),
+            self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(self.totalStorageRefreshTimeInSeconds),
                                          target: self,
                                          selector: #selector(self.refreshTotalStorageAsync),
                                          userInfo: nil,

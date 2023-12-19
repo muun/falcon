@@ -39,6 +39,12 @@ target 'falconPushNotifications' do
   pod 'core/notifications', :path => '../core'
 end
 
+target 'falconUITests' do
+  use_frameworks! :linkage => :static
+
+  pod 'core/all', :path => '../core'
+end
+
 pre_install do |installer|
     # XCode runs scripts in a custom env where GOPATH is missing, so we store it in a file the build script can find
     File.open('.gopath', 'w') {|f| f.write(ENV["GOPATH"]) }

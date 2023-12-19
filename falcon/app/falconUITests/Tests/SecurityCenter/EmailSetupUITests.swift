@@ -41,7 +41,7 @@ class EmailSetupUITests: FalconUITests {
 
         let primingEmail = securityCenter.goToEmailSetup()
         let backUpEmailPage = primingEmail.confirm()
-        backUpEmailPage.type(email: "muun @muun.com")
+        backUpEmailPage.type(email: "muun @muun.com", shouldTapContinue: false)
 
         // This is to wait for the label to change its text
         _ = app.wait(for: .unknown, timeout: 1)

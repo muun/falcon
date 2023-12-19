@@ -549,9 +549,9 @@ internal enum L10n {
     }
     /// There are no funds to withdraw
     internal static let noAvailableBalanceTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.noAvailableBalanceTitle")
-    /// It seems %@ couldn't find a route to send you the payment. We suggest you contact <service> to let them know.
-    internal static func noRouteDescription(_ p1: Any) -> String {
-      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteDescription", String(describing: p1))
+    /// It seems %@ couldn't find a route to send you the payment. We suggest you contact %@ to let them know.
+    internal static func noRouteDescription(_ p1: Any, _ p2: Any) -> String {
+      return L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteDescription", String(describing: p1), String(describing: p2))
     }
     /// There's no available route
     internal static let noRouteTitle = L10n.tr("Localizable", "LNURLWithdrawPresenter.noRouteTitle")
@@ -1235,6 +1235,11 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "RecoveryToolViewController.s5")
   }
 
+  internal enum RequestCloudFeedbackView {
+    /// Thank you for your feedback!
+    internal static let title = L10n.tr("Localizable", "RequestCloudFeedbackView.title")
+  }
+
   internal enum RequestCloudView {
     /// We plan to support more cloud services. Which one would you like to see added?
     internal static let description = L10n.tr("Localizable", "RequestCloudView.description")
@@ -1559,6 +1564,8 @@ internal enum L10n {
     internal static let ekUploadErrorTitle = L10n.tr("Localizable", "ShareEmergencyKitViewController.ekUploadErrorTitle")
     /// Muun - Emergency Kit.pdf
     internal static let fileName = L10n.tr("Localizable", "ShareEmergencyKitViewController.fileName")
+    /// We couldn't generate your Emergency Kit.
+    internal static let generateEmergencyKitError = L10n.tr("Localizable", "ShareEmergencyKitViewController.generateEmergencyKitError")
     /// Emergency Kit
     internal static let s1 = L10n.tr("Localizable", "ShareEmergencyKitViewController.s1")
     /// Updating your Emergency Kit

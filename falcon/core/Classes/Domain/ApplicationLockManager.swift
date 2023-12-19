@@ -79,14 +79,17 @@ public class ApplicationLockManager {
         return isValidForUser(pin: pin)
     }
 
+    public func resetNumberOfAttemptsAfterValidAuthMethod() throws {
+        try sessionRepository.store(pinAttemptsLeft: ApplicationLockManager.attempts)
+    }
+
     private func isValidForUser(pin: String) -> PinCheck {
         do {
             let isValid = try sessionRepository.getPin() == pin
 
             if isValid {
 
-                // Reset the number of attempts when we got a valid pin
-                try sessionRepository.store(pinAttemptsLeft: ApplicationLockManager.attempts)
+                try resetNumberOfAttemptsAfterValidAuthMethod()
                 return .valid
             } else {
                 let attemptsLeft = self.attemptsLeft() - 1
@@ -136,6 +139,11 @@ public class ApplicationLockManager {
             Logger.log(error: error)
             return 0
         }
+    }
+
+    public func recoverableUserHasAttemptsAlreadySpent() -> Bool {
+        return !userRepository.isUnrecoverableUser()
+            && attemptsLeft() < ApplicationLockManager.attempts
     }
 
     public func getBiometricIdStatus() -> Bool? {

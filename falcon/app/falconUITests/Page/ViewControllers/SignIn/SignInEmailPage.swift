@@ -22,9 +22,11 @@ final class SignInEmailPage: UIElementPage<UIElements.Pages.SignInEmailPage> {
         buttonView.mainButtonTap()
     }
 
-    func type(email: String) {
+    func type(email: String, shouldTapContinue: Bool = true) {
         textInputView.type(text: email)
-        tapContinueButton()
+        if shouldTapContinue {
+            tapContinueButton()
+        }
     }
 
     func goToSignInWithRCFlow() -> SignInWithRCPage {

@@ -51,19 +51,28 @@ enum DIManager {
             let databaseURL: URL
             do {
                 databaseURL = try FileManager.default
-                    .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                    .url(for: .applicationSupportDirectory,
+                         in: .userDomainMask,
+                         appropriateFor: nil,
+                         create: true)
                     .appendingPathComponent("db.sqlite")
             } catch {
                 fatalError("Couldn't create path for DB")
             }
 
-            container.register(.singleton, type: URL.self, tag: DependencyContainer.DataTags.databaseUrl) {
+            container.register(.singleton,
+                               type: URL.self,
+                               tag: DependencyContainer.DataTags.databaseUrl) {
                 databaseURL
             }
-            container.register(.singleton, type: String.self, tag: DependencyContainer.DataTags.secureStoragePrefix) {
+            container.register(.singleton,
+                               type: String.self,
+                               tag: DependencyContainer.DataTags.secureStoragePrefix) {
                 Identifiers.bundleId
             }
-            container.register(.singleton, type: String.self, tag: DependencyContainer.DataTags.secureStorageGroup) {
+            container.register(.singleton,
+                               type: String.self,
+                               tag: DependencyContainer.DataTags.secureStorageGroup) {
                 Identifiers.group
             }
 
@@ -76,7 +85,8 @@ enum DIManager {
 }
 
 // This code abuses both tuples and force trys with full knowledge of their consequences
-// There's really no place in the codebase where failing to resolve a dependency is a non-fatal error
+// There's really no place in the codebase where failing to resolve a dependency is a non-fatal
+// error
 
 // swiftlint:disable force_try large_tuple
 
@@ -98,7 +108,8 @@ extension MUViewController: PresenterInstantior {}
 
 extension PresenterInstantior {
 
-    func instancePresenter<T, U>(_ factory: ((U)) -> T, delegate: U) -> T where T: BasePresenter<U> {
+    func instancePresenter<T, U>(_ factory: ((U)) -> T,
+                                 delegate: U) -> T where T: BasePresenter<U> {
         return factory((delegate))
     }
 
@@ -136,7 +147,9 @@ extension PresenterInstantior {
         ))
     }
 
-    func instancePresenter<T, U, A, B, S>(_ factory: ((U, S, A, B)) -> T, delegate: U, state: S) -> T
+    func instancePresenter<T, U, A, B, S>(_ factory: ((U, S, A, B)) -> T,
+                                          delegate: U,
+                                          state: S) -> T
         where T: BasePresenter<U> {
 
         return factory((
@@ -158,7 +171,9 @@ extension PresenterInstantior {
         ))
     }
 
-    func instancePresenter<T, U, A, B, C, S>(_ factory: ((U, S, A, B, C)) -> T, delegate: U, state: S) -> T
+    func instancePresenter<T, U, A, B, C, S>(_ factory: ((U, S, A, B, C)) -> T,
+                                             delegate: U,
+                                             state: S) -> T
         where T: BasePresenter<U> {
 
         return factory((
@@ -182,7 +197,9 @@ extension PresenterInstantior {
         ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, S>(_ factory: ((U, S, A, B, C, D)) -> T, delegate: U, state: S) -> T
+    func instancePresenter<T, U, A, B, C, D, S>(_ factory: ((U, S, A, B, C, D)) -> T,
+                                                delegate: U,
+                                                state: S) -> T
         where T: BasePresenter<U> {
 
         return factory((
@@ -195,7 +212,8 @@ extension PresenterInstantior {
         ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E>(_ factory: ((U, A, B, C, D, E)) -> T, delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E>(_ factory: ((U, A, B, C, D, E)) -> T,
+                                                delegate: U) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -208,7 +226,9 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, S>(_ factory: ((U, S, A, B, C, D, E)) -> T, delegate: U, state: S) -> T
+    func instancePresenter<T, U, A, B, C, D, E, S>(_ factory: ((U, S, A, B, C, D, E)) -> T,
+                                                   delegate: U,
+                                                   state: S) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -222,7 +242,8 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F>(_ factory: ((U, A, B, C, D, E, F)) -> T, delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F>(_ factory: ((U, A, B, C, D, E, F)) -> T,
+                                                   delegate: U) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -237,7 +258,8 @@ extension PresenterInstantior {
     }
 
     func instancePresenter<T, U, A, B, C, D, E, F, S>(_ factory: ((U, S, A, B, C, D, E, F)) -> T,
-                                                      delegate: U, state: S) -> T
+                                                      delegate: U,
+                                                      state: S) -> T
         where T: BasePresenter<U> {
 
             return factory((

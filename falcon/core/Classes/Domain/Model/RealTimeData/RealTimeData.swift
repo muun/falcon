@@ -23,6 +23,7 @@ public enum FeatureFlags: String, RawRepresentable {
     case TaprootPreactivation = "TAPROOT_PREACTIVATION"
     case highFeesHomeBanner = "HIGH_FEES_HOME_BANNER"
     case highFeesReceiveFlow = "HIGH_FEES_RECEIVE_FLOW"
+    case collectDeviceCheckReachability = "COLLECT_DEVICE_CHECK_REACHABILITY"
 }
 
 public struct FeeWindow: Codable {

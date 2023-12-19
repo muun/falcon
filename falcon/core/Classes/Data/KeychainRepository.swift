@@ -11,7 +11,7 @@ public class KeychainRepository {
     private let keyPrefix: String
     private let group: String
     
-    public enum storedKeys: String {
+    public enum storedKeys: String, CaseIterable {
         case deviceCheckToken
         case fallbackDeviceToken
         case iCloudRecordId
@@ -101,5 +101,28 @@ public class KeychainRepository {
         }
 
         return status == errSecSuccess
+    }
+
+    func wipe() {
+        let keychainStoredKeys = getKeychainStoredKeys()
+
+        let dict: [NSString : Any] = [kSecClass : kSecClassGenericPassword]
+        let result = SecItemDelete(dict as CFDictionary)
+        if result != noErr && result != errSecItemNotFound {
+            Logger.log(error: NSError(domain: "wipe_secure_storage_failed", code: Int(result)))
+            // What should we do here? deletion may fail and users will have
+        }
+
+        keychainStoredKeys.forEach {
+            try? self.store($0.value, at: $0.key)
+        }
+    }
+
+    private func getKeychainStoredKeys() -> [String: String] {
+        return storedKeys.allCases.reduce(into: [String: String]()) {
+            if let value = try? get($1.rawValue) {
+                $0[$1.rawValue] = value
+            }
+        }
     }
 }

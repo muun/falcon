@@ -96,7 +96,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
         case .description: return ("description", nil)
         case .confirmation(let data):
             // TODO(newop): this will not log again if we don't recreate the view
-            return ("confirmation", getFeeParams(data))
+            return ("confirmation", data.getOnChainAnalyticsParams())
         case .feeEditor, .currencyPicker:
             // These are view controller, they control their own logging
             return nil
@@ -106,35 +106,6 @@ class OpToAddressViewBuilder: OpViewBuilder {
     func shouldDisplayOneConfNotice(state: NewOpState) -> Bool {
         // This is only for submarine swaps
         return false
-    }
-
-    private func getFeeParams(_ data: NewOpData.Confirm) -> [String: Any]? {
-        let feeWindow = data.feeWindow
-        let fastFee = feeWindow.getTargetedFees(feeWindow.fastConfTarget)
-        let mediumFee = feeWindow.getTargetedFees(feeWindow.mediumConfTarget)
-        let slowFee = feeWindow.getTargetedFees(feeWindow.slowConfTarget)
-
-        var params = [String: String]()
-
-        switch data.feeState {
-        case .noPossibleFee, .feeNeedsChange:
-            return params
-        case .finalFee(_, let rate):
-            switch (rate.satsPerVByte as NSDecimalNumber).doubleValue {
-            case fastFee:
-                params["fee_type"] = "fast"
-            case mediumFee:
-                params["fee_type"] = "medium"
-            case slowFee:
-                params["fee_type"] = "slow"
-            default:
-                params["fee_type"] = "custom"
-            }
-
-            params["sats_per_virtual_byte"] = "\(rate.satsPerVByte)"
-        }
-
-        return params
     }
 
     private func buildDestinationView(type: PaymentRequestType, confirm: Bool = false) -> MUView {

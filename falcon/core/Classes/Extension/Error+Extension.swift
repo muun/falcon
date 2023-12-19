@@ -50,6 +50,24 @@ extension Error {
         return false
     }
 
+    public func isKindOf(_ comparedError: DomainError) -> Bool {
+        if let selfAsMuunError = self as? MuunError,
+           let selfAsDomainError = selfAsMuunError.kind as? DomainError {
+            return comparedError == selfAsDomainError
+        }
+
+        return false
+    }
+
+    func isKindOf(_ comparedError: KeyStorageError) -> Bool {
+        if let selfAsMuunError = self as? MuunError,
+           let selfAsKeyStorageError = selfAsMuunError.kind as? KeyStorageError {
+            return selfAsKeyStorageError == comparedError
+        }
+        
+        return false
+    }
+
     public func contains<T: Error & Equatable>(_ expected: T) -> Bool {
 
         if let err = self as? T {

@@ -85,39 +85,11 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
         if let muunError = e as? MuunError,
             let error = muunError.kind as? ServiceError {
 
-            switch error {
-
-            case .customError(let devError):
-
-                switch devError.getKindOfError() {
-
-                case .forceUpdate:
-                    delegate.pushTo(UpdateAppViewController())
-
-                case .sessionExpired, .missingOrInvalidAuthToken:
-                    handleSessionExpired(e)
-
-                case .nonUserFacing, .emailNotRegistered, .invoiceUnreachableNode, .recoveryCodeNotSetUp,
-                     .invalidEmail, .emailAlreadyUsed, .invalidChallengeSignature, .exchangeRateWindowTooOld,
-                     .invalidInvoice, .invoiceAlreadyUsed, .invoiceExpiresTooSoon, .noPaymentRoute, .cyclicalSwap,
-                     .incomingSwapAlreadyFulfilled, .amountLessInvoicesNotSupported, .swapFailed:
-                    let error = devError.developerMessage ?? devError.message
-                    Logger.log(LogLevel.debug, error)
-
-                case .tooManyRequests:
-                    delegate.showMessage(L10n.BasePresenter.s1)
-
-                case .defaultError, .staleChallengeKey, .credentialsDontMatch:
-                    Logger.log(error: e)
-                    delegate.showMessage(L10n.BasePresenter.s2)
-                }
-
-            case .internetError:
-                delegate.showMessage(L10n.BasePresenter.s3)
-
-            case .defaultError, .codableError, .serviceFailure, .timeOut:
-                Logger.log(error: e)
-                delegate.showMessage(L10n.BasePresenter.s2)
+            handleServiceError(error, e)
+        } else if let muunError = e as? MuunError,
+                  let error = muunError.kind as? DomainError {
+            if error == .sessionExpiredOnNotificationProcessor {
+                // Do nothing for now. The error will be logged by the notifications processor
             }
         } else {
             Logger.log(error: e)
@@ -152,6 +124,43 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
     func resetRxDisposable() {
         releaseDisposeBag()
         compositeDisposable = CompositeDisposable()
+    }
+
+    private func handleServiceError(_ error: ServiceError, _ e: Error) {
+        switch error {
+
+        case .customError(let devError):
+
+            switch devError.getKindOfError() {
+
+            case .forceUpdate:
+                delegate.pushTo(UpdateAppViewController())
+
+            case .sessionExpired, .missingOrInvalidAuthToken:
+                handleSessionExpired(e)
+
+            case .nonUserFacing, .emailNotRegistered, .invoiceUnreachableNode, .recoveryCodeNotSetUp,
+                    .invalidEmail, .emailAlreadyUsed, .invalidChallengeSignature, .exchangeRateWindowTooOld,
+                    .invalidInvoice, .invoiceAlreadyUsed, .invoiceExpiresTooSoon, .noPaymentRoute, .cyclicalSwap,
+                    .incomingSwapAlreadyFulfilled, .amountLessInvoicesNotSupported, .swapFailed:
+                let error = devError.developerMessage ?? devError.message
+                Logger.log(LogLevel.debug, error)
+
+            case .tooManyRequests:
+                delegate.showMessage(L10n.BasePresenter.s1)
+
+            case .defaultError, .staleChallengeKey, .credentialsDontMatch:
+                Logger.log(error: e)
+                delegate.showMessage(L10n.BasePresenter.s2)
+            }
+
+        case .internetError:
+            delegate.showMessage(L10n.BasePresenter.s3)
+
+        case .defaultError, .codableError, .serviceFailure, .timeOut:
+            Logger.log(error: e)
+            delegate.showMessage(L10n.BasePresenter.s2)
+        }
     }
 }
 

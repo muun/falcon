@@ -77,10 +77,16 @@ class PinViewController: MUViewController {
 
         let isLocked = (state == .locked)
         if isLocked, presenter.getBiometricIdStatus() {
+            // TODO: refactor this
+            // 1 - View should not decide that it is necessary to ask for biometrics. That is a
+            // presenter responsability.
+            // 2 - The responsibility of validating access lies with the lock manager, as it serves
+            // as the access validator for PIN cases.
             requestAuthentication(completion: {
-                self.unlockSuccessful()
+                self.presenter.onUserUnlockedAppSuccessfullyWithBiometrics()
+                self.unlockSuccessful(authMethod: .biometrics)
             }, failure: {
-
+                self.presenter.onBiometricsAuthFailed()
             })
         }
     }
@@ -245,10 +251,11 @@ extension PinViewController: PinPresenterDelegate {
         case did_not_match
     }
 
-    func unlockSuccessful() {
-
+    func unlockSuccessful(authMethod: AuthMethod) {
         if let lockDelegate = self.appLockDelegate {
-            logEvent("pin", parameters: ["type": PinTypeParam.correct.rawValue])
+            logEvent("pin",
+                     parameters: ["type": PinTypeParam.correct.rawValue,
+                                  "auth_method": authMethod.getName()])
             pinView.pinValidationFeedback(isValid: true)
             notification.notificationOccurred(.success)
 
@@ -268,12 +275,17 @@ extension PinViewController: PinPresenterDelegate {
                 .attributedForDescription(alignment: .center)
                 .set(bold: bold, color: Asset.Colors.muunRed.color)
         } else {
-            let errorString = L10n.PinViewController.s5("\(attemptsLeft)")
-            hintLabel.attributedText = errorString
-                .attributedForDescription(alignment: .center)
-                .set(bold: bold, color: Asset.Colors.muunRed.color)
-                .set(bold: "\(attemptsLeft)", color: Asset.Colors.muunGrayDark.color)
+            displayAttemptsLeftHint(attemptsLeft: attemptsLeft)
         }
+    }
+
+    func displayAttemptsLeftHint(attemptsLeft: Int) {
+        let bold = L10n.PinViewController.s4
+        let errorString = L10n.PinViewController.s5("\(attemptsLeft)")
+        hintLabel.attributedText = errorString
+            .attributedForDescription(alignment: .center)
+            .set(bold: bold, color: Asset.Colors.muunRed.color)
+            .set(bold: "\(attemptsLeft)", color: Asset.Colors.muunGrayDark.color)
     }
 
     func noMoreAttempts() {

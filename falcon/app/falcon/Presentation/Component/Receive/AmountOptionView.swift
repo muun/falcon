@@ -38,7 +38,10 @@ class AmountOptionView: UIStackView {
         axis = .horizontal
         alignment = .center
         isLayoutMarginsRelativeArrangement = true
-        layoutMargins = UIEdgeInsets(top: .verticalRowMargin, left: 8, bottom: .verticalRowMargin, right: 8)
+        layoutMargins = UIEdgeInsets(top: .verticalRowMargin,
+                                     left: 8,
+                                     bottom: .verticalRowMargin,
+                                     right: 8)
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 56)
@@ -60,7 +63,8 @@ class AmountOptionView: UIStackView {
     func setUpEditButton() {
         editButton.isUserInteractionEnabled = true
         editButton.contentMode = .center
-        editButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapEditButton))
+        editButton.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                               action: .didTapEditButton))
         editButton.isHidden = true
 
         let editButtonIcon = UIImageView()

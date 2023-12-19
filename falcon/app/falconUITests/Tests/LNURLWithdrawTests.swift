@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import core
 
 class LNURLWithdrawTests: FalconUITests {
 
@@ -34,7 +35,7 @@ class LNURLWithdrawTests: FalconUITests {
         let scanQRPage = firstTimePage.tapContinue()
         let manuallyEnterPage = scanQRPage.enterManually()
 
-        let qr = lnurlWithdraw()
+        let qr = TestLapp.lnurlWithdraw()
         manuallyEnterPage.enterQR(qr)
 
         homePage.wait(15)
@@ -51,7 +52,7 @@ class LNURLWithdrawTests: FalconUITests {
         let scanQRPage = firstTimePage.tapContinue()
         let manuallyEnterPage = scanQRPage.enterManually()
 
-        let qr = lnurlWithdraw(variant: "fails")
+        let qr = TestLapp.lnurlWithdraw(variant: "fails")
         manuallyEnterPage.enterQR(qr)
 
         let errorPage = LNURLWithdrawErrorPage()

@@ -51,7 +51,8 @@ class AnalyticsHelper {
             Analytics.setUserProperty(value, forName: name)
         } else {
             // Truncate value to 36 chars
-            Analytics.setUserProperty(value.truncate(maxLength: maxLengthUserPropertyValue), forName: name)
+            Analytics.setUserProperty(value.truncate(maxLength: maxLengthUserPropertyValue),
+                                      forName: name)
         }
     }
 
@@ -67,7 +68,9 @@ class AnalyticsHelper {
         additionalInfo?.forEach { (key, value) in
           currentUserInfo["\(key)"] = value
         }
-        let updatedNSError = NSError(domain: tempNSError.domain, code: tempNSError.code, userInfo: currentUserInfo)
+        let updatedNSError = NSError(domain: tempNSError.domain,
+                                     code: tempNSError.code,
+                                     userInfo: currentUserInfo)
         crashlytics.record(error: updatedNSError)
     }
 
@@ -90,6 +93,21 @@ class AnalyticsHelper {
         actuallyLogEvent(screenName, parameters: parameters)
     }
 
+    static func serialize(amount: BitcoinAmount) -> String {
+        let satsValue = amount.inSatoshis.value
+        let inputAmount = serialize(amount: amount.inInputCurrency)
+        let inputInPrimaryAmount = serialize(amount: amount.inPrimaryCurrency)
+
+        return "\(satsValue);\(inputAmount);\(inputInPrimaryAmount)"
+    }
+
+    static func serialize(amount: MonetaryAmount) -> String {
+        let value = amount.amount.stringValue()
+        let currency = amount.currency
+
+        return "\(value) \(currency)"
+    }
+
     private static func actuallyLogEvent(_ event: String, parameters: [String: Any]? = nil) {
         let finalParams = addDeviceParams(to: parameters)
 
@@ -97,7 +115,7 @@ class AnalyticsHelper {
             Analytics.logEvent(event, parameters: finalParams)
             Logger.log(
                 .info,
-                "Event: '\(event)' with parameters: \(finalParams.description) logged to Firebase Analytics"
+                "Event: '\(event)' with parameters: \(finalParams.description) logged to Firebase Analytics\n"
             )
         } else {
             Logger.log(
@@ -123,7 +141,8 @@ class AnalyticsHelper {
     }
 
     private static func isValidParameterName(_ name: String) -> Bool {
-        // The name of the event's parameter should contain 1 to 40 alphanumeric characters or underscores
+        // The name of the event's parameter should contain 1 to 40 alphanumeric characters or
+        // underscores
         return !name.isEmpty
             && name.range(of: "^[a-zA-Z0-9_]*$", options: .regularExpression) != nil
             && name.count <= maxLengthEventParameterName

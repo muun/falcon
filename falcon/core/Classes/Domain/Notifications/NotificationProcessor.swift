@@ -68,6 +68,11 @@ public class NotificationProcessor {
                 }
 
             } catch {
+                // Just for security do not throw all kind of errors
+                if error.isKindOf(.sessionExpiredOnNotificationProcessor) {
+                    subject.onError(error)
+                }
+
                 Logger.log(error: error)
             }
 
@@ -141,6 +146,7 @@ public class NotificationProcessor {
                 Logger.log(.err, "Got notifications and error too: \(error)")
                 return notifications
             } else {
+                try throwCustomSessionExpiredErrorIfSessionExpired(error)
                 Logger.log(error: error)
             }
         }
@@ -150,6 +156,15 @@ public class NotificationProcessor {
         } else {
             Logger.log(error: MuunError(Errors.failedFetch(fromId: notificationId)))
             return try fetchNotificationsAfter(notificationId, retries: retries - 1)
+        }
+    }
+
+    /// If while processing notifications a sessionExpired is received we want to let listeners know session has expired but we want to
+    /// avoid the base presenter session expired handling since it might kick the user of out the application. We can't be sure enough
+    /// session expired error will be intercepted by callers and we don't want to let it reach the base presenter.
+    private func throwCustomSessionExpiredErrorIfSessionExpired(_ error: Error) throws {
+        if error.isKindOf(.sessionExpired) {
+            throw MuunError(DomainError.sessionExpiredOnNotificationProcessor)
         }
     }
 

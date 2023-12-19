@@ -219,7 +219,7 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
                 .attributedForDescription(alignment: .center)
                 .set(bold: domain, color: Asset.Colors.muunGrayDark.color)
         case .noRoute(_, let domain):
-            return L10n.LNURLWithdrawPresenter.noRouteDescription(domain)
+            return L10n.LNURLWithdrawPresenter.noRouteDescription(domain, domain)
                 .attributedForDescription(alignment: .center)
                 .set(bold: domain, color: Asset.Colors.muunGrayDark.color)
         case .unknown:

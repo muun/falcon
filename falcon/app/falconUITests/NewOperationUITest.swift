@@ -8,6 +8,7 @@
 
 import Foundation
 import XCTest
+import core
 
 // This needs to be named diff than description because it's also a method in the test class
 private let descriptionText = "Test test are tests"
@@ -43,7 +44,7 @@ class NewOperationUITest: FalconUITests {
         let homePage = setupUser()
         let address = homePage.getAddress()
         back()
-        let mempoolStartingSize = mempoolCount()
+        let mempoolStartingSize = TestLapp.mempoolCount()
 
         // Enter a valid address
         let newOpPage = homePage.enter(address: address)
@@ -87,7 +88,7 @@ class NewOperationUITest: FalconUITests {
 
         let transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: mempoolStartingSize + 1)
-        XCTAssertEqual(mempoolCount(), mempoolStartingSize + 1, "We must have 1 new unconfirmed TXs")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolStartingSize + 1, "We must have 1 new unconfirmed TXs")
     }
 
     func testUris() {
@@ -96,7 +97,7 @@ class NewOperationUITest: FalconUITests {
         back()
         let newOpPage = NewOperationPage()
         let descriptionPage = NewOpDescriptionPage()
-        let mempoolStartingSize = mempoolCount()
+        let mempoolStartingSize = TestLapp.mempoolCount()
 
         tryUriEdgeCases(homePage: homePage, newOpPage: newOpPage, address: address)
 
@@ -134,7 +135,7 @@ class NewOperationUITest: FalconUITests {
 
         let transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: mempoolStartingSize + 2)
-        XCTAssertEqual(mempoolCount(), mempoolStartingSize + 2, "We must have 2 new unconfirmed TXs")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolStartingSize + 2, "We must have 2 new unconfirmed TXs")
     }
 
     // TestPay to a bech32 Address
@@ -143,10 +144,10 @@ class NewOperationUITest: FalconUITests {
 
         let homePage = setupUser()
 
-        let mempoolStartingSize = mempoolCount()
+        let mempoolStartingSize = TestLapp.mempoolCount()
 
         // Enter a valid bech32 address
-        let address = getBech32Address()
+        let address = TestLapp.getBech32Address()
         let newOpPage = homePage.enter(address: address)
         let amountPage = NewOpAmountPage()
         let descriptionPage = NewOpDescriptionPage()
@@ -170,7 +171,7 @@ class NewOperationUITest: FalconUITests {
 
         let transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: mempoolStartingSize + 1)
-        XCTAssertEqual(mempoolCount(), mempoolStartingSize + 1, "We must have 1 new unconfirmed TX")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolStartingSize + 1, "We must have 1 new unconfirmed TX")
     }
 
     // MARK: Submarine swap test
@@ -178,12 +179,12 @@ class NewOperationUITest: FalconUITests {
         addSection("setup")
 
         let homePage = setupUser()
-        let mempoolStartingSize = mempoolCount()
+        let mempoolStartingSize = TestLapp.mempoolCount()
 
         addSection("New op - Submarine Swap")
         let descriptionPage = NewOpDescriptionPage()
         // 35k is enough to avoid the swap being a lend
-        let (invoice, destination) = getLightningInvoice(satoshis: "35000")
+        let (invoice, destination) = TestLapp.getLightningInvoice(satoshis: "35000")
         let newOpPage = homePage.enter(address: invoice)
         descriptionPage.wait(10)
 
@@ -194,7 +195,7 @@ class NewOperationUITest: FalconUITests {
 
         let transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: mempoolStartingSize + 1)
-        XCTAssertEqual(mempoolCount(), mempoolStartingSize + 1, "We must have 1 new unconfirmed TXs")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolStartingSize + 1, "We must have 1 new unconfirmed TXs")
     }
 
     func testFastFeeEdgeCases() {
@@ -202,7 +203,7 @@ class NewOperationUITest: FalconUITests {
         var homePage = setupUser()
         let address = homePage.getAddress()
         back()
-        let mempoolStartingSize = mempoolCount()
+        let mempoolStartingSize = TestLapp.mempoolCount()
 
         let newOpPage = homePage.enter(address: address)
         var amountPage = NewOpAmountPage()
@@ -220,19 +221,19 @@ class NewOperationUITest: FalconUITests {
 
         let transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: mempoolStartingSize)
-        XCTAssertEqual(mempoolCount(), mempoolStartingSize, "We must have 0 new unconfirmed TXs")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolStartingSize, "We must have 0 new unconfirmed TXs")
     }
 
     func testBip70() {
         addSection("setup user")
 
         let homePage = setupUser()
-        let initialMempoolSize = mempoolCount()
+        let initialMempoolSize = TestLapp.mempoolCount()
         let initialOperationCount = 2 // The user just received 2 operations
         var currentBalance = formatBTCAmount(1.00, format: .short)
         homePage.assert(balance: currentBalance)
 
-        let bip70Url = bip70Invoice()
+        let bip70Url = TestLapp.bip70Invoice()
         addSection("New op - 10.000 sats BIP0070")
         let newOpPage = homePage.enter(address: bip70Url)
         newOpPage.waitForConfirm()
@@ -248,7 +249,7 @@ class NewOperationUITest: FalconUITests {
 
         let transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: expectedOperationCount)
-        XCTAssertEqual(mempoolCount(), expectedMempoolSize, "We must have 1 new unconfirmed TXs in the mempool")
+        XCTAssertEqual(TestLapp.mempoolCount(), expectedMempoolSize, "We must have 1 new unconfirmed TXs in the mempool")
 
         backTo(page: homePage)
 
@@ -268,7 +269,7 @@ class NewOperationUITest: FalconUITests {
         addSection("setup user")
 
         let homePage = setupUser()
-        var mempoolSize = mempoolCount()
+        var mempoolSize = TestLapp.mempoolCount()
         var operationCount = mempoolSize
         var currentBalance = formatBTCAmount(1.00, format: .short)
 
@@ -276,7 +277,7 @@ class NewOperationUITest: FalconUITests {
 
         addSection("New op - 10.000 sats Lend swap")
         let descriptionPage = NewOpDescriptionPage()
-        let (lendInvoice, destination) = getLightningInvoice(satoshis: "10000")
+        let (lendInvoice, destination) = TestLapp.getLightningInvoice(satoshis: "10000")
         var newOpPage = homePage.enter(address: lendInvoice)
         descriptionPage.wait(10)
 
@@ -288,16 +289,16 @@ class NewOperationUITest: FalconUITests {
         var transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: operationCount)
         // There wasn't any on chain tx
-        XCTAssertEqual(mempoolCount(), mempoolSize, "We must have no new unconfirmed TXs in the mempool")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolSize, "We must have no new unconfirmed TXs in the mempool")
 
         backTo(page: homePage)
 
-        // Current balance is 1 BTC - 10000 sats of the invoice = 0.99990000
-        currentBalance = formatBTCAmount(0.99990000, format: .short)
+        // Current balance is 1 BTC - 10000 sats of the invoice - 5 sats of fees = 0.99989995
+        currentBalance = formatBTCAmount(0.99989995, format: .short)
         homePage.assert(balance: currentBalance)
 
         addSection("New op - 20.000 sats Collect swap")
-        let (collectInvoice, destination2) = getLightningInvoice(satoshis: "20000")
+        let (collectInvoice, destination2) = TestLapp.getLightningInvoice(satoshis: "20000")
 
         newOpPage = homePage.enter(address: collectInvoice)
         descriptionPage.wait(10)
@@ -310,16 +311,16 @@ class NewOperationUITest: FalconUITests {
 
         transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: operationCount)
-        XCTAssertEqual(mempoolCount(), mempoolSize, "We must have 1 new unconfirmed TXs in the mempool")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolSize, "We must have 1 new unconfirmed TXs in the mempool")
 
         backTo(page: homePage)
 
         // This tx will use 1 sat/vbyte -> 209 sats (using 0 sats for routing fee)
-        currentBalance = formatBTCAmount(0.99969791, format: .short)
+        currentBalance = formatBTCAmount(0.99969776, format: .short)
         homePage.assert(balance: currentBalance)
 
         addSection("New op - 200 sats Lend swap")
-        let (lendInvoice2, destination3) = getLightningInvoice(satoshis: "200")
+        let (lendInvoice2, destination3) = TestLapp.getLightningInvoice(satoshis: "200")
         newOpPage = homePage.enter(address: lendInvoice2)
         descriptionPage.wait(10)
 
@@ -331,16 +332,17 @@ class NewOperationUITest: FalconUITests {
         transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: operationCount)
         // There wasn't any on chain tx
-        XCTAssertEqual(mempoolCount(), mempoolSize, "We must have no new unconfirmed TXs in the mempool")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolSize, "We must have no new unconfirmed TXs in the mempool")
 
         backTo(page: homePage)
 
         // This assert will crash if we ever change the fees for debug mode
-        currentBalance = formatBTCAmount(0.99969591, format: .short) // 200 sats less for the invoice
+        // 0.99969776 balance - 0.000002 invoice - 0.00000555
+        currentBalance = formatBTCAmount(0.99969021, format: .short)
         homePage.assert(balance: currentBalance)
 
         addSection("Sweep funds - Forgive debt test")
-        let address = getBech32Address()
+        let address = TestLapp.getBech32Address()
         newOpPage = homePage.enter(address: address)
         let amountPage = NewOpAmountPage()
         // Use all funds
@@ -352,7 +354,7 @@ class NewOperationUITest: FalconUITests {
 
         transactionsPage = homePage.openOperationsList()
         transactionsPage.assertOperationsCount(equalTo: operationCount)
-        XCTAssertEqual(mempoolCount(), mempoolSize, "We must have 1 new unconfirmed TX")
+        XCTAssertEqual(TestLapp.mempoolCount(), mempoolSize, "We must have 1 new unconfirmed TX")
 
         backTo(page: homePage)
 
@@ -551,7 +553,7 @@ class NewOperationUITest: FalconUITests {
     func spendAllFundsOnchain(homePage: HomePage) {
         let address = "2N2y9wGHh7AfqwQ8dk5cQfhjvEAAq6xhjb6"
 
-        let mempoolStartingSize = mempoolCount()
+        let mempoolStartingSize = TestLapp.mempoolCount()
 
         // Enter a valid address
         let newOpPage = homePage.enter(address: address)

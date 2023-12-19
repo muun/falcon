@@ -41,7 +41,10 @@ public class BaseService {
     private let preferences: Preferences
     private let urlSession: URLSession
     private let sessionRepository: SessionRepository
+    private let debugRequestsRepository: DebugRequestsRepository
+    private let deviceCheckTokenProvider: DeviceCheckTokenProvider
     private let sendAuth: Bool
+    private let backgroundExecutionMetricsProvider: BackgroundExecutionMetricsProvider
 
     lazy public var baseURL = getBaseURL()
     private static let maxRetries = 3
@@ -49,11 +52,17 @@ public class BaseService {
     init(preferences: Preferences,
          urlSession: URLSession,
          sessionRepository: SessionRepository,
+         debugRequestsRepository: DebugRequestsRepository,
+         deviceCheckTokenProvider: DeviceCheckTokenProvider,
+         backgroundExecutionMetricsProvider: BackgroundExecutionMetricsProvider,
          sendAuth: Bool) {
         self.preferences = preferences
         self.urlSession = urlSession
         self.sessionRepository = sessionRepository
+        self.deviceCheckTokenProvider = deviceCheckTokenProvider
         self.sendAuth = sendAuth
+        self.debugRequestsRepository = debugRequestsRepository
+        self.backgroundExecutionMetricsProvider = backgroundExecutionMetricsProvider
     }
 
     public func getBaseURL() -> String {
@@ -210,7 +219,7 @@ private extension BaseService {
             .addHeader(key: "X-Idempotency-Key", value: UUID().uuidString)
             .addHeader(key: "X-Retry-Count", value: "1")
 
-        if let backgroundExecutionMetrics = BackgroundExcecutionMetricsProvider.run() {
+        if let backgroundExecutionMetrics = backgroundExecutionMetricsProvider.run() {
             request = request.addHeader(key: "X-Background-Execution-Metrics",
                                         value: backgroundExecutionMetrics)
         }
@@ -222,13 +231,16 @@ private extension BaseService {
             }
         }
 
-        let tokenProvider = DeviceCheckTokenProvider.shared
-        let token = tokenProvider.provide(ignoreRateLimit: shouldForceDeviceCheckToken)
+        let token = deviceCheckTokenProvider.provide(ignoreRateLimit: shouldForceDeviceCheckToken)
         token.map { request = request.addHeader(key: "X-Device-Token", value: $0) }
 
         return Single.create { single in
 
-            self.performHTTPRequest(request: request, model: model, maxRetries: maxRetries, success: { (response) in
+            self.performHTTPRequest(request: request,
+                                    model: model,
+                                    maxRetries: maxRetries,
+                                    success: { [weak self] (response) in
+                self?.deviceCheckTokenProvider.reactToRequestSucceded()
                 single(.success(response))
             }, failure: { (error) in
                 single(.error(error))
@@ -244,7 +256,12 @@ private extension BaseService {
                                                   success: @escaping (T) -> Void,
                                                   failure: @escaping (Error) -> Void) {
         let dataTask = self.urlSession.dataTask(with: request.request) { (data, response, error) in
-
+            #if DEBUG
+            self.debugRequestsRepository.save(request: request,
+                                              response: response,
+                                              data: data,
+                                              error: error)
+            #endif
             self.log(request, response, data)
 
             if let someError = self.parseError(data: data, error: error, response: response) {

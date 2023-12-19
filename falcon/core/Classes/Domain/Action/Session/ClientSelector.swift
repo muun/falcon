@@ -20,7 +20,6 @@ class ClientSelector {
     }
 
     func run() -> Client {
-
         return Client(
             buildType: Environment.current.buildType,
             version: Int(core.Constant.buildVersion)!,

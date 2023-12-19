@@ -80,4 +80,7 @@ public enum Persistence: String, CaseIterable {
     case featureFlags
 
     case preactivedTaproot
+
+    case reachabilityStatus
+    case reachabilityStatusAlreadyProvided
 }

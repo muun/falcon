@@ -15,6 +15,9 @@ public class HoustonService: BaseService {
     init(preferences: Preferences,
          urlSession: URLSession,
          sessionRepository: SessionRepository,
+         debugRequestRepository: DebugRequestsRepository,
+         deviceCheckTokenProvider: DeviceCheckTokenProvider,
+         backgroundExecutionMetricsProvider: BackgroundExecutionMetricsProvider,
          decrypter: OperationMetadataDecrypter) {
 
         self.decrypter = decrypter
@@ -22,6 +25,9 @@ public class HoustonService: BaseService {
         super.init(preferences: preferences,
                    urlSession: urlSession,
                    sessionRepository: sessionRepository,
+                   debugRequestsRepository: debugRequestRepository,
+                   deviceCheckTokenProvider: deviceCheckTokenProvider,
+                   backgroundExecutionMetricsProvider: backgroundExecutionMetricsProvider,
                    sendAuth: true)
     }
 
@@ -160,6 +166,10 @@ public class HoustonService: BaseService {
                     andReturn: KeySetJson.self,
                     shouldForceDeviceCheckToken: true)
             .map({ $0.toModel() })
+    }
+
+    func publicStatus() -> Single<()> {
+        return get("public/status", andReturn: EmptyJson.self).map({ $0.toModel() })
     }
 
     func loginCompatWithoutChallenge() -> Single<KeySet> {

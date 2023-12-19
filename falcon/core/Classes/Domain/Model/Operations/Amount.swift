@@ -96,7 +96,7 @@ public struct Satoshis {
     public static let dust = Satoshis(value: 3 * 182)
     public static let zero = Satoshis(value: 0)
 
-    let value: Int64
+    public let value: Int64
 
     public init(value: Int64) {
         self.value = value

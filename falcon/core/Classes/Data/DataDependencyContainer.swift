@@ -42,6 +42,7 @@ public extension DependencyContainer {
             container.register(factory: KeysRepository.init)
             container.register(factory: NextTransactionSizeRepository.init)
             container.register(factory: SessionRepository.init)
+            container.register(.singleton, factory: DebugRequestsRepository.init)
             container.register(factory: OperationRepository.init)
             container.register(factory: PublicProfileRepository.init)
             container.register(factory: TaskRunner.init)
@@ -54,13 +55,33 @@ public extension DependencyContainer {
             container.register(factory: UserPreferencesRepository.init)
             container.register(factory: MinFeeRateRepository.init)
             container.register(factory: FeatureFlagsRepository.init)
-
+            container.register(factory: ReachabilityStatusRepository.init)
+            container.register(.unique, factory: MUTimer.init)
+            container.register { AppleDeviceCheckAdapter() as DeviceCheckAdapter }
             container.register(factory: ICloudCapabilitiesProvider.init)
 
             container.register(factory: NotificationScheduler.init)
             container.register(.singleton, factory: ErrorReporter.init)
-
+            container.register(.unique, factory: PingURLService.init)
             container.register(factory: HoustonService.init)
         }
+    }
+
+}
+
+extension DependencyContainer {
+    @discardableResult public func register<T, A, B, C, D, E, F, G>(_ scope: ComponentScope = .shared, type: T.Type = T.self, tag: DependencyTagConvertible? = nil, factory: @escaping ((A, B, C, D, E, F, G)) throws -> T) -> Definition<T, (A, B, C, D, E, F, G)> {
+        return register(scope: scope,
+                        type: type,
+                        tag: tag,
+                        factory: factory,
+                        numberOfArguments: 7) { container, tag in
+            try factory((container.resolve(tag: tag),
+                         container.resolve(tag: tag),
+                         container.resolve(tag: tag),
+                         container.resolve(tag: tag),
+                         container.resolve(tag: tag),
+                         container.resolve(tag: tag),
+                         container.resolve(tag: tag))) }
     }
 }

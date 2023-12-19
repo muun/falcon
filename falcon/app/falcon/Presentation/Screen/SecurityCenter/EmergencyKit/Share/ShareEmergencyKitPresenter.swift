@@ -19,6 +19,7 @@ protocol ShareEmergencyKitPresenterDelegate: BasePresenterDelegate {
                                  option: EmergencyKitSavingOption,
                                  link: URL?)
     func hideUploadingEKView(completion: (() -> Void)?)
+    func abortExportBecauseOfError()
 }
 
 class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: BasePresenter<Delegate> {
@@ -183,5 +184,13 @@ class ShareEmergencyKitPresenter<Delegate: ShareEmergencyKitPresenterDelegate>: 
 
     func request(cloud: String) {
         supportAction.run(type: .cloudRequest, text: cloud)
+    }
+
+    override func handleError(_ e: Error) {
+        if e.isKindOf(DomainError.emergencyKitExportError) {
+            delegate.abortExportBecauseOfError()
+        } else {
+            super.handleError(e)
+        }
     }
 }

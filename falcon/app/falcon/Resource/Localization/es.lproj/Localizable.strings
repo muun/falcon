@@ -385,7 +385,7 @@ recibir bitcoin";
 "LNURLWithdrawPresenter.wrongTagDescription" = "Esto es un LNURL válido, pero no para esta operación. Por favor, vuelve a verificar su fuente.";
 "LNURLWithdrawPresenter.requestExpiredDescription" = "La LNURL expiró antes de que se realizara el pago. Por favor, solicita una nueva.";
 "LNURLWithdrawPresenter.noAvailableBalanceDescription" = "Parece que no tienes fondos para retirar de %@. Por favor, comprueba que tu saldo no esté vacío.";
-"LNURLWithdrawPresenter.noRouteDescription" = "Parece que <service> no pudo encontrar una ruta para enviarte el pago. Te sugerimos que te pongas en contacto con %@ para avisarles.";
+"LNURLWithdrawPresenter.noRouteDescription" = "Parece que %@ no pudo encontrar una ruta para enviarte el pago. Te sugerimos que te pongas en contacto con %@ para avisarles.";
 "LNURLWithdrawPresenter.unresponsiveDescription" = "El servicio que creó el código LNURL no está disponible. Por favor, inténtalo de nuevo más tarde.";
 "LNURLWithdrawPresenter.unknownErrorDescription" = "Algo falló y no estamos seguros de qué fue. Envíanos un reporte para ayudarnos a averiguar qué sucedió.";
 "LNURLWithdrawPresenter.expiredInvoice" = "Tu pago falló";
@@ -520,6 +520,7 @@ Intenta recordarla.";
 "ShareEmergencyKitViewController.alertRetry" = "Reintentar";
 "ShareEmergencyKitViewController.alertCancel" = "Cancelar";
 "ShareEmergencyKitViewController.fileName" = "Muun - Kit de Emergencia.pdf";
+"ShareEmergencyKitViewController.generateEmergencyKitError" = "No pudimos generar tu Kit de Emergencia.";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/ManualSaveEmergencyKitView.swift */
 "ManualSaveEmergencyKitView.title" = "¿Quieres guardar tu Kit manualmente? Te damos algunos consejos.";
 "ManualSaveEmergencyKitView.accesible" = "Hazlo accesible. Debes poder acceder a tu Kit en todo momento, incluso si perdieras tu teléfono, te lo robaran o dejara de funcionar.";
@@ -532,6 +533,8 @@ Intenta recordarla.";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Share/RequestCloudView.swift */
 "RequestCloudView.description" = "Planeamos incluir más servicios en la nube. ¿Cuál te gustaría que se agregue?";
 "RequestCloudView.send" = "ENVIAR COMENTARIO";
+/* Presentation/Screen/SecurityCenter/EmergencyKit/Share/RequestCloudFeedbackView.swift */
+"RequestCloudFeedbackView.title" = "¡Gracias por tu comentario!";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Verify/VerifyEmergencyKitView.swift */
 "VerifyEmergencyKitView.done" = "LISTO";
 /* Presentation/Screen/SecurityCenter/EmergencyKit/Slides/SlidesViewController.swift */

@@ -201,7 +201,6 @@
 		A081D69525151B2500632F2D /* SignUpVerifyEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A081D69425151B2500632F2D /* SignUpVerifyEmailViewController.swift */; };
 		A081D69F25151B3A00632F2D /* SignUpVerifyEmailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A081D69E25151B3A00632F2D /* SignUpVerifyEmailPresenter.swift */; };
 		A081D6A92515204C00632F2D /* EmailClientsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A081D6A82515204C00632F2D /* EmailClientsPicker.swift */; };
-		A082096C2281C4A700E63CE2 /* TestLapp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A082096B2281C4A700E63CE2 /* TestLapp.swift */; };
 		A08407A522DCBBD9007775CE /* FeeEditorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08407A422DCBBD9007775CE /* FeeEditorPresenter.swift */; };
 		A089FFDF21383606006915FC /* SignInPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A089FFDC21383606006915FC /* SignInPasswordViewController.swift */; };
 		A089FFE021383606006915FC /* SignInPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A089FFDD21383606006915FC /* SignInPasswordViewController.xib */; };
@@ -371,6 +370,7 @@
 		A0FB99E221D55E990088EEA4 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018410C211E03D600337895 /* UIColor+Extension.swift */; };
 		A0FD55852487FAF300F942AB /* DeletableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD55842487FAF300F942AB /* DeletableTextField.swift */; };
 		A0FE143B21B049B5008F99C4 /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE143A21B049B5008F99C4 /* UINavigationController+Extension.swift */; };
+		A4FD7D9FE80B20A99FF04185 /* Pods_falconUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F94E07531BAC27AA0FAA75 /* Pods_falconUITests.framework */; };
 		AFDDA03910BC79AA459012C2 /* BlockClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDDA13924FAE85DF3F7E295 /* BlockClockView.swift */; };
 		AFDDA08D5CAE5EF2FCB54115 /* GoogleService-Info-regtest.plist in Resources */ = {isa = PBXBuildFile; fileRef = AFDDA3A58AA2F7DBDA05F6EA /* GoogleService-Info-regtest.plist */; };
 		AFDDA101CB6375EF4931B386 /* RequestCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDDA6225A57FCCF85D48DCB /* RequestCloudView.swift */; };
@@ -479,7 +479,6 @@
 		B3E76FAD2729D0A500618C90 /* SlidesViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E76FAC2729D0A500618C90 /* SlidesViewConfiguration.swift */; };
 		B3EAC855220C983C00D765D5 /* VerifyRecoveryCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EAC852220C983C00D765D5 /* VerifyRecoveryCodeViewController.swift */; };
 		B3EAC856220C983C00D765D5 /* VerifyRecoveryCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3EAC853220C983C00D765D5 /* VerifyRecoveryCodeViewController.xib */; };
-		B3F5A3482459D81400309AC8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0432D9222E7A8A1002D34C4 /* Environment.swift */; };
 		F9D2DEA862D8852273DC87B5 /* Pods_falconPushNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72C8B50BB75E5801CCB1AEE /* Pods_falconPushNotifications.framework */; };
 		FE0066D028787C0E00788DD1 /* GetCurrencyForCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0066CF28787C0E00788DD1 /* GetCurrencyForCode.swift */; };
 		FE0066D228787C1A00788DD1 /* GetBTCDefaultSelectedUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0066D128787C1A00788DD1 /* GetBTCDefaultSelectedUnit.swift */; };
@@ -492,6 +491,7 @@
 		FE211A3B2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE211A3A2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift */; };
 		FE21354E28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */; };
 		FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */; };
+		FE300CC72AB7658100AAE9DC /* RequestCloudFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */; };
 		FE3A50C629355C3200006363 /* BitcoinURIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */; };
 		FE560CDB291AE3D900FACF78 /* UnverifiedRcWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */; };
 		FE560D6C291AE3EC00FACF78 /* UnverifiedRcWarningViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */; };
@@ -500,10 +500,13 @@
 		FE5B0C3B292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5B0C3A292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift */; };
 		FE5B0C3D292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5B0C3C292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift */; };
 		FE5B0C3F292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5B0C3E292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift */; };
+		FE5F95AB2AB24C46008A43F8 /* AuthMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F95AA2AB24C46008A43F8 /* AuthMethod.swift */; };
 		FE64761628EB54A700EA4A77 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761528EB54A700EA4A77 /* UIStackView+Extension.swift */; };
 		FE64761928ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */; };
 		FE64761D28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */; };
 		FE69B2D128F09D4F00A48050 /* SettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */; };
+		FE712CE32AF5856E006DEA41 /* KeychainRepositoryStubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE712CE22AF5856E006DEA41 /* KeychainRepositoryStubber.swift */; };
+		FE712CE52AF58613006DEA41 /* KeychainRepositoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE712CE42AF58613006DEA41 /* KeychainRepositoryTest.swift */; };
 		FE7879C6287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879C5287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift */; };
 		FE7879C92878866400CB4198 /* FiatCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879C82878866400CB4198 /* FiatCurrency.swift */; };
 		FE7879CB2878868400CB4198 /* BitcoinCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879CA2878868400CB4198 /* BitcoinCurrency.swift */; };
@@ -513,6 +516,14 @@
 		FE7879D5287B910800CB4198 /* BitcoinCurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D4287B910800CB4198 /* BitcoinCurrencyTests.swift */; };
 		FE7879D7287B991900CB4198 /* NewOpAmountPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D6287B991900CB4198 /* NewOpAmountPresenterTest.swift */; };
 		FE7879DA287C583E00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879D8287C583B00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift */; };
+		FE838B652A8E63500007C8F8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0432D9222E7A8A1002D34C4 /* Environment.swift */; };
+		FE8909972ABCB1050058A682 /* DebugRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8909962ABCB1050058A682 /* DebugRequestsViewController.swift */; };
+		FE8909992ABCB1360058A682 /* DebugRequestsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8909982ABCB1360058A682 /* DebugRequestsPresenter.swift */; };
+		FE89099B2ABCC7A20058A682 /* DebugRequestDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89099A2ABCC7A20058A682 /* DebugRequestDetail.swift */; };
+		FE9DF5B92AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DF5B82AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift */; };
+		FE9DF6772AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DF6762AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift */; };
+		FE9DF6792AF040A6001B51A0 /* FakePingURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DF6782AF040A6001B51A0 /* FakePingURLService.swift */; };
+		FEB5CCE82A7C31AA00CFA14E /* ConfirmStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5CCE72A7C31AA00CFA14E /* ConfirmStateViewModel.swift */; };
 		FEB749B729030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */; };
 		FEB74C7F2909E2C8002C08D1 /* SetupRecoveryCodeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */; };
 		FEB74C812909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C802909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift */; };
@@ -525,6 +536,11 @@
 		FEB74C982911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */; };
 		FEB74C9A2911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */; };
 		FEB74C9C2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */; };
+		FED1239B2A8D1924007A3779 /* AppDelegate+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED1239A2A8D1924007A3779 /* AppDelegate+Debug.swift */; };
+		FED1239E2A8D4DDE007A3779 /* DebugModeDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED1239D2A8D4DDE007A3779 /* DebugModeDisplayer.swift */; };
+		FED123A02A8D4E04007A3779 /* DebugMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED1239F2A8D4E04007A3779 /* DebugMenuViewController.swift */; };
+		FED123A22A8D4E45007A3779 /* DebugModePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED123A12A8D4E45007A3779 /* DebugModePresenter.swift */; };
+		FEF347592A7AE33000A0C387 /* PinUITestinTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF347582A7AE33000A0C387 /* PinUITestinTest.swift */; };
 		FEF58D6A29634C400078F64B /* UserPreferencesRepositoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF58D6929634C400078F64B /* UserPreferencesRepositoryTest.swift */; };
 /* End PBXBuildFile section */
 
@@ -618,10 +634,13 @@
 		0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioGroupView.swift; sourceTree = "<group>"; };
 		0FF90788262B311300889E0F /* NewOpError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpError.swift; sourceTree = "<group>"; };
 		0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewOperationStateMachine.swift; sourceTree = "<group>"; };
+		1F0852911EA2C42F3978A647 /* Pods-Muun-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-Muun-falconUITests/Pods-Muun-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4218A5EC749F0490196019CC /* Pods_Muun.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Muun.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FDD7A39280D20C474642D /* Pods-falconPushNotifications.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconPushNotifications.debug.xcconfig"; path = "Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications.debug.xcconfig"; sourceTree = "<group>"; };
 		47163A6E09E12FEE22D35F44 /* Pods_falconTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_falconTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78A6CA93F0F445C0F1541BB1 /* Pods-falconTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconTests.release.xcconfig"; path = "Target Support Files/Pods-falconTests/Pods-falconTests.release.xcconfig"; sourceTree = "<group>"; };
+		8D644A271A94615EDD5ED4DC /* Pods-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		96303DAE309982529187EEAB /* Pods-falconUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.release.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.release.xcconfig"; sourceTree = "<group>"; };
 		A0000990257A7B9600B69008 /* TransactionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListViewController.swift; sourceTree = "<group>"; };
 		A0000996257A7BB900B69008 /* TransactionListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListPresenter.swift; sourceTree = "<group>"; };
 		A000099C257A7CAC00B69008 /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
@@ -767,7 +786,6 @@
 		A081D69425151B2500632F2D /* SignUpVerifyEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVerifyEmailViewController.swift; sourceTree = "<group>"; };
 		A081D69E25151B3A00632F2D /* SignUpVerifyEmailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVerifyEmailPresenter.swift; sourceTree = "<group>"; };
 		A081D6A82515204C00632F2D /* EmailClientsPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailClientsPicker.swift; sourceTree = "<group>"; };
-		A082096B2281C4A700E63CE2 /* TestLapp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLapp.swift; sourceTree = "<group>"; };
 		A08407A422DCBBD9007775CE /* FeeEditorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeEditorPresenter.swift; sourceTree = "<group>"; };
 		A089FFDC21383606006915FC /* SignInPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInPasswordViewController.swift; sourceTree = "<group>"; };
 		A089FFDD21383606006915FC /* SignInPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignInPasswordViewController.xib; sourceTree = "<group>"; };
@@ -939,6 +957,7 @@
 		A0FD55842487FAF300F942AB /* DeletableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletableTextField.swift; sourceTree = "<group>"; };
 		A0FE143A21B049B5008F99C4 /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		A72C8B50BB75E5801CCB1AEE /* Pods_falconPushNotifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_falconPushNotifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABBD402FC45B744031328AC7 /* Pods-Muun-falconUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun-falconUITests.release.xcconfig"; path = "Target Support Files/Pods-Muun-falconUITests/Pods-Muun-falconUITests.release.xcconfig"; sourceTree = "<group>"; };
 		AFDDA13924FAE85DF3F7E295 /* BlockClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockClockView.swift; sourceTree = "<group>"; };
 		AFDDA1A9462F867047F67ADD /* EmergencyKitFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmergencyKitFlow.swift; sourceTree = "<group>"; };
 		AFDDA3A58AA2F7DBDA05F6EA /* GoogleService-Info-regtest.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "GoogleService-Info-regtest.plist"; sourceTree = "<group>"; };
@@ -1045,6 +1064,7 @@
 		B3EAC852220C983C00D765D5 /* VerifyRecoveryCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyRecoveryCodeViewController.swift; sourceTree = "<group>"; };
 		B3EAC853220C983C00D765D5 /* VerifyRecoveryCodeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VerifyRecoveryCodeViewController.xib; sourceTree = "<group>"; };
 		E01180D62A75C0F7B22B75CA /* Pods-falconTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconTests.debug.xcconfig"; path = "Target Support Files/Pods-falconTests/Pods-falconTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E7F94E07531BAC27AA0FAA75 /* Pods_falconUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_falconUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBE6A13064BE09C80FBE84B7 /* Pods-falconPushNotifications.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconPushNotifications.release.xcconfig"; path = "Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications.release.xcconfig"; sourceTree = "<group>"; };
 		F9EA5AD239DA4E67956232D0 /* Pods-Muun.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun.debug.xcconfig"; path = "Target Support Files/Pods-Muun/Pods-Muun.debug.xcconfig"; sourceTree = "<group>"; };
 		FBD7C98E94F17B20252432EC /* Pods-Muun.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun.release.xcconfig"; path = "Target Support Files/Pods-Muun/Pods-Muun.release.xcconfig"; sourceTree = "<group>"; };
@@ -1059,6 +1079,7 @@
 		FE211A3A2A0D426900F6BBA5 /* MUPlainInfoDisplayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MUPlainInfoDisplayerViewController.swift; sourceTree = "<group>"; };
 		FE21354D28F84D9700AFCCA6 /* SettingsTogglePresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenterDelegate.swift; sourceTree = "<group>"; };
 		FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenter.swift; sourceTree = "<group>"; };
+		FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCloudFeedbackView.swift; sourceTree = "<group>"; };
 		FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURIViewModel.swift; sourceTree = "<group>"; };
 		FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnverifiedRcWarningViewController.swift; sourceTree = "<group>"; };
 		FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnverifiedRcWarningViewController.xib; sourceTree = "<group>"; };
@@ -1067,10 +1088,13 @@
 		FE5B0C3A292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFormatSettingDropdownView.swift; sourceTree = "<group>"; };
 		FE5B0C3C292D47660067E935 /* ReceiveFormatPreferenceDropdownPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFormatPreferenceDropdownPresenter.swift; sourceTree = "<group>"; };
 		FE5B0C3E292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveFormatPreferenceMUActionSheetPresenter.swift; sourceTree = "<group>"; };
+		FE5F95AA2AB24C46008A43F8 /* AuthMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthMethod.swift; sourceTree = "<group>"; };
 		FE64761528EB54A700EA4A77 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboChannelSettingsTogglePresenter.swift; sourceTree = "<group>"; };
 		FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggleUserPreferenciesResolver.swift; sourceTree = "<group>"; };
 		FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUITest.swift; sourceTree = "<group>"; };
+		FE712CE22AF5856E006DEA41 /* KeychainRepositoryStubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainRepositoryStubber.swift; sourceTree = "<group>"; };
+		FE712CE42AF58613006DEA41 /* KeychainRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainRepositoryTest.swift; sourceTree = "<group>"; };
 		FE7879C5287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinAmountWithSelectedCurrency.swift; sourceTree = "<group>"; };
 		FE7879C82878866400CB4198 /* FiatCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatCurrency.swift; sourceTree = "<group>"; };
 		FE7879CA2878868400CB4198 /* BitcoinCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCurrency.swift; sourceTree = "<group>"; };
@@ -1080,6 +1104,13 @@
 		FE7879D4287B910800CB4198 /* BitcoinCurrencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinCurrencyTests.swift; sourceTree = "<group>"; };
 		FE7879D6287B991900CB4198 /* NewOpAmountPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpAmountPresenterTest.swift; sourceTree = "<group>"; };
 		FE7879D8287C583B00CB4198 /* MonetaryAmountWithCompleteDataOfCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetaryAmountWithCompleteDataOfCurrency.swift; sourceTree = "<group>"; };
+		FE8909962ABCB1050058A682 /* DebugRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugRequestsViewController.swift; sourceTree = "<group>"; };
+		FE8909982ABCB1360058A682 /* DebugRequestsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugRequestsPresenter.swift; sourceTree = "<group>"; };
+		FE89099A2ABCC7A20058A682 /* DebugRequestDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugRequestDetail.swift; sourceTree = "<group>"; };
+		FE9DF5B82AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCheckTokenProviderTest.swift; sourceTree = "<group>"; };
+		FE9DF6762AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiReachabiltiyServiceTest.swift; sourceTree = "<group>"; };
+		FE9DF6782AF040A6001B51A0 /* FakePingURLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePingURLService.swift; sourceTree = "<group>"; };
+		FEB5CCE72A7C31AA00CFA14E /* ConfirmStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmStateViewModel.swift; sourceTree = "<group>"; };
 		FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartRecoverCodeSetupActionTests.swift; sourceTree = "<group>"; };
 		FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupRecoveryCodeError.swift; sourceTree = "<group>"; };
 		FEB74C802909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryCodePrimingPresenter.swift; sourceTree = "<group>"; };
@@ -1092,6 +1123,11 @@
 		FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupPresenterTest.swift; sourceTree = "<group>"; };
 		FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupActionStub.swift; sourceTree = "<group>"; };
 		FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupPresenterDelegateSpy.swift; sourceTree = "<group>"; };
+		FED1239A2A8D1924007A3779 /* AppDelegate+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Debug.swift"; sourceTree = "<group>"; };
+		FED1239D2A8D4DDE007A3779 /* DebugModeDisplayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModeDisplayer.swift; sourceTree = "<group>"; };
+		FED1239F2A8D4E04007A3779 /* DebugMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenuViewController.swift; sourceTree = "<group>"; };
+		FED123A12A8D4E45007A3779 /* DebugModePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModePresenter.swift; sourceTree = "<group>"; };
+		FEF347582A7AE33000A0C387 /* PinUITestinTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinUITestinTest.swift; sourceTree = "<group>"; };
 		FEF58D6929634C400078F64B /* UserPreferencesRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesRepositoryTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1116,6 +1152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4FD7D9FE80B20A99FF04185 /* Pods_falconUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1330,6 +1367,10 @@
 				EBE6A13064BE09C80FBE84B7 /* Pods-falconPushNotifications.release.xcconfig */,
 				E01180D62A75C0F7B22B75CA /* Pods-falconTests.debug.xcconfig */,
 				78A6CA93F0F445C0F1541BB1 /* Pods-falconTests.release.xcconfig */,
+				8D644A271A94615EDD5ED4DC /* Pods-falconUITests.debug.xcconfig */,
+				96303DAE309982529187EEAB /* Pods-falconUITests.release.xcconfig */,
+				1F0852911EA2C42F3978A647 /* Pods-Muun-falconUITests.debug.xcconfig */,
+				ABBD402FC45B744031328AC7 /* Pods-Muun-falconUITests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1436,6 +1477,7 @@
 		A00BAE6A21221F1100126F94 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				FED1239C2A8D4DD2007A3779 /* Debug */,
 				FE211A392A0D425100F6BBA5 /* ReusableGenericViews */,
 				A044183B257158EC002D959B /* TransactionList */,
 				A044181C257128E3002D959B /* TabBar */,
@@ -2048,6 +2090,7 @@
 				A0DFCD1A24520C6400D1EBC4 /* NewOp+MoreInfo.swift */,
 				0FF90788262B311300889E0F /* NewOpError.swift */,
 				0FCB0E7F2694EA6400FE764C /* NewOperationPresenter.swift */,
+				FEB5CCE72A7C31AA00CFA14E /* ConfirmStateViewModel.swift */,
 			);
 			path = NewOperation;
 			sourceTree = "<group>";
@@ -2101,6 +2144,7 @@
 				B3B9C0D1224E82B0009C3617 /* MUDetailRowView.swift */,
 				FE561A62292BC13B00FACF78 /* MUActionSheetView */,
 				A0A9CE672124B24100549855 /* MUView.swift */,
+				FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2168,6 +2212,7 @@
 				A01B3CD1212EF923004E6288 /* PinPresenter.swift */,
 				A0BB7A7D21235EF00043F7FD /* PinViewController.swift */,
 				A0BB7A7C21235EF00043F7FD /* PinViewController.xib */,
+				FE5F95AA2AB24C46008A43F8 /* AuthMethod.swift */,
 			);
 			path = Pin;
 			sourceTree = "<group>";
@@ -2465,8 +2510,8 @@
 				B36B079C22440F6F00E7D16B /* Regtest.swift */,
 				A0E0F777220C74F5001B99AC /* SignInUITests.swift */,
 				FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */,
-				A082096B2281C4A700E63CE2 /* TestLapp.swift */,
 				B3E131B423282D7D00D55759 /* XCUIElement+Extension.swift */,
+				FEF347582A7AE33000A0C387 /* PinUITestinTest.swift */,
 			);
 			path = falconUITests;
 			sourceTree = "<group>";
@@ -2714,6 +2759,7 @@
 				A0F627B9227B6ABC00496987 /* AppDelegate+Firebase.swift */,
 				A0F627B7227B698300496987 /* AppDelegate+Notification.swift */,
 				A0F627BB227B6DD400496987 /* AppDelegate+Pin.swift */,
+				FED1239A2A8D1924007A3779 /* AppDelegate+Debug.swift */,
 			);
 			path = AppDelegate;
 			sourceTree = "<group>";
@@ -2747,6 +2793,7 @@
 		B3085CC721CA7B6300B159F4 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				FE9DF5B72AEEFEB2001B51A0 /* Services */,
 				0F7666DE264DB96F007121DF /* Model */,
 				0F9340EC25AFF06800F766A9 /* Action */,
 				B3394AB725BF615E00460DB7 /* FulfillincomingSwapActionTest.swift */,
@@ -3058,6 +3105,7 @@
 				4218A5EC749F0490196019CC /* Pods_Muun.framework */,
 				A72C8B50BB75E5801CCB1AEE /* Pods_falconPushNotifications.framework */,
 				47163A6E09E12FEE22D35F44 /* Pods_falconTests.framework */,
+				E7F94E07531BAC27AA0FAA75 /* Pods_falconUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3158,6 +3206,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		FE9DF5B72AEEFEB2001B51A0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FE9DF5B82AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift */,
+				FE9DF6762AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		FEB74C82290ABE83002C08D1 /* SecurityCenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -3193,14 +3250,29 @@
 				FEB74C91290B2108002C08D1 /* FakeHoustonService.swift */,
 				FEB74C93290B2323002C08D1 /* BuildChallengeSetupActionFake.swift */,
 				FEB74C95290B2376002C08D1 /* FakeKeysRepository.swift */,
+				FE9DF6782AF040A6001B51A0 /* FakePingURLService.swift */,
 			);
 			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		FED1239C2A8D4DD2007A3779 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				FED1239D2A8D4DDE007A3779 /* DebugModeDisplayer.swift */,
+				FED1239F2A8D4E04007A3779 /* DebugMenuViewController.swift */,
+				FED123A12A8D4E45007A3779 /* DebugModePresenter.swift */,
+				FE8909962ABCB1050058A682 /* DebugRequestsViewController.swift */,
+				FE89099A2ABCC7A20058A682 /* DebugRequestDetail.swift */,
+				FE8909982ABCB1360058A682 /* DebugRequestsPresenter.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		FEF58D6829634C300078F64B /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
 				FEF58D6929634C400078F64B /* UserPreferencesRepositoryTest.swift */,
+				FE712CE42AF58613006DEA41 /* KeychainRepositoryTest.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -3249,9 +3321,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0E0F773220C74BF001B99AC /* Build configuration list for PBXNativeTarget "falconUITests" */;
 			buildPhases = (
+				E71EF1F2E7F5EAC059F5106F /* [CP] Check Pods Manifest.lock */,
 				A0E0F768220C74BF001B99AC /* Sources */,
 				A0E0F769220C74BF001B99AC /* Frameworks */,
 				A0E0F76A220C74BF001B99AC /* Resources */,
+				0B4F012C09DBEABBCA83FF87 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3484,6 +3558,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0B4F012C09DBEABBCA83FF87 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-falconUITests/Pods-falconUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-falconUITests/Pods-falconUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-falconUITests/Pods-falconUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		35AF04612567958BDE6C215F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3595,6 +3686,28 @@
 			shellPath = /bin/sh;
 			shellScript = "../../tools/libwallet-ios.sh\n";
 		};
+		E71EF1F2E7F5EAC059F5106F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-falconUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F42EDF24DB634862DB021FA5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3619,6 +3732,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE9DF5B92AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift in Sources */,
+				FE9DF6792AF040A6001B51A0 /* FakePingURLService.swift in Sources */,
 				B3CBAC5221F66B8400A591C8 /* FeeCalculatorTests.swift in Sources */,
 				FEB74C96290B2376002C08D1 /* FakeKeysRepository.swift in Sources */,
 				B3953CF425841C52002FA194 /* UpdateUserPreferencesActionTest.swift in Sources */,
@@ -3629,6 +3744,7 @@
 				0F9340E725AFECC000F766A9 /* IncomingSwapRepositoryTests.swift in Sources */,
 				0F9340D725AFE8DF00F766A9 /* Factory.swift in Sources */,
 				FEB74C9A2911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift in Sources */,
+				FE712CE52AF58613006DEA41 /* KeychainRepositoryTest.swift in Sources */,
 				B3CBAC5521F66B8C00A591C8 /* ExpectationUtils.swift in Sources */,
 				FE56FE75287F113A00F6D011 /* FiatCurrencyTests.swift in Sources */,
 				B3CBAC5321F66B8900A591C8 /* HomePresenterTests.swift in Sources */,
@@ -3638,6 +3754,7 @@
 				B3CBAC4E21F66B8400A591C8 /* TransactionSchemeV2Tests.swift in Sources */,
 				0F9EFBE525A4E490007BAD8F /* OperationRepositoryTests.swift in Sources */,
 				FEB74C982911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift in Sources */,
+				FE9DF6772AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift in Sources */,
 				FEB74C8C290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift in Sources */,
 				B3CBAC4D21F66B8400A591C8 /* KeyCrypterTests.swift in Sources */,
 				FEB74C9C2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift in Sources */,
@@ -3713,11 +3830,11 @@
 				A001BC3D24CF335100BC0743 /* ChangePasswordPrimingPage.swift in Sources */,
 				A0BE8F7B251BD69D006BCC79 /* VerifyEmailPage.swift in Sources */,
 				A0D43FA3220DCFD400442165 /* ButtonViewPage.swift in Sources */,
-				B3F5A3482459D81400309AC8 /* Environment.swift in Sources */,
 				B3D93BB622247E6B00ABEF15 /* ReceivePage.swift in Sources */,
 				B3D93BBE222487D400ABEF15 /* LargeTextInputViewPage.swift in Sources */,
 				B3E131B3232822BF00D55759 /* EmergencyKitUITest.swift in Sources */,
 				A02AA963246EE08F000618F6 /* CreateWalletTests.swift in Sources */,
+				FEF347592A7AE33000A0C387 /* PinUITestinTest.swift in Sources */,
 				A0C4B27424BE3F1A00B75604 /* ActivateEmergencyKitPage.swift in Sources */,
 				A016EA2122120AD3002487EA /* HomePage.swift in Sources */,
 				0FAF464D257FD55A004C7F17 /* TransactionListPage.swift in Sources */,
@@ -3748,13 +3865,13 @@
 				A016EA182211BADF002487EA /* SetEmailBackUpPage.swift in Sources */,
 				0FB71A8E264AE0E300B1DB23 /* LNURLWithdrawTests.swift in Sources */,
 				0F9E0FC1264ECF490062DE40 /* LNURLScanQRPage.swift in Sources */,
-				A082096C2281C4A700E63CE2 /* TestLapp.swift in Sources */,
 				B3BF3B48221338720009F76D /* GenerateRecoveryCodePage.swift in Sources */,
 				A0D43F98220DC82200442165 /* UITestablePage.swift in Sources */,
 				A025A2EB246EFA5F00D909A8 /* PrimingRecoveryCodePage.swift in Sources */,
 				0F22E6D525D2D27800EBFA06 /* QRCodeWithActions.swift in Sources */,
 				A09076ED25924FF100D4BDAF /* Strings+Generated.swift in Sources */,
 				0FB71A91264AE7AF00B1DB23 /* LNURLFirstTimePage.swift in Sources */,
+				FE838B652A8E63500007C8F8 /* Environment.swift in Sources */,
 				B3BF3B5222133FBB0009F76D /* RecoveryCodeUITest.swift in Sources */,
 				A010F07B22EF4EB500B2F38F /* CurrencyPickerPage.swift in Sources */,
 				B36B079D22440F6F00E7D16B /* Regtest.swift in Sources */,
@@ -3858,6 +3975,7 @@
 				A0CAC9AD22243F7A00C1F917 /* MonetaryAmount+Extension.swift in Sources */,
 				A0CCCEC422BD5832009B6CB6 /* SelectFeeViewController.swift in Sources */,
 				A012F2AD24D061DB002278F4 /* CGFloat+Extension.swift in Sources */,
+				FED123A02A8D4E04007A3779 /* DebugMenuViewController.swift in Sources */,
 				A0D1E79721B86F660066BB48 /* UITableViewCell+Extension.swift in Sources */,
 				A07947932204C76F00A08474 /* SessionExpiredViewController.swift in Sources */,
 				FE1120AC295641B000D4B532 /* UITapGestureRecognizer+Extension.swift in Sources */,
@@ -3886,6 +4004,7 @@
 				A032C0A624D4A95E00A111A0 /* ChangePasswordEnterRecoveryCodePresenter.swift in Sources */,
 				B3297EA527234DE60035FEB8 /* OnchainSettingsPresenter.swift in Sources */,
 				A053127724A5143700911BD9 /* ActivateEmergencyKitViewController.swift in Sources */,
+				FE8909972ABCB1050058A682 /* DebugRequestsViewController.swift in Sources */,
 				A0E1CE7124A4334E00FFF385 /* RepresentableView.swift in Sources */,
 				B3BF3B632215C2F70009F76D /* LargeTextInputView.swift in Sources */,
 				B30F9380258A59CB00045301 /* LightningNetworkSettingsPresenter.swift in Sources */,
@@ -3900,6 +4019,7 @@
 				0FB0144725E42D9E009953BF /* QRLoadingView.swift in Sources */,
 				A01840EC211DC95D00337895 /* Constant.swift in Sources */,
 				A0480CFC255B163B002F76DD /* LoadingPopUpView.swift in Sources */,
+				FEB5CCE82A7C31AA00CFA14E /* ConfirmStateViewModel.swift in Sources */,
 				A08407A522DCBBD9007775CE /* FeeEditorPresenter.swift in Sources */,
 				A0CAC9A9222435FF00C1F917 /* NewOpConfirmView.swift in Sources */,
 				A0E36005221F005500FE06A5 /* CurrencyPickerPresenter.swift in Sources */,
@@ -3945,6 +4065,7 @@
 				A0DA93C724CF1B2F00377124 /* ChangePasswordPrimingViewController.swift in Sources */,
 				FE1518BC292FBC4900D3730A /* UnifiedAdvancedOptionsView.swift in Sources */,
 				B3BDBE2F221CDF7A006490B9 /* LocaleNumberFormatter.swift in Sources */,
+				FE8909992ABCB1360058A682 /* DebugRequestsPresenter.swift in Sources */,
 				A0E35FF9221DE3A300FE06A5 /* ManuallyEnterQRViewController.swift in Sources */,
 				A0D0E0BD244F4FFA001F3F88 /* FinishEmailSetupViewController.swift in Sources */,
 				B3C1B6C62343D65100327FA4 /* OpStateMachine.swift in Sources */,
@@ -3953,6 +4074,7 @@
 				A0B4DBAE222583A30029D149 /* ErrorView.swift in Sources */,
 				FE5B0C3B292D474A0067E935 /* ReceiveFormatSettingDropdownView.swift in Sources */,
 				A0481280255D84CC002F76DD /* EmergencyKitSavingOptions.swift in Sources */,
+				FE5F95AB2AB24C46008A43F8 /* AuthMethod.swift in Sources */,
 				B36B07962243EFC600E7D16B /* SettingsViewController.swift in Sources */,
 				A0B60FE621F0C97600F6C266 /* NewOpAmountView.swift in Sources */,
 				A0D0E0BF244F5014001F3F88 /* FinishEmailSetupPresenter.swift in Sources */,
@@ -3981,6 +4103,8 @@
 				A055C7FC2459E58600E6E95F /* WelcomePopUpView.swift in Sources */,
 				A0D9CC13250967B700F7DA4C /* SignInWithRCView.swift in Sources */,
 				B3297E9F2723206B0035FEB8 /* UIEdgeInsets+Extension.swift in Sources */,
+				FE89099B2ABCC7A20058A682 /* DebugRequestDetail.swift in Sources */,
+				FE300CC72AB7658100AAE9DC /* RequestCloudFeedbackView.swift in Sources */,
 				0F22E69825D24A0200EBFA06 /* SelectAddressTypeOptionView.swift in Sources */,
 				A0A716A62226D4E3001A539B /* NewOpLoadingPresenter.swift in Sources */,
 				B3085CD521DE75DF00B159F4 /* ReceiveViewController.swift in Sources */,
@@ -4003,11 +4127,13 @@
 				A001BC4124CF5BC600BC0743 /* ChangePasswordEnterCurrentViewController.swift in Sources */,
 				A0A03B0421EE59E100700526 /* AddressInputPresenter.swift in Sources */,
 				A0D43F97220DC82200442165 /* UITestablePage.swift in Sources */,
+				FED1239B2A8D1924007A3779 /* AppDelegate+Debug.swift in Sources */,
 				A0DFCD1F24520ED700D1EBC4 /* SecurityCenter+Feedback.swift in Sources */,
 				A00643352357713B0038BF2A /* SlidesViewController.swift in Sources */,
 				A0E36003221EEFF800FE06A5 /* CurrencyTableViewCell.swift in Sources */,
 				B3A4AC95220B691B00FF0A8C /* GenerateRecoveryCodePresenter.swift in Sources */,
 				B3BF3B582215AD960009F76D /* SupportPresenter.swift in Sources */,
+				FED123A22A8D4E45007A3779 /* DebugModePresenter.swift in Sources */,
 				A0658D322522501C0054EB3A /* EmailPrimingPresenter.swift in Sources */,
 				A0E0860A22BD662A003A4226 /* TargetedFeeTableViewCell.swift in Sources */,
 				FEB74C7F2909E2C8002C08D1 /* SetupRecoveryCodeError.swift in Sources */,
@@ -4035,6 +4161,7 @@
 				B3BF3B5B2215ADA50009F76D /* SupportViewController.swift in Sources */,
 				B33735C7221DA54E00185403 /* NewOpDestinationFilledDataView.swift in Sources */,
 				0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */,
+				FED1239E2A8D4DDE007A3779 /* DebugModeDisplayer.swift in Sources */,
 				FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */,
 				A012F2D824D1EFEC002278F4 /* ChangePasswordVerifyViewController.swift in Sources */,
 				A0DFCD1D24520CCA00D1EBC4 /* Recover+MoreInfo.swift in Sources */,
@@ -4177,7 +4304,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1030;
+				CURRENT_PROJECT_VERSION = 1031;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4228,7 +4355,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1030;
+				CURRENT_PROJECT_VERSION = 1031;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4270,6 +4397,7 @@
 		};
 		A0E0F774220C74BF001B99AC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D644A271A94615EDD5ED4DC /* Pods-falconUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
@@ -4291,7 +4419,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = muun.falconUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Muun;
 			};
@@ -4299,6 +4427,7 @@
 		};
 		A0E0F775220C74BF001B99AC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 96303DAE309982529187EEAB /* Pods-falconUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
@@ -4315,7 +4444,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = muun.falconUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Muun;
 			};
@@ -4356,7 +4485,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1030;
+				CURRENT_PROJECT_VERSION = 1031;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4421,7 +4550,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1030;
+				CURRENT_PROJECT_VERSION = 1031;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4454,7 +4583,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1030;
+				CURRENT_PROJECT_VERSION = 1031;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4542,7 +4671,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1030;
+				CURRENT_PROJECT_VERSION = 1031;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

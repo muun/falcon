@@ -118,6 +118,18 @@ class KeysRepository {
         return fingerprint
     }
 
+    func getEncriptedUserPrivateKey() throws -> String {
+        guard try secureStorage.has(.encriptedUserPrivateKey) else {
+            throw MuunError(KeyStorageError.missingKey)
+        }
+
+        return try secureStorage.get(.encriptedUserPrivateKey)
+    }
+
+    func store(encriptedUserPrivateKey: String) throws {
+        try secureStorage.store(encriptedUserPrivateKey, at: .encriptedUserPrivateKey)
+    }
+
     private func saltKey(for type: ChallengeType) -> SecureStorage.Keys {
 
         switch type {

@@ -7,8 +7,10 @@
 
 import Foundation
 
-struct BackgroundExcecutionMetricsProvider {
-    static func run() -> String? {
+class BackgroundExecutionMetricsProvider {
+    var reachabilityService: ReachabilityService?
+
+    func run() -> String? {
         /// isBatteryMonitoringEnabled is required in order to get battery metrics.
         UIDevice.current.isBatteryMonitoringEnabled = true
 
@@ -26,6 +28,13 @@ struct BackgroundExcecutionMetricsProvider {
             availableNetworksDTO = AvailableNetworksDTO.from(model: $0)
         }
 
+        let reachabilityStatus = reachabilityService?.getReachabilityStatus()
+        var reachabilityStatusDTO: ReachabilityStatusDTO?
+
+        reachabilityStatus.map {
+            reachabilityStatusDTO = ReachabilityStatusDTO.from(model: $0)
+        }
+
         let metrics = BackgroundExcecutionMetrics(
             epochInMilliseconds: createEpoch(),
             batteryLevel: hardwareCapabilities.getBatterylevel(),
@@ -36,10 +45,12 @@ struct BackgroundExcecutionMetricsProvider {
             hasInternetConnectionProvidedByCarrier: hasInternetConnectionProvidedByCarrier,
             currentlyOverWifi: conectivityCapabilities.isOverWifi,
             availableNetworks: availableNetworksDTO,
+            reachabilityStatus: reachabilityStatusDTO,
             totalInternalStorage: hardwareCapabilities.getTotalStorage(),
             totalRamStorage: hardwareCapabilities.getTotalRam(),
             osVersion: osVersionString
         )
+
         let encoder = JSONEncoder()
         guard let metricsAsData = try? encoder.encode(metrics) else {
             return nil
@@ -48,7 +59,7 @@ struct BackgroundExcecutionMetricsProvider {
         return String(decoding: metricsAsData, as: UTF8.self)
     }
 
-    private static func createEpoch() -> Int64 {
+    private func createEpoch() -> Int64 {
         /// timeIntervalSince1970 provides miliseconds on decimal part so we can get epoch time as int in miliseconds.
         return Int64(Date().timeIntervalSince1970 * 1000)
     }
@@ -64,6 +75,7 @@ struct BackgroundExcecutionMetrics: Encodable {
     let hasInternetConnectionProvidedByCarrier: Bool?
     let currentlyOverWifi: Bool?
     let availableNetworks: AvailableNetworksDTO?
+    let reachabilityStatus: ReachabilityStatusDTO?
     let totalInternalStorage: Int64
     let totalRamStorage: UInt64
     let osVersion: String

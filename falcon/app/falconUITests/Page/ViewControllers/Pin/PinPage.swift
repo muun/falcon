@@ -46,4 +46,16 @@ final class PinPage: UIElementPage<UIElements.Pages.PinPage> {
         return homePage
     }
 
+    func isInLockModeAndPresent() -> Bool {
+        return Page.app.staticTexts[L10n.PinPresenter.s3].waitForExistence(timeout: 1)
+    }
+
+    func isDisplayingInvalidPinHint() -> Bool {
+        return Page.app.staticTexts[L10n.PinViewController.s4].waitForExistence(timeout: 1)
+    }
+
+    func isDisplayingAttemptsLeftHint(numberOfAttempts: Int) -> Bool {
+        return Page.app.staticTexts[L10n.PinViewController.s5("\(numberOfAttempts)")]
+            .waitForExistence(timeout: 1)
+    }
 }

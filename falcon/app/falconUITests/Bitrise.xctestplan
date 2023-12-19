@@ -16,6 +16,7 @@
     {
       "skippedTests" : [
         "IncomingSwapUITests\/testFullDebt()",
+        "NewOperationUITest\/testUserDebt()",
         "SettingsUITests"
       ],
       "target" : {

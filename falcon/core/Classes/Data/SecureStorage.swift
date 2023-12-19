@@ -17,6 +17,7 @@ public class SecureStorage {
 
     enum Keys: String, CaseIterable {
         case privateKey
+        case encriptedUserPrivateKey
         case muunPrivateKey
         case baseKeyDerivationPath
         case pin
@@ -39,9 +40,7 @@ public class SecureStorage {
     }
 
     func wipeAll() {
-        for key in Keys.allCases {
-            delete(key)
-        }
+        keychainRepository.wipe()
     }
 
     func delete(_ key: Keys) {

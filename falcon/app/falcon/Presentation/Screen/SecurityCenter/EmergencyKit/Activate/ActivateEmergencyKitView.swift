@@ -50,14 +50,17 @@ final class ActivateEmergencyKitView: UIView {
         addSubview(titleAndDescriptionView)
         NSLayoutConstraint.activate([
             titleAndDescriptionView.topAnchor.constraint(equalTo: topAnchor),
-            titleAndDescriptionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            titleAndDescriptionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+            titleAndDescriptionView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                             constant: .sideMargin),
+            titleAndDescriptionView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                              constant: -.sideMargin)
         ])
 
         titleAndDescriptionView.titleText = L10n.ActivateEmergencyKitView.s1
         titleAndDescriptionView.descriptionText = L10n.ActivateEmergencyKitView.activationDescription
             .attributedForDescription()
-            .set(bold: L10n.ActivateEmergencyKitView.boldDescription, color: Asset.Colors.title.color)
+            .set(bold: L10n.ActivateEmergencyKitView.boldDescription,
+                 color: Asset.Colors.title.color)
         titleAndDescriptionView.animate()
     }
 
@@ -83,7 +86,8 @@ final class ActivateEmergencyKitView: UIView {
             tf.backgroundColor = Asset.Colors.muunAlmostWhite.color
             tf.textColor = Asset.Colors.title.color
             tf.tintColor = Asset.Colors.title.color
-            tf.font = Constant.Fonts.monospacedDigitSystemFont(size: .welcomeMessage, weight: .semibold)
+            tf.font = Constant.Fonts.monospacedDigitSystemFont(size: .welcomeMessage,
+                                                               weight: .semibold)
             tf.textAlignment = .center
             tf.roundCorners()
 
@@ -114,8 +118,10 @@ final class ActivateEmergencyKitView: UIView {
         addSubview(activationCodeLabel)
         NSLayoutConstraint.activate([
             activationCodeLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 12),
-            activationCodeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            activationCodeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+            activationCodeLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                         constant: .sideMargin),
+            activationCodeLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                          constant: -.sideMargin)
         ])
     }
 
@@ -172,7 +178,8 @@ final class ActivateEmergencyKitView: UIView {
                  lineSpacing: Constant.FontAttributes.lineSpacing,
                  kerning: Constant.FontAttributes.kerning,
                  alignment: .center)
-            .set(tint: L10n.ActivateEmergencyKitView.oldCodeErrorRed, color: Asset.Colors.muunRed.color)
+            .set(tint: L10n.ActivateEmergencyKitView.oldCodeErrorRed,
+                 color: Asset.Colors.muunRed.color)
             .set(bold: firstDigitsOfOriginalCode, color: Asset.Colors.muunGrayDark.color)
         activationCodeLabel.shake()
     }
@@ -204,7 +211,8 @@ extension ActivateEmergencyKitView: UITextFieldDelegate {
 
             } else if updatedText.count >= textfieldMaxCharacters {
 
-                // Only change it if we know the new value won't exceed the max characters per textfield
+                // Only change it if we know the new value won't exceed the max characters per
+                // textfield
                 if text.count < textfieldMaxCharacters {
                     textField.text = updatedText
                 }

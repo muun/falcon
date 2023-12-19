@@ -35,7 +35,7 @@ class ChangePasswordVerifyPresenter<Delegate: ChangePasswordVerifyPresenterDeleg
         super.setUp()
 
         // Delay by one second to avoid hammering the backend with requests
-        let periodicFetch: Observable<Int> = buildFetchNotificationsPeriodicAction(intervalInSeconds: 1)
+        let periodicFetch = buildFetchNotificationsPeriodicAction(intervalInSeconds: 1)
 
         subscribeTo(sessionActions.watchChangePasswordVerification(), onNext: self.onEmailAuthorization)
         subscribeTo(periodicFetch, onNext: { _ in })
