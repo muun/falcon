@@ -57,6 +57,7 @@ public extension DependencyContainer {
             container.register(factory: FeatureFlagsRepository.init)
             container.register(factory: ReachabilityStatusRepository.init)
             container.register(.unique, factory: MUTimer.init)
+            container.register(.singleton, factory: BackgroundTimesRepository.init)
             container.register { AppleDeviceCheckAdapter() as DeviceCheckAdapter }
             container.register(factory: ICloudCapabilitiesProvider.init)
 

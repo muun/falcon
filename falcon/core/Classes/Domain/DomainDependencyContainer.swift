@@ -101,6 +101,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: UserActivatedFeaturesSelector.init)
             container.register(.singleton, factory: FeatureFlagsSelector.init)
             container.register(.singleton, factory: DeviceCheckTokenProvider.init)
+            container.register(.singleton, factory: BackgroundTimesService.init)
             container.register {
                 BackgroundExecutionMetricsProvider()
             }.resolvingProperties {

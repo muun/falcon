@@ -14,24 +14,28 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
     private let blockchainHeightRepository: BlockchainHeightRepository
+    private let backgroundTimesService: BackgroundTimesService
 
     init(houstonService: HoustonService,
          keysRepository: KeysRepository,
-         blockchainHeightRepository: BlockchainHeightRepository) {
+         blockchainHeightRepository: BlockchainHeightRepository,
+         backgroundTimesService: BackgroundTimesService) {
         self.houstonService = houstonService
         self.keysRepository = keysRepository
         self.blockchainHeightRepository = blockchainHeightRepository
+        self.backgroundTimesService = backgroundTimesService
 
         super.init(name: "SubmarineSwapAction")
     }
 
-    public func run(invoice: String) {
-
+    public func run(invoice: String, origin: String) {
         // We used to care a lot about this number for v1 swaps since it was the refund time
         // With swaps v2 we have collaborative refunds so we don't quite care and go for the max time
         let swapExpirationInBlocks = 144 * 7
         let submarineSwapRequest = SubmarineSwapRequest(invoice: invoice,
-                                                        swapExpirationInBlocks: swapExpirationInBlocks)
+                                                        swapExpirationInBlocks: swapExpirationInBlocks,
+                                                        origin: origin, 
+                                                        bkgTimes: backgroundTimesService.retrieveTimeLapses())
         runSingle(
             houstonService.createSubmarineSwap(submarineSwapRequest: submarineSwapRequest)
                 .map({ swap in

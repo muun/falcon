@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider = resolve()
     internal let keychainRepository: KeychainRepository = resolve()
     var debugModeDisplayer: DebugModeDisplayer?
-
+    private let backgroundTimesService: BackgroundTimesService = resolve()
     internal let gcmMessageIDKey = "gcm.message_id"
 
     func application(_ application: UIApplication,
@@ -88,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         setupDebugModeIfNeeded()
+        backgroundTimesService.onEnterForeground()
 
         return true
     }
@@ -186,6 +187,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         AnalyticsHelper.logEvent("app_will_enter_foreground")
         deviceCheckTokenProvider.reactToForegroundAppState()
+        backgroundTimesService.onEnterForeground()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -195,6 +197,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         DeviceUtils.appState = application.applicationState
+        backgroundTimesService.onEnterBackground()
     }
 
     func getRootNavigationControllerOnMainWindow() -> UINavigationController? {

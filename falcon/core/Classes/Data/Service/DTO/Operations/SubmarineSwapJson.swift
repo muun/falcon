@@ -79,4 +79,6 @@ struct SubmarineSwapFundingOutputJson: Codable {
 struct SubmarineSwapRequestJson: Codable {
     let invoice: String
     let swapExpirationInBlocks: Int
+    let origin: String
+    let bkgTimes: [BackgroundTimeLapse]
 }

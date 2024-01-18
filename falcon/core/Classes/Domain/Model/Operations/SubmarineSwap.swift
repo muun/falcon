@@ -265,10 +265,14 @@ extension SubmarineSwapFundingOutput: LibwalletSubmarineSwapFundingOutputProtoco
 public class SubmarineSwapRequest: NSObject {
     let _invoice: String
     let _swapExpirationInBlocks: Int
+    let _origin: String
+    let _bkgTimes: [BackgroundTimeLapse]
 
-    init(invoice: String, swapExpirationInBlocks: Int) {
+    init(invoice: String, swapExpirationInBlocks: Int, origin: String, bkgTimes: [BackgroundTimeLapse]) {
         _invoice = invoice
         _swapExpirationInBlocks = swapExpirationInBlocks
+        _origin = origin
+        _bkgTimes = bkgTimes
     }
 }
 

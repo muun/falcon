@@ -54,7 +54,8 @@ class NewOperationViewController: MUViewController {
             self.viewBuilder = OpToAddressViewBuilder(transitionDelegate: presenter,
                                                       newOpViewDelegate: self,
                                                       filledDataDelegate: self,
-                                                      amountDelegate: newOpView)
+                                                      amountDelegate: newOpView,
+                                                      origin: origin)
 
             newOpParams = ["type": Constant.NewOpAnalytics.OpType.toAddress.rawValue,
                            "origin": origin.rawValue]
@@ -69,7 +70,8 @@ class NewOperationViewController: MUViewController {
             self.viewBuilder = OpSubmarineSwapViewBuilder(transitionDelegate: presenter,
                                                           newOpViewDelegate: self,
                                                           filledDataDelegate: self,
-                                                          amountDelegate: newOpView)
+                                                          amountDelegate: newOpView,
+                                                          origin: origin)
             newOpParams = ["type": Constant.NewOpAnalytics.OpType.submarineSwap.rawValue,
                            "origin": origin.rawValue]
             title = L10n.NewOperationViewController.s2

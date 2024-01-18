@@ -27,24 +27,30 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     weak var newOpViewDelegate: NewOpViewDelegate?
     weak var filledDataDelegate: NewOperationView.FilledDataDelegate?
     weak var amountDelegate: AmountDelegate?
+    private var origin: Constant.NewOpAnalytics.Origin
 
     private var params: [String: Any] = [:]
 
     init(transitionDelegate: Transitions,
          newOpViewDelegate: NewOpViewDelegate,
          filledDataDelegate: NewOperationView.FilledDataDelegate,
-         amountDelegate: AmountDelegate?) {
+         amountDelegate: AmountDelegate?,
+         origin: Constant.NewOpAnalytics.Origin) {
         self.transitionDelegate = transitionDelegate
         self.newOpViewDelegate = newOpViewDelegate
         self.filledDataDelegate = filledDataDelegate
         self.amountDelegate = amountDelegate
+        self.origin = origin
     }
 
     func getNextStep(state: NewOpState) -> NewOpNextStep {
         switch state {
 
         case .loading(let data):
-            return .view(NewOpLoadingView(paymentIntent: data.type, delegate: transitionDelegate), filledData: [])
+            return .view(NewOpLoadingView(paymentIntent: data.type,
+                                          delegate: transitionDelegate,
+                                          origin: origin),
+                         filledData: [])
 
         case .amount(let data):
             let view = NewOpAmountView(data: data,

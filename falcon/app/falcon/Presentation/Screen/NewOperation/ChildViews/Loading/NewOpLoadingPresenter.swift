@@ -44,7 +44,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
         super.init(delegate: delegate)
     }
 
-    func startLoading() {
+    func startLoading(origin: Constant.NewOpAnalytics.Origin) {
 
         let paymentRequestType: Single<PaymentRequestType>
         var isSwap = false
@@ -54,7 +54,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
             paymentRequestType = Single.just(FlowToAddress(uri: uri))
 
         case .submarineSwap(let invoice):
-            paymentRequestType = createSubmarineSwap(invoice: invoice)
+            paymentRequestType = createSubmarineSwap(invoice: invoice, origin: origin)
             isSwap = true
 
         case .fromHardwareWallet,
@@ -73,8 +73,9 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
         feeCalculatorAction.run(isSwap: isSwap)
     }
 
-    private func createSubmarineSwap(invoice: LibwalletInvoice) -> Single<PaymentRequestType> {
-        submarineSwapAction.run(invoice: invoice.rawInvoice)
+    private func createSubmarineSwap(invoice: LibwalletInvoice,
+                                     origin: Constant.NewOpAnalytics.Origin) -> Single<PaymentRequestType> {
+        submarineSwapAction.run(invoice: invoice.rawInvoice, origin: origin.rawValue)
 
         return submarineSwapAction.getValue().map({ (submarineSwap) -> PaymentRequestType in
             return FlowSubmarineSwap(invoice: invoice, submarineSwap: submarineSwap)

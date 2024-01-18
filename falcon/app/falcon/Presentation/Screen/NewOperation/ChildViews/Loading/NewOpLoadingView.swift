@@ -25,11 +25,15 @@ class NewOpLoadingView: MUView, PresenterInstantior {
     fileprivate lazy var presenter = instancePresenter(NewOpLoadingPresenter.init, delegate: self, state: paymentIntent)
 
     private let paymentIntent: PaymentIntent
+    private let origin: Constant.NewOpAnalytics.Origin
     weak var delegate: OpLoadingTransitions?
 
-    init(paymentIntent: PaymentIntent, delegate: OpLoadingTransitions?) {
+    init(paymentIntent: PaymentIntent,
+         delegate: OpLoadingTransitions?,
+         origin: Constant.NewOpAnalytics.Origin) {
         self.paymentIntent = paymentIntent
         self.delegate = delegate
+        self.origin = origin
 
         super.init(frame: CGRect.zero)
 
@@ -38,7 +42,7 @@ class NewOpLoadingView: MUView, PresenterInstantior {
 
         view.addTo(self)
 
-        presenter.startLoading()
+        presenter.startLoading(origin: origin)
     }
 
     required init?(coder aDecoder: NSCoder) {

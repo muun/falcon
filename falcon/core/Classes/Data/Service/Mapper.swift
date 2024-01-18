@@ -1205,7 +1205,10 @@ extension LinkAction: APIConvertible {
 extension SubmarineSwapRequest: APIConvertible {
 
     func toJson() -> SubmarineSwapRequestJson {
-        return SubmarineSwapRequestJson(invoice: _invoice, swapExpirationInBlocks: _swapExpirationInBlocks)
+        return SubmarineSwapRequestJson(invoice: _invoice,
+                                        swapExpirationInBlocks: _swapExpirationInBlocks,
+                                        origin: _origin,
+                                        bkgTimes: _bkgTimes)
     }
 
 }
