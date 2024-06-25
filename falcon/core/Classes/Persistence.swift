@@ -12,6 +12,7 @@ public enum Persistence: String, CaseIterable {
 
     case email
     case gcmToken
+    case gcmTokenSynced
     case isBiometricIdSet
 
     case appInForeground

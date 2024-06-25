@@ -16,13 +16,16 @@ public class TaskRunner {
     let syncExternalAddressesAction: SyncExternalAddresses
     let fetchNotificationsAction: FetchNotificationsAction
     let refreshInvoicesAction: RefreshInvoicesAction
+    let fcmTokenAction: FCMTokenAction
 
     public init(syncExternalAddressesAction: SyncExternalAddresses,
                 fetchNotificationsAction: FetchNotificationsAction,
-                refreshInvoicesAction: RefreshInvoicesAction) {
+                refreshInvoicesAction: RefreshInvoicesAction,
+                fcmTokenAction: FCMTokenAction) {
         self.syncExternalAddressesAction = syncExternalAddressesAction
         self.fetchNotificationsAction = fetchNotificationsAction
         self.refreshInvoicesAction = refreshInvoicesAction
+        self.fcmTokenAction = fcmTokenAction
     }
 
     public func run() {
@@ -37,6 +40,9 @@ public class TaskRunner {
 
         // We only run this once since after that FCM should do the rest
         run(action: fetchNotificationsAction, retries: 0)
+
+        // We only run this once since after the first run failure modes will be contemplated inside the action.
+        run(action: fcmTokenAction, retries: 0)
     }
 
     private func schedule(after: DispatchTimeInterval, cb: @escaping () -> Void) {

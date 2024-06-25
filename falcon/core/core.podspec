@@ -8,11 +8,11 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/muun/muun.git', :tag => s.version.to_s }
 
   s.swift_version = '5'
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.0'
   s.static_framework = true
 
   # Only deps for notifications extension
-  s.dependency 'Firebase/Crashlytics', '7.9.0'
+  s.dependency 'Firebase/Crashlytics', '10.24.0'
   s.dependency 'GoogleUtilities'
 
   s.subspec 'all' do |sp|
@@ -30,8 +30,8 @@ Pod::Spec.new do |s|
     sp.dependency 'RxBlocking', '5.0.1'
 
     # GoogleDrive
-    sp.dependency 'GoogleSignIn', '6.2.2'
-    sp.dependency 'GoogleAPIClientForREST/Drive', '1.5.1'
+    sp.dependency 'GoogleSignIn', '7.1.0'
+    sp.dependency 'GoogleAPIClientForREST/Drive', '3.5.1'
 
     sp.test_spec 'Tests' do |ts|
       ts.source_files = 'Tests/**/*'

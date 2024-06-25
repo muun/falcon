@@ -28,7 +28,7 @@ public class CreateRCLoginSessionAction: AsyncAction<Challenge> {
         super.init(name: "CreateRCLoginSessionAction")
     }
 
-    public func run(gcmToken: String, recoveryCode: String) {
+    public func run(gcmToken: String?, recoveryCode: String) {
         // We have to wipe everything to avoid edgy bugs with the notifications
         logoutAction.run(notifyHouston: false)
 

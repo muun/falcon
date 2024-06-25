@@ -40,6 +40,17 @@ public struct NextTransactionSize: Codable {
 
         return utxoBalanceInSat - expectedDebt
     }
+
+    // Migration to init utxo status for pre-existing sizeForAmounts. Will be properly
+    // initialized after first NTS refresh (e.g first newOperation, incoming operation, or any
+    // operationUpdate).
+    // NOTE: we're choosing to init status as CONFIRMED as this field won't be used right away and
+    // for our intended first use CONFIRMED will be handled gracefully as "ignorable".
+    func initUtxoStatus() -> NextTransactionSize {
+        return NextTransactionSize(sizeProgression: sizeProgression.map({ $0.initUtxoStatus() }),
+                                   validAtOperationHid: validAtOperationHid,
+                                   _expectedDebt: _expectedDebt)
+    }
 }
 
 public struct SizeForAmount: Codable {
@@ -49,6 +60,24 @@ public struct SizeForAmount: Codable {
 
     // This property can't be nullable in versions > 46
     let outpoint: String?
+
+    // This property can't be nullable in versions > 1035 (just nullable to support migrating old, preexisting SizeForAmounts)
+    let utxoStatus: UtxoStatus?
+
+    func initUtxoStatus() -> SizeForAmount {
+        return SizeForAmount(amountInSatoshis: amountInSatoshis,
+                             sizeInBytes: sizeInBytes,
+                             outpoint: outpoint,
+                             utxoStatus: .CONFIRMED)
+    }
+}
+
+public enum UtxoStatus: String, Codable {
+
+    case UNCONFIRMED
+
+    case CONFIRMED
+
 }
 
 struct RawTransaction {

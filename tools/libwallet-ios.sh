@@ -31,7 +31,7 @@ fi
 patched_go_folder="$repo_root/falcon/go/bin"
 if [[ -x "$patched_go_folder/go" ]] || [[ "$CONFIGURATION" = "Release" ]]; then
     PATH="$patched_go_folder:$PATH"
-    if ! go version | grep "go1.18.1-muun" > /dev/null ; then
+    if ! go version | grep "go1.18.10-muun" > /dev/null ; then
         echo "Misconfigured golang version. Expected go1.18.1-muun."
         go version
         exit 1

@@ -91,6 +91,10 @@ void GULLoggerForceDebug(void) {
   }
 }
 
+GULLoggerLevel GULGetLoggerLevel(void) {
+  return sGULLoggerMaximumLevel;
+}
+
 __attribute__((no_sanitize("thread"))) void GULSetLoggerLevel(GULLoggerLevel loggerLevel) {
   if (loggerLevel < GULLoggerLevelMin || loggerLevel > GULLoggerLevelMax) {
     GULLogError(kGULLoggerLogger, NO, @"I-COR000023", @"Invalid logger level, %ld",
@@ -121,20 +125,21 @@ __attribute__((no_sanitize("thread"))) BOOL GULIsLoggableLevel(GULLoggerLevel lo
 }
 
 #ifdef DEBUG
-void GULResetLogger() {
+void GULResetLogger(void) {
   sGULLoggerOnceToken = 0;
   sGULLoggerDebugMode = NO;
+  sGULLoggerMaximumLevel = GULLoggerLevelNotice;
 }
 
-aslclient getGULLoggerClient() {
+aslclient getGULLoggerClient(void) {
   return sGULLoggerClient;
 }
 
-dispatch_queue_t getGULClientQueue() {
+dispatch_queue_t getGULClientQueue(void) {
   return sGULClientQueue;
 }
 
-BOOL getGULLoggerDebugMode() {
+BOOL getGULLoggerDebugMode(void) {
   return sGULLoggerDebugMode;
 }
 #endif
@@ -157,9 +162,8 @@ void GULLogBasic(GULLoggerLevel level,
 #ifdef DEBUG
   NSCAssert(messageCode.length == 11, @"Incorrect message code length.");
   NSRange messageCodeRange = NSMakeRange(0, messageCode.length);
-  NSUInteger numberOfMatches = [sMessageCodeRegex numberOfMatchesInString:messageCode
-                                                                  options:0
-                                                                    range:messageCodeRange];
+  NSUInteger __unused numberOfMatches =
+      [sMessageCodeRegex numberOfMatchesInString:messageCode options:0 range:messageCodeRange];
   NSCAssert(numberOfMatches == 1, @"Incorrect message code format.");
 #endif
   NSString *logMsg;

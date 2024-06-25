@@ -40,13 +40,11 @@ class BackgroundExecutionMetricsProvider {
             batteryLevel: hardwareCapabilities.getBatterylevel(),
             batteryState: hardwareCapabilities.getBatteryState(),
             freeRamStorage: hardwareCapabilities.getFreeRam(),
-            freeInternalStorage: hardwareCapabilities.getFreeStorage(),
             simState: conectivityCapabilities.getSimState().rawValue,
             hasInternetConnectionProvidedByCarrier: hasInternetConnectionProvidedByCarrier,
             currentlyOverWifi: conectivityCapabilities.isOverWifi,
             availableNetworks: availableNetworksDTO,
             reachabilityStatus: reachabilityStatusDTO,
-            totalInternalStorage: hardwareCapabilities.getTotalStorage(),
             totalRamStorage: hardwareCapabilities.getTotalRam(),
             osVersion: osVersionString
         )
@@ -70,13 +68,11 @@ struct BackgroundExcecutionMetrics: Encodable {
     let batteryLevel: Float
     let batteryState: String
     let freeRamStorage: Int64
-    let freeInternalStorage: Int64
     let simState: String
     let hasInternetConnectionProvidedByCarrier: Bool?
     let currentlyOverWifi: Bool?
     let availableNetworks: AvailableNetworksDTO?
     let reachabilityStatus: ReachabilityStatusDTO?
-    let totalInternalStorage: Int64
     let totalRamStorage: UInt64
     let osVersion: String
 }

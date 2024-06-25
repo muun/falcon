@@ -18,6 +18,8 @@
 
 #include "Crashlytics/Protogen/nanopb/crashlytics.nanopb.h"
 
+#import "Crashlytics/Crashlytics/Models/FIRCLSInstallIdentifierModel.h"
+
 #import <GoogleDataTransport/GoogleDataTransport.h>
 
 /// This class is responsible for reading the persisted crash reports from disk and converting them
@@ -28,6 +30,11 @@
 
 /// Initializer
 /// @param folderPath Path where the persisted crash files reside
-- (instancetype)initWithPath:(NSString *)folderPath googleAppId:(NSString *)googleAppID;
-
+/// @param googleAppID ID for the app passed in from Firebase Core
+/// @param installIDModel for pulling the Crashlytics Installation UUID
+- (instancetype)initWithPath:(NSString *)folderPath
+                 googleAppId:(NSString *)googleAppID
+              installIDModel:(FIRCLSInstallIdentifierModel *)installIDModel
+                        fiid:(NSString *)fiid
+                   authToken:(NSString *)authToken;
 @end

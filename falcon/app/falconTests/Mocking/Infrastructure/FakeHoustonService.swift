@@ -156,4 +156,29 @@ class FakeHoustonService: HoustonService {
             return Disposables.create()
         }
     }
+
+    var canUpdateGcmToken = true
+    var updateGcmTokenCalledCount = 0
+    var shouldRespondToUpdateGcmToken = BehaviorSubject<Bool>(value: true)
+    var lastSyncedGCMToken: String?
+    var updateGcmTokenExpectation: XCTestExpectation?
+    override func updateGcmToken(gcmToken: String) -> Single<()> {
+        updateGcmTokenCalledCount += 1
+        return Single.create { completion in
+            _ = self.shouldRespondToUpdateGcmToken.subscribe { value in
+                if value.element ?? false {
+                    guard self.canUpdateGcmToken else {
+                        completion(.error(NSError(domain: "", code: 1)))
+                        return
+                    }
+
+                    self.lastSyncedGCMToken = gcmToken
+                    completion(.success(()))
+                    self.updateGcmTokenExpectation?.fulfill()
+                }
+            }
+
+            return Disposables.create()
+        }
+    }
 }

@@ -1,0 +1,664 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A08AB39A264E66F8878ADF671AD0E3F /* FirebaseSessionsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528F59727EF73B26A6B25641A92F099 /* FirebaseSessionsError.swift */; };
+		11D67D76C4512FEE7CA7FE76C97C8829 /* sessions.nanopb.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D346FB4D2FA3B1E37BFB8C1D16296D2 /* sessions.nanopb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		15DEF408B816D6AA3AB9F64269E2A3C2 /* SessionStartEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454549B6E7C997166A80634992788C35 /* SessionStartEvent.swift */; };
+		173B28BEBE36E5059DF355C44E7FFAC4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4350A94934F5BFD1309E14C0B9BFAEDC /* Logger.swift */; };
+		2477CA35523E11F01EA85A73ED02B9EB /* ApplicationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB92CACC964E377BA8549A799C562C4F /* ApplicationInfo.swift */; };
+		2C853D772DB3F245891A800DE32119A6 /* FirebaseSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD552DA5BE59E74B94F12E46ADFD11E3 /* FirebaseSessions.swift */; };
+		3367A2B656515EAACD463F24FB140DFC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933AC8D44290CBAC27942E1F635F2B6B /* Foundation.framework */; };
+		35DE21E367EF6A3D574AF44334397F49 /* SessionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1EA3FF4F4F2F7BCC05665124B27D45 /* SessionGenerator.swift */; };
+		3DCB71B17F8A40880479718ABF7EE197 /* SessionsDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F9C5C40EF4499FE7AACD9BED65A131 /* SessionsDependencies.swift */; };
+		3FBF9DBA46C30B83973CB19BD151408A /* FirebaseSessions-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F7BA5CF5750FDF3EBFE401942F539E3 /* FirebaseSessions-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		46278799E1C0FBB3EB470AE6FDE0CCD2 /* sessions.nanopb.c in Sources */ = {isa = PBXBuildFile; fileRef = 62D3E31F84D9CB36EDE2E7E587C02408 /* sessions.nanopb.c */; };
+		46ABFC5C90C6CBEC42866365BECE8A92 /* SessionInitiator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A62FC553DD10BC16DB2328E625BB80 /* SessionInitiator.swift */; };
+		5C6F65F6BDC6BEF89619C3489C83C586 /* SessionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08CE5ECBDE8C71BFA7D7D4FFF8C26BA /* SessionsProvider.swift */; };
+		64658565BFB4E7BB2A998347E5A8F8A9 /* NanoPB+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B1352548DB5D2CD7A72105BF5479DC /* NanoPB+CustomStringConvertible.swift */; };
+		7513B7142BF9F81C3BB66ACCDFB41101 /* SessionsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3451B3DC7E7E224DBCBF4CF4ABF932F /* SessionsSettings.swift */; };
+		799727D5D309899C8348DABA3461B5AF /* SDKDefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3F813523F16CA140BE458ADCBCA284 /* SDKDefaultSettings.swift */; };
+		7A8B3D71CB1C2C8616C41200789D2790 /* FirebaseSessions-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C785E0FC826C8CF3922DE2B40A292F /* FirebaseSessions-dummy.m */; };
+		893B426CF05F94F55837D155C55448EA /* EventGDTLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9954C66B5AEE048B2CB3920E9816B9EC /* EventGDTLogger.swift */; };
+		895CBA418BBDA7A3885417AB98BD789D /* SettingsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EC3928235FE2422F65D623A06FE576 /* SettingsProtocol.swift */; };
+		8CAD2052E60B676915BBE6E88FC1CB6E /* RemoteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAEBE911BA40AD4806ADEC5E02BC151 /* RemoteSettings.swift */; };
+		925BCF5060611C493F0AC4C47D31C721 /* FIRSESNanoPBHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = BB08E4E5CCF64806B96542A43382D3E4 /* FIRSESNanoPBHelpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9E904053C6969FB180FE912F1F9F364D /* SettingsCacheClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6658DF507C7AAF728DBD52D9AA5F2CE /* SettingsCacheClient.swift */; };
+		A505279983CF77F47FF7A4E12833F402 /* SettingsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F0F3893EC43AB106A265A7B761F7D8 /* SettingsProvider.swift */; };
+		A7E6D764F73DCEED6B50C5D204CB0233 /* SessionsSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E06EC75B41620603E74455F0EACCAF /* SessionsSubscriber.swift */; };
+		A8A34FE7C3EC4E8C269AB90F7B8E6380 /* FIRSESNanoPBHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2F4E4E8609BEE5BF03C34F460FC4DA /* FIRSESNanoPBHelpers.m */; };
+		A8AB46D9F7A01669F23989D6B0CF5E7B /* NetworkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAAEA1BBFE7E59D899BBECE41AB3D7A4 /* NetworkInfo.swift */; };
+		C646C8E3DF1D2BF26B26D14FFC850959 /* SettingsDownloadClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7EC2A140518FF301820E5284F70353 /* SettingsDownloadClient.swift */; };
+		CD685B81A7F4D9F675E77D6C6BD551AB /* LocalOverrideSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8A567AFAAB92059E145F9A82BDEF1 /* LocalOverrideSettings.swift */; };
+		E18D1D4CC8846C4B1E96F9764D6B2616 /* GoogleDataTransport+GoogleDataTransportProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F79DB1FBFAEF884555707B17D351123 /* GoogleDataTransport+GoogleDataTransportProtocol.swift */; };
+		E5740072B5D2D72273E508DC2DD6D626 /* DevEventConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A432B14B94773353DDC8F653E3E7E0 /* DevEventConsoleLogger.swift */; };
+		F9604F88597088C64A950C3AC0C701B6 /* Installations+InstallationsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB190BAA82B2E0B5B9F5795E4B5782A /* Installations+InstallationsProtocol.swift */; };
+		F9D56B8FFB5021D9BC60A143B6924773 /* SessionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060309C44BFA620BBB98B57951F97F29 /* SessionCoordinator.swift */; };
+		FCF817F4CFE497A946039D81C58F5A9E /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F26E2240108C186CA957F5899006182 /* Time.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1BAFBCBE466826F1D4FA47F68D4B19BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4690B6D567BD875B19BFF520F8CDDCCA /* FirebaseCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
+			remoteInfo = FirebaseCore;
+		};
+		66B5FC693A6D1FCB6A81989B8A638699 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35DA349F587B1DF076AF9F0F8912F1F1 /* FirebaseInstallations.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5141209CC29AF79FFB5703E3712E76EF;
+			remoteInfo = FirebaseInstallations;
+		};
+		6B7780267349B005D1969E90923A8164 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67467794FEC457B6B020DEE4E0FE46C2 /* PromisesSwift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CD5857E2EED13CA5EA1662727DE09222;
+			remoteInfo = PromisesSwift;
+		};
+		7B4C24BFC6CD47629E80A2CEFCD0BD52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 805165BCF719B019F13CE12885CC3D71 /* GoogleUtilities.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
+			remoteInfo = GoogleUtilities;
+		};
+		85FA57562A2BED456E7D5738C4992883 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9FD1BD1BD3992E46A560DA3C30ECF766 /* GoogleDataTransport.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 78B41281B6D2EAC6C3C75FFE5052E985;
+			remoteInfo = GoogleDataTransport;
+		};
+		D88E26D4350EC8654FF3611CAC9EA5C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 318E706F452B2819DC6EDA6BEC41A16B /* FirebaseCoreExtension.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 990B821FCC6595B8EBC121BBFD843EBD;
+			remoteInfo = FirebaseCoreExtension;
+		};
+		E6E334A01C0A38B19362A69CDB20FC81 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E7DDAB6783A5B9509722DD2F8A8C9FB8 /* nanopb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 052B66B57BF269A4B160A5659F7D46D4;
+			remoteInfo = nanopb;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		01E06EC75B41620603E74455F0EACCAF /* SessionsSubscriber.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionsSubscriber.swift; path = FirebaseSessions/Sources/Public/SessionsSubscriber.swift; sourceTree = "<group>"; };
+		04359BD304597F4C1A5670BD24B6B86C /* FirebaseSessions-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FirebaseSessions-Info.plist"; sourceTree = "<group>"; };
+		060309C44BFA620BBB98B57951F97F29 /* SessionCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionCoordinator.swift; path = FirebaseSessions/Sources/SessionCoordinator.swift; sourceTree = "<group>"; };
+		11A62FC553DD10BC16DB2328E625BB80 /* SessionInitiator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionInitiator.swift; path = FirebaseSessions/Sources/SessionInitiator.swift; sourceTree = "<group>"; };
+		16EC3928235FE2422F65D623A06FE576 /* SettingsProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsProtocol.swift; path = FirebaseSessions/Sources/Settings/SettingsProtocol.swift; sourceTree = "<group>"; };
+		1D67F209D9E505BA081BA8AE80E5C733 /* FirebaseSessions */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FirebaseSessions; path = FirebaseSessions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29C785E0FC826C8CF3922DE2B40A292F /* FirebaseSessions-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FirebaseSessions-dummy.m"; sourceTree = "<group>"; };
+		2A1EA3FF4F4F2F7BCC05665124B27D45 /* SessionGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionGenerator.swift; path = FirebaseSessions/Sources/SessionGenerator.swift; sourceTree = "<group>"; };
+		30A432B14B94773353DDC8F653E3E7E0 /* DevEventConsoleLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DevEventConsoleLogger.swift; path = FirebaseSessions/Sources/Development/DevEventConsoleLogger.swift; sourceTree = "<group>"; };
+		318E706F452B2819DC6EDA6BEC41A16B /* FirebaseCoreExtension */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseCoreExtension; path = FirebaseCoreExtension.xcodeproj; sourceTree = "<group>"; };
+		35DA349F587B1DF076AF9F0F8912F1F1 /* FirebaseInstallations */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseInstallations; path = FirebaseInstallations.xcodeproj; sourceTree = "<group>"; };
+		3D346FB4D2FA3B1E37BFB8C1D16296D2 /* sessions.nanopb.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = sessions.nanopb.h; path = FirebaseSessions/SourcesObjC/Protogen/nanopb/sessions.nanopb.h; sourceTree = "<group>"; };
+		4350A94934F5BFD1309E14C0B9BFAEDC /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = FirebaseSessions/Sources/Logger.swift; sourceTree = "<group>"; };
+		454549B6E7C997166A80634992788C35 /* SessionStartEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionStartEvent.swift; path = FirebaseSessions/Sources/SessionStartEvent.swift; sourceTree = "<group>"; };
+		45F9C5C40EF4499FE7AACD9BED65A131 /* SessionsDependencies.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionsDependencies.swift; path = FirebaseSessions/Sources/Public/SessionsDependencies.swift; sourceTree = "<group>"; };
+		4690B6D567BD875B19BFF520F8CDDCCA /* FirebaseCore */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseCore; path = FirebaseCore.xcodeproj; sourceTree = "<group>"; };
+		5C3F813523F16CA140BE458ADCBCA284 /* SDKDefaultSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SDKDefaultSettings.swift; path = FirebaseSessions/Sources/Settings/SDKDefaultSettings.swift; sourceTree = "<group>"; };
+		5F7BA5CF5750FDF3EBFE401942F539E3 /* FirebaseSessions-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FirebaseSessions-umbrella.h"; sourceTree = "<group>"; };
+		62D3E31F84D9CB36EDE2E7E587C02408 /* sessions.nanopb.c */ = {isa = PBXFileReference; includeInIndex = 1; name = sessions.nanopb.c; path = FirebaseSessions/SourcesObjC/Protogen/nanopb/sessions.nanopb.c; sourceTree = "<group>"; };
+		67467794FEC457B6B020DEE4E0FE46C2 /* PromisesSwift */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PromisesSwift; path = PromisesSwift.xcodeproj; sourceTree = "<group>"; };
+		77F0F3893EC43AB106A265A7B761F7D8 /* SettingsProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsProvider.swift; path = FirebaseSessions/Sources/Settings/SettingsProvider.swift; sourceTree = "<group>"; };
+		7F26E2240108C186CA957F5899006182 /* Time.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Time.swift; path = FirebaseSessions/Sources/Time.swift; sourceTree = "<group>"; };
+		7F79DB1FBFAEF884555707B17D351123 /* GoogleDataTransport+GoogleDataTransportProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "GoogleDataTransport+GoogleDataTransportProtocol.swift"; path = "FirebaseSessions/Sources/GoogleDataTransport+GoogleDataTransportProtocol.swift"; sourceTree = "<group>"; };
+		805165BCF719B019F13CE12885CC3D71 /* GoogleUtilities */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GoogleUtilities; path = GoogleUtilities.xcodeproj; sourceTree = "<group>"; };
+		88B1352548DB5D2CD7A72105BF5479DC /* NanoPB+CustomStringConvertible.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NanoPB+CustomStringConvertible.swift"; path = "FirebaseSessions/Sources/Development/NanoPB+CustomStringConvertible.swift"; sourceTree = "<group>"; };
+		8C7EC2A140518FF301820E5284F70353 /* SettingsDownloadClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsDownloadClient.swift; path = FirebaseSessions/Sources/Settings/SettingsDownloadClient.swift; sourceTree = "<group>"; };
+		8EAEBE911BA40AD4806ADEC5E02BC151 /* RemoteSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RemoteSettings.swift; path = FirebaseSessions/Sources/Settings/RemoteSettings.swift; sourceTree = "<group>"; };
+		933AC8D44290CBAC27942E1F635F2B6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		9954C66B5AEE048B2CB3920E9816B9EC /* EventGDTLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EventGDTLogger.swift; path = FirebaseSessions/Sources/EventGDTLogger.swift; sourceTree = "<group>"; };
+		9FD1BD1BD3992E46A560DA3C30ECF766 /* GoogleDataTransport */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GoogleDataTransport; path = GoogleDataTransport.xcodeproj; sourceTree = "<group>"; };
+		A528F59727EF73B26A6B25641A92F099 /* FirebaseSessionsError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FirebaseSessionsError.swift; path = FirebaseSessions/Sources/FirebaseSessionsError.swift; sourceTree = "<group>"; };
+		A8F63DB57BD592145B30B6EDF649D06F /* FirebaseSessions.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FirebaseSessions.modulemap; sourceTree = "<group>"; };
+		BAAEA1BBFE7E59D899BBECE41AB3D7A4 /* NetworkInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkInfo.swift; path = FirebaseSessions/Sources/NetworkInfo.swift; sourceTree = "<group>"; };
+		BB08E4E5CCF64806B96542A43382D3E4 /* FIRSESNanoPBHelpers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRSESNanoPBHelpers.h; path = FirebaseSessions/SourcesObjC/NanoPB/FIRSESNanoPBHelpers.h; sourceTree = "<group>"; };
+		C1F8A567AFAAB92059E145F9A82BDEF1 /* LocalOverrideSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalOverrideSettings.swift; path = FirebaseSessions/Sources/Settings/LocalOverrideSettings.swift; sourceTree = "<group>"; };
+		C95837EE9F66B424138F26A2822313B2 /* FirebaseSessions.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FirebaseSessions.debug.xcconfig; sourceTree = "<group>"; };
+		CE08BB98111BFF95930C7623A96DE9F1 /* FirebaseSessions.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FirebaseSessions.release.xcconfig; sourceTree = "<group>"; };
+		D6658DF507C7AAF728DBD52D9AA5F2CE /* SettingsCacheClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsCacheClient.swift; path = FirebaseSessions/Sources/Settings/SettingsCacheClient.swift; sourceTree = "<group>"; };
+		DB92CACC964E377BA8549A799C562C4F /* ApplicationInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ApplicationInfo.swift; path = FirebaseSessions/Sources/ApplicationInfo.swift; sourceTree = "<group>"; };
+		E08CE5ECBDE8C71BFA7D7D4FFF8C26BA /* SessionsProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionsProvider.swift; path = FirebaseSessions/Sources/Public/SessionsProvider.swift; sourceTree = "<group>"; };
+		E7DDAB6783A5B9509722DD2F8A8C9FB8 /* nanopb */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = nanopb; path = nanopb.xcodeproj; sourceTree = "<group>"; };
+		EAB190BAA82B2E0B5B9F5795E4B5782A /* Installations+InstallationsProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Installations+InstallationsProtocol.swift"; path = "FirebaseSessions/Sources/Installations+InstallationsProtocol.swift"; sourceTree = "<group>"; };
+		EE2F4E4E8609BEE5BF03C34F460FC4DA /* FIRSESNanoPBHelpers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRSESNanoPBHelpers.m; path = FirebaseSessions/SourcesObjC/NanoPB/FIRSESNanoPBHelpers.m; sourceTree = "<group>"; };
+		F3451B3DC7E7E224DBCBF4CF4ABF932F /* SessionsSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionsSettings.swift; path = FirebaseSessions/Sources/Settings/SessionsSettings.swift; sourceTree = "<group>"; };
+		FD552DA5BE59E74B94F12E46ADFD11E3 /* FirebaseSessions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FirebaseSessions.swift; path = FirebaseSessions/Sources/FirebaseSessions.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0D8851B57BB34F9753CB74E1B7500A54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3367A2B656515EAACD463F24FB140DFC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0F990C6C843486A7244741B9D5CCF884 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A8F63DB57BD592145B30B6EDF649D06F /* FirebaseSessions.modulemap */,
+				29C785E0FC826C8CF3922DE2B40A292F /* FirebaseSessions-dummy.m */,
+				04359BD304597F4C1A5670BD24B6B86C /* FirebaseSessions-Info.plist */,
+				5F7BA5CF5750FDF3EBFE401942F539E3 /* FirebaseSessions-umbrella.h */,
+				C95837EE9F66B424138F26A2822313B2 /* FirebaseSessions.debug.xcconfig */,
+				CE08BB98111BFF95930C7623A96DE9F1 /* FirebaseSessions.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/FirebaseSessions";
+			sourceTree = "<group>";
+		};
+		60863F0B7C4963E6750E95BDC4D9FFFE /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				4690B6D567BD875B19BFF520F8CDDCCA /* FirebaseCore */,
+				318E706F452B2819DC6EDA6BEC41A16B /* FirebaseCoreExtension */,
+				35DA349F587B1DF076AF9F0F8912F1F1 /* FirebaseInstallations */,
+				9FD1BD1BD3992E46A560DA3C30ECF766 /* GoogleDataTransport */,
+				805165BCF719B019F13CE12885CC3D71 /* GoogleUtilities */,
+				E7DDAB6783A5B9509722DD2F8A8C9FB8 /* nanopb */,
+				67467794FEC457B6B020DEE4E0FE46C2 /* PromisesSwift */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		696A74119A00FFE78B1AB208C7202A1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D67F209D9E505BA081BA8AE80E5C733 /* FirebaseSessions */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B2C6A4FEC5B98917345DCCEDD8B88AB7 = {
+			isa = PBXGroup;
+			children = (
+				60863F0B7C4963E6750E95BDC4D9FFFE /* Dependencies */,
+				D516D78A0F5EB9393B44E94F6DAA76B2 /* FirebaseSessions */,
+				F5E966691898C8BB45B84CE8EF78DB62 /* Frameworks */,
+				696A74119A00FFE78B1AB208C7202A1B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D516D78A0F5EB9393B44E94F6DAA76B2 /* FirebaseSessions */ = {
+			isa = PBXGroup;
+			children = (
+				DB92CACC964E377BA8549A799C562C4F /* ApplicationInfo.swift */,
+				30A432B14B94773353DDC8F653E3E7E0 /* DevEventConsoleLogger.swift */,
+				9954C66B5AEE048B2CB3920E9816B9EC /* EventGDTLogger.swift */,
+				FD552DA5BE59E74B94F12E46ADFD11E3 /* FirebaseSessions.swift */,
+				A528F59727EF73B26A6B25641A92F099 /* FirebaseSessionsError.swift */,
+				BB08E4E5CCF64806B96542A43382D3E4 /* FIRSESNanoPBHelpers.h */,
+				EE2F4E4E8609BEE5BF03C34F460FC4DA /* FIRSESNanoPBHelpers.m */,
+				7F79DB1FBFAEF884555707B17D351123 /* GoogleDataTransport+GoogleDataTransportProtocol.swift */,
+				EAB190BAA82B2E0B5B9F5795E4B5782A /* Installations+InstallationsProtocol.swift */,
+				C1F8A567AFAAB92059E145F9A82BDEF1 /* LocalOverrideSettings.swift */,
+				4350A94934F5BFD1309E14C0B9BFAEDC /* Logger.swift */,
+				88B1352548DB5D2CD7A72105BF5479DC /* NanoPB+CustomStringConvertible.swift */,
+				BAAEA1BBFE7E59D899BBECE41AB3D7A4 /* NetworkInfo.swift */,
+				8EAEBE911BA40AD4806ADEC5E02BC151 /* RemoteSettings.swift */,
+				5C3F813523F16CA140BE458ADCBCA284 /* SDKDefaultSettings.swift */,
+				060309C44BFA620BBB98B57951F97F29 /* SessionCoordinator.swift */,
+				2A1EA3FF4F4F2F7BCC05665124B27D45 /* SessionGenerator.swift */,
+				11A62FC553DD10BC16DB2328E625BB80 /* SessionInitiator.swift */,
+				62D3E31F84D9CB36EDE2E7E587C02408 /* sessions.nanopb.c */,
+				3D346FB4D2FA3B1E37BFB8C1D16296D2 /* sessions.nanopb.h */,
+				45F9C5C40EF4499FE7AACD9BED65A131 /* SessionsDependencies.swift */,
+				E08CE5ECBDE8C71BFA7D7D4FFF8C26BA /* SessionsProvider.swift */,
+				F3451B3DC7E7E224DBCBF4CF4ABF932F /* SessionsSettings.swift */,
+				01E06EC75B41620603E74455F0EACCAF /* SessionsSubscriber.swift */,
+				454549B6E7C997166A80634992788C35 /* SessionStartEvent.swift */,
+				D6658DF507C7AAF728DBD52D9AA5F2CE /* SettingsCacheClient.swift */,
+				8C7EC2A140518FF301820E5284F70353 /* SettingsDownloadClient.swift */,
+				16EC3928235FE2422F65D623A06FE576 /* SettingsProtocol.swift */,
+				77F0F3893EC43AB106A265A7B761F7D8 /* SettingsProvider.swift */,
+				7F26E2240108C186CA957F5899006182 /* Time.swift */,
+				0F990C6C843486A7244741B9D5CCF884 /* Support Files */,
+			);
+			name = FirebaseSessions;
+			path = FirebaseSessions;
+			sourceTree = "<group>";
+		};
+		E15605896EDFC4FC5FEFFCC55662C965 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				933AC8D44290CBAC27942E1F635F2B6B /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		F5E966691898C8BB45B84CE8EF78DB62 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E15605896EDFC4FC5FEFFCC55662C965 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		90B87C7240F07490443659565721FC2B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FBF9DBA46C30B83973CB19BD151408A /* FirebaseSessions-umbrella.h in Headers */,
+				925BCF5060611C493F0AC4C47D31C721 /* FIRSESNanoPBHelpers.h in Headers */,
+				11D67D76C4512FEE7CA7FE76C97C8829 /* sessions.nanopb.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		EAD207B5ED8AD7FA4A70C0723B4901AA /* FirebaseSessions */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5333C02597E8008631538AED70FCC1AB /* Build configuration list for PBXNativeTarget "FirebaseSessions" */;
+			buildPhases = (
+				90B87C7240F07490443659565721FC2B /* Headers */,
+				724455F1B748457C056136004D4C3F39 /* Sources */,
+				0D8851B57BB34F9753CB74E1B7500A54 /* Frameworks */,
+				76EF26614ECEDCB715350677D1E476A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B4F357458989ABB6ABA77E2EA0493A1 /* PBXTargetDependency */,
+				253C1F1672C6EF4E267BE2CA707A9C99 /* PBXTargetDependency */,
+				83A071FD4F4BDD1D6B252BA755A7ECF4 /* PBXTargetDependency */,
+				B9D5E06293E37D2D301FEBB9EEB08BEA /* PBXTargetDependency */,
+				576B4A4694D1615B880E75E937E7D9A1 /* PBXTargetDependency */,
+				16ECC66096DF594EA779E97D871DD02A /* PBXTargetDependency */,
+				F6930360C9D46783C5BE3B8434A82224 /* PBXTargetDependency */,
+			);
+			name = FirebaseSessions;
+			productName = FirebaseSessions;
+			productReference = 1D67F209D9E505BA081BA8AE80E5C733 /* FirebaseSessions */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		41006F054D94EA8F51DC5FA4ED47FAD0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 9C81F6AB75D1A947FF085F6DE5A4B2C5 /* Build configuration list for PBXProject "FirebaseSessions" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = B2C6A4FEC5B98917345DCCEDD8B88AB7;
+			productRefGroup = 696A74119A00FFE78B1AB208C7202A1B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProjectRef = 4690B6D567BD875B19BFF520F8CDDCCA /* FirebaseCore */;
+				},
+				{
+					ProjectRef = 318E706F452B2819DC6EDA6BEC41A16B /* FirebaseCoreExtension */;
+				},
+				{
+					ProjectRef = 35DA349F587B1DF076AF9F0F8912F1F1 /* FirebaseInstallations */;
+				},
+				{
+					ProjectRef = 9FD1BD1BD3992E46A560DA3C30ECF766 /* GoogleDataTransport */;
+				},
+				{
+					ProjectRef = 805165BCF719B019F13CE12885CC3D71 /* GoogleUtilities */;
+				},
+				{
+					ProjectRef = E7DDAB6783A5B9509722DD2F8A8C9FB8 /* nanopb */;
+				},
+				{
+					ProjectRef = 67467794FEC457B6B020DEE4E0FE46C2 /* PromisesSwift */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				EAD207B5ED8AD7FA4A70C0723B4901AA /* FirebaseSessions */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		76EF26614ECEDCB715350677D1E476A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		724455F1B748457C056136004D4C3F39 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2477CA35523E11F01EA85A73ED02B9EB /* ApplicationInfo.swift in Sources */,
+				E5740072B5D2D72273E508DC2DD6D626 /* DevEventConsoleLogger.swift in Sources */,
+				893B426CF05F94F55837D155C55448EA /* EventGDTLogger.swift in Sources */,
+				2C853D772DB3F245891A800DE32119A6 /* FirebaseSessions.swift in Sources */,
+				7A8B3D71CB1C2C8616C41200789D2790 /* FirebaseSessions-dummy.m in Sources */,
+				0A08AB39A264E66F8878ADF671AD0E3F /* FirebaseSessionsError.swift in Sources */,
+				A8A34FE7C3EC4E8C269AB90F7B8E6380 /* FIRSESNanoPBHelpers.m in Sources */,
+				E18D1D4CC8846C4B1E96F9764D6B2616 /* GoogleDataTransport+GoogleDataTransportProtocol.swift in Sources */,
+				F9604F88597088C64A950C3AC0C701B6 /* Installations+InstallationsProtocol.swift in Sources */,
+				CD685B81A7F4D9F675E77D6C6BD551AB /* LocalOverrideSettings.swift in Sources */,
+				173B28BEBE36E5059DF355C44E7FFAC4 /* Logger.swift in Sources */,
+				64658565BFB4E7BB2A998347E5A8F8A9 /* NanoPB+CustomStringConvertible.swift in Sources */,
+				A8AB46D9F7A01669F23989D6B0CF5E7B /* NetworkInfo.swift in Sources */,
+				8CAD2052E60B676915BBE6E88FC1CB6E /* RemoteSettings.swift in Sources */,
+				799727D5D309899C8348DABA3461B5AF /* SDKDefaultSettings.swift in Sources */,
+				F9D56B8FFB5021D9BC60A143B6924773 /* SessionCoordinator.swift in Sources */,
+				35DE21E367EF6A3D574AF44334397F49 /* SessionGenerator.swift in Sources */,
+				46ABFC5C90C6CBEC42866365BECE8A92 /* SessionInitiator.swift in Sources */,
+				46278799E1C0FBB3EB470AE6FDE0CCD2 /* sessions.nanopb.c in Sources */,
+				3DCB71B17F8A40880479718ABF7EE197 /* SessionsDependencies.swift in Sources */,
+				5C6F65F6BDC6BEF89619C3489C83C586 /* SessionsProvider.swift in Sources */,
+				7513B7142BF9F81C3BB66ACCDFB41101 /* SessionsSettings.swift in Sources */,
+				A7E6D764F73DCEED6B50C5D204CB0233 /* SessionsSubscriber.swift in Sources */,
+				15DEF408B816D6AA3AB9F64269E2A3C2 /* SessionStartEvent.swift in Sources */,
+				9E904053C6969FB180FE912F1F9F364D /* SettingsCacheClient.swift in Sources */,
+				C646C8E3DF1D2BF26B26D14FFC850959 /* SettingsDownloadClient.swift in Sources */,
+				895CBA418BBDA7A3885417AB98BD789D /* SettingsProtocol.swift in Sources */,
+				A505279983CF77F47FF7A4E12833F402 /* SettingsProvider.swift in Sources */,
+				FCF817F4CFE497A946039D81C58F5A9E /* Time.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		16ECC66096DF594EA779E97D871DD02A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PromisesSwift;
+			targetProxy = 6B7780267349B005D1969E90923A8164 /* PBXContainerItemProxy */;
+		};
+		253C1F1672C6EF4E267BE2CA707A9C99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FirebaseCoreExtension;
+			targetProxy = D88E26D4350EC8654FF3611CAC9EA5C8 /* PBXContainerItemProxy */;
+		};
+		2B4F357458989ABB6ABA77E2EA0493A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FirebaseCore;
+			targetProxy = 1BAFBCBE466826F1D4FA47F68D4B19BF /* PBXContainerItemProxy */;
+		};
+		576B4A4694D1615B880E75E937E7D9A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleUtilities;
+			targetProxy = 7B4C24BFC6CD47629E80A2CEFCD0BD52 /* PBXContainerItemProxy */;
+		};
+		83A071FD4F4BDD1D6B252BA755A7ECF4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FirebaseInstallations;
+			targetProxy = 66B5FC693A6D1FCB6A81989B8A638699 /* PBXContainerItemProxy */;
+		};
+		B9D5E06293E37D2D301FEBB9EEB08BEA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleDataTransport;
+			targetProxy = 85FA57562A2BED456E7D5738C4992883 /* PBXContainerItemProxy */;
+		};
+		F6930360C9D46783C5BE3B8434A82224 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = nanopb;
+			targetProxy = E6E334A01C0A38B19362A69CDB20FC81 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		655BA6CF9E6B9E30E667249C234E4655 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C95837EE9F66B424138F26A2822313B2 /* FirebaseSessions.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/FirebaseSessions/FirebaseSessions-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/FirebaseSessions/FirebaseSessions.modulemap";
+				PRODUCT_MODULE_NAME = FirebaseSessions;
+				PRODUCT_NAME = FirebaseSessions;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		66BB57B6B34C3ECB8AA408B4014C03CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		7E3AD58ABECB47D7DBEC3FDF185B74FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE08BB98111BFF95930C7623A96DE9F1 /* FirebaseSessions.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/FirebaseSessions/FirebaseSessions-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/FirebaseSessions/FirebaseSessions.modulemap";
+				PRODUCT_MODULE_NAME = FirebaseSessions;
+				PRODUCT_NAME = FirebaseSessions;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		9A65E980DB053B71C1127E1CC8637F82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5333C02597E8008631538AED70FCC1AB /* Build configuration list for PBXNativeTarget "FirebaseSessions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				655BA6CF9E6B9E30E667249C234E4655 /* Debug */,
+				7E3AD58ABECB47D7DBEC3FDF185B74FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9C81F6AB75D1A947FF085F6DE5A4B2C5 /* Build configuration list for PBXProject "FirebaseSessions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66BB57B6B34C3ECB8AA408B4014C03CE /* Debug */,
+				9A65E980DB053B71C1127E1CC8637F82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 41006F054D94EA8F51DC5FA4ED47FAD0 /* Project object */;
+}

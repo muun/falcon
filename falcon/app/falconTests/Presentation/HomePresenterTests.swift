@@ -23,7 +23,10 @@ class HomePresenterTests: MuunTestCase {
         let nextTransactionSizeRepository: NextTransactionSizeRepository = resolve()
 
         let progression = [
-            SizeForAmount(amountInSatoshis: Satoshis(value: 100), sizeInBytes: 0, outpoint: "a:0")
+            SizeForAmount(amountInSatoshis: Satoshis(value: 100),
+                          sizeInBytes: 0,
+                          outpoint: "a:0",
+                          utxoStatus: .CONFIRMED)
         ]
         let nextSize = NextTransactionSize(sizeProgression: progression,
                                            validAtOperationHid: 0,
@@ -40,7 +43,10 @@ class HomePresenterTests: MuunTestCase {
         let nextTransactionSizeRepository: NextTransactionSizeRepository = resolve()
 
         let progression = [
-            SizeForAmount(amountInSatoshis: Satoshis(value: 1000), sizeInBytes: 0, outpoint: "a:0")
+            SizeForAmount(amountInSatoshis: Satoshis(value: 1000),
+                          sizeInBytes: 0,
+                          outpoint: "a:0",
+                          utxoStatus: .CONFIRMED)
         ]
         let nextSize = NextTransactionSize(sizeProgression: progression,
                                            validAtOperationHid: 0,
@@ -57,7 +63,10 @@ class HomePresenterTests: MuunTestCase {
         let nextTransactionSizeRepository: NextTransactionSizeRepository = resolve()
 
         let progression = [
-            SizeForAmount(amountInSatoshis: Satoshis(value: 1000), sizeInBytes: 0, outpoint: "a:0")
+            SizeForAmount(amountInSatoshis: Satoshis(value: 1000),
+                          sizeInBytes: 0,
+                          outpoint: "a:0",
+                          utxoStatus: .CONFIRMED)
         ]
         let nextSize = NextTransactionSize(
             sizeProgression: progression,

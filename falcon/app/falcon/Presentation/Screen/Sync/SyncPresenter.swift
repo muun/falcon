@@ -70,7 +70,7 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
     func runSyncAction() {
         syncAction.run(
             signFlow: signFlow,
-            gcmToken: preferences.string(forKey: .gcmToken) ?? "",
+            gcmToken: preferences.string(forKey: .gcmToken),
             currencyCode: CurrencyHelper.currencyForLocale().code
         )
     }

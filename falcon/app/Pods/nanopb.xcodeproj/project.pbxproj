@@ -3,114 +3,146 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3972A6A8E5160F0BF1F658DE9821E740 /* pb_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DA72771481AAB39AE67677EE6BC24C2 /* pb_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C16A69CB617188CD311599F3FA3AB1A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EEAE7624461F33106F37782E51FA0B /* Foundation.framework */; };
-		611E68970D67BA4255553EED6244F2AA /* pb_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 233FD935744FC63C6DF85011F36A3ED0 /* pb_encode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
-		6461165BF8BB6A5A650E1F8DB5F637B9 /* nanopb-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 30FAB8B7EDECD6DBBAF8C15FD989D109 /* nanopb-dummy.m */; };
-		773203F779AFDBAB0D2F3F9C2832956A /* pb_decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E3116B9215487873018E938ACE6B641 /* pb_decode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
-		7F60A9993236DD7B8E68D8EC7A8B7BB9 /* nanopb-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E54F9B86ABC44957D19247DCDA533832 /* nanopb-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		813E6FEEC7B18428C2B3F892BF45B192 /* pb.h in Headers */ = {isa = PBXBuildFile; fileRef = C23770FD73366AF1D6177F3899AE86B2 /* pb.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		88D79A2E920FEE7FF43FCD20B851DE66 /* pb_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 12CB2DA051AA4B89974A4329448469BF /* pb_decode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9BBAC51BFD7EC01EB6E8DBD6740D77D2 /* pb_common.c in Sources */ = {isa = PBXBuildFile; fileRef = 058DF425825B5F1DC2089A406D143B7A /* pb_common.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc -fno-objc-arc"; }; };
-		F5C0FE622BB6BD1CB475548C58FAC18A /* pb_encode.h in Headers */ = {isa = PBXBuildFile; fileRef = 09C3D42B5ECC4F95993439B6D214D72D /* pb_encode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		11EA56777FCB9AFC3060F7584892F23D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EEAE7624461F33106F37782E51FA0B /* Foundation.framework */; };
+		386A535A520275413C9D52CCCC4A24AC /* pb_common.c in Sources */ = {isa = PBXBuildFile; fileRef = 81D750C0351DF94C43C67A0024117DD8 /* pb_common.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc -fno-objc-arc"; }; };
+		3F37482EC12EC322CEBAAA10D9E77CBA /* pb_encode.h in Headers */ = {isa = PBXBuildFile; fileRef = F5541FCCAE961E1136A99B255C192DB8 /* pb_encode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4872CD993F91DA760F78C70C2C320B97 /* pb_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DD02BE6DF20F286BE7E37DFA0999F21 /* pb_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5DDFD25F7A95B43B5A008ABB7C4E5C0C /* pb_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 0377580C8A1FB625D699474C595C126E /* pb_encode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
+		60558E0B1DD4FD3A1EFABAE77E2ADD34 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C6876F3BE5887890D110B73D234FA89D /* PrivacyInfo.xcprivacy */; };
+		81056D58DA633D2B63BFBE0E86BB1D76 /* pb_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D72C242415AFB80BC7B260135EE244C /* pb_decode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DB6068B20627AA963FD199417AE693CF /* pb.h in Headers */ = {isa = PBXBuildFile; fileRef = 05C4A84D44B19642116AA259F78FA8DA /* pb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F660D96815BF65E49747C43E562B3C9E /* pb_decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 93026D8CCCFC59269FFBBF6A466FDA12 /* pb_decode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
+		F9753B696E33D20B7B16D72D2AC8BF40 /* nanopb-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D49EFA8F99568747E75611B4317CAC1F /* nanopb-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBE7BC003DFC0974B22A07CF7C358836 /* nanopb-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6929492C726C0219C3F9E91122D196 /* nanopb-dummy.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C8DE57E7C278430A2836BFB2A98D4F86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71F8533AE75309759041404D25E534DE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7704CDBC4BA6B09568BDB06A548DCDE8;
+			remoteInfo = "nanopb-nanopb_Privacy";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		058DF425825B5F1DC2089A406D143B7A /* pb_common.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_common.c; sourceTree = "<group>"; };
-		09C3D42B5ECC4F95993439B6D214D72D /* pb_encode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_encode.h; sourceTree = "<group>"; };
-		12CB2DA051AA4B89974A4329448469BF /* pb_decode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_decode.h; sourceTree = "<group>"; };
-		228162EFDDFD463681B75C9EF5FC91C4 /* nanopb-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-prefix.pch"; sourceTree = "<group>"; };
-		233FD935744FC63C6DF85011F36A3ED0 /* pb_encode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_encode.c; sourceTree = "<group>"; };
-		30FAB8B7EDECD6DBBAF8C15FD989D109 /* nanopb-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "nanopb-dummy.m"; sourceTree = "<group>"; };
-		38052B55B944853122E9CA78D2F5C003 /* nanopb.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = nanopb.modulemap; sourceTree = "<group>"; };
-		3DA72771481AAB39AE67677EE6BC24C2 /* pb_common.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_common.h; sourceTree = "<group>"; };
-		3E3116B9215487873018E938ACE6B641 /* pb_decode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_decode.c; sourceTree = "<group>"; };
+		0377580C8A1FB625D699474C595C126E /* pb_encode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_encode.c; sourceTree = "<group>"; };
+		05C4A84D44B19642116AA259F78FA8DA /* pb.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb.h; sourceTree = "<group>"; };
+		22DA1E83CE8C65EDF522B1EC24297482 /* ResourceBundle-nanopb_Privacy-nanopb-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-nanopb_Privacy-nanopb-Info.plist"; sourceTree = "<group>"; };
+		2A55235CC0449F6BDD1B387E97C368FE /* nanopb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.debug.xcconfig; sourceTree = "<group>"; };
+		4DD02BE6DF20F286BE7E37DFA0999F21 /* pb_common.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_common.h; sourceTree = "<group>"; };
 		66EEAE7624461F33106F37782E51FA0B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		8A119B9B29B772A0F39BBCAB324D45CE /* nanopb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.debug.xcconfig; sourceTree = "<group>"; };
-		A6892B5C92F47F30D6517BCBC6CAA1DF /* nanopb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.release.xcconfig; sourceTree = "<group>"; };
-		C23770FD73366AF1D6177F3899AE86B2 /* pb.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb.h; sourceTree = "<group>"; };
-		C58372B0D687F6B2181CDAEB75639664 /* nanopb-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "nanopb-Info.plist"; sourceTree = "<group>"; };
+		7D72C242415AFB80BC7B260135EE244C /* pb_decode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_decode.h; sourceTree = "<group>"; };
+		81D750C0351DF94C43C67A0024117DD8 /* pb_common.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_common.c; sourceTree = "<group>"; };
+		8A6929492C726C0219C3F9E91122D196 /* nanopb-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "nanopb-dummy.m"; sourceTree = "<group>"; };
+		93026D8CCCFC59269FFBBF6A466FDA12 /* pb_decode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_decode.c; sourceTree = "<group>"; };
+		9608F5322822BFC7DEB53BFEBDD0343F /* nanopb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.release.xcconfig; sourceTree = "<group>"; };
+		98D79111BC6F036129AB5AB042636C06 /* nanopb-nanopb_Privacy */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "nanopb-nanopb_Privacy"; path = nanopb_Privacy.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC69D75D8A151DB626A36A903FA92676 /* nanopb-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "nanopb-Info.plist"; sourceTree = "<group>"; };
+		B173502C62E7014D2019BCBAED65CA62 /* nanopb.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = nanopb.modulemap; sourceTree = "<group>"; };
+		C6876F3BE5887890D110B73D234FA89D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = spm_resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D49EFA8F99568747E75611B4317CAC1F /* nanopb-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-umbrella.h"; sourceTree = "<group>"; };
 		DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = nanopb; path = nanopb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E54F9B86ABC44957D19247DCDA533832 /* nanopb-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-umbrella.h"; sourceTree = "<group>"; };
+		F5541FCCAE961E1136A99B255C192DB8 /* pb_encode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = pb_encode.h; sourceTree = "<group>"; };
+		FD9F8224AD6C1EE94EB18FB9D9C67C63 /* nanopb-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		916D94BF0274A56FAE98D747BEC9053B /* Frameworks */ = {
+		AAFE5ADE79DA9DA1D3ED4BB53BB88214 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C16A69CB617188CD311599F3FA3AB1A /* Foundation.framework in Frameworks */,
+				11EA56777FCB9AFC3060F7584892F23D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAC1DC0798E4F758D732CDE2A35C4051 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		37DCDADFF345416EC1D2C27F88D1271A /* Support Files */ = {
+		02306E1C8A7D553D5CF11BC17E42A0DF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				38052B55B944853122E9CA78D2F5C003 /* nanopb.modulemap */,
-				30FAB8B7EDECD6DBBAF8C15FD989D109 /* nanopb-dummy.m */,
-				C58372B0D687F6B2181CDAEB75639664 /* nanopb-Info.plist */,
-				228162EFDDFD463681B75C9EF5FC91C4 /* nanopb-prefix.pch */,
-				E54F9B86ABC44957D19247DCDA533832 /* nanopb-umbrella.h */,
-				8A119B9B29B772A0F39BBCAB324D45CE /* nanopb.debug.xcconfig */,
-				A6892B5C92F47F30D6517BCBC6CAA1DF /* nanopb.release.xcconfig */,
+				DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb */,
+				98D79111BC6F036129AB5AB042636C06 /* nanopb-nanopb_Privacy */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/nanopb";
+			name = Products;
 			sourceTree = "<group>";
 		};
-		3BDBF09E807B38AA4A564027D5EDD8F4 /* encode */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = encode;
-			sourceTree = "<group>";
-		};
-		79A5F9300E4092C36D0917C0505A28E1 /* decode */ = {
+		6E532BD40DFDB5AA23CC5F9086DB63B1 /* decode */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = decode;
 			sourceTree = "<group>";
 		};
-		8F91B7AA8BC321A97395F00DF87DAD4A /* nanopb */ = {
+		75D26BE010717438D5E3CC539021CDF3 /* encode */ = {
 			isa = PBXGroup;
 			children = (
-				C23770FD73366AF1D6177F3899AE86B2 /* pb.h */,
-				058DF425825B5F1DC2089A406D143B7A /* pb_common.c */,
-				3DA72771481AAB39AE67677EE6BC24C2 /* pb_common.h */,
-				3E3116B9215487873018E938ACE6B641 /* pb_decode.c */,
-				12CB2DA051AA4B89974A4329448469BF /* pb_decode.h */,
-				233FD935744FC63C6DF85011F36A3ED0 /* pb_encode.c */,
-				09C3D42B5ECC4F95993439B6D214D72D /* pb_encode.h */,
-				79A5F9300E4092C36D0917C0505A28E1 /* decode */,
-				3BDBF09E807B38AA4A564027D5EDD8F4 /* encode */,
-				37DCDADFF345416EC1D2C27F88D1271A /* Support Files */,
+			);
+			name = encode;
+			sourceTree = "<group>";
+		};
+		8A0053E32F3736EFC26CAB69935C4C59 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				B173502C62E7014D2019BCBAED65CA62 /* nanopb.modulemap */,
+				8A6929492C726C0219C3F9E91122D196 /* nanopb-dummy.m */,
+				AC69D75D8A151DB626A36A903FA92676 /* nanopb-Info.plist */,
+				FD9F8224AD6C1EE94EB18FB9D9C67C63 /* nanopb-prefix.pch */,
+				D49EFA8F99568747E75611B4317CAC1F /* nanopb-umbrella.h */,
+				2A55235CC0449F6BDD1B387E97C368FE /* nanopb.debug.xcconfig */,
+				9608F5322822BFC7DEB53BFEBDD0343F /* nanopb.release.xcconfig */,
+				22DA1E83CE8C65EDF522B1EC24297482 /* ResourceBundle-nanopb_Privacy-nanopb-Info.plist */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/nanopb";
+			sourceTree = "<group>";
+		};
+		C9193A3A079355DEB79342E388E41780 /* nanopb */ = {
+			isa = PBXGroup;
+			children = (
+				05C4A84D44B19642116AA259F78FA8DA /* pb.h */,
+				81D750C0351DF94C43C67A0024117DD8 /* pb_common.c */,
+				4DD02BE6DF20F286BE7E37DFA0999F21 /* pb_common.h */,
+				93026D8CCCFC59269FFBBF6A466FDA12 /* pb_decode.c */,
+				7D72C242415AFB80BC7B260135EE244C /* pb_decode.h */,
+				0377580C8A1FB625D699474C595C126E /* pb_encode.c */,
+				F5541FCCAE961E1136A99B255C192DB8 /* pb_encode.h */,
+				6E532BD40DFDB5AA23CC5F9086DB63B1 /* decode */,
+				75D26BE010717438D5E3CC539021CDF3 /* encode */,
+				D69583655FE53CCF57A5B24BE41FC067 /* Resources */,
+				8A0053E32F3736EFC26CAB69935C4C59 /* Support Files */,
 			);
 			name = nanopb;
 			path = nanopb;
 			sourceTree = "<group>";
 		};
-		B853FD1101233474795EE4627C78EBA9 /* Products */ = {
+		D69583655FE53CCF57A5B24BE41FC067 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb */,
+				C6876F3BE5887890D110B73D234FA89D /* PrivacyInfo.xcprivacy */,
 			);
-			name = Products;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		F2DB4CF37E2E32D2131A0B7792811734 = {
 			isa = PBXGroup;
 			children = (
 				FC532DF073BD3AB5B72D6F9D8A9020A8 /* Frameworks */,
-				8F91B7AA8BC321A97395F00DF87DAD4A /* nanopb */,
-				B853FD1101233474795EE4627C78EBA9 /* Products */,
+				C9193A3A079355DEB79342E388E41780 /* nanopb */,
+				02306E1C8A7D553D5CF11BC17E42A0DF /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,15 +165,15 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		B03591C9B156E892E99F93ED0251EAE3 /* Headers */ = {
+		2D305D2723ADD0BAECD004D52CF85F3F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F60A9993236DD7B8E68D8EC7A8B7BB9 /* nanopb-umbrella.h in Headers */,
-				813E6FEEC7B18428C2B3F892BF45B192 /* pb.h in Headers */,
-				3972A6A8E5160F0BF1F658DE9821E740 /* pb_common.h in Headers */,
-				88D79A2E920FEE7FF43FCD20B851DE66 /* pb_decode.h in Headers */,
-				F5C0FE622BB6BD1CB475548C58FAC18A /* pb_encode.h in Headers */,
+				F9753B696E33D20B7B16D72D2AC8BF40 /* nanopb-umbrella.h in Headers */,
+				DB6068B20627AA963FD199417AE693CF /* pb.h in Headers */,
+				4872CD993F91DA760F78C70C2C320B97 /* pb_common.h in Headers */,
+				81056D58DA633D2B63BFBE0E86BB1D76 /* pb_decode.h in Headers */,
+				3F37482EC12EC322CEBAAA10D9E77CBA /* pb_encode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,21 +182,39 @@
 /* Begin PBXNativeTarget section */
 		052B66B57BF269A4B160A5659F7D46D4 /* nanopb */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 331D97A4EF7B8D48274BFEA4DB2F819E /* Build configuration list for PBXNativeTarget "nanopb" */;
+			buildConfigurationList = 1FD8F712D2CEBF17494A2BF9DACACF65 /* Build configuration list for PBXNativeTarget "nanopb" */;
 			buildPhases = (
-				B03591C9B156E892E99F93ED0251EAE3 /* Headers */,
-				56732841AE5544A38735D309E0308183 /* Sources */,
-				916D94BF0274A56FAE98D747BEC9053B /* Frameworks */,
-				597A4DBB11AF8843AC7F687DED7B44B7 /* Resources */,
+				2D305D2723ADD0BAECD004D52CF85F3F /* Headers */,
+				9505E90B65D9B66F52FA31961CF66E32 /* Sources */,
+				AAFE5ADE79DA9DA1D3ED4BB53BB88214 /* Frameworks */,
+				495ABA7D10CE2484576828E96D7CE473 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2031346B07BEE6F9081C5E6318A07B26 /* PBXTargetDependency */,
 			);
 			name = nanopb;
 			productName = nanopb;
 			productReference = DA4181A656DA93DDF6A3412D73B7DD44 /* nanopb */;
 			productType = "com.apple.product-type.framework";
+		};
+		7704CDBC4BA6B09568BDB06A548DCDE8 /* nanopb-nanopb_Privacy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B39C7FD05F153144CE49804F8D99421 /* Build configuration list for PBXNativeTarget "nanopb-nanopb_Privacy" */;
+			buildPhases = (
+				84D676187535403AD9F48001B91512F2 /* Sources */,
+				BAC1DC0798E4F758D732CDE2A35C4051 /* Frameworks */,
+				A4718C07DC5CCDB556FAD6A7093243EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "nanopb-nanopb_Privacy";
+			productName = nanopb_Privacy;
+			productReference = 98D79111BC6F036129AB5AB042636C06 /* nanopb-nanopb_Privacy */;
+			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -172,11 +222,11 @@
 		71F8533AE75309759041404D25E534DE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 2A9D98A90AF7FA09325E25E198DA7FED /* Build configuration list for PBXProject "nanopb" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -184,40 +234,119 @@
 				en,
 			);
 			mainGroup = F2DB4CF37E2E32D2131A0B7792811734;
-			productRefGroup = B853FD1101233474795EE4627C78EBA9 /* Products */;
+			productRefGroup = 02306E1C8A7D553D5CF11BC17E42A0DF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				052B66B57BF269A4B160A5659F7D46D4 /* nanopb */,
+				7704CDBC4BA6B09568BDB06A548DCDE8 /* nanopb-nanopb_Privacy */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		597A4DBB11AF8843AC7F687DED7B44B7 /* Resources */ = {
+		495ABA7D10CE2484576828E96D7CE473 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A4718C07DC5CCDB556FAD6A7093243EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60558E0B1DD4FD3A1EFABAE77E2ADD34 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		56732841AE5544A38735D309E0308183 /* Sources */ = {
+		84D676187535403AD9F48001B91512F2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6461165BF8BB6A5A650E1F8DB5F637B9 /* nanopb-dummy.m in Sources */,
-				9BBAC51BFD7EC01EB6E8DBD6740D77D2 /* pb_common.c in Sources */,
-				773203F779AFDBAB0D2F3F9C2832956A /* pb_decode.c in Sources */,
-				611E68970D67BA4255553EED6244F2AA /* pb_encode.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9505E90B65D9B66F52FA31961CF66E32 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBE7BC003DFC0974B22A07CF7C358836 /* nanopb-dummy.m in Sources */,
+				386A535A520275413C9D52CCCC4A24AC /* pb_common.c in Sources */,
+				F660D96815BF65E49747C43E562B3C9E /* pb_decode.c in Sources */,
+				5DDFD25F7A95B43B5A008ABB7C4E5C0C /* pb_encode.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		2031346B07BEE6F9081C5E6318A07B26 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "nanopb-nanopb_Privacy";
+			target = 7704CDBC4BA6B09568BDB06A548DCDE8 /* nanopb-nanopb_Privacy */;
+			targetProxy = C8DE57E7C278430A2836BFB2A98D4F86 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		4D61D074D73715293E08E6C903E5B142 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9608F5322822BFC7DEB53BFEBDD0343F /* nanopb.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/nanopb";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IBSC_MODULE = nanopb;
+				INFOPLIST_FILE = "Target Support Files/nanopb/ResourceBundle-nanopb_Privacy-nanopb-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_NAME = nanopb_Privacy;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		5413BB507B50FAFF7C72C49884A15FE2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2A55235CC0449F6BDD1B387E97C368FE /* nanopb.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/nanopb/nanopb-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/nanopb/nanopb-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/nanopb/nanopb.modulemap";
+				PRODUCT_MODULE_NAME = nanopb;
+				PRODUCT_NAME = nanopb;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		62F3CA93FD890DB5E7BB3AD1B1F46371 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -281,9 +410,9 @@
 			};
 			name = Release;
 		};
-		7560573F5C3F437B7DDD6CF6793CEA17 /* Debug */ = {
+		918993B90B1D3199907A8B50C75D0500 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A119B9B29B772A0F39BBCAB324D45CE /* nanopb.debug.xcconfig */;
+			baseConfigurationReference = 9608F5322822BFC7DEB53BFEBDD0343F /* nanopb.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -312,10 +441,11 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		B3F8C13AFF8E8E2487D879E9FA2CE06E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -384,46 +514,36 @@
 			};
 			name = Debug;
 		};
-		C0EF03C5EE4AB205D769D74F7406471B /* Release */ = {
+		FD9E5E71B831FAD3DD8A94B382803295 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6892B5C92F47F30D6517BCBC6CAA1DF /* nanopb.release.xcconfig */;
+			baseConfigurationReference = 2A55235CC0449F6BDD1B387E97C368FE /* nanopb.debug.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/nanopb";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/nanopb/nanopb-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/nanopb/nanopb-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IBSC_MODULE = nanopb;
+				INFOPLIST_FILE = "Target Support Files/nanopb/ResourceBundle-nanopb_Privacy-nanopb-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/nanopb/nanopb.modulemap";
-				PRODUCT_MODULE_NAME = nanopb;
-				PRODUCT_NAME = nanopb;
+				PRODUCT_NAME = nanopb_Privacy;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
+				WRAPPER_EXTENSION = bundle;
 			};
-			name = Release;
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1FD8F712D2CEBF17494A2BF9DACACF65 /* Build configuration list for PBXNativeTarget "nanopb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5413BB507B50FAFF7C72C49884A15FE2 /* Debug */,
+				918993B90B1D3199907A8B50C75D0500 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2A9D98A90AF7FA09325E25E198DA7FED /* Build configuration list for PBXProject "nanopb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -433,11 +553,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		331D97A4EF7B8D48274BFEA4DB2F819E /* Build configuration list for PBXNativeTarget "nanopb" */ = {
+		2B39C7FD05F153144CE49804F8D99421 /* Build configuration list for PBXNativeTarget "nanopb-nanopb_Privacy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7560573F5C3F437B7DDD6CF6793CEA17 /* Debug */,
-				C0EF03C5EE4AB205D769D74F7406471B /* Release */,
+				FD9E5E71B831FAD3DD8A94B382803295 /* Debug */,
+				4D61D074D73715293E08E6C903E5B142 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

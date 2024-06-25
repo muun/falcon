@@ -56,7 +56,7 @@ public class SyncAction: AsyncAction<()> {
         super.init(name: "SyncAction")
     }
 
-    public func run(signFlow: SignFlow, gcmToken: String, currencyCode: String) {
+    public func run(signFlow: SignFlow, gcmToken: String?, currencyCode: String) {
 
         do {
             if signFlow == .create { // is anon user

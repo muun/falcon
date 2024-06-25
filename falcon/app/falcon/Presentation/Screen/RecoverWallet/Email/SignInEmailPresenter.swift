@@ -46,17 +46,11 @@ class SignInEmailPresenter<Delegate: SignInEmailPresenterDelegate>: BasePresente
     func createSession(email: String) {
         delegate.setLoading(true)
 
-        if getGcmToken() == "" {
-            subscribeTo(fcmTokenAction.getValue().catchErrorJustReturn(()), onSuccess: { _ in
-                self.runSessionAction(email: email)
-            })
-        } else {
-            runSessionAction(email: email)
-        }
+        runSessionAction(email: email)
     }
 
-    func getGcmToken() -> String {
-        return preferences.string(forKey: .gcmToken) ?? ""
+    func getGcmToken() -> String? {
+        return preferences.string(forKey: .gcmToken)
     }
 
     func isValidEmail(testStr: String) -> Bool {

@@ -10,18 +10,6 @@ import Foundation
 public class HardwareCapabilitiesProvider {
     public static let shared = HardwareCapabilitiesProvider()
 
-    private var timer: Timer?
-    private var freeStorage: Int64?
-    private var totalStorage: Int64?
-
-    private let totalStorageRefreshTimeInSeconds = 10
-
-    public func startRefreshingCacheableValues() {
-        refreshFreeStorage()
-        refreshTotalStorageAsync()
-        startKeepingTotalStorageUpToDate()
-    }
-
     func getBatterylevel() -> Float {
         return UIDevice.current.batteryLevel
     }
@@ -35,31 +23,12 @@ public class HardwareCapabilitiesProvider {
         }
     }
 
-    @discardableResult
-    public func refreshFreeStorage() -> Int64 {
-        let freeStorage = getDiskValue(resourceKey: .volumeAvailableCapacityForImportantUsageKey)
-        self.freeStorage = freeStorage
-        return freeStorage;
-    }
-    
-    func getFreeStorage() -> Int64 {
-        return freeStorage ?? refreshFreeStorage()
-    }
-    
-    func getTotalStorage() -> Int64 {
-        return totalStorage ?? refreshTotalStorage()
-    }
-    
     private func getDiskValue(resourceKey: URLResourceKey) -> Int64 {
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         
         let values = try? url.resourceValues(forKeys:
-                                                [.volumeTotalCapacityKey,
-                                                 .volumeAvailableCapacityForImportantUsageKey])
-        if let capacity = values?.volumeTotalCapacity,
-            resourceKey == .volumeTotalCapacityKey {
-            return Int64(capacity)
-        }
+                                                [.volumeAvailableCapacityForImportantUsageKey])
+
         if let capacity = values?.volumeAvailableCapacityForImportantUsage,
             resourceKey == .volumeAvailableCapacityForImportantUsageKey {
             return capacity
@@ -98,29 +67,5 @@ public class HardwareCapabilitiesProvider {
                 }
             }
         }
-    }
-
-    private func startKeepingTotalStorageUpToDate() {
-        DispatchQueue.main.async {
-            self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(self.totalStorageRefreshTimeInSeconds),
-                                         target: self,
-                                         selector: #selector(self.refreshTotalStorageAsync),
-                                         userInfo: nil,
-                                         repeats: true)
-        }
-    }
-
-    @objc
-    private func refreshTotalStorageAsync() {
-        DispatchQueue.global().async {
-            self.refreshTotalStorage()
-        }
-    }
-
-    @discardableResult
-    private func refreshTotalStorage() -> Int64 {
-        let totalStorage = getDiskValue(resourceKey: .volumeTotalCapacityKey)
-        self.totalStorage = totalStorage
-        return totalStorage
     }
 }

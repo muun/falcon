@@ -31,6 +31,8 @@ extern NSString* const FIRCLSUserNameKey;
 extern NSString* const FIRCLSUserEmailKey;
 extern NSString* const FIRCLSDevelopmentPlatformNameKey;
 extern NSString* const FIRCLSDevelopmentPlatformVersionKey;
+extern NSString* const FIRCLSOnDemandRecordedExceptionsKey;
+extern NSString* const FIRCLSOnDemandDroppedExceptionsKey;
 #endif
 
 extern const uint32_t FIRCLSUserLoggingMaxKVEntries;
@@ -79,7 +81,9 @@ void FIRCLSUserLoggingRecordUserKeysAndValues(NSDictionary* keysAndValues);
 void FIRCLSUserLoggingRecordInternalKeyValue(NSString* key, id value);
 void FIRCLSUserLoggingWriteInternalKeyValue(NSString* key, NSString* value);
 
-void FIRCLSUserLoggingRecordError(NSError* error, NSDictionary<NSString*, id>* additionalUserInfo);
+void FIRCLSUserLoggingRecordError(NSError* error,
+                                  NSDictionary<NSString*, id>* additionalUserInfo,
+                                  NSString* rolloutsInfoJSON);
 
 NSDictionary* FIRCLSUserLoggingGetCompactedKVEntries(FIRCLSUserLoggingKVStorage* storage,
                                                      bool decodeHex);

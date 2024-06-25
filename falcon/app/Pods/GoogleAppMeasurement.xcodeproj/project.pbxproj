@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -14,22 +14,22 @@
 				C4836C8C0184924D88456974CE50E131 /* [CP] Copy XCFrameworks */,
 			);
 			dependencies = (
-				601C2808BFBEAF71C08E2260E8575EDF /* PBXTargetDependency */,
-				173A3D72CBCC95FAA0F86DAF8854DD10 /* PBXTargetDependency */,
+				7A6DCB21DBA7969A3C6EA35CD62A8F76 /* PBXTargetDependency */,
+				13EE257F1BBDD9F8857670384FD03295 /* PBXTargetDependency */,
 			);
 			name = GoogleAppMeasurement;
 		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
-		26C1FD2A8829C7E2DB5B1529DB8DE4F6 /* PBXContainerItemProxy */ = {
+		2A4EEEB894E226B1EE4412F1914C7166 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F066E3ECBE8B460E55410B3554DDE30C /* nanopb.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 052B66B57BF269A4B160A5659F7D46D4;
 			remoteInfo = nanopb;
 		};
-		8CF15408452E11E5EE51008D59ED9480 /* PBXContainerItemProxy */ = {
+		608AD22A4C12C89219B1789521FE74BC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B14A6E5D41DC74FF5FB1D41790DF8C06 /* GoogleUtilities.xcodeproj */;
 			proxyType = 1;
@@ -39,23 +39,41 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		589E9A1E206E2F6D99971D52B335B46E /* GoogleAppMeasurement.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = GoogleAppMeasurement.xcframework; path = Frameworks/GoogleAppMeasurement.xcframework; sourceTree = "<group>"; };
-		6B037C32B0BE828ACCE9AA3864E599E2 /* GoogleAppMeasurement.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleAppMeasurement.release.xcconfig; sourceTree = "<group>"; };
+		17E38C957B9B4C22967C5CB22D22185A /* GoogleAppMeasurement.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = GoogleAppMeasurement.xcframework; path = Frameworks/GoogleAppMeasurement.xcframework; sourceTree = "<group>"; };
+		7A966067EE550DC75CD1D507335CFAA4 /* GoogleAppMeasurement.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleAppMeasurement.release.xcconfig; sourceTree = "<group>"; };
+		842541EFBBC818AFE5D78C2D5F2AF631 /* GoogleAppMeasurement.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleAppMeasurement.debug.xcconfig; sourceTree = "<group>"; };
 		B14A6E5D41DC74FF5FB1D41790DF8C06 /* GoogleUtilities */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GoogleUtilities; path = GoogleUtilities.xcodeproj; sourceTree = "<group>"; };
-		E42435E1844ABC081813A2711A2CBE19 /* GoogleAppMeasurement-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "GoogleAppMeasurement-xcframeworks.sh"; sourceTree = "<group>"; };
+		B5581DE3DDF5FE262481149066A5D333 /* GoogleAppMeasurementIdentitySupport.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = GoogleAppMeasurementIdentitySupport.xcframework; path = Frameworks/GoogleAppMeasurementIdentitySupport.xcframework; sourceTree = "<group>"; };
+		C30CCB014C713EE7E07CA99DF844322A /* GoogleAppMeasurement-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "GoogleAppMeasurement-xcframeworks.sh"; sourceTree = "<group>"; };
 		F066E3ECBE8B460E55410B3554DDE30C /* nanopb */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = nanopb; path = nanopb.xcodeproj; sourceTree = "<group>"; };
-		F47C8F71F72CEFFB2C6802075BA10E93 /* GoogleAppMeasurement.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleAppMeasurement.debug.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		318FDC64D5D480A5498D386D555DEE5B /* GoogleAppMeasurement */ = {
+		1001E06054BE87899E8E1D3BA1C52E7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FB4648F7D9164DEE9925DE3681D5D954 /* Frameworks */,
-				DC07ED27E5DF29391769C91A5B73C8C7 /* Support Files */,
+				B5581DE3DDF5FE262481149066A5D333 /* GoogleAppMeasurementIdentitySupport.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		11CA7E5E6005916732808FA2645FFAB5 /* GoogleAppMeasurement */ = {
+			isa = PBXGroup;
+			children = (
+				6B06C4A3BCD3689182667A18738AD9FC /* AdIdSupport */,
+				865BE5B1F0BD0F3F4226888DBB9CDC29 /* Support Files */,
+				53DBD369DB2E2A179A5BB2AF80825F14 /* WithoutAdIdSupport */,
 			);
 			name = GoogleAppMeasurement;
 			path = GoogleAppMeasurement;
+			sourceTree = "<group>";
+		};
+		1ECAF40A3A3F7B87D8FFCA610508909D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				17E38C957B9B4C22967C5CB22D22185A /* GoogleAppMeasurement.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		3B647B3A008BCD59F2938FB128EC1650 /* Products */ = {
@@ -65,25 +83,41 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		53DBD369DB2E2A179A5BB2AF80825F14 /* WithoutAdIdSupport */ = {
+			isa = PBXGroup;
+			children = (
+				1ECAF40A3A3F7B87D8FFCA610508909D /* Frameworks */,
+			);
+			name = WithoutAdIdSupport;
+			sourceTree = "<group>";
+		};
+		6B06C4A3BCD3689182667A18738AD9FC /* AdIdSupport */ = {
+			isa = PBXGroup;
+			children = (
+				1001E06054BE87899E8E1D3BA1C52E7F /* Frameworks */,
+			);
+			name = AdIdSupport;
+			sourceTree = "<group>";
+		};
+		865BE5B1F0BD0F3F4226888DBB9CDC29 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C30CCB014C713EE7E07CA99DF844322A /* GoogleAppMeasurement-xcframeworks.sh */,
+				842541EFBBC818AFE5D78C2D5F2AF631 /* GoogleAppMeasurement.debug.xcconfig */,
+				7A966067EE550DC75CD1D507335CFAA4 /* GoogleAppMeasurement.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/GoogleAppMeasurement";
+			sourceTree = "<group>";
+		};
 		A8D04577D0DC866A4AB06E790CAAD9E1 = {
 			isa = PBXGroup;
 			children = (
 				EB666E07FEFBFC86E1B2EC6829262370 /* Dependencies */,
 				E258A4D52B19482E9DC37297C90F7999 /* Frameworks */,
-				318FDC64D5D480A5498D386D555DEE5B /* GoogleAppMeasurement */,
+				11CA7E5E6005916732808FA2645FFAB5 /* GoogleAppMeasurement */,
 				3B647B3A008BCD59F2938FB128EC1650 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		DC07ED27E5DF29391769C91A5B73C8C7 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				E42435E1844ABC081813A2711A2CBE19 /* GoogleAppMeasurement-xcframeworks.sh */,
-				F47C8F71F72CEFFB2C6802075BA10E93 /* GoogleAppMeasurement.debug.xcconfig */,
-				6B037C32B0BE828ACCE9AA3864E599E2 /* GoogleAppMeasurement.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/GoogleAppMeasurement";
 			sourceTree = "<group>";
 		};
 		E258A4D52B19482E9DC37297C90F7999 /* Frameworks */ = {
@@ -102,25 +136,17 @@
 			name = Dependencies;
 			sourceTree = "<group>";
 		};
-		FB4648F7D9164DEE9925DE3681D5D954 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				589E9A1E206E2F6D99971D52B335B46E /* GoogleAppMeasurement.xcframework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXProject section */
 		9734F3A095509732DDB39E501DB2D7DA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 126CAB7AFD888E3BE809CFAB0D4121F4 /* Build configuration list for PBXProject "GoogleAppMeasurement" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -166,20 +192,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		173A3D72CBCC95FAA0F86DAF8854DD10 /* PBXTargetDependency */ = {
+		13EE257F1BBDD9F8857670384FD03295 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = nanopb;
-			targetProxy = 26C1FD2A8829C7E2DB5B1529DB8DE4F6 /* PBXContainerItemProxy */;
+			targetProxy = 2A4EEEB894E226B1EE4412F1914C7166 /* PBXContainerItemProxy */;
 		};
-		601C2808BFBEAF71C08E2260E8575EDF /* PBXTargetDependency */ = {
+		7A6DCB21DBA7969A3C6EA35CD62A8F76 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GoogleUtilities;
-			targetProxy = 8CF15408452E11E5EE51008D59ED9480 /* PBXContainerItemProxy */;
+			targetProxy = 608AD22A4C12C89219B1789521FE74BC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		43230016094B49DC8FF964955CB064D3 /* Debug */ = {
+		48717579C1498CAB8E460145444C0DE4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -233,7 +259,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -246,7 +272,44 @@
 			};
 			name = Debug;
 		};
-		4419D13D5DE960BD828C8206B962022E /* Release */ = {
+		50C2CCC7A407DD6C8321DED1901DC9D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A966067EE550DC75CD1D507335CFAA4 /* GoogleAppMeasurement.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		779D1D69A9BEBC4E56924B347D7AAE1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 842541EFBBC818AFE5D78C2D5F2AF631 /* GoogleAppMeasurement.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BD9FC2F9C58221BD277358A327599F00 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -297,7 +360,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -309,49 +372,14 @@
 			};
 			name = Release;
 		};
-		8349446D971E9DAFADD34618C4B47A2D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B037C32B0BE828ACCE9AA3864E599E2 /* GoogleAppMeasurement.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		B8B80928B42A5BA1EDC971EB34E157CB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F47C8F71F72CEFFB2C6802075BA10E93 /* GoogleAppMeasurement.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		126CAB7AFD888E3BE809CFAB0D4121F4 /* Build configuration list for PBXProject "GoogleAppMeasurement" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				43230016094B49DC8FF964955CB064D3 /* Debug */,
-				4419D13D5DE960BD828C8206B962022E /* Release */,
+				48717579C1498CAB8E460145444C0DE4 /* Debug */,
+				BD9FC2F9C58221BD277358A327599F00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -359,8 +387,8 @@
 		AFAC0162370129FB6A0F87AC72B1A8CC /* Build configuration list for PBXAggregateTarget "GoogleAppMeasurement" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B8B80928B42A5BA1EDC971EB34E157CB /* Debug */,
-				8349446D971E9DAFADD34618C4B47A2D /* Release */,
+				779D1D69A9BEBC4E56924B347D7AAE1E /* Debug */,
+				50C2CCC7A407DD6C8321DED1901DC9D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

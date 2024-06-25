@@ -18,21 +18,29 @@
 
 #import "GoogleDataTransport/GDTCORLibrary/Internal/GDTCORLifecycle.h"
 #import "GoogleDataTransport/GDTCORLibrary/Internal/GDTCORStorageEventSelector.h"
+#import "GoogleDataTransport/GDTCORLibrary/Internal/GDTCORStorageSizeBytes.h"
 #import "GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORTargets.h"
 
 @class GDTCOREvent;
 @class GDTCORClock;
+@class GDTCORUploadBatch;
+
+@class FBLPromise<ValueType>;
+
+@protocol GDTCORStorageDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
-
-/** The data type to represent storage size. */
-typedef uint64_t GDTCORStorageSizeBytes;
 
 typedef void (^GDTCORStorageBatchBlock)(NSNumber *_Nullable newBatchID,
                                         NSSet<GDTCOREvent *> *_Nullable batchEvents);
 
+#pragma mark - GDTCORStorageProtocol
+
 /** Defines the interface a storage subsystem is expected to implement. */
 @protocol GDTCORStorageProtocol <NSObject, GDTCORLifecycleProtocol>
+
+/// The object that acts as the delegate of the storage instance.
+@property(nonatomic, weak, nullable) id<GDTCORStorageDelegate> delegate;
 
 @required
 
@@ -120,6 +128,54 @@ typedef void (^GDTCORStorageBatchBlock)(NSNumber *_Nullable newBatchID,
 
 @end
 
+#pragma mark - GDTCORStoragePromiseProtocol
+
+// TODO(ncooke3): Consider complete replacing block based API by promise API.
+
+@class GDTCORMetricsMetadata;
+@class GDTCORStorageMetadata;
+
+/** Promise based version of API defined in GDTCORStorageProtocol. See API docs for corresponding
+ * methods in GDTCORStorageProtocol. */
+@protocol GDTCORStoragePromiseProtocol <GDTCORStorageProtocol>
+
+- (FBLPromise<NSSet<NSNumber *> *> *)batchIDsForTarget:(GDTCORTarget)target;
+
+- (FBLPromise<NSNull *> *)removeBatchWithID:(NSNumber *)batchID deleteEvents:(BOOL)deleteEvents;
+
+- (FBLPromise<NSNull *> *)removeBatchesWithIDs:(NSSet<NSNumber *> *)batchIDs
+                                  deleteEvents:(BOOL)deleteEvents;
+
+- (FBLPromise<NSNull *> *)removeAllBatchesForTarget:(GDTCORTarget)target
+                                       deleteEvents:(BOOL)deleteEvents;
+
+/// Fetches metrics metadata from storage, passes them to the given handler, and writes the
+/// resulting metrics metadata from the given handler to storage.
+/// @note This API is thread-safe.
+/// @param handler A handler to process the fetch result and return an updated value to store.
+/// @return A promise that is fulfilled if the update is successful, and rejected otherwise.
+- (FBLPromise<NSNull *> *)fetchAndUpdateMetricsWithHandler:
+    (GDTCORMetricsMetadata * (^)(GDTCORMetricsMetadata *_Nullable fetchedMetadata,
+                                 NSError *_Nullable fetchError))handler;
+
+/// Fetches and returns storage metadata.
+- (FBLPromise<GDTCORStorageMetadata *> *)fetchStorageMetadata;
+
+/** See `hasEventsForTarget:onComplete:`.
+ *  @return A promise object that is resolved with @YES if there are events for the specified target
+ * and @NO otherwise.
+ */
+- (FBLPromise<NSNumber *> *)hasEventsForTarget:(GDTCORTarget)target;
+
+/** See `batchWithEventSelector:batchExpiration:onComplete:`
+ *  The promise is rejected when there are no events for the specified selector.
+ */
+- (FBLPromise<GDTCORUploadBatch *> *)batchWithEventSelector:
+                                         (GDTCORStorageEventSelector *)eventSelector
+                                            batchExpiration:(NSDate *)expiration;
+
+@end
+
 /** Retrieves the storage instance for the given target.
  *
  * @param target The target.
@@ -127,5 +183,28 @@ typedef void (^GDTCORStorageBatchBlock)(NSNumber *_Nullable newBatchID,
  */
 FOUNDATION_EXPORT
 id<GDTCORStorageProtocol> _Nullable GDTCORStorageInstanceForTarget(GDTCORTarget target);
+
+FOUNDATION_EXPORT
+id<GDTCORStoragePromiseProtocol> _Nullable GDTCORStoragePromiseInstanceForTarget(
+    GDTCORTarget target);
+
+#pragma mark - GDTCORStorageDelegate
+
+/// A type that can be delegated actions from a storage instance.
+@protocol GDTCORStorageDelegate <NSObject>
+
+/// Tells the delegate that the storage instance has removed a set of expired events.
+/// @param storage The storage instance informing the delegate of this impending event.
+/// @param events A set of events that were removed from storage due to their expiration.
+- (void)storage:(id<GDTCORStorageProtocol>)storage
+    didRemoveExpiredEvents:(NSSet<GDTCOREvent *> *)events;
+
+/// Tells the delegate that the storage instance has dropped an event due to the event cache being
+/// full.
+/// @param storage The storage instance informing the delegate of this impending event.
+/// @param event An event that was dropped due to the event cache being full.
+- (void)storage:(id<GDTCORStorageProtocol>)storage didDropEvent:(GDTCOREvent *)event;
+
+@end
 
 NS_ASSUME_NONNULL_END

@@ -23,8 +23,8 @@
 
 __BEGIN_DECLS
 
-// Typically, apps seem to have ~300 binary images loaded
-#define CLS_BINARY_IMAGE_RUNTIME_NODE_COUNT (512)
+// Typically, apps seem to have ~700 binary images loaded
+#define CLS_BINARY_IMAGE_RUNTIME_NODE_COUNT (1024)
 #define CLS_BINARY_IMAGE_RUNTIME_NODE_NAME_SIZE (32)
 #define CLS_BINARY_IMAGE_RUNTIME_NODE_RECORD_NAME 0
 
@@ -64,8 +64,7 @@ typedef struct {
   FIRCLSBinaryImageRuntimeNode nodes[CLS_BINARY_IMAGE_RUNTIME_NODE_COUNT];
 } FIRCLSBinaryImageReadWriteContext;
 
-void FIRCLSBinaryImageInit(FIRCLSBinaryImageReadOnlyContext* roContext,
-                           FIRCLSBinaryImageReadWriteContext* rwContext);
+void FIRCLSBinaryImageInit(void);
 
 #if CLS_COMPACT_UNWINDING_SUPPORTED
 bool FIRCLSBinaryImageSafeFindImageForAddress(uintptr_t address,

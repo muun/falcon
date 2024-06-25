@@ -42,7 +42,8 @@ struct CreateLoginSessionJson: Codable {
 
     let client: ClientJson
     let email: String
-    let gcmToken: String
+    // GcmToken is not retrieved until notification permission approval.
+    let gcmToken: String?
 
 }
 

@@ -23,7 +23,6 @@ class ManuallyEnterFeeViewController: MUViewController {
     @IBOutlet fileprivate weak var warningView: UIView!
     @IBOutlet fileprivate weak var warningImageView: UIImageView!
     @IBOutlet fileprivate weak var warningLabel: UILabel!
-    @IBOutlet fileprivate weak var useMaxButton: UIButton!
     @IBOutlet var warningViewTopConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate weak var buttonView: ButtonView!
     @IBOutlet fileprivate weak var buttonViewBottomConstraint: NSLayoutConstraint!
@@ -35,7 +34,6 @@ class ManuallyEnterFeeViewController: MUViewController {
 
     private let originalFeeState: FeeState
     private var selectedFee: FeeState?
-    private let shouldShowUseMaxButton: Bool
     private let state: FeeEditorState
 
     private let highImage = Asset.Assets.warningHigh.image
@@ -48,11 +46,10 @@ class ManuallyEnterFeeViewController: MUViewController {
         return "manually_enter_fee"
     }
 
-    init(delegate: SelectFeeDelegate?, state: FeeEditorState, showUseMaxButton: Bool, selectedCurrency: Currency) {
+    init(delegate: SelectFeeDelegate?, state: FeeEditorState, selectedCurrency: Currency) {
         self.delegate = delegate
         self.originalFeeState = state.feeState
         self.selectedFee = state.feeState
-        self.shouldShowUseMaxButton = showUseMaxButton
         self.state = state
         self.selectedCurrency = selectedCurrency
 
@@ -92,7 +89,6 @@ class ManuallyEnterFeeViewController: MUViewController {
         setUpLabels()
         setUpTextField()
         setUpConfirmButton()
-        setUpUseMaxButton()
         makeViewTestable()
     }
 
@@ -152,27 +148,9 @@ class ManuallyEnterFeeViewController: MUViewController {
         buttonView.isEnabled = false
     }
 
-    private func setUpUseMaxButton() {
-        useMaxButton.setTitle(L10n.ManuallyEnterFeeViewController.s6, for: .normal)
-        useMaxButton.setTitleColor(Asset.Colors.muunBlue.color, for: .normal)
-        useMaxButton.titleLabel?.font = Constant.Fonts.system(size: .desc, weight: .semibold)
-        useMaxButton.isHidden = !shouldShowUseMaxButton
-
-        if shouldShowUseMaxButton {
-            showUseMaxButton()
-        }
-    }
-
     @objc fileprivate func titleLabelTouched() {
         let overlayVc = BottomDrawerOverlayViewController(info: BottomDrawerInfo.manualFee)
         navigationController!.present(overlayVc, animated: true)
-    }
-
-    @IBAction fileprivate func useMaxButtonTouched(_ sender: Any) {
-        hideUseMaxButton()
-        let feeRate = presenter.calculateMaximumFeePossible()
-        textField.text = feeRate.stringValue()
-        updateCardView(feeRate)
     }
 
     private func updateCardView(_ feeRate: FeeRate?) {
@@ -233,17 +211,6 @@ class ManuallyEnterFeeViewController: MUViewController {
             buttonView.isEnabled = false
         }
     }
-
-    private func hideUseMaxButton() {
-        useMaxButton.isHidden = true
-        warningViewTopConstraint.constant = 16
-    }
-
-    private func showUseMaxButton() {
-        useMaxButton.isHidden = false
-        warningViewTopConstraint.constant = 56
-    }
-
 }
 
 extension ManuallyEnterFeeViewController: UITextFieldDelegate {
@@ -253,8 +220,6 @@ extension ManuallyEnterFeeViewController: UITextFieldDelegate {
 
         if let text = textField.text,
             let textRange = Range(range, in: text) {
-
-            hideUseMaxButton()
 
             let updatedText = text.replacingCharacters(in: textRange, with: string)
             if updatedText.count >= 6 {
@@ -266,9 +231,6 @@ extension ManuallyEnterFeeViewController: UITextFieldDelegate {
                 updateCardView(feeRate)
             } else if updatedText == "" {
                 updateCardView(nil)
-                if shouldShowUseMaxButton {
-                    showUseMaxButton()
-                }
             } else {
                 return false
             }
@@ -329,11 +291,6 @@ extension ManuallyEnterFeeViewController: ManuallyEnterFeePresenterDelegate {
 
     func feeIsTooHigh(maxFee: String) {
         let warningText = L10n.ManuallyEnterFeeViewController.s9(maxFee)
-        showWarning(warningText, image: highImage, warningColor: redColor, buttonEnabled: false)
-    }
-
-    func insufficientFunds(maxFee: String) {
-        let warningText = L10n.ManuallyEnterFeeViewController.s10(maxFee)
         showWarning(warningText, image: highImage, warningColor: redColor, buttonEnabled: false)
     }
 

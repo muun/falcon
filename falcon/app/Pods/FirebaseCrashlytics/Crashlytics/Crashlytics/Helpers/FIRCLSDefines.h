@@ -41,6 +41,13 @@
 #define TARGET_OS_TV 0
 #endif
 
+// Whether MetricKit should be supported
+#if defined(__IPHONE_15_0)
+#define CLS_METRICKIT_SUPPORTED (__has_include(<MetricKit/MetricKit.h>) && TARGET_OS_IOS)
+#else
+#define CLS_METRICKIT_SUPPORTED 0
+#endif
+
 // These help compile based on availability of technologies/frameworks.
 #define CLS_TARGET_OS_OSX (TARGET_OS_MAC && !TARGET_OS_IPHONE)
 #define CLS_TARGET_OS_HAS_UIKIT (TARGET_OS_IOS || TARGET_OS_TV)
@@ -48,6 +55,13 @@
 // arch definitions
 #if defined(__arm__) || defined(__arm64__) || defined(__arm64e__)
 #include <arm/arch.h>
+#endif
+
+// VisionOS support
+#if defined(TARGET_OS_VISION) && TARGET_OS_VISION
+#define CLS_TARGET_OS_VISION 1
+#else
+#define CLS_TARGET_OS_VISION 0
 #endif
 
 #if defined(__arm__)

@@ -32,6 +32,12 @@ struct SizeForAmountJson: Codable {
     // The sizeInBytes actually returns the size in WeightUnit, we need to divide that number by 4 to have vBytes
     let sizeInBytes: Int64
     let outpoint: String
+    let status: UtxoStatusJson
+}
+
+public enum UtxoStatusJson: String, Codable {
+    case UNCONFIRMED
+    case CONFIRMED
 }
 
 struct RawTransactionJson: Codable {

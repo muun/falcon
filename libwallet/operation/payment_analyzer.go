@@ -3,6 +3,7 @@ package operation
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/btcsuite/btcutil"
 	"github.com/muun/libwallet/fees"
@@ -64,9 +65,30 @@ type PaymentAnalyzer struct {
 	feeCalculator       *feeCalculator
 }
 
+type UtxoStatus string
+
+const (
+	UtxosStatusConfirmed   UtxoStatus = "CONFIRMED"
+	UtxosStatusUnconfirmed UtxoStatus = "UNCONFIRMED"
+)
+
+var (
+	utxoStatusMap = map[string]UtxoStatus{
+		"confirmed":   UtxosStatusConfirmed,
+		"unconfirmed": UtxosStatusUnconfirmed,
+	}
+)
+
+func MapUtxoStatus(str string) (UtxoStatus, bool) {
+	val, ok := utxoStatusMap[strings.ToLower(str)]
+	return val, ok
+}
+
 type SizeForAmount struct {
 	AmountInSat int64
 	SizeInVByte int64
+	Outpoint    string
+	UtxoStatus  UtxoStatus
 }
 
 type NextTransactionSize struct {
@@ -330,7 +352,7 @@ func (a *PaymentAnalyzer) analyzeCollectSwap(payment *PaymentToInvoice, swapFees
 // determines the fees (on-chain and lightning), and we need both to determine the number of confirmations required for
 // the swap, which affects the on-chain fee, which affects the amount (since this is TFFA).
 // For this implementation built from the assumptions that 0-conf on-chain fees are lower than 1-conf fees
-//(since we don't have to wait for a block to make the payment).
+// (since we don't have to wait for a block to make the payment).
 // Here we go:
 // 1. We calculate the on-chain fee for a 0-conf swap spending all funds
 //   - If that fee is greater than our balance -> payment can't be made (VERY low balance scenario)
@@ -557,31 +579,4 @@ func (a *PaymentAnalyzer) computeFeeForTFFASwap(payment *PaymentToInvoice, feeRa
 	onChainAmount := a.totalBalance() + int64(payment.FundingOutputPolicies.PotentialCollect)
 
 	return a.feeCalculator.Fee(onChainAmount, feeRate, true)
-}
-
-// MaxFeeRateToAddress computes the maximum fee rate that can be used when
-// paying a given amount. This does not imply that the payment _can be made_.
-// When given invalid parameters, it's likely to still obtain a value here and
-// the resulting analysis would be Unpayable. It's up to the caller to first
-// verify the amount is payable, and only then call this method.
-func (a *PaymentAnalyzer) MaxFeeRateToAddress(payment *PaymentToAddress) float64 {
-
-	if payment.AmountInSat > a.totalBalance() {
-		return 0
-	}
-
-	var restInSat int64
-	if payment.TakeFeeFromAmount {
-		restInSat = payment.AmountInSat
-	} else {
-		restInSat = a.totalBalance() - payment.AmountInSat
-	}
-
-	for _, sizeForAmount := range a.nextTransactionSize.SizeProgression {
-		if sizeForAmount.AmountInSat >= payment.AmountInSat {
-			return float64(restInSat) / float64(sizeForAmount.SizeInVByte)
-		}
-	}
-
-	return 0
 }

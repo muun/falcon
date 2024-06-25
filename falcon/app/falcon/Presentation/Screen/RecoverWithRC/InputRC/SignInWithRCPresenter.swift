@@ -63,18 +63,11 @@ class SignInWithRCPresenter<Delegate: SignInWithRCPresenterDelegate>: BasePresen
         delegate.setLoading(true)
         self.recoveryCode = recoveryCode
 
-        if getGcmToken() == "" {
-            subscribeTo(fcmTokenAction.getValue().catchErrorJustReturn(()), onSuccess: { _ in
-                self.createRCLoginSessionAction.run(gcmToken: self.getGcmToken(), recoveryCode: recoveryCode)
-            })
-        } else {
-            createRCLoginSessionAction.run(gcmToken: self.getGcmToken(), recoveryCode: recoveryCode)
-        }
-
+        createRCLoginSessionAction.run(gcmToken: self.getGcmToken(), recoveryCode: recoveryCode)
     }
 
-    func getGcmToken() -> String {
-        return preferences.string(forKey: .gcmToken) ?? ""
+    func getGcmToken() -> String? {
+        return preferences.string(forKey: .gcmToken)
     }
 
     private func onCreateSessionChange(_ result: ActionState<Challenge>) {

@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** This class handles the caching and retreival of IMPs as we swizzle and unswizzle them. It uses
+/** This class handles the caching and retrieval of IMPs as we swizzle and unswizzle them. It uses
  *  two C++ STL unordered_maps as the underlying data store. This class is NOT thread safe.
  */
 @interface GULSwizzlingCache : NSObject
@@ -31,8 +31,8 @@
  *  If the currentIMP is something that we put there, it will ignore it and instead point newIMP
  *  to what existed before we swizzled.
  *
- *  @param newIMP new The IMP that is going to replace the current IMP.
  *  @param currentIMP The IMP returned by class_getMethodImplementation.
+ *  @param newIMP new The IMP that is going to replace the current IMP.
  *  @param aClass The class that we're swizzling.
  *  @param selector The selector we're swizzling.
  */
@@ -45,8 +45,8 @@
  *  If the currentIMP is something that we put there, it will ignore it and instead point newIMP
  *  to what existed before we swizzled.
  *
- *  @param newIMP new The IMP that is going to replace the current IMP.
  *  @param currentIMP The IMP returned by class_getMethodImplementation.
+ *  @param newIMP new The IMP that is going to replace the current IMP.
  *  @param aClass The class that we're swizzling.
  *  @param selector The selector we're swizzling.
  */

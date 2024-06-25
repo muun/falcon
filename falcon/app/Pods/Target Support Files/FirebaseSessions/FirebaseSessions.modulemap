@@ -1,0 +1,6 @@
+framework module FirebaseSessions {
+  umbrella header "FirebaseSessions-umbrella.h"
+
+  export *
+  module * { export * }
+}

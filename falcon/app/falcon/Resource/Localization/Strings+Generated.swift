@@ -674,10 +674,6 @@ internal enum L10n {
   internal enum ManuallyEnterFeeViewController {
     /// Edit network fee
     internal static let s1 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s1")
-    /// Not enough funds. You can pay up to %@ sat/vbyte
-    internal static func s10(_ p1: Any) -> String {
-      return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s10", String(describing: p1))
-    }
     /// Not enough funds.
     internal static let s11 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s11")
     /// Fee is very low. This transaction may take days to confirm.
@@ -694,8 +690,6 @@ internal enum L10n {
     internal static let s4 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s4")
     /// CONFIRM FEE
     internal static let s5 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s5")
-    /// USE MAXIMUM FEE
-    internal static let s6 = L10n.tr("Localizable", "ManuallyEnterFeeViewController.s6")
     /// Less than %@
     internal static func s7(_ p1: Any) -> String {
       return L10n.tr("Localizable", "ManuallyEnterFeeViewController.s7", String(describing: p1))
@@ -1623,7 +1617,7 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "SignInEmailViewController.s1")
     /// Enter your email
     internal static let s2 = L10n.tr("Localizable", "SignInEmailViewController.s2")
-    /// You chose it when you set up wallet.
+    /// You chose it when you set up your wallet.
     internal static let s3 = L10n.tr("Localizable", "SignInEmailViewController.s3")
     /// Your email
     internal static let s4 = L10n.tr("Localizable", "SignInEmailViewController.s4")

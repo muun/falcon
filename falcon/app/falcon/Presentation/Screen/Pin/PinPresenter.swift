@@ -87,17 +87,9 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
             let signFlow: SignFlow = (isExistingUser) ? .recover : .create
             let primaryCurrency = CurrencyHelper.currencyForLocale().code
 
-            if getGcmToken() == "" {
-                subscribeTo(fcmTokenAction.getValue().catchErrorJustReturn(()), onSuccess: { _ in
-                    self.syncAction.run(signFlow: signFlow,
-                                        gcmToken: self.getGcmToken(),
-                                        currencyCode: primaryCurrency)
-                })
-            } else {
-                syncAction.run(signFlow: signFlow,
-                               gcmToken: getGcmToken(),
-                               currencyCode: primaryCurrency)
-            }
+            syncAction.run(signFlow: signFlow,
+                           gcmToken: getGcmToken(),
+                           currencyCode: primaryCurrency)
         }
     }
 
@@ -163,8 +155,8 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
         applicationLockManager.setBiometricIdStatus(status)
     }
 
-    func getGcmToken() -> String {
-        return preferences.string(forKey: .gcmToken) ?? ""
+    func getGcmToken() -> String? {
+        return preferences.string(forKey: .gcmToken)
     }
 
     // When setting up the view if the user has biometrics we need to avoid displaying

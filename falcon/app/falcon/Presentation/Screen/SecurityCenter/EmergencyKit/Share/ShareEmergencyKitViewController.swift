@@ -164,7 +164,7 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitViewDelegate {
 
             if GIDSignIn.sharedInstance.hasPreviousSignIn() {
                 // This will call the sign in callback
-                GIDSignIn.sharedInstance.restorePreviousSignIn(callback: sign(didSignInFor:withError:))
+                GIDSignIn.sharedInstance.restorePreviousSignIn(completion: sign(didSignInFor:withError:))
             } else {
                 logEvent("ek_drive", parameters: ["type": "sign_in_start"])
                 signInWithGoogle()
@@ -326,23 +326,20 @@ extension ShareEmergencyKitViewController {
         } else {
             // Re-request sign in so we get the missing scope
             let scopes = [kGTLRAuthScopeDriveFile]
-            GIDSignIn.sharedInstance.addScopes(scopes,
-                                               presenting: self,
-                                               callback: sign(didSignInFor:withError:))
+
+            user.addScopes(scopes, presenting: self) { [weak self] result, error in
+                self?.sign(didSignInFor: result?.user, withError: error)
+            }
         }
     }
 
     func signInWithGoogle() {
-        // This client id needs to be hardwired here, since it can't be in the info.plist schemes because apple rejects
-        // the build in that case
-        let clientId = "31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com"
-        let configuration = GIDConfiguration(clientID: clientId)
         let scopes = [kGTLRAuthScopeDriveFile]
-        GIDSignIn.sharedInstance.signIn(with: configuration,
-                                        presenting: self,
+        GIDSignIn.sharedInstance.signIn(withPresenting: self,
                                         hint: nil,
-                                        additionalScopes: scopes,
-                                        callback: sign(didSignInFor:withError:))
+                                        additionalScopes: scopes) { [weak self] result, error in
+            self?.sign(didSignInFor: result?.user, withError: error)
+        }
     }
 
     private func handleSignIn(error: Error) {

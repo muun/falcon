@@ -49,6 +49,7 @@ extension SizeForAmount {
         sizeForAmount.amountInSat = amount
         sizeForAmount.sizeInVByte = sizeInBytes / 4 // This is necessary to convert the size in weight units to vbytes as accepted by libwallet
         sizeForAmount.outpoint = outpoint ?? ""
+        sizeForAmount.utxoStatus = utxoStatus!.rawValue
 
         return sizeForAmount
     }

@@ -80,6 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readonly) BOOL customExceptionsEnabled;
 
 /**
+ * When this is true, Crashlytics will collect data from MetricKit
+ */
+@property(nonatomic, readonly) BOOL metricKitCollectionEnabled;
+
+/**
  * Returns the maximum number of custom exception events that will be
  * recorded in a session.
  */
@@ -100,6 +105,21 @@ NS_ASSUME_NONNULL_BEGIN
  * Returns the maximum number of custom key-value pair keys (not bytes).
  */
 @property(nonatomic, readonly) uint32_t maxCustomKeys;
+
+/**
+ * Returns the initial upload rate for on-demand exception reporting.
+ */
+@property(nonatomic, readonly) double onDemandUploadRate;
+
+/**
+ * Base exponent used when exponential backoff is triggered for on-demand reporting.
+ */
+@property(nonatomic, readonly) double onDemandBackoffBase;
+
+/**
+ * Step duration to use with exponential backoff for on-demand reporting.
+ */
+@property(nonatomic, readonly) uint32_t onDemandBackoffStepDuration;
 
 @end
 

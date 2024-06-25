@@ -17,7 +17,6 @@ public class ConectivityCapabilitiesProvider {
 
     private var storedNetworkMonitor: Any?
 
-    @available(iOS 12.0, *)
     private var networkMonitor: NWPathMonitor {
         if storedNetworkMonitor == nil {
             storedNetworkMonitor = NWPathMonitor()
@@ -72,7 +71,6 @@ public class ConectivityCapabilitiesProvider {
         isOverWifi = false
     }
 
-    @available(iOS 12.0, *)
     private func retrieveAvailableNetworksBasedOn(availableInterfaces: [NWInterface]) -> AvailableNetworks {
         var availableNetworks = AvailableNetworks()
 
