@@ -20,7 +20,6 @@ class FeeEditorPresenter<Delegate: BasePresenterDelegate>: BasePresenter<Delegat
     let takeFeeFromAmount: Bool
     let minMempoolFeeRate: FeeRate
     let minFeeRate: (_ target: UInt) -> FeeRate
-    let maxFeeRate: FeeRate
     let feeConfirmationTargets: FeeConfirmationTargets
 
     init(delegate: Delegate, state: FeeEditorState) {
@@ -30,7 +29,6 @@ class FeeEditorPresenter<Delegate: BasePresenterDelegate>: BasePresenter<Delegat
         self.takeFeeFromAmount = state.takeFeeFromAmount
         self.minMempoolFeeRate = state.minMempoolFeeRate
         self.minFeeRate = state.minFeeRate
-        self.maxFeeRate = state.maxFeeRate
         self.feeConfirmationTargets = state.feeConfirmationTargets
 
         super.init(delegate: delegate)

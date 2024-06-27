@@ -30,38 +30,38 @@ class FeeCalculatorTests: MuunTestCase {
                                              20: FeeRate(satsPerVByte: 5)]
 
     let defaultProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 103_456), sizeInBytes: 110, outpoint: "default:0"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 20_345_678), sizeInBytes: 230, outpoint: "default:1"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 303_456_789), sizeInBytes: 340, outpoint: "default:2"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 703_456_789), sizeInBytes: 580, outpoint: "default:3")
+        SizeForAmount(amountInSatoshis: Satoshis(value: 103_456), sizeInBytes: 110, outpoint: "default:0", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 20_345_678), sizeInBytes: 230, outpoint: "default:1", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 303_456_789), sizeInBytes: 340, outpoint: "default:2", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 703_456_789), sizeInBytes: 580, outpoint: "default:3", utxoStatus: .CONFIRMED)
     ]
 
     let negativeProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 48_216), sizeInBytes: 840 , outpoint: "negative:0"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 48_880), sizeInBytes: 1366, outpoint: "negative:1"),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 48_216), sizeInBytes: 840 , outpoint: "negative:0", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 48_880), sizeInBytes: 1366, outpoint: "negative:1", utxoStatus: .CONFIRMED),
     ]
 
     let singleNegativeProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 560), sizeInBytes: 840, outpoint: "singleNegative:0")
+        SizeForAmount(amountInSatoshis: Satoshis(value: 560), sizeInBytes: 840, outpoint: "singleNegative:0", utxoStatus: .CONFIRMED)
     ]
 
     let dustDrivenProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 1_000), sizeInBytes: 100, outpoint: "dust:0"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 2_000), sizeInBytes: 200, outpoint: "dust:1"),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 1_000), sizeInBytes: 100, outpoint: "dust:0", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 2_000), sizeInBytes: 200, outpoint: "dust:1", utxoStatus: .CONFIRMED),
     ]
 
     let edgeCaseProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 10_000), sizeInBytes: 90, outpoint: "edge:0"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 20_000), sizeInBytes: 100, outpoint: "edge:1")
+        SizeForAmount(amountInSatoshis: Satoshis(value: 10_000), sizeInBytes: 90, outpoint: "edge:0", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 20_000), sizeInBytes: 100, outpoint: "edge:1", utxoStatus: .CONFIRMED)
     ]
 
     let collectProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 9_000), sizeInBytes: 90, outpoint: "collect:0"),
-        SizeForAmount(amountInSatoshis: Satoshis(value: 12_000), sizeInBytes: 100, outpoint: "collect:1")
+        SizeForAmount(amountInSatoshis: Satoshis(value: 9_000), sizeInBytes: 90, outpoint: "collect:0", utxoStatus: .CONFIRMED),
+        SizeForAmount(amountInSatoshis: Satoshis(value: 12_000), sizeInBytes: 100, outpoint: "collect:1", utxoStatus: .CONFIRMED)
     ]
 
     let lendProgression: [SizeForAmount] = [
-        SizeForAmount(amountInSatoshis: Satoshis(value: 10_000), sizeInBytes: 90, outpoint: "lend:0")
+        SizeForAmount(amountInSatoshis: Satoshis(value: 10_000), sizeInBytes: 90, outpoint: "lend:0", utxoStatus: .CONFIRMED)
     ]
 
     lazy var emptyCalculator = FeeCalculator(
@@ -175,7 +175,10 @@ class FeeCalculatorTests: MuunTestCase {
 
     func testSingleOutputSpendable() throws {
         let max = Satoshis(value: 12_345)
-        let sizeProgression = [SizeForAmount(amountInSatoshis: max, sizeInBytes: 400, outpoint: "max:0")]
+        let sizeProgression = [SizeForAmount(amountInSatoshis: max,
+                                             sizeInBytes: 400,
+                                             outpoint: "max:0",
+                                             utxoStatus: .CONFIRMED)]
         let calculator = FeeCalculator(
             targetedFees: targetedFees,
             nts: buildNts(sizeProgression, expectedDebt: zeroDebt),
@@ -349,7 +352,8 @@ class FeeCalculatorTests: MuunTestCase {
         // lower it and product a valid output
         let progression = [SizeForAmount(amountInSatoshis: Satoshis(value: 2_000),
                                          sizeInBytes: 300,
-                                         outpoint: "prg:0")]
+                                         outpoint: "prg:0",
+                                         utxoStatus: .CONFIRMED)]
         let debtInSats = Satoshis(value: 1_000)
         let amount = Satoshis(value: 1_000)
 
@@ -367,7 +371,8 @@ class FeeCalculatorTests: MuunTestCase {
         // This edge case covers a take fee from amount where there is no possible fee to complete the transaction
         let progression = [SizeForAmount(amountInSatoshis: Satoshis(value: 2_000),
                                          sizeInBytes: 1_000,
-                                         outpoint: "prg:0")]
+                                         outpoint: "prg:0",
+                                         utxoStatus: .CONFIRMED)]
         let debtInSats = Satoshis(value: 1_400)
         let amount = Satoshis(value: 600)
 
@@ -419,7 +424,7 @@ class FeeCalculatorTests: MuunTestCase {
         let emptyOutpointsCalc = FeeCalculator(
             targetedFees: targetedFees,
             nts: buildNts(
-                [SizeForAmount(amountInSatoshis: Satoshis(value: 1000), sizeInBytes: 10, outpoint: nil)],
+                [SizeForAmount(amountInSatoshis: Satoshis(value: 1000), sizeInBytes: 10, outpoint: nil, utxoStatus: .CONFIRMED)],
                 expectedDebt: zeroDebt
             ),
             minFeeRate: Constant.FeeProtocol.minProtocolFeeRate

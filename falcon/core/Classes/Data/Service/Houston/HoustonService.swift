@@ -88,8 +88,11 @@ public class HoustonService: BaseService {
             fatalError("Cant encode value for key")
         }
 
-        return put("sessions/current/gcm-token", body: data, andReturn: EmptyJson.self)
-            .map({ $0.toModel() })
+        return put("sessions/current/gcm-token",
+                   body: data,
+                   andReturn: EmptyJson.self,
+                   maxRetries: 5)
+        .map({ $0.toModel() })
     }
 
     public func fetchNotification(notificationId: Int) -> Single<Notification?> {

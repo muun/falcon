@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -493,6 +493,7 @@
 		FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */; };
 		FE300CC72AB7658100AAE9DC /* RequestCloudFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */; };
 		FE3A50C629355C3200006363 /* BitcoinURIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */; };
+		FE4D50202BFEAE520013E456 /* FCMTokenActionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D501F2BFEAE520013E456 /* FCMTokenActionTest.swift */; };
 		FE560CDB291AE3D900FACF78 /* UnverifiedRcWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */; };
 		FE560D6C291AE3EC00FACF78 /* UnverifiedRcWarningViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */; };
 		FE560D6E291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */; };
@@ -505,7 +506,6 @@
 		FE64761928ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */; };
 		FE64761D28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */; };
 		FE69B2D128F09D4F00A48050 /* SettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */; };
-		FE712CE32AF5856E006DEA41 /* KeychainRepositoryStubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE712CE22AF5856E006DEA41 /* KeychainRepositoryStubber.swift */; };
 		FE712CE52AF58613006DEA41 /* KeychainRepositoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE712CE42AF58613006DEA41 /* KeychainRepositoryTest.swift */; };
 		FE7879C6287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879C5287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift */; };
 		FE7879C92878866400CB4198 /* FiatCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7879C82878866400CB4198 /* FiatCurrency.swift */; };
@@ -523,6 +523,7 @@
 		FE9DF5B92AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DF5B82AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift */; };
 		FE9DF6772AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DF6762AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift */; };
 		FE9DF6792AF040A6001B51A0 /* FakePingURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DF6782AF040A6001B51A0 /* FakePingURLService.swift */; };
+		FEA27D402BDB03B200AE67B2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FEA27D3F2BDB03B200AE67B2 /* PrivacyInfo.xcprivacy */; };
 		FEB5CCE82A7C31AA00CFA14E /* ConfirmStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5CCE72A7C31AA00CFA14E /* ConfirmStateViewModel.swift */; };
 		FEB749B729030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */; };
 		FEB74C7F2909E2C8002C08D1 /* SetupRecoveryCodeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */; };
@@ -1081,6 +1082,7 @@
 		FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenter.swift; sourceTree = "<group>"; };
 		FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCloudFeedbackView.swift; sourceTree = "<group>"; };
 		FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURIViewModel.swift; sourceTree = "<group>"; };
+		FE4D501F2BFEAE520013E456 /* FCMTokenActionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMTokenActionTest.swift; sourceTree = "<group>"; };
 		FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnverifiedRcWarningViewController.swift; sourceTree = "<group>"; };
 		FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnverifiedRcWarningViewController.xib; sourceTree = "<group>"; };
 		FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupActionTest.swift; sourceTree = "<group>"; };
@@ -1093,7 +1095,6 @@
 		FE64761828ECB80900EA4A77 /* TurboChannelSettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboChannelSettingsTogglePresenter.swift; sourceTree = "<group>"; };
 		FE64761C28ECCFFD00EA4A77 /* SettingToggleUserPreferenciesResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingToggleUserPreferenciesResolver.swift; sourceTree = "<group>"; };
 		FE69B2D028F09D4F00A48050 /* SettingsUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUITest.swift; sourceTree = "<group>"; };
-		FE712CE22AF5856E006DEA41 /* KeychainRepositoryStubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainRepositoryStubber.swift; sourceTree = "<group>"; };
 		FE712CE42AF58613006DEA41 /* KeychainRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainRepositoryTest.swift; sourceTree = "<group>"; };
 		FE7879C5287884EE00CB4198 /* BitcoinAmountWithSelectedCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinAmountWithSelectedCurrency.swift; sourceTree = "<group>"; };
 		FE7879C82878866400CB4198 /* FiatCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatCurrency.swift; sourceTree = "<group>"; };
@@ -1110,6 +1111,7 @@
 		FE9DF5B82AEEFEBC001B51A0 /* DeviceCheckTokenProviderTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCheckTokenProviderTest.swift; sourceTree = "<group>"; };
 		FE9DF6762AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiReachabiltiyServiceTest.swift; sourceTree = "<group>"; };
 		FE9DF6782AF040A6001B51A0 /* FakePingURLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePingURLService.swift; sourceTree = "<group>"; };
+		FEA27D3F2BDB03B200AE67B2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FEB5CCE72A7C31AA00CFA14E /* ConfirmStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmStateViewModel.swift; sourceTree = "<group>"; };
 		FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartRecoverCodeSetupActionTests.swift; sourceTree = "<group>"; };
 		FEB74C7E2909E2C8002C08D1 /* SetupRecoveryCodeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupRecoveryCodeError.swift; sourceTree = "<group>"; };
@@ -2572,6 +2574,7 @@
 		A0E6F2E9211C785700821A80 = {
 			isa = PBXGroup;
 			children = (
+				FEA27D3F2BDB03B200AE67B2 /* PrivacyInfo.xcprivacy */,
 				B3C742762461BE8A00EE1ADF /* UnitTests.xctestplan */,
 				A01D3A362434E34B00E233FD /* CHANGELOG.md */,
 				A0E6F2F4211C785700821A80 /* falcon */,
@@ -2799,6 +2802,7 @@
 				B3394AB725BF615E00460DB7 /* FulfillincomingSwapActionTest.swift */,
 				FEB749B629030CF8002C08D1 /* StartRecoverCodeSetupActionTests.swift */,
 				FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */,
+				FE4D501F2BFEAE520013E456 /* FCMTokenActionTest.swift */,
 				B36ABD9421ECDFA000ECA5EA /* Crypto */,
 				B36ABD9321ECDFA000ECA5EA /* AddressActionsTests.swift */,
 				B3CBAC2521F6665600A591C8 /* FeeCalculatorTests.swift */,
@@ -3307,6 +3311,7 @@
 				A02128C221D415D4004E6F2B /* Sources */,
 				A02128C321D415D4004E6F2B /* Frameworks */,
 				A02128C421D415D4004E6F2B /* Resources */,
+				1986330881CBB31F9006E4FE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3350,6 +3355,7 @@
 				A0E6F2F0211C785700821A80 /* Resources */,
 				B37069A322A1850A00FF497C /* Embed App Extensions */,
 				F42EDF24DB634862DB021FA5 /* [CP] Copy Pods Resources */,
+				FE03E3A32C0662D80062B68A /* Automatic Dsyms upload */,
 			);
 			buildRules = (
 			);
@@ -3474,6 +3480,7 @@
 				B39987D5220CD4C700EED408 /* FinishRecoveryCodeSetupViewController.xib in Resources */,
 				A04B49C522089ED7001DD436 /* SmallButtonView.xib in Resources */,
 				A0D0E0BC244F4FFA001F3F88 /* FinishEmailSetupViewController.xib in Resources */,
+				FEA27D402BDB03B200AE67B2 /* PrivacyInfo.xcprivacy in Resources */,
 				A0EAE85B2209D377000FD8FA /* TitleAndDescriptionView.xib in Resources */,
 				A0E0860522BD62FE003A4226 /* TitleTableViewCell.xib in Resources */,
 				A053FAF12270F3BB00A212E2 /* ToastView.xib in Resources */,
@@ -3573,6 +3580,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-falconUITests/Pods-falconUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1986330881CBB31F9006E4FE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		35AF04612567958BDE6C215F /* [CP] Check Pods Manifest.lock */ = {
@@ -3725,6 +3749,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Muun/Pods-Muun-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		FE03E3A32C0662D80062B68A /* Automatic Dsyms upload */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Automatic Dsyms upload";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n    ${PODS_ROOT}/FirebaseCrashlytics/run -gsp ${SRCROOT}/falcon/GoogleService-Info-debug.plist -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME} \nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3757,6 +3799,7 @@
 				FE9DF6772AF0098C001B51A0 /* ApiReachabiltiyServiceTest.swift in Sources */,
 				FEB74C8C290B2024002C08D1 /* RecoveryCodePrimingPresenterDelegateSpy.swift in Sources */,
 				B3CBAC4D21F66B8400A591C8 /* KeyCrypterTests.swift in Sources */,
+				FE4D50202BFEAE520013E456 /* FCMTokenActionTest.swift in Sources */,
 				FEB74C9C2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift in Sources */,
 				B3394AB825BF615E00460DB7 /* FulfillincomingSwapActionTest.swift in Sources */,
 				B3BDBE31221CDF97006490B9 /* LocaleNumberFormatterTests.swift in Sources */,
@@ -4256,6 +4299,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4286,6 +4330,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4304,7 +4349,8 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1035;
+				CURRENT_PROJECT_VERSION = 1037;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4314,7 +4360,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconPushNotifications/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4355,13 +4401,14 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1035;
+				CURRENT_PROJECT_VERSION = 1037;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "FALCON=0";
 				INFOPLIST_FILE = falconPushNotifications/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4408,7 +4455,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4434,7 +4481,7 @@
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "FALCON=0";
 				INFOPLIST_FILE = falconUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4485,7 +4532,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1035;
+				CURRENT_PROJECT_VERSION = 1037;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4504,7 +4552,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -4550,7 +4598,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1035;
+				CURRENT_PROJECT_VERSION = 1037;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4563,7 +4612,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -4583,7 +4632,8 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1035;
+				CURRENT_PROJECT_VERSION = 1037;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4597,7 +4647,7 @@
 					"FALCON=1",
 				);
 				INFOPLIST_FILE = falcon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4615,10 +4665,6 @@
 					"\"FirebaseAnalytics\"",
 					"-framework",
 					"\"FirebaseCore\"",
-					"-framework",
-					"\"FirebaseCoreDiagnostics\"",
-					"-framework",
-					"\"FirebaseInstanceID\"",
 					"-framework",
 					"\"FirebaseMessaging\"",
 					"-framework",
@@ -4671,7 +4717,8 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1035;
+				CURRENT_PROJECT_VERSION = 1037;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4684,7 +4731,7 @@
 					"FALCON=1",
 				);
 				INFOPLIST_FILE = falcon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4702,10 +4749,6 @@
 					"\"FirebaseAnalytics\"",
 					"-framework",
 					"\"FirebaseCore\"",
-					"-framework",
-					"\"FirebaseCoreDiagnostics\"",
-					"-framework",
-					"\"FirebaseInstanceID\"",
 					"-framework",
 					"\"FirebaseMessaging\"",
 					"-framework",

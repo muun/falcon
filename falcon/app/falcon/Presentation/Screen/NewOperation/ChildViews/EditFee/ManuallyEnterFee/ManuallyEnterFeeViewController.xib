@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManuallyEnterFeeViewController" customModule="falcon" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManuallyEnterFeeViewController" customModule="Muun" customModuleProvider="target">
             <connections>
                 <outlet property="btcLabel" destination="i6C-qH-sFU" id="uv1-jh-rcn"/>
                 <outlet property="buttonView" destination="wEx-da-th9" id="OBJ-8o-itR"/>
@@ -21,7 +21,6 @@
                 <outlet property="timeImageView" destination="uwq-yj-h3c" id="YPW-eu-je7"/>
                 <outlet property="timeLabel" destination="YBB-2b-jkx" id="HoN-TR-CRv"/>
                 <outlet property="titleLabel" destination="zgW-wp-CIR" id="wAD-Cc-mda"/>
-                <outlet property="useMaxButton" destination="cBm-0X-Mdn" id="4EY-nd-NZo"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="warningImageView" destination="zyI-wk-UeZ" id="TMA-F6-JZA"/>
                 <outlet property="warningLabel" destination="5zR-xr-trs" id="sjT-RK-3FF"/>
@@ -35,13 +34,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zgW-wp-CIR">
-                    <rect key="frame" x="0.0" y="60" width="414" height="20.5"/>
+                    <rect key="frame" x="0.0" y="64" width="414" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d6C-lz-K5c">
-                    <rect key="frame" x="0.0" y="96.5" width="414" height="80"/>
+                    <rect key="frame" x="0.0" y="100.5" width="414" height="80"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HrD-8z-n8g">
                             <rect key="frame" x="16" y="16" width="9" height="21"/>
@@ -77,13 +76,13 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i6C-qH-sFU" customClass="AmountLabel" customModule="falcon" customModuleProvider="target">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i6C-qH-sFU" customClass="AmountLabel" customModule="Muun" customModuleProvider="target">
                             <rect key="frame" x="356" y="16" width="42" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iBm-Uf-Zsc" customClass="AmountLabel" customModule="falcon" customModuleProvider="target">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iBm-Uf-Zsc" customClass="AmountLabel" customModule="Muun" customModuleProvider="target">
                             <rect key="frame" x="356" y="43" width="42" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
@@ -112,7 +111,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6B8-qQ-4l4">
-                    <rect key="frame" x="0.0" y="192.5" width="414" height="33.5"/>
+                    <rect key="frame" x="0.0" y="196.5" width="414" height="33.5"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="warning_low" translatesAutoresizingMaskIntoConstraints="NO" id="zyI-wk-UeZ">
                             <rect key="frame" x="0.0" y="2.5" width="12" height="12"/>
@@ -138,14 +137,7 @@
                         <constraint firstItem="5zR-xr-trs" firstAttribute="leading" secondItem="zyI-wk-UeZ" secondAttribute="trailing" constant="8" id="gdz-nZ-P3A"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBm-0X-Mdn">
-                    <rect key="frame" x="0.0" y="192.5" width="46" height="30"/>
-                    <state key="normal" title="Button"/>
-                    <connections>
-                        <action selector="useMaxButtonTouched:" destination="-1" eventType="touchUpInside" id="fMo-cA-acC"/>
-                    </connections>
-                </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wEx-da-th9" customClass="ButtonView" customModule="falcon" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wEx-da-th9" customClass="ButtonView" customModule="Muun" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="782" width="414" height="80"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -153,9 +145,9 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="cBm-0X-Mdn" firstAttribute="top" secondItem="d6C-lz-K5c" secondAttribute="bottom" constant="16" id="DKZ-3W-QRw"/>
                 <constraint firstItem="6B8-qQ-4l4" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="K6N-ok-CDY"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="wEx-da-th9" secondAttribute="trailing" id="N8k-BF-jAj"/>
                 <constraint firstItem="wEx-da-th9" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="NPd-zp-njv"/>
@@ -166,11 +158,9 @@
                 <constraint firstItem="zgW-wp-CIR" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="ePA-vA-Xmk"/>
                 <constraint firstItem="d6C-lz-K5c" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="eRz-CU-I8C"/>
                 <constraint firstItem="6B8-qQ-4l4" firstAttribute="top" secondItem="d6C-lz-K5c" secondAttribute="bottom" constant="16" id="fLr-9V-nLQ"/>
-                <constraint firstItem="cBm-0X-Mdn" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="i0c-oj-lc1"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="d6C-lz-K5c" secondAttribute="trailing" id="mOA-Wv-UBy"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="6B8-qQ-4l4" secondAttribute="trailing" id="tre-fj-oQc"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="1" y="32"/>
         </view>
     </objects>

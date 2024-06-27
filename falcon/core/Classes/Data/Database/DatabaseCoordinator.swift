@@ -477,6 +477,21 @@ public class DatabaseCoordinator {
             }
         }
 
+        // Migration to init utxo status for pre-existing sizeForAmounts. Will be properly
+        // initialized after first NTS refresh (e.g first newOperation, incoming operation, or any
+        // operationUpdate).
+        // NOTE: we're choosing to init status as CONFIRMED as this field won't be used right away and
+        // for our intended first use CONFIRMED will be handled gracefully as "ignorable".
+        migrator.registerMigration("init NTS utxoStatus") { [self] _ in
+            let nts: NextTransactionSize? = preferences.object(forKey: .nextTransactionSize)
+            guard let nts = nts else {
+                return
+            }
+
+            let updatedNts = nts.initUtxoStatus()
+            preferences.set(object: updatedNts, forKey: .nextTransactionSize)
+        }
+
         return migrator
     }
     // swiftlint:enable function_body_length

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -15,7 +15,7 @@
 			);
 			dependencies = (
 				2FC10E63E5461EF56A1A0DAD19B48963 /* PBXTargetDependency */,
-				F7B2FED3659C0464D5BE525C40BC52F2 /* PBXTargetDependency */,
+				008589DD3501F360A04C47EBBA0BC95E /* PBXTargetDependency */,
 			);
 			name = "core-notifications";
 		};
@@ -275,20 +275,6 @@
 			remoteGlobalIDString = E46E82E2FE597920D6002998F33AF81F;
 			remoteInfo = "Firebase-CoreOnly-Crashlytics";
 		};
-		08E44BE53619B6416137479285024F00 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A21609303C11C00DE8F4F804E41EA3D9 /* GoogleUtilities.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
-			remoteInfo = GoogleUtilities;
-		};
-		27FB19CEA69EBA3F3FADF4F0CD1896A8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E5C069F6749E43583EDDF66C9518F0C5 /* GoogleSignIn.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 70D52585A9FA4EEA343010638ADABC11;
-			remoteInfo = GoogleSignIn;
-		};
 		36A0E229625D4A940C12900C821E62E9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFB773060715231C493FD73C03BCD598 /* RxSwift.xcodeproj */;
@@ -303,6 +289,13 @@
 			remoteGlobalIDString = E46E82E2FE597920D6002998F33AF81F;
 			remoteInfo = "Firebase-CoreOnly-Crashlytics";
 		};
+		38C30A12300A647A417574C3928CE6A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A21609303C11C00DE8F4F804E41EA3D9 /* GoogleUtilities.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
+			remoteInfo = GoogleUtilities;
+		};
 		4D1E250ADE706F60C5A9DC1B5C52EF35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 131045C64BB5CB58F0C74DC2022C86AA /* RxGRDB.xcodeproj */;
@@ -310,12 +303,12 @@
 			remoteGlobalIDString = E692B0850D76A4FF2BFAA7660490A883;
 			remoteInfo = RxGRDB;
 		};
-		5AB7F317FEF8990886513A0125439EF8 /* PBXContainerItemProxy */ = {
+		73FB8E8D2115221A6B18DA064F8529D0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A21609303C11C00DE8F4F804E41EA3D9 /* GoogleUtilities.xcodeproj */;
+			containerPortal = 54D6710F8B1A26C1DA6B19803ECD8260 /* GoogleAPIClientForREST.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
-			remoteInfo = GoogleUtilities;
+			remoteGlobalIDString = E899E01EE94E3AAE44DBC0A0C183AD70;
+			remoteInfo = GoogleAPIClientForREST;
 		};
 		8F74271A1D37916FB041F840D91423BA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -323,13 +316,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9BFFF3EB042705945C38B38FFB810AE2;
 			remoteInfo = GRDB.swift;
-		};
-		A3103A7C547F018F930F0485EDB553D9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 54D6710F8B1A26C1DA6B19803ECD8260 /* GoogleAPIClientForREST.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E899E01EE94E3AAE44DBC0A0C183AD70;
-			remoteInfo = GoogleAPIClientForREST;
 		};
 		A5557ED8B0FF2399C95A11599D6CBD6A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -344,6 +330,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 501C5CCDEC7C0091AFD7691259C66AC9;
 			remoteInfo = Dip;
+		};
+		D7BB09256F5606CFD288F75D346B5E50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5C069F6749E43583EDDF66C9518F0C5 /* GoogleSignIn.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 70D52585A9FA4EEA343010638ADABC11;
+			remoteInfo = GoogleSignIn;
+		};
+		DA6D068C23A3EC3A83F08CDFD654E38D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A21609303C11C00DE8F4F804E41EA3D9 /* GoogleUtilities.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
+			remoteInfo = GoogleUtilities;
 		};
 		FC7CBE3B4903551D66F619CFB98E22EC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1818,9 +1818,9 @@
 				933EE58DE66BF7457F05378916E50C62 /* PBXTargetDependency */,
 				BC19B198429C7062569A03685AC0284E /* PBXTargetDependency */,
 				251B3A3645DA5DA4EDCFD6A8D530F113 /* PBXTargetDependency */,
-				1E28FCA856A21F3F9E7D1CAB6352C03E /* PBXTargetDependency */,
-				5E652B2A680BBF2243F98F72A89157A1 /* PBXTargetDependency */,
-				98BEE68445349E9EE659C5E6A133C748 /* PBXTargetDependency */,
+				30E2ACA76B8B0BFBC1B19028E4E4330E /* PBXTargetDependency */,
+				364D20BB3CF0E99BA45134A4A74CA9D2 /* PBXTargetDependency */,
+				9CB419CA772552B9ECB04F98765BCC70 /* PBXTargetDependency */,
 				BA30D9E36B66B3E9845DCCC7C16DCD61 /* PBXTargetDependency */,
 				A85036BEAF11EF5919F125AA0BBD4B01 /* PBXTargetDependency */,
 				C5EED936B367A34D340F1EC1922FF9F5 /* PBXTargetDependency */,
@@ -1836,11 +1836,11 @@
 		F586A8DB17DF3117A7CE4D82B0869E59 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 9984921E1E7F61A93E2181ABBCE2A59C /* Build configuration list for PBXProject "core" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -2234,16 +2234,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		008589DD3501F360A04C47EBBA0BC95E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleUtilities;
+			targetProxy = DA6D068C23A3EC3A83F08CDFD654E38D /* PBXContainerItemProxy */;
+		};
 		1CA8490E9F890141EA90AB91A34346F0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "core-all";
 			target = D3F43BD3D2229C98805AF36A5700DC83 /* core-all */;
 			targetProxy = A5557ED8B0FF2399C95A11599D6CBD6A /* PBXContainerItemProxy */;
-		};
-		1E28FCA856A21F3F9E7D1CAB6352C03E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GoogleAPIClientForREST;
-			targetProxy = A3103A7C547F018F930F0485EDB553D9 /* PBXContainerItemProxy */;
 		};
 		251B3A3645DA5DA4EDCFD6A8D530F113 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2255,20 +2255,25 @@
 			name = "Firebase-CoreOnly-Crashlytics";
 			targetProxy = 36BC3117BCFA177C87132E7FBC295E26 /* PBXContainerItemProxy */;
 		};
-		5E652B2A680BBF2243F98F72A89157A1 /* PBXTargetDependency */ = {
+		30E2ACA76B8B0BFBC1B19028E4E4330E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleAPIClientForREST;
+			targetProxy = 73FB8E8D2115221A6B18DA064F8529D0 /* PBXContainerItemProxy */;
+		};
+		364D20BB3CF0E99BA45134A4A74CA9D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GoogleSignIn;
-			targetProxy = 27FB19CEA69EBA3F3FADF4F0CD1896A8 /* PBXContainerItemProxy */;
+			targetProxy = D7BB09256F5606CFD288F75D346B5E50 /* PBXContainerItemProxy */;
 		};
 		933EE58DE66BF7457F05378916E50C62 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Dip;
 			targetProxy = C89F03C6BB3BE422025C1AFE48BD8BE0 /* PBXContainerItemProxy */;
 		};
-		98BEE68445349E9EE659C5E6A133C748 /* PBXTargetDependency */ = {
+		9CB419CA772552B9ECB04F98765BCC70 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GoogleUtilities;
-			targetProxy = 08E44BE53619B6416137479285024F00 /* PBXContainerItemProxy */;
+			targetProxy = 38C30A12300A647A417574C3928CE6A3 /* PBXContainerItemProxy */;
 		};
 		A85036BEAF11EF5919F125AA0BBD4B01 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2290,39 +2295,47 @@
 			name = RxSwift;
 			targetProxy = 36A0E229625D4A940C12900C821E62E9 /* PBXContainerItemProxy */;
 		};
-		F7B2FED3659C0464D5BE525C40BC52F2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GoogleUtilities;
-			targetProxy = 5AB7F317FEF8990886513A0125439EF8 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		029C3AA6173B77E073B665229F888391 /* Release */ = {
+		02BD822C7BFC6FDD29DD909244CFE05D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC6DD4248DC5320CF0B34759F33D25BE /* core-all.unit-all-tests.release.xcconfig */;
+			baseConfigurationReference = 029EC6A21787040EF79BC42591C83CCB /* core-notifications.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-Unit-all-Tests-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Unit-all-Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_NAME = "core-all-Unit-all-Tests";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0791B17ACF61BBED34C52A9DF92D777D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C4CEF6CDA22F1B570DABEC4121B9CAC9 /* core-notifications.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		255D1321FDF570F4C362D0530ADC3431 /* Debug */ = {
+		0FEB546895452390B44EB2C77EDD1FE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2376,7 +2389,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2389,7 +2402,68 @@
 			};
 			name = Debug;
 		};
-		3C3320AB7D8C4633AE57820DF8466828 /* Debug */ = {
+		176795323B2A9E98F13BFB7C6F311984 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0654C8FEFB2762C3F2C6F1B8B9BA6CA8 /* core-all.unit-all-tests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-Unit-all-Tests-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Unit-all-Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				PRODUCT_NAME = "core-all-Unit-all-Tests";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5;
+			};
+			name = Debug;
+		};
+		6B2A3CE1692E9C350E700F801A3F4E97 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE798749EC875BBE48DFDAF54438CEDA /* core-all.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/core-all/core-all.modulemap";
+				PRODUCT_MODULE_NAME = core;
+				PRODUCT_NAME = core;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B2FA5ED35E88F6A60B0D70DD8B3E12E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B4CAE454BEAEAABC5B1E6A6618955F84 /* core-all.debug.xcconfig */;
 			buildSettings = {
@@ -2406,7 +2480,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2426,7 +2500,31 @@
 			};
 			name = Debug;
 		};
-		9F3875731B8F38D2F521E79BC32636BC /* Release */ = {
+		F063FD3EC61CDBABFA60B300E71CDAD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC6DD4248DC5320CF0B34759F33D25BE /* core-all.unit-all-tests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-Unit-all-Tests-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Unit-all-Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				PRODUCT_NAME = "core-all-Unit-all-Tests";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F0EB8222BDE1D350316FAA789E610854 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2477,7 +2575,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2489,112 +2587,14 @@
 			};
 			name = Release;
 		};
-		A1088EDB1823E894E14D8FD36E7DA39C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C4CEF6CDA22F1B570DABEC4121B9CAC9 /* core-notifications.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		AF350BE870458A36B7D2F26289A8137C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE798749EC875BBE48DFDAF54438CEDA /* core-all.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/core-all/core-all.modulemap";
-				PRODUCT_MODULE_NAME = core;
-				PRODUCT_NAME = core;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		D56DED47B055A6D228929E25A8689ABC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 029EC6A21787040EF79BC42591C83CCB /* core-notifications.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		EC8A1FA48485DE24900FBAACFA607A1B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0654C8FEFB2762C3F2C6F1B8B9BA6CA8 /* core-all.unit-all-tests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				GCC_PREFIX_HEADER = "Target Support Files/core-all/core-all-Unit-all-Tests-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/core-all/core-all-Unit-all-Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_NAME = "core-all-Unit-all-Tests";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5;
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		27CE458F56E9396481EC4884F71BDFF2 /* Build configuration list for PBXNativeTarget "core-all" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3C3320AB7D8C4633AE57820DF8466828 /* Debug */,
-				AF350BE870458A36B7D2F26289A8137C /* Release */,
+				B2FA5ED35E88F6A60B0D70DD8B3E12E4 /* Debug */,
+				6B2A3CE1692E9C350E700F801A3F4E97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2602,8 +2602,8 @@
 		4532B7ED19FABD1A9416B5524B3AA830 /* Build configuration list for PBXAggregateTarget "core-notifications" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D56DED47B055A6D228929E25A8689ABC /* Debug */,
-				A1088EDB1823E894E14D8FD36E7DA39C /* Release */,
+				02BD822C7BFC6FDD29DD909244CFE05D /* Debug */,
+				0791B17ACF61BBED34C52A9DF92D777D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2611,8 +2611,8 @@
 		9984921E1E7F61A93E2181ABBCE2A59C /* Build configuration list for PBXProject "core" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				255D1321FDF570F4C362D0530ADC3431 /* Debug */,
-				9F3875731B8F38D2F521E79BC32636BC /* Release */,
+				0FEB546895452390B44EB2C77EDD1FE5 /* Debug */,
+				F0EB8222BDE1D350316FAA789E610854 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2620,8 +2620,8 @@
 		A40BF714833CA5C71C982CBDF784C849 /* Build configuration list for PBXNativeTarget "core-all-Unit-all-Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EC8A1FA48485DE24900FBAACFA607A1B /* Debug */,
-				029C3AA6173B77E073B665229F888391 /* Release */,
+				176795323B2A9E98F13BFB7C6F311984 /* Debug */,
+				F063FD3EC61CDBABFA60B300E71CDAD6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

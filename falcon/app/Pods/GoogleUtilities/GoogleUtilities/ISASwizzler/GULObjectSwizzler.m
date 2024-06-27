@@ -16,6 +16,7 @@
 
 #import <objc/runtime.h>
 
+#import "GoogleUtilities/ISASwizzler/GULObjectSwizzler+Internal.h"
 #import "GoogleUtilities/ISASwizzler/Public/GoogleUtilities/GULSwizzledObject.h"
 
 @implementation GULObjectSwizzler {
@@ -80,7 +81,7 @@
   }
 
   GULObjectSwizzler *existingSwizzler =
-      [[self class] getAssociatedObject:object key:kSwizzlerAssociatedObjectKey];
+      [[self class] getAssociatedObject:object key:kGULSwizzlerAssociatedObjectKey];
   if ([existingSwizzler isKindOfClass:[GULObjectSwizzler class]]) {
     // The object has been swizzled already, no need to swizzle again.
     return existingSwizzler;
@@ -130,7 +131,7 @@
   __strong id swizzledObject = _swizzledObject;
 
   GULObjectSwizzler *existingSwizzler =
-      [[self class] getAssociatedObject:swizzledObject key:kSwizzlerAssociatedObjectKey];
+      [[self class] getAssociatedObject:swizzledObject key:kGULSwizzlerAssociatedObjectKey];
   if (existingSwizzler != nil) {
     NSAssert(existingSwizzler == self, @"The swizzled object has a different swizzler.");
     // The object has been swizzled already.
@@ -139,7 +140,7 @@
 
   if (swizzledObject) {
     [GULObjectSwizzler setAssociatedObject:swizzledObject
-                                       key:kSwizzlerAssociatedObjectKey
+                                       key:kGULSwizzlerAssociatedObjectKey
                                      value:self
                                association:GUL_ASSOCIATION_RETAIN];
 
@@ -159,6 +160,20 @@
 }
 
 - (void)dealloc {
+  // When the Zombies instrument is enabled, a zombie is created for the swizzled object upon
+  // deallocation. Because this zombie subclasses the generated class, the swizzler should not
+  // dispose it during the swizzler's deallocation.
+  //
+  // There are other special cases where the generated class might be subclassed by a third-party
+  // generated classes, for example: https://github.com/firebase/firebase-ios-sdk/issues/9083
+  // To avoid errors in such cases, the environment variable `GULGeneratedClassDisposeDisabled` can
+  // be set with `YES`.
+  NSDictionary *environment = [[NSProcessInfo processInfo] environment];
+  if ([[environment objectForKey:@"NSZombieEnabled"] boolValue] ||
+      [[environment objectForKey:@"GULGeneratedClassDisposeDisabled"] boolValue]) {
+    return;
+  }
+
   if (_generatedClass) {
     if (_swizzledObject == nil) {
       // The swizzled object has been deallocated already, so the generated class can be disposed

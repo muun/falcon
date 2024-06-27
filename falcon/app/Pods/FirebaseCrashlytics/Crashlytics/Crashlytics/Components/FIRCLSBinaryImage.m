@@ -23,6 +23,7 @@
 
 #include "Crashlytics/Crashlytics/Components/FIRCLSGlobals.h"
 #include "Crashlytics/Crashlytics/Components/FIRCLSHost.h"
+#include "Crashlytics/Crashlytics/Helpers/FIRCLSDefines.h"
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSFeatures.h"
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSFile.h"
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSUtility.h"
@@ -51,8 +52,7 @@ static void FIRCLSBinaryImageStoreNode(bool added, FIRCLSBinaryImageDetails imag
 static void FIRCLSBinaryImageRecordSlice(bool added, const FIRCLSBinaryImageDetails imageDetails);
 
 #pragma mark - Core API
-void FIRCLSBinaryImageInit(FIRCLSBinaryImageReadOnlyContext* roContext,
-                           FIRCLSBinaryImageReadWriteContext* rwContext) {
+void FIRCLSBinaryImageInit(void) {
   // initialize our node array to all zeros
   memset(&_firclsContext.writable->binaryImage, 0, sizeof(_firclsContext.writable->binaryImage));
   _firclsContext.writable->binaryImage.file.fd = -1;
@@ -242,7 +242,7 @@ static FIRCLSMachOSegmentCommand FIRCLSBinaryImageMachOGetSegmentCommand(
 
   return segmentCommand;
 }
-
+#if !CLS_TARGET_OS_VISION
 static bool FIRCLSBinaryImageMachOSliceInitSectionByName(FIRCLSMachOSliceRef slice,
                                                          const char* segName,
                                                          const char* sectionName,
@@ -280,6 +280,38 @@ static bool FIRCLSBinaryImageMachOSliceInitSectionByName(FIRCLSMachOSliceRef sli
 
   return true;
 }
+#endif
+
+static void FIRCLSPopulateImageDetailWithLoadCommand(uint32_t type,
+                                                     uint32_t size,
+                                                     const struct load_command* cmd,
+                                                     void* context) {
+  FIRCLSBinaryImageDetails* details = context;
+  switch (type) {
+    case LC_UUID: {
+      const uint8_t* uuid = FIRCLSMachOGetUUID(cmd);
+      FIRCLSSafeHexToString(uuid, 16, details->uuidString);
+    } break;
+    case LC_ENCRYPTION_INFO:
+      details->encrypted = FIRCLSMachOGetEncrypted(cmd);
+      break;
+    case LC_SEGMENT:
+    case LC_SEGMENT_64: {
+      FIRCLSMachOSegmentCommand segmentCommand = FIRCLSBinaryImageMachOGetSegmentCommand(cmd);
+
+      if (strncmp(segmentCommand.segname, SEG_TEXT, sizeof(SEG_TEXT)) == 0) {
+        details->node.size = segmentCommand.vmsize;
+      }
+    } break;
+    case LC_VERSION_MIN_MACOSX:
+    case LC_VERSION_MIN_IPHONEOS:
+    case LC_VERSION_MIN_TVOS:
+    case LC_VERSION_MIN_WATCHOS:
+      details->minSDK = FIRCLSMachOGetMinimumOSVersion(cmd);
+      details->builtSDK = FIRCLSMachOGetLinkedSDKVersion(cmd);
+      break;
+  }
+}
 
 static bool FIRCLSBinaryImageFillInImageDetails(FIRCLSBinaryImageDetails* details) {
   if (!FIRCLSIsValidPointer(details)) {
@@ -299,33 +331,8 @@ static bool FIRCLSBinaryImageFillInImageDetails(FIRCLSBinaryImageDetails* detail
   // struct types in a few different places.
   details->node.baseAddress = (void* volatile)details->slice.startAddress;
 
-  FIRCLSMachOSliceEnumerateLoadCommands(
-      &details->slice, ^(uint32_t type, uint32_t size, const struct load_command* cmd) {
-        switch (type) {
-          case LC_UUID: {
-            const uint8_t* uuid = FIRCLSMachOGetUUID(cmd);
-            FIRCLSSafeHexToString(uuid, 16, details->uuidString);
-          } break;
-          case LC_ENCRYPTION_INFO:
-            details->encrypted = FIRCLSMachOGetEncrypted(cmd);
-            break;
-          case LC_SEGMENT:
-          case LC_SEGMENT_64: {
-            FIRCLSMachOSegmentCommand segmentCommand = FIRCLSBinaryImageMachOGetSegmentCommand(cmd);
-
-            if (strncmp(segmentCommand.segname, SEG_TEXT, sizeof(SEG_TEXT)) == 0) {
-              details->node.size = segmentCommand.vmsize;
-            }
-          } break;
-          case LC_VERSION_MIN_MACOSX:
-          case LC_VERSION_MIN_IPHONEOS:
-          case LC_VERSION_MIN_TVOS:
-          case LC_VERSION_MIN_WATCHOS:
-            details->minSDK = FIRCLSMachOGetMinimumOSVersion(cmd);
-            details->builtSDK = FIRCLSMachOGetLinkedSDKVersion(cmd);
-            break;
-        }
-      });
+  FIRCLSMachOSliceEnumerateLoadCommands_f(&details->slice, details,
+                                          FIRCLSPopulateImageDetailWithLoadCommand);
 
   // We look up the section we want, and we *should* be able to use:
   //
@@ -338,25 +345,56 @@ static bool FIRCLSBinaryImageFillInImageDetails(FIRCLSBinaryImageDetails* detail
   FIRCLSMachOSection section;
 
 #if CLS_COMPACT_UNWINDING_SUPPORTED
+#if !CLS_TARGET_OS_VISION
   if (FIRCLSBinaryImageMachOSliceInitSectionByName(&details->slice, SEG_TEXT, "__unwind_info",
                                                    &section)) {
     details->node.unwindInfo = (void*)(section.addr + details->vmaddr_slide);
   }
+#else
+  unsigned long unwindInfoSize;
+  details->node.unwindInfo = (void*)getsectiondata(details->slice.startAddress, "__TEXT",
+                                                   "__unwind_info", &unwindInfoSize);
+#endif
 #endif
 
 #if CLS_DWARF_UNWINDING_SUPPORTED
+#if !CLS_TARGET_OS_VISION
   if (FIRCLSBinaryImageMachOSliceInitSectionByName(&details->slice, SEG_TEXT, "__eh_frame",
                                                    &section)) {
     details->node.ehFrame = (void*)(section.addr + details->vmaddr_slide);
   }
+#else
+  unsigned long ehFrameSize;
+  details->node.ehFrame =
+      (void*)getsectiondata(details->slice.startAddress, "__TEXT", "__eh_frame", &ehFrameSize);
+#endif
 #endif
 
+#if !CLS_TARGET_OS_VISION
   if (FIRCLSBinaryImageMachOSliceInitSectionByName(&details->slice, SEG_DATA, "__crash_info",
                                                    &section)) {
     details->node.crashInfo = (void*)(section.addr + details->vmaddr_slide);
   }
+#else
+  unsigned long crashInfoSize;
+  details->node.crashInfo =
+      (void*)getsectiondata(details->slice.startAddress, "__TEXT", "__crash_info", &crashInfoSize);
+#endif
 
   return true;
+}
+
+typedef struct {
+  FIRCLSBinaryImageDetails details;
+  bool added;
+} FIRCLSImageChange;
+
+static void FIRCLSProcessBinaryImageChange(void* context) {
+  FIRCLSImageChange* imageChange = context;
+  // this is an atomic operation
+  FIRCLSBinaryImageStoreNode(imageChange->added, imageChange->details);
+  FIRCLSBinaryImageRecordSlice(imageChange->added, imageChange->details);
+  free(context);
 }
 
 static void FIRCLSBinaryImageChanged(bool added,
@@ -368,14 +406,14 @@ static void FIRCLSBinaryImageChanged(bool added,
 
   imageDetails.slice = FIRCLSMachOSliceWithHeader((void*)mh);
   imageDetails.vmaddr_slide = vmaddr_slide;
+  // fill imageDetails fields using slice & vmaddr_slide
   FIRCLSBinaryImageFillInImageDetails(&imageDetails);
 
-  // Do these time-consuming operations on a background queue
-  dispatch_async(FIRCLSGetBinaryImageQueue(), ^{
-    // this is an atomic operation
-    FIRCLSBinaryImageStoreNode(added, imageDetails);
-    FIRCLSBinaryImageRecordSlice(added, imageDetails);
-  });
+  FIRCLSImageChange* change = malloc(sizeof(FIRCLSImageChange));
+  if (!change) return;
+  change->added = added;
+  change->details = imageDetails;
+  dispatch_async_f(FIRCLSGetBinaryImageQueue(), change, FIRCLSProcessBinaryImageChange);
 }
 
 #pragma mark - In-Memory Storage
@@ -390,6 +428,7 @@ static void FIRCLSBinaryImageStoreNode(bool added, FIRCLSBinaryImageDetails imag
     return;
   }
 
+  // looking for an empty space if an image added
   void* searchAddress = NULL;
   bool success = false;
   FIRCLSBinaryImageRuntimeNode* nodes = _firclsContext.writable->binaryImage.nodes;

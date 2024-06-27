@@ -15,7 +15,6 @@
 #include "Crashlytics/Crashlytics/Components/FIRCLSHost.h"
 
 #include <mach/mach.h>
-#include <sys/mount.h>
 #include <sys/sysctl.h>
 
 #import "Crashlytics/Crashlytics/Components/FIRCLSApplication.h"
@@ -106,7 +105,7 @@ vm_size_t FIRCLSHostGetPageSize(void) {
 
 // This comes from the Apple documentation here:
 // https://developer.apple.com/documentation/apple_silicon/about_the_rosetta_translation_environment
-bool FIRCLSHostIsRosettaTranslated() {
+bool FIRCLSHostIsRosettaTranslated(void) {
 #if TARGET_OS_MAC
   int result = 0;
   size_t size = sizeof(result);
@@ -158,6 +157,8 @@ static void FIRCLSHostWriteOSVersionInfo(FIRCLSFile* file) {
   FIRCLSFileWriteHashEntryString(file, "os_display_version",
                                  [FIRCLSHostOSDisplayVersion() UTF8String]);
   FIRCLSFileWriteHashEntryString(file, "platform", [FIRCLSApplicationGetPlatform() UTF8String]);
+  FIRCLSFileWriteHashEntryString(file, "firebase_platform",
+                                 [FIRCLSApplicationGetFirebasePlatform() UTF8String]);
 }
 
 bool FIRCLSHostRecord(FIRCLSFile* file) {
@@ -178,16 +179,15 @@ bool FIRCLSHostRecord(FIRCLSFile* file) {
 }
 
 void FIRCLSHostWriteDiskUsage(FIRCLSFile* file) {
-  struct statfs tStats;
-
   FIRCLSFileWriteSectionStart(file, "storage");
 
   FIRCLSFileWriteHashStart(file);
 
-  if (statfs(_firclsContext.readonly->host.documentDirectoryPath, &tStats) == 0) {
-    FIRCLSFileWriteHashEntryUint64(file, "free", tStats.f_bavail * tStats.f_bsize);
-    FIRCLSFileWriteHashEntryUint64(file, "total", tStats.f_blocks * tStats.f_bsize);
-  }
+  // Due to Apple Privacy Manifests, Crashlytics is not collecting
+  // disk space using statfs. When we find a solution, we can update
+  // this to actually track disk space correctly.
+  FIRCLSFileWriteHashEntryUint64(file, "free", 0);
+  FIRCLSFileWriteHashEntryUint64(file, "total", 0);
 
   FIRCLSFileWriteHashEnd(file);
 

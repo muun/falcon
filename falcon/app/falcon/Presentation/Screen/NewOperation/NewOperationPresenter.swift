@@ -286,7 +286,6 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
         let totalBalance = state.amountInfo!.totalBalance!.adapt()
-        let maxFeeRate = FeeRate(satsPerVByte: Decimal(state.maxFeeRateInSatsPerVByte))
         let satsPerByte = Decimal(state.resolved!.paymentContext!.minFeeRateInSatsPerVByte)
         let selectedCurrency = getLastSelectedCurrencyWithBitcoinDefaultInCaseOfBitcoin()
         let newOpState = NewOpState.feeEditor(
@@ -302,8 +301,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
                 feeWindow: state.resolved!.paymentContext!.feeWindow!,
                 minMempoolFeeRate: FeeRate(satsPerVByte: satsPerByte),
                 calculateFee: calculateFee,
-                minFeeRate: minFeeRate,
-                maxFeeRate: maxFeeRate
+                minFeeRate: minFeeRate
             )
         )
 

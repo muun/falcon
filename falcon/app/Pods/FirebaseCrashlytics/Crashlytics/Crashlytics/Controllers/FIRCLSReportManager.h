@@ -16,12 +16,11 @@
 
 #import "Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FIRCrashlytics.h"
 
-#import "Crashlytics/Crashlytics/Helpers/FIRCLSProfiling.h"
-
 @class FBLPromise<T>;
 @class FIRCLSExistingReportManager;
 @class FIRCLSAnalyticsManager;
 @class FIRCLSManagerData;
+@class FIRCLSContextManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
-- (FBLPromise<NSNumber *> *)startWithProfilingMark:(FIRCLSProfileMark)mark;
+- (FBLPromise<NSNumber *> *)startWithProfiling;
 
 - (FBLPromise<FIRCrashlyticsReport *> *)checkForUnsentReports;
 - (FBLPromise *)sendUnsentReports;

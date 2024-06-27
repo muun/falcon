@@ -9,7 +9,6 @@
 import core
 
 protocol ManuallyEnterFeePresenterDelegate: BasePresenterDelegate {
-    func insufficientFunds(maxFee: String)
     func insufficientFunds()
     func feeIsTooHigh(maxFee: String)
     func feeIsTooLow(minFee: String)
@@ -19,9 +18,6 @@ protocol ManuallyEnterFeePresenterDelegate: BasePresenterDelegate {
 }
 
 class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: FeeEditorPresenter<Delegate> {
-    func calculateMaximumFeePossible() -> FeeRate {
-        return maxFeeRate
-    }
 
     func checkWarnings(_ fee: FeeState) {
         let feeRate: FeeRate
@@ -62,11 +58,7 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
         }
 
         if !isValid {
-            if !takeFeeFromAmount {
-                delegate.insufficientFunds(maxFee: calculateMaximumFeePossible().stringValue())
-            } else {
-                delegate.insufficientFunds()
-            }
+            delegate.insufficientFunds()
             return
         }
 

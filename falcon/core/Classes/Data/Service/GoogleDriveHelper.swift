@@ -31,7 +31,7 @@ public enum GoogleDriveHelper {
         let cloudStorageFolderName = "Muun"
         let service = GTLRDriveService()
 
-        service.authorizer = googleUser.authentication.fetcherAuthorizer()
+        service.authorizer = googleUser.fetcherAuthorizer
 
         getOrCreateFolderID(
             name: cloudStorageFolderName,

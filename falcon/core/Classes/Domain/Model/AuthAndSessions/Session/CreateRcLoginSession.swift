@@ -10,7 +10,8 @@ import Foundation
 struct CreateRcLoginSession {
 
     let client: Client
-    let gcmToken: String
+    // GcmToken is not retrieved until notification permission approval.
+    let gcmToken: String?
     let challengeKey: ChallengeKey
 
 }

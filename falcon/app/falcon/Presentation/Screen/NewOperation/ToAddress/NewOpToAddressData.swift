@@ -163,7 +163,6 @@ enum NewOpData {
 
         let calculateFee: (FeeRate) -> NewopFeeState
         let minFeeRate: (UInt) -> FeeRate
-        let maxFeeRate: FeeRate
 
         var feeConfirmationTargets: FeeConfirmationTargets {
             return (

@@ -16,7 +16,6 @@
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSDefines.h"
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSFeatures.h"
 #include "Crashlytics/Crashlytics/Components/FIRCLSGlobals.h"
-#include "Crashlytics/Crashlytics/Helpers/FIRCLSProfiling.h"
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSThreadState.h"
 #include "Crashlytics/Crashlytics/Unwind/FIRCLSUnwind.h"
 #include "Crashlytics/Crashlytics/Helpers/FIRCLSUtility.h"
@@ -55,10 +54,6 @@ bool FIRCLSProcessInit(FIRCLSProcess *process, thread_t crashedThread, void *uap
   }
 
   return true;
-}
-
-bool FIRCLSProcessDestroy(FIRCLSProcess *process) {
-  return false;
 }
 
 // https://developer.apple.com/library/mac/#qa/qa2004/qa1361.html

@@ -87,7 +87,8 @@ class AnalyticsHelper {
     }
 
     static func logScreen(_ name: String, parameters: [String: Any]?) {
-        Analytics.setScreenName(name, screenClass: nil)
+        Analytics.logEvent(AnalyticsEventScreenView, parameters: [AnalyticsParameterScreenName: name])
+
         let screenName = "s_\(name)"
 
         actuallyLogEvent(screenName, parameters: parameters)

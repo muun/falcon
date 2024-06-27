@@ -26,13 +26,28 @@
 #import <nanopb/pb_decode.h>
 #import <nanopb/pb_encode.h>
 
+@interface FIRCLSReportAdapter ()
+
+@property(nonatomic, strong) FIRCLSInstallIdentifierModel *installIDModel;
+@property(nonatomic, copy) NSString *fiid;
+@property(nonatomic, copy) NSString *authToken;
+
+@end
+
 @implementation FIRCLSReportAdapter
 
-- (instancetype)initWithPath:(NSString *)folderPath googleAppId:(NSString *)googleAppID {
+- (instancetype)initWithPath:(NSString *)folderPath
+                 googleAppId:(NSString *)googleAppID
+              installIDModel:(FIRCLSInstallIdentifierModel *)installIDModel
+                        fiid:(NSString *)fiid
+                   authToken:(NSString *)authToken {
   self = [super init];
   if (self) {
     _folderPath = folderPath;
     _googleAppID = googleAppID;
+    _installIDModel = installIDModel;
+    _fiid = [fiid copy];
+    _authToken = [authToken copy];
 
     [self loadMetaDataFile];
 
@@ -141,7 +156,10 @@
   report.sdk_version = FIRCLSEncodeString(self.identity.build_version);
   report.gmp_app_id = FIRCLSEncodeString(self.googleAppID);
   report.platform = [self protoPlatformFromString:self.host.platform];
-  report.installation_uuid = FIRCLSEncodeString(self.identity.install_id);
+  report.installation_uuid = FIRCLSEncodeString(self.installIDModel.installID);
+  report.firebase_installation_id = FIRCLSEncodeString(self.fiid);
+  report.app_quality_session_id = FIRCLSEncodeString(self.identity.app_quality_session_id);
+  report.firebase_authentication_token = FIRCLSEncodeString(self.authToken);
   report.build_version = FIRCLSEncodeString(self.application.build_version);
   report.display_version = FIRCLSEncodeString(self.application.display_version);
   report.apple_payload = [self protoFilesPayload];

@@ -96,7 +96,6 @@ extension Client: APIConvertible {
             language: language,
             deviceCheckToken: deviceCheckToken,
             fallbackDeviceToken: fallbackDeviceToken,
-            iosSystemUptimeInMilliseconds: Int64(floor(systemUptime * 1000)),
             iCloudRecordId: iCloudRecordId
         )
     }
@@ -623,7 +622,8 @@ extension SizeForAmountJson: ModelConvertible {
         return SizeForAmount(
             amountInSatoshis: Satoshis(value: amountInSatoshis),
             sizeInBytes: sizeInBytes,
-            outpoint: outpoint
+            outpoint: outpoint,
+            utxoStatus: status.toModel()
         )
     }
 
@@ -635,8 +635,31 @@ extension SizeForAmount: APIConvertible {
         return SizeForAmountJson(
             amountInSatoshis: amountInSatoshis.value,
             sizeInBytes: sizeInBytes,
-            outpoint: outpoint ?? ""
+            outpoint: outpoint ?? "",
+            status: utxoStatus!.toJson()
         )
+    }
+
+}
+
+extension UtxoStatusJson: ModelConvertible {
+
+    public func toModel() -> UtxoStatus {
+        switch self {
+        case .CONFIRMED: return .CONFIRMED
+        case .UNCONFIRMED: return .UNCONFIRMED
+        }
+    }
+
+}
+
+extension UtxoStatus: APIConvertible {
+
+    public func toJson() -> UtxoStatusJson {
+        switch self {
+        case .CONFIRMED: return .CONFIRMED
+        case .UNCONFIRMED: return .UNCONFIRMED
+        }
     }
 
 }

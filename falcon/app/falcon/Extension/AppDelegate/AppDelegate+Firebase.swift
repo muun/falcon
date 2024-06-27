@@ -27,11 +27,36 @@ extension AppDelegate {
 
     fileprivate func requestAPNSTokenOnlyAfterPermissionsApproval() {
         PushNotificationsHelper.getPushNotificationAuthorizationStatus { (status) in
+
             if status == .authorized {
                 // Attempt registration for remote notifications
                 UIApplication.shared.registerForRemoteNotifications()
+
+                self.logAbsentFCMTokenWhenHavingPushPermissions()
             }
         }
+    }
+
+    /**
+     In order to send push notifications, we rely on FCM. If we have push notification permissions, we must have an FCM token;
+     otherwise, we can assume there is a bug in either APNS or FCM preventing us from getting an FCM token. This logic is a best effort
+     to detect cases in which we have notification permissions but do not have an FCM token.
+     */
+    private func logAbsentFCMTokenWhenHavingPushPermissions() {
+        // Avoid logging twice.
+        guard !fcmTokenHandlingAlreadyReported else {
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+            if !self.preferences.has(key: .gcmToken) {
+                let hasAPNSToken = (Messaging.messaging().apnsToken != nil)
+                Logger.log(.err, "FCMToken inconsistency: permission granted but fcmToken not received. has ApnsToken: \(hasAPNSToken)")
+                return
+            }
+        }
+
+        fcmTokenHandlingAlreadyReported = true
     }
 }
 
@@ -44,11 +69,8 @@ extension AppDelegate: MessagingDelegate {
 
         Logger.log(.info, "Firebase registration token: \(fcmToken)")
 
-        preferences.set(value: fcmToken, forKey: .gcmToken)
-        if sessionActions.isLoggedIn() {
-            fcmTokenAction.run(token: fcmToken)
-            requestAPNSTokenOnlyAfterPermissionsApproval()
-        }
+        fcmTokenAction.run(token: fcmToken)
+        requestAPNSTokenOnlyAfterPermissionsApproval()
     }
 
 }

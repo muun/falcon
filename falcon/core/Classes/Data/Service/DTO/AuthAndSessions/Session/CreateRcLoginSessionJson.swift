@@ -10,7 +10,8 @@ import Foundation
 struct CreateRcLoginSessionJson: Codable {
 
     let client: ClientJson
-    let gcmToken: String
+    // GcmToken is not retrieved until notification permission approval.
+    let gcmToken: String?
     let challengeKeyJson: ChallengeKeyJson
 
 }

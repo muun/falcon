@@ -155,7 +155,6 @@ extension SelectFeeViewController: UITableViewDelegate {
         case .enterManually:
             let vc = ManuallyEnterFeeViewController(delegate: delegate,
                                                     state: state,
-                                                    showUseMaxButton: shouldShowUseMaxButton(),
                                                     selectedCurrency: state.amount.selectedCurrency)
             navigationController!.pushViewController(vc, animated: true)
             tableView.reloadData()
@@ -163,23 +162,6 @@ extension SelectFeeViewController: UITableViewDelegate {
         default:
             return
         }
-    }
-
-    private func shouldShowUseMaxButton() -> Bool {
-        // The use max fee button is only displayed in case the user is not taking fee from amount
-        // And if the user doesnt have a selected fee
-        if presenter.takeFeeFromAmount {
-            return false
-        } else {
-            switch originalFeeState {
-            case .finalFee:
-                return false
-            default:
-                return true
-            }
-
-        }
-
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

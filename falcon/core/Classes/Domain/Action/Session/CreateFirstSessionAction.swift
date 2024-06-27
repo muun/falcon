@@ -32,7 +32,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         super.init(name: "CreateFirstSessionAction")
     }
 
-    public func run(gcmToken: String, currencyCode: String) throws {
+    public func run(gcmToken: String?, currencyCode: String) throws {
         // We have to wipe everything to avoid edgy bugs with the notifications
         logoutAction.run(notifyHouston: false)
 
@@ -59,7 +59,7 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         }
     }
 
-    public func createFirstSession(gcmToken: String, currencyCode: String) throws -> Single<CreateFirstSessionOk> {
+    public func createFirstSession(gcmToken: String?, currencyCode: String) throws -> Single<CreateFirstSessionOk> {
 
         createBasePrivateKey()
 

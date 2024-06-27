@@ -12,7 +12,6 @@ import XCTest
 
 class UserTests: MuunTestCase {
 
-    @available(iOS 12, *)
     func testSupportId() {
         var user = Factory.user(createdAt: Date(timeIntervalSinceReferenceDate: 614635838.145))
 

@@ -34,12 +34,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * To support end-users rotating Install IDs, this will check and rotate the Install ID,
- * which is a costly operation performance-wise. To keep the startup time impact down, call this in
- * a background thread.
+ * which can be a slow operation. This should be run in an Activity or
+ * background thread.
  *
- * The block will be called on a background thread.
+ * This method has 2 concerns:
+ *  - Concern 1: We have the old Crashlytics Install ID that needs to regenerate when the FIID
+ * changes. If we get a null FIID, we don't want to rotate because we don't know if it changed or
+ * not.
+ *  - Concern 2: Whatever the FIID is, we should send it with the Crash report so we're in sync with
+ * Sessions and other Firebase SDKs
  */
-- (void)regenerateInstallIDIfNeededWithBlock:(void (^)(BOOL didRotate))callback;
+- (BOOL)regenerateInstallIDIfNeededWithBlock:(void (^)(NSString *fiid, NSString *authToken))block;
 
 @end
 

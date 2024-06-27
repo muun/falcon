@@ -18,7 +18,7 @@
 
 /** Checks if we've swizzled the currentIMP and returns the original IMP that would be invoked if
  *  we hadn't swizzled it in the first place. This method is private because consumers don't need it
- *  to cache or retrive any IMPs. It is used internally and for certain asserts in GULSwizzler.
+ *  to cache or retrieve any IMPs. It is used internally and for certain asserts in GULSwizzler.
  *
  *  @param currentIMP The IMP returned by class_getMethodImplementation.
  *  @return The original IMP that would be invoked if we hadn't swizzled at all, and in cases where

@@ -45,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var debugModeDisplayer: DebugModeDisplayer?
     private let backgroundTimesService: BackgroundTimesService = resolve()
     internal let gcmMessageIDKey = "gcm.message_id"
+    // Used in firebase extension
+    var fcmTokenHandlingAlreadyReported = false
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -81,10 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if let url = launchOptions?[UIApplication.LaunchOptionsKey.url] as? URL {
             return self.application(application, open: url, options: [:])
-        }
-
-        DispatchQueue.global().async {
-            HardwareCapabilitiesProvider.shared.startRefreshingCacheableValues()
         }
 
         setupDebugModeIfNeeded()
@@ -182,9 +180,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         blurEffectView.removeFromSuperview()
 
         DeviceUtils.appState = application.applicationState
-        DispatchQueue.global().async {
-            HardwareCapabilitiesProvider.shared.refreshFreeStorage()
-        }
         AnalyticsHelper.logEvent("app_will_enter_foreground")
         deviceCheckTokenProvider.reactToForegroundAppState()
         backgroundTimesService.onEnterForeground()

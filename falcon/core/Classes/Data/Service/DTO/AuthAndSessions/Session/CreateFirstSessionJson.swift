@@ -10,7 +10,8 @@ import Foundation
 struct CreateFirstSessionJson: Codable {
 
     let client: ClientJson
-    let gcmToken: String
+    // GcmToken is not retrieved until notification permission approval.
+    let gcmToken: String?
     let primaryCurrency: String
     let basePublicKey: PublicKeyJson
 
@@ -34,6 +35,5 @@ struct ClientJson: Codable {
     let language: String
     let deviceCheckToken: String
     let fallbackDeviceToken: String
-    let iosSystemUptimeInMilliseconds: Int64
     let iCloudRecordId: String?
 }
