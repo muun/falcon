@@ -24,7 +24,8 @@ final class ShareEmergencyKitPage: UIElementPage<UIElements.Pages.EmergencyKit.S
         confirmSave.mainButtonTap()
 
         // Hack to tap the copy button on the activity view controller
-        XCUIApplication().buttons["Copy"].tap()
+        XCUIApplication().cells.element(boundBy: 0).waitForExistence(timeout: 3)
+        XCUIApplication().cells.element(boundBy: 0).tap()
 
         return ActivateEmergencyKitPage()
     }

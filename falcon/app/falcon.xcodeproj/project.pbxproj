@@ -56,6 +56,7 @@
 		0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */; };
 		0FF90789262B311300889E0F /* NewOpError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF90788262B311300889E0F /* NewOpError.swift */; };
 		0FFF339526CABFC80050F69F /* NewOperationStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */; };
+		659FC2852C07B074006E98AB /* ChangePasswordNewViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */; };
 		69B9CBC541E3A6E385C06BE7 /* Pods_Muun.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4218A5EC749F0490196019CC /* Pods_Muun.framework */; };
 		A0000991257A7B9600B69008 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000990257A7B9600B69008 /* TransactionListViewController.swift */; };
 		A0000997257A7BB900B69008 /* TransactionListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000996257A7BB900B69008 /* TransactionListPresenter.swift */; };
@@ -639,6 +640,7 @@
 		4218A5EC749F0490196019CC /* Pods_Muun.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Muun.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FDD7A39280D20C474642D /* Pods-falconPushNotifications.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconPushNotifications.debug.xcconfig"; path = "Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications.debug.xcconfig"; sourceTree = "<group>"; };
 		47163A6E09E12FEE22D35F44 /* Pods_falconTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_falconTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordNewViewPresenter.swift; sourceTree = "<group>"; };
 		78A6CA93F0F445C0F1541BB1 /* Pods-falconTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconTests.release.xcconfig"; path = "Target Support Files/Pods-falconTests/Pods-falconTests.release.xcconfig"; sourceTree = "<group>"; };
 		8D644A271A94615EDD5ED4DC /* Pods-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		96303DAE309982529187EEAB /* Pods-falconUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.release.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1637,9 +1639,10 @@
 		A032C09224D4889E00A111A0 /* EnterNew */ = {
 			isa = PBXGroup;
 			children = (
+				A032C09724D48CE100A111A0 /* ChangePasswordEnterNewPresenter.swift */,
 				A032C09324D488B400A111A0 /* ChangePasswordEnterNewView.swift */,
 				A032C09524D48CB200A111A0 /* ChangePasswordEnterNewViewController.swift */,
-				A032C09724D48CE100A111A0 /* ChangePasswordEnterNewPresenter.swift */,
+				659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */,
 			);
 			path = EnterNew;
 			sourceTree = "<group>";
@@ -3985,6 +3988,7 @@
 				A0DFCD1924520BF300D1EBC4 /* SecurityCenter+MoreInfo.swift in Sources */,
 				A062C3D0212C501C00796D92 /* SignUpEmailPresenter.swift in Sources */,
 				A0F627B8227B698300496987 /* AppDelegate+Notification.swift in Sources */,
+				659FC2852C07B074006E98AB /* ChangePasswordNewViewPresenter.swift in Sources */,
 				A0E295D024A40018001317F6 /* ShareEmergencyKitView.swift in Sources */,
 				A0D737312244196C00547A77 /* TwoLinesSettingsTableViewCell.swift in Sources */,
 				A0E11ACA2450A12E00B068F8 /* SecurityCenter+ActionCard.swift in Sources */,
@@ -4349,8 +4353,8 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1037;
-				CURRENT_PROJECT_VERSION = 1036;
+				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4401,8 +4405,8 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1037;
-				CURRENT_PROJECT_VERSION = 1036;
+				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4532,8 +4536,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1037;
-				CURRENT_PROJECT_VERSION = 1036;
+				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4598,8 +4602,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1037;
-				CURRENT_PROJECT_VERSION = 1036;
+				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4632,8 +4636,8 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1037;
-				CURRENT_PROJECT_VERSION = 1036;
+				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4717,8 +4721,8 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1037;
-				CURRENT_PROJECT_VERSION = 1036;
+				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

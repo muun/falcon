@@ -13,15 +13,22 @@ final class ChangePasswordEnterNewPage: UIElementPage<UIElements.Pages.ChangePas
     private lazy var confirmButton = ButtonViewPage(Root.confirmButton)
     private lazy var firstTextInput = TextInputViewPage(Root.firstTextInput)
     private lazy var secondTextInput = TextInputViewPage(Root.secondTextInput)
+    private lazy var agreeChangePasswordCheck = CheckViewPage(Root.agreeChangePasswordCheck)
 
     init() {
         super.init(root: Root.root)
     }
 
     func enterNew(_ password: String) -> FeedbackPage {
+        assert(!agreeChangePasswordCheck.exists())
+
         firstTextInput.type(text: password)
-        confirmButton.mainButtonTap()
+        assert(!agreeChangePasswordCheck.exists())
+
         secondTextInput.type(text: password)
+        assert(agreeChangePasswordCheck.exists())
+
+        agreeChangePasswordCheck.tap()
         confirmButton.mainButtonTap()
         return FeedbackPage()
     }

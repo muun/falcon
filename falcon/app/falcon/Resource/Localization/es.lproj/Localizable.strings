@@ -760,6 +760,7 @@ Por favor revisa tu conexión e inténtalo de nuevo.";
 "ChangePasswordEnterNewView.s4" = "Al menos 8 caracteres de longitud";
 "ChangePasswordEnterNewView.s6" = "Las contraseñas deben coincidir";
 "ChangePasswordEnterNewView.s7" = "CONFIRMAR CONTRASEÑA";
+"ChangePasswordEnterNewView.s8" = "Entiendo que mi contraseña anterior ya no será válida.";
 /* Presentation/Screen/Settings/ChangePassword/EnterNew/ChangePasswordEnterNewViewController.swift */
 "ChangePasswordEnterNewViewController.s1" = "Cambiar contraseña";
 "ChangePasswordEnterNewViewController.s2" = "¿Abortar cambio de contraseña?";

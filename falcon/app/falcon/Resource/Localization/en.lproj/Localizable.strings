@@ -755,6 +755,7 @@ Please check your connection and try again.";
 "ChangePasswordEnterNewView.s4" = "At least 8 characters long";
 "ChangePasswordEnterNewView.s6" = "Passwords must match";
 "ChangePasswordEnterNewView.s7" = "CONFIRM NEW PASSWORD";
+"ChangePasswordEnterNewView.s8" = "I understand that my previous password is no longer valid.";
 /* Presentation/Screen/Settings/ChangePassword/EnterNew/ChangePasswordEnterNewViewController.swift */
 "ChangePasswordEnterNewViewController.s1" = "Change password";
 "ChangePasswordEnterNewViewController.s2" = "Abort change password?";

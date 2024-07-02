@@ -275,7 +275,8 @@ extension ShareEmergencyKitViewController: ShareEmergencyKitPresenterDelegate {
             case (OIDOAuthTokenErrorDomain, OIDErrorCodeOAuth.unauthorizedClient.rawValue),
                 (OIDOAuthTokenErrorDomain, OIDErrorCodeOAuth.accessDenied.rawValue),
                 (OIDOAuthTokenErrorDomain, OIDErrorCodeOAuth.invalidGrant.rawValue),
-                (kGTLRErrorObjectDomain, 403):
+                (kGTLRErrorObjectDomain, 403),
+                (kGTLRErrorObjectDomain, 401):
 
                 // Retrigger a login
                 signInWithGoogle()

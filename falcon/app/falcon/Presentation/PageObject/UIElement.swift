@@ -87,6 +87,7 @@ enum UIElements {
             case send
             case balance
             case chevron
+            case letsGo
         }
 
         enum TransactionListPage: String, UIElement {
@@ -233,6 +234,7 @@ enum UIElements {
             case firstTextInput
             case secondTextInput
             case confirmButton
+            case agreeChangePasswordCheck
         }
 
         enum SecurityCenterPage: String, UIElement {
