@@ -31,6 +31,7 @@ class WelcomePopUpView: UIView {
         setUpMessageLabel()
         setUpImageView()
         setUpButton()
+        makeViewTestable()
     }
 
     fileprivate func setUpCard() {
@@ -99,4 +100,14 @@ extension WelcomePopUpView: SmallButtonViewDelegate {
     func button(didPress button: SmallButtonView) {
         delegate?.dismiss(popup: self)
     }
+}
+
+extension WelcomePopUpView: UITestablePage {
+
+    typealias UIElementType = UIElements.Pages.HomePage
+
+    func makeViewTestable() {
+        makeViewTestable(continueButton, using: .letsGo)
+    }
+
 }

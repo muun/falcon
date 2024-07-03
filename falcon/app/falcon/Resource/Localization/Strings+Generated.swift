@@ -158,6 +158,8 @@ internal enum L10n {
     internal static let s6 = L10n.tr("Localizable", "ChangePasswordEnterNewView.s6")
     /// CONFIRM NEW PASSWORD
     internal static let s7 = L10n.tr("Localizable", "ChangePasswordEnterNewView.s7")
+    /// I understand that my previous password is no longer valid.
+    internal static let s8 = L10n.tr("Localizable", "ChangePasswordEnterNewView.s8")
   }
 
   internal enum ChangePasswordEnterNewViewController {

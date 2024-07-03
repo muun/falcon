@@ -43,6 +43,11 @@ class BackgroundExecutionMetricsProvider {
             simState: conectivityCapabilities.getSimState().rawValue,
             hasInternetConnectionProvidedByCarrier: hasInternetConnectionProvidedByCarrier,
             currentlyOverWifi: conectivityCapabilities.isOverWifi,
+            currentNetInterface: conectivityCapabilities.netInterfaceName,
+            excludedTunnelAddresses: conectivityCapabilities.getExcludedTunnelAddresses(),
+            proxyHttp: conectivityCapabilities.getHTTPProxy(),
+            proxyHttps: conectivityCapabilities.getHTTPSProxy(),
+            socksEnable: conectivityCapabilities.isSOCKSEnable(),
             availableNetworks: availableNetworksDTO,
             reachabilityStatus: reachabilityStatusDTO,
             totalRamStorage: hardwareCapabilities.getTotalRam(),
@@ -71,6 +76,11 @@ struct BackgroundExcecutionMetrics: Encodable {
     let simState: String
     let hasInternetConnectionProvidedByCarrier: Bool?
     let currentlyOverWifi: Bool?
+    let currentNetInterface: String
+    let excludedTunnelAddresses: String
+    let proxyHttp: String
+    let proxyHttps: String
+    let socksEnable: Int
     let availableNetworks: AvailableNetworksDTO?
     let reachabilityStatus: ReachabilityStatusDTO?
     let totalRamStorage: UInt64

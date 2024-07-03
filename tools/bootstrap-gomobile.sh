@@ -11,5 +11,4 @@ mkdir -p "$build_dir/pkg"
 
 GOMODCACHE="$build_dir/pkg" \
     go install golang.org/x/mobile/cmd/gomobile && \
-    go install golang.org/x/mobile/cmd/gobind && \
-    gobind init
+    go install golang.org/x/mobile/cmd/gobind

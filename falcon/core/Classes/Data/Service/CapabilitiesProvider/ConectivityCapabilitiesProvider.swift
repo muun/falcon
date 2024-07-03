@@ -13,6 +13,7 @@ public class ConectivityCapabilitiesProvider {
     public static let shared = ConectivityCapabilitiesProvider()
     // Maintained for legacy backward compability.
     var isOverWifi: Bool?
+    var netInterfaceName: String = SignalConstants.empty
     var availableNetworks: AvailableNetworks?
 
     private var storedNetworkMonitor: Any?
@@ -65,6 +66,41 @@ public class ConectivityCapabilitiesProvider {
         }
         return nil
     }
+    
+    func getExcludedTunnelAddresses() -> String {
+        guard let cfDict = CFNetworkCopySystemProxySettings() else {
+            return SignalConstants.unknown
+        }
+        let proxySettings = cfDict.takeRetainedValue() as NSDictionary
+        if let value = proxySettings["ExceptionsList"] as? [String] {
+            let stringArray = value.map { "\($0)" }
+            return stringArray.joined(separator: ", ")
+        }
+        return SignalConstants.empty
+    }
+
+     func getHTTPProxy() -> String {
+         return getProxySetting(key: .http, unknownValue: SignalConstants.unknown, defaultValue: SignalConstants.empty)
+     }
+
+     func getHTTPSProxy() -> String {
+         return getProxySetting(key: .https, unknownValue: SignalConstants.unknown, defaultValue: SignalConstants.empty)
+     }
+
+     func isSOCKSEnable() -> Int {
+         return getProxySetting(key: .socks, unknownValue: SignalConstants.intUnknown, defaultValue: SignalConstants.intDisabled)
+     }
+    
+    private func getProxySetting<T>(key: ProxyKey, unknownValue: T , defaultValue: T) -> T {
+        guard let cfDict = CFNetworkCopySystemProxySettings() else {
+            return defaultValue
+        }
+        let netSettings = cfDict.takeRetainedValue() as NSDictionary
+        if let value = netSettings[key.rawValue] as? T {
+            return value
+        }
+        return defaultValue
+    }
 
     private func resetCachedAvailableNetworks() {
         availableNetworks = AvailableNetworks()
@@ -75,6 +111,8 @@ public class ConectivityCapabilitiesProvider {
         var availableNetworks = AvailableNetworks()
 
         isOverWifi = availableInterfaces.contains(where: { $0.type == .wifi })
+        
+        netInterfaceName = availableInterfaces.first?.name ?? SignalConstants.empty
 
         availableInterfaces.forEach {
             switch($0.type) {
@@ -116,4 +154,17 @@ struct AvailableNetworks {
         cellular = false
         other = false
     }
+}
+
+enum ProxyKey: String {
+    case http = "HTTPProxy"
+    case https = "HTTPSProxy"
+    case socks = "SOCKSEnable"
+}
+
+struct SignalConstants {
+    static let unknown = "UNKNOWN"
+    static let intUnknown = -1
+    static let intDisabled = 0
+    static let empty = ""
 }

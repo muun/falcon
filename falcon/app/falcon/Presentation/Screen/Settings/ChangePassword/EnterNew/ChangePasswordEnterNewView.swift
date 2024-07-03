@@ -7,23 +7,28 @@
 //
 
 import UIKit
+import core
 
 protocol ChangePasswordEnterNewViewDelegate: AnyObject {
     func didEnterNewPassword(_ password: String)
 }
 
-final class ChangePasswordEnterNewView: UIView {
+final class ChangePasswordEnterNewView: MUView, PresenterInstantior {
 
     private var contentVerticalStack: UIStackView!
     private var titleAndDescriptionView: TitleAndDescriptionView!
     private var firstPasswordInput: TextInputView!
     private var secondPasswordInput: TextInputView!
+    private var agreeChangePasswordCheck: CheckView!
     private var confirmButton: ButtonView!
 
+    private lazy var presenter = instancePresenter(
+        ChangePasswordNewViewPresenter.init,
+        delegate: self
+    )
     private weak var delegate: ChangePasswordEnterNewViewDelegate?
 
     private var bottomMarginConstraint: NSLayoutConstraint!
-    private var status: CreatePasswordState = .inputPassword
 
     init(delegate: ChangePasswordEnterNewViewDelegate?) {
         self.delegate = delegate
@@ -41,6 +46,7 @@ final class ChangePasswordEnterNewView: UIView {
         setUpContentStackView()
 
         makeViewTestable()
+        presenter.setUp()
     }
 
     private func setUpContentStackView() {
@@ -100,7 +106,13 @@ final class ChangePasswordEnterNewView: UIView {
         secondPasswordInput.bottomLabel = L10n.ChangePasswordEnterNewView.s6
         secondPasswordInput.delegate = self
         contentVerticalStack.addArrangedSubview(secondPasswordInput)
-        secondPasswordInput.alpha = 0
+
+        agreeChangePasswordCheck = CheckView()
+        agreeChangePasswordCheck.translatesAutoresizingMaskIntoConstraints = false
+        agreeChangePasswordCheck.delegate = self
+        agreeChangePasswordCheck.labelText = L10n.ChangePasswordEnterNewView.s8
+        agreeChangePasswordCheck.alpha = 0
+        contentVerticalStack.addArrangedSubview(agreeChangePasswordCheck)
     }
 
     private func setUpButton() {
@@ -145,41 +157,33 @@ final class ChangePasswordEnterNewView: UIView {
     func makePasswordInputFirstResponder() {
         _ = firstPasswordInput.becomeFirstResponder()
     }
-
 }
 
 extension ChangePasswordEnterNewView: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
-        if status == .inputPassword {
-            status = .confirmPassword
-            confirmButton.isEnabled = false
-
-            secondPasswordInput.animate(direction: .topToBottom, duration: .short)
-            _ = secondPasswordInput.becomeFirstResponder()
-
-        } else if status == .confirmPassword {
-            if firstPasswordInput.text == secondPasswordInput.text {
-                endEditing(true)
-                delegate?.didEnterNewPassword(firstPasswordInput.text)
-            } else {
-                secondPasswordInput.setError(L10n.ChangePasswordEnterNewView.s6)
-            }
+        endEditing(true)
+        guard presenter.isPasswordChangeAllowed(firstPassword: firstPasswordInput.text,
+                                                secondPassword: secondPasswordInput.text,
+                                                isAgreeChangePasswordChecked:
+                                                    agreeChangePasswordCheck.isChecked)
+        else {
+            Logger.log(.err, "Change password button should be deactivated")
+            return
         }
+        delegate?.didEnterNewPassword(firstPasswordInput.text)
     }
-
 }
 
 extension ChangePasswordEnterNewView: TextInputViewDelegate {
 
     func onTextChange(textInputView: TextInputView, text: String) {
-        if textInputView == firstPasswordInput {
-            confirmButton.isEnabled = text.count >= 8
-        } else if textInputView == secondPasswordInput {
-            confirmButton.isEnabled = text.count >= 8 && firstPasswordInput.text.count >= 8
-        }
+        let firstPassword = textInputView == firstPasswordInput ? text : firstPasswordInput.text
+        let secondPassword = textInputView == secondPasswordInput ? text : secondPasswordInput.text
+        presenter.onInputPasswordStateChanged(firstPassword: firstPassword,
+            secondPassword: secondPassword,
+            isAgreeChangePasswordChecked: agreeChangePasswordCheck.isChecked)
     }
-
 }
 
 extension ChangePasswordEnterNewView: UITestablePage {
@@ -191,6 +195,31 @@ extension ChangePasswordEnterNewView: UITestablePage {
         self.makeViewTestable(firstPasswordInput, using: .firstTextInput)
         self.makeViewTestable(secondPasswordInput, using: .secondTextInput)
         self.makeViewTestable(confirmButton, using: .confirmButton)
+        self.makeViewTestable(agreeChangePasswordCheck, using: .agreeChangePasswordCheck)
     }
+}
 
+extension ChangePasswordEnterNewView: CheckViewDelegate {
+    func onCheckChanged(checked: Bool) {
+        presenter.onInputPasswordStateChanged(firstPassword: firstPasswordInput.text,
+            secondPassword: secondPasswordInput.text,
+            isAgreeChangePasswordChecked: checked)
+    }
+}
+
+extension ChangePasswordEnterNewView: ChangePasswordNewViewPresenterDelegate {
+    func updateUi(state: ChangePasswordState) {
+        switch state {
+        case .inputPassword:
+            confirmButton.isEnabled = false
+        case .passwordMatch:
+            confirmButton.isEnabled = false
+            agreeChangePasswordCheck.animate(direction: .topToBottom, duration: .short)
+        case .passwordDoesNotMatch:
+            confirmButton.isEnabled = false
+            secondPasswordInput.setError(L10n.ChangePasswordEnterNewView.s6)
+        case .confirmPassword:
+            confirmButton.isEnabled = true
+        }
+    }
 }

@@ -13,6 +13,7 @@ final class HomePage: UIElementPage<UIElements.Pages.HomePage> {
 
     private let receiveButton = SmallButtonViewPage(Root.receive)
     private let sendButton = SmallButtonViewPage(Root.send)
+    private lazy var confirmWelcome = SmallButtonViewPage(Root.letsGo)
     private lazy var chevron = otherElement(Root.chevron)
     private lazy var balanceLabel = label(.balance)
 
@@ -44,11 +45,8 @@ final class HomePage: UIElementPage<UIElements.Pages.HomePage> {
         // Wait for the pop up to appear
         sleep(2)
 
-        // Tap on the center of the screen
-        Page.app.coordinate(withNormalizedOffset: CGVector(
-            dx: UIScreen.main.bounds.height / 2,
-            dy: UIScreen.main.bounds.width / 2)
-        ).tap()
+        confirmWelcome.mainButtonTap()
+
     }
 
     func getAddress() -> String {
