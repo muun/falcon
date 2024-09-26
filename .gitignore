@@ -67,5 +67,9 @@ Libwallet.framework
 .gopath
 .golangprod
 
+# Golang
+go/
+go.src.tar.gz
+
 falcon/app/vendor
 .idea/
