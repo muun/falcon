@@ -66,6 +66,7 @@ fastlane/report.xml
 Libwallet.framework
 .gopath
 .golangprod
+falcon/core/Libwallet.xcframework
 
 # Golang
 go/
