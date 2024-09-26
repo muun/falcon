@@ -103,7 +103,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: DeviceCheckTokenProvider.init)
             container.register(.singleton, factory: BackgroundTimesService.init)
             container.register {
-                BackgroundExecutionMetricsProvider()
+                BackgroundExecutionMetricsProvider(localeTimeZoneProvider: try container.resolve())
             }.resolvingProperties {
                 $1.reachabilityService = try container.resolve()
             }

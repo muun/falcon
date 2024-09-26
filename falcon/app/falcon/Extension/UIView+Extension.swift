@@ -212,4 +212,12 @@ extension UIView {
                                          multiplier: 1.0,
                                          constant: 0.0))
     }
+
+    func fitTo(parent: UIView, replacingTop: NSLayoutYAxisAnchor? = nil) {
+        translatesAutoresizingMaskIntoConstraints = false
+        topAnchor.constraint(equalTo: replacingTop ?? parent.topAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: parent.bottomAnchor).isActive = true
+        leftAnchor.constraint(equalTo: parent.leftAnchor).isActive = true
+        rightAnchor.constraint(equalTo: parent.rightAnchor).isActive = true
+    }
 }

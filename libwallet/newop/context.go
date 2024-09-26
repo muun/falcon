@@ -32,5 +32,6 @@ func newPaymentAnalyzer(context *PaymentContext) *operation.PaymentAnalyzer {
 	return operation.NewPaymentAnalyzer(
 		context.FeeWindow.toInternalType(),
 		context.NextTransactionSize.toInternalType(),
+		nil,
 	)
 }

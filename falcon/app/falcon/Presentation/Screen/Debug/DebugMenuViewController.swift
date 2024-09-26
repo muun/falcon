@@ -62,6 +62,13 @@ extension DebugMenuViewController: DebugMenuPresenterDelegate {
                                                           animated: true)
         }
     }
+
+    func showAnalytics() {
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(DebugAnalyticsViewController(),
+                                                          animated: true)
+        }
+    }
 }
 
 private extension DebugMenuViewController {

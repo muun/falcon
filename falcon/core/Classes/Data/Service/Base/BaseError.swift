@@ -19,7 +19,7 @@ public struct DeveloperError: Codable, LocalizedError {
     public func getKindOfError() -> ExactDeveloperError {
         switch errorCode {
         case 429: return .tooManyRequests
-        case 2016: return .missingOrInvalidAuthToken
+        case 2016: return .notAuthorized
         case 2018: return .emailAlreadyUsed
         case 2021: return .exchangeRateWindowTooOld
         case 2038: return .sessionExpired
@@ -58,7 +58,7 @@ public enum ExactDeveloperError {
     case defaultError
     case tooManyRequests
 
-    case missingOrInvalidAuthToken
+    case notAuthorized
     case forceUpdate
     case sessionExpired
     case invalidEmail

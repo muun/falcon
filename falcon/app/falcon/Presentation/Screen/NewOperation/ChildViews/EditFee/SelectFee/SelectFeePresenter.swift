@@ -17,44 +17,53 @@ enum SelectFeeSection {
 
 class SelectFeePresenter<Delegate: BasePresenterDelegate>: FeeEditorPresenter<Delegate> {
 
-    lazy var fees: [FeeState] = calculateFees()
-    var targetBlocks: [UInt] {
-        return [feeConfirmationTargets.fast, feeConfirmationTargets.medium, feeConfirmationTargets.slow]
+    struct FeeData {
+        let fee: FeeState
+        let targetBlock: UInt
     }
 
+    lazy var feesData: [FeeData] = calculateFeesData()
+
     var sections: [SelectFeeSection] {
-        return [.title, .targetedFees(targets: targetBlocks), .enterManually]
+        return [.title, .targetedFees(targets: allTargetBlocks), .enterManually]
+    }
+
+    private var allTargetBlocks: [UInt] {
+        return [feeConfirmationTargets.fast,
+                feeConfirmationTargets.medium,
+                feeConfirmationTargets.slow]
     }
 
     func numberOfRowsForSection(_ section: Int) -> Int {
         switch sections[section] {
         case .title: return 1
-        case .targetedFees: return fees.count
+        case .targetedFees: return feesData.count
         case .enterManually: return 1
         }
     }
 
-    private func calculateFees() -> [FeeState] {
-        var allFees: [FeeState] = [FeeState]()
-        for target in targetBlocks {
+    private func calculateFeesData() -> [FeeData] {
+        var allFeesData: [FeeData] = [FeeData]()
+        for target in allTargetBlocks {
             let rate = minFeeRate(target)
             let fee = calculateFee(rate).adapt()
-            // Do not add duplicate values
-            if !allFees.contains(fee) {
-                allFees.append(fee)
+            // To avoid duplicated values, only different fee / target blocks will be presented to users.
+            if !allFeesData.contains(where: { $0.fee == fee }) {
+                let feeData = FeeData(fee: fee, targetBlock: target)
+                allFeesData.append(feeData)
             }
         }
-        return allFees
+        return allFeesData
     }
 
     func fee(for indexPath: IndexPath) -> FeeState {
-        return fees[indexPath.row]
+        return feesData[indexPath.row].fee
     }
 
     func timeText(for indexPath: IndexPath) -> String {
         switch sections[indexPath.section] {
         case .targetedFees:
-            let block = targetBlocks[indexPath.row]
+            let block = feesData[indexPath.row].targetBlock
             return timeToConfirm(targetBlock: block)
         default:
             Logger.fatal("Only targeted fee section can call this method")

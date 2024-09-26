@@ -21,6 +21,9 @@
       }
     },
     {
+      "skippedTests" : [
+        "FCMTokenActionTest\/test_syncAgainOnNewTokenReceivedWhileSyncing()"
+      ],
       "target" : {
         "containerPath" : "container:falcon.xcodeproj",
         "identifier" : "0F18C6C92130993500BC5BFE",

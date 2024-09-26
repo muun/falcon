@@ -5,14 +5,14 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcd/btcec/v2"
 )
 
 func TestSigning(t *testing.T) {
 	toSign := [32]byte{1, 2, 3}
 
-	userPriv, _ := btcec.NewPrivateKey(btcec.S256())
-	muunPriv, _ := btcec.NewPrivateKey(btcec.S256())
+	userPriv, _ := btcec.NewPrivateKey()
+	muunPriv, _ := btcec.NewPrivateKey()
 
 	combined, err := CombinePubKeysWithTweak(userPriv.PubKey(), muunPriv.PubKey(), nil)
 	if err != nil {
@@ -65,13 +65,13 @@ func TestSigning(t *testing.T) {
 }
 
 func TestSigningWithCustomTweak(t *testing.T) {
-	someRandomKey, _ := btcec.NewPrivateKey(btcec.S256())
+	someRandomKey, _ := btcec.NewPrivateKey()
 	customTweak := someRandomKey.Serialize()
 
 	toSign := [32]byte{1, 2, 3}
 
-	userPriv, _ := btcec.NewPrivateKey(btcec.S256())
-	muunPriv, _ := btcec.NewPrivateKey(btcec.S256())
+	userPriv, _ := btcec.NewPrivateKey()
+	muunPriv, _ := btcec.NewPrivateKey()
 
 	combined, err := CombinePubKeysWithTweak(userPriv.PubKey(), muunPriv.PubKey(), customTweak)
 	if err != nil {
@@ -140,8 +140,8 @@ func TestCrossWithJava(t *testing.T) {
 	expectedKey, _ := hex.DecodeString("027ca7eab04c2ad445418fa6a0ed2a331f121444aedd043adef94bdc00040ff96c")
 	expectedSig, _ := hex.DecodeString("773ad923eb5eef593095a6787b674675de2a558335dc3e44fe40cf7b3736637e66d508e4eaadca28dab02e2fdcf5707392b561fffa1837205d2fa77b74cbc82f")
 
-	userPriv, _ := btcec.PrivKeyFromBytes(btcec.S256(), rawUserPriv[:])
-	muunPriv, _ := btcec.PrivKeyFromBytes(btcec.S256(), rawMuunPriv[:])
+	userPriv, _ := btcec.PrivKeyFromBytes(rawUserPriv[:])
+	muunPriv, _ := btcec.PrivKeyFromBytes(rawMuunPriv[:])
 	combined, err := CombinePubKeysWithTweak(userPriv.PubKey(), muunPriv.PubKey(), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -205,8 +205,8 @@ func TestCrossWithJavaUsingTweak(t *testing.T) {
 	expectedKey, _ := hex.DecodeString("0348131bb4b25e17ad573923b3a24f0ac780a9cf5cefaefe44f0b762c1e83bfc06")
 	expectedSig, _ := hex.DecodeString("1467fb39edcfc400f036ee97c0e5b0f10879e8f9c53de022c97fbd4e997b2ed8ad2a170747b3edbafd370e203c6284aad605486696887791c09d9e99195c2b85")
 
-	userPriv, _ := btcec.PrivKeyFromBytes(btcec.S256(), rawUserPriv[:])
-	muunPriv, _ := btcec.PrivKeyFromBytes(btcec.S256(), rawMuunPriv[:])
+	userPriv, _ := btcec.PrivKeyFromBytes(rawUserPriv[:])
+	muunPriv, _ := btcec.PrivKeyFromBytes(rawMuunPriv[:])
 	combined, err := CombinePubKeysWithTweak(userPriv.PubKey(), muunPriv.PubKey(), tweak[:])
 	if err != nil {
 		t.Fatal(err)

@@ -173,6 +173,7 @@ extension AppDelegate {
 
         let libwalletConfig = LibwalletConfig()
         libwalletConfig.dataDir = Environment.current.libwalletDataDirectory.absoluteString
+        libwalletConfig.featureStatusProvider = featureFlagsRepository
 
         LibwalletInit(libwalletConfig)
     }

@@ -238,7 +238,7 @@ class DetailViewController: MUViewController {
 
     fileprivate func addTxHash(title: String) {
         if let hash = operation.transaction?.hash {
-            let url = "\(Environment.current.txExplorer)\(hash)"
+            let url = "\(Environment.current.txExplorer)\(hash)?mode=details"
 
             let shareUrl = {
                 let activityViewController = UIActivityViewController(activityItems: [url as NSString],

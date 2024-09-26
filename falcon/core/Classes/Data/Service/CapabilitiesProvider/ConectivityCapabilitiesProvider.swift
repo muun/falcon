@@ -36,6 +36,27 @@ public class ConectivityCapabilitiesProvider {
         }
     }
 
+    func getSimRegion() -> String {
+        if #available(iOS 12.0, *) {
+            let isoCountryCodeDeprecated = "--"
+
+            guard let carrier = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders?.values.first else {
+                return SignalConstants.unknown
+            }
+
+            guard let isoCountry = carrier.isoCountryCode else {
+                return SignalConstants.empty
+            }
+
+            if isoCountry == isoCountryCodeDeprecated {
+                return SignalConstants.deprecated
+            }
+
+            return isoCountry
+        }
+        return SignalConstants.unknown
+    }
+
     func getSimState() -> SimState {
         if #available(iOS 12.0, *) {
             let countryCodeDeprecatedValueIndicator = "65535"
@@ -167,4 +188,5 @@ struct SignalConstants {
     static let intUnknown = -1
     static let intDisabled = 0
     static let empty = ""
+    static let deprecated = "DEPRECATED"
 }

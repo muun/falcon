@@ -12,6 +12,7 @@ import core
 /// This struct is necessary because there is no way looking at Currencyhelper to be sure what bitcoin unit was
 /// selected by an user in case the user selects a specific bitcoin unit for a given flow.
 /// Looking at bitcoinAmount.inInputCurrency you can only figure out if currency is bitcoin not specific bitcoin unit
+/// - Tag: BitcoinAmountWithSelectedCurrency
 struct BitcoinAmountWithSelectedCurrency: Equatable {
     var bitcoinAmount: BitcoinAmount
     var selectedCurrency: Currency

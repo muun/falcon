@@ -437,7 +437,8 @@ func verifyInput(t *testing.T, signedTx *wire.MsgTx, hexPrevTx string, prevIndex
 		txscript.ScriptVerifyStrictEncoding | txscript.ScriptVerifyLowS |
 		txscript.ScriptVerifyWitness | txscript.ScriptVerifyCheckLockTimeVerify
 
-	vm, err := txscript.NewEngine(prevTx.TxOut[prevIndex].PkScript, signedTx, index, flags, nil, nil, prevTx.TxOut[prevIndex].Value)
+	prevOutFetcher := txscript.NewCannedPrevOutputFetcher(prevTx.TxOut[prevIndex].PkScript, prevTx.TxOut[prevIndex].Value)
+	vm, err := txscript.NewEngine(prevTx.TxOut[prevIndex].PkScript, signedTx, index, flags, nil, nil, prevTx.TxOut[prevIndex].Value, prevOutFetcher)
 	if err != nil {
 		t.Fatalf("failed to build script engine: %v", err)
 	}

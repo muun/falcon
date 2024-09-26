@@ -64,6 +64,7 @@
         ]
       },
       "vendored_frameworks": "Libwallet.xcframework",
+      "preserve_paths": "Libwallet.xcframework",
       "testspecs": [
         {
           "name": "Tests",
@@ -74,7 +75,8 @@
     },
     {
       "name": "notifications",
-      "vendored_frameworks": "Libwallet.xcframework"
+      "vendored_frameworks": "Libwallet.xcframework",
+      "preserve_paths": "Libwallet.xcframework"
     }
   ],
   "swift_version": "5"

@@ -38,10 +38,12 @@ Pod::Spec.new do |s|
     end
 
     sp.vendored_framework = 'Libwallet.xcframework'
+    sp.preserve_paths = 'Libwallet.xcframework'
   end
 
   s.subspec 'notifications' do |sp|
     sp.vendored_framework = 'Libwallet.xcframework'
+    sp.preserve_paths = 'Libwallet.xcframework'
   end
 
   s.script_phases = [{ 

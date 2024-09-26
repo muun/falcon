@@ -236,7 +236,7 @@ public struct FeeRate: Codable, Equatable {
     }
 
     public func rounded() -> Decimal {
-        return satsPerVByte.round(scale: 2, roundingMode: .down)
+        return satsPerVByte.round(scale: 2, roundingMode: .up)
     }
 
     public func stringValue() -> String {

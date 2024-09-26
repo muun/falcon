@@ -9,6 +9,22 @@ falcon_root="$repo_root/falcon/app"
 
 this_file_sha=$(shasum "$0")
 
+# Build patched version of go to prevent alignment errors
+if [[ -x "$repo_root/tools/patch-go.sh" ]]; then
+    . "$repo_root/tools/patch-go.sh"
+fi
+
+# gomobile bind generates the src-ios* directories several times, leading to fail with:
+# /tmp/go-build3034672677/b001/exe/gomobile: mkdir $GOCACHE/src-ios-arm64: file exists
+# exit status 1
+# There is no significant change in build times without these folders.
+no_cache_found="No src-arm64-* directories found in GOCACHE."
+
+rm -rf "$build_dir"/ios/ios/src-arm64* 2>/dev/null || echo $no_cache_found
+rm -rf "$build_dir"/ios/iossimulator/src-amd64* 2>/dev/null || echo $no_cache_found
+rm -rf "$build_dir"/ios/iossimulator/src-arm64* 2>/dev/null || echo $no_cache_found
+
+
 calc_shasum() {
     files=$(find "$1" -xdev -type f -name "*.go" -print \
             | grep -v "_test.go$" | grep -v "/build/" \
@@ -25,17 +41,14 @@ if ! which gobind > /dev/null; then
 
     MAIN_GOPATH="$(cat $falcon_root/.gopath)"
     GOPATH="$MAIN_GOPATH:$PWD/libwallet"
-    PATH="$PATH:$MAIN_GOPATH/bin"
+    PATH="$MAIN_GOPATH/bin:$PATH"
 fi
 
 patched_go_folder="$repo_root/falcon/go/bin"
 if [[ -x "$patched_go_folder/go" ]] || [[ "$CONFIGURATION" = "Release" ]]; then
     PATH="$patched_go_folder:$PATH"
-    if ! go version | grep "go1.18.10-muun" > /dev/null ; then
-        echo "Misconfigured golang version. Expected go1.18.1-muun."
-        go version
-        exit 1
-    fi
+    # Change GOROOT to match the go tool path to avoid tooldir pollution.
+    GOROOT="$repo_root/falcon/go/"
 fi
 
 cd "$repo_root"
@@ -60,20 +73,28 @@ mkdir -p "$build_dir/ios"
 mkdir -p "$build_dir/pkg"
 
 # Gomobile crashes if these files exist already
-rm -r "$build_dir"/ios/ios/iphoneos/*.framework || true
-rm -r "$build_dir"/ios/iossimulator/iphonesimulator/*.framework || true
+rm -r "$build_dir"/ios/ios/iphoneos/*.framework 2>/dev/null || true
+rm -r "$build_dir"/ios/iossimulator/iphonesimulator/*.framework 2>/dev/null|| true
+rm -r "$libwallet" 2>/dev/null|| true
+rm -r "$build_dir/ios" 2>/dev/null || true
 
 # Use a shared dependency cache between iOS and Android by setting GOMODCACHE
 
 # Setting CGO_LDFLAGS_ALLOW is a hack to build with golang 1.15.5
 # https://github.com/golang/go/issues/42565#issuecomment-727214122
 
+echo "Using go binary $(which go) $(go version)"
+
+# Install and setup gomobile on demand (no-op if already installed and up-to-date)
+. "$repo_root/tools/bootstrap-gomobile.sh"
+
 CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
+    CGO_LDFLAGS="-lresolv" \
     GOMODCACHE="$build_dir/pkg" \
     go run golang.org/x/mobile/cmd/gomobile bind \
-    -target=ios,iossimulator -o "$libwallet" -cache "$build_dir/ios" \
+    -target=ios,iossimulator -o "$libwallet" \
     -iosversion="11.4" \
-    . ./newop 
+    . ./newop
 
 st=$?
 

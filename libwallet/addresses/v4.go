@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/hdkeychain"
+	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 )
 
 // CreateAddressV4 returns a P2WSH WalletAddress from a user HD-pubkey and a Muun co-signing HD-pubkey.
