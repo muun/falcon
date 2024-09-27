@@ -7,7 +7,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
  - falconUITests
  - vendor
  - fastlane
-warning_threshold: 760
+warning_threshold: 744
 swiftlint_version: 0.50.1 # Keep in mind you will need to modify Podfile
 line_length: 100
 function_parameter_count:

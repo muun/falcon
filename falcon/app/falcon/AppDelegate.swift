@@ -47,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal let gcmMessageIDKey = "gcm.message_id"
     // Used in firebase extension
     var fcmTokenHandlingAlreadyReported = false
+    
+    internal let featureFlagsRepository: FeatureFlagsRepository = resolve()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -81,9 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         checkIfAppWasOpenByNotification(launchOptions)
 
-        if let url = launchOptions?[UIApplication.LaunchOptionsKey.url] as? URL {
-            return self.application(application, open: url, options: [:])
-        }
 
         setupDebugModeIfNeeded()
         backgroundTimesService.onEnterForeground()

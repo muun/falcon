@@ -43,6 +43,7 @@ public extension DependencyContainer {
             container.register(factory: NextTransactionSizeRepository.init)
             container.register(factory: SessionRepository.init)
             container.register(.singleton, factory: DebugRequestsRepository.init)
+            container.register(.singleton, factory: DebugAnalyticsRepository.init)
             container.register(factory: OperationRepository.init)
             container.register(factory: PublicProfileRepository.init)
             container.register(factory: TaskRunner.init)
@@ -60,6 +61,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: BackgroundTimesRepository.init)
             container.register { AppleDeviceCheckAdapter() as DeviceCheckAdapter }
             container.register(factory: ICloudCapabilitiesProvider.init)
+            container.register(.weakSingleton, factory: LocaleTimeZoneProvider.init)
 
             container.register(factory: NotificationScheduler.init)
             container.register(.singleton, factory: ErrorReporter.init)

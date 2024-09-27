@@ -8,7 +8,6 @@
 
 import Foundation
 
-import core
 import RxSwift
 
 class ShowRequestsDebugExecutable: DebugExecutable {

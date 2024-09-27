@@ -19,7 +19,7 @@ extension Environment {
     public var txExplorer: String {
         switch self {
         case .dev:
-            return "https://live.blockcypher.com/btc-testnet/tx/"
+            return "https://mempool.space/testnet/tx/"
         case .debug, .regtest:
             return "http://totally-explorer/tx/"
         case .prod:
@@ -30,7 +30,7 @@ extension Environment {
     public var addressExplorer: String {
         switch self {
         case .dev:
-            return "https://live.blockcypher.com/btc-testnet/address/"
+            return "https://mempool.space/testnet/address/"
         case .debug, .regtest:
             return "http://totally-explorer/address/"
         case .prod:

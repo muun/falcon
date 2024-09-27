@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"unsafe"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/muun/libwallet/btcsuitew/chainhashw"
 )
 
@@ -63,7 +63,7 @@ func CombinePubKeysWithTweak(userKey, muunKey *btcec.PublicKey, customTweak []by
 		return nil, fmt.Errorf("failed to serialize tweaked key")
 	}
 
-	return btcec.ParsePubKey(serialized[:], btcec.S256())
+	return btcec.ParsePubKey(serialized[:])
 }
 
 func combinePubKeys(userKey *btcec.PublicKey, muunKey *btcec.PublicKey) (*C.secp256k1_xonly_pubkey, error) {

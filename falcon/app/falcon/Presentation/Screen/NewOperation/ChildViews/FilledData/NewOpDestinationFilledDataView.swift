@@ -27,7 +27,10 @@ class NewOpDestinationFilledDataView: MUView {
     private let confirm: Bool
     private let moreInfo: MoreInfo
 
-    init(type: PaymentRequestType, delegate: NewOpDestinationViewDelegate?, confirm: Bool, moreInfo: MoreInfo) {
+    init(type: PaymentRequestType,
+         delegate: NewOpDestinationViewDelegate?,
+         confirm: Bool,
+         moreInfo: MoreInfo) {
         self.type = type
         self.delegate = delegate
         self.confirm = confirm

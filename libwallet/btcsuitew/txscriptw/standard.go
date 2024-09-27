@@ -2,7 +2,7 @@ package txscriptw
 
 import (
 	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcutil"
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/muun/libwallet/btcsuitew/btcutilw"
 )
 

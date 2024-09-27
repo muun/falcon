@@ -43,13 +43,18 @@ class NewOperationViewController: MUViewController {
         self.paymentIntent = paymentIntent
         self.origin = origin
         super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        preconditionFailure()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         switch paymentIntent {
         case .toAddress(let uri):
             presenter.start(uri: uri.raw)
-
-            // The code below needs the view to be alive already
-            self.loadViewIfNeeded()
 
             self.viewBuilder = OpToAddressViewBuilder(transitionDelegate: presenter,
                                                       newOpViewDelegate: self,
@@ -63,9 +68,6 @@ class NewOperationViewController: MUViewController {
 
         case .submarineSwap(let invoice):
             presenter.start(invoice: invoice)
-
-            // The code below needs the view to be alive already
-            self.loadViewIfNeeded()
 
             self.viewBuilder = OpSubmarineSwapViewBuilder(transitionDelegate: presenter,
                                                           newOpViewDelegate: self,
@@ -81,10 +83,6 @@ class NewOperationViewController: MUViewController {
         case .lnurlWithdraw:
             Logger.fatal("Intent is not handled by this view controller: \(paymentIntent)")
         }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        preconditionFailure()
     }
 
     override func loadView() {
@@ -121,6 +119,11 @@ class NewOperationViewController: MUViewController {
     }
 
     fileprivate func setUpNavigation() {
+        // If an error is being shown the navigationBar must be hidden. This codepath is called from viewWillAppear and errors might be detected in viewDidLoad.
+        guard !isBlockingFlowErrorViewAlreadyShown() else {
+            return
+        }
+
         navigationController!.setNavigationBarHidden(false, animated: true)
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: Constant.Images.back,

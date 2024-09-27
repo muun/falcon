@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
+	"github.com/btcsuite/btcd/btcutil"
 )
 
 // DecodeAddress uses btcutil.DecodeAddress for all cases except SegWit version 1, which is handled

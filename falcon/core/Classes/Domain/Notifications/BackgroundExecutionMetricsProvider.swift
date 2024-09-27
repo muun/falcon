@@ -9,6 +9,11 @@ import Foundation
 
 class BackgroundExecutionMetricsProvider {
     var reachabilityService: ReachabilityService?
+    let localeTimeZoneProvider: LocaleTimeZoneProvider
+
+    init(localeTimeZoneProvider: LocaleTimeZoneProvider) {
+        self.localeTimeZoneProvider = localeTimeZoneProvider
+    }
 
     func run() -> String? {
         /// isBatteryMonitoringEnabled is required in order to get battery metrics.
@@ -16,6 +21,7 @@ class BackgroundExecutionMetricsProvider {
 
         let conectivityCapabilities = ConectivityCapabilitiesProvider.shared
         let hardwareCapabilities = HardwareCapabilitiesProvider.shared
+
         let hasInternetConnectionProvidedByCarrier =
             conectivityCapabilities.hasInternetConnectionProvidedByCarrier()
 
@@ -51,7 +57,16 @@ class BackgroundExecutionMetricsProvider {
             availableNetworks: availableNetworksDTO,
             reachabilityStatus: reachabilityStatusDTO,
             totalRamStorage: hardwareCapabilities.getTotalRam(),
-            osVersion: osVersionString
+            osVersion: osVersionString,
+            iosSimRegion: conectivityCapabilities.getSimRegion(),
+            iosTimeZoneId:localeTimeZoneProvider.getTimezoneId(),
+            iosCalendarIdentifier:localeTimeZoneProvider.getCalendarIdentifier(),
+            iosCurrencyCode: localeTimeZoneProvider.getCurrencyCode(),
+            iosDateFormat: localeTimeZoneProvider.getDateFormat(),
+            iosMeasurementSystem: localeTimeZoneProvider.getMeasurementSystem(),
+            language: localeTimeZoneProvider.getLanguage(),
+            regionCode: localeTimeZoneProvider.getRegionCode(),
+            timeZoneOffsetInSeconds: localeTimeZoneProvider.getTimeZoneOffsetInSeconds()
         )
 
         let encoder = JSONEncoder()
@@ -85,6 +100,15 @@ struct BackgroundExcecutionMetrics: Encodable {
     let reachabilityStatus: ReachabilityStatusDTO?
     let totalRamStorage: UInt64
     let osVersion: String
+    let iosSimRegion: String
+    let iosTimeZoneId: String
+    let iosCalendarIdentifier: String
+    let iosCurrencyCode: String
+    let iosDateFormat: String
+    let iosMeasurementSystem: String
+    let language: String
+    let regionCode: String
+    let timeZoneOffsetInSeconds: Int
 }
 
 struct AvailableNetworksDTO: Encodable {

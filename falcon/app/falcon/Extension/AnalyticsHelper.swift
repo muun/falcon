@@ -12,7 +12,7 @@ import FirebaseCrashlytics
 import FirebaseCore
 import core
 
-class AnalyticsHelper {
+class AnalyticsHelper: Resolver {
 
     // This constants can be found on: https://support.google.com/firebase/answer/9237506?hl=en
     private static let maxLengthUserPropertyName = 25
@@ -22,6 +22,7 @@ class AnalyticsHelper {
     private static let maxLengthEventParameterValue = 100
 
     private static let crashlytics = Crashlytics.crashlytics()
+    private static let debugAnalyticsRepository: DebugAnalyticsRepository = resolve()
 
     private static let deviceParams: [String: Int] = [
         "height": Int(UIScreen.main.bounds.height),
@@ -114,6 +115,9 @@ class AnalyticsHelper {
 
         if isValidEventName(event), areValidParameters(parameters: finalParams) {
             Analytics.logEvent(event, parameters: finalParams)
+            #if DEBUG
+            debugAnalyticsRepository.save(event: event, params: finalParams)
+            #endif
             Logger.log(
                 .info,
                 "Event: '\(event)' with parameters: \(finalParams.description) logged to Firebase Analytics\n"

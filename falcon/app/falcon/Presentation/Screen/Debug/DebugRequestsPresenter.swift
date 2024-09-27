@@ -12,7 +12,8 @@ protocol DebugRequestsPresenterDelegate: BasePresenterDelegate,
                                          MUViewController {
 }
 
-class DebugRequestsPresenter<Delegate: DebugRequestsPresenterDelegate>: BasePresenter<Delegate> {
+class DebugRequestsPresenter<Delegate: DebugRequestsPresenterDelegate>: BasePresenter<Delegate>,
+                                                                            DebugListPresenter {
 
     private let debugRequests: [DebugRequest]
 
@@ -24,7 +25,9 @@ class DebugRequestsPresenter<Delegate: DebugRequestsPresenterDelegate>: BasePres
     }
 
     func titleFor(cell: Int) -> String {
-        debugRequests[cell].url.components(separatedBy: "houston")[1]
+        let path = debugRequests[cell].url.contains("houston") ? "houston" : "8080"
+
+        return debugRequests[cell].url.components(separatedBy: path)[1]
     }
 
     func numberOfRequests() -> Int {

@@ -13,6 +13,7 @@ protocol DebugMenuPresenterDelegate: BasePresenterDelegate,
                                      MUViewController {
     func askUserForText(message: String, completion: @escaping (String) -> Void)
     func showRequests()
+    func showAnalytics()
 }
 
 class DebugMenuPresenter<Delegate: DebugMenuPresenterDelegate>: BasePresenter<Delegate> {
@@ -62,5 +63,9 @@ extension DebugMenuPresenter: DebugMenuExecutableContext {
 
     func showRequests() {
         delegate.showRequests()
+    }
+
+    func showAnalytics() {
+        delegate.showAnalytics()
     }
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/muun/libwallet/btcsuitew/btcutilw"
 
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/lightningnetwork/lnd/zpay32"
 	"github.com/muun/libwallet/addresses"
 )

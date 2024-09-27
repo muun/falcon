@@ -185,7 +185,7 @@ extension SelectFeeViewController: UITableViewDelegate {
     }
 
     private func isFeeSelectedManually() -> Bool {
-        return !presenter.fees.contains(selectedFee)
+        !presenter.feesData.contains(where: { $0.fee == selectedFee })
     }
 }
 
@@ -256,7 +256,7 @@ extension SelectFeeViewController: UITableViewDataSource {
         switch originalFeeState {
         case .finalFee(let fee, _):
             finalFee = fee
-            for fee in presenter.fees where fee == originalFeeState {
+            if presenter.feesData.contains(where: { $0.fee == originalFeeState }) {
                 finalFee = nil
             }
         default:

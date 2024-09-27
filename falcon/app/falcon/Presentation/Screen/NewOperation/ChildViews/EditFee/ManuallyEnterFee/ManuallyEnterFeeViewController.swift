@@ -279,18 +279,21 @@ extension ManuallyEnterFeeViewController {
 
 extension ManuallyEnterFeeViewController: ManuallyEnterFeePresenterDelegate {
 
-    func feeIsTooLow(minFee: String) {
-        let warningText = L10n.ManuallyEnterFeeViewController.s8(minFee)
+    func feeIsTooLow(minFee: FeeRate) {
+        let roundedMinFee = minFee.stringValue()
+        let warningText = L10n.ManuallyEnterFeeViewController.s8(roundedMinFee)
         showWarning(warningText, image: highImage, warningColor: redColor, buttonEnabled: false)
     }
 
-    func feeBelowMempoolMinimum(minFee: String) {
-        let warningText = L10n.ManuallyEnterFeeViewController.s13(minFee)
+    func feeBelowMempoolMinimum(minFee: FeeRate) {
+        let roundedMinFee = minFee.stringValue()
+        let warningText = L10n.ManuallyEnterFeeViewController.s13(roundedMinFee)
         showWarning(warningText, image: highImage, warningColor: redColor, buttonEnabled: false)
     }
 
-    func feeIsTooHigh(maxFee: String) {
-        let warningText = L10n.ManuallyEnterFeeViewController.s9(maxFee)
+    func feeIsTooHigh(maxFee: FeeRate) {
+        let roundedMaxFee = maxFee.stringValue()
+        let warningText = L10n.ManuallyEnterFeeViewController.s9(roundedMaxFee)
         showWarning(warningText, image: highImage, warningColor: redColor, buttonEnabled: false)
     }
 

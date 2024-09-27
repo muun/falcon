@@ -8,11 +8,11 @@ import (
 	"github.com/muun/libwallet/btcsuitew/txscriptw"
 	"github.com/muun/libwallet/musig"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/btcsuite/btcd/btcutil"
 )
 
 // CreateAddressV5 returns a P2TR MuunAddress using Musig with the signing and cosigning keys.

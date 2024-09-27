@@ -136,7 +136,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
             case .forceUpdate:
                 delegate.pushTo(UpdateAppViewController())
 
-            case .sessionExpired, .missingOrInvalidAuthToken:
+            case .sessionExpired:
                 handleSessionExpired(e)
 
             case .nonUserFacing, .emailNotRegistered, .invoiceUnreachableNode, .recoveryCodeNotSetUp,
@@ -149,7 +149,7 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
             case .tooManyRequests:
                 delegate.showMessage(L10n.BasePresenter.s1)
 
-            case .defaultError, .staleChallengeKey, .credentialsDontMatch:
+            case .defaultError, .staleChallengeKey, .credentialsDontMatch, .notAuthorized:
                 Logger.log(error: e)
                 delegate.showMessage(L10n.BasePresenter.s2)
             }

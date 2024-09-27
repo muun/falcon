@@ -21,4 +21,5 @@ public protocol DebugExecutable {
 public protocol DebugMenuExecutableContext {
     func askUserForText(message: String, completion: @escaping (String) -> Void)
     func showRequests()
+    func showAnalytics()
 }

@@ -11,16 +11,24 @@ type Listener interface {
 	OnDataChanged(tag string)
 }
 
-// Config defines the global libwallet configuration.
-type Config struct {
-	DataDir  string
-	Listener Listener
+// BackendActivatedFeatureStatusProvider is an interface implemented by the
+// apps to provide us with information about the state of some backend side
+// feature flags until we can implement a libwallet-side solution for this.
+type BackendActivatedFeatureStatusProvider interface {
+	IsBackendFlagEnabled(flag string) bool
 }
 
-var cfg *Config
+// Config defines the global libwallet configuration.
+type Config struct {
+	DataDir               string
+	Listener              Listener
+	FeatureStatusProvider BackendActivatedFeatureStatusProvider
+}
+
+var Cfg *Config
 
 // Init configures the libwallet
 func Init(c *Config) {
 	debug.SetTraceback("crash")
-	cfg = c
+	Cfg = c
 }

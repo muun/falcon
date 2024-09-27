@@ -70,4 +70,6 @@ post_install do |installer|
       end
     end
   end
+  puts 'Generating Pods registry'
+  `../../tools/ios-update-pods-registry.sh`
 end

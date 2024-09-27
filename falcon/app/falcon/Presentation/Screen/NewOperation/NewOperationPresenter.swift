@@ -46,6 +46,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
     var submarineSwap: SubmarineSwap? // TODO(newop): can we remove this hack somehow?
 
+    /// Go to: [BitcoinAmountWithSelectedCurrency](x-source-tag://BitcoinAmountWithSelectedCurrency)
     var lastSelectedCurrency: Currency?
 
     init(delegate: Delegate, operationActions: OperationActions) {
@@ -152,11 +153,8 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let type = createPaymentRequestType(state.resolved!.paymentIntent!)
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
         let totalBalance = state.totalBalance!.adapt()
+        loadLastSelectedCurrencyIfNeeded(totalBalance)
         let amount = state.amount!.adapt()
-        if lastSelectedCurrency == nil {
-            let primaryCurrency = totalBalance.inPrimaryCurrency.currency
-            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: primaryCurrency)
-        }
         let newOpState = NewOpState.amount(
             NewOpData.Amount(
                 type: type,
@@ -181,10 +179,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let type = createPaymentRequestType(state.resolved!.paymentIntent!)
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
         let totalBalance = state.amountInfo!.totalBalance!.adapt()
-        if lastSelectedCurrency == nil {
-            let inputPrimaryCurrency = totalBalance.inPrimaryCurrency.currency
-            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: inputPrimaryCurrency)
-        }
+        loadLastSelectedCurrencyIfNeeded(totalBalance)
         let newOpState = NewOpState.description(
             NewOpData.Description(
                 amount: BitcoinAmountWithSelectedCurrency(bitcoinAmount: amount,
@@ -220,6 +215,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         handleConfirmState(ConfirmStateViewModel.fromConfirm(state: state))
     }
 
+    // This flow can be executed from both lightning and bitcoin.
     private func handleConfirmState(_ state: ConfirmStateViewModel) {
         let type = createPaymentRequestType(state.paymentIntent)
         let amount = state.getAmount(lastSelectedCurrency: lastSelectedCurrency)
@@ -227,6 +223,9 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         let totalBalance = state.totalBalance
         let feeState = state.feeState
         let minMempoolFeeRate = state.minMempoolFeeRate
+
+        // If the URI has a message the flow will come right to this state
+        loadLastSelectedCurrencyIfNeeded(totalBalance)
 
         let newOpState = NewOpState.confirmation(
             NewOpData.Confirm(
@@ -449,7 +448,6 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
             Logger.fatal("Could not produce a valid PaymentRequestType: \(intent)")
         }
     }
-
 }
 
 extension NewOperationPresenter: NewOperationTransitions {
@@ -475,6 +473,12 @@ extension NewOperationPresenter: NewOperationTransitions {
         })
     }
 
+    private func loadLastSelectedCurrencyIfNeeded(_ totalBalance: BitcoinAmount) {
+        if lastSelectedCurrency == nil {
+            let primaryCurrency = totalBalance.inPrimaryCurrency.currency
+            lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: primaryCurrency)
+        }
+    }
 }
 
 extension NewOperationPresenter: OpLoadingTransitions {
@@ -543,10 +547,7 @@ extension NewOperationPresenter: OpAmountTransitions {
             let type = createPaymentRequestType(state.resolved!.paymentIntent!)
             let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
             let totalBalance = state.totalBalance!.adapt()
-            let inInputCurrency = totalBalance.inPrimaryCurrency.currency
-            if lastSelectedCurrency == nil {
-                lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: inInputCurrency)
-            }
+            loadLastSelectedCurrencyIfNeeded(totalBalance)
 
             let newOpState = NewOpState.currencyPicker(
                 NewOpData.Amount(

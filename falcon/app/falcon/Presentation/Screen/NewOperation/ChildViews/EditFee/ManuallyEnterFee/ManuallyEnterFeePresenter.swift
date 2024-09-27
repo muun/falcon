@@ -10,9 +10,9 @@ import core
 
 protocol ManuallyEnterFeePresenterDelegate: BasePresenterDelegate {
     func insufficientFunds()
-    func feeIsTooHigh(maxFee: String)
-    func feeIsTooLow(minFee: String)
-    func feeBelowMempoolMinimum(minFee: String)
+    func feeIsTooHigh(maxFee: FeeRate)
+    func feeIsTooLow(minFee: FeeRate)
+    func feeBelowMempoolMinimum(minFee: FeeRate)
     func feeIsVeryLow()
     func noWarnings()
 }
@@ -38,7 +38,7 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
 
         let maxFeeRate = core.Constant.FeeProtocol.maxFeeRateAllowed
         if feeRate.satsPerVByte >= maxFeeRate.satsPerVByte {
-            delegate.feeIsTooHigh(maxFee: maxFeeRate.stringValue())
+            delegate.feeIsTooHigh(maxFee: maxFeeRate)
             return
         }
 
@@ -49,11 +49,11 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
             // This fee rate is too low. Is it because it doesn't match current network
             // requirements, or because it's below the protocol-level minimum.
             if minMempoolFeeRate.satsPerVByte > minProtocolFeeRate.satsPerVByte {
-                delegate.feeBelowMempoolMinimum(minFee: minSatsPerVByte.stringValue())
+                delegate.feeBelowMempoolMinimum(minFee: FeeRate(satsPerVByte: minSatsPerVByte))
                 return
             }
 
-            delegate.feeIsTooLow(minFee: minSatsPerVByte.stringValue())
+            delegate.feeIsTooLow(minFee: FeeRate(satsPerVByte: minSatsPerVByte))
             return
         }
 

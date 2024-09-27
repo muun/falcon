@@ -1,0 +1,35 @@
+From a9ce14cda6730eabe868e93a69cb2b6af7ba70f1 Mon Sep 17 00:00:00 2001
+From: Juan Pablo Civile <champo@muun.com>
+Date: Thu, 27 Jan 2022 14:36:39 -0300
+Subject: [PATCH] align to ptrsize
+
+---
+ VERSION            | 4 ++--
+ src/cmd/cgo/out.go | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/VERSION b/VERSION
+index 1194c3f295..14bc5da85d 100644
+--- a/VERSION
++++ b/VERSION
+@@ -1,2 +1,2 @@
+-go1.22.1
+-time 2024-02-29T18:18:48Z
++go1.22.1
++time 2024-06-25T14:29:07Z
+diff --git a/src/cmd/cgo/out.go b/src/cmd/cgo/out.go
+index b2933e2d82..57d08480ff 100644
+--- a/src/cmd/cgo/out.go
++++ b/src/cmd/cgo/out.go
+@@ -1012,7 +1012,7 @@ func (p *Package) writeExports(fgo2, fm, fgcc, fgcch io.Writer) {
+ 		// string.h for memset, and is also robust to C++
+ 		// types with constructors. Both GCC and LLVM optimize
+ 		// this into just zeroing _cgo_a.
+-		fmt.Fprintf(fgcc, "\ttypedef %s %v _cgo_argtype;\n", ctype, p.packedAttribute())
++		fmt.Fprintf(fgcc, "\ttypedef %s %v __attribute__((aligned(%v))) _cgo_argtype;\n", ctype, p.packedAttribute(), p.PtrSize)
+ 		fmt.Fprintf(fgcc, "\tstatic _cgo_argtype _cgo_zero;\n")
+ 		fmt.Fprintf(fgcc, "\t_cgo_argtype _cgo_a = _cgo_zero;\n")
+ 		if gccResult != "void" && (len(fntype.Results.List) > 1 || len(fntype.Results.List[0].Names) > 1) {
+-- 
+2.45.0
+

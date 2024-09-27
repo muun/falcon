@@ -56,6 +56,10 @@
 		0FF4E27A25D6DEEC00EEAFB6 /* RadioGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */; };
 		0FF90789262B311300889E0F /* NewOpError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF90788262B311300889E0F /* NewOpError.swift */; };
 		0FFF339526CABFC80050F69F /* NewOperationStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */; };
+		12C350572C8A058D00C28F55 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C350562C8A058400C28F55 /* libresolv.tbd */; };
+		4A0D044D2C6E89CA0088B046 /* Libwallet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0D04492C6E897D0088B046 /* Libwallet.xcframework */; };
+		4A0D059E2C6E962D0088B046 /* Libwallet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0D04492C6E897D0088B046 /* Libwallet.xcframework */; };
+		4A0D059F2C6E962D0088B046 /* Libwallet.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0D04492C6E897D0088B046 /* Libwallet.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		659FC2852C07B074006E98AB /* ChangePasswordNewViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */; };
 		69B9CBC541E3A6E385C06BE7 /* Pods_Muun.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4218A5EC749F0490196019CC /* Pods_Muun.framework */; };
 		A0000991257A7B9600B69008 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000990257A7B9600B69008 /* TransactionListViewController.swift */; };
@@ -494,6 +498,7 @@
 		FE21355128F8537900AFCCA6 /* SettingsTogglePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */; };
 		FE300CC72AB7658100AAE9DC /* RequestCloudFeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */; };
 		FE3A50C629355C3200006363 /* BitcoinURIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */; };
+		FE3D243B2C88DF7D00796445 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FE3D24392C88DF5200796445 /* libresolv.tbd */; };
 		FE4D50202BFEAE520013E456 /* FCMTokenActionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D501F2BFEAE520013E456 /* FCMTokenActionTest.swift */; };
 		FE560CDB291AE3D900FACF78 /* UnverifiedRcWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */; };
 		FE560D6C291AE3EC00FACF78 /* UnverifiedRcWarningViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */; };
@@ -538,6 +543,10 @@
 		FEB74C982911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */; };
 		FEB74C9A2911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */; };
 		FEB74C9C2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */; };
+		FEC910D92C5056700014983E /* DebugListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC910D82C5056700014983E /* DebugListPresenter.swift */; };
+		FEC910F62C507A3A0014983E /* DebugTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC910F52C507A3A0014983E /* DebugTableView.swift */; };
+		FEC912082C507C4B0014983E /* DebugAnalyticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC912072C507C4B0014983E /* DebugAnalyticsViewController.swift */; };
+		FEC9120A2C507C7C0014983E /* DebugAnalyticsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC912092C507C7C0014983E /* DebugAnalyticsPresenter.swift */; };
 		FED1239B2A8D1924007A3779 /* AppDelegate+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED1239A2A8D1924007A3779 /* AppDelegate+Debug.swift */; };
 		FED1239E2A8D4DDE007A3779 /* DebugModeDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED1239D2A8D4DDE007A3779 /* DebugModeDisplayer.swift */; };
 		FED123A02A8D4E04007A3779 /* DebugMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED1239F2A8D4E04007A3779 /* DebugMenuViewController.swift */; };
@@ -571,6 +580,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4A0D05A02C6E962D0088B046 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4A0D059F2C6E962D0088B046 /* Libwallet.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B37069A322A1850A00FF497C /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -636,10 +656,12 @@
 		0FF4E27925D6DEEC00EEAFB6 /* RadioGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioGroupView.swift; sourceTree = "<group>"; };
 		0FF90788262B311300889E0F /* NewOpError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOpError.swift; sourceTree = "<group>"; };
 		0FFF339426CABFC80050F69F /* NewOperationStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewOperationStateMachine.swift; sourceTree = "<group>"; };
+		12C350562C8A058400C28F55 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		1F0852911EA2C42F3978A647 /* Pods-Muun-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-Muun-falconUITests/Pods-Muun-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4218A5EC749F0490196019CC /* Pods_Muun.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Muun.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FDD7A39280D20C474642D /* Pods-falconPushNotifications.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconPushNotifications.debug.xcconfig"; path = "Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications.debug.xcconfig"; sourceTree = "<group>"; };
 		47163A6E09E12FEE22D35F44 /* Pods_falconTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_falconTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A0D04492C6E897D0088B046 /* Libwallet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Libwallet.xcframework; path = ../core/Libwallet.xcframework; sourceTree = "<group>"; };
 		659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordNewViewPresenter.swift; sourceTree = "<group>"; };
 		78A6CA93F0F445C0F1541BB1 /* Pods-falconTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconTests.release.xcconfig"; path = "Target Support Files/Pods-falconTests/Pods-falconTests.release.xcconfig"; sourceTree = "<group>"; };
 		8D644A271A94615EDD5ED4DC /* Pods-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1084,6 +1106,7 @@
 		FE21355028F8537900AFCCA6 /* SettingsTogglePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTogglePresenter.swift; sourceTree = "<group>"; };
 		FE300CC62AB7658100AAE9DC /* RequestCloudFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCloudFeedbackView.swift; sourceTree = "<group>"; };
 		FE3A50C529355C3200006363 /* BitcoinURIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinURIViewModel.swift; sourceTree = "<group>"; };
+		FE3D24392C88DF5200796445 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		FE4D501F2BFEAE520013E456 /* FCMTokenActionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMTokenActionTest.swift; sourceTree = "<group>"; };
 		FE560CDA291AE3D400FACF78 /* UnverifiedRcWarningViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnverifiedRcWarningViewController.swift; sourceTree = "<group>"; };
 		FE560D6B291AE3EB00FACF78 /* UnverifiedRcWarningViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnverifiedRcWarningViewController.xib; sourceTree = "<group>"; };
@@ -1127,6 +1150,10 @@
 		FEB74C972911B9E1002C08D1 /* FinishRecoveryCodeSetupPresenterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupPresenterTest.swift; sourceTree = "<group>"; };
 		FEB74C992911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupActionStub.swift; sourceTree = "<group>"; };
 		FEB74C9B2911C042002C08D1 /* FinishRecoveryCodeSetupPresenterDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRecoveryCodeSetupPresenterDelegateSpy.swift; sourceTree = "<group>"; };
+		FEC910D82C5056700014983E /* DebugListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugListPresenter.swift; sourceTree = "<group>"; };
+		FEC910F52C507A3A0014983E /* DebugTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableView.swift; sourceTree = "<group>"; };
+		FEC912072C507C4B0014983E /* DebugAnalyticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugAnalyticsViewController.swift; sourceTree = "<group>"; };
+		FEC912092C507C7C0014983E /* DebugAnalyticsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugAnalyticsPresenter.swift; sourceTree = "<group>"; };
 		FED1239A2A8D1924007A3779 /* AppDelegate+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Debug.swift"; sourceTree = "<group>"; };
 		FED1239D2A8D4DDE007A3779 /* DebugModeDisplayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModeDisplayer.swift; sourceTree = "<group>"; };
 		FED1239F2A8D4E04007A3779 /* DebugMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenuViewController.swift; sourceTree = "<group>"; };
@@ -1140,6 +1167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A0D059E2C6E962D0088B046 /* Libwallet.xcframework in Frameworks */,
 				A031E155C876B0747E19BE19 /* Pods_falconTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1148,6 +1176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A0D044D2C6E89CA0088B046 /* Libwallet.xcframework in Frameworks */,
 				F9D2DEA862D8852273DC87B5 /* Pods_falconPushNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1157,6 +1186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4FD7D9FE80B20A99FF04185 /* Pods_falconUITests.framework in Frameworks */,
+				12C350572C8A058D00C28F55 /* libresolv.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1166,6 +1196,7 @@
 			files = (
 				A0B9D115227354840009F5A9 /* WebKit.framework in Frameworks */,
 				69B9CBC541E3A6E385C06BE7 /* Pods_Muun.framework in Frameworks */,
+				FE3D243B2C88DF7D00796445 /* libresolv.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3106,6 +3137,9 @@
 		CA3BF0D40D8EF91EA304C555 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE3D24392C88DF5200796445 /* libresolv.tbd */,
+				12C350562C8A058400C28F55 /* libresolv.tbd */,
+				4A0D04492C6E897D0088B046 /* Libwallet.xcframework */,
 				B337BD2228257B8E00A6605D /* core */,
 				A0D3D2E8237AD8F2007ED9AD /* protobuf.framework */,
 				A0B9D114227354840009F5A9 /* WebKit.framework */,
@@ -3269,8 +3303,12 @@
 				FED1239F2A8D4E04007A3779 /* DebugMenuViewController.swift */,
 				FED123A12A8D4E45007A3779 /* DebugModePresenter.swift */,
 				FE8909962ABCB1050058A682 /* DebugRequestsViewController.swift */,
+				FEC912072C507C4B0014983E /* DebugAnalyticsViewController.swift */,
+				FEC910F52C507A3A0014983E /* DebugTableView.swift */,
 				FE89099A2ABCC7A20058A682 /* DebugRequestDetail.swift */,
 				FE8909982ABCB1360058A682 /* DebugRequestsPresenter.swift */,
+				FEC910D82C5056700014983E /* DebugListPresenter.swift */,
+				FEC912092C507C7C0014983E /* DebugAnalyticsPresenter.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -3295,6 +3333,7 @@
 				0F18C6C62130993500BC5BFE /* Sources */,
 				0F18C6C72130993500BC5BFE /* Frameworks */,
 				0F18C6C82130993500BC5BFE /* Resources */,
+				4A0D05A02C6E962D0088B046 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3350,6 +3389,7 @@
 			buildConfigurationList = A0E6F304211C785800821A80 /* Build configuration list for PBXNativeTarget "Muun" */;
 			buildPhases = (
 				35AF04612567958BDE6C215F /* [CP] Check Pods Manifest.lock */,
+				FE3B41402C31FFDB00191786 /* Set localhost ip for debug */,
 				A0F7162125431813009ECECF /* SwiftGen */,
 				B3E0EF7A2230616C00527A72 /* ShellScript */,
 				A0E6F2EE211C785700821A80 /* Sources */,
@@ -3770,6 +3810,25 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n    ${PODS_ROOT}/FirebaseCrashlytics/run -gsp ${SRCROOT}/falcon/GoogleService-Info-debug.plist -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME} \nfi\n";
 		};
+		FE3B41402C31FFDB00191786 /* Set localhost ip for debug */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Set localhost ip for debug";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../../tools/ios-assign-localhost-ip-for-debug.sh\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3967,6 +4026,7 @@
 				A04A8BDC2272128600A7FC70 /* MuunImageView.swift in Sources */,
 				A01E7B2C22BF344D009F13C2 /* EnterFeeManuallyTableViewCell.swift in Sources */,
 				A069903F252BA376006A418F /* ReceiveInLightningView.swift in Sources */,
+				FEC910F62C507A3A0014983E /* DebugTableView.swift in Sources */,
 				A00BAE71212224FF00126F94 /* UIView+Extension.swift in Sources */,
 				A012F2DA24D1F04A002278F4 /* WaitForEmailView.swift in Sources */,
 				A032C09624D48CB200A111A0 /* ChangePasswordEnterNewViewController.swift in Sources */,
@@ -4050,6 +4110,7 @@
 				B3B9C0D2224E82B0009C3617 /* MUDetailRowView.swift in Sources */,
 				A032C0A624D4A95E00A111A0 /* ChangePasswordEnterRecoveryCodePresenter.swift in Sources */,
 				B3297EA527234DE60035FEB8 /* OnchainSettingsPresenter.swift in Sources */,
+				FEC9120A2C507C7C0014983E /* DebugAnalyticsPresenter.swift in Sources */,
 				A053127724A5143700911BD9 /* ActivateEmergencyKitViewController.swift in Sources */,
 				FE8909972ABCB1050058A682 /* DebugRequestsViewController.swift in Sources */,
 				A0E1CE7124A4334E00FFF385 /* RepresentableView.swift in Sources */,
@@ -4129,6 +4190,7 @@
 				A0FE143B21B049B5008F99C4 /* UINavigationController+Extension.swift in Sources */,
 				A090235622BD5C3A0007222E /* SelectFeePresenter.swift in Sources */,
 				A089FFE121383606006915FC /* SignInPasswordPresenter.swift in Sources */,
+				FEC912082C507C4B0014983E /* DebugAnalyticsViewController.swift in Sources */,
 				A0EB92622188D6F9000E6A2B /* LoadingView.swift in Sources */,
 				0FAF467B257FFB46004C7F17 /* Detail+MoreInfo.swift in Sources */,
 				A0BB9D03244E0DB2002D864D /* SecurityCenterPresenter.swift in Sources */,
@@ -4153,6 +4215,7 @@
 				FE89099B2ABCC7A20058A682 /* DebugRequestDetail.swift in Sources */,
 				FE300CC72AB7658100AAE9DC /* RequestCloudFeedbackView.swift in Sources */,
 				0F22E69825D24A0200EBFA06 /* SelectAddressTypeOptionView.swift in Sources */,
+				FEC910D92C5056700014983E /* DebugListPresenter.swift in Sources */,
 				A0A716A62226D4E3001A539B /* NewOpLoadingPresenter.swift in Sources */,
 				B3085CD521DE75DF00B159F4 /* ReceiveViewController.swift in Sources */,
 				A04A4A6B2502BBE8006EEA40 /* SetupEmailWording.swift in Sources */,
@@ -4353,8 +4416,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1038;
-				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1101;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4377,6 +4439,7 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"c++\"",
+					"-l\"resolv\"",
 					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
@@ -4405,8 +4468,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1038;
-				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1101;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4424,6 +4486,7 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"c++\"",
+					"-l\"resolv\"",
 					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
@@ -4536,8 +4599,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1038;
-				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1101;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4602,8 +4664,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1038;
-				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1101;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4636,8 +4697,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1038;
-				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1101;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -4661,6 +4721,7 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"c++\"",
+					"-l\"resolv\"",
 					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
@@ -4721,8 +4782,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1038;
-				CURRENT_PROJECT_VERSION = 1038;
+				CURRENT_PROJECT_VERSION = 1101;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4745,6 +4805,7 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"c++\"",
+					"-l\"resolv\"",
 					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
