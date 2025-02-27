@@ -6,7 +6,7 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-import core
+
 import UIKit
 
 protocol PinPresenterDelegate: BasePresenterDelegate {
@@ -135,7 +135,11 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
     }
 
     func onUserUnlockedAppSuccessfullyWithBiometrics() {
-        try? applicationLockManager.resetNumberOfAttemptsAfterValidAuthMethod()
+        do {
+            try applicationLockManager.resetNumberOfAttemptsAfterValidAuthMethod()
+        } catch {
+            Logger.log(error: error)
+        }
     }
 
     func resetChoose() {

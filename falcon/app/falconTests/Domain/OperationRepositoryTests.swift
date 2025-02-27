@@ -1,13 +1,12 @@
 //
 //  OperationRepositoryTests.swift
-//  core.root-all-notifications-Unit-Tests
 //
 //  Created by Federico Bond on 05/01/2021.
 //
 
 import XCTest
 import Firebase
-@testable import core
+
 @testable import Muun
 
 class OperationRepositoryTests: MuunTestCase {

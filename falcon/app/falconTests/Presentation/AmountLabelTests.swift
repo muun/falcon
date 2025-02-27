@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-@testable import core
+
 @testable import Muun
 
 class AmountLabelTests: MuunTestCase {

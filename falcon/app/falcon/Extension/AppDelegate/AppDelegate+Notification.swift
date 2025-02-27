@@ -8,7 +8,7 @@
 
 import UIKit
 import UserNotifications
-import core
+
 
 extension AppDelegate {
 
@@ -133,6 +133,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
     private func displayNotificationFlowFetchingDetailsFromBackend(_ report: NotificationReport) {
         DispatchQueue.global(qos: .userInteractive).async {
+            // swiftlint:disable force_error_handling
             let notification = try? self.houstonService.fetchNotification(notificationId: report.maximumId)
                 .toBlocking()
                 .single()
@@ -145,7 +146,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
     }
 
-    private func displayNotificationFlowIfAvailable(message: core.Notification.Message) {
+    private func displayNotificationFlowIfAvailable(message: Notification.Message) {
         switch message {
         case .newOperation(let op):
             presentOpDetail(op: op.operation)
@@ -162,10 +163,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
                 return try NotificationParser.parseReport(data, decrypter: operationMetadataDecrypter)
             }
-
         } catch {
-            return nil
+            Logger.log(error: error)
         }
+
         return nil
     }
 
@@ -183,7 +184,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
     }
 
-    fileprivate func presentOpDetail(op: core.Operation) {
+    fileprivate func presentOpDetail(op: Operation) {
         let detailVc = DetailViewController(operation: op)
         let detailNavController = UINavigationController(rootViewController: detailVc)
         let navController = getRootNavigationControllerOnMainWindow()

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcd/btcutil"
 	"github.com/muun/libwallet/swaps"
 )
 

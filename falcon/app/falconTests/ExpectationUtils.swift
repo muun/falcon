@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import core
+
 @testable import Muun
 
 func AssertThrowsError<T, E>(_ expression: @autoclosure () throws -> T,

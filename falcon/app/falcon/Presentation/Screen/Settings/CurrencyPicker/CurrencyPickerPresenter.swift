@@ -8,7 +8,7 @@
 
 import UIKit
 import Libwallet
-import core
+
 
 protocol CurrencyPickerPresenterDelegate: BasePresenterDelegate {
     func gotCurrencyList()

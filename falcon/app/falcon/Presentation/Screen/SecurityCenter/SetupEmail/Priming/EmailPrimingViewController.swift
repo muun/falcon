@@ -112,11 +112,15 @@ extension EmailPrimingViewController: LinkButtonViewDelegate {
         let title = L10n.EmailPrimingViewController.s3
         let msg = L10n.EmailPrimingViewController.s4
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: L10n.EmailPrimingViewController.s5, style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: L10n.EmailPrimingViewController.s5,
+                                      style: .destructive,
+                                      handler: { _ in
             alert.dismiss(animated: true)
         }))
 
-        alert.addAction(UIAlertAction(title: L10n.EmailPrimingViewController.s6, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: L10n.EmailPrimingViewController.s6,
+                                      style: .default,
+                                      handler: { _ in
             self.logEvent("email_setup_skipped")
             self.presenter.skipEmail()
             self.navigationController!.popTo(type: SecurityCenterViewController.self)

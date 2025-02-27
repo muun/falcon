@@ -17,7 +17,7 @@
 				8A57A57DAAB1824E42531A1868211AAD /* PBXTargetDependency */,
 				36033540E5E440A04ED22C847BBC9876 /* PBXTargetDependency */,
 				683D1F37E103DCD66AF0949EB27B1E4F /* PBXTargetDependency */,
-				A8EBAC382E0CA301F9982D6668382050 /* PBXTargetDependency */,
+				AD30D9DC83CAF8253D2B808A2D352400 /* PBXTargetDependency */,
 				DEA90BB12AC6CA27170CDCBEBB26E554 /* PBXTargetDependency */,
 			);
 			name = FirebaseAnalytics;
@@ -46,19 +46,19 @@
 			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
 			remoteInfo = FirebaseCore;
 		};
-		D60AEFE7B92C02973F87BC51D692DFAD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9696E80308B384D01E45D0A8DDC6DFC4 /* GoogleUtilities.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
-			remoteInfo = GoogleUtilities;
-		};
 		E056BA85222A8FC949468A87B09F4CB6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 903719E7B3AEB4D5E8C9D6869EE795C2 /* FirebaseInstallations.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 5141209CC29AF79FFB5703E3712E76EF;
 			remoteInfo = FirebaseInstallations;
+		};
+		F6720EFF2BEC7749E3453E33255820E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9696E80308B384D01E45D0A8DDC6DFC4 /* GoogleUtilities.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
+			remoteInfo = GoogleUtilities;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -228,10 +228,10 @@
 			name = FirebaseCore;
 			targetProxy = C5F3FD5F2EEFA3663C0359CAEC09CB5D /* PBXContainerItemProxy */;
 		};
-		A8EBAC382E0CA301F9982D6668382050 /* PBXTargetDependency */ = {
+		AD30D9DC83CAF8253D2B808A2D352400 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GoogleUtilities;
-			targetProxy = D60AEFE7B92C02973F87BC51D692DFAD /* PBXContainerItemProxy */;
+			targetProxy = F6720EFF2BEC7749E3453E33255820E7 /* PBXContainerItemProxy */;
 		};
 		DEA90BB12AC6CA27170CDCBEBB26E554 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -295,7 +295,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -316,7 +316,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -335,7 +335,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -396,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

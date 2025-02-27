@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol SelectFeeDelegate: AnyObject {
     func selected(fee: BitcoinAmount, rate: FeeRate)
@@ -254,7 +254,7 @@ extension SelectFeeViewController: UITableViewDataSource {
         var finalFee: BitcoinAmount?
 
         switch originalFeeState {
-        case .finalFee(let fee, _):
+        case .finalFee(let fee, _, _):
             finalFee = fee
             if presenter.feesData.contains(where: { $0.fee == originalFeeState }) {
                 finalFee = nil
@@ -278,7 +278,7 @@ extension SelectFeeViewController: UITableViewDataSource {
 extension SelectFeeViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
-        if case .finalFee(let fee, let rate) = selectedFee {
+        if case .finalFee(let fee, let rate, _) = selectedFee {
             delegate?.selected(fee: fee, rate: rate)
             navigationController?.dismiss(animated: true)
         }

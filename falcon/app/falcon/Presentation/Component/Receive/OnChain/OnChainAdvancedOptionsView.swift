@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol OnChainAdvancedOptionsViewDelegate: AnyObject {
     func didTapOnAddressTypeControl()

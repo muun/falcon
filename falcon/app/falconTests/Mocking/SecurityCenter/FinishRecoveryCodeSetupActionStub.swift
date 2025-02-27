@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-@testable import core
+@testable import Muun
 
 class FinishRecoveryCodeSetupActionStub: FinishRecoverCodeSetupAction {
     lazy var observable = BehaviorSubject(value: ActionState<()>.createEmpty())

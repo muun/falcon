@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol ReceiveAmountInputViewControllerDelegate: AnyObject {
     func didConfirm(bitcoinAmount: BitcoinAmountWithSelectedCurrency?)

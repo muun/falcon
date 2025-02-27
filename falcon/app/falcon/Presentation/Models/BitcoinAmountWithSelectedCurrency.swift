@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+
 
 /// Struct to hold BitcoinAmount and the selectedCurrency on current flow.
 /// This struct is necessary because there is no way looking at Currencyhelper to be sure what bitcoin unit was

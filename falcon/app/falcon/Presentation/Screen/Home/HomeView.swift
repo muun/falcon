@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol HomeViewDelegate: AnyObject {
     func sendButtonTap()
@@ -164,7 +164,7 @@ final class HomeView: UIView {
         currentCompanionView?.removeFromSuperview()
     }
 
-    func updateBalanceAndChevron(state: core.OperationsState) {
+    func updateBalanceAndChevron(state: OperationsState) {
         chevronView.updateOperationsState(state)
         balanceView.updateOperationsState(state)
     }

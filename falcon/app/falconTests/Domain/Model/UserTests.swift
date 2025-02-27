@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import core
+
 
 class UserTests: MuunTestCase {
 

@@ -10,7 +10,7 @@ import UIKit
 import GoogleSignIn
 import GoogleAPIClientForREST
 import AppAuth
-import core
+
 
 class ShareEmergencyKitViewController: MUViewController {
 

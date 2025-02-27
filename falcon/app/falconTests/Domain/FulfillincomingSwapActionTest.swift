@@ -1,6 +1,5 @@
 //
 //  FulfillincomingSwapActionTest.swift
-//  core.root-all-notifications-Unit-Tests
 //
 //  Created by Juan Pablo Civile on 25/01/2021.
 //
@@ -9,7 +8,7 @@ import XCTest
 import RxSwift
 import Libwallet
 import CryptoKit
-@testable import core
+@testable import Muun
 
 class FulfillIncomingSwapActionTest: MuunTestCase {
 

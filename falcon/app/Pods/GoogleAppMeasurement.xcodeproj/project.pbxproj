@@ -14,7 +14,7 @@
 				C4836C8C0184924D88456974CE50E131 /* [CP] Copy XCFrameworks */,
 			);
 			dependencies = (
-				7A6DCB21DBA7969A3C6EA35CD62A8F76 /* PBXTargetDependency */,
+				06FD50D8A3CB032D8A7FAB8E99456814 /* PBXTargetDependency */,
 				13EE257F1BBDD9F8857670384FD03295 /* PBXTargetDependency */,
 			);
 			name = GoogleAppMeasurement;
@@ -22,19 +22,19 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
+		1A7CB1010D6A31B26B0098DF339FC173 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B14A6E5D41DC74FF5FB1D41790DF8C06 /* GoogleUtilities.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
+			remoteInfo = GoogleUtilities;
+		};
 		2A4EEEB894E226B1EE4412F1914C7166 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F066E3ECBE8B460E55410B3554DDE30C /* nanopb.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 052B66B57BF269A4B160A5659F7D46D4;
 			remoteInfo = nanopb;
-		};
-		608AD22A4C12C89219B1789521FE74BC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B14A6E5D41DC74FF5FB1D41790DF8C06 /* GoogleUtilities.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
-			remoteInfo = GoogleUtilities;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -192,15 +192,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		06FD50D8A3CB032D8A7FAB8E99456814 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleUtilities;
+			targetProxy = 1A7CB1010D6A31B26B0098DF339FC173 /* PBXContainerItemProxy */;
+		};
 		13EE257F1BBDD9F8857670384FD03295 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = nanopb;
 			targetProxy = 2A4EEEB894E226B1EE4412F1914C7166 /* PBXContainerItemProxy */;
-		};
-		7A6DCB21DBA7969A3C6EA35CD62A8F76 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GoogleUtilities;
-			targetProxy = 608AD22A4C12C89219B1789521FE74BC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -259,7 +259,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -280,7 +280,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -299,7 +299,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -360,7 +360,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

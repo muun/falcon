@@ -6,13 +6,14 @@
 //  Copyright © 2021 muun. All rights reserved.
 //
 
-@testable import core
+import Foundation
+@testable import Muun
 
 extension Factory {
 
     static func operation(status: OperationStatus,
                    direction: OperationDirection = .OUTGOING,
-                   isRBF: Bool = false) -> core.Operation {
+                          isRBF: Bool = false) -> Muun.Operation {
         return Operation(
             id: 0,
             requestId: "String",
@@ -39,19 +40,19 @@ extension Factory {
         )
     }
 
-    static func pendingIncomingOperation(isRBF: Bool = false) -> core.Operation {
+    static func pendingIncomingOperation(isRBF: Bool = false) -> Muun.Operation {
         return operation(status: OperationStatus.pendingStates.randomElement()!,
                          direction: .INCOMING,
                          isRBF: isRBF)
     }
 
-    static func pendingOutgoingOperation() -> core.Operation {
+    static func pendingOutgoingOperation() -> Muun.Operation {
         return operation(status: OperationStatus.pendingStates.randomElement()!,
                          direction: .OUTGOING)
     }
 
     static func incomingSwapOperation(status: OperationStatus,
-                                      incomingSwap: IncomingSwap = incomingSwap()) -> core.Operation {
+                                      incomingSwap: IncomingSwap = incomingSwap()) -> Muun.Operation {
         return Operation(
             id: 0,
             requestId: "String",

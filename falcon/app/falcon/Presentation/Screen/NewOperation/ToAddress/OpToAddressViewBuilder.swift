@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class OpToAddressViewBuilder: OpViewBuilder {
 
@@ -128,7 +128,7 @@ class OpToAddressViewBuilder: OpViewBuilder {
         switch data.feeState {
         case .feeNeedsChange(let displayFee, _):
             return (displayFee, false)
-        case .finalFee(let fee, _):
+        case .finalFee(let fee, _, _):
             return (fee, true)
         case .noPossibleFee:
             Logger.fatal("Trying to display no possible fee")

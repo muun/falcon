@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 // Analytics
 extension UIViewController {

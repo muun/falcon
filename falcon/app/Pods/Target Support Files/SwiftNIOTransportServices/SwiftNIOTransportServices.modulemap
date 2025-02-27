@@ -1,0 +1,6 @@
+framework module NIOTransportServices {
+  umbrella header "SwiftNIOTransportServices-umbrella.h"
+
+  export *
+  module * { export * }
+}

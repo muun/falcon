@@ -10,7 +10,7 @@ import Foundation
 import FirebaseAnalytics
 import FirebaseCrashlytics
 import FirebaseCore
-import core
+
 
 class AnalyticsHelper: Resolver {
 

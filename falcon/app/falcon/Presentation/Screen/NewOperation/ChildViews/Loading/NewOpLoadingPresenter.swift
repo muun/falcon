@@ -8,7 +8,6 @@
 
 import RxSwift
 import Libwallet
-import core
 
 protocol NewOpLoadingPresenterDelegate: BasePresenterDelegate {
     func loadingDidFinish(feeInfo: FeeInfo,
@@ -23,23 +22,38 @@ protocol NewOpLoadingPresenterDelegate: BasePresenterDelegate {
 
 class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresenter<Delegate> {
 
+    private struct CombinedSingleResult {
+        let feeInfo: FeeInfo
+        let paymentRequestType: PaymentRequestType
+        let user: User
+    }
+
     private let paymentIntent: PaymentIntent
     private let feeCalculatorAction: FeeCalculatorAction
     private let userSelector: UserSelector
     private let submarineSwapAction: SubmarineSwapAction
     private let bip70Action: BIP70Action
+    private let preloadFeeDataAction: PreloadFeeDataAction
+    private let featureFlagsRepository: FeatureFlagsRepository
+    private let libwalletService: LibwalletService
 
     init(delegate: Delegate,
          state: PaymentIntent,
          feeCalculatorAction: FeeCalculatorAction,
          userSelector: UserSelector,
          submarineSwapAction: SubmarineSwapAction,
-         bip70Action: BIP70Action) {
+         bip70Action: BIP70Action,
+         preloadFeeDataAction: PreloadFeeDataAction,
+         featureFlagsRepository: FeatureFlagsRepository,
+         libwalletService: LibwalletService) {
         self.paymentIntent = state
         self.feeCalculatorAction = feeCalculatorAction
         self.userSelector = userSelector
         self.submarineSwapAction = submarineSwapAction
         self.bip70Action = bip70Action
+        self.preloadFeeDataAction = preloadFeeDataAction
+        self.featureFlagsRepository = featureFlagsRepository
+        self.libwalletService = libwalletService
 
         super.init(delegate: delegate)
     }
@@ -64,13 +78,42 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
             preconditionFailure()
         }
 
-        let loadSingle = Single.zip(feeCalculatorAction.getValue(),
-                                    paymentRequestType,
-                                    userSelector.get())
+        // baseSingle always will be executed, feeDataSyncer.getValue() in loadSingle
+        // only will be executed when effectiveFeesCalculation FF is ON.
+        let baseSingle: Single<CombinedSingleResult> = Single.zip(feeCalculatorAction.getValue(),
+                                                                  paymentRequestType,
+                                                                  userSelector.get())
+            .map { CombinedSingleResult(feeInfo: $0, paymentRequestType: $1, user: $2) }
 
-        subscribeTo(loadSingle, onSuccess: self.didLoad)
+        let loadSingle: Single<CombinedSingleResult>
+        if shouldLoadFeeData() {
+            preloadFeeDataAction.reset()
+            loadSingle = preloadFeeDataAction.getValue()
+                .flatMap { _ in
+                    baseSingle
+                }
+        } else {
+            loadSingle = baseSingle
+        }
+
+        subscribeTo(loadSingle) { [weak self] result in
+            self?.didLoad(feeInfo: result.feeInfo,
+                          paymentRequestType: result.paymentRequestType,
+                          user: result.user)
+        }
 
         feeCalculatorAction.run(isSwap: isSwap)
+
+        if shouldLoadFeeData() {
+            preloadFeeDataAction.forceRun(refreshPolicy: .newOpBlockingly)
+        }
+    }
+
+    private func shouldLoadFeeData() -> Bool {
+        let isEffectiveFeesCalculationTurnedOn = featureFlagsRepository.fetch()
+            .contains(.effectiveFeesCalculation)
+        let areFeeBumpFunctionsInvalidated = libwalletService.areFeeBumpFunctionsInvalidated()
+        return isEffectiveFeesCalculationTurnedOn && areFeeBumpFunctionsInvalidated
     }
 
     private func createSubmarineSwap(invoice: LibwalletInvoice,

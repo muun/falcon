@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol OpLoadingTransitions: AnyObject {
     func didLoad(feeInfo: FeeInfo,

@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+
 import Libwallet
 
 protocol CurrenciesForPickerRetriever {

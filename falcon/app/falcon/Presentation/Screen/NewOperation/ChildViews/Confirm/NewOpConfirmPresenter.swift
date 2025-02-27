@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 
 protocol NewOpConfirmPresenterDelegate: BasePresenterDelegate {
     func dataValidated(_ isValid: Bool)

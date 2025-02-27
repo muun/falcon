@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 import Libwallet
 
 enum HomeOperationsState {
@@ -83,7 +83,10 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         subscribeTo(watchAppState(), onNext: self.onAppStateChange)
         subscribeTo(realTimeDataAction.getState(), onNext: self.handleRealTimeDataAction)
         subscribeTo(operationActions.getOperationsChange(), onNext: self.onOperationsChange)
-        subscribeTo(balanceActions.watchBalance(), onNext: self.onBalanceChange)
+        // Using `userInitiated` queue to avoid refresh delays.
+        subscribeTo(balanceActions.watchBalance(),
+                    onNext: self.onBalanceChange,
+                    subscribeOn: Scheduler.userInitiatedScheduler)
         subscribeTo(fetchNotificationsAction.getState(), onNext: { _ in })
 
         let taproot = Libwallet.userActivatedFeatureTaproot()!
@@ -198,7 +201,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
-    private func onOperationsChange(_ change: core.OperationsChange) {
+    private func onOperationsChange(_ change: OperationsChange) {
         guard areThereVisualChangesToApply(change: change) else {
             return
         }
@@ -220,7 +223,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         delegate.onOperationsChange()
     }
 
-    private func areThereVisualChangesToApply(change: core.OperationsChange) -> Bool {
+    private func areThereVisualChangesToApply(change: OperationsChange) -> Bool {
         if let lastOperation = change.lastOperation,
            lastOperation.isFailedAndOutgoing() {
             return false
@@ -229,7 +232,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         return true
     }
 
-    private func diffAmount(_ op: core.Operation) -> MonetaryAmount {
+    private func diffAmount(_ op: Operation) -> MonetaryAmount {
         switch op.direction {
         case .OUTGOING:
             // If the operation is outgoing, the money diff needs to take the fee into consideration
@@ -280,7 +283,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         return balance
     }
 
-    func getOperationsState() -> core.OperationsState {
+    func getOperationsState() -> OperationsState {
         return operationActions.getOperationsState()
     }
 
@@ -315,6 +318,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     }
 
     func shouldDisplayTransactionListTooltip() -> Bool {
+        // swiftlint:disable force_error_handling
         let preferences = try? userPreferencesSelector.get()
             .toBlocking()
             .single()

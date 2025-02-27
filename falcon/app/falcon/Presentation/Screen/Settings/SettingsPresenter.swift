@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 import Libwallet
 
 protocol SettingsPresenterDelegate: BasePresenterDelegate {

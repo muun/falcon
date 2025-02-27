@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Foundation
+import UserNotifications
 
 class DebugModeDisplayer {
     private weak var lastKeyWindow: UIWindow?
     private let debugWindow = UIWindow(frame: UIScreen.main.bounds)
-    static let deviceShakedNotification = Notification.Name("device_shaked_notification")
+    static let deviceShakedNotification = Foundation.Notification.Name(rawValue: "device_shaked_notification")
 
     func startDebugDisplayerIfDebugBuild() {
         #if !DEBUG

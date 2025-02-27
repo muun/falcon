@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol AddressTypeOptionViewDelegate: AnyObject {
     func didTapControl()

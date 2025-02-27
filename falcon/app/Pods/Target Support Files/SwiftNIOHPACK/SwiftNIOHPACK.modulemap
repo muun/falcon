@@ -1,0 +1,6 @@
+framework module NIOHPACK {
+  umbrella header "SwiftNIOHPACK-umbrella.h"
+
+  export *
+  module * { export * }
+}

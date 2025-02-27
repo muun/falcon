@@ -8,7 +8,7 @@
 
 import Foundation
 import RxSwift
-import core
+
 
 protocol SyncDelegate: BasePresenterDelegate {
     func onSyncFinished()

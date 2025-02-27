@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 enum AmountLabelType {
     case inBTC

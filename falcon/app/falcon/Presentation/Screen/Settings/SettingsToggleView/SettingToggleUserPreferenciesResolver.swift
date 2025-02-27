@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 import RxSwift
 
 class SettingToggleUserPreferenciesResolver {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import core
 
 protocol BalanceViewDelegate: AnyObject {
     func balanceTap()
@@ -266,7 +265,7 @@ final class BalanceView: UIView {
         }
     }
 
-    func updateOperationsState(_ state: core.OperationsState) {
+    func updateOperationsState(_ state: OperationsState) {
         switch state {
         case .confirmed:
             clockImageView.isHidden = true

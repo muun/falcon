@@ -7,7 +7,7 @@
 //
 
 @testable import Muun
-@testable import core
+
 import RxSwift
 import XCTest
 
@@ -111,10 +111,12 @@ class FakeHoustonService: HoustonService {
         }
     }
 
-    override func pushFulfillmentTransaction(rawTransaction: RawTransaction, incomingSwap: String) -> Completable {
+    override func pushFulfillmentTransaction(rawTransaction: RawTransaction, incomingSwap: String) -> Single<FulfillmentPushed> {
 
-        return Completable.executing {
+        return Single.create { completion in
             XCTFail("no test is expected to call this method")
+
+            return Disposables.create()
         }
     }
 
@@ -180,5 +182,23 @@ class FakeHoustonService: HoustonService {
 
             return Disposables.create()
         }
+    }
+
+    var fetchRealTimeFeesCalledCount = 0
+    let feeWindow = FeeWindow(id: 1,
+                              fetchDate: Date(),
+                              targetedFees: [0: FeeRate(satsPerVByte: 10)],
+                              fastConfTarget: 1,
+                              mediumConfTarget: 43,
+                              slowConfTarget: 90)
+    let feeBumpFunctions = FeeBumpFunctions(uuid: "testID", functions: ["f4AAAD+AAAAAAAAA"]) // [+Inf, 1, 0]
+    lazy var fetchRealTimeFeesResult = RealTimeFees(feeBumpFunctions: feeBumpFunctions,
+                                               feeWindow: feeWindow,
+                                               minMempoolFeeRateInSatPerVbyte: 1,
+                                               minFeeRateIncrementToReplaceByFeeInSatPerVbyte: 1,
+                                               computedAt: Date())
+    override func fetchRealTimeFees(realTimeFeesRequest: RealTimeFeesRequestJson) -> Single<RealTimeFees> {
+        fetchRealTimeFeesCalledCount += 1
+        return .just(self.fetchRealTimeFeesResult)
     }
 }

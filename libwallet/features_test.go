@@ -219,7 +219,6 @@ func (t TestBackendActivatedFeatureStatusProvider) IsBackendFlagEnabled(flag str
 func Test_DetermineBackendActivatedFeatureStatus(t *testing.T) {
 	Cfg = &Config{
 		DataDir:               "",
-		Listener:              nil,
 		FeatureStatusProvider: TestBackendActivatedFeatureStatusProvider{},
 	}
 

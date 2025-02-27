@@ -2,6 +2,7 @@ package walletdb
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -9,9 +10,17 @@ import (
 )
 
 type FeeBumpRepository interface {
-	Store(feeBumpFunctions []*operation.FeeBumpFunction) error
-	GetAll() ([]*operation.FeeBumpFunction, error)
+	Store(feeBumpFunctionSet *operation.FeeBumpFunctionSet) error
+	GetAll() (*operation.FeeBumpFunctionSet, error)
+	GetCreationDate() (*time.Time, error)
 	RemoveAll() error
+}
+
+type FeeBumpFunctionSet struct {
+	gorm.Model
+	UUID             string
+	RefreshPolicy    string
+	FeeBumpFunctions []FeeBumpFunction `gorm:"foreignKey:SetID"`
 }
 
 type FeeBumpFunction struct {
@@ -20,6 +29,7 @@ type FeeBumpFunction struct {
 	// PartialLinearFunctions establishes a foreign key relationship with the PartialLinearFunction table,
 	// where 'FunctionPosition' in PartialLinearFunction references 'Position' in FeeBumpFunction.
 	PartialLinearFunctions []PartialLinearFunction `gorm:"foreignKey:FunctionPosition;references:Position;"`
+	SetID                  uint                    `sql:"not null"`
 }
 
 type PartialLinearFunction struct {
@@ -35,15 +45,20 @@ type GORMFeeBumpRepository struct {
 	db *gorm.DB
 }
 
-func (r *GORMFeeBumpRepository) Store(feeBumpFunctions []*operation.FeeBumpFunction) error {
-	dbFeeBumpFunctions := mapToDBFeeBumpFunctions(feeBumpFunctions)
+func (r *GORMFeeBumpRepository) Store(feeBumpFunctionSet *operation.FeeBumpFunctionSet) error {
+	dbFeeBumpFunctionSet := mapToDBFeeBumpFunctions(feeBumpFunctionSet)
 
 	tx := r.db.Begin()
-	for _, feeBumpFunction := range dbFeeBumpFunctions {
-		if err := tx.Create(&feeBumpFunction).Error; err != nil {
-			tx.Rollback()
-			return err
-		}
+
+	// Remove old data before store updated functions
+	err := removeAllInTransaction(tx)
+	if err != nil {
+		return fmt.Errorf("error when trying to remove old fee bump functions: %w", err)
+	}
+
+	if err := tx.Create(&dbFeeBumpFunctionSet).Error; err != nil {
+		tx.Rollback()
+		return err
 	}
 
 	if err := tx.Commit().Error; err != nil {
@@ -52,34 +67,65 @@ func (r *GORMFeeBumpRepository) Store(feeBumpFunctions []*operation.FeeBumpFunct
 	return nil
 }
 
-func (r *GORMFeeBumpRepository) GetAll() ([]*operation.FeeBumpFunction, error) {
-	var dbFeeBumpFunctions []FeeBumpFunction
+func (r *GORMFeeBumpRepository) GetAll() (*operation.FeeBumpFunctionSet, error) {
+	var dbFeeBumpFunctionSet FeeBumpFunctionSet
 
-	result := r.db.Preload("PartialLinearFunctions").Order("position asc").Find(&dbFeeBumpFunctions)
+	result := r.db.Preload("FeeBumpFunctions.PartialLinearFunctions").Find(&dbFeeBumpFunctionSet)
+
+	if result.Error != nil && !gorm.IsRecordNotFoundError(result.Error) {
+		return nil, result.Error
+	}
+
+	feeBumpFunctionSet := mapToOperationFeeBumpFunctions(dbFeeBumpFunctionSet)
+
+	return feeBumpFunctionSet, nil
+}
+
+func (r *GORMFeeBumpRepository) GetCreationDate() (*time.Time, error) {
+	var dbFeeBumpFunctionSet FeeBumpFunctionSet
+	result := r.db.First(&dbFeeBumpFunctionSet)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	feeBumpFunctions := mapToOperationFeeBumpFunctions(dbFeeBumpFunctions)
-
-	return feeBumpFunctions, nil
+	return &dbFeeBumpFunctionSet.CreatedAt, nil
 }
 
 func (r *GORMFeeBumpRepository) RemoveAll() error {
-	result := r.db.Delete(FeeBumpFunction{})
+	tx := r.db.Begin()
+	err := removeAllInTransaction(tx)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit().Error
+}
+
+func removeAllInTransaction(tx *gorm.DB) error {
+	result := tx.Unscoped().Delete(FeeBumpFunctionSet{})
 	if result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
 
-	result = r.db.Delete(PartialLinearFunction{})
+	result = tx.Unscoped().Delete(FeeBumpFunction{})
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
 
-	return result.Error
+	result = tx.Unscoped().Delete(PartialLinearFunction{})
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+	return nil
 }
 
-func mapToDBFeeBumpFunctions(feeBumpFunctions []*operation.FeeBumpFunction) []FeeBumpFunction {
+func mapToDBFeeBumpFunctions(feeBumpFunctionSet *operation.FeeBumpFunctionSet) FeeBumpFunctionSet {
 	var dbFeeBumpFunctions []FeeBumpFunction
-	for i, feeBumpFunction := range feeBumpFunctions {
+	for i, feeBumpFunction := range feeBumpFunctionSet.FeeBumpFunctions {
 		var dbPartialLinearFunctions []PartialLinearFunction
 		for _, partialLinearFunction := range feeBumpFunction.PartialLinearFunctions {
 			dbPartialLinearFunctions = append(dbPartialLinearFunctions, PartialLinearFunction{
@@ -96,10 +142,15 @@ func mapToDBFeeBumpFunctions(feeBumpFunctions []*operation.FeeBumpFunction) []Fe
 		})
 	}
 
-	return dbFeeBumpFunctions
+	return FeeBumpFunctionSet{
+		UUID:             feeBumpFunctionSet.UUID,
+		RefreshPolicy:    feeBumpFunctionSet.RefreshPolicy,
+		FeeBumpFunctions: dbFeeBumpFunctions,
+	}
 }
 
-func mapToOperationFeeBumpFunctions(dbFeeBumpFunctions []FeeBumpFunction) []*operation.FeeBumpFunction {
+func mapToOperationFeeBumpFunctions(dbFeeBumpFunctionSet FeeBumpFunctionSet) *operation.FeeBumpFunctionSet {
+	dbFeeBumpFunctions := dbFeeBumpFunctionSet.FeeBumpFunctions
 	var feeBumpFunctions []*operation.FeeBumpFunction
 	for _, dbFeeBumpFunction := range dbFeeBumpFunctions {
 		var partialLinearFunctions []*operation.PartialLinearFunction
@@ -119,5 +170,11 @@ func mapToOperationFeeBumpFunctions(dbFeeBumpFunctions []FeeBumpFunction) []*ope
 			},
 		)
 	}
-	return feeBumpFunctions
+
+	return &operation.FeeBumpFunctionSet{
+		CreatedAt:        dbFeeBumpFunctionSet.CreatedAt,
+		UUID:             dbFeeBumpFunctionSet.UUID,
+		RefreshPolicy:    dbFeeBumpFunctionSet.RefreshPolicy,
+		FeeBumpFunctions: feeBumpFunctions,
+	}
 }

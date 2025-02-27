@@ -7,7 +7,8 @@
 //
 
 import XCTest
-@testable import core
+
+@testable import Muun
 
 class ApiReachabiltiyServiceTest: MuunTestCase {
     var reachabilityService: ReachabilityService!

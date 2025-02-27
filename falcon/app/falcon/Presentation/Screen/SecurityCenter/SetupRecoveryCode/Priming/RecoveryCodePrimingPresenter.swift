@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+
 
 protocol RecoveryCodePrimingPresenterDelegate: BasePresenterDelegate {
     func goToNextScreen(recoveryCode: RecoveryCode)

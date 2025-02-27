@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol SignUpEmailPresenterDelegate: BasePresenterDelegate {
     func responseOkReceived()

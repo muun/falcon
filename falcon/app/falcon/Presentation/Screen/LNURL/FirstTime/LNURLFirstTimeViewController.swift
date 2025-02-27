@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class LNURLFirstTimeViewController: MUViewController {
 

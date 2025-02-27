@@ -72,25 +72,20 @@ cd libwallet/
 mkdir -p "$build_dir/ios"
 mkdir -p "$build_dir/pkg"
 
+GOCACHE="$build_dir/ios"
+
 # Gomobile crashes if these files exist already
 rm -r "$build_dir"/ios/ios/iphoneos/*.framework 2>/dev/null || true
 rm -r "$build_dir"/ios/iossimulator/iphonesimulator/*.framework 2>/dev/null|| true
 rm -r "$libwallet" 2>/dev/null|| true
 rm -r "$build_dir/ios" 2>/dev/null || true
 
-# Use a shared dependency cache between iOS and Android by setting GOMODCACHE
-
-# Setting CGO_LDFLAGS_ALLOW is a hack to build with golang 1.15.5
-# https://github.com/golang/go/issues/42565#issuecomment-727214122
-
 echo "Using go binary $(which go) $(go version)"
 
 # Install and setup gomobile on demand (no-op if already installed and up-to-date)
 . "$repo_root/tools/bootstrap-gomobile.sh"
 
-CGO_LDFLAGS_ALLOW="-fembed-bitcode" \
-    CGO_LDFLAGS="-lresolv" \
-    GOMODCACHE="$build_dir/pkg" \
+CGO_LDFLAGS="-lresolv" \
     go run golang.org/x/mobile/cmd/gomobile bind \
     -target=ios,iossimulator -o "$libwallet" \
     -iosversion="11.4" \

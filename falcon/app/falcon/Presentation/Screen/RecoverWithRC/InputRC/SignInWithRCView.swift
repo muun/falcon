@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol SignInWithRCViewDelegate: AnyObject {
     func didConfirmRecoveryCode(_ code: String)

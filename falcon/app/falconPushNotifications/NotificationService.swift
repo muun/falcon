@@ -69,6 +69,7 @@ class NotificationService: UNNotificationServiceExtension {
     private func getNotificationReport(_ userInfo: [AnyHashable: Any]) throws -> NotificationReportJson {
         if let aps = userInfo["aps"] as? [String: Any],
            let alertReport = aps["alert"] as? [String: Any],
+           // swiftlint:disable force_error_handling
            let data = try? JSONSerialization.data(withJSONObject: alertReport, options: []) {
             return try getDecoded(data: data)
         } else {

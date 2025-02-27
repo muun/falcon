@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 import RxSwift
-@testable import core
+@testable import Muun
 
 class UpdateUserPreferencesActionTest: MuunTestCase {
 

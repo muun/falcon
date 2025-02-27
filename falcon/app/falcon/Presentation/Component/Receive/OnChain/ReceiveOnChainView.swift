@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 enum AddressTypeViewModel: String, MUActionSheetOption {
     case segwit

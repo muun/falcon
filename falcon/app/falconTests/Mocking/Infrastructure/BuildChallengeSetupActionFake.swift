@@ -7,7 +7,7 @@
 //
 
 @testable import Muun
-@testable import core
+
 
 class BuildChallengeSetupActionFake: BuildChallengeSetupAction {
     var expectedKey: ChallengeKey!

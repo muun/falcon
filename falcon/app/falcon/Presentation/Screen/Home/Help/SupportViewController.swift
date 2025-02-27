@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 private enum RequestType {
     case feedback

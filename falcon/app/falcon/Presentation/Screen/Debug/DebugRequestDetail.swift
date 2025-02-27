@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class DebugRequestDetail: MUViewController {
     private let closeButton = UIButton()

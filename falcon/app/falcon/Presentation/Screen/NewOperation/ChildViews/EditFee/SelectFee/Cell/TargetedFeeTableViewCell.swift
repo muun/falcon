@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class TargetedFeeTableViewCell: UITableViewCell {
 
@@ -58,7 +58,7 @@ class TargetedFeeTableViewCell: UITableViewCell {
             feeRate = rate
             isValid = false
 
-        case .finalFee(let amount, let rate):
+        case .finalFee(let amount, let rate, _):
             feeAmount = amount
             feeRate = rate
             isValid = true

@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-import core
+@testable import Muun
 
 class IncomingSwapUITests: FalconUITests {
 

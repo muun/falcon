@@ -7,7 +7,7 @@
 //
 
 import Libwallet
-import core
+
 
 class EmergencyKit {
 

@@ -3,8 +3,8 @@ package walletdb
 import (
 	"bytes"
 	"crypto/rand"
-	"os"
 	"math"
+	"os"
 	"path"
 	"testing"
 )

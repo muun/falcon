@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol RecoveryViewDelegate: AnyObject {
     func recoveryViewDidChange(_ recoveryView: RecoveryView, code: RecoveryCode?)
@@ -235,7 +235,7 @@ extension RecoveryView: UITextFieldDelegate {
                 segments.append(segment)
             }
         }
-
+        // swiftlint:disable force_error_handling
         return try? RecoveryCode(segments: segments)
     }
 

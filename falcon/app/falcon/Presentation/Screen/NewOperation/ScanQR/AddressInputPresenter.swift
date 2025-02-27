@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol AddressInputPresenterDelegate: BasePresenterDelegate {
     func checkForClipboardChange()

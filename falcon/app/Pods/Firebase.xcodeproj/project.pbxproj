@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		653AF76FD912AA49F6645199D1C392BB /* Firebase.default-CoreOnly */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 81E5545DB08106F57A96EC0485F9F321 /* Build configuration list for PBXAggregateTarget "Firebase.default-CoreOnly" */;
+			buildPhases = (
+			);
+			dependencies = (
+				83062CEFBE5B4531D3E7B8A07B55FBCF /* PBXTargetDependency */,
+				2E5FFF835B391DA654186E06E506218C /* PBXTargetDependency */,
+			);
+			name = "Firebase.default-CoreOnly";
+		};
 		C75A99DD64880BCFE15DA7AFAA653EE6 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = D399E2A17D94AC8D1BEFA816AB088EAD /* Build configuration list for PBXAggregateTarget "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging" */;
@@ -20,27 +31,9 @@
 			);
 			name = "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging";
 		};
-		E46E82E2FE597920D6002998F33AF81F /* Firebase-CoreOnly-Crashlytics */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 0509BF1A40309289384AC300C8B68186 /* Build configuration list for PBXAggregateTarget "Firebase-CoreOnly-Crashlytics" */;
-			buildPhases = (
-			);
-			dependencies = (
-				771D268F62AE9EE639DF8BA48DFD7261 /* PBXTargetDependency */,
-				8B67C2B7F0180539BB08D1CFFE024BC7 /* PBXTargetDependency */,
-			);
-			name = "Firebase-CoreOnly-Crashlytics";
-		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
-		03A578585C39730A2FF85F722C3C74BB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 70D15AA89E1DD416A3293530DDF6FD25 /* FirebaseCore.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
-			remoteInfo = FirebaseCore;
-		};
 		35E0B2425A25EAAFAB36BB88BBA58BA6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AE607646CCBE20FC247A31103856B3BB /* FirebaseCrashlytics.xcodeproj */;
@@ -62,6 +55,13 @@
 			remoteGlobalIDString = 07B1CA595486D0B88A10EEBC5BAF2614;
 			remoteInfo = FirebaseMessaging;
 		};
+		C50D8F9F98400B8A731A11EAE3150908 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 70D15AA89E1DD416A3293530DDF6FD25 /* FirebaseCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
+			remoteInfo = FirebaseCore;
+		};
 		EBF59D4E65A5AD9EB13494DE687DD050 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics.xcodeproj */;
@@ -69,25 +69,25 @@
 			remoteGlobalIDString = 3DC59710253F562E6B3BE135BABFBA19;
 			remoteInfo = FirebaseAnalytics;
 		};
-		ECD691559AA95F597BD228912AC6090B /* PBXContainerItemProxy */ = {
+		FCF38BFA05E1FCF315005EFEF13AF65D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = AE607646CCBE20FC247A31103856B3BB /* FirebaseCrashlytics.xcodeproj */;
+			containerPortal = A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = F8006328C579782402418E6C6605DE15;
-			remoteInfo = FirebaseCrashlytics;
+			remoteGlobalIDString = 3DC59710253F562E6B3BE135BABFBA19;
+			remoteInfo = FirebaseAnalytics;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05892C0F181C01EB05F7C62ECB810974 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig"; sourceTree = "<group>"; };
+		22B187EBD73AD59BE4688E24D230BDE9 /* Firebase.default-CoreOnly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Firebase.default-CoreOnly.release.xcconfig"; path = "../Firebase.default-CoreOnly/Firebase.default-CoreOnly.release.xcconfig"; sourceTree = "<group>"; };
 		54F356E693FD883EDE1B75074CACC0DC /* Firebase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = CoreOnly/Sources/Firebase.h; sourceTree = "<group>"; };
+		6CA14C541C3092BBEB1E6942DF5CE623 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig"; sourceTree = "<group>"; };
 		70D15AA89E1DD416A3293530DDF6FD25 /* FirebaseCore */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseCore; path = FirebaseCore.xcodeproj; sourceTree = "<group>"; };
-		8F86322BB048DDD527D4844AED9BBB06 /* Firebase-CoreOnly-Crashlytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Firebase-CoreOnly-Crashlytics.debug.xcconfig"; path = "../Firebase-CoreOnly-Crashlytics/Firebase-CoreOnly-Crashlytics.debug.xcconfig"; sourceTree = "<group>"; };
 		A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseAnalytics; path = FirebaseAnalytics.xcodeproj; sourceTree = "<group>"; };
+		A9A78C753B9E46E9110A2C58C2929A7E /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig"; sourceTree = "<group>"; };
 		AE607646CCBE20FC247A31103856B3BB /* FirebaseCrashlytics */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseCrashlytics; path = FirebaseCrashlytics.xcodeproj; sourceTree = "<group>"; };
-		B2BE885868EFDEEE5160D817DCD16A53 /* Firebase-CoreOnly-Crashlytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Firebase-CoreOnly-Crashlytics.release.xcconfig"; path = "../Firebase-CoreOnly-Crashlytics/Firebase-CoreOnly-Crashlytics.release.xcconfig"; sourceTree = "<group>"; };
-		C64AB0B91A86BFF71ED7F995DFCE2A3B /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig"; sourceTree = "<group>"; };
 		EB1D51DB4E9A84CAF30AB866C06F379E /* FirebaseMessaging */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FirebaseMessaging; path = FirebaseMessaging.xcodeproj; sourceTree = "<group>"; };
+		FF7383892D8284B19E64BBD9661CFD85 /* Firebase.default-CoreOnly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Firebase.default-CoreOnly.debug.xcconfig"; path = "../Firebase.default-CoreOnly/Firebase.default-CoreOnly.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -110,22 +110,10 @@
 			isa = PBXGroup;
 			children = (
 				28752EA9DEFEFFAE3C98CF9D1EC987CA /* CoreOnly */,
-				75C8B5A416B8A84A31DF48FA548D6F38 /* Support Files */,
+				7EA0AC3F6E31925FEAF79EC6183E2057 /* Support Files */,
 			);
 			name = Firebase;
 			path = Firebase;
-			sourceTree = "<group>";
-		};
-		75C8B5A416B8A84A31DF48FA548D6F38 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				C64AB0B91A86BFF71ED7F995DFCE2A3B /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */,
-				05892C0F181C01EB05F7C62ECB810974 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */,
-				8F86322BB048DDD527D4844AED9BBB06 /* Firebase-CoreOnly-Crashlytics.debug.xcconfig */,
-				B2BE885868EFDEEE5160D817DCD16A53 /* Firebase-CoreOnly-Crashlytics.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging";
 			sourceTree = "<group>";
 		};
 		7677451580D65C621C3555C5ED0FF2C7 /* Products */ = {
@@ -133,6 +121,18 @@
 			children = (
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7EA0AC3F6E31925FEAF79EC6183E2057 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				6CA14C541C3092BBEB1E6942DF5CE623 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */,
+				A9A78C753B9E46E9110A2C58C2929A7E /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */,
+				FF7383892D8284B19E64BBD9661CFD85 /* Firebase.default-CoreOnly.debug.xcconfig */,
+				22B187EBD73AD59BE4688E24D230BDE9 /* Firebase.default-CoreOnly.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging";
 			sourceTree = "<group>";
 		};
 		B5FC03EEBDB15307C9B9A1CC1BCBD917 /* Dependencies */ = {
@@ -193,21 +193,21 @@
 			projectRoot = "";
 			targets = (
 				C75A99DD64880BCFE15DA7AFAA653EE6 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging */,
-				E46E82E2FE597920D6002998F33AF81F /* Firebase-CoreOnly-Crashlytics */,
+				653AF76FD912AA49F6645199D1C392BB /* Firebase.default-CoreOnly */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXTargetDependency section */
-		771D268F62AE9EE639DF8BA48DFD7261 /* PBXTargetDependency */ = {
+		2E5FFF835B391DA654186E06E506218C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseCore;
-			targetProxy = 03A578585C39730A2FF85F722C3C74BB /* PBXContainerItemProxy */;
+			targetProxy = C50D8F9F98400B8A731A11EAE3150908 /* PBXContainerItemProxy */;
 		};
-		8B67C2B7F0180539BB08D1CFFE024BC7 /* PBXTargetDependency */ = {
+		83062CEFBE5B4531D3E7B8A07B55FBCF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = FirebaseCrashlytics;
-			targetProxy = ECD691559AA95F597BD228912AC6090B /* PBXContainerItemProxy */;
+			name = FirebaseAnalytics;
+			targetProxy = FCF38BFA05E1FCF315005EFEF13AF65D /* PBXContainerItemProxy */;
 		};
 		9556102CB370601A4BF81C22265B9499 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -232,15 +232,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		52EEC0F3042C3A23CE078328C444ABD6 /* Release */ = {
+		15761E6D17458C5EE00720AB093ED6C8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2BE885868EFDEEE5160D817DCD16A53 /* Firebase-CoreOnly-Crashlytics.release.xcconfig */;
+			baseConfigurationReference = 22B187EBD73AD59BE4688E24D230BDE9 /* Firebase.default-CoreOnly.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -251,7 +251,7 @@
 			};
 			name = Release;
 		};
-		542E7F374C2B053392AC079A97D69CB5 /* Release */ = {
+		3202CCBE9911D0488D07D929E3E47B19 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -302,7 +302,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -314,33 +314,15 @@
 			};
 			name = Release;
 		};
-		5565357B1BBE4A7AB2DCD3D986067B60 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F86322BB048DDD527D4844AED9BBB06 /* Firebase-CoreOnly-Crashlytics.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		836E7D058839A8F7B9A2756517B3A238 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05892C0F181C01EB05F7C62ECB810974 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */;
+			baseConfigurationReference = A9A78C753B9E46E9110A2C58C2929A7E /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -351,15 +333,15 @@
 			};
 			name = Release;
 		};
-		98A2F1E4B481EFE6DC030E0C6F9DF604 /* Debug */ = {
+		95504798FD42428EE7BDABAE26A4C077 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C64AB0B91A86BFF71ED7F995DFCE2A3B /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */;
+			baseConfigurationReference = FF7383892D8284B19E64BBD9661CFD85 /* Firebase.default-CoreOnly.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -369,7 +351,25 @@
 			};
 			name = Debug;
 		};
-		E607FEB78457478B4D6691840DAE2FC1 /* Debug */ = {
+		98A2F1E4B481EFE6DC030E0C6F9DF604 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6CA14C541C3092BBEB1E6942DF5CE623 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B7CE31B12D53B379A8FC28F0FD385FC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -423,7 +423,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -439,20 +439,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0509BF1A40309289384AC300C8B68186 /* Build configuration list for PBXAggregateTarget "Firebase-CoreOnly-Crashlytics" */ = {
+		198012EF7A45C9DD9AF96756AF40414F /* Build configuration list for PBXProject "Firebase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5565357B1BBE4A7AB2DCD3D986067B60 /* Debug */,
-				52EEC0F3042C3A23CE078328C444ABD6 /* Release */,
+				B7CE31B12D53B379A8FC28F0FD385FC6 /* Debug */,
+				3202CCBE9911D0488D07D929E3E47B19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		198012EF7A45C9DD9AF96756AF40414F /* Build configuration list for PBXProject "Firebase" */ = {
+		81E5545DB08106F57A96EC0485F9F321 /* Build configuration list for PBXAggregateTarget "Firebase.default-CoreOnly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E607FEB78457478B4D6691840DAE2FC1 /* Debug */,
-				542E7F374C2B053392AC079A97D69CB5 /* Release */,
+				95504798FD42428EE7BDABAE26A4C077 /* Debug */,
+				15761E6D17458C5EE00720AB093ED6C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

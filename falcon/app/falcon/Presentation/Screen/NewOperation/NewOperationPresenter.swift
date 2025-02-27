@@ -9,15 +9,15 @@
 // swiftlint:disable force_try
 
 import Foundation
-import core
+
 import Libwallet
 
 protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func requestNextStep(_ data: NewOpState)
-    func requestFinish(_ operation: core.Operation)
+    func requestFinish(_ operation: Operation)
     func updateStep(_ data: NewOpState)
 
-    func operationCompleted(_ operation: core.Operation)
+    func operationCompleted(_ operation: Operation)
 
     // Errors
     func operationError()
@@ -234,7 +234,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
                 total: total,
                 description: state.note,
                 feeState: feeState,
-                takeFeeFromAmount: false,
+                takeFeeFromAmount: state.takeFeeFromAmount,
                 primaryCurrency: state.primaryCurrency,
                 totalBalance: totalBalance,
                 onchainFee: state.onchainFee,
@@ -280,7 +280,9 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         if state.validated!.feeNeedsChange {
             feeState = .feeNeedsChange(displayFee: state.validated!.fee!.adapt(), rate: feeRate)
         } else {
-            feeState = .finalFee(state.validated!.fee!.adapt(), rate: feeRate)
+            feeState = .finalFee(state.validated!.fee!.adapt(),
+                                 rate: feeRate,
+                                 feeBumpInfo: state.validated?.feeBumpInfo?.adapt())
         }
 
         let primaryCurrency = state.resolved!.paymentContext!.primaryCurrency
@@ -417,7 +419,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         subscribeTo(operationActions.newOperation(operation, with: params), onSuccess: self.operationCreated)
     }
 
-    private func operationCreated(_ operation: core.Operation) {
+    private func operationCreated(_ operation: Operation) {
         delegate.operationCompleted(operation)
     }
 
@@ -484,13 +486,12 @@ extension NewOperationPresenter: NewOperationTransitions {
 extension NewOperationPresenter: OpLoadingTransitions {
     func didLoad(feeInfo: FeeInfo, user: User, paymentRequestType: PaymentRequestType) {
 
-        let context = NewopPaymentContext()
+        let context = NewopInitialPaymentContext()
         context.feeWindow = feeInfo.feeWindow.toLibwallet()
-        context.nextTransactionSize = feeInfo.feeCalculator.nts.toLibwallet()
+        context.nextTransactionSize = feeInfo.nextTransactionSize.toLibwallet()
         context.exchangeRateWindow = feeInfo.exchangeRateWindow.toLibwallet()
         context.primaryCurrency = user.primaryCurrencyWithValidExchangeRate(window: feeInfo.exchangeRateWindow)
-        context.minFeeRateInSatsPerVByte =
-            (feeInfo.feeCalculator.getMinimumFeeRate().satsPerVByte as NSDecimalNumber).doubleValue
+        context.minFeeRateInSatsPerVByte = feeInfo.minFeeRateInSatsPerVByte
 
         if let flowSwap = paymentRequestType as? FlowSubmarineSwap {
             submarineSwap = flowSwap.submarineSwap
@@ -628,7 +629,10 @@ extension NewopFeeState {
     func adapt() -> FeeState {
         switch state {
         case NewopFeeStateFinalFee:
-            return .finalFee(amount!.adapt(), rate: FeeRate(satsPerVByte: Decimal(rateInSatsPerVByte)))
+
+            return .finalFee(amount!.adapt(),
+                             rate: FeeRate(satsPerVByte: Decimal(rateInSatsPerVByte)),
+                             feeBumpInfo: feeBumpInfo?.adapt())
         case NewopFeeStateNeedsChange:
             return .feeNeedsChange(
                 displayFee: amount!.adapt(),

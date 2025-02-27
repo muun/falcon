@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class OperationTableViewCell: UITableViewCell {
 
@@ -47,7 +47,7 @@ class OperationTableViewCell: UITableViewCell {
         dateLabel.font = Constant.Fonts.system(size: .opHelper)
     }
 
-    func setUp(_ operation: core.Operation) {
+    func setUp(_ operation: Operation) {
         setUpLabels()
 
         let formatter = OperationFormatter(operation: operation)
@@ -86,7 +86,7 @@ class OperationTableViewCell: UITableViewCell {
         descriptionLabel.lineBreakMode = .byTruncatingTail
     }
 
-    private func setAmountText(operation: core.Operation) {
+    private func setAmountText(operation: Operation) {
         let amount = operation.amount.inInputCurrency
         let amountString = amount.toAmountWithoutCode(btcCurrencyFormat: .short)
         amountLabel.text = amountString

@@ -6,8 +6,8 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
 import CoreFoundation
+import Foundation
 
 struct FiatCurrency: Currency {
     let code: String
@@ -49,12 +49,25 @@ struct FiatCurrency: Currency {
         let id = "\(LocaleAmountFormatter.locale.identifier)@currency=\(currencyCode)"
         let canonical = NSLocale.canonicalLocaleIdentifier(from: id)
         let currencyLocale = Locale(identifier: canonical)
-
         let formatter = NumberFormatter()
-        formatter.currencyCode = currencyCode
+        // The formatter might have inconsistent behavior if the numberStyle is not
+        // currency but currency values are setted
+        if numberStyle == .currency {
+            formatter.currencyCode = currencyCode
+            formatter.currencySymbol = ""
+            formatter.currencyDecimalSeparator = LocaleAmountFormatter.locale.decimalSeparator
+            formatter.currencyGroupingSeparator = LocaleAmountFormatter.locale.groupingSeparator
+        }
+
         formatter.locale = currencyLocale
         formatter.numberStyle = numberStyle
-        formatter.currencySymbol = ""
+
+        // This may seem redundant, but we encountered unexpected behavior with currencies
+        // not respecting the locale. Ensure the formatter adheres to the locale settings.
+        // I checked if th problem was how we were generating the ID but the ID generation
+        // seems to be okey.
+        formatter.decimalSeparator = LocaleAmountFormatter.locale.decimalSeparator
+        formatter.groupingSeparator = LocaleAmountFormatter.locale.groupingSeparator
         formatter.roundingMode = .halfEven // Half even is the other name for bankers
 
         return formatter

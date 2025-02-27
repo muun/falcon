@@ -1,0 +1,694 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		098A65260C088A417B88701CFD443CB7 /* NIOTSBootstraps.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10CA670DCBEA948C29619900AF254FC /* NIOTSBootstraps.swift */; };
+		267290D02AD6B282DAA21ACD5EDB0403 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 937224B249A812401A431CECBC8EF06C /* Foundation.framework */; };
+		2DB696E0F6DF29A11731E927163F0F97 /* NIOTSConnectionBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBCDF969B2763B3CCCF5A256335256B /* NIOTSConnectionBootstrap.swift */; };
+		61E6F43363752803078E27F4D1DAEDE9 /* SocketAddress+NWEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B57D82CDB6456E36BFFCA7F773EF2D /* SocketAddress+NWEndpoint.swift */; };
+		765C7979BC047F22C20DF7B09C11F762 /* NIOFilterEmptyWritesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792939FFBF59B9527FD14D365A064C29 /* NIOFilterEmptyWritesHandler.swift */; };
+		A0CDC84CD85EA50E878E9404CFB378B1 /* NIOTSChannelOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83431AC8B6956A2B82EE137F9C4972A5 /* NIOTSChannelOptions.swift */; };
+		A8A2854AFE9CBD752223BB2FEA4F5D15 /* NIOTSEventLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0597DF6C4E84F341F5F1E070899560 /* NIOTSEventLoop.swift */; };
+		A916204479A4B7AB6A0C665C9C938843 /* NIOTSListenerBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A98BD793A09417EDFA148F93E6C473B /* NIOTSListenerBootstrap.swift */; };
+		A92905087C87C015420E72A2C58C4A71 /* NIOTSEventLoopGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB64C81036DF8089DDA45683E8CFC41 /* NIOTSEventLoopGroup.swift */; };
+		B08085C68E1B900203E6D908B4C18637 /* NIOTSNetworkEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F145E6CBA1FFD5142A6A44CCF8631D61 /* NIOTSNetworkEvents.swift */; };
+		B3F52A79BE44C47C765476A1C912908C /* NIOTSConnectionChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C10E8BE230FF0F30DB31CD2316CA7 /* NIOTSConnectionChannel.swift */; };
+		DDA0A6BC0293A777E045EC433F88479A /* TCPOptions+SocketChannelOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16B5AEC202F67106967DC31C741B399 /* TCPOptions+SocketChannelOption.swift */; };
+		DE0F996468D5CD81F94863A27DC03ACC /* NIOTSErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD8F7D1FBF897CB98D2A500C847971C /* NIOTSErrors.swift */; };
+		E7C42C2D4C0A95EAFE723DA1EB2378AF /* StateManagedChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E316313B3540501BF93D369FD69447C /* StateManagedChannel.swift */; };
+		F59DA34137B9D363F555156B1652442D /* NIOTSListenerChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386DD65D70AD0706C64F8E72ED618E6E /* NIOTSListenerChannel.swift */; };
+		FEF7F92C0B405058A9E58E34EBEAB901 /* SwiftNIOTransportServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0758599C862AA03E6002D2C9286A0F97 /* SwiftNIOTransportServices-dummy.m */; };
+		FEFD317FA2BE895DB4E2447C80EBA9EF /* SwiftNIOTransportServices-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 09B88879CEF6263B8C6FE52C4D396C9D /* SwiftNIOTransportServices-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1F6306926061828FFBE0F6030B08AC13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A31B545ECB5A16CF444F2A3C9D3376C /* CNIOAtomics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 40D64047CA69307226E535A5C27B5557;
+			remoteInfo = CNIOAtomics;
+		};
+		36CC9408018C7A18913BADDAEEF06ACA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4197A5F1093FD97324158014C7E39934 /* SwiftNIOCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 460693FBE6771D7C632F5FDE639F6F00;
+			remoteInfo = SwiftNIOCore;
+		};
+		37AA901E96604A6F6C02B66EB8B72A3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8CD7A42E2ED29E641EDE45422052F3B2 /* SwiftNIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 11C413FFAC0A228777380A1A35809BA1;
+			remoteInfo = SwiftNIO;
+		};
+		39A15066889E49ED4F5FB0CC8290A44E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21C3B920A217C72DDBA016986F91E8E5 /* SwiftNIOConcurrencyHelpers.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1496D58C34C5664860A9B30D53886298;
+			remoteInfo = SwiftNIOConcurrencyHelpers;
+		};
+		53FEEA251A33E05ACBD0B4730361D89D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0738ED10CF048A30B573BB74660DBAA0 /* _NIODataStructures.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F92D18F08B992D99DB0456659F662494;
+			remoteInfo = _NIODataStructures;
+		};
+		61ACA8EB9E8640D2A9F739028E373D0C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AD91F5AC2D4F7DFF5A886F9B7FB1565 /* CNIOLinux.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B7800DD0BF633BF71509AC719EBBF42B;
+			remoteInfo = CNIOLinux;
+		};
+		6445BDE621BC6BFBCCBAF610CDB81734 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 082BE3416491C95808C2A6D83F5F2BAE /* CNIOWindows.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 33366F289F4E177BCB54EF8410F60430;
+			remoteInfo = CNIOWindows;
+		};
+		6CD9D6235ACD121F515D757697D65BF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7315DEEE2100AF5E68279D1C8503A502 /* CNIODarwin.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E32F41231F1384F7485067EA4D2FE32C;
+			remoteInfo = CNIODarwin;
+		};
+		9B3BEDBB05F6D720CC8E0E36037DB077 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C85779D3B3D614662265C5589F05D327 /* SwiftNIOPosix.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02BEEB56B9C5EE5749687DBDCF92FBF4;
+			remoteInfo = SwiftNIOPosix;
+		};
+		9CB40110A11D9BE4B9E2719102FA2A64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D10BE43EF7A7DD9BA09D12BEFCD761C /* SwiftNIOEmbedded.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B733CA9682FF150AB9083676B35D0A2E;
+			remoteInfo = SwiftNIOEmbedded;
+		};
+		B88F7D5F53316DB73AD5E8296F8DA14A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D86F368852EF791DFBCA0C301C0C7F2C /* SwiftNIOTLS.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D7618F0C4E51FFC254A8A489B8E073AB;
+			remoteInfo = SwiftNIOTLS;
+		};
+		F3A1A87E485B96A729BE21C0BD08BE81 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B7588A627BDC51CF96E332CB63500CF /* SwiftNIOFoundationCompat.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 795C293388B872D4202F21DB4657DA25;
+			remoteInfo = SwiftNIOFoundationCompat;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0738ED10CF048A30B573BB74660DBAA0 /* _NIODataStructures */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = _NIODataStructures; path = _NIODataStructures.xcodeproj; sourceTree = "<group>"; };
+		0758599C862AA03E6002D2C9286A0F97 /* SwiftNIOTransportServices-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftNIOTransportServices-dummy.m"; sourceTree = "<group>"; };
+		082BE3416491C95808C2A6D83F5F2BAE /* CNIOWindows */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CNIOWindows; path = CNIOWindows.xcodeproj; sourceTree = "<group>"; };
+		09B88879CEF6263B8C6FE52C4D396C9D /* SwiftNIOTransportServices-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftNIOTransportServices-umbrella.h"; sourceTree = "<group>"; };
+		1A42DFF67089D96929CD859BE2639985 /* SwiftNIOTransportServices.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftNIOTransportServices.release.xcconfig; sourceTree = "<group>"; };
+		1AD91F5AC2D4F7DFF5A886F9B7FB1565 /* CNIOLinux */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CNIOLinux; path = CNIOLinux.xcodeproj; sourceTree = "<group>"; };
+		1B0597DF6C4E84F341F5F1E070899560 /* NIOTSEventLoop.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSEventLoop.swift; path = Sources/NIOTransportServices/NIOTSEventLoop.swift; sourceTree = "<group>"; };
+		21C3B920A217C72DDBA016986F91E8E5 /* SwiftNIOConcurrencyHelpers */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIOConcurrencyHelpers; path = SwiftNIOConcurrencyHelpers.xcodeproj; sourceTree = "<group>"; };
+		24B57D82CDB6456E36BFFCA7F773EF2D /* SocketAddress+NWEndpoint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "SocketAddress+NWEndpoint.swift"; path = "Sources/NIOTransportServices/SocketAddress+NWEndpoint.swift"; sourceTree = "<group>"; };
+		2AD8F7D1FBF897CB98D2A500C847971C /* NIOTSErrors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSErrors.swift; path = Sources/NIOTransportServices/NIOTSErrors.swift; sourceTree = "<group>"; };
+		386DD65D70AD0706C64F8E72ED618E6E /* NIOTSListenerChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSListenerChannel.swift; path = Sources/NIOTransportServices/NIOTSListenerChannel.swift; sourceTree = "<group>"; };
+		3D10BE43EF7A7DD9BA09D12BEFCD761C /* SwiftNIOEmbedded */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIOEmbedded; path = SwiftNIOEmbedded.xcodeproj; sourceTree = "<group>"; };
+		4197A5F1093FD97324158014C7E39934 /* SwiftNIOCore */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIOCore; path = SwiftNIOCore.xcodeproj; sourceTree = "<group>"; };
+		4E316313B3540501BF93D369FD69447C /* StateManagedChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StateManagedChannel.swift; path = Sources/NIOTransportServices/StateManagedChannel.swift; sourceTree = "<group>"; };
+		55764257F6B58126D9914C753E04C9C5 /* SwiftNIOTransportServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftNIOTransportServices.debug.xcconfig; sourceTree = "<group>"; };
+		68868CA79E2052D7059E8CE9EF7E8407 /* SwiftNIOTransportServices-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SwiftNIOTransportServices-Info.plist"; sourceTree = "<group>"; };
+		6A98BD793A09417EDFA148F93E6C473B /* NIOTSListenerBootstrap.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSListenerBootstrap.swift; path = Sources/NIOTransportServices/NIOTSListenerBootstrap.swift; sourceTree = "<group>"; };
+		72458AA360D3A2A11ECEF33636DB94BB /* SwiftNIOTransportServices.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftNIOTransportServices.modulemap; sourceTree = "<group>"; };
+		7315DEEE2100AF5E68279D1C8503A502 /* CNIODarwin */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CNIODarwin; path = CNIODarwin.xcodeproj; sourceTree = "<group>"; };
+		792939FFBF59B9527FD14D365A064C29 /* NIOFilterEmptyWritesHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOFilterEmptyWritesHandler.swift; path = Sources/NIOTransportServices/NIOFilterEmptyWritesHandler.swift; sourceTree = "<group>"; };
+		7A31B545ECB5A16CF444F2A3C9D3376C /* CNIOAtomics */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CNIOAtomics; path = CNIOAtomics.xcodeproj; sourceTree = "<group>"; };
+		83431AC8B6956A2B82EE137F9C4972A5 /* NIOTSChannelOptions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSChannelOptions.swift; path = Sources/NIOTransportServices/NIOTSChannelOptions.swift; sourceTree = "<group>"; };
+		88C1578ED3A41D036E9FEBD917E1718E /* SwiftNIOTransportServices-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftNIOTransportServices-prefix.pch"; sourceTree = "<group>"; };
+		8CD7A42E2ED29E641EDE45422052F3B2 /* SwiftNIO */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIO; path = SwiftNIO.xcodeproj; sourceTree = "<group>"; };
+		937224B249A812401A431CECBC8EF06C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		9AB64C81036DF8089DDA45683E8CFC41 /* NIOTSEventLoopGroup.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSEventLoopGroup.swift; path = Sources/NIOTransportServices/NIOTSEventLoopGroup.swift; sourceTree = "<group>"; };
+		9B7588A627BDC51CF96E332CB63500CF /* SwiftNIOFoundationCompat */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIOFoundationCompat; path = SwiftNIOFoundationCompat.xcodeproj; sourceTree = "<group>"; };
+		A10CA670DCBEA948C29619900AF254FC /* NIOTSBootstraps.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSBootstraps.swift; path = Sources/NIOTransportServices/NIOTSBootstraps.swift; sourceTree = "<group>"; };
+		A48C10E8BE230FF0F30DB31CD2316CA7 /* NIOTSConnectionChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSConnectionChannel.swift; path = Sources/NIOTransportServices/NIOTSConnectionChannel.swift; sourceTree = "<group>"; };
+		B16B5AEC202F67106967DC31C741B399 /* TCPOptions+SocketChannelOption.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "TCPOptions+SocketChannelOption.swift"; path = "Sources/NIOTransportServices/TCPOptions+SocketChannelOption.swift"; sourceTree = "<group>"; };
+		C85779D3B3D614662265C5589F05D327 /* SwiftNIOPosix */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIOPosix; path = SwiftNIOPosix.xcodeproj; sourceTree = "<group>"; };
+		D86F368852EF791DFBCA0C301C0C7F2C /* SwiftNIOTLS */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftNIOTLS; path = SwiftNIOTLS.xcodeproj; sourceTree = "<group>"; };
+		EFBCDF969B2763B3CCCF5A256335256B /* NIOTSConnectionBootstrap.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSConnectionBootstrap.swift; path = Sources/NIOTransportServices/NIOTSConnectionBootstrap.swift; sourceTree = "<group>"; };
+		F145E6CBA1FFD5142A6A44CCF8631D61 /* NIOTSNetworkEvents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOTSNetworkEvents.swift; path = Sources/NIOTransportServices/NIOTSNetworkEvents.swift; sourceTree = "<group>"; };
+		F3B1C224F198DBE0949DD7EE2A6B2E09 /* SwiftNIOTransportServices */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftNIOTransportServices; path = NIOTransportServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E54B67A85C6033890184141A48DB5A6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				267290D02AD6B282DAA21ACD5EDB0403 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0733F3BCB77AD0F41573128E6A743740 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				0738ED10CF048A30B573BB74660DBAA0 /* _NIODataStructures */,
+				7A31B545ECB5A16CF444F2A3C9D3376C /* CNIOAtomics */,
+				7315DEEE2100AF5E68279D1C8503A502 /* CNIODarwin */,
+				1AD91F5AC2D4F7DFF5A886F9B7FB1565 /* CNIOLinux */,
+				082BE3416491C95808C2A6D83F5F2BAE /* CNIOWindows */,
+				8CD7A42E2ED29E641EDE45422052F3B2 /* SwiftNIO */,
+				21C3B920A217C72DDBA016986F91E8E5 /* SwiftNIOConcurrencyHelpers */,
+				4197A5F1093FD97324158014C7E39934 /* SwiftNIOCore */,
+				3D10BE43EF7A7DD9BA09D12BEFCD761C /* SwiftNIOEmbedded */,
+				9B7588A627BDC51CF96E332CB63500CF /* SwiftNIOFoundationCompat */,
+				C85779D3B3D614662265C5589F05D327 /* SwiftNIOPosix */,
+				D86F368852EF791DFBCA0C301C0C7F2C /* SwiftNIOTLS */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		23BBA2FC9F79E36885A1D66EBCF52CF0 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				72458AA360D3A2A11ECEF33636DB94BB /* SwiftNIOTransportServices.modulemap */,
+				0758599C862AA03E6002D2C9286A0F97 /* SwiftNIOTransportServices-dummy.m */,
+				68868CA79E2052D7059E8CE9EF7E8407 /* SwiftNIOTransportServices-Info.plist */,
+				88C1578ED3A41D036E9FEBD917E1718E /* SwiftNIOTransportServices-prefix.pch */,
+				09B88879CEF6263B8C6FE52C4D396C9D /* SwiftNIOTransportServices-umbrella.h */,
+				55764257F6B58126D9914C753E04C9C5 /* SwiftNIOTransportServices.debug.xcconfig */,
+				1A42DFF67089D96929CD859BE2639985 /* SwiftNIOTransportServices.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SwiftNIOTransportServices";
+			sourceTree = "<group>";
+		};
+		898BFB3D96AD6D7489F69F0D7685BF04 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DEB55460FC7BC4DC7CBAE53923D1D78B /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8DDA6490DDD24EBEFA63369C28981374 = {
+			isa = PBXGroup;
+			children = (
+				0733F3BCB77AD0F41573128E6A743740 /* Dependencies */,
+				898BFB3D96AD6D7489F69F0D7685BF04 /* Frameworks */,
+				FA099E62F0B9AAE9DA75CA5854B21582 /* Products */,
+				F87D641D8E627F5B9F6E497EF48E6AB1 /* SwiftNIOTransportServices */,
+			);
+			sourceTree = "<group>";
+		};
+		DEB55460FC7BC4DC7CBAE53923D1D78B /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				937224B249A812401A431CECBC8EF06C /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		F87D641D8E627F5B9F6E497EF48E6AB1 /* SwiftNIOTransportServices */ = {
+			isa = PBXGroup;
+			children = (
+				792939FFBF59B9527FD14D365A064C29 /* NIOFilterEmptyWritesHandler.swift */,
+				A10CA670DCBEA948C29619900AF254FC /* NIOTSBootstraps.swift */,
+				83431AC8B6956A2B82EE137F9C4972A5 /* NIOTSChannelOptions.swift */,
+				EFBCDF969B2763B3CCCF5A256335256B /* NIOTSConnectionBootstrap.swift */,
+				A48C10E8BE230FF0F30DB31CD2316CA7 /* NIOTSConnectionChannel.swift */,
+				2AD8F7D1FBF897CB98D2A500C847971C /* NIOTSErrors.swift */,
+				1B0597DF6C4E84F341F5F1E070899560 /* NIOTSEventLoop.swift */,
+				9AB64C81036DF8089DDA45683E8CFC41 /* NIOTSEventLoopGroup.swift */,
+				6A98BD793A09417EDFA148F93E6C473B /* NIOTSListenerBootstrap.swift */,
+				386DD65D70AD0706C64F8E72ED618E6E /* NIOTSListenerChannel.swift */,
+				F145E6CBA1FFD5142A6A44CCF8631D61 /* NIOTSNetworkEvents.swift */,
+				24B57D82CDB6456E36BFFCA7F773EF2D /* SocketAddress+NWEndpoint.swift */,
+				4E316313B3540501BF93D369FD69447C /* StateManagedChannel.swift */,
+				B16B5AEC202F67106967DC31C741B399 /* TCPOptions+SocketChannelOption.swift */,
+				23BBA2FC9F79E36885A1D66EBCF52CF0 /* Support Files */,
+			);
+			name = SwiftNIOTransportServices;
+			path = SwiftNIOTransportServices;
+			sourceTree = "<group>";
+		};
+		FA099E62F0B9AAE9DA75CA5854B21582 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3B1C224F198DBE0949DD7EE2A6B2E09 /* SwiftNIOTransportServices */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D689409FA2C3B891ED60CC1AEDB0E2E0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEFD317FA2BE895DB4E2447C80EBA9EF /* SwiftNIOTransportServices-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DF6DB7C3BF572065F0B297C61AA3B6F5 /* SwiftNIOTransportServices */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE0DAE086258CADD8BADD39A3B66BEC8 /* Build configuration list for PBXNativeTarget "SwiftNIOTransportServices" */;
+			buildPhases = (
+				D689409FA2C3B891ED60CC1AEDB0E2E0 /* Headers */,
+				BA8574638ECAD7391AF10E7B3B0F3E29 /* Sources */,
+				E54B67A85C6033890184141A48DB5A6C /* Frameworks */,
+				8EB1782DF4FE89A293737D977F527847 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9ED7389DC0F4D44BE076EED47E633EED /* PBXTargetDependency */,
+				E8C466B005C88D5749600FC932275523 /* PBXTargetDependency */,
+				4C30CFEF8C7C3AC6F27525A1B6483636 /* PBXTargetDependency */,
+				CE35561B89A350CF84E809DFD9D0BC46 /* PBXTargetDependency */,
+				FA90579E6DDCDEDD372698F005A2F477 /* PBXTargetDependency */,
+				5D10DAB23BEE9C1926932847AB2909DB /* PBXTargetDependency */,
+				46EF423293A297EF44AC1DD6D3CAB8DF /* PBXTargetDependency */,
+				26FC109B8138448ADEDB7E3217C96F45 /* PBXTargetDependency */,
+				F098D5C3C1818117680B7B127DDC3A5F /* PBXTargetDependency */,
+				F1CC9608440BB4A7A9904431F01BD3E7 /* PBXTargetDependency */,
+				6FF0E32A25819AE0CEDB21DDCDC4F210 /* PBXTargetDependency */,
+				BB6AE3FEF53E67A07F6AB37961F4197A /* PBXTargetDependency */,
+			);
+			name = SwiftNIOTransportServices;
+			productName = NIOTransportServices;
+			productReference = F3B1C224F198DBE0949DD7EE2A6B2E09 /* SwiftNIOTransportServices */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E4C84050AD5BC04E1EBAA7E4D8259729 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 0CEF561F8AF73357BD94654B781596F7 /* Build configuration list for PBXProject "SwiftNIOTransportServices" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8DDA6490DDD24EBEFA63369C28981374;
+			productRefGroup = FA099E62F0B9AAE9DA75CA5854B21582 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProjectRef = 7A31B545ECB5A16CF444F2A3C9D3376C /* CNIOAtomics */;
+				},
+				{
+					ProjectRef = 7315DEEE2100AF5E68279D1C8503A502 /* CNIODarwin */;
+				},
+				{
+					ProjectRef = 1AD91F5AC2D4F7DFF5A886F9B7FB1565 /* CNIOLinux */;
+				},
+				{
+					ProjectRef = 082BE3416491C95808C2A6D83F5F2BAE /* CNIOWindows */;
+				},
+				{
+					ProjectRef = 8CD7A42E2ED29E641EDE45422052F3B2 /* SwiftNIO */;
+				},
+				{
+					ProjectRef = 21C3B920A217C72DDBA016986F91E8E5 /* SwiftNIOConcurrencyHelpers */;
+				},
+				{
+					ProjectRef = 4197A5F1093FD97324158014C7E39934 /* SwiftNIOCore */;
+				},
+				{
+					ProjectRef = 3D10BE43EF7A7DD9BA09D12BEFCD761C /* SwiftNIOEmbedded */;
+				},
+				{
+					ProjectRef = 9B7588A627BDC51CF96E332CB63500CF /* SwiftNIOFoundationCompat */;
+				},
+				{
+					ProjectRef = C85779D3B3D614662265C5589F05D327 /* SwiftNIOPosix */;
+				},
+				{
+					ProjectRef = D86F368852EF791DFBCA0C301C0C7F2C /* SwiftNIOTLS */;
+				},
+				{
+					ProjectRef = 0738ED10CF048A30B573BB74660DBAA0 /* _NIODataStructures */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				DF6DB7C3BF572065F0B297C61AA3B6F5 /* SwiftNIOTransportServices */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8EB1782DF4FE89A293737D977F527847 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BA8574638ECAD7391AF10E7B3B0F3E29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				765C7979BC047F22C20DF7B09C11F762 /* NIOFilterEmptyWritesHandler.swift in Sources */,
+				098A65260C088A417B88701CFD443CB7 /* NIOTSBootstraps.swift in Sources */,
+				A0CDC84CD85EA50E878E9404CFB378B1 /* NIOTSChannelOptions.swift in Sources */,
+				2DB696E0F6DF29A11731E927163F0F97 /* NIOTSConnectionBootstrap.swift in Sources */,
+				B3F52A79BE44C47C765476A1C912908C /* NIOTSConnectionChannel.swift in Sources */,
+				DE0F996468D5CD81F94863A27DC03ACC /* NIOTSErrors.swift in Sources */,
+				A8A2854AFE9CBD752223BB2FEA4F5D15 /* NIOTSEventLoop.swift in Sources */,
+				A92905087C87C015420E72A2C58C4A71 /* NIOTSEventLoopGroup.swift in Sources */,
+				A916204479A4B7AB6A0C665C9C938843 /* NIOTSListenerBootstrap.swift in Sources */,
+				F59DA34137B9D363F555156B1652442D /* NIOTSListenerChannel.swift in Sources */,
+				B08085C68E1B900203E6D908B4C18637 /* NIOTSNetworkEvents.swift in Sources */,
+				61E6F43363752803078E27F4D1DAEDE9 /* SocketAddress+NWEndpoint.swift in Sources */,
+				E7C42C2D4C0A95EAFE723DA1EB2378AF /* StateManagedChannel.swift in Sources */,
+				FEF7F92C0B405058A9E58E34EBEAB901 /* SwiftNIOTransportServices-dummy.m in Sources */,
+				DDA0A6BC0293A777E045EC433F88479A /* TCPOptions+SocketChannelOption.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		26FC109B8138448ADEDB7E3217C96F45 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIOEmbedded;
+			targetProxy = 9CB40110A11D9BE4B9E2719102FA2A64 /* PBXContainerItemProxy */;
+		};
+		46EF423293A297EF44AC1DD6D3CAB8DF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIOCore;
+			targetProxy = 36CC9408018C7A18913BADDAEEF06ACA /* PBXContainerItemProxy */;
+		};
+		4C30CFEF8C7C3AC6F27525A1B6483636 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CNIOLinux;
+			targetProxy = 61ACA8EB9E8640D2A9F739028E373D0C /* PBXContainerItemProxy */;
+		};
+		5D10DAB23BEE9C1926932847AB2909DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIOConcurrencyHelpers;
+			targetProxy = 39A15066889E49ED4F5FB0CC8290A44E /* PBXContainerItemProxy */;
+		};
+		6FF0E32A25819AE0CEDB21DDCDC4F210 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIOTLS;
+			targetProxy = B88F7D5F53316DB73AD5E8296F8DA14A /* PBXContainerItemProxy */;
+		};
+		9ED7389DC0F4D44BE076EED47E633EED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CNIOAtomics;
+			targetProxy = 1F6306926061828FFBE0F6030B08AC13 /* PBXContainerItemProxy */;
+		};
+		BB6AE3FEF53E67A07F6AB37961F4197A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = _NIODataStructures;
+			targetProxy = 53FEEA251A33E05ACBD0B4730361D89D /* PBXContainerItemProxy */;
+		};
+		CE35561B89A350CF84E809DFD9D0BC46 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CNIOWindows;
+			targetProxy = 6445BDE621BC6BFBCCBAF610CDB81734 /* PBXContainerItemProxy */;
+		};
+		E8C466B005C88D5749600FC932275523 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CNIODarwin;
+			targetProxy = 6CD9D6235ACD121F515D757697D65BF8 /* PBXContainerItemProxy */;
+		};
+		F098D5C3C1818117680B7B127DDC3A5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIOFoundationCompat;
+			targetProxy = F3A1A87E485B96A729BE21C0BD08BE81 /* PBXContainerItemProxy */;
+		};
+		F1CC9608440BB4A7A9904431F01BD3E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIOPosix;
+			targetProxy = 9B3BEDBB05F6D720CC8E0E36037DB077 /* PBXContainerItemProxy */;
+		};
+		FA90579E6DDCDEDD372698F005A2F477 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftNIO;
+			targetProxy = 37AA901E96604A6F6C02B66EB8B72A3A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		107DDCBB9482782251B9E61734C2ECAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1A42DFF67089D96929CD859BE2639985 /* SwiftNIOTransportServices.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftNIOTransportServices/SwiftNIOTransportServices-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftNIOTransportServices/SwiftNIOTransportServices-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/SwiftNIOTransportServices/SwiftNIOTransportServices.modulemap";
+				PRODUCT_MODULE_NAME = NIOTransportServices;
+				PRODUCT_NAME = NIOTransportServices;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		20DA02752B8472740D1CD0DC70FC5703 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		64EBB8FC2373C4442B8D9E035709FD53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55764257F6B58126D9914C753E04C9C5 /* SwiftNIOTransportServices.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftNIOTransportServices/SwiftNIOTransportServices-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftNIOTransportServices/SwiftNIOTransportServices-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/SwiftNIOTransportServices/SwiftNIOTransportServices.modulemap";
+				PRODUCT_MODULE_NAME = NIOTransportServices;
+				PRODUCT_NAME = NIOTransportServices;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C85FD967FE9E45AB040A88098640561D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0CEF561F8AF73357BD94654B781596F7 /* Build configuration list for PBXProject "SwiftNIOTransportServices" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20DA02752B8472740D1CD0DC70FC5703 /* Debug */,
+				C85FD967FE9E45AB040A88098640561D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FE0DAE086258CADD8BADD39A3B66BEC8 /* Build configuration list for PBXNativeTarget "SwiftNIOTransportServices" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64EBB8FC2373C4442B8D9E035709FD53 /* Debug */,
+				107DDCBB9482782251B9E61734C2ECAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E4C84050AD5BC04E1EBAA7E4D8259729 /* Project object */;
+}

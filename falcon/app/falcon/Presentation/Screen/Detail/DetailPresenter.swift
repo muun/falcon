@@ -6,7 +6,7 @@
 //  Copyright © 2019 muun. All rights reserved.
 //
 
-import core
+
 import Foundation
 import Libwallet
 

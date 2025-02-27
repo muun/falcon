@@ -1,0 +1,6 @@
+framework module CNIOBoringSSL {
+  umbrella header "CNIOBoringSSL-umbrella.h"
+
+  export *
+  module * { export * }
+}

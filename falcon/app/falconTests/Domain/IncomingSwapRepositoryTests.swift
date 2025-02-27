@@ -8,7 +8,7 @@
 
 import XCTest
 import Firebase
-@testable import core
+
 @testable import Muun
 
 class IncomingSwapRepositoryTests: MuunTestCase {

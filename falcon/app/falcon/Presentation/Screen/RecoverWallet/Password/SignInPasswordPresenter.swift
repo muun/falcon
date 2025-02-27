@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol SignInPasswordPresenterDelegate: BasePresenterDelegate {
     func setLoading(_ isLoading: Bool)

@@ -6,7 +6,7 @@
 //  Copyright © 2021 muun. All rights reserved.
 //
 
-import core
+import Foundation
 
 protocol LNURLWithdrawPresenterDelegate: BasePresenterDelegate {
     func updateState(_ state: LNURLWithdrawViewController.State)

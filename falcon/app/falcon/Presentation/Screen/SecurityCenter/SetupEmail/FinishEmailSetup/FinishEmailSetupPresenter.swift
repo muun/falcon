@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol FinishEmailSetupPresenterDelegate: BasePresenterDelegate {
     func passwordSetUp()

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 
 protocol NewOperationStateDelegate { }
 

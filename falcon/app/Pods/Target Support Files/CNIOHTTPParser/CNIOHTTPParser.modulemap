@@ -1,0 +1,6 @@
+framework module CNIOHTTPParser {
+  umbrella header "CNIOHTTPParser-umbrella.h"
+
+  export *
+  module * { export * }
+}

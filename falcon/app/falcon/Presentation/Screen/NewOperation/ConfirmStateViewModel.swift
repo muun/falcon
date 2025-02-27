@@ -8,7 +8,7 @@
 
 import Foundation
 import Libwallet
-import core
+
 
 struct ConfirmStateViewModel {
     private let resolved: NewopResolved
@@ -23,6 +23,10 @@ struct ConfirmStateViewModel {
 
     var totalBalance: BitcoinAmount {
         amountInfo.totalBalance!.adapt()
+    }
+
+    var takeFeeFromAmount: Bool {
+        amountInfo.takeFeeFromAmount
     }
 
     var minMempoolFeeRate: FeeRate {
@@ -83,7 +87,7 @@ struct ConfirmStateViewModel {
         if validated.feeNeedsChange && !isLightningPayment() {
             return .feeNeedsChange(displayFee: fee, rate: feeRate)
         } else {
-            return .finalFee(fee, rate: feeRate)
+            return .finalFee(fee, rate: feeRate, feeBumpInfo: validated.feeBumpInfo?.adapt())
         }
     }
 

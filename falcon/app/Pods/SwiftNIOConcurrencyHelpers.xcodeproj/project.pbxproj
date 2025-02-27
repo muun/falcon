@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03319CE9BAC5018210A5455956CE9D4D /* NIOAtomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249A817EF0BC3684D3368658C2740517 /* NIOAtomic.swift */; };
+		4D107CE7A6F92370AB1A0ADE91C20051 /* atomics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2BBA4DF30E9968BD463ED75A0DAD84 /* atomics.swift */; };
+		5B6F820FE25285EC6906412EDBECCE73 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE57847F700191F24B376087E8546084 /* Foundation.framework */; };
+		74B84F8C5CA620420912EDC5CCC631C0 /* SwiftNIOConcurrencyHelpers-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E5C32224152674CDDF830506B8E372A8 /* SwiftNIOConcurrencyHelpers-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A06B568259195A5F77CC40085A7C1477 /* SwiftNIOConcurrencyHelpers-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D38B2644656166CB428C565C08EC4CD /* SwiftNIOConcurrencyHelpers-dummy.m */; };
+		F706105290E163F54DC97448130661A5 /* lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D61CE63019CEC6B1292431CD1BA1D3D /* lock.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		57079F1ABEB389900BCC9B67D41C2767 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DB9648CD9AC7225D5B3D078AE6B1095 /* CNIOAtomics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 40D64047CA69307226E535A5C27B5557;
+			remoteInfo = CNIOAtomics;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1D38B2644656166CB428C565C08EC4CD /* SwiftNIOConcurrencyHelpers-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftNIOConcurrencyHelpers-dummy.m"; sourceTree = "<group>"; };
+		249A817EF0BC3684D3368658C2740517 /* NIOAtomic.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NIOAtomic.swift; path = Sources/NIOConcurrencyHelpers/NIOAtomic.swift; sourceTree = "<group>"; };
+		2D61CE63019CEC6B1292431CD1BA1D3D /* lock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = lock.swift; path = Sources/NIOConcurrencyHelpers/lock.swift; sourceTree = "<group>"; };
+		2F34879C5BF395E32F5384DB89ED0C76 /* SwiftNIOConcurrencyHelpers-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftNIOConcurrencyHelpers-prefix.pch"; sourceTree = "<group>"; };
+		360498E02DA095394791EF15C1838378 /* SwiftNIOConcurrencyHelpers.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftNIOConcurrencyHelpers.modulemap; sourceTree = "<group>"; };
+		6DB9648CD9AC7225D5B3D078AE6B1095 /* CNIOAtomics */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CNIOAtomics; path = CNIOAtomics.xcodeproj; sourceTree = "<group>"; };
+		7E2BBA4DF30E9968BD463ED75A0DAD84 /* atomics.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = atomics.swift; path = Sources/NIOConcurrencyHelpers/atomics.swift; sourceTree = "<group>"; };
+		A892BB26A17EFE9FD410732574CDD4D5 /* SwiftNIOConcurrencyHelpers-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SwiftNIOConcurrencyHelpers-Info.plist"; sourceTree = "<group>"; };
+		B7020F4953364E4B7E9A53E882000462 /* SwiftNIOConcurrencyHelpers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftNIOConcurrencyHelpers.debug.xcconfig; sourceTree = "<group>"; };
+		BE57847F700191F24B376087E8546084 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		E5C32224152674CDDF830506B8E372A8 /* SwiftNIOConcurrencyHelpers-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftNIOConcurrencyHelpers-umbrella.h"; sourceTree = "<group>"; };
+		E843659081D4E13465779C3D83805455 /* SwiftNIOConcurrencyHelpers */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftNIOConcurrencyHelpers; path = NIOConcurrencyHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA34BA1C3D60B761944C3EE5E7F1C5DE /* SwiftNIOConcurrencyHelpers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftNIOConcurrencyHelpers.release.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D9E838F8EC6BCECFA992F0A62513D00F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B6F820FE25285EC6906412EDBECCE73 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F0954C39C404C6A96DC9B7433A731B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BB9E17C0D0F9E60EB07C3E171CD87E66 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2228FFD96F551056EF8EDE345BC01349 = {
+			isa = PBXGroup;
+			children = (
+				65E61363F6494816367D5FF2B01D3E59 /* Dependencies */,
+				1F0954C39C404C6A96DC9B7433A731B0 /* Frameworks */,
+				6BC6B4DD393153B5AC4983CFE1E9F55A /* Products */,
+				6410EBBB174F905D5BCBD57AC3F5D33B /* SwiftNIOConcurrencyHelpers */,
+			);
+			sourceTree = "<group>";
+		};
+		6410EBBB174F905D5BCBD57AC3F5D33B /* SwiftNIOConcurrencyHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				7E2BBA4DF30E9968BD463ED75A0DAD84 /* atomics.swift */,
+				2D61CE63019CEC6B1292431CD1BA1D3D /* lock.swift */,
+				249A817EF0BC3684D3368658C2740517 /* NIOAtomic.swift */,
+				C3DD51D5D1F6C74FF75DD34D1407A4CF /* Support Files */,
+			);
+			name = SwiftNIOConcurrencyHelpers;
+			path = SwiftNIOConcurrencyHelpers;
+			sourceTree = "<group>";
+		};
+		65E61363F6494816367D5FF2B01D3E59 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				6DB9648CD9AC7225D5B3D078AE6B1095 /* CNIOAtomics */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		6BC6B4DD393153B5AC4983CFE1E9F55A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E843659081D4E13465779C3D83805455 /* SwiftNIOConcurrencyHelpers */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BB9E17C0D0F9E60EB07C3E171CD87E66 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				BE57847F700191F24B376087E8546084 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		C3DD51D5D1F6C74FF75DD34D1407A4CF /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				360498E02DA095394791EF15C1838378 /* SwiftNIOConcurrencyHelpers.modulemap */,
+				1D38B2644656166CB428C565C08EC4CD /* SwiftNIOConcurrencyHelpers-dummy.m */,
+				A892BB26A17EFE9FD410732574CDD4D5 /* SwiftNIOConcurrencyHelpers-Info.plist */,
+				2F34879C5BF395E32F5384DB89ED0C76 /* SwiftNIOConcurrencyHelpers-prefix.pch */,
+				E5C32224152674CDDF830506B8E372A8 /* SwiftNIOConcurrencyHelpers-umbrella.h */,
+				B7020F4953364E4B7E9A53E882000462 /* SwiftNIOConcurrencyHelpers.debug.xcconfig */,
+				EA34BA1C3D60B761944C3EE5E7F1C5DE /* SwiftNIOConcurrencyHelpers.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SwiftNIOConcurrencyHelpers";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B7A87ECC7337518BCAA1A762ED34D9C8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74B84F8C5CA620420912EDC5CCC631C0 /* SwiftNIOConcurrencyHelpers-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1496D58C34C5664860A9B30D53886298 /* SwiftNIOConcurrencyHelpers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96B80B9F407B51913CF5EBC9EEB087E9 /* Build configuration list for PBXNativeTarget "SwiftNIOConcurrencyHelpers" */;
+			buildPhases = (
+				B7A87ECC7337518BCAA1A762ED34D9C8 /* Headers */,
+				2DC8A512CC0302F88BC8247F7EAA283B /* Sources */,
+				D9E838F8EC6BCECFA992F0A62513D00F /* Frameworks */,
+				A4211E0E94EFF91D890FE391814ACA11 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				52935C6FA0FCA06DDC8D53EAD64B4C6F /* PBXTargetDependency */,
+			);
+			name = SwiftNIOConcurrencyHelpers;
+			productName = NIOConcurrencyHelpers;
+			productReference = E843659081D4E13465779C3D83805455 /* SwiftNIOConcurrencyHelpers */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E3AAC86EACAD6BD7D3E2376D803EE1DA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = F4A2BB07A77F476306FDE58C1E531924 /* Build configuration list for PBXProject "SwiftNIOConcurrencyHelpers" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2228FFD96F551056EF8EDE345BC01349;
+			productRefGroup = 6BC6B4DD393153B5AC4983CFE1E9F55A /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProjectRef = 6DB9648CD9AC7225D5B3D078AE6B1095 /* CNIOAtomics */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				1496D58C34C5664860A9B30D53886298 /* SwiftNIOConcurrencyHelpers */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A4211E0E94EFF91D890FE391814ACA11 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2DC8A512CC0302F88BC8247F7EAA283B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D107CE7A6F92370AB1A0ADE91C20051 /* atomics.swift in Sources */,
+				F706105290E163F54DC97448130661A5 /* lock.swift in Sources */,
+				03319CE9BAC5018210A5455956CE9D4D /* NIOAtomic.swift in Sources */,
+				A06B568259195A5F77CC40085A7C1477 /* SwiftNIOConcurrencyHelpers-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		52935C6FA0FCA06DDC8D53EAD64B4C6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CNIOAtomics;
+			targetProxy = 57079F1ABEB389900BCC9B67D41C2767 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		024F6BBE6DB7BAA5615C72DB624704FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA34BA1C3D60B761944C3EE5E7F1C5DE /* SwiftNIOConcurrencyHelpers.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftNIOConcurrencyHelpers/SwiftNIOConcurrencyHelpers-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftNIOConcurrencyHelpers/SwiftNIOConcurrencyHelpers-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/SwiftNIOConcurrencyHelpers/SwiftNIOConcurrencyHelpers.modulemap";
+				PRODUCT_MODULE_NAME = NIOConcurrencyHelpers;
+				PRODUCT_NAME = NIOConcurrencyHelpers;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.4;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		149E76847934544A355DC961D1EE8241 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7020F4953364E4B7E9A53E882000462 /* SwiftNIOConcurrencyHelpers.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftNIOConcurrencyHelpers/SwiftNIOConcurrencyHelpers-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftNIOConcurrencyHelpers/SwiftNIOConcurrencyHelpers-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/SwiftNIOConcurrencyHelpers/SwiftNIOConcurrencyHelpers.modulemap";
+				PRODUCT_MODULE_NAME = NIOConcurrencyHelpers;
+				PRODUCT_NAME = NIOConcurrencyHelpers;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.4;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BC6590FECA9DFA964F837B9083831135 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		D3EE849D78E886A1DBABA0614CCC41D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		96B80B9F407B51913CF5EBC9EEB087E9 /* Build configuration list for PBXNativeTarget "SwiftNIOConcurrencyHelpers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				149E76847934544A355DC961D1EE8241 /* Debug */,
+				024F6BBE6DB7BAA5615C72DB624704FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F4A2BB07A77F476306FDE58C1E531924 /* Build configuration list for PBXProject "SwiftNIOConcurrencyHelpers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3EE849D78E886A1DBABA0614CCC41D2 /* Debug */,
+				BC6590FECA9DFA964F837B9083831135 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E3AAC86EACAD6BD7D3E2376D803EE1DA /* Project object */;
+}

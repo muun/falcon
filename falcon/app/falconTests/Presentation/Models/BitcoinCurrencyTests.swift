@@ -8,7 +8,7 @@
 
 @testable import Muun
 import XCTest
-import core
+
 
 class BitcoinCurrencyTest: XCTestCase, Resolver {
     var bitcoinCurrency = BitcoinCurrency()

@@ -8,7 +8,7 @@
 
 import UIKit
 import Libwallet
-import core
+
 
 protocol CurrencyPickerDelegate: AnyObject {
     func didSelectCurrency(_ currency: Currency)

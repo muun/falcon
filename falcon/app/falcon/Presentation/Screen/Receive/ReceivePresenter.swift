@@ -8,7 +8,7 @@
 
 import Foundation
 import RxSwift
-import core
+
 
 protocol ReceivePresenterDelegate: BasePresenterDelegate {
     func didReceiveNewOperation(message: String)
@@ -200,6 +200,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     }
 
     func isLNURLFirstTimeUser() -> Bool {
+        // swiftlint:disable force_error_handling
         let preferences = try? userPreferencesSelector.get()
             .toBlocking()
             .first()
@@ -208,6 +209,7 @@ class ReceivePresenter<Delegate: ReceivePresenterDelegate>: BasePresenter<Delega
     }
 
     func retrieveReceivePreference() -> ReceiveFormatPreference {
+        // swiftlint:disable force_error_handling
         let preferences = try? userPreferencesSelector.get()
             .toBlocking()
             .first()

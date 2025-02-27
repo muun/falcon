@@ -7,18 +7,33 @@
 //
 
 import Foundation
-import core
+
+public struct FeeBumpInfo: Equatable {
+    let uuid: String
+    let amountInSat: Satoshis
+    let refreshPolicy: String
+    let secondsSinceLastUpdate: Int64
+}
 
 enum FeeState: Equatable {
-    case finalFee(_ fee: BitcoinAmount, rate: FeeRate)
+    case finalFee(_ fee: BitcoinAmount, rate: FeeRate, feeBumpInfo: FeeBumpInfo?)
     case feeNeedsChange(displayFee: BitcoinAmount, rate: FeeRate)
     // Consider removing this from here and making this a throw wherever it goes 🤷‍♂️
     case noPossibleFee
 
     func getFeeAmount() -> BitcoinAmount? {
         switch self {
-        case .finalFee(let btcAmount, _):
+        case .finalFee(let btcAmount, _, _):
             return btcAmount
+        default:
+            return nil
+        }
+    }
+
+    func getFeeBumpInfo() -> FeeBumpInfo? {
+        switch self {
+        case .finalFee(_, _, let feeBumpInfo):
+            return feeBumpInfo
         default:
             return nil
         }
@@ -26,8 +41,11 @@ enum FeeState: Equatable {
 
     static func == (lhs: FeeState, rhs: FeeState) -> Bool {
         switch (lhs, rhs) {
-        case (.finalFee(let lhsFee, let lhsRate), .finalFee(let rhsFee, let rhsRate)):
-            return lhsFee.inSatoshis == rhsFee.inSatoshis && lhsRate == rhsRate
+        case (.finalFee(let lhsFee, let lhsRate, let lhsFeeBumpInfo),
+            .finalFee(let rhsFee, let rhsRate, let rhsFeeBumpInfo)):
+            return lhsFee.inSatoshis == rhsFee.inSatoshis &&
+                    lhsRate == rhsRate &&
+                    lhsFeeBumpInfo == rhsFeeBumpInfo
         case (.feeNeedsChange(let lhsFee, let lhsRate), .feeNeedsChange(let rhsFee, let rhsRate)):
             return lhsFee.inSatoshis == rhsFee.inSatoshis && lhsRate == rhsRate
         case (.noPossibleFee, .noPossibleFee):
@@ -40,9 +58,9 @@ enum FeeState: Equatable {
 
 protocol NewOpStateMachineDelegate: BasePresenterDelegate {
     func requestNextStep(_ data: NewOpState)
-    func requestFinish(_ operation: core.Operation)
+    func requestFinish(_ operation: Operation)
 
-    func operationCompleted(_ operation: core.Operation)
+    func operationCompleted(_ operation: Operation)
 
     // Errors
     func operationError()

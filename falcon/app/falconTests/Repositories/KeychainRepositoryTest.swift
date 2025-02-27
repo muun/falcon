@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import core
+@testable import Muun
 
 class KeychainRepositoryTest: MuunTestCase {
     lazy var keychainRepository: KeychainRepository = resolve()

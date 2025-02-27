@@ -8,7 +8,7 @@
 
 import UIKit
 import AVKit
-import core
+
 
 class ScanQRViewController: MUViewController {
 
