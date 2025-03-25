@@ -884,13 +884,13 @@ internal enum L10n {
     internal static let s1 = L10n.tr("Localizable", "NewOperationViewController.s1")
     /// Pay via lightning
     internal static let s2 = L10n.tr("Localizable", "NewOperationViewController.s2")
-    /// Quit without finishing?
+    /// Cancel payment?
     internal static let s3 = L10n.tr("Localizable", "NewOperationViewController.s3")
-    /// You are about to quit this payment and go back to the home screen.
+    /// Do you want to cancel this payment and go back to the home screen?
     internal static let s4 = L10n.tr("Localizable", "NewOperationViewController.s4")
-    /// Continue
+    /// NO
     internal static let s5 = L10n.tr("Localizable", "NewOperationViewController.s5")
-    /// Yes, quit
+    /// YES, CANCEL
     internal static let s6 = L10n.tr("Localizable", "NewOperationViewController.s6")
   }
 

@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol SignInEmailPresenterDelegate: BasePresenterDelegate {
     func sessionResponseReceived(sessionOk: CreateSessionOk)

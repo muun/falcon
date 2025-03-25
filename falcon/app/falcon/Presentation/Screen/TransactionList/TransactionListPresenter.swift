@@ -6,15 +6,15 @@
 //  Copyright © 2020 muun. All rights reserved.
 //
 
-import core
+
 
 protocol TransactionListPresenterDelegate: BasePresenterDelegate {
-    func onOperationsChange(_ ops: LazyLoadedList<core.Operation>)
+    func onOperationsChange(_ ops: LazyLoadedList<Operation>)
 }
 
 class TransactionListPresenter<Delegate: TransactionListPresenterDelegate>: BasePresenter<Delegate> {
 
-    private var operations: LazyLoadedList<core.Operation> = LazyLoadedList()
+    private var operations: LazyLoadedList<Operation> = LazyLoadedList()
     private let operationActions: OperationActions
     internal let fetchNotificationsAction: FetchNotificationsAction
 
@@ -35,7 +35,7 @@ class TransactionListPresenter<Delegate: TransactionListPresenterDelegate>: Base
         subscribeTo(operationActions.getOperationsLazy(), onNext: self.onOperationsChange)
     }
 
-    private func onOperationsChange(_ result: LazyLoadedList<core.Operation>) {
+    private func onOperationsChange(_ result: LazyLoadedList<Operation>) {
         operations = result
         delegate.onOperationsChange(result)
     }

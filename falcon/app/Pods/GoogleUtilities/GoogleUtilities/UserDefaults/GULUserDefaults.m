@@ -18,8 +18,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSTimeInterval const kGULSynchronizeInterval = 1.0;
-
 static NSString *const kGULLogFormat = @"I-GUL%06ld";
 
 static GULLoggerService kGULLogUserDefaultsService = @"[GoogleUtilities/UserDefaults]";
@@ -107,7 +105,7 @@ typedef NS_ENUM(NSInteger, GULUDMessageCode) {
   }
   if (!value) {
     CFPreferencesSetAppValue((__bridge CFStringRef)key, NULL, _appNameRef);
-    [self scheduleSynchronize];
+    [self synchronize];
     return;
   }
   BOOL isAcceptableValue =
@@ -124,7 +122,7 @@ typedef NS_ENUM(NSInteger, GULUDMessageCode) {
   }
 
   CFPreferencesSetAppValue((__bridge CFStringRef)key, (__bridge CFStringRef)value, _appNameRef);
-  [self scheduleSynchronize];
+  [self synchronize];
 }
 
 - (void)removeObjectForKey:(NSString *)key {
@@ -191,21 +189,6 @@ typedef NS_ENUM(NSInteger, GULUDMessageCode) {
                 [NSString stringWithFormat:kGULLogFormat, (long)GULUDMessageCodeSynchronizeFailed],
                 @"Cannot synchronize user defaults to disk");
   }
-}
-
-#pragma mark - Private methods
-
-- (void)scheduleSynchronize {
-  // Synchronize data using a timer so that multiple set... calls can be coalesced under one
-  // synchronize.
-  [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                           selector:@selector(synchronize)
-                                             object:nil];
-  // This method may be called on multiple queues (due to set... methods can be called on any queue)
-  // synchronize can be scheduled on different queues, so make sure that it does not crash. If this
-  // instance goes away, self will be released also, no one will retain it and the schedule won't be
-  // called.
-  [self performSelector:@selector(synchronize) withObject:nil afterDelay:kGULSynchronizeInterval];
 }
 
 @end

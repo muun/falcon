@@ -1,6 +1,5 @@
 //
 //  Environment.swift
-//  core
 //
 //  Created by Juan Pablo Civile on 30/05/2019.
 //

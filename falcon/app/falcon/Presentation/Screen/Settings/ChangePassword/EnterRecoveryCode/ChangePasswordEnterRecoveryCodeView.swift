@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol ChangePasswordEnterRecoveryCodeViewDelegate: AnyObject {
     func didConfirmRecoveryCode(_ code: String)

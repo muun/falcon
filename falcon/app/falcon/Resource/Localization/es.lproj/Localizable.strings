@@ -248,10 +248,10 @@ El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si est
 /* Presentation/Screen/NewOperation/NewOperationViewController.swift */
 "NewOperationViewController.s1" = "Enviar bitcoin";
 "NewOperationViewController.s2" = "Pagar por lightning";
-"NewOperationViewController.s3" = "¿Salir sin terminar?";
-"NewOperationViewController.s4" = "Estás a punto de salirte de este pago y volver a la pantalla de inicio.";
-"NewOperationViewController.s5" = "Continuar";
-"NewOperationViewController.s6" = "Sí, salir";
+"NewOperationViewController.s3" = "¿Cancelar Pago?";
+"NewOperationViewController.s4" = "¿Quieres cancelar el pago y volver a la pantalla de inicio?";
+"NewOperationViewController.s5" = "NO";
+"NewOperationViewController.s6" = "SI, CANCELAR";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
 "ManuallyEnterQRViewController.s1" = "Texto de dirección o factura";
 "ManuallyEnterQRViewController.s2" = "CONTINUAR";

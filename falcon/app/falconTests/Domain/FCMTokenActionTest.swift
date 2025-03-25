@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import core
+@testable import Muun
 
 class FCMTokenActionTest: MuunTestCase {
     private let fakeToken = "fakeToken"

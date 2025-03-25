@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import core
 
 protocol TransactionListViewControllerDelegate: AnyObject {
     func didTapLoadWallet()
@@ -15,7 +14,8 @@ protocol TransactionListViewControllerDelegate: AnyObject {
 
 class TransactionListViewController: MUViewController {
 
-    fileprivate lazy var presenter = instancePresenter(TransactionListPresenter.init, delegate: self)
+    fileprivate lazy var presenter = instancePresenter(TransactionListPresenter.init,
+                                                       delegate: self)
 
     private weak var delegate: TransactionListViewControllerDelegate?
     private var txListView: TransactionListView!
@@ -73,7 +73,7 @@ class TransactionListViewController: MUViewController {
 
 extension TransactionListViewController: TransactionListPresenterDelegate {
 
-    func onOperationsChange(_ ops: LazyLoadedList<core.Operation>) {
+    func onOperationsChange(_ ops: LazyLoadedList<Operation>) {
         txListView.updateOperations(ops)
     }
 
@@ -87,7 +87,7 @@ extension TransactionListViewController: TransactionListViewDelegate {
         })
     }
 
-    func didTapOperation(_ operation: core.Operation) {
+    func didTapOperation(_ operation: Operation) {
         navigationController?.pushViewController(
             DetailViewController(operation: operation),
             animated: true

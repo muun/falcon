@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 
 enum SelectFeeSection {
     case title

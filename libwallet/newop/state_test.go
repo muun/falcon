@@ -1,10 +1,14 @@
 package newop
 
 import (
+	"math"
+	"path"
 	"testing"
 	"time"
 
 	"github.com/muun/libwallet"
+	"github.com/muun/libwallet/operation"
+	"github.com/muun/libwallet/walletdb"
 	"github.com/shopspring/decimal"
 )
 
@@ -35,10 +39,16 @@ func (t *testListener) next() State {
 
 var _ TransitionListener = &testListener{}
 
-var testContext = createContext()
+var testContext = createInitialContext()
 
-func createContext() *PaymentContext {
-	var context = &PaymentContext{
+type TestBackendActivatedFeatureStatusProvider struct{}
+
+func (t TestBackendActivatedFeatureStatusProvider) IsBackendFlagEnabled(flag string) bool {
+	return true
+}
+
+func createInitialContext() *InitialPaymentContext {
+	var initialContext = &InitialPaymentContext{
 		NextTransactionSize: &NextTransactionSize{},
 		ExchangeRateWindow: &ExchangeRateWindow{
 			rates: make(map[string]float64),
@@ -47,26 +57,35 @@ func createContext() *PaymentContext {
 		PrimaryCurrency:          "BTC",
 		MinFeeRateInSatsPerVByte: 1.0,
 	}
-	context.NextTransactionSize.AddSizeForAmount(&SizeForAmount{
+	initialContext.NextTransactionSize.AddSizeForAmount(&SizeForAmount{
 		AmountInSat: 100_000_000,
 		SizeInVByte: 240,
 		UtxoStatus:  "CONFIRMED",
 	})
 
-	context.ExchangeRateWindow.AddRate("BTC", 1)
-	context.ExchangeRateWindow.AddRate("USD", 32_000)
-	context.ExchangeRateWindow.AddRate("ARS", 9_074_813.98)
+	initialContext.ExchangeRateWindow.AddRate("BTC", 1)
+	initialContext.ExchangeRateWindow.AddRate("USD", 32_000)
+	initialContext.ExchangeRateWindow.AddRate("ARS", 9_074_813.98)
 
-	context.FeeWindow.PutTargetedFees(1, 400.0)
-	context.FeeWindow.PutTargetedFees(15, 120.0)
-	context.FeeWindow.PutTargetedFees(90, 8.0)
+	initialContext.FeeWindow.PutTargetedFees(1, 400.0)
+	initialContext.FeeWindow.PutTargetedFees(15, 120.0)
+	initialContext.FeeWindow.PutTargetedFees(90, 8.0)
 
-	return context
+	return initialContext
+}
+
+func setupStateTests(t *testing.T) {
+
+	libwallet.Init(&libwallet.Config{
+		DataDir:               t.TempDir(),
+		FeatureStatusProvider: TestBackendActivatedFeatureStatusProvider{},
+	})
 }
 
 //goland:noinspection GoUnhandledErrorResult
 func TestBarebonesOnChainFixedAmountFixedFee(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -101,6 +120,7 @@ func TestBarebonesOnChainFixedAmountFixedFee(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestBarebonesOnChainFixedAmountFixedDescriptionFixedFee(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -131,6 +151,7 @@ func TestBarebonesOnChainFixedAmountFixedDescriptionFixedFee(t *testing.T) {
 
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountChangeFee(t *testing.T) {
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -190,8 +211,157 @@ func TestOnChainFixedAmountChangeFee(t *testing.T) {
 	}
 }
 
+func TestOnChainFixedAmountChangeFeeWithFeeBump(t *testing.T) {
+
+	setupStateTests(t)
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	startState.Resolve("bitcoin:bcrt1qj35fkq34xend9w0ssthn432vl9pxxsuy0epzlu?amount=1.0&description=foo", libwallet.Regtest())
+
+	resolveState := listener.next().(*ResolveState)
+
+	context := *testContext
+	nextTransactionSize := *context.NextTransactionSize
+	nextTransactionSize.AddSizeForAmount(&SizeForAmount{
+		SizeInVByte: 500,
+		AmountInSat: 100_100_000,
+		Outpoint:    "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c1:0",
+		UtxoStatus:  string(UtxosStatusUnconfirmed),
+	})
+
+	nextTransactionSize.AddSizeForAmount(&SizeForAmount{
+		SizeInVByte: 730,
+		AmountInSat: 100_900_000,
+		Outpoint:    "0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c2:0",
+		UtxoStatus:  string(UtxosStatusUnconfirmed),
+	})
+	context.NextTransactionSize = &nextTransactionSize
+
+	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+
+	repository := db.NewFeeBumpRepository()
+	repository.Store(&operation.FeeBumpFunctionSet{
+		UUID: "uuid",
+		FeeBumpFunctions: []*operation.FeeBumpFunction{
+			{
+				PartialLinearFunctions: []*operation.PartialLinearFunction{
+					{
+						LeftClosedEndpoint: 0,
+						RightOpenEndpoint:  math.Inf(1),
+						Slope:              2,
+						Intercept:          300,
+					},
+				},
+			},
+		},
+	})
+
+	resolveState.SetContext(&context)
+
+	validateState := listener.next().(*ValidateState)
+	validateState.Continue()
+
+	enterDescriptionState := listener.next().(*EnterDescriptionState)
+	enterDescriptionState.EnterDescription("bar")
+
+	confirmState := listener.next().(*ConfirmState)
+
+	if confirmState.FeeRateInSatsPerVByte != 400 {
+		t.Fatalf("expected initial fee rate to be 400, got %v", confirmState.FeeRateInSatsPerVByte)
+	}
+
+	if confirmState.Fee.InSat != 293_100 {
+		t.Fatalf("expected fee amount to be 293100, got %v", confirmState.Fee.InSat)
+	}
+
+	confirmState.OpenFeeEditor()
+
+	editFeeState := listener.next().(*EditFeeState)
+
+	// Calculate high priority transaction fee
+	feeRatePriorityHigh, err := editFeeState.MinFeeRateForTarget(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	feeState, err := editFeeState.CalculateFee(feeRatePriorityHigh)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Using all 3 utxos (1 confirmed, 2 unconfirmed) - Fee bump amount: 1100
+	if feeState.Amount.InSat != 293_100 {
+		t.Fatalf("expected fee amount to be 293000, got %v", feeState.Amount.InSat)
+	}
+
+	// Calculate medium priority transaction fee
+	feeRatePriorityMedium, err := editFeeState.MinFeeRateForTarget(15)
+	if err != nil {
+		t.Fatal(err)
+	}
+	feeState, err = editFeeState.CalculateFee(feeRatePriorityMedium)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Using 2 utxos (1 confirmed, 1 unconfirmed) - Fee bump amount: 540
+	if feeState.Amount.InSat != 60_540 {
+		t.Fatalf("expected fee amount to be 60540, got %v", feeState.Amount.InSat)
+	}
+
+	// Calculate low priority transaction fee
+	feeRatePriorityLow, err := editFeeState.MinFeeRateForTarget(90)
+	if err != nil {
+		t.Fatal(err)
+	}
+	feeState, err = editFeeState.CalculateFee(feeRatePriorityLow)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Using 2 utxos (1 confirmed, 1 unconfirmed) - Fee bump amount: 316
+	if feeState.Amount.InSat != 4316 {
+		t.Fatalf("expected fee amount to be 4316, got %v", feeState.Amount.InSat)
+	}
+
+	newFeeRate := 15.0
+	feeState, err = editFeeState.CalculateFee(newFeeRate)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if feeState.State != FeeStateFinalFee {
+		t.Fatalf("expected fee state to be FinalFee, got %v", feeState.State)
+	}
+	if feeState.Amount.InSat != 7830 {
+		t.Fatalf("expected fee amount to be 7830, got %v", feeState.Amount.InSat)
+	}
+
+	editFeeState.SetFeeRate(newFeeRate)
+
+	validateState = listener.next().(*ValidateState)
+	validateState.Continue()
+
+	confirmState = listener.next().(*ConfirmState)
+
+	if confirmState.Note != "bar" {
+		t.Fatalf("expected note to match input, got '%v'", confirmState.Note)
+	}
+	if confirmState.Amount.InInputCurrency.String() != "1 BTC" {
+		t.Fatalf("expected amount to match resolved URI, got %v", confirmState.Amount.InInputCurrency)
+	}
+	if confirmState.Fee.InInputCurrency.String() != "0.0000783 BTC" {
+		t.Fatalf("expected fee to match, got %v", confirmState.Fee.InInputCurrency)
+	}
+	if confirmState.Total.InInputCurrency.String() != "1.0000783 BTC" {
+		t.Fatalf("expected total to match, got %v", confirmState.Total.InInputCurrency)
+	}
+}
+
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountFeeNeedsChange(t *testing.T) {
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -261,6 +431,7 @@ func TestOnChainFixedAmountFeeNeedsChange(t *testing.T) {
 
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountNoPossibleFee(t *testing.T) {
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -286,6 +457,7 @@ func TestOnChainFixedAmountNoPossibleFee(t *testing.T) {
 
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountTooSmall(t *testing.T) {
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -303,6 +475,7 @@ func TestOnChainFixedAmountTooSmall(t *testing.T) {
 
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountGreaterThanbalance(t *testing.T) {
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -329,12 +502,13 @@ func TestOnChainFixedAmountGreaterThanbalance(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainSendZeroFundsWithZeroBalance(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
 	startState.Resolve("bitcoin:bcrt1qj35fkq34xend9w0ssthn432vl9pxxsuy0epzlu", libwallet.Regtest())
 
-	context := createContext()
+	context := createInitialContext()
 	context.NextTransactionSize = &NextTransactionSize{}
 
 	resolveState := listener.next().(*ResolveState)
@@ -356,6 +530,7 @@ func TestOnChainSendZeroFundsWithZeroBalance(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainTFFA(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -405,6 +580,7 @@ func TestOnChainTFFA(t *testing.T) {
 
 //goland:noinspection GoUnhandledErrorResult
 func TestInvalidAmountEmitsInvalidAddress(t *testing.T) {
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -424,6 +600,7 @@ func TestInvalidAmountEmitsInvalidAddress(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainBack(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -506,6 +683,7 @@ func TestOnChainBack(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainChangeCurrency(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -626,6 +804,7 @@ func TestOnChainChangeCurrency(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningSendZeroFunds(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -638,7 +817,7 @@ func TestLightningSendZeroFunds(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.NextTransactionSize = &NextTransactionSize{}
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
@@ -673,6 +852,7 @@ func TestLightningSendZeroFunds(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningSendZeroFundsTFFA(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -685,7 +865,7 @@ func TestLightningSendZeroFundsTFFA(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.NextTransactionSize = &NextTransactionSize{}
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
@@ -720,6 +900,7 @@ func TestLightningSendZeroFundsTFFA(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningSendNegativeFunds(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -732,7 +913,7 @@ func TestLightningSendNegativeFunds(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.NextTransactionSize = &NextTransactionSize{}
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
@@ -767,6 +948,7 @@ func TestLightningSendNegativeFunds(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningSendNegativeFundsWithTFFA(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -779,7 +961,7 @@ func TestLightningSendNegativeFundsWithTFFA(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.NextTransactionSize = &NextTransactionSize{}
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
@@ -814,6 +996,7 @@ func TestLightningSendNegativeFundsWithTFFA(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningExpiredInvoice(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -837,6 +1020,7 @@ func TestLightningExpiredInvoice(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningInvoiceWithAmount(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -849,7 +1033,7 @@ func TestLightningInvoiceWithAmount(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		Fees: &SwapFees{
 			RoutingFeeInSat:     0,
@@ -888,6 +1072,7 @@ func TestLightningInvoiceWithAmount(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningWithAmountBack(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -900,7 +1085,7 @@ func TestLightningWithAmountBack(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		Fees: &SwapFees{
 			RoutingFeeInSat:     0,
@@ -948,6 +1133,7 @@ func TestLightningWithAmountBack(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningInvoiceWithAmountAndDescription(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -960,7 +1146,7 @@ func TestLightningInvoiceWithAmountAndDescription(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		Fees: &SwapFees{
 			RoutingFeeInSat:     0,
@@ -996,6 +1182,7 @@ func TestLightningInvoiceWithAmountAndDescription(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestLightningAmountlessInvoice(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -1008,7 +1195,7 @@ func TestLightningAmountlessInvoice(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
 			{
@@ -1064,6 +1251,7 @@ func TestLightningAmountlessInvoice(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestInvoiceOneConf(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -1076,7 +1264,7 @@ func TestInvoiceOneConf(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
 			{
@@ -1134,6 +1322,7 @@ func TestAmountConversion(t *testing.T) {
 	// Then, for amount/total the amount in sat and in primary currency differed
 	// in 1 sat.
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -1146,7 +1335,7 @@ func TestAmountConversion(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
 			{
@@ -1191,6 +1380,7 @@ func TestAmountConversion(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestInvoiceUnpayable(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -1203,7 +1393,7 @@ func TestInvoiceUnpayable(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		BestRouteFees: []*BestRouteFees{
 			{
@@ -1243,6 +1433,7 @@ func TestInvoiceUnpayable(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestInvoiceLend(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
@@ -1255,7 +1446,7 @@ func TestInvoiceLend(t *testing.T) {
 
 	resolveState := listener.next().(*ResolveState)
 
-	context := createContext()
+	context := createInitialContext()
 	context.SubmarineSwap = &SubmarineSwap{
 		Fees: &SwapFees{
 			RoutingFeeInSat:     0,
@@ -1319,12 +1510,13 @@ func TestAmountInfo_Mutating(t *testing.T) {
 //goland:noinspection GoUnhandledErrorResult
 func TestOnChainTFFAWithDebtFeeNeedsChangeBecauseOutputAmountLowerThanDust(t *testing.T) {
 
+	setupStateTests(t)
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
 
 	startState.Resolve("bitcoin:bcrt1qj35fkq34xend9w0ssthn432vl9pxxsuy0epzlu", libwallet.Regtest())
 
-	context := createContext()
+	context := createInitialContext()
 
 	nts := &NextTransactionSize{}
 	nts.AddSizeForAmount(&SizeForAmount{

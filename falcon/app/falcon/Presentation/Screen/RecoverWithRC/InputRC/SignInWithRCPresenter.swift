@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 import Libwallet
 
 protocol SignInWithRCPresenterDelegate: BasePresenterDelegate {

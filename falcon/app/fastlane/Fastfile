@@ -36,7 +36,7 @@ platform :ios do
 
   private_lane :set_env do |params|
     env = params[:env]
-    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../core/Classes/Environment.swift")
+    sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../app/falcon/core/Environment.swift")
     sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../app/falconPushNotifications/Environment.swift")
     sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{get_env_for_app_identification(env:env)}\"/", "../../app/falconPushNotifications/Environment.swift")
     sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{get_env_for_app_identification(env:env)}\"/", "../../app/falcon/Resource/Environment+Extension.swift")
@@ -153,7 +153,7 @@ platform :ios do
       reset_git_repo(
         force: true,
         files: [
-        "../core/Classes/Environment.swift",
+        "../app/falcon/core/Environment.swift",
         "../app/falconPushNotifications/Environment.swift",
         "../app/falcon/Resource/Identifiers.swift",
         "../app/falcon/Resource/Environment+Extension.swift"
@@ -287,7 +287,7 @@ platform :ios do
     sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
 
     # Avoid build crashing in device farm because of entitlements
-    sh("sed", "-i", "", "s/public func setup() { */public func setup() { return/", "../../core/Classes/Data/Service/CapabilitiesProvider/ICloudCapabilitiesProvider.swift")
+    sh("sed", "-i", "", "s/public func setup() { */public func setup() { return/", "../../app/falcon/core/Data/Service/CapabilitiesProvider/ICloudCapabilitiesProvider.swift")
 
     if !is_prod then
       customize_app_for_a_not_production_environment(env: env, 

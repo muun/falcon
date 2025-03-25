@@ -1,0 +1,6 @@
+framework module NIOPosix {
+  umbrella header "SwiftNIOPosix-umbrella.h"
+
+  export *
+  module * { export * }
+}

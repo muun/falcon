@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol ChangePasswordEnterNewViewDelegate: AnyObject {
     func didEnterNewPassword(_ password: String)

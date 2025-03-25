@@ -8,11 +8,11 @@
 
 import Foundation
 import UIKit
-import core
+
 
 struct OperationFormatter {
 
-    let operation: core.Operation
+    let operation: Operation
 
     enum Status {
         case COMPLETED

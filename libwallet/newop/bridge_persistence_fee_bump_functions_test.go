@@ -1,14 +1,13 @@
 package newop
 
 import (
+	"github.com/muun/libwallet"
+	"github.com/muun/libwallet/operation"
+	"github.com/muun/libwallet/walletdb"
 	"math"
 	"path"
 	"reflect"
 	"testing"
-
-	"github.com/muun/libwallet"
-	"github.com/muun/libwallet/operation"
-	"github.com/muun/libwallet/walletdb"
 )
 
 func TestDecodeFeeBumpFunctions(t *testing.T) {
@@ -129,9 +128,7 @@ func TestPersistFeeBumpFunctions(t *testing.T) {
 	}
 
 	// Set temporary file for testing
-	libwallet.Init(&libwallet.Config{
-		DataDir: t.TempDir(),
-	})
+	libwallet.Init(&libwallet.Config{DataDir: t.TempDir()})
 
 	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
 	if err != nil {
@@ -139,8 +136,12 @@ func TestPersistFeeBumpFunctions(t *testing.T) {
 	}
 	defer db.Close()
 
+	uuid := "uuid"
+	refreshPolicy := "foreground"
+
 	for _, tC := range testCases {
-		err := PersistFeeBumpFunctions(tC.encodedFunctionList)
+		functionList := libwallet.NewStringListWithElements(tC.encodedFunctionList)
+		err := PersistFeeBumpFunctions(functionList, uuid, refreshPolicy)
 
 		if err != nil && tC.err {
 			t.Fatal(err)
@@ -148,16 +149,22 @@ func TestPersistFeeBumpFunctions(t *testing.T) {
 
 		repository := db.NewFeeBumpRepository()
 
-		feeBumpFunctions, err := repository.GetAll()
+		feeBumpFunctionSet, err := repository.GetAll()
 
 		if err != nil {
 			t.Fatalf("error getting bump functions")
 		}
 
-		if !reflect.DeepEqual(feeBumpFunctions, tC.expectedFunctions) {
+		if len(feeBumpFunctionSet.FeeBumpFunctions) != len(tC.expectedFunctions) ||
+			feeBumpFunctionSet.RefreshPolicy != refreshPolicy ||
+			feeBumpFunctionSet.UUID != uuid {
 			t.Fatalf("fee bump functions were not saved properly")
 		}
 
-		repository.RemoveAll()
+		for i, expectedFunction := range tC.expectedFunctions {
+			if !reflect.DeepEqual(expectedFunction.PartialLinearFunctions, feeBumpFunctionSet.FeeBumpFunctions[i].PartialLinearFunctions) {
+				t.Fatalf("fee bump functions were not saved properly")
+			}
+		}
 	}
 }

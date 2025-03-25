@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import Muun
-@testable import core
+
 import RxSwift
 
 class RecoveryCodePrimingPresenterTest: MuunTestCase {

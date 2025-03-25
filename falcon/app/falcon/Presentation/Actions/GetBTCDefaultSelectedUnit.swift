@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+
 
 /// Gets default selected bitcoin unit using preferences.bool(forKey: .displayBTCasSAT)
 class GetBTCDefaultSelectedUnit: Resolver {

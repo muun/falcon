@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 import Libwallet
 
 enum NewOpData {
@@ -130,7 +130,7 @@ enum NewOpData {
             switch feeState {
             case .noPossibleFee, .feeNeedsChange:
                 return params
-            case .finalFee(_, let rate):
+            case .finalFee(_, let rate, let feeBumpInfo):
                 switch (rate.satsPerVByte as NSDecimalNumber).doubleValue {
                 case fastFee:
                     params["fee_type"] = "fast"
@@ -143,6 +143,16 @@ enum NewOpData {
                 }
 
                 params["sats_per_virtual_byte"] = "\(rate.satsPerVByte)"
+
+                // Effective fee information
+                if let feeBumpInfo = feeState.getFeeBumpInfo() {
+                    params["fee_bump_set_uuid"] = feeBumpInfo.uuid
+                    params["fee_bump_amount_in_sat"] = "\(feeBumpInfo.amountInSat.value)"
+                    params["fee_bump_policy"] = feeBumpInfo.refreshPolicy
+                    params["fee_bump_seconds_since_last_update"]
+                        = "\(feeBumpInfo.secondsSinceLastUpdate)"
+                }
+
             }
 
             return params

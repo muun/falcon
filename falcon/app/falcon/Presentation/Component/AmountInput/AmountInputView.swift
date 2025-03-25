@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import core
+
 
 protocol AmountInputViewDelegate: AnyObject {
     func didInput(amount: String, currency: Currency)

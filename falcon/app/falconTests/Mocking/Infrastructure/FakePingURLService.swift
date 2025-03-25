@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-@testable import core
+@testable import Muun
 
 class FakePingURLService: PingURLService {
     var pingExpected = true

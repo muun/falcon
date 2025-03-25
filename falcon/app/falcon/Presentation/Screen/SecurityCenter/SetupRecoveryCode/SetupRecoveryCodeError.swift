@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 
 enum SetupRecoveryCodeError: ErrorViewModel {
     case failedToStartSetup

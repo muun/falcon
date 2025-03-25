@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 import Libwallet
 
 extension AppDelegate {
@@ -173,11 +173,12 @@ extension AppDelegate {
 
         let libwalletConfig = LibwalletConfig()
         libwalletConfig.dataDir = Environment.current.libwalletDataDirectory.absoluteString
+        libwalletConfig.socketPath = Environment.current.libwalletSocketFile.absoluteString
         libwalletConfig.featureStatusProvider = featureFlagsRepository
+        libwalletConfig.appLogSink = LibwalletLogHelper()
 
         LibwalletInit(libwalletConfig)
     }
-
 }
 
 // Force touch stuff

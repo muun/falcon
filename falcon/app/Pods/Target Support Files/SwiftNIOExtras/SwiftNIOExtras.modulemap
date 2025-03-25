@@ -1,0 +1,6 @@
+framework module NIOExtras {
+  umbrella header "SwiftNIOExtras-umbrella.h"
+
+  export *
+  module * { export * }
+}

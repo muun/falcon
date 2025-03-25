@@ -8,7 +8,7 @@
 
 import XCTest
 import RxBlocking
-@testable import core
+
 @testable import Muun
 
 class HomePresenterTests: MuunTestCase {

@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol LNURLScanQRPresenterDelegate: BasePresenterDelegate {
     func checkForClipboardChange()

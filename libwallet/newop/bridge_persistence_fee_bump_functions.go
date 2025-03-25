@@ -3,24 +3,33 @@ package newop
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"math"
 	"path"
+	"time"
 
 	"github.com/muun/libwallet"
 	"github.com/muun/libwallet/operation"
 	"github.com/muun/libwallet/walletdb"
 )
 
+const invalidationTimeInSeconds = 150.0
+
 // PersistFeeBumpFunctions This is a bridge that stores fee bump functions
 // from native apps in the device's local database.
-func PersistFeeBumpFunctions(encodedBase64Functions []string) error {
-	decodedFunctions, err := decodeFunctions(encodedBase64Functions)
+func PersistFeeBumpFunctions(encodedBase64Functions *libwallet.StringList, uuid string, refreshPolicy string) error {
+
+	if encodedBase64Functions == nil {
+		return errors.New("encoded base 64 function list is null")
+	}
+
+	decodedFunctions, err := decodeFunctions(encodedBase64Functions.ConvertToArray())
 	if err != nil {
 		return err
 	}
 
-	feeBumpFunctions := convertToLibwalletFeeBumpFunctions(decodedFunctions)
+	feeBumpFunctions := convertToLibwalletFeeBumpFunctions(decodedFunctions, uuid, refreshPolicy)
 
 	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
 	if err != nil {
@@ -29,7 +38,27 @@ func PersistFeeBumpFunctions(encodedBase64Functions []string) error {
 	defer db.Close()
 
 	repository := db.NewFeeBumpRepository()
+
 	return repository.Store(feeBumpFunctions)
+}
+
+func AreFeeBumpFunctionsInvalidated() bool {
+	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
+	if err != nil {
+		return true
+	}
+	defer db.Close()
+
+	repository := db.NewFeeBumpRepository()
+	creationDate, err := repository.GetCreationDate()
+
+	if err != nil || creationDate == nil {
+		return true
+	}
+
+	durationInSeconds := time.Since(*creationDate).Seconds()
+
+	return durationInSeconds >= invalidationTimeInSeconds
 }
 
 func decodeFunctions(encodedFunctions []string) ([][][]float64, error) {
@@ -85,7 +114,11 @@ func decodeFromBase64(base64Function string) ([][]float64, error) {
 	return result, nil
 }
 
-func convertToLibwalletFeeBumpFunctions(decodedFunctions [][][]float64) []*operation.FeeBumpFunction {
+func convertToLibwalletFeeBumpFunctions(
+	decodedFunctions [][][]float64,
+	uuid string,
+	refreshPolicy string,
+) *operation.FeeBumpFunctionSet {
 	// Convert to libwallet data types
 	var feeBumpFunctions []*operation.FeeBumpFunction
 	const rightOpenEndpointPosition = 0
@@ -109,8 +142,14 @@ func convertToLibwalletFeeBumpFunctions(decodedFunctions [][][]float64) []*opera
 		}
 		feeBumpFunctions = append(
 			feeBumpFunctions,
-			&operation.FeeBumpFunction{PartialLinearFunctions: partialLinearFunctions},
+			&operation.FeeBumpFunction{
+				PartialLinearFunctions: partialLinearFunctions,
+			},
 		)
 	}
-	return feeBumpFunctions
+	return &operation.FeeBumpFunctionSet{
+		UUID:             uuid,
+		RefreshPolicy:    refreshPolicy,
+		FeeBumpFunctions: feeBumpFunctions,
+	}
 }

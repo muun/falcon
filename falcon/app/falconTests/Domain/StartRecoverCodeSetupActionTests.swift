@@ -1,12 +1,11 @@
 //
 //  StartRecoverCodeSetupActionTests.swift
-//  core-all
 //
 //  Created by Lucas Serruya on 20/10/2022.
 //
 
 import XCTest
-@testable import core
+@testable import Muun
 
 class StartRecoveryCodeSetupActionTests: MuunTestCase {
     fileprivate var houstonService: FakeHoustonService!

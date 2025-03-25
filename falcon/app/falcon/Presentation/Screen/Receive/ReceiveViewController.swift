@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreImage
-import core
+
 
 enum ReceiveType {
     case onChain

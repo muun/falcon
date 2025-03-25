@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+import Foundation
 
 public let satSymbol = "SAT"
 

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import core
 
 protocol ReceiveUnifiedViewDelegate: ReceiveDelegate {
     func didTapOn(URI: BitcoinURIViewModel)

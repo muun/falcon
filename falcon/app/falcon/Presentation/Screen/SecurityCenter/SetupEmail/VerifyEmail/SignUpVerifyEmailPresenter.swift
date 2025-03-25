@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol SignUpVerifyEmailPresenterDelegate: BasePresenterDelegate {
     func onEmailVerified()

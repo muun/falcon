@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 import Libwallet
 import os
 import DeviceCheck
@@ -49,6 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var fcmTokenHandlingAlreadyReported = false
     
     internal let featureFlagsRepository: FeatureFlagsRepository = resolve()
+    private let preloadFeeDataAction: PreloadFeeDataAction = resolve()
+    private let feeDataSyncer: FeeDataSyncer = resolve()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -107,14 +109,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func generateDeviceToken() {
         // Always store a fallback token in case we can't generate the real one
         let fallbackDeviceTokenKey = KeychainRepository.storedKeys.fallbackDeviceToken.rawValue
-        if (try? keychainRepository.get(fallbackDeviceTokenKey)) == nil {
-            try? keychainRepository.store(
-                SecureRandom.randomBytes(count: 32).toHexString(),
-                at: fallbackDeviceTokenKey
-            )
+        do {
+            if (!(try keychainRepository.has(fallbackDeviceTokenKey))) {
+                try keychainRepository.store(
+                    SecureRandom.randomBytes(count: 32).toHexString(),
+                    at: fallbackDeviceTokenKey
+                )
+            }
+        } catch {
+            Logger.log(error: error)
         }
 
         let deviceTokenKey = KeychainRepository.storedKeys.deviceCheckToken.rawValue
+        // swiftlint:disable force_error_handling
         let deviceToken = try? keychainRepository.get(deviceTokenKey)
         if deviceToken != nil
             && deviceToken != DeviceTokenErrorValues.failToRetrieve.rawValue
@@ -124,25 +131,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if DCDevice.current.isSupported {
             DCDevice.current.generateToken { token, error in
-                guard let deviceToken = token, error == nil else {
-                    error.map { Logger.log(error: $0) }
-                    try? self.keychainRepository.store(
-                        DeviceTokenErrorValues.failToRetrieve.rawValue,
-                        at: deviceTokenKey
-                    )
-                    self.reachabilityService.collectReachabilityStatusIfNeeded()
-                    return
+                do {
+                    guard let deviceToken = token, error == nil else {
+                        error.map { Logger.log(error: $0) }
+                        try self.keychainRepository.store(
+                            DeviceTokenErrorValues.failToRetrieve.rawValue,
+                            at: deviceTokenKey
+                        )
+                        self.reachabilityService.collectReachabilityStatusIfNeeded()
+                        return
+                    }
+                    try self.keychainRepository.store(deviceToken.base64EncodedString(),
+                                                      at: deviceTokenKey)
+                } catch {
+                    Logger.log(error: error)
                 }
-                try? self.keychainRepository.store(deviceToken.base64EncodedString(),
-                                                   at: deviceTokenKey)
             }
         } else {
-            try? keychainRepository.store(DeviceTokenErrorValues.unsupported.rawValue,
-                                          at: deviceTokenKey)
+            do {
+                try keychainRepository.store(DeviceTokenErrorValues.unsupported.rawValue,
+                                             at: deviceTokenKey)
+            } catch {
+                Logger.log(error: error)
+            }
         }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        DeviceUtils.appState = application.applicationState
+
+        // To avoid bugs, this has to be called before .appInForeground is set.
+        // The HomePresenter triggers the NotificationProcessor when
+        // .appInForeground is set to true.
+        feeDataSyncer.appDidBecomeActive()
+
         preferences.set(value: true, forKey: .appInForeground)
         blurEffectView.removeFromSuperview()
 
@@ -153,7 +175,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         clearNotifications()
 
-        DeviceUtils.appState = application.applicationState
         AnalyticsHelper.logEvent("app_did_become_active")
     }
 
@@ -162,6 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         blurApp()
 
         lockManager.appWillResignActive()
+        feeDataSyncer.appWillResignActive()
 
         DeviceUtils.appState = application.applicationState
         AnalyticsHelper.logEvent("app_will_go_to_background")
@@ -182,6 +204,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AnalyticsHelper.logEvent("app_will_enter_foreground")
         deviceCheckTokenProvider.reactToForegroundAppState()
         backgroundTimesService.onEnterForeground()
+
+        if sessionActions.isLoggedIn() {
+            preloadFeeDataAction.run(refreshPolicy: .foreground)
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

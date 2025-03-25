@@ -3,30 +3,40 @@ source 'https://cdn.cocoapods.org/'
 install! 'cocoapods',
          :generate_multiple_pod_projects => true
 
-platform :ios, '11.0'
+$app_deployment_target = Gem::Version.new('12.0')
+platform :ios, $app_deployment_target
 
 target 'Muun' do
   use_frameworks! :linkage => :static
-
-  pod 'core/all', :path => '../core', :testspecs => ['Tests'] 
+  platform :ios, $app_deployment_target
 
   # Animations
   pod 'lottie-ios', '3.0.6'
 
   # This dependencies are fixed at core.podspec
   # Firebase
-  pod 'GoogleUtilities'
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
   pod 'Firebase/Analytics'
-  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Crashlytics', '10.24.0'
 
   # GoogleDrive
-  pod 'GoogleSignIn'
-  pod 'GoogleAPIClientForREST/Drive'
+  pod 'GoogleSignIn', '7.1.0'
+  pod 'GoogleAPIClientForREST/Drive', '3.5.1'
   pod 'SwiftLint', '0.50.1' # Keep in mind you will need to modify swiftlint.yml
   pod 'SwiftGen', '~> 6.0'
   
+  # core
+  pod 'Dip', '7.0.1'
+  pod 'GRDB.swift', '4.14.0'
+  pod 'RxGRDB', '0.18.0'
+  pod 'RxSwift', '5.0.1'
+  pod 'RxBlocking', '5.0.1'
+
+  # protobuf & gRPC
+  pod 'SwiftProtobuf', '~> 1.28'
+  pod 'gRPC-Swift', '~> 1.8.0'
+
   target 'falconTests' do
       inherit! :search_paths
   end
@@ -35,14 +45,15 @@ end
 
 target 'falconPushNotifications' do
   use_frameworks! :linkage => :static
+  pod 'FirebaseCrashlytics'
+  pod 'Firebase'
 
-  pod 'core/notifications', :path => '../core'
 end
 
 target 'falconUITests' do
   use_frameworks! :linkage => :static
-
-  pod 'core/all', :path => '../core'
+  pod 'FirebaseCrashlytics'
+  pod 'Firebase'
 end
 
 pre_install do |installer|
@@ -56,6 +67,11 @@ def fix_config(config)
   # https://github.com/CocoaPods/CocoaPods/issues/8891#issuecomment-546636698
   if config.build_settings['DEVELOPMENT_TEAM'].nil?
     config.build_settings['DEVELOPMENT_TEAM'] = '5YYLBTUB6W'
+  end
+  # Some pods can end up with a too low deployment target and cause weird build failures.
+  pod_deployment_target = Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
+  if pod_deployment_target < $app_deployment_target
+    config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $app_deployment_target
   end
 end
 

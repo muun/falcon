@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol LightningAdvancedOptionsViewDelegate: AnyObject {
     func didTapAddAmount()

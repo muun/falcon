@@ -2,7 +2,7 @@ package operation
 
 import (
 	"errors"
-	"fmt"
+	"log/slog"
 	"math"
 )
 
@@ -18,33 +18,41 @@ type feeCalculator struct {
 // Consequences of this:
 // - we don't check balance whatsoever
 // - fee for COLLECT swap is exactly the same as normal case
-func (f *feeCalculator) Fee(amountInSat int64, feeRateInSatsPerVByte float64, takeFeeFromAmount bool) int64 {
+func (f *feeCalculator) Fee(
+	amountInSat int64,
+	feeRateInSatsPerVByte float64,
+	takeFeeFromAmount bool,
+) (totalFee int64, feeBump int64) {
 	if amountInSat == 0 {
-		return 0
+		return 0, 0
 	}
 	return f.calculateFee(amountInSat, feeRateInSatsPerVByte, takeFeeFromAmount)
 }
 
-func (f *feeCalculator) calculateFee(amountInSat int64, feeRateInSatsPerVByte float64, takeFeeFromAmount bool) int64 {
+func (f *feeCalculator) calculateFee(
+	amountInSat int64,
+	feeRateInSatsPerVByte float64,
+	takeFeeFromAmount bool,
+) (totalFee int64, feeBump int64) {
 	if f.NextTransactionSize == nil {
-		return 0
+		return 0, 0
 	}
 
 	var fee int64
 	lastUnconfirmedUtxoUsedIndex := -1
+	var feeBumpAmount int64 = 0
 	for _, sizeForAmount := range f.NextTransactionSize.SizeProgression {
 		// this code assumes that sizeProgression has the same order as used when fee bump functions was generated.
 		if sizeForAmount.UtxoStatus == UtxosStatusUnconfirmed {
 			lastUnconfirmedUtxoUsedIndex++
 		}
 
-		var feeBumpAmount int64 = 0
+		feeBumpAmount = 0
 		if lastUnconfirmedUtxoUsedIndex >= 0 {
 			var err error
 			feeBumpAmount, err = f.calculateFeeBumpAmount(lastUnconfirmedUtxoUsedIndex, feeRateInSatsPerVByte)
 			if err != nil {
-				// TODO: Add listener to track non-fatal error.
-				fmt.Printf("Non-fatal error calculating fee bump amount: %v\n", err.Error())
+				slog.Error("error calculating fee bump amount.", slog.Any("error", err))
 			}
 		}
 
@@ -59,7 +67,7 @@ func (f *feeCalculator) calculateFee(amountInSat int64, feeRateInSatsPerVByte fl
 			}
 		}
 	}
-	return fee
+	return fee, feeBumpAmount
 }
 
 func computeFee(sizeInVByte int64, feeRate float64, feeBumpAmount int64) int64 {

@@ -8,11 +8,8 @@
 
 import XCTest
 import RxSwift
-@testable import core
-@testable import Muun
 
-// For some reason Swift thinks Notification is ambiguous in this file
-typealias Notification = core.Notification
+@testable import Muun
 
 class NotificationProcessorTests: MuunTestCase {
     
@@ -377,15 +374,15 @@ class NotificationProcessorTests: MuunTestCase {
     }
 
 
-    private func buildSimpleNotification(id: Int) -> Notification {
+    private func buildSimpleNotification(id: Int) -> Muun.Notification {
         return Notification(id: id, previousId: id - 1, senderSessionUuid: "", message: .sessionAuthorized)
     }
     
-    private func buildInvalidNotification(id: Int) -> Notification {
+    private func buildInvalidNotification(id: Int) -> Muun.Notification {
         return Notification(id: id, previousId: id - 1, senderSessionUuid: "", message: .unknownMessage(type: "foo"))
     }
 
-    private func buildReport(max: Int, _ notifications: Notification...) -> NotificationReport {
+    private func buildReport(max: Int, _ notifications: Muun.Notification...) -> NotificationReport {
         NotificationReport(
             previousId: notifications.first?.previousId ?? max,
             maximumId: max,

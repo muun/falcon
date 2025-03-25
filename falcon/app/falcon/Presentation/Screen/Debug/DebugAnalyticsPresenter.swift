@@ -6,7 +6,7 @@
 //  Copyright © 2024 muun. All rights reserved.
 //
 
-import core
+
 
 protocol DebugAnalyticsPresenterDelegate: BasePresenterDelegate,
                                          MUViewController {

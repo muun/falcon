@@ -44,7 +44,7 @@ func Validate(
 		},
 	)
 	if err != nil {
-		return fmt.Errorf("failed decode sphinx due to %e", err)
+		return fmt.Errorf("failed decode sphinx due to %w", err)
 	}
 	payload, _, err := iterator.HopPayload()
 	if err != nil {

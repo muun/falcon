@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 import Libwallet
 
 class OpSubmarineSwapViewBuilder: OpViewBuilder {
@@ -27,9 +27,11 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     weak var newOpViewDelegate: NewOpViewDelegate?
     weak var filledDataDelegate: NewOperationView.FilledDataDelegate?
     weak var amountDelegate: AmountDelegate?
+
     private var origin: Constant.NewOpAnalytics.Origin
 
     private var params: [String: Any] = [:]
+    private var swapUuid: String?
 
     init(transitionDelegate: Transitions,
          newOpViewDelegate: NewOpViewDelegate,
@@ -112,7 +114,7 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     }
 
     func getLoggingData(state: NewOpState) -> (logName: String, logParams: [String: Any]?)? {
-
+        params["swap_uuid"] = swapUuid
         switch state {
         case .loading: return ("loading", params)
         case .amount: return ("amount", params)
@@ -148,14 +150,15 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         switch data.feeState {
         case .noPossibleFee, .feeNeedsChange:
             return
-        case .finalFee(_, let rate):
+        case .finalFee(_, let rate, _):
             params["sats_per_virtual_byte"] = "\(rate.satsPerVByte)"
         }
     }
 
     private func buildDestination(type: PaymentRequestType, confirm: Bool = false) -> MUView {
-
         let submarineSwap = getSubmarineSwap(type: type)
+
+        swapUuid = (type as? FlowSubmarineSwap)?.submarineSwap._swapUuid
 
         let pubKey = submarineSwap.receiver!.publicKey
         let moreInfo = BottomDrawerInfo.swapDestination(
@@ -209,7 +212,7 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     }
 
     private func buildLightningFeeView(_ confirmState: NewOpData.Confirm) -> MUView {
-        guard case .finalFee(let fee, rate: _) = confirmState.feeState else {
+        guard case .finalFee(let fee, rate: _, _) = confirmState.feeState else {
             Logger.fatal("expected fee to be final for lightning payments")
         }
         let selectedCurrency = confirmState.amount.selectedCurrency

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class DebugRequestsViewController: MUViewController {
     private lazy var presenter = instancePresenter(DebugRequestsPresenter.init, delegate: self)

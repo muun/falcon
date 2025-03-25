@@ -8,7 +8,7 @@
 
 import UIKit
 import Lottie
-import core
+
 
 protocol ChevronViewDelegate: AnyObject {
     func chevronTap()
@@ -97,7 +97,7 @@ final class ChevronView: UIView {
 
     // MARK: - Actions -
 
-    func updateOperationsState(_ style: core.OperationsState) {
+    func updateOperationsState(_ style: OperationsState) {
         if isDarkMode() {
             switch style {
             case .confirmed: setAnimation(name: "dm_chevron-regular")

@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+import Foundation
 
 /// Workaround to show multiples currencies with the same code on picker.
 struct VisualCurrency: Currency {

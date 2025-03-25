@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol OpConfirmTransitions: NewOperationTransitions {
     func didConfirm()

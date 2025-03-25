@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import core
+
 
 protocol TransactionListViewDelegate: AnyObject {
     func didTapLoadWallet()
-    func didTapOperation(_ operation: core.Operation)
+    func didTapOperation(_ operation: Operation)
 }
 
 final class TransactionListView: UIView {
@@ -19,7 +19,7 @@ final class TransactionListView: UIView {
     private var emptyStateView: TransactionListEmptyView!
     private var tableView: UITableView! = UITableView()
 
-    private var operations: LazyLoadedList<core.Operation> = LazyLoadedList()
+    private var operations: LazyLoadedList<Operation> = LazyLoadedList()
 
     private weak var delegate: TransactionListViewDelegate?
 
@@ -93,7 +93,7 @@ final class TransactionListView: UIView {
         tableView.isHidden = false
     }
 
-    fileprivate func getOperationAt(_ index: Int) -> core.Operation? {
+    fileprivate func getOperationAt(_ index: Int) -> Operation? {
         guard index < operations.count else {
             return nil
         }
@@ -102,7 +102,7 @@ final class TransactionListView: UIView {
 
     // MARK: - View Controller actions -
 
-    func updateOperations(_ ops: LazyLoadedList<core.Operation>) {
+    func updateOperations(_ ops: LazyLoadedList<Operation>) {
         self.operations = ops
         decideView()
     }

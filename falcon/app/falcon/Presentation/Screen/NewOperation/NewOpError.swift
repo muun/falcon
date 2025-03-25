@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 
 // swiftlint:disable cyclomatic_complexity
 enum NewOpError: ErrorViewModel {

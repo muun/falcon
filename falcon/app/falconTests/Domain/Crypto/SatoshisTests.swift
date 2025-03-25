@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import core
+
 @testable import Muun
 
 // These are all really dumb tests, but they test a very core part of the logic that

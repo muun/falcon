@@ -1,0 +1,414 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		05E474579BD9D7E65CA136C8FC33D10C /* shim.c in Sources */ = {isa = PBXBuildFile; fileRef = E3E13FEAE4EE5EB7D2B9EEA296858C2A /* shim.c */; settings = {COMPILER_FLAGS = "-D__APPLE_USE_RFC_3542=1"; }; };
+		617FE0265E2431BB21D7EC4B31599457 /* CNIODarwin-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D02D420145A8E11F7988167DBDD1186C /* CNIODarwin-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		64D600D2AF119225FBFBEE0CA4FA9BDC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D62E1BE6FABDC74FC6CDA717D52014F /* Foundation.framework */; };
+		AC41943E74734E7095A77A14D62551C4 /* CNIODarwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 083987630EEF2E8CCA4C2ECD242A87F3 /* CNIODarwin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD62F67A189F9EC8CEDC43407876722E /* CNIODarwin-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 14099772512798E44302F309320D3CB2 /* CNIODarwin-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		083987630EEF2E8CCA4C2ECD242A87F3 /* CNIODarwin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CNIODarwin.h; path = Sources/CNIODarwin/include/CNIODarwin.h; sourceTree = "<group>"; };
+		11080A005A3EC72DD3CB36D10B2ECEFE /* CNIODarwin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CNIODarwin.debug.xcconfig; sourceTree = "<group>"; };
+		14099772512798E44302F309320D3CB2 /* CNIODarwin-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CNIODarwin-dummy.m"; sourceTree = "<group>"; };
+		1C34645E900DDD158529685CCCE6434B /* CNIODarwin-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CNIODarwin-prefix.pch"; sourceTree = "<group>"; };
+		2DAC69F450965C8BF790EFC67FB8E13E /* CNIODarwin.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CNIODarwin.modulemap; sourceTree = "<group>"; };
+		531280FC360CC9E2C3AE638C75CADA47 /* CNIODarwin-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CNIODarwin-Info.plist"; sourceTree = "<group>"; };
+		6D62E1BE6FABDC74FC6CDA717D52014F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		6D9EC7F0BDAC8BED51FDBF79DC54532A /* CNIODarwin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CNIODarwin; path = CNIODarwin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0EB90D37B77B4AC7578C9847BA62697 /* CNIODarwin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CNIODarwin.release.xcconfig; sourceTree = "<group>"; };
+		D02D420145A8E11F7988167DBDD1186C /* CNIODarwin-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CNIODarwin-umbrella.h"; sourceTree = "<group>"; };
+		E3E13FEAE4EE5EB7D2B9EEA296858C2A /* shim.c */ = {isa = PBXFileReference; includeInIndex = 1; name = shim.c; path = Sources/CNIODarwin/shim.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		222826B5B8460A98507ACB196BCF4CEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64D600D2AF119225FBFBEE0CA4FA9BDC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		20C01E813ACC84A53683C77649F98F24 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A378F405E254E64A44E9FA9BC0D149EF /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		20E62E73E465EAE7C262577901C819D1 /* CNIODarwin */ = {
+			isa = PBXGroup;
+			children = (
+				083987630EEF2E8CCA4C2ECD242A87F3 /* CNIODarwin.h */,
+				E3E13FEAE4EE5EB7D2B9EEA296858C2A /* shim.c */,
+				DFB5E72A82FE59EBD5CAF144C59371D2 /* Support Files */,
+			);
+			name = CNIODarwin;
+			path = CNIODarwin;
+			sourceTree = "<group>";
+		};
+		9DE338C3D1805BB1AC58DCA8D4900929 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6D9EC7F0BDAC8BED51FDBF79DC54532A /* CNIODarwin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A378F405E254E64A44E9FA9BC0D149EF /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6D62E1BE6FABDC74FC6CDA717D52014F /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		DFB5E72A82FE59EBD5CAF144C59371D2 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				2DAC69F450965C8BF790EFC67FB8E13E /* CNIODarwin.modulemap */,
+				14099772512798E44302F309320D3CB2 /* CNIODarwin-dummy.m */,
+				531280FC360CC9E2C3AE638C75CADA47 /* CNIODarwin-Info.plist */,
+				1C34645E900DDD158529685CCCE6434B /* CNIODarwin-prefix.pch */,
+				D02D420145A8E11F7988167DBDD1186C /* CNIODarwin-umbrella.h */,
+				11080A005A3EC72DD3CB36D10B2ECEFE /* CNIODarwin.debug.xcconfig */,
+				B0EB90D37B77B4AC7578C9847BA62697 /* CNIODarwin.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/CNIODarwin";
+			sourceTree = "<group>";
+		};
+		FF40EFB7D6B1173053907ED0BFE45213 = {
+			isa = PBXGroup;
+			children = (
+				20E62E73E465EAE7C262577901C819D1 /* CNIODarwin */,
+				20C01E813ACC84A53683C77649F98F24 /* Frameworks */,
+				9DE338C3D1805BB1AC58DCA8D4900929 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		AA3A853AB551018A2AF56B576C3F5032 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC41943E74734E7095A77A14D62551C4 /* CNIODarwin.h in Headers */,
+				617FE0265E2431BB21D7EC4B31599457 /* CNIODarwin-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E32F41231F1384F7485067EA4D2FE32C /* CNIODarwin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D1CF03E23FD073225415919125A1A89 /* Build configuration list for PBXNativeTarget "CNIODarwin" */;
+			buildPhases = (
+				AA3A853AB551018A2AF56B576C3F5032 /* Headers */,
+				097FAA7E7AAE709EB06594EC0BA1AFD0 /* Sources */,
+				222826B5B8460A98507ACB196BCF4CEF /* Frameworks */,
+				471FAE327E840CEB75AF467C1B3E4EDD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CNIODarwin;
+			productName = CNIODarwin;
+			productReference = 6D9EC7F0BDAC8BED51FDBF79DC54532A /* CNIODarwin */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		27F5D815E55B13B41A68765E6D4C85AE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = EA2E1AACE9CA08A59A5D588D08125911 /* Build configuration list for PBXProject "CNIODarwin" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = FF40EFB7D6B1173053907ED0BFE45213;
+			productRefGroup = 9DE338C3D1805BB1AC58DCA8D4900929 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E32F41231F1384F7485067EA4D2FE32C /* CNIODarwin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		471FAE327E840CEB75AF467C1B3E4EDD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		097FAA7E7AAE709EB06594EC0BA1AFD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD62F67A189F9EC8CEDC43407876722E /* CNIODarwin-dummy.m in Sources */,
+				05E474579BD9D7E65CA136C8FC33D10C /* shim.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0861668BD9A062F308B542F86D685503 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0EB90D37B77B4AC7578C9847BA62697 /* CNIODarwin.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CNIODarwin/CNIODarwin-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CNIODarwin/CNIODarwin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/CNIODarwin/CNIODarwin.modulemap";
+				PRODUCT_MODULE_NAME = CNIODarwin;
+				PRODUCT_NAME = CNIODarwin;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.4;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		51AB8C517D733D2D7BB55B4DBFF8A110 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		B4A3FBB7E0968AE9A0BB6185556D8790 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		E432D2D18156325FE7D6A1BCEC1E9846 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11080A005A3EC72DD3CB36D10B2ECEFE /* CNIODarwin.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CNIODarwin/CNIODarwin-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CNIODarwin/CNIODarwin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/CNIODarwin/CNIODarwin.modulemap";
+				PRODUCT_MODULE_NAME = CNIODarwin;
+				PRODUCT_NAME = CNIODarwin;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.4;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5D1CF03E23FD073225415919125A1A89 /* Build configuration list for PBXNativeTarget "CNIODarwin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E432D2D18156325FE7D6A1BCEC1E9846 /* Debug */,
+				0861668BD9A062F308B542F86D685503 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA2E1AACE9CA08A59A5D588D08125911 /* Build configuration list for PBXProject "CNIODarwin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B4A3FBB7E0968AE9A0BB6185556D8790 /* Debug */,
+				51AB8C517D733D2D7BB55B4DBFF8A110 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 27F5D815E55B13B41A68765E6D4C85AE /* Project object */;
+}

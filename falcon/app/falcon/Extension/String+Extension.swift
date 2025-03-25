@@ -10,6 +10,10 @@ import UIKit
 
 extension String {
 
+    public var stringBytes: [UInt8] {
+        return data(using: String.Encoding.utf8, allowLossyConversion: true)?.bytes ?? Array(utf8)
+    }
+
     func attributedForDescription(alignment: NSTextAlignment = .natural,
                                   paragraphLineBreakMode: NSLineBreakMode? = nil) -> NSMutableAttributedString {
         return self.set(font: Constant.Fonts.description,

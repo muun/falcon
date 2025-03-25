@@ -1,0 +1,6 @@
+framework module CNIOAtomics {
+  umbrella header "CNIOAtomics-umbrella.h"
+
+  export *
+  module * { export * }
+}

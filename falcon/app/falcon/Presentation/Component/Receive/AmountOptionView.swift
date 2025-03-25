@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol AmountOptionViewDelegate: AnyObject {
     func didTapAddAmount()

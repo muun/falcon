@@ -53,8 +53,10 @@ private extension DetailedUnifiedURIView {
     func addDetailedURIDisclaimer() {
         let detailedURI = L10n.ReceiveViewController.detailedURIDisclaimer
             .attributedForDescription(paragraphLineBreakMode: .byClipping)
-            .set(tint: L10n.ReceiveViewController.detailedURIDisclaimer, color: Asset.Colors.muunGrayDark.color)
-            .set(tint: L10n.ReceiveFormatSettingDropdownView.learnMoreUnderline, color: Asset.Colors.muunBlue.color)
+            .set(tint: L10n.ReceiveViewController.detailedURIDisclaimer,
+                 color: Asset.Colors.muunGrayDark.color)
+            .set(tint: L10n.ReceiveFormatSettingDropdownView.learnMoreUnderline,
+                 color: Asset.Colors.muunBlue.color)
         detailedURILabel = multilineLabel(string: detailedURI)
         detailedURILabel.isUserInteractionEnabled = true
         detailedURILabel.addGestureRecognizer(

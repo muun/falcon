@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import core
+@testable import Muun
 
 class FalconUITests: XCTestCase {
 

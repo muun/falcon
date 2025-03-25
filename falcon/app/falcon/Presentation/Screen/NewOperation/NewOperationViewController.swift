@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol NewOpViewDelegate: AnyObject {
     func readyForNextState(_ isReady: Bool, error: String?)
@@ -348,14 +348,14 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         self.navigationController!.present(alert, animated: true)
     }
 
-    func requestFinish(_ operation: core.Operation) {
+    func requestFinish(_ operation: Operation) {
         toggleUserInteraction(isEnabled: false)
         newOpView.isLoading = true
 
         logEvent("\(screenLoggingName)_submitted", parameters: newOpParams)
     }
 
-    func operationCompleted(_ operation: core.Operation) {
+    func operationCompleted(_ operation: Operation) {
         newOpParams["operation_id"] =  "\(operation.id ?? 0)"
         logEvent("\(screenLoggingName)_completed", parameters: newOpParams)
 

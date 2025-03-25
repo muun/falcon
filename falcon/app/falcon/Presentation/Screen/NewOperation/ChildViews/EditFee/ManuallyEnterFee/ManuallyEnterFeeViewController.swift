@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class ManuallyEnterFeeViewController: MUViewController {
 
@@ -165,7 +165,7 @@ class ManuallyEnterFeeViewController: MUViewController {
 
             let feeAmount: BitcoinAmount
             switch feeState {
-            case .finalFee(let amount, _):
+            case .finalFee(let amount, _, _):
                 feeAmount = amount
             case .feeNeedsChange(let amount, _):
                 feeAmount = amount
@@ -244,7 +244,7 @@ extension ManuallyEnterFeeViewController: UITextFieldDelegate {
 extension ManuallyEnterFeeViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
-        if case .finalFee(let fee, let rate) = selectedFee {
+        if case .finalFee(let fee, let rate, _) = selectedFee {
             delegate?.selected(fee: fee, rate: rate)
             view.endEditing(true)
             navigationController?.dismiss(animated: true)

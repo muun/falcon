@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol ErrorViewDelegate: AnyObject {
     func retryTouched(button: ButtonView)

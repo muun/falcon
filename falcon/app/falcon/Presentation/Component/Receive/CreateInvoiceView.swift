@@ -84,8 +84,10 @@ class CreateInvoiceView: UIView, SmallButtonViewDelegate {
         addSubview(overlayStackView)
 
         NSLayoutConstraint.activate([
-            overlayStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            overlayStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin),
+            overlayStackView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                      constant: .sideMargin),
+            overlayStackView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                       constant: -.sideMargin),
             overlayStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 

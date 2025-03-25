@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 // TODO: implement a strategy pattern for this and for manuallyEnterQRViewController
 class LNURLManuallyEnterQRViewController: MUViewController {

@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+import UIKit
 
 protocol SettingsDropdownPresenter: AnyObject {
     func didChange(value: ReceiveFormatPreference)

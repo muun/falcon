@@ -1,0 +1,6 @@
+framework module NIOEmbedded {
+  umbrella header "SwiftNIOEmbedded-umbrella.h"
+
+  export *
+  module * { export * }
+}

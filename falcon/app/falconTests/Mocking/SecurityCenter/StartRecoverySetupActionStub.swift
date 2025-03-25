@@ -6,8 +6,9 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-@testable import core
+
 import RxSwift
+@testable import Muun
 
 class StartRecoverySetupActionStub: StartRecoverCodeSetupAction {
     lazy var observable = BehaviorSubject(value: ActionState<()>.createEmpty())

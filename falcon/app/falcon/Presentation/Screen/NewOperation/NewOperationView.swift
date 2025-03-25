@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import core
+
 
 protocol NewOperationViewDelegate: AnyObject {
     func invoiceJustExpired()

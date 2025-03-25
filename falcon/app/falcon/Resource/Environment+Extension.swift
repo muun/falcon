@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import core
+
 
 extension Environment {
     var firebaseOptionsPath: String {

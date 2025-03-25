@@ -9,7 +9,7 @@
 import XCTest
 
 import RxSwift
-@testable import core
+
 @testable import Muun
 
 class AddressActionsTests: MuunTestCase {

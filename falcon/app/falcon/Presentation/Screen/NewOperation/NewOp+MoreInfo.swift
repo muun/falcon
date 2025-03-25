@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 extension BottomDrawerInfo {
 

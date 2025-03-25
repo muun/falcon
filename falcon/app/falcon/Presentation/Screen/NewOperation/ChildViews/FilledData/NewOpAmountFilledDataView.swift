@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 struct Notice {
     let notice: String

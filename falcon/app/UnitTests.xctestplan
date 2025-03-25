@@ -14,13 +14,6 @@
   },
   "testTargets" : [
     {
-      "target" : {
-        "containerPath" : "container:Pods\/core.xcodeproj",
-        "identifier" : "4A208F9F1AC5EE61FE968B79EF775F24",
-        "name" : "core.root-all-notifications-Unit-Tests"
-      }
-    },
-    {
       "skippedTests" : [
         "FCMTokenActionTest\/test_syncAgainOnNewTokenReceivedWhileSyncing()"
       ],

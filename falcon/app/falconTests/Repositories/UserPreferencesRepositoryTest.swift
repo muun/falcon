@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import core
+@testable import Muun
 
 class UserPreferencesRepositoryTest: XCTestCase {
     private var repository: UserPreferencesRepository!

@@ -6,8 +6,8 @@ import (
 
 	"github.com/btcsuite/btcd/chaincfg"
 
-	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/btcutil/hdkeychain"
+	"github.com/btcsuite/btcd/txscript"
 	"github.com/muun/libwallet/addresses"
 	"github.com/muun/libwallet/hdpath"
 	hash "golang.org/x/crypto/ripemd160" //lint:ignore SA1019 using deprecated hash function for compatibility

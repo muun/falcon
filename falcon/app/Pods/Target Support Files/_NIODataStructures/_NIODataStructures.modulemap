@@ -1,0 +1,6 @@
+framework module _NIODataStructures {
+  umbrella header "_NIODataStructures-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -6,7 +6,7 @@
 //  Copyright © 2020 muun. All rights reserved.
 //
 
-import core
+
 
 protocol ActivateEmergencyKitPresenterDelegate: BasePresenterDelegate {
     func reported()

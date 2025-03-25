@@ -7,13 +7,13 @@
 //
 
 @testable import Muun
-@testable import core
+
 import UIKit
 
 class RecoveryCodePrimingPresenterDelegateSpy: RecoveryCodePrimingPresenterDelegate {
     var goToNextCalledCount = 0
     var lastRecoveryCodePassedOnGoToNextScreen: RecoveryCode!
-    func goToNextScreen(recoveryCode: core.RecoveryCode) {
+    func goToNextScreen(recoveryCode: RecoveryCode) {
         goToNextCalledCount += 1
         lastRecoveryCodePassedOnGoToNextScreen = recoveryCode
     }

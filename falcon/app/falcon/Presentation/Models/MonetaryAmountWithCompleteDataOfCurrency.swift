@@ -6,7 +6,7 @@
 //  Copyright © 2022 muun. All rights reserved.
 //
 
-import core
+
 
 /// MonetaryAmount is an object consumed by libWallet as well its really expensive to modify.
 /// This struct is needed in order to have complete access to currency when interacting with monetary amount

@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-import core
+@testable import Muun
 
 // This needs to be named diff than description because it's also a method in the test class
 private let descriptionText = "Test test are tests"

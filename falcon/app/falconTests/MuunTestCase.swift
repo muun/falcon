@@ -11,7 +11,7 @@ import Dip
 import GRDB
 import RxSwift
 import RxBlocking
-@testable import core
+
 @testable import Muun
 import Libwallet
 
@@ -30,7 +30,7 @@ private let databaseCoordinator = try! DatabaseCoordinator(
     secureStorage: SecureStorage(keychainRepository: keychainRepository)
 )
 
-var keychainRepository = KeychainRepository(keyPrefix: secureStoragePrefix, group: core.Identifiers.group)
+var keychainRepository = KeychainRepository(keyPrefix: secureStoragePrefix, group: Identifiers.group)
 
 class MuunTestCase: XCTestCase {
     
@@ -73,7 +73,7 @@ class MuunTestCase: XCTestCase {
                 secureStoragePrefix
             }
             container.register(.singleton, type: String.self, tag: DependencyContainer.DataTags.secureStorageGroup) {
-                core.Identifiers.group
+                Identifiers.group
             }
 
             container.register { URLSession.shared }

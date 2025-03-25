@@ -6,7 +6,7 @@
 //  Copyright © 2019 muun. All rights reserved.
 //
 
-import core
+
 
 protocol ManuallyEnterFeePresenterDelegate: BasePresenterDelegate {
     func insufficientFunds()
@@ -28,7 +28,7 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
             feeRate = rate
             isValid = false
 
-        case .finalFee(_, let rate):
+        case .finalFee(_, let rate, _):
             feeRate = rate
             isValid = true
 
@@ -36,13 +36,13 @@ class ManuallyEnterFeePresenter<Delegate: ManuallyEnterFeePresenterDelegate>: Fe
             return
         }
 
-        let maxFeeRate = core.Constant.FeeProtocol.maxFeeRateAllowed
+        let maxFeeRate = Constant.FeeProtocol.maxFeeRateAllowed
         if feeRate.satsPerVByte >= maxFeeRate.satsPerVByte {
             delegate.feeIsTooHigh(maxFee: maxFeeRate)
             return
         }
 
-        let minProtocolFeeRate = core.Constant.FeeProtocol.minProtocolFeeRate
+        let minProtocolFeeRate = Constant.FeeProtocol.minProtocolFeeRate
         let minSatsPerVByte = max(minMempoolFeeRate.satsPerVByte, minProtocolFeeRate.satsPerVByte)
 
         if feeRate.satsPerVByte < minSatsPerVByte {

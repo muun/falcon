@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol OpAmountTransitions: NewOperationTransitions {
     func didEnter(amount: BitcoinAmount, data: NewOperationStateLoaded, takeFeeFromAmount: Bool)

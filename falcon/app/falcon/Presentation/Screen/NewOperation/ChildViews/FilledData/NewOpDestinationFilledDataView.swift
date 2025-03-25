@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol NewOpDestinationViewDelegate: AnyObject {
     func showMoreInfo(info: MoreInfo)

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import core
+@testable import Muun
 
 extension Factory {
 

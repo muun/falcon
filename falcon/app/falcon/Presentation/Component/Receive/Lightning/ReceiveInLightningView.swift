@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 protocol ReceiveDelegate: AnyObject {
     func didTapOnShare(_ shareText: String)

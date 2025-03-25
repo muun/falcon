@@ -7,7 +7,7 @@
 //
 
 @testable import Muun
-@testable import core
+
 
 class FakeKeysRepository: KeysRepository {
     var lastStoredChallengeKey: ChallengeKey!

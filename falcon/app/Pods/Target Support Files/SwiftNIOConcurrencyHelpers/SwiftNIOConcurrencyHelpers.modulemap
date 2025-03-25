@@ -1,0 +1,6 @@
+framework module NIOConcurrencyHelpers {
+  umbrella header "SwiftNIOConcurrencyHelpers-umbrella.h"
+
+  export *
+  module * { export * }
+}

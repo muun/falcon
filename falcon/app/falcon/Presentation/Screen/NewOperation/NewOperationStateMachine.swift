@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 import Libwallet
-import core
+
 
 class NewOperationStateMachine {
     private let subject: BehaviorSubject<NewopStateProtocol> = BehaviorSubject(value: NewopStartState())

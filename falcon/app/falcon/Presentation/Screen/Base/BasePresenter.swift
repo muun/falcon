@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import core
+
 
 protocol BasePresenterDelegate: AnyObject {
     func showMessage(_ message: String)
@@ -38,11 +38,20 @@ class BasePresenter<Delegate> where Delegate: BasePresenterDelegate {
         Logger.log(.debug, "\(className) Set Up")
     }
 
+
+    /// Adds a `subscribeOn` parameter that defaults to a `background` queue,
+    /// helping avoid refresh delays caused by lower-priority queues when needed.
+    /// Uses a `userInitiated` queue to reduce refresh delays after a device restart
+    /// such as when the user updates iOS and reboots.
+    /// For instance, this prevents users from seeing a zero balance for several seconds,
+    /// improving the overall experience.
     @discardableResult
-    public func subscribeTo<T>(_ observable: Observable<T>, onNext: @escaping (_ t: T) -> Void)
+    public func subscribeTo<T>(_ observable: Observable<T>,
+                               onNext: @escaping (_ t: T) -> Void,
+                               subscribeOn: SchedulerType = Scheduler.backgroundScheduler)
         -> CompositeDisposable.DisposeKey? {
         let disp = observable
-            .subscribeOn(Scheduler.backgroundScheduler)
+            .subscribeOn(subscribeOn)
             .observeOn(Scheduler.foregroundScheduler)
             .subscribe(
                 onNext: onNext,

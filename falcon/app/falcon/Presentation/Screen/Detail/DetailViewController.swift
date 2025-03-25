@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import core
+
 
 class DetailViewController: MUViewController {
 
@@ -18,12 +18,12 @@ class DetailViewController: MUViewController {
 
     fileprivate lazy var presenter = instancePresenter(DetailPresenter.init, delegate: self)
 
-    let operation: core.Operation
+    let operation: Operation
     let formatter: OperationFormatter
 
     private let refundMessage = L10n.DetailViewController.s1
 
-    init(operation: core.Operation) {
+    init(operation: Operation) {
         self.operation = operation
         self.formatter = OperationFormatter(operation: operation)
 
@@ -280,7 +280,9 @@ class DetailViewController: MUViewController {
         if let fee = swap.getLightningFeeInSats(onChainFee: operation.fee)?
             .toBitcoinAmount(reference: operation.amount) {
             stackView.addArrangedSubview(
-                MUDetailRowView.copyableAmount(fee, title: L10n.DetailViewController.s8, controller: self)
+                MUDetailRowView.copyableAmount(fee,
+                                               title: L10n.DetailViewController.s8,
+                                               controller: self)
             )
         }
 
@@ -288,7 +290,9 @@ class DetailViewController: MUViewController {
 
     fileprivate func add(invoice: String) {
         stackView.addArrangedSubview(
-            MUDetailRowView.clipboard(invoice, title: L10n.DetailViewController.s13, controller: self)
+            MUDetailRowView.clipboard(invoice,
+                                      title: L10n.DetailViewController.s13,
+                                      controller: self)
         )
     }
 

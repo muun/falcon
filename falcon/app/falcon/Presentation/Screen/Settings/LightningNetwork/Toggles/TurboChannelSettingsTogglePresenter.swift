@@ -8,7 +8,7 @@
 
 import Foundation
 
-import core
+
 import RxSwift
 
 class TurboChannelSettingsTogglePresenter<Delegate: SettingsTogglePresenterDelegate>: BasePresenter<Delegate> {
