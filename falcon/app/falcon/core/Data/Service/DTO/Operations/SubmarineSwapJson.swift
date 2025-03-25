@@ -25,6 +25,8 @@ struct SubmarineSwapJson: Codable {
 
     let payedAt: Date?
     let preimageInHex: String?
+
+    let maxAlternativeTransactionCount: Int
 }
 
 struct BestRouteFeesJson: Codable {

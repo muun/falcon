@@ -120,8 +120,11 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
                                      origin: Constant.NewOpAnalytics.Origin) -> Single<PaymentRequestType> {
         submarineSwapAction.run(invoice: invoice.rawInvoice, origin: origin.rawValue)
 
-        return submarineSwapAction.getValue().map({ (submarineSwap) -> PaymentRequestType in
-            return FlowSubmarineSwap(invoice: invoice, submarineSwap: submarineSwap)
+        return submarineSwapAction.getValue().map({ submarineSwapCreated -> PaymentRequestType in
+            return FlowSubmarineSwap(
+                invoice: invoice,
+                submarineSwapCreated: submarineSwapCreated
+            )
         })
     }
 

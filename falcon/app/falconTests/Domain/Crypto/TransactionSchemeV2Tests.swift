@@ -36,7 +36,8 @@ class TransactionSchemeV2Tests: XCTestCase {
                 destination: "2N9Byuz8A5CBHMjJAisG6BVaG6D3TQAVkK7",
                 amount: Satoshis.from(bitcoin: 9.9995),
                 fee: Satoshis(value: 0),
-                change: nil
+                change: nil,
+                alternative: false
             ),
             nonces: LibwalletGenerateMusigNonces(1)!
         )

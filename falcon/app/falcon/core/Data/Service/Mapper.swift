@@ -871,7 +871,8 @@ extension SubmarineSwap: APIConvertible {
                                  bestRouteFees: nil,
                                  fundingOutputPolicies: nil,
                                  payedAt: _payedAt,
-                                 preimageInHex: _preimageInHex)
+                                 preimageInHex: _preimageInHex,
+                                 maxAlternativeTransactionCount: 0)
     }
 }
 
@@ -1155,6 +1156,7 @@ extension OperationCreatedJson: ModelOperationConvertible {
     public func toModel(decrypter: OperationMetadataDecrypter) -> OperationCreated {
         return OperationCreated(operation: operation.toModel(decrypter: decrypter),
                                 partiallySignedTransaction: partiallySignedTransaction.toModel(),
+                                alternativeTransactions: alternativeTransactions.toModel(),
                                 nextTransactionSize: nextTransactionSize.toModel(),
                                 change: changeAddress?.toModel())
     }
@@ -1363,6 +1365,15 @@ extension Array: ModelOperationConvertible where Element: ModelOperationConverti
         return map({ $0.toModel(decrypter: decrypter) })
     }
 
+}
+
+extension Array: APIConvertible where Element: APIConvertible {
+
+    typealias Output = [Element.Output]
+
+    func toJson() -> [Element.Output] {
+        return map({ $0.toJson() })
+    }
 }
 
 // swiftlint:enable cyclomatic_complexity

@@ -9,7 +9,7 @@
 import Foundation
 import Libwallet
 
-public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
+public class SubmarineSwapAction: AsyncAction<SubmarineSwapCreated> {
 
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
@@ -38,7 +38,7 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
                                                         bkgTimes: backgroundTimesService.retrieveTimeLapses())
         runSingle(
             houstonService.createSubmarineSwap(submarineSwapRequest: submarineSwapRequest)
-                .map({ swap in
+                .map({ swapCreated in
 
                     let userKey = try self.keysRepository.getBasePublicKey()
                     let muunKey = try self.keysRepository.getCosigningKey()
@@ -48,16 +48,16 @@ public class SubmarineSwapAction: AsyncAction<(SubmarineSwap)> {
                             invoice,
                             userKey.key,
                             muunKey.key,
-                            swap,
+                            swapCreated.swap,
                             Int64(swapExpirationInBlocks),
                             Environment.current.network,
                             err
                         )
                     })
 
-                    self.verifyLockTime(swap, expirationInBlocks: swapExpirationInBlocks)
+                    self.verifyLockTime(swapCreated.swap, expirationInBlocks: swapExpirationInBlocks)
 
-                    return swap
+                    return swapCreated
                 })
         )
     }

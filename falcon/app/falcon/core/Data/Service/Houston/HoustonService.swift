@@ -397,13 +397,17 @@ public class HoustonService: BaseService {
             .asCompletable()
     }
 
-    func pushTransaction(rawTransaction: RawTransaction?, operationId: Int) -> Single<RawTransactionResponse> {
-        var jsonData: Data?
-        if let rawTx = rawTransaction {
-            jsonData = JSONEncoder.data(from: rawTx)
-        }
+    func pushTransactions(
+        rawTransaction: RawTransaction?,
+        alternativeTransactions: [RawTransaction],
+        operationId: Int
+    ) -> Single<RawTransactionResponse> {
+        let jsonData = JSONEncoder.data(json: PushTransactionsJson(
+            rawTransaction: rawTransaction?.toJson(),
+            alternativeTransactions: alternativeTransactions.toJson()
+        ))
 
-        let path = "operations/{operationId}/raw-transaction"
+        let path = "operations/{operationId}/raw-transactions"
         let finalPath = path.replacingOccurrences(of: "{operationId}", with: String(describing: operationId))
 
         return put(
@@ -423,11 +427,16 @@ public class HoustonService: BaseService {
     // ---------------------------------------------------------------------------------------------
     // Submarine swaps:
 
-    func createSubmarineSwap(submarineSwapRequest: SubmarineSwapRequest) -> Single<SubmarineSwap> {
+    func createSubmarineSwap(submarineSwapRequest: SubmarineSwapRequest) -> Single<SubmarineSwapCreated> {
         let jsonData = JSONEncoder.data(from: submarineSwapRequest)
 
         return post("operations/sswap/create", body: jsonData, andReturn: SubmarineSwapJson.self)
-            .map({ $0.toModel() })
+            .map({
+                SubmarineSwapCreated(
+                    swap: $0.toModel(),
+                    maxAlternativeTransactionCount: $0.maxAlternativeTransactionCount
+                )
+            })
     }
 
     // ---------------------------------------------------------------------------------------------

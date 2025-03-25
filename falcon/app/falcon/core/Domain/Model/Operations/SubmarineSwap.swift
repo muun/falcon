@@ -300,3 +300,8 @@ public class SwapExecutionParameters: NSObject {
         return routingFee + sweepFee
     }
 }
+
+public struct SubmarineSwapCreated {
+    public let swap: SubmarineSwap
+    public let maxAlternativeTransactionCount: Int
+}

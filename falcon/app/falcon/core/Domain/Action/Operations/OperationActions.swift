@@ -173,7 +173,12 @@ public class OperationActions {
         }
     }
 
-    public func newOperation(_ operation: Operation, with swapParameters: SwapExecutionParameters? = nil) -> Single<Operation> {
+    // swiftlint:disable function_body_length
+    public func newOperation(
+        _ operation: Operation,
+        with swapParameters: SwapExecutionParameters? = nil,
+        maxAlternativeTransactionCount: Int = 0
+    ) -> Single<Operation> {
 
         guard let destinationAddress = operation.receiverAddress else {
             Logger.fatal("Tried to create new operation without a destination address")
@@ -204,21 +209,38 @@ public class OperationActions {
 
         let nonceCount = json.outpoints?.count ?? 0
         let nonces = LibwalletGenerateMusigNonces(nonceCount)!
+        var noncesForAlternativeTransactions: [LibwalletMusigNonces] = []
+        for _ in 0..<maxAlternativeTransactionCount {
+            noncesForAlternativeTransactions.append(LibwalletGenerateMusigNonces(nonceCount)!)
+        }
+
         var noncesHex = [String]()
         for i in 0..<nonceCount {
             noncesHex.append(nonces.getPubnonceHex(i))
         }
+        // I mean, this looks really ugly. Maybe we should send an array of arrays of nonces for alternative txs
+        for nonces in noncesForAlternativeTransactions {
+            for i in 0..<nonceCount {
+                noncesHex.append(nonces.getPubnonceHex(i))
+            }
+        }
+
         json.userPublicNoncesHex = noncesHex
 
         return houstonService.newOperation(operation: json)
             .flatMap({ created in
 
+                // TODO: only allow alternative TXs for 0-conf swaps
+                precondition(maxAlternativeTransactionCount >= created.alternativeTransactions.count)
+
                 let rawTransaction: RawTransaction?
+                let alternativeTransactions: [RawTransaction]
                 var operationUpdated = created.operation
 
                 if case .LEND = swapParameters?.debtType {
                     // If we are on a lend swap we don't need to sign anything because there wont be a transaction
                     rawTransaction = nil
+                    alternativeTransactions = []
                 } else {
                     // Sign the transaction
                     let privateKey = try self.keysRepository.getBasePrivateKey()
@@ -228,7 +250,9 @@ public class OperationActions {
                         destination: destinationAddress,
                         amount: outputAmount,
                         fee: operation.fee.inSatoshis,
-                        change: created.change)
+                        change: created.change,
+                        alternative: false
+                    )
 
                     let signedTransaction = try created.partiallySignedTransaction.sign(
                         key: privateKey,
@@ -237,15 +261,30 @@ public class OperationActions {
                         nonces: nonces
                     )
 
+                    var signedAlternativeTransactions: [PartiallySignedTransaction.SignedTransaction] = []
+                    for (i, alternativeTransaction) in created.alternativeTransactions.enumerated() {
+                        signedAlternativeTransactions.append(try alternativeTransaction.sign(
+                            key: privateKey,
+                            muunKey: muunKey,
+                            expectations: expectations.toAlternative(),
+                            nonces: noncesForAlternativeTransactions[i]
+                        ))
+                    }
+
                     operationUpdated.transaction?.hash = signedTransaction.hash
                     operationUpdated.status = .SIGNED
 
                     rawTransaction = RawTransaction(hex: signedTransaction.bytes.toHexString())
+                    alternativeTransactions = signedAlternativeTransactions.map({ tx in
+                        RawTransaction(hex: tx.bytes.toHexString())
+                    })
                 }
 
-                return self.houstonService.pushTransaction(
+                return self.houstonService.pushTransactions(
                     rawTransaction: rawTransaction,
-                    operationId: operationUpdated.id!)
+                    alternativeTransactions: alternativeTransactions,
+                    operationId: operationUpdated.id!
+                )
                     .map { pushTxResponse in
                         self.logOnStaleNTS(pushTxResponse.nextTransactionSize)
                         self.nextTransactionSizeRepository

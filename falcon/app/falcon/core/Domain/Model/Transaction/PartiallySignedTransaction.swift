@@ -18,6 +18,17 @@ struct PartiallySignedTransaction {
         let amount: Satoshis
         let fee: Satoshis
         let change: MuunAddress?
+        let alternative: Bool
+
+        func toAlternative() -> Expectations {
+            return Expectations(
+                destination: destination,
+                amount: amount,
+                fee: fee,
+                change: change,
+                alternative: true
+            )
+        }
     }
 
     struct SignedTransaction {
@@ -41,7 +52,8 @@ struct PartiallySignedTransaction {
             expectations.destination,
             expectations.amount.value,
             expectations.change,
-            expectations.fee.value)
+            expectations.fee.value,
+            expectations.alternative)
 
         do {
             try partial.verify(expectations, userPublicKey: key.walletPublicKey().key, muunPublickKey: muunKey.key)

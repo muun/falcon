@@ -158,7 +158,7 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
     private func buildDestination(type: PaymentRequestType, confirm: Bool = false) -> MUView {
         let submarineSwap = getSubmarineSwap(type: type)
 
-        swapUuid = (type as? FlowSubmarineSwap)?.submarineSwap._swapUuid
+        swapUuid = (type as? FlowSubmarineSwap)?.submarineSwapCreated.swap._swapUuid
 
         let pubKey = submarineSwap.receiver!.publicKey
         let moreInfo = BottomDrawerInfo.swapDestination(
@@ -245,7 +245,7 @@ class OpSubmarineSwapViewBuilder: OpViewBuilder {
         guard let swapFlow = type as? FlowSubmarineSwap else {
             Logger.fatal("Wrong payment request: \(type) in Submarine swap flow")
         }
-        return swapFlow.submarineSwap.toLibwallet()
+        return swapFlow.submarineSwapCreated.swap.toLibwallet()
     }
 
 }

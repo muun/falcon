@@ -44,7 +44,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
     let stateMachine = NewOperationStateMachine()
 
-    var submarineSwap: SubmarineSwap? // TODO(newop): can we remove this hack somehow?
+    var submarineSwapCreated: SubmarineSwapCreated? // TODO(newop): can we remove this hack somehow?
 
     /// Go to: [BitcoinAmountWithSelectedCurrency](x-source-tag://BitcoinAmountWithSelectedCurrency)
     var lastSelectedCurrency: Currency?
@@ -402,7 +402,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
             .getOutpoints().split(separator: "\n").map { String($0) }
 
         let operation = BuildOperationAction.swap(
-            submarineSwap!,
+            submarineSwapCreated!.swap,
             amount: state.amountInfo!.amount!.adapt(),
             fee: state.validated!.swapInfo!.onchainFee!.adapt(),
             description: state.note,
@@ -411,12 +411,18 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         )
 
         let params = state.validated!.swapInfo!.swapFees!.adapt()
+        let maxAlternativeTransactionCount = submarineSwapCreated!.maxAlternativeTransactionCount
 
-        submarineSwap = nil
+        submarineSwapCreated = nil
 
         delegate.requestFinish(operation)
 
-        subscribeTo(operationActions.newOperation(operation, with: params), onSuccess: self.operationCreated)
+        subscribeTo(
+            operationActions.newOperation(operation,
+                                          with: params,
+                                          maxAlternativeTransactionCount: maxAlternativeTransactionCount),
+            onSuccess: self.operationCreated
+        )
     }
 
     private func operationCreated(_ operation: Operation) {
@@ -445,7 +451,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         case .toAddress(let uri):
             return FlowToAddress(uri: uri)
         case .submarineSwap(let invoice):
-            return FlowSubmarineSwap(invoice: invoice, submarineSwap: submarineSwap!)
+            return FlowSubmarineSwap(invoice: invoice, submarineSwapCreated: submarineSwapCreated!)
         default:
             Logger.fatal("Could not produce a valid PaymentRequestType: \(intent)")
         }
@@ -494,8 +500,8 @@ extension NewOperationPresenter: OpLoadingTransitions {
         context.minFeeRateInSatsPerVByte = feeInfo.minFeeRateInSatsPerVByte
 
         if let flowSwap = paymentRequestType as? FlowSubmarineSwap {
-            submarineSwap = flowSwap.submarineSwap
-            context.submarineSwap = flowSwap.submarineSwap.toLibwallet()
+            submarineSwapCreated = flowSwap.submarineSwapCreated
+            context.submarineSwap = flowSwap.submarineSwapCreated.swap.toLibwallet()
         }
 
         try! stateMachine.withState { (state: NewopResolveState) in

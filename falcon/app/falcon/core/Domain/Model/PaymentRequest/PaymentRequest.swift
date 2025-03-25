@@ -41,11 +41,11 @@ public struct FlowToAddress {
 
 public struct FlowSubmarineSwap {
     public let invoice: LibwalletInvoice
-    public let submarineSwap: SubmarineSwap
+    public let submarineSwapCreated: SubmarineSwapCreated
 
-    public init(invoice: LibwalletInvoice, submarineSwap: SubmarineSwap) {
+    public init(invoice: LibwalletInvoice, submarineSwapCreated: SubmarineSwapCreated) {
         self.invoice = invoice
-        self.submarineSwap = submarineSwap
+        self.submarineSwapCreated = submarineSwapCreated
     }
 }
 
@@ -98,11 +98,11 @@ extension FlowToAddress: PaymentRequestType {
 extension FlowSubmarineSwap: PaymentRequestType {
 
     public func destination() -> String {
-        if let alias = submarineSwap._receiver._alias {
+        if let alias = submarineSwapCreated.swap._receiver._alias {
             return alias
         }
 
-        if let pubKey = submarineSwap._receiver._publicKey {
+        if let pubKey = submarineSwapCreated.swap._receiver._publicKey {
             return truncate(address: pubKey)
         }
 
