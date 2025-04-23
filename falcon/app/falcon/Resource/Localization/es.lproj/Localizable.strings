@@ -130,6 +130,7 @@ Haz clic o desliza para ver tus pagos.";
 "Home.activateTaproot" = "Mejora tus pagos. Ahorra con cada pago activando Taproot.";
 "Home.activateTaprootHighlight" = "Mejora tus pagos.";
 "Home.highFeesBannerTitle" = "La red de Bitcoin está congestionada. Los pagos están más lentos y costosos.";
+"Home.iOSUnder15Banner" = "Actualiza a iOS 15 o superior para seguir recibiendo las últimas funciones y mejoras de seguridad.";
 
 /* Presentation/Screen/Home/HomeViewController.swift */
 "HomeViewController.s1" = "Reportar un problema";

@@ -176,6 +176,8 @@ extension HomeViewController: HomePresenterDelegate {
             homeView.show(blocksLeft: blocksLeft)
         case .highFeesHomeBanner:
             homeView.show(actionCard: .highFeesHomeBanner())
+        case .iOSUnder15:
+            homeView.show(actionCard: .iOSUnder15Banner())
         case .none:
             homeView.hideCompanion()
         }
@@ -211,7 +213,7 @@ extension HomeViewController: HomeViewDelegate {
                 configuration: .taprootActivation(successFeedback: FeedbackInfo.taprootActive)
             ))
 
-        case .highFeesHomeBanner:
+        case .highFeesHomeBanner, .iOSUnder15:
             break
 
         case .preactiveTaproot(let blocksLeft):

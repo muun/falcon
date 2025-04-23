@@ -22,6 +22,7 @@ public enum FeatureFlags: String, RawRepresentable {
     case Taproot = "TAPROOT"
     case TaprootPreactivation = "TAPROOT_PREACTIVATION"
     case highFeesHomeBanner = "HIGH_FEES_HOME_BANNER"
+    case osVersionDeprecatedFlow = "OS_VERSION_DEPRECATED_FLOW"
     case highFeesReceiveFlow = "HIGH_FEES_RECEIVE_FLOW"
     case collectDeviceCheckReachability = "COLLECT_DEVICE_CHECK_REACHABILITY"
     case effectiveFeesCalculation = "EFFECTIVE_FEES_CALCULATION"

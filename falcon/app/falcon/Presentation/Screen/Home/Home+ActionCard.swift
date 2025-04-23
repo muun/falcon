@@ -55,4 +55,19 @@ extension ActionCardModel {
         )
     }
 
+    static func iOSUnder15Banner() -> ActionCardModel {
+        return ActionCardModel(
+            title: L10n.Home.iosUnder15Banner
+                .set(font: Constant.Fonts.system(size: .opHelper, weight: .medium),
+                     lineSpacing: Constant.FontAttributes.lineSpacing),
+            description: "".attributedForDescription(),
+            nextViewController: UIViewController(), // Any controller sufices here.
+            stemNumber: nil,
+            stepImage: Asset.Assets.notice.image,
+            state: .home,
+            accessibilityLabel: L10n.Home.highFeesBannerTitle,
+            accessibilityTrait: .staticText
+        )
+    }
+
 }
