@@ -455,6 +455,8 @@ internal enum L10n {
     internal static let boldBackUp = L10n.tr("Localizable", "Home.boldBackUp")
     /// The Bitcoin Network is congested. Fees are high, and confirmation times are slow.
     internal static let highFeesBannerTitle = L10n.tr("Localizable", "Home.highFeesBannerTitle")
+    /// Upgrade to iOS 15 or greater to keep getting the latest features and security updates.
+    internal static let iosUnder15Banner = L10n.tr("Localizable", "Home.iOSUnder15Banner")
     /// RECEIVE
     internal static let receiveCTA = L10n.tr("Localizable", "Home.receiveCTA")
     /// SEND

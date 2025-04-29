@@ -8,7 +8,6 @@
 
 import Libwallet
 
-
 class EmergencyKit {
 
     let verificationCode: String

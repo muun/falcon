@@ -20,6 +20,7 @@ enum HomeCompanion {
     case backUp
     case activateTaproot
     case highFeesHomeBanner
+    case iOSUnder15
     case preactiveTaproot(blocksLeft: UInt)
     case blockClock(blocksLeft: UInt)
     case none
@@ -96,6 +97,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
                                          featureFlagsSelector.run())
         ) { [self] (_, taprootStatus, featureFlags) in
             let isHighFeesBannerTurnedOn = featureFlags.contains(.highFeesHomeBanner)
+            let isOsVersionDeprecatedOn = featureFlags.contains(.osVersionDeprecatedFlow)
 
             if case .active = taprootStatus,
                preferences.bool(forKey: .preactivedTaproot) {
@@ -109,8 +111,13 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
                 preferences.set(value: true, forKey: .preactivedTaproot)
             }
 
-            delegate.onCompanionChange(decideCompanion(taprootStatus: taprootStatus,
-                                                       isHighFeesBannerTurnedOn: isHighFeesBannerTurnedOn))
+            delegate.onCompanionChange(
+                decideCompanion(
+                    taprootStatus: taprootStatus,
+                    isHighFeesBannerTurnedOn: isHighFeesBannerTurnedOn,
+                    isOsVersionDeprecatedOn: isOsVersionDeprecatedOn
+                )
+            )
         }
 
         decidePollNotificationsPolicy()
@@ -317,6 +324,10 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         return isUnrecoverableUser() && !preferences.bool(forKey: .welcomeMessageSeen)
     }
 
+    private func isOsVersionUnder15() -> Bool {
+        return ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 15
+    }
+
     func shouldDisplayTransactionListTooltip() -> Bool {
         // swiftlint:disable force_error_handling
         let preferences = try? userPreferencesSelector.get()
@@ -365,10 +376,17 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
-    private func decideCompanion(taprootStatus: UserActivatedFeatureStatus,
-                                 isHighFeesBannerTurnedOn: Bool) -> HomeCompanion {
+    private func decideCompanion(
+        taprootStatus: UserActivatedFeatureStatus,
+        isHighFeesBannerTurnedOn: Bool,
+        isOsVersionDeprecatedOn: Bool
+    ) -> HomeCompanion {
         if isUnrecoverableUser() {
             return .backUp
+        }
+
+        if isOsVersionUnder15() && isOsVersionDeprecatedOn {
+            return .iOSUnder15
         }
 
         switch taprootStatus {

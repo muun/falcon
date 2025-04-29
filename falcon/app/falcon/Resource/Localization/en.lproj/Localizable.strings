@@ -129,6 +129,7 @@ Tap or swipe up to see your transactions.";
 "Home.activateTaproot" = "Level-up your payments. Save with each payment by activating Taproot.";
 "Home.activateTaprootHighlight" = "Level-up your payments.";
 "Home.highFeesBannerTitle" = "The Bitcoin Network is congested. Fees are high, and confirmation times are slow.";
+"Home.iOSUnder15Banner" = "Upgrade to iOS 15 or greater to keep getting the latest features and security updates.";
 
 /* Presentation/Screen/Home/HomeViewController.swift */
 "HomeViewController.s1" = "Report a problem";
