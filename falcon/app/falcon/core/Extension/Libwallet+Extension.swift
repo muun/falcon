@@ -269,6 +269,17 @@ extension LibwalletMuunPaymentURI {
     }
 }
 
+extension CardNfcResponse {
+
+    func toLibwallet() -> App_provided_dataNfcBridgeResponse {
+        let cardBridgeResponse = App_provided_dataNfcBridgeResponse()
+        cardBridgeResponse.statusCode = Int32(statusCode)
+        cardBridgeResponse.response = response
+
+        return cardBridgeResponse
+    }
+}
+
 extension Array where Element == Int {
 
     func toLibwallet() -> LibwalletIntList {

@@ -61,12 +61,18 @@ public extension DependencyContainer {
             container.register { AppleDeviceCheckAdapter() as DeviceCheckAdapter }
             container.register(factory: ICloudCapabilitiesProvider.init)
             container.register(.weakSingleton, factory: LocaleTimeZoneProvider.init)
+            container.register(.weakSingleton, factory: StoreKitCapabilitiesProvider.init)
 
             container.register(factory: NotificationScheduler.init)
             container.register(.singleton, factory: ErrorReporter.init)
             container.register(.unique, factory: PingURLService.init)
             container.register(factory: HoustonService.init)
             container.register(.singleton, factory: WalletService.init)
+            container.register(.singleton, factory: HttpClientSessionProvider.init)
+            container.register(.singleton, factory: KeyProvider.init)
+            if #available(iOS 13.0, *) {
+                container.register(.singleton) { DefaultCardNfcService() as CardNfcService }
+            }
         }
     }
 

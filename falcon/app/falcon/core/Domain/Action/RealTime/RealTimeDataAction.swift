@@ -20,6 +20,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
     private let forwardingPoliciesRepository: ForwardingPolicyRepository
     private let minFeeRateRepository: MinFeeRateRepository
     private let featureFlagsRepository: FeatureFlagsRepository
+    private let userRepository: UserRepository
 
     private let secondsForFreshData: Double = 5 * 60
 
@@ -29,7 +30,8 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
          blockchainHeightRepository: BlockchainHeightRepository,
          forwardingPoliciesRepository: ForwardingPolicyRepository,
          minFeeRateRepository: MinFeeRateRepository,
-         featureFlagsRepository: FeatureFlagsRepository) {
+         featureFlagsRepository: FeatureFlagsRepository,
+         userRepository: UserRepository) {
 
         self.houstonService = houstonService
 
@@ -39,6 +41,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
         self.forwardingPoliciesRepository = forwardingPoliciesRepository
         self.minFeeRateRepository = minFeeRateRepository
         self.featureFlagsRepository = featureFlagsRepository
+        self.userRepository = userRepository
 
         super.init(name: "RealTimeDataAction")
     }
@@ -62,6 +65,14 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                         self.minFeeRateRepository
                             .store(satsPerWeightUnit: data.minFeeRateInWeightUnits)
                     }
+
+                    /// If the NFC_CARD feature flag is active, we set cardActivated as true
+                    /// in order to test NFC card interactions during internal testing.
+                    /// This avoids requiring real users to pair an actual NFC card — we only want
+                    /// to test the new operation flow involving NFC card interaction.
+                    /// When the flag is off, cardActivated is set to false.
+                    let isNfcCardFlagActivated = data.features.contains(.nfcCard)
+                    self.userRepository.setCardActivated(isActivated: isNfcCardFlagActivated)
                 })
         } else {
             let realData = RealTimeData(

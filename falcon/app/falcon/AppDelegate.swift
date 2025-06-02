@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Instance this as early as possible to load schema and migrations and crash early
     internal let databaseCoordinator: DatabaseCoordinator = resolve()
 
+    internal let storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider = resolve()
     internal let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider = resolve()
     internal let keychainRepository: KeychainRepository = resolve()
     var debugModeDisplayer: DebugModeDisplayer?
@@ -51,6 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal let featureFlagsRepository: FeatureFlagsRepository = resolve()
     private let preloadFeeDataAction: PreloadFeeDataAction = resolve()
     private let feeDataSyncer: FeeDataSyncer = resolve()
+    internal let httpClientSessionProvider: HttpClientSessionProvider = resolve()
+    internal let cardNfcService: CardNfcService = resolve()
+    internal let keyProvider: KeyProvider = resolve()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -66,11 +70,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         configureFirebase()
         ConectivityCapabilitiesProvider.shared.startMonitoring()
+        storeKitCapabilitiesProvider.start()
         deviceCheckTokenProvider.start()
         if sessionActions.isFirstLaunch() {
             lockManager.firstLaunch()
         }
         configureLibwallet()
+
+        do {
+            _ = try doWithError { error in
+                Libwallet_initStartServer(error)
+            }
+        } catch {
+            Logger.log(.err,
+                       "Error initializing libwallet server: \(error.localizedDescription)")
+        }
 
         registerUserData()
         iCloudCapabilitiesProvider.setup()
@@ -84,7 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         checkIfAppWasOpenByNotification(launchOptions)
-
 
         setupDebugModeIfNeeded()
         backgroundTimesService.onEnterForeground()
@@ -213,6 +226,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         DeviceUtils.appState = application.applicationState
         AnalyticsHelper.logEvent("app_will_terminate")
+        Libwallet_initStopServer()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {

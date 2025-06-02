@@ -351,6 +351,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
     func requestFinish(_ operation: Operation) {
         toggleUserInteraction(isEnabled: false)
         newOpView.isLoading = true
+        newOpParams["has_2fa"] = presenter.hasNfc2fa
 
         logEvent("\(screenLoggingName)_submitted", parameters: newOpParams)
     }
@@ -371,6 +372,10 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         toggleUserInteraction(isEnabled: true)
         newOpView.isLoading = false
         displayErrorView(type: .unexpected)
+    }
+
+    func nfc2faError() {
+        logEvent("nfc_2fa_failed")
     }
 
     private func showDustError() {

@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package rpc;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/muun/libwallet/api";
+
+service WalletService {
+  rpc DeleteWallet(EmptyMessage) returns (OperationStatus);
+
+  // V2 - use then discard API
+  rpc NfcTransmit(NfcTransmitRequest) returns (NfcTransmitResponse);
+
+  // V3 - Future NFC security cards Native/Libwallet API
+//  rpc SetupNfcCard(EmptyMessage) returns (XpubResponse);
+//  rpc ResetNfcCard(EmptyMessage) returns (EmptyMessage);
+//  rpc GetXpubFromNfcCard(EmptyMessage) returns (XpubResponse);
+//  rpc SignMessageNfcCard(SignMessageNfcCardRequest) returns (SignMessageNfcCardResponse);
+
+  // Diagnostic Mode API
+  rpc StartDiagnosticSession(google.protobuf.Empty) returns (DiagnosticSessionDescriptor);
+  rpc PerformDiagnosticScanForUtxos(DiagnosticSessionDescriptor) returns (stream ScanProgressUpdate);
+  rpc SubmitDiagnosticLog(DiagnosticSessionDescriptor) returns (DiagnosticSubmitStatus);
+}
+
+message EmptyMessage {}
+
+message OperationStatus {
+  string status = 1;
+}
+
+message NfcTransmitRequest {
+  bytes apduCommand = 1;
+}
+
+message NfcTransmitResponse {
+  bytes apduResponse = 1;
+  int32 statusCode = 2;
+}
+
+message XpubResponse {
+  string serializedXpub = 1;
+}
+
+message SignMessageNfcCardRequest {
+  string messageHex = 1;
+}
+
+message SignMessageNfcCardResponse {
+  string signedMessageHex = 1;
+}
+
+message DiagnosticSessionDescriptor {
+  string sessionId = 1;
+}
+
+message ScanProgressUpdate {
+  oneof update {
+    FoundUtxoReport foundUtxoReport = 1;
+    ScanComplete scanComplete = 2;
+  }
+}
+
+message FoundUtxoReport {
+  string address = 1;
+  int64 amount = 2;
+}
+
+message ScanComplete {
+  string status = 1;
+}
+
+message DiagnosticSubmitStatus {
+  int64 statusCode = 1;
+  string statusMessage = 2;
+}

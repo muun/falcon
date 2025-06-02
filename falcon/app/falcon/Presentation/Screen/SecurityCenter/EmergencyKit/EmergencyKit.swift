@@ -20,6 +20,7 @@ class EmergencyKit {
         input.firstFingerprint = data.userFingerprint
         input.secondEncryptedKey = data.muunKey
         input.secondFingerprint = data.muunFingerprint
+        input.rcChecksum = data.rcChecksum
 
         do {
             let out = try doWithError({ error in

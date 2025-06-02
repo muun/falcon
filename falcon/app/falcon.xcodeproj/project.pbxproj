@@ -61,10 +61,17 @@
 		128A88C42D4D4E06004E6951 /* wallet_service.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128A88C22D4D4E06004E6951 /* wallet_service.grpc.swift */; };
 		12B477812D47F87500268C76 /* WalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B477802D47F87500268C76 /* WalletService.swift */; };
 		12C350572C8A058D00C28F55 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C350562C8A058400C28F55 /* libresolv.tbd */; };
+		37EB7D112D8296E600D81008 /* storage_service.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EB7D102D8296E600D81008 /* storage_service.pb.swift */; };
+		37EB7D122D8296E600D81008 /* storage_service.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EB7D0F2D8296E600D81008 /* storage_service.grpc.swift */; };
 		4A0D044D2C6E89CA0088B046 /* Libwallet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0D04492C6E897D0088B046 /* Libwallet.xcframework */; };
 		4A0D059E2C6E962D0088B046 /* Libwallet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0D04492C6E897D0088B046 /* Libwallet.xcframework */; };
 		4A0D059F2C6E962D0088B046 /* Libwallet.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0D04492C6E897D0088B046 /* Libwallet.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		62415D1D2DB690F70093662B /* AsciiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62415D1B2DB690F70093662B /* AsciiUtils.swift */; };
+		62415D222DB698D20093662B /* AsciiUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62415D212DB698D20093662B /* AsciiUtilsTests.swift */; };
 		65034AA32CE7B63200A14A73 /* FulfillmentPushedJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65034AA22CE7B63200A14A73 /* FulfillmentPushedJson.swift */; };
+		650481B22D725EAC00EAD7E5 /* CardNfcService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650481B12D725EAC00EAD7E5 /* CardNfcService.swift */; };
+		650481B42D735CFC00EAD7E5 /* LibwalletNfcBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650481B32D735CFC00EAD7E5 /* LibwalletNfcBridge.swift */; };
+		650488402D78E0EA00EAD7E5 /* DefaultCardNfcService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6504883F2D78E0EA00EAD7E5 /* DefaultCardNfcService.swift */; };
 		65144D502D2DB99800DDB30A /* FeeBumpFunctionsJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65144D4F2D2DB99800DDB30A /* FeeBumpFunctionsJson.swift */; };
 		65144D522D2DBD3000DDB30A /* FeeBumpFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65144D512D2DBD3000DDB30A /* FeeBumpFunctions.swift */; };
 		653370B62CD527F700B4D786 /* FeeDataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653370B52CD527F700B4D786 /* FeeDataSyncer.swift */; };
@@ -72,10 +79,21 @@
 		659FC2852C07B074006E98AB /* ChangePasswordNewViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */; };
 		65A3F7462CD964DC00DE31F2 /* FeeDataSyncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A3F7452CD964DC00DE31F2 /* FeeDataSyncerTests.swift */; };
 		65A3F7492CD9688A00DE31F2 /* FakePreloadFeeDataAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A3F7482CD9688A00DE31F2 /* FakePreloadFeeDataAction.swift */; };
+		65AC49042D8C5E3A00782A55 /* Apdu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC49032D8C5E3A00782A55 /* Apdu.swift */; };
+		65AC49062D8C60A000782A55 /* CardUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC49052D8C60A000782A55 /* CardUtils.swift */; };
+		65AC4AD82D8C6B2D00782A55 /* SecureChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4AD72D8C6B2D00782A55 /* SecureChannel.swift */; };
+		65AC4ADB2D8C722A00782A55 /* PairNfcCardAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4ADA2D8C722A00782A55 /* PairNfcCardAction.swift */; };
+		65AC4ADE2D8C740D00782A55 /* CardPairingDebugExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4ADD2D8C740D00782A55 /* CardPairingDebugExecutable.swift */; };
+		65AC4AE02D8C744100782A55 /* NfcCardGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4ADF2D8C744100782A55 /* NfcCardGroup.swift */; };
+		65AC4E822D8C96BE00782A55 /* UnpairNfcCardAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4E812D8C96BE00782A55 /* UnpairNfcCardAction.swift */; };
+		65AC4E842D8C971300782A55 /* CardUnpairingDebugExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4E832D8C971300782A55 /* CardUnpairingDebugExecutable.swift */; };
+		65AC4E862D8CA47800782A55 /* SignMessageAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4E852D8CA47800782A55 /* SignMessageAction.swift */; };
+		65AC4E882D8CA4E200782A55 /* SignMessageDebugExecutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC4E872D8CA4E200782A55 /* SignMessageDebugExecutable.swift */; };
 		65E5A05C2CCBEB240062438D /* LibwalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E5A05B2CCBEB240062438D /* LibwalletService.swift */; };
 		65E5A05E2CCC11EF0062438D /* PreloadFeeDataActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E5A05D2CCC11EF0062438D /* PreloadFeeDataActionTests.swift */; };
 		65E5A0602CCC12970062438D /* FakeLibwalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E5A05F2CCC12970062438D /* FakeLibwalletService.swift */; };
 		69B9CBC541E3A6E385C06BE7 /* Pods_Muun.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4218A5EC749F0490196019CC /* Pods_Muun.framework */; };
+		761CBA172DB0274A00FC2632 /* StoreKitCapabilitiesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761CBA162DB0274A00FC2632 /* StoreKitCapabilitiesProvider.swift */; };
 		A0000991257A7B9600B69008 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000990257A7B9600B69008 /* TransactionListViewController.swift */; };
 		A0000997257A7BB900B69008 /* TransactionListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000996257A7BB900B69008 /* TransactionListPresenter.swift */; };
 		A000099D257A7CAC00B69008 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000099C257A7CAC00B69008 /* TransactionListView.swift */; };
@@ -414,6 +432,8 @@
 		B3297EA427234DE60035FEB8 /* OnchainSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297EA127234DE60035FEB8 /* OnchainSettingsViewController.swift */; };
 		B3297EA527234DE60035FEB8 /* OnchainSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297EA227234DE60035FEB8 /* OnchainSettingsPresenter.swift */; };
 		B3297EA627234DE60035FEB8 /* OnchainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3297EA327234DE60035FEB8 /* OnchainSettingsView.swift */; };
+		B32B86092DBD3848005F472E /* librs.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32B86082DBD3848005F472E /* librs.xcframework */; };
+		B32B860A2DBD3851005F472E /* librs.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32B86082DBD3848005F472E /* librs.xcframework */; };
 		B33735C7221DA54E00185403 /* NewOpDestinationFilledDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33735C5221DA54D00185403 /* NewOpDestinationFilledDataView.swift */; };
 		B33735C8221DA54E00185403 /* NewOpDestinationFilledDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B33735C6221DA54D00185403 /* NewOpDestinationFilledDataView.xib */; };
 		B33735CB221DC77200185403 /* NewOpAmountFilledDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B33735C9221DC77200185403 /* NewOpAmountFilledDataView.xib */; };
@@ -441,6 +461,8 @@
 		B3A4AC92220B690C00FF0A8C /* GenerateRecoveryCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A4AC90220B690C00FF0A8C /* GenerateRecoveryCodeViewController.swift */; };
 		B3A4AC93220B690C00FF0A8C /* GenerateRecoveryCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A4AC91220B690C00FF0A8C /* GenerateRecoveryCodeViewController.xib */; };
 		B3A4AC95220B691B00FF0A8C /* GenerateRecoveryCodePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A4AC94220B691B00FF0A8C /* GenerateRecoveryCodePresenter.swift */; };
+		B3B6D02C2D652A10006AD1EC /* HttpClientSessionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B6D02B2D6529CA006AD1EC /* HttpClientSessionProvider.swift */; };
+		B3B6E9CA2D6F83040047C9A2 /* KeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B6E9C92D6F83040047C9A2 /* KeyProvider.swift */; };
 		B3B9C0C8224D6DBC009C3617 /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3B9C0C4224D6DBC009C3617 /* GoogleService-Info-dev.plist */; };
 		B3B9C0C9224D6DBC009C3617 /* GoogleService-Info-debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3B9C0C5224D6DBC009C3617 /* GoogleService-Info-debug.plist */; };
 		B3B9C0CA224D6DBC009C3617 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3B9C0C6224D6DBC009C3617 /* GoogleService-Info-prod.plist */; };
@@ -921,11 +943,18 @@
 		12B477802D47F87500268C76 /* WalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletService.swift; sourceTree = "<group>"; };
 		12C350562C8A058400C28F55 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		1F0852911EA2C42F3978A647 /* Pods-Muun-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Muun-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-Muun-falconUITests/Pods-Muun-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		37EB7D0F2D8296E600D81008 /* storage_service.grpc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storage_service.grpc.swift; sourceTree = "<group>"; };
+		37EB7D102D8296E600D81008 /* storage_service.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storage_service.pb.swift; sourceTree = "<group>"; };
 		4218A5EC749F0490196019CC /* Pods_Muun.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Muun.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FDD7A39280D20C474642D /* Pods-falconPushNotifications.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconPushNotifications.debug.xcconfig"; path = "Target Support Files/Pods-falconPushNotifications/Pods-falconPushNotifications.debug.xcconfig"; sourceTree = "<group>"; };
 		47163A6E09E12FEE22D35F44 /* Pods_falconTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_falconTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A0D04492C6E897D0088B046 /* Libwallet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Libwallet.xcframework; path = ../core/Libwallet.xcframework; sourceTree = "<group>"; };
+		62415D1B2DB690F70093662B /* AsciiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsciiUtils.swift; sourceTree = "<group>"; };
+		62415D212DB698D20093662B /* AsciiUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsciiUtilsTests.swift; sourceTree = "<group>"; };
 		65034AA22CE7B63200A14A73 /* FulfillmentPushedJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FulfillmentPushedJson.swift; sourceTree = "<group>"; };
+		650481B12D725EAC00EAD7E5 /* CardNfcService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardNfcService.swift; sourceTree = "<group>"; };
+		650481B32D735CFC00EAD7E5 /* LibwalletNfcBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibwalletNfcBridge.swift; sourceTree = "<group>"; };
+		6504883F2D78E0EA00EAD7E5 /* DefaultCardNfcService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCardNfcService.swift; sourceTree = "<group>"; };
 		65144D4F2D2DB99800DDB30A /* FeeBumpFunctionsJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeBumpFunctionsJson.swift; sourceTree = "<group>"; };
 		65144D512D2DBD3000DDB30A /* FeeBumpFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeBumpFunctions.swift; sourceTree = "<group>"; };
 		653370B52CD527F700B4D786 /* FeeDataSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeDataSyncer.swift; sourceTree = "<group>"; };
@@ -933,9 +962,20 @@
 		659FC2842C07B074006E98AB /* ChangePasswordNewViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordNewViewPresenter.swift; sourceTree = "<group>"; };
 		65A3F7452CD964DC00DE31F2 /* FeeDataSyncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeDataSyncerTests.swift; sourceTree = "<group>"; };
 		65A3F7482CD9688A00DE31F2 /* FakePreloadFeeDataAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePreloadFeeDataAction.swift; sourceTree = "<group>"; };
+		65AC49032D8C5E3A00782A55 /* Apdu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apdu.swift; sourceTree = "<group>"; };
+		65AC49052D8C60A000782A55 /* CardUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardUtils.swift; sourceTree = "<group>"; };
+		65AC4AD72D8C6B2D00782A55 /* SecureChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureChannel.swift; sourceTree = "<group>"; };
+		65AC4ADA2D8C722A00782A55 /* PairNfcCardAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairNfcCardAction.swift; sourceTree = "<group>"; };
+		65AC4ADD2D8C740D00782A55 /* CardPairingDebugExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPairingDebugExecutable.swift; sourceTree = "<group>"; };
+		65AC4ADF2D8C744100782A55 /* NfcCardGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NfcCardGroup.swift; sourceTree = "<group>"; };
+		65AC4E812D8C96BE00782A55 /* UnpairNfcCardAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnpairNfcCardAction.swift; sourceTree = "<group>"; };
+		65AC4E832D8C971300782A55 /* CardUnpairingDebugExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardUnpairingDebugExecutable.swift; sourceTree = "<group>"; };
+		65AC4E852D8CA47800782A55 /* SignMessageAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignMessageAction.swift; sourceTree = "<group>"; };
+		65AC4E872D8CA4E200782A55 /* SignMessageDebugExecutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignMessageDebugExecutable.swift; sourceTree = "<group>"; };
 		65E5A05B2CCBEB240062438D /* LibwalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibwalletService.swift; sourceTree = "<group>"; };
 		65E5A05D2CCC11EF0062438D /* PreloadFeeDataActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreloadFeeDataActionTests.swift; sourceTree = "<group>"; };
 		65E5A05F2CCC12970062438D /* FakeLibwalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeLibwalletService.swift; sourceTree = "<group>"; };
+		761CBA162DB0274A00FC2632 /* StoreKitCapabilitiesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitCapabilitiesProvider.swift; sourceTree = "<group>"; };
 		78A6CA93F0F445C0F1541BB1 /* Pods-falconTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconTests.release.xcconfig"; path = "Target Support Files/Pods-falconTests/Pods-falconTests.release.xcconfig"; sourceTree = "<group>"; };
 		8D644A271A94615EDD5ED4DC /* Pods-falconUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.debug.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		96303DAE309982529187EEAB /* Pods-falconUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-falconUITests.release.xcconfig"; path = "Target Support Files/Pods-falconUITests/Pods-falconUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1279,6 +1319,7 @@
 		B3297EA127234DE60035FEB8 /* OnchainSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnchainSettingsViewController.swift; sourceTree = "<group>"; };
 		B3297EA227234DE60035FEB8 /* OnchainSettingsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnchainSettingsPresenter.swift; sourceTree = "<group>"; };
 		B3297EA327234DE60035FEB8 /* OnchainSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnchainSettingsView.swift; sourceTree = "<group>"; };
+		B32B86082DBD3848005F472E /* librs.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = librs.xcframework; path = ../../libwallet/librs/libs/librs.xcframework; sourceTree = "<group>"; };
 		B33735C5221DA54D00185403 /* NewOpDestinationFilledDataView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewOpDestinationFilledDataView.swift; sourceTree = "<group>"; };
 		B33735C6221DA54D00185403 /* NewOpDestinationFilledDataView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewOpDestinationFilledDataView.xib; sourceTree = "<group>"; };
 		B33735C9221DC77200185403 /* NewOpAmountFilledDataView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewOpAmountFilledDataView.xib; sourceTree = "<group>"; };
@@ -1311,6 +1352,8 @@
 		B3A4AC90220B690C00FF0A8C /* GenerateRecoveryCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecoveryCodeViewController.swift; sourceTree = "<group>"; };
 		B3A4AC91220B690C00FF0A8C /* GenerateRecoveryCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenerateRecoveryCodeViewController.xib; sourceTree = "<group>"; };
 		B3A4AC94220B691B00FF0A8C /* GenerateRecoveryCodePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRecoveryCodePresenter.swift; sourceTree = "<group>"; };
+		B3B6D02B2D6529CA006AD1EC /* HttpClientSessionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClientSessionProvider.swift; sourceTree = "<group>"; };
+		B3B6E9C92D6F83040047C9A2 /* KeyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyProvider.swift; sourceTree = "<group>"; };
 		B3B9C0C4224D6DBC009C3617 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
 		B3B9C0C5224D6DBC009C3617 /* GoogleService-Info-debug.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-debug.plist"; sourceTree = "<group>"; };
 		B3B9C0C6224D6DBC009C3617 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
@@ -1693,6 +1736,7 @@
 			files = (
 				4A0D044D2C6E89CA0088B046 /* Libwallet.xcframework in Frameworks */,
 				F9D2DEA862D8852273DC87B5 /* Pods_falconPushNotifications.framework in Frameworks */,
+				B32B860A2DBD3851005F472E /* librs.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1709,6 +1753,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B32B86092DBD3848005F472E /* librs.xcframework in Frameworks */,
 				A0B9D115227354840009F5A9 /* WebKit.framework in Frameworks */,
 				69B9CBC541E3A6E385C06BE7 /* Pods_Muun.framework in Frameworks */,
 				FE3D243B2C88DF7D00796445 /* libresolv.tbd in Frameworks */,
@@ -1916,8 +1961,18 @@
 			children = (
 				128A88C22D4D4E06004E6951 /* wallet_service.grpc.swift */,
 				128A88C12D4D4E06004E6951 /* wallet_service.pb.swift */,
+				37EB7D0F2D8296E600D81008 /* storage_service.grpc.swift */,
+				37EB7D102D8296E600D81008 /* storage_service.pb.swift */,
 			);
 			path = Protobuf;
+			sourceTree = "<group>";
+		};
+		62415D232DB6AAAA0093662B /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				62415D212DB698D20093662B /* AsciiUtilsTests.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		653370B42CD527E000B4D786 /* Sync */ = {
@@ -1950,6 +2005,37 @@
 				65A3F7482CD9688A00DE31F2 /* FakePreloadFeeDataAction.swift */,
 			);
 			path = Action;
+			sourceTree = "<group>";
+		};
+		65AC49022D8C5E1C00782A55 /* Nfc */ = {
+			isa = PBXGroup;
+			children = (
+				65AC49032D8C5E3A00782A55 /* Apdu.swift */,
+				65AC49052D8C60A000782A55 /* CardUtils.swift */,
+				65AC4AD72D8C6B2D00782A55 /* SecureChannel.swift */,
+			);
+			path = Nfc;
+			sourceTree = "<group>";
+		};
+		65AC4AD92D8C720400782A55 /* Nfc */ = {
+			isa = PBXGroup;
+			children = (
+				65AC4ADA2D8C722A00782A55 /* PairNfcCardAction.swift */,
+				65AC4E852D8CA47800782A55 /* SignMessageAction.swift */,
+				65AC4E812D8C96BE00782A55 /* UnpairNfcCardAction.swift */,
+			);
+			path = Nfc;
+			sourceTree = "<group>";
+		};
+		65AC4ADC2D8C73EE00782A55 /* NfcCard */ = {
+			isa = PBXGroup;
+			children = (
+				65AC4ADD2D8C740D00782A55 /* CardPairingDebugExecutable.swift */,
+				65AC4E832D8C971300782A55 /* CardUnpairingDebugExecutable.swift */,
+				65AC4ADF2D8C744100782A55 /* NfcCardGroup.swift */,
+				65AC4E872D8CA4E200782A55 /* SignMessageDebugExecutable.swift */,
+			);
+			path = NfcCard;
 			sourceTree = "<group>";
 		};
 		958E0C7E256D37E4973FED0F /* Pods */ = {
@@ -3391,6 +3477,7 @@
 		B3085CC721CA7B6300B159F4 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				62415D232DB6AAAA0093662B /* Utils */,
 				B36ABD9321ECDFA000ECA5EA /* AddressActionsTests.swift */,
 				FE4D501F2BFEAE520013E456 /* FCMTokenActionTest.swift */,
 				FE560D6D291AE8D900FACF78 /* FinishRecoveryCodeSetupActionTest.swift */,
@@ -3592,6 +3679,15 @@
 			path = Generate;
 			sourceTree = "<group>";
 		};
+		B3B6D02A2D6529B2006AD1EC /* Libwallet */ = {
+			isa = PBXGroup;
+			children = (
+				B3B6E9C92D6F83040047C9A2 /* KeyProvider.swift */,
+				B3B6D02B2D6529CA006AD1EC /* HttpClientSessionProvider.swift */,
+			);
+			path = Libwallet;
+			sourceTree = "<group>";
+		};
 		B3B9C0CC224E7B85009C3617 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -3698,6 +3794,7 @@
 		CA3BF0D40D8EF91EA304C555 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B32B86082DBD3848005F472E /* librs.xcframework */,
 				FE3D24392C88DF5200796445 /* libresolv.tbd */,
 				12C350562C8A058400C28F55 /* libresolv.tbd */,
 				4A0D04492C6E897D0088B046 /* Libwallet.xcframework */,
@@ -3823,19 +3920,21 @@
 		FE6D32062CA36F87005F883B /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				FE6D32072CA36F87005F883B /* Database */,
-				FE6D32102CA36F87005F883B /* UserDefaults */,
 				FE6D32122CA36F87005F883B /* DataDependencyContainer.swift */,
-				FE6D32132CA36F87005F883B /* Repository */,
-				FE6D322A2CA36F87005F883B /* LazyLoadedList.swift */,
-				FE6D322B2CA36F87005F883B /* Notification */,
-				FE6D322D2CA36F87005F883B /* SecureStorage.swift */,
-				FE6D322E2CA36F87005F883B /* Scheduler */,
-				FE6D32312CA36F87005F883B /* Component */,
-				FE6D32332CA36F87005F883B /* LibwalletStorageHelper.swift */,
 				FE6D32342CA36F87005F883B /* KeychainRepository.swift */,
+				FE6D322A2CA36F87005F883B /* LazyLoadedList.swift */,
+				FE6D32332CA36F87005F883B /* LibwalletStorageHelper.swift */,
+				FE6D322D2CA36F87005F883B /* SecureStorage.swift */,
+				FE6D32312CA36F87005F883B /* Component */,
+				FE6D32072CA36F87005F883B /* Database */,
 				FE6D32352CA36F87005F883B /* Errors */,
+				B3B6D02A2D6529B2006AD1EC /* Libwallet */,
+				65AC49022D8C5E1C00782A55 /* Nfc */,
+				FE6D322B2CA36F87005F883B /* Notification */,
+				FE6D32132CA36F87005F883B /* Repository */,
+				FE6D322E2CA36F87005F883B /* Scheduler */,
 				FE6D323A2CA36F87005F883B /* Service */,
+				FE6D32102CA36F87005F883B /* UserDefaults */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -3957,6 +4056,8 @@
 				FE6D32772CA36F87005F883B /* CapabilitiesProvider */,
 				FE6D327C2CA36F87005F883B /* Base */,
 				12B477802D47F87500268C76 /* WalletService.swift */,
+				650481B32D735CFC00EAD7E5 /* LibwalletNfcBridge.swift */,
+				6504883F2D78E0EA00EAD7E5 /* DefaultCardNfcService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -4182,6 +4283,7 @@
 				FE6D32792CA36F87005F883B /* ConectivityCapabilitiesProvider.swift */,
 				FE6D327A2CA36F87005F883B /* HardwareCapabilitiesProvider.swift */,
 				FE6D327B2CA36F87005F883B /* ICloudCapabilitiesProvider.swift */,
+				761CBA162DB0274A00FC2632 /* StoreKitCapabilitiesProvider.swift */,
 			);
 			path = CapabilitiesProvider;
 			sourceTree = "<group>";
@@ -4258,6 +4360,7 @@
 		FE6D32922CA36F87005F883B /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				62415D1B2DB690F70093662B /* AsciiUtils.swift */,
 				FE6D32942CA36F87005F883B /* DeviceUtils.swift */,
 			);
 			path = Utils;
@@ -4277,6 +4380,7 @@
 				FE6D32B82CA36F87005F883B /* DebugExecutablesGroup */,
 				FE6D32972CA36F87005F883B /* IncomingSwap */,
 				FE6D329D2CA36F87005F883B /* LNURL */,
+				65AC4AD92D8C720400782A55 /* Nfc */,
 				FE6D32A02CA36F87005F883B /* Operations */,
 				FE230B422CA6F530008BE0FE /* RealTime */,
 				FE6D32CE2CA36F87005F883B /* Session */,
@@ -4361,6 +4465,7 @@
 				FE6D32B92CA36F87005F883B /* BaseDebugExecutablesGroup.swift */,
 				FE6D32BA2CA36F87005F883B /* AppSyncingGroup */,
 				FE6D32BF2CA36F87005F883B /* DebugExecutablesGroup.swift */,
+				65AC4ADC2D8C73EE00782A55 /* NfcCard */,
 				FE6D32C02CA36F87005F883B /* NodeHandling */,
 				FE6D32C62CA36F87005F883B /* AddressGeneration */,
 				FE6D32CA2CA36F87005F883B /* WalletFunding */,
@@ -4686,6 +4791,7 @@
 				FE6D332C2CA36F87005F883B /* DeviceCheckTokenProvider.swift */,
 				65E5A05B2CCBEB240062438D /* LibwalletService.swift */,
 				FE6D332E2CA36F87005F883B /* ReachabilityService.swift */,
+				650481B12D725EAC00EAD7E5 /* CardNfcService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -5363,6 +5469,7 @@
 				B3CBAC4C21F66B8400A591C8 /* SatoshisTests.swift in Sources */,
 				B3CBAC4B21F66B8000A591C8 /* WalletPrivateKeyTests.swift in Sources */,
 				FE6D375F2CA45CA1005F883B /* OperationTests.swift in Sources */,
+				62415D222DB698D20093662B /* AsciiUtilsTests.swift in Sources */,
 				0F9340E725AFECC000F766A9 /* IncomingSwapRepositoryTests.swift in Sources */,
 				0F9340D725AFE8DF00F766A9 /* Factory.swift in Sources */,
 				FEB74C9A2911BAF5002C08D1 /* FinishRecoveryCodeSetupActionStub.swift in Sources */,
@@ -5566,6 +5673,7 @@
 				0FF4E25E25D4EBAD00EEAFB6 /* ExpirationTimeOptionView.swift in Sources */,
 				FEB74C812909FA73002C08D1 /* RecoveryCodePrimingPresenter.swift in Sources */,
 				FE6D33F02CA36F87005F883B /* SetUpPasswordAction.swift in Sources */,
+				65AC49042D8C5E3A00782A55 /* Apdu.swift in Sources */,
 				FE6D33FB2CA36F87005F883B /* MuunModel.swift in Sources */,
 				A05CA3B322F4C3250087A23E /* BlockHelper.swift in Sources */,
 				A053FAF22270F3BB00A212E2 /* ToastView.swift in Sources */,
@@ -5596,6 +5704,8 @@
 				A00C043824B508A8000A140A /* PDFGenerator.swift in Sources */,
 				A07947922204C76F00A08474 /* SessionExpiredPresenter.swift in Sources */,
 				FE6D33FA2CA36F87005F883B /* DomainError.swift in Sources */,
+				65AC49062D8C60A000782A55 /* CardUtils.swift in Sources */,
+				B3B6E9CA2D6F83040047C9A2 /* KeyProvider.swift in Sources */,
 				FE6D34172CA36F87005F883B /* Operation.swift in Sources */,
 				FE6D33822CA36F87005F883B /* EmptyJson.swift in Sources */,
 				A089FFE6213843CF006915FC /* SignInEmailAndRCViewController.swift in Sources */,
@@ -5637,6 +5747,7 @@
 				FE6D34042CA36F87005F883B /* SendEncryptedKeys.swift in Sources */,
 				A0D6F7652268F072000A07CE /* FeedbackViewController.swift in Sources */,
 				0F14C5F226217C5700BAE8B5 /* LNURLScanQRViewController.swift in Sources */,
+				65AC4AD82D8C6B2D00782A55 /* SecureChannel.swift in Sources */,
 				A0E295C024A3F4F3001317F6 /* ShareEmergencyKitViewController.swift in Sources */,
 				A037B8232189F256002A29C7 /* LinkButtonView.swift in Sources */,
 				0FE97AB7261FA08B00B7E31E /* LNURLFirstTimeViewController.swift in Sources */,
@@ -5656,6 +5767,7 @@
 				A0BDFB422518FBBD00F88B42 /* SignInAuthorizeEmailViewController.swift in Sources */,
 				FE6D34072CA36F87005F883B /* RecoveryCode.swift in Sources */,
 				FE6D33BA2CA36F87005F883B /* CurrencyActions.swift in Sources */,
+				65AC4E862D8CA47800782A55 /* SignMessageAction.swift in Sources */,
 				FE1120A7295397BB00D4B532 /* MUBottomSheetViewContainer.swift in Sources */,
 				A032C09D24D49F5500A111A0 /* RecoveryCodeMissingView.swift in Sources */,
 				0F22E6F725D3469C00EBFA06 /* ReceiveAmountInputViewController.swift in Sources */,
@@ -5712,15 +5824,18 @@
 				FE6D34162CA36F87005F883B /* SubmarineSwap.swift in Sources */,
 				A06C88DF2125E9D700940EB3 /* MUViewController.swift in Sources */,
 				FE6D33832CA36F87005F883B /* UserJson.swift in Sources */,
+				65AC4E822D8C96BE00782A55 /* UnpairNfcCardAction.swift in Sources */,
 				FE6D33C22CA36F87005F883B /* ActionState.swift in Sources */,
 				FE5B0C3F292D8A8C0067E935 /* ReceiveFormatPreferenceMUActionSheetPresenter.swift in Sources */,
 				FE6D33E82CA36F87005F883B /* SignChallengeWithUserKeyAction.swift in Sources */,
 				FE6D33B42CA36F87005F883B /* OperationActions.swift in Sources */,
+				761CBA172DB0274A00FC2632 /* StoreKitCapabilitiesProvider.swift in Sources */,
 				FE6D34132CA36F87005F883B /* Amount.swift in Sources */,
 				B3B9C0D2224E82B0009C3617 /* MUDetailRowView.swift in Sources */,
 				FE6D33B92CA36F87005F883B /* BalanceActions.swift in Sources */,
 				A032C0A624D4A95E00A111A0 /* ChangePasswordEnterRecoveryCodePresenter.swift in Sources */,
 				FE6D34022CA36F87005F883B /* StartEmailSetup.swift in Sources */,
+				65AC4AE02D8C744100782A55 /* NfcCardGroup.swift in Sources */,
 				FE6D34032CA36F87005F883B /* PasswrodSetup.swift in Sources */,
 				FE6D336A2CA36F87005F883B /* MUTimer.swift in Sources */,
 				FE6D33EC2CA36F87005F883B /* StartEmailSetupAction.swift in Sources */,
@@ -5735,6 +5850,8 @@
 				B3BF3B632215C2F70009F76D /* LargeTextInputView.swift in Sources */,
 				FE6D34192CA36F87005F883B /* PaymentRequest.swift in Sources */,
 				FE6D335A2CA36F87005F883B /* NextTransactionSizeRepository.swift in Sources */,
+				65AC4E842D8C971300782A55 /* CardUnpairingDebugExecutable.swift in Sources */,
+				62415D1D2DB690F70093662B /* AsciiUtils.swift in Sources */,
 				B30F9380258A59CB00045301 /* LightningNetworkSettingsPresenter.swift in Sources */,
 				A0A03B0021EE59E100700526 /* NewOperationViewController.swift in Sources */,
 				FEDD25132CA73FF40000F9EB /* RealTimeFeesJson.swift in Sources */,
@@ -5753,6 +5870,7 @@
 				A01840EC211DC95D00337895 /* Constant.swift in Sources */,
 				FE6D33512CA36F87005F883B /* MinFeeRateRepository.swift in Sources */,
 				A0480CFC255B163B002F76DD /* LoadingPopUpView.swift in Sources */,
+				65AC4ADB2D8C722A00782A55 /* PairNfcCardAction.swift in Sources */,
 				FEB5CCE82A7C31AA00CFA14E /* ConfirmStateViewModel.swift in Sources */,
 				FE6D33702CA36F87005F883B /* MuunError.swift in Sources */,
 				A08407A522DCBBD9007775CE /* FeeEditorPresenter.swift in Sources */,
@@ -5882,6 +6000,8 @@
 				FE6D339A2CA36F87005F883B /* BaseRequest.swift in Sources */,
 				FE6D33D32CA36F87005F883B /* CopyRandomAddressDebugExecutable.swift in Sources */,
 				A03C3EF323A01E5400D4DE71 /* BitcoinUnitPickerPresenter.swift in Sources */,
+				37EB7D112D8296E600D81008 /* storage_service.pb.swift in Sources */,
+				37EB7D122D8296E600D81008 /* storage_service.grpc.swift in Sources */,
 				FE6D33562CA36F87005F883B /* EmergencyKitRepository.swift in Sources */,
 				0FAF459B257A88F8004C7F17 /* TransactionListEmptyView.swift in Sources */,
 				A0D9CC11250967AA00F7DA4C /* SignInWithRCViewController.swift in Sources */,
@@ -5945,6 +6065,7 @@
 				FE6D33F52CA36F87005F883B /* PartiallySignedTransaction.swift in Sources */,
 				FE6D338A2CA36F87005F883B /* OperationJson.swift in Sources */,
 				0F14C5FE26217E0A00BAE8B5 /* LNURLScanQRViewController+Camera.swift in Sources */,
+				650488402D78E0EA00EAD7E5 /* DefaultCardNfcService.swift in Sources */,
 				A0F627BC227B6DD400496987 /* AppDelegate+Pin.swift in Sources */,
 				FE6D34222CA36F87005F883B /* NotificationHandler.swift in Sources */,
 				A01840F1211DC9CD00337895 /* GetStartedViewController.swift in Sources */,
@@ -5975,6 +6096,7 @@
 				FED123A22A8D4E45007A3779 /* DebugModePresenter.swift in Sources */,
 				A0658D322522501C0054EB3A /* EmailPrimingPresenter.swift in Sources */,
 				A0E0860A22BD662A003A4226 /* TargetedFeeTableViewCell.swift in Sources */,
+				65AC4E882D8CA4E200782A55 /* SignMessageDebugExecutable.swift in Sources */,
 				FE6D33A72CA36F87005F883B /* BaseSelector.swift in Sources */,
 				FEB74C7F2909E2C8002C08D1 /* SetupRecoveryCodeError.swift in Sources */,
 				1213168B2CA462DA003DE537 /* LibwalletLogHelper.swift in Sources */,
@@ -6001,12 +6123,14 @@
 				FE6D33652CA36F87005F883B /* LazyLoadedList.swift in Sources */,
 				A0DFCD1724520B5100D1EBC4 /* Receive+MoreInfo.swift in Sources */,
 				A0441841257159A6002D959B /* HomeView.swift in Sources */,
+				B3B6D02C2D652A10006AD1EC /* HttpClientSessionProvider.swift in Sources */,
 				FE6D33EF2CA36F87005F883B /* LogInWithRCAction.swift in Sources */,
 				A048B8792354B34B00C1CA3B /* NewOpToAddressData.swift in Sources */,
 				A0BB7A7F21235EF00043F7FD /* PinViewController.swift in Sources */,
 				FE6D33E32CA36F87005F883B /* ChangeCurrencyAction.swift in Sources */,
 				FE6D33E02CA36F87005F883B /* BuildChallengeSetupAction.swift in Sources */,
 				FE6D33D12CA36F87005F883B /* GenerateBlockDebugExecutable.swift in Sources */,
+				650481B42D735CFC00EAD7E5 /* LibwalletNfcBridge.swift in Sources */,
 				A0EAE8622209F15C000FD8FA /* SignInEmailViewController.swift in Sources */,
 				FE6D333B2CA36F87005F883B /* Decimal+Extension.swift in Sources */,
 				B3297EA427234DE60035FEB8 /* OnchainSettingsViewController.swift in Sources */,
@@ -6030,6 +6154,7 @@
 				A012F2DC24D1F0EB002278F4 /* ChangePasswordVerifyPresenter.swift in Sources */,
 				A0480E5A255C5FF3002F76DD /* VerifyEmergencyKitView.swift in Sources */,
 				FE6D33932CA36F87005F883B /* PingURLService.swift in Sources */,
+				65AC4ADE2D8C740D00782A55 /* CardPairingDebugExecutable.swift in Sources */,
 				FE6D33D82CA36F87005F883B /* ReportEmergencyKitExportedAction.swift in Sources */,
 				A0ED8A9524A5375A00AD54D4 /* HelpEmergencyKitViewController.swift in Sources */,
 				A0C842532458CCEA00325B0B /* EmailAlreadyUsedViewController.swift in Sources */,
@@ -6075,6 +6200,7 @@
 				FE6D34012CA36F87005F883B /* Notification.swift in Sources */,
 				FE6D335D2CA36F87005F883B /* BlockchainHeightRepository.swift in Sources */,
 				AFDDA03910BC79AA459012C2 /* BlockClockView.swift in Sources */,
+				650481B22D725EAC00EAD7E5 /* CardNfcService.swift in Sources */,
 				AFDDA58977F13981373E6CB2 /* ManualSaveEmergencyKitView.swift in Sources */,
 				AFDDA1206BBA9868DBF04883 /* EmergencyKitFlow.swift in Sources */,
 				AFDDA101CB6375EF4931B386 /* RequestCloudView.swift in Sources */,
@@ -6141,7 +6267,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6172,7 +6298,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6191,7 +6317,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1205;
+				CURRENT_PROJECT_VERSION = 1316;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -6201,7 +6327,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconPushNotifications/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6243,13 +6369,13 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = falconPushNotifications/falconPushNotifications.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1205;
+				CURRENT_PROJECT_VERSION = 1316;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "FALCON=0";
 				INFOPLIST_FILE = falconPushNotifications/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6297,7 +6423,7 @@
 					"FALCON=0",
 				);
 				INFOPLIST_FILE = falconUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6323,7 +6449,7 @@
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "FALCON=0";
 				INFOPLIST_FILE = falconUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6374,7 +6500,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1205;
+				CURRENT_PROJECT_VERSION = 1316;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -6439,7 +6565,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1205;
+				CURRENT_PROJECT_VERSION = 1316;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -6472,7 +6598,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1205;
+				CURRENT_PROJECT_VERSION = 1316;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
@@ -6486,7 +6612,7 @@
 					"FALCON=1",
 				);
 				INFOPLIST_FILE = falcon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6555,7 +6681,7 @@
 				CODE_SIGN_ENTITLEMENTS = falcon/falcon.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1205;
+				CURRENT_PROJECT_VERSION = 1316;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6568,7 +6694,7 @@
 					"FALCON=1",
 				);
 				INFOPLIST_FILE = falcon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -10,9 +10,17 @@ import UIKit
 class BackgroundExecutionMetricsProvider {
     var reachabilityService: ReachabilityService?
     let localeTimeZoneProvider: LocaleTimeZoneProvider
+    let asciiSanitizer: AsciiUtils
+    let storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider
 
-    init(localeTimeZoneProvider: LocaleTimeZoneProvider) {
+    init(
+        localeTimeZoneProvider: LocaleTimeZoneProvider,
+        asciiSanitizer: AsciiUtils = AsciiUtils(),
+        storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider
+    ) {
         self.localeTimeZoneProvider = localeTimeZoneProvider
+        self.asciiSanitizer = asciiSanitizer
+        self.storeKitCapabilitiesProvider = storeKitCapabilitiesProvider
     }
 
     func run() -> String? {
@@ -42,7 +50,7 @@ class BackgroundExecutionMetricsProvider {
         }
 
         let metrics = BackgroundExcecutionMetrics(
-            epochInMilliseconds: createEpoch(),
+            epochInMilliseconds: createEpochInMiliseconds(),
             batteryLevel: hardwareCapabilities.getBatterylevel(),
             batteryState: hardwareCapabilities.getBatteryState(),
             freeRamStorage: hardwareCapabilities.getFreeRam(),
@@ -59,14 +67,16 @@ class BackgroundExecutionMetricsProvider {
             totalRamStorage: hardwareCapabilities.getTotalRam(),
             osVersion: osVersionString,
             iosSimRegion: conectivityCapabilities.getSimRegion(),
-            iosTimeZoneId:localeTimeZoneProvider.getTimezoneId(),
-            iosCalendarIdentifier:localeTimeZoneProvider.getCalendarIdentifier(),
+            iosTimeZoneId: localeTimeZoneProvider.getTimezoneId(),
+            iosCalendarIdentifier: localeTimeZoneProvider.getCalendarIdentifier(),
             iosCurrencyCode: localeTimeZoneProvider.getCurrencyCode(),
             iosDateFormat: localeTimeZoneProvider.getDateFormat(),
             iosMeasurementSystem: localeTimeZoneProvider.getMeasurementSystem(),
             language: localeTimeZoneProvider.getLanguage(),
             regionCode: localeTimeZoneProvider.getRegionCode(),
-            timeZoneOffsetInSeconds: localeTimeZoneProvider.getTimeZoneOffsetInSeconds()
+            timeZoneOffsetInSeconds: localeTimeZoneProvider.getTimeZoneOffsetInSeconds(),
+            storeCountry: storeKitCapabilitiesProvider.getStoreCountry(),
+            iosCellularProviders: conectivityCapabilities.getCellularProviders()
         )
 
         var metricsAsData: Data?
@@ -81,11 +91,11 @@ class BackgroundExecutionMetricsProvider {
             return nil
         }
 
-        return String(decoding: metricsAsData, as: UTF8.self)
+        let jsonString = String(decoding: metricsAsData, as: UTF8.self)
+        return asciiSanitizer.toSafeAscii(jsonString)
     }
 
-    private func createEpoch() -> Int64 {
-        /// timeIntervalSince1970 provides miliseconds on decimal part so we can get epoch time as int in miliseconds.
+    private func createEpochInMiliseconds() -> Int64 {
         return Int64(Date().timeIntervalSince1970 * 1000)
     }
 }
@@ -116,6 +126,8 @@ struct BackgroundExcecutionMetrics: Encodable {
     let language: String
     let regionCode: String
     let timeZoneOffsetInSeconds: Int
+    let storeCountry: String
+    let iosCellularProviders: [SimData]
 }
 
 struct AvailableNetworksDTO: Encodable {

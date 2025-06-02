@@ -20,6 +20,11 @@ internal protocol Rpc_WalletServiceClientProtocol: GRPCClient {
     _ request: Rpc_EmptyMessage,
     callOptions: CallOptions?
   ) -> UnaryCall<Rpc_EmptyMessage, Rpc_OperationStatus>
+
+  func nfcTransmit(
+    _ request: Rpc_NfcTransmitRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>
 }
 
 extension Rpc_WalletServiceClientProtocol {
@@ -42,6 +47,24 @@ extension Rpc_WalletServiceClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? []
+    )
+  }
+
+  /// V2 - use then discard API
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to NfcTransmit.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func nfcTransmit(
+    _ request: Rpc_NfcTransmitRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.nfcTransmit.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? []
     )
   }
 }
@@ -112,6 +135,11 @@ internal protocol Rpc_WalletServiceAsyncClientProtocol: GRPCClient {
     _ request: Rpc_EmptyMessage,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<Rpc_EmptyMessage, Rpc_OperationStatus>
+
+  func makeNfcTransmitCall(
+    _ request: Rpc_NfcTransmitRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -135,6 +163,18 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? []
     )
   }
+
+  internal func makeNfcTransmitCall(
+    _ request: Rpc_NfcTransmitRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.nfcTransmit.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -148,6 +188,18 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? []
+    )
+  }
+
+  internal func nfcTransmit(
+    _ request: Rpc_NfcTransmitRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_NfcTransmitResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.nfcTransmit.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? []
     )
   }
 }
@@ -173,6 +225,9 @@ internal protocol Rpc_WalletServiceClientInterceptorFactoryProtocol: Sendable {
 
   /// - Returns: Interceptors to use when invoking 'deleteWallet'.
   func makeDeleteWalletInterceptors() -> [ClientInterceptor<Rpc_EmptyMessage, Rpc_OperationStatus>]
+
+  /// - Returns: Interceptors to use when invoking 'nfcTransmit'.
+  func makeNfcTransmitInterceptors() -> [ClientInterceptor<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>]
 }
 
 internal enum Rpc_WalletServiceClientMetadata {
@@ -181,6 +236,7 @@ internal enum Rpc_WalletServiceClientMetadata {
     fullName: "rpc.WalletService",
     methods: [
       Rpc_WalletServiceClientMetadata.Methods.deleteWallet,
+      Rpc_WalletServiceClientMetadata.Methods.nfcTransmit,
     ]
   )
 
@@ -188,6 +244,12 @@ internal enum Rpc_WalletServiceClientMetadata {
     internal static let deleteWallet = GRPCMethodDescriptor(
       name: "DeleteWallet",
       path: "/rpc.WalletService/DeleteWallet",
+      type: GRPCCallType.unary
+    )
+
+    internal static let nfcTransmit = GRPCMethodDescriptor(
+      name: "NfcTransmit",
+      path: "/rpc.WalletService/NfcTransmit",
       type: GRPCCallType.unary
     )
   }
@@ -198,6 +260,9 @@ internal protocol Rpc_WalletServiceProvider: CallHandlerProvider {
   var interceptors: Rpc_WalletServiceServerInterceptorFactoryProtocol? { get }
 
   func deleteWallet(request: Rpc_EmptyMessage, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_OperationStatus>
+
+  /// V2 - use then discard API
+  func nfcTransmit(request: Rpc_NfcTransmitRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_NfcTransmitResponse>
 }
 
 extension Rpc_WalletServiceProvider {
@@ -221,6 +286,15 @@ extension Rpc_WalletServiceProvider {
         userFunction: self.deleteWallet(request:context:)
       )
 
+    case "NfcTransmit":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_NfcTransmitRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_NfcTransmitResponse>(),
+        interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? [],
+        userFunction: self.nfcTransmit(request:context:)
+      )
+
     default:
       return nil
     }
@@ -237,6 +311,12 @@ internal protocol Rpc_WalletServiceAsyncProvider: CallHandlerProvider, Sendable 
     request: Rpc_EmptyMessage,
     context: GRPCAsyncServerCallContext
   ) async throws -> Rpc_OperationStatus
+
+  /// V2 - use then discard API
+  func nfcTransmit(
+    request: Rpc_NfcTransmitRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_NfcTransmitResponse
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -267,6 +347,15 @@ extension Rpc_WalletServiceAsyncProvider {
         wrapping: { try await self.deleteWallet(request: $0, context: $1) }
       )
 
+    case "NfcTransmit":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_NfcTransmitRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_NfcTransmitResponse>(),
+        interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? [],
+        wrapping: { try await self.nfcTransmit(request: $0, context: $1) }
+      )
+
     default:
       return nil
     }
@@ -278,6 +367,10 @@ internal protocol Rpc_WalletServiceServerInterceptorFactoryProtocol: Sendable {
   /// - Returns: Interceptors to use when handling 'deleteWallet'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteWalletInterceptors() -> [ServerInterceptor<Rpc_EmptyMessage, Rpc_OperationStatus>]
+
+  /// - Returns: Interceptors to use when handling 'nfcTransmit'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeNfcTransmitInterceptors() -> [ServerInterceptor<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>]
 }
 
 internal enum Rpc_WalletServiceServerMetadata {
@@ -286,6 +379,7 @@ internal enum Rpc_WalletServiceServerMetadata {
     fullName: "rpc.WalletService",
     methods: [
       Rpc_WalletServiceServerMetadata.Methods.deleteWallet,
+      Rpc_WalletServiceServerMetadata.Methods.nfcTransmit,
     ]
   )
 
@@ -293,6 +387,12 @@ internal enum Rpc_WalletServiceServerMetadata {
     internal static let deleteWallet = GRPCMethodDescriptor(
       name: "DeleteWallet",
       path: "/rpc.WalletService/DeleteWallet",
+      type: GRPCCallType.unary
+    )
+
+    internal static let nfcTransmit = GRPCMethodDescriptor(
+      name: "NfcTransmit",
+      path: "/rpc.WalletService/NfcTransmit",
       type: GRPCCallType.unary
     )
   }

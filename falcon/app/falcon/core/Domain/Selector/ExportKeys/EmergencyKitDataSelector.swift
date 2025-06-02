@@ -11,6 +11,7 @@ public struct EmergencyKitData {
     public let userFingerprint: String
     public let muunKey: String
     public let muunFingerprint: String
+    public let rcChecksum: String
 }
 
 public class EmergencyKitDataSelector: BaseOptionalSelector<EmergencyKitData> {
@@ -25,13 +26,17 @@ public class EmergencyKitDataSelector: BaseOptionalSelector<EmergencyKitData> {
 
                 let encryptedKey = try Self.getOrCreateEncriptedUserPrivateKey(keysRepository: keysRepository,
                                                                                challengeKey: challengeKey,
-                                                                               privateKey: privateKey)
+                                                                               privateKey: privateKey,
+                                                                               muunPrivateKey: muunKey)
+
+                let rcChecksum = try challengeKey.getChecksum()
 
                 let data = EmergencyKitData(
                     userKey: encryptedKey,
                     userFingerprint: try keysRepository.getUserKeyFingerprint(),
                     muunKey: muunKey,
-                    muunFingerprint: try keysRepository.getMuunKeyFingerprint()
+                    muunFingerprint: try keysRepository.getMuunKeyFingerprint(),
+                    rcChecksum: rcChecksum
                 )
 
                 return Observable.just(data)
@@ -44,12 +49,14 @@ public class EmergencyKitDataSelector: BaseOptionalSelector<EmergencyKitData> {
     // Avoid user private key rotation on emergency kit. 
     private static func getOrCreateEncriptedUserPrivateKey(keysRepository: KeysRepository,
                                                            challengeKey: ChallengeKey,
-                                                           privateKey: WalletPrivateKey) throws -> String {
+                                                           privateKey: WalletPrivateKey,
+                                                           muunPrivateKey: String) throws -> String {
         do {
             let storedEncriptedPrivateKey = try keysRepository.getEncriptedUserPrivateKey()
             return storedEncriptedPrivateKey
         } catch where error.isKindOf(KeyStorageError.missingKey) {
-            let newEncriptedPrivateKey = try challengeKey.encryptKey(privateKey)
+            let newEncriptedPrivateKey = try challengeKey.encryptKey(privateKey,
+                                                                     muunPrivateKey: muunPrivateKey)
             try keysRepository.store(encriptedUserPrivateKey: newEncriptedPrivateKey)
 
             return newEncriptedPrivateKey

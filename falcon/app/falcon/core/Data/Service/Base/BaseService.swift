@@ -217,7 +217,7 @@ private extension BaseService {
             .addHeader(key: "X-Client-Language", value: Locale.current.languageCode ?? "en")
             .addHeader(key: "X-Client-Type", value: "FALCON")
             .addHeader(key: "X-Idempotency-Key", value: UUID().uuidString)
-            .addHeader(key: "X-Retry-Count", value: "1")
+            .addHeader(key: "X-Retry-Count", value: "0")
 
         if let backgroundExecutionMetrics = backgroundExecutionMetricsProvider.run() {
             request = request.addHeader(key: "X-Background-Execution-Metrics",
@@ -335,7 +335,7 @@ private extension BaseService {
     }
 
     func updateRetryCountHeader(_ request: BaseRequest) -> BaseRequest {
-        let retryCount = request.request.value(forHTTPHeaderField: "X-Retry-Count") ?? "1"
+        let retryCount = request.request.value(forHTTPHeaderField: "X-Retry-Count") ?? "0"
         let retryInt = Int(retryCount) ?? 1
 
         return request.updateHeader(key: "X-Retry-Count", value: String(describing: retryInt + 1))
