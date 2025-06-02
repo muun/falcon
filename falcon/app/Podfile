@@ -3,7 +3,7 @@ source 'https://cdn.cocoapods.org/'
 install! 'cocoapods',
          :generate_multiple_pod_projects => true
 
-$app_deployment_target = Gem::Version.new('12.0')
+$app_deployment_target = Gem::Version.new('15.0')
 platform :ios, $app_deployment_target
 
 target 'Muun' do

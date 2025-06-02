@@ -33,7 +33,7 @@ public struct ChallengeKey: Equatable {
         return challengeVersion ?? 0
     }
 
-    func encryptKey(_ privateKey: WalletPrivateKey) throws -> String {
+    func encryptKey(_ privateKey: WalletPrivateKey, muunPrivateKey: String) throws -> String {
 
         let challengePublicKey = try doWithError({ error in
             LibwalletNewChallengePublicKeyFromSerialized(publicKey, error)
@@ -44,9 +44,18 @@ public struct ChallengeKey: Equatable {
                 privateKey.key,
                 recoveryCodeSalt: salt,
                 birthday: 0xFFFF, // The birthday for the user key isn't used
+                muunPrivateKey: muunPrivateKey,
                 error: error
             )
         })
+    }
+    
+    func getChecksum() throws -> String {
+        let challengePublicKey = try doWithError({ error in
+            LibwalletNewChallengePublicKeyFromSerialized(publicKey, error)
+        })
+        
+        return challengePublicKey.getChecksum()
     }
 
 }

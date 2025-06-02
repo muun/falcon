@@ -26,10 +26,11 @@ rm -rf "$build_dir"/ios/iossimulator/src-arm64* 2>/dev/null || echo $no_cache_fo
 
 
 calc_shasum() {
-    files=$(find "$1" -xdev -type f -name "*.go" -print \
+    go_files=$(find "$1" -xdev -type f -name "*.go" -print \
             | grep -v "_test.go$" | grep -v "/build/" \
             | grep -v ".build/" | sort -z)
-    shaeach=$(for file in $files; do shasum "$file"; done)
+    librs_files=$(find "$1/librs" -type f | grep -v "/target" | grep -v "\./\." | grep -v ".bin$" | sort -z)
+    shaeach=$(for file in $go_files $librs_files; do shasum "$file"; done)
     echo "$shaeach "$this_file_sha" $(shasum $(which go)) $(shasum "$1/go.mod")" | shasum | awk \{'print $1'\}
 }
 
@@ -88,8 +89,8 @@ echo "Using go binary $(which go) $(go version)"
 CGO_LDFLAGS="-lresolv" \
     go run golang.org/x/mobile/cmd/gomobile bind \
     -target=ios,iossimulator -o "$libwallet" \
-    -iosversion="11.4" \
-    . ./newop
+    -iosversion="15.0" \
+    . ./newop ./app_provided_data ./libwallet_init
 
 st=$?
 

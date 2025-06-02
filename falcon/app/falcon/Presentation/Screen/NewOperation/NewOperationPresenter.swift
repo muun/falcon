@@ -11,6 +11,7 @@
 import Foundation
 
 import Libwallet
+import RxSwift
 
 protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func requestNextStep(_ data: NewOpState)
@@ -30,6 +31,7 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func amountBelowDust()
     func invoiceMissingAmount()
     func unexpectedError()
+    func nfc2faError()
 
     func setExpires(_ expiresTime: Double)
     func cancel(confirm: Bool)
@@ -48,6 +50,15 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
     /// Go to: [BitcoinAmountWithSelectedCurrency](x-source-tag://BitcoinAmountWithSelectedCurrency)
     var lastSelectedCurrency: Currency?
+
+    var hasNfc2fa: Bool {
+        userRepository.isCardActivated()
+    }
+
+    private let userRepository: UserRepository = resolve()
+    private let featureFlagsRepository: FeatureFlagsRepository = resolve()
+    private let signMessageAction: SignMessageAction = SignMessageAction()
+    private let disposeBag = DisposeBag()
 
     init(delegate: Delegate, operationActions: OperationActions) {
         self.operationActions = operationActions
@@ -533,9 +544,28 @@ extension NewOperationPresenter: OpLoadingTransitions {
 
 extension NewOperationPresenter: OpConfirmTransitions {
     func didConfirm() {
-        createOperation()
-    }
+        if hasNfc2fa
+            && featureFlagsRepository.fetch().contains(.nfcCard) {
+            let message = "testing NFC in iOS"
+            signMessageAction.run(message: message, slot: 0)
+                .subscribe(onSuccess: { signedMessage in
+                    guard let signedMessage else {
+                        self.delegate.nfc2faError()
+                        return
+                    }
+                    Logger.log(.debug, "Card signed message response: \(signedMessage)")
 
+                    // if signed was successful, continue with the operation.
+                    // we will check the signed message in Libwallet in the final implementation
+                    self.createOperation()
+
+                }, onError: { _ in
+                    self.delegate.nfc2faError()
+                }).disposed(by: disposeBag)
+        } else {
+            createOperation()
+        }
+    }
 }
 
 extension NewOperationPresenter: OpAmountTransitions {

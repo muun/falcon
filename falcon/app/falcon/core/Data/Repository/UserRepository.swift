@@ -79,4 +79,12 @@ public class UserRepository {
     func isEmailSkippedByPreference() -> Bool {
         return preferences.bool(forKey: .isEmailSkipped)
     }
+
+    func setCardActivated(isActivated: Bool) {
+        preferences.set(value: isActivated, forKey: .cardActivated)
+    }
+
+    func isCardActivated() -> Bool {
+        preferences.bool(forKey: .cardActivated)
+    }
 }

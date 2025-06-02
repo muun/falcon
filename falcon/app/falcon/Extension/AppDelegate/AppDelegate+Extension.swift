@@ -170,14 +170,21 @@ extension AppDelegate {
 
     internal func configureLibwallet() {
         LibwalletStorageHelper.ensureExists()
+        // In some cases we might have leftovers from an unclean shutdown.
+        LibwalletStorageHelper.cleanupSocket()
 
-        let libwalletConfig = LibwalletConfig()
+        let libwalletConfig = App_provided_dataConfig()
         libwalletConfig.dataDir = Environment.current.libwalletDataDirectory.absoluteString
-        libwalletConfig.socketPath = Environment.current.libwalletSocketFile.absoluteString
+        libwalletConfig.socketPath = Environment.current.libwalletSocketFile.path
         libwalletConfig.featureStatusProvider = featureFlagsRepository
         libwalletConfig.appLogSink = LibwalletLogHelper()
+        libwalletConfig.httpClientSessionProvider = httpClientSessionProvider
+        let libwalletNfcBridge = LibwalletNfcBridge(cardNfcService: cardNfcService)
+        libwalletConfig.nfcBridge = libwalletNfcBridge
+        libwalletConfig.keyProvider = keyProvider
+        libwalletConfig.network = Environment.current.network.name()
 
-        LibwalletInit(libwalletConfig)
+        Libwallet_initInit(libwalletConfig)
     }
 }
 
