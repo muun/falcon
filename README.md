@@ -8,12 +8,13 @@ This is the source code repository for muun's iOS wallet. Muun is a non-custodia
 
 1. Install [golang](https://golang.org/)
 2. Make sure you've set the GOPATH env var correctly
-3. Install [gomobile](https://godoc.org/golang.org/x/mobile/cmd/gomobile)
-4. Install [cocoapods](https://guides.cocoapods.org/using/getting-started.html)
+3. Install [cocoapods](https://guides.cocoapods.org/using/getting-started.html)
+4. Install [docker](https://docs.docker.com/engine/install/)
 5. Make sure you have Xcode command line tools installed. You can check this in Xcode  > Preferences > Locations > Command Line tools
-6. Run `tools/bootstrap-gomobile.sh`. This will install gomobile and bind libwallet to your GOPATH.
-7. Run `cd falcon/app && pod install`
-8. You're done! Open the workspace file and try building the project.
+6. Run `libwallet/librs/makelibs.sh`
+7. Run `tools/bootstrap-gomobile.sh`. This will install gomobile and bind libwallet to your GOPATH.
+8. Run `cd falcon/app && pod install`
+9. You're done! Open the workspace file and try building the project.
 
 ## Structure
 

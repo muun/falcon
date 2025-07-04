@@ -63,8 +63,15 @@ extension Environment {
     }
 
     public var libwalletSocketFile: URL {
+#if targetEnvironment(simulator)
+        // Here is something fun: OSX has a limit on the length of the path for a socket.
+        // This limit is lower than the gigantic path to the .documentDirectory of the
+        // simulator. So we have to use another path for the simulator.
+        return URL(fileURLWithPath: "/tmp/wallet.sock")
+#else
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0].appendingPathComponent("wallet.sock", isDirectory: false)
+#endif
     }
 
     public static func getLocalhostByIp() -> String {

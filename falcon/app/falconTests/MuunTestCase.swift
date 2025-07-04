@@ -86,9 +86,10 @@ class MuunTestCase: XCTestCase {
             attributes: [:]
         )
 
-        let libwalletConfig = LibwalletConfig()
+        let libwalletConfig = App_provided_dataConfig()
         libwalletConfig.dataDir = libwalletStorageURL.absoluteString
-        LibwalletInit(libwalletConfig)
+        libwalletConfig.network = Environment.current.network.name()
+        Libwallet_initInit(libwalletConfig)
         
         containers = DIManager.testing_setupContainer(testContainer)
         _ = replace(.singleton, DatabaseCoordinator.self) { databaseCoordinator }

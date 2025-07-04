@@ -55,7 +55,8 @@ public extension DependencyContainer {
                                    blockchainHeightRepository: $3,
                                    forwardingPoliciesRepository: $4,
                                    minFeeRateRepository: $5,
-                                   featureFlagsRepository: try container.resolve())
+                                   featureFlagsRepository: try container.resolve(),
+                                   userRepository: try container.resolve())
             }
             container.register(.singleton, factory: PreloadFeeDataAction.init)
             container.register(.singleton) {
@@ -115,7 +116,8 @@ public extension DependencyContainer {
                 GoLibwalletService() as LibwalletService
             }
             container.register {
-                BackgroundExecutionMetricsProvider(localeTimeZoneProvider: try container.resolve())
+                BackgroundExecutionMetricsProvider(localeTimeZoneProvider: try container.resolve(),
+                                                   storeKitCapabilitiesProvider: try container.resolve())
             }.resolvingProperties {
                 $1.reachabilityService = try container.resolve()
             }
@@ -154,7 +156,8 @@ public extension DependencyContainer {
                  WalletFundingGroup.init(addressActions: $1,
                                          createInvoice: $2,
                                          userPreferencesSelector: $3),
-                 NodeHandlingGroup()] as [DebugExecutablesGroup]
+                 NodeHandlingGroup(),
+                 NfcCardGroup()] as [DebugExecutablesGroup]
             }
         }
     }

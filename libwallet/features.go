@@ -12,6 +12,7 @@ const (
 	BackendFeatureHighFeesReceiveFlow      = "HIGH_FEES_RECEIVE_FLOW"
 	BackendFeatureEffectiveFeesCalculation = "EFFECTIVE_FEES_CALCULATION"
 	BackendFeatureOsVersionDeprecatedFlow  = "OS_VERSION_DEPRECATED_FLOW"
+	BackendFeatureNfcCard                  = "NFC_CARD"
 
 	UserActivatedFeatureStatusOff                 = "off"
 	UserActivatedFeatureStatusCanPreactivate      = "can_preactivate"

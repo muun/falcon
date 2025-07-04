@@ -24,4 +24,14 @@ public enum LibwalletStorageHelper {
         }
     }
 
+    public static func cleanupSocket() {
+        do {
+            let socketFile = Environment.current.libwalletSocketFile
+            if FileManager.default.fileExists(atPath: socketFile.path) {
+                try FileManager.default.removeItem(at: socketFile)
+            }
+        } catch {
+            Logger.fatal(error: error)
+        }
+    }
 }

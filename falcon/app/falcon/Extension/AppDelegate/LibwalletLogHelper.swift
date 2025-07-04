@@ -1,7 +1,7 @@
 import Foundation
 import Libwallet
 
-class LibwalletLogHelper: NSObject, LibwalletAppLogSinkProtocol {
+class LibwalletLogHelper: NSObject, App_provided_dataAppLogSinkProtocol {
 
     func write(_ msgData: Data?, n: UnsafeMutablePointer<Int>?) throws {
         n?.pointee = msgData?.count ?? 0

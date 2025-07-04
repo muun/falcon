@@ -84,7 +84,8 @@ public enum Persistence: String, CaseIterable {
 
     case reachabilityStatus
     case reachabilityStatusAlreadyProvided
-    
+
     case lastBackgroundBeginTime
     case backgroundTimes
+    case cardActivated
 }

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GIDClientID</key>
-	<string>31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -19,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.9.2</string>
+	<string>2.10.0</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -64,7 +62,10 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
+
 	<string>1205</string>
+	<key>GIDClientID</key>
+	<string>31549017632-edq72gjasgvfem953m1a4qvk86muhjb2.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>googledrive</string>
@@ -76,6 +77,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NFCReaderUsageDescription</key>
+	<string>Used to configure your Security Card for secure transactions.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -139,6 +142,10 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>A00000015100133700</string>
 	</array>
 </dict>
 </plist>

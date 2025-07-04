@@ -27,67 +27,55 @@ public class ConectivityCapabilitiesProvider {
     }
 
     public func startMonitoring() {
-        if #available(iOS 12.0, *) {
-            networkMonitor.pathUpdateHandler = { [weak self] path in
-                self?.availableNetworks = self?.retrieveAvailableNetworksBasedOn(availableInterfaces: path.availableInterfaces)
-            }
-
-            networkMonitor.start(queue: DispatchQueue(label: "availableNetworksMonitor"))
+        networkMonitor.pathUpdateHandler = { [weak self] path in
+            self?.availableNetworks = self?
+                .retrieveAvailableNetworksBasedOn(availableInterfaces: path.availableInterfaces)
         }
+
+        networkMonitor.start(queue: DispatchQueue(label: "availableNetworksMonitor"))
     }
 
     func getSimRegion() -> String {
-        if #available(iOS 12.0, *) {
-            let isoCountryCodeDeprecated = "--"
-
-            guard let carrier = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders?.values.first else {
-                return SignalConstants.unknown
-            }
-
-            guard let isoCountry = carrier.isoCountryCode else {
-                return SignalConstants.empty
-            }
-
-            if isoCountry == isoCountryCodeDeprecated {
-                return SignalConstants.deprecated
-            }
-
-            return isoCountry
+        guard let carrier = CTTelephonyNetworkInfo()
+            .serviceSubscriberCellularProviders?.values.first else {
+            return SignalConstants.unknown
         }
-        return SignalConstants.unknown
+
+        guard let isoCountry = carrier.isoCountryCode else {
+            return SignalConstants.empty
+        }
+
+        if isoCountry == SIMStateDeprecatedValues.noISOCountryCode {
+            return SignalConstants.deprecated
+        }
+
+        return isoCountry
     }
 
     func getSimState() -> SimState {
-        if #available(iOS 12.0, *) {
-            let countryCodeDeprecatedValueIndicator = "65535"
-
-            let mobileCountryCodes = CTTelephonyNetworkInfo()
-                .serviceSubscriberCellularProviders?
-                .values
-                .compactMap { $0.mobileCountryCode }
-            guard let mobileCountryCodes = mobileCountryCodes, !mobileCountryCodes.isEmpty else {
-                return .absent
-            }
-
-            if (mobileCountryCodes.contains { $0 == countryCodeDeprecatedValueIndicator }) {
-                return .deprecated
-            }
-
-            return .ready
+        let cellularProvidersCountryCodes = CTTelephonyNetworkInfo()
+            .serviceSubscriberCellularProviders?
+            .values
+            .compactMap { $0.mobileCountryCode }
+        guard let mobileCountryCodes = cellularProvidersCountryCodes, !mobileCountryCodes.isEmpty else {
+            return .absent
         }
-        return .unknown
+
+        if (mobileCountryCodes.contains { $0 == SIMStateDeprecatedValues.noMobileCountryCode }) {
+            return .deprecated
+        }
+
+        return .ready
     }
 
-    func hasInternetConnectionProvidedByCarrier() -> Bool? {
-        if #available(iOS 12.0, *) {
-            guard let radioAccess = CTTelephonyNetworkInfo().serviceCurrentRadioAccessTechnology else {
-                return false
-            }
-            return !radioAccess.isEmpty
+    func hasInternetConnectionProvidedByCarrier() -> Bool {
+        guard let radioAccess = CTTelephonyNetworkInfo()
+            .serviceCurrentRadioAccessTechnology else {
+            return false
         }
-        return nil
+        return !radioAccess.isEmpty
     }
-    
+
     func getExcludedTunnelAddresses() -> String {
         guard let cfDict = CFNetworkCopySystemProxySettings() else {
             return SignalConstants.unknown
@@ -101,18 +89,44 @@ public class ConectivityCapabilitiesProvider {
     }
 
      func getHTTPProxy() -> String {
-         return getProxySetting(key: .http, unknownValue: SignalConstants.unknown, defaultValue: SignalConstants.empty)
+         return getProxySetting(
+            key: .http,
+            unknownValue: SignalConstants.unknown,
+            defaultValue: SignalConstants.empty
+         )
      }
 
      func getHTTPSProxy() -> String {
-         return getProxySetting(key: .https, unknownValue: SignalConstants.unknown, defaultValue: SignalConstants.empty)
+         return getProxySetting(
+            key: .https,
+            unknownValue: SignalConstants.unknown,
+            defaultValue: SignalConstants.empty
+         )
      }
 
      func isSOCKSEnable() -> Int {
-         return getProxySetting(key: .socks, unknownValue: SignalConstants.intUnknown, defaultValue: SignalConstants.intDisabled)
+         return getProxySetting(
+            key: .socks,
+            unknownValue: SignalConstants.intUnknown,
+            defaultValue: SignalConstants.intDisabled
+         )
      }
-    
-    private func getProxySetting<T>(key: ProxyKey, unknownValue: T , defaultValue: T) -> T {
+
+    func getCellularProviders() -> [SimData] {
+        // Current connection related data
+        let radiosData = CTTelephonyNetworkInfo().serviceCurrentRadioAccessTechnology ?? [:]
+        // Sim related data
+        let carriers = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders ?? [:]
+
+        return radiosData.map { (serviceId, radio) -> SimData in
+            return SimData.from(
+                    radioData: (serviceId: serviceId, radio: radio),
+                    carriers: carriers
+                )
+        }
+    }
+
+    private func getProxySetting<T>(key: ProxyKey, unknownValue: T, defaultValue: T) -> T {
         guard let cfDict = CFNetworkCopySystemProxySettings() else {
             return defaultValue
         }
@@ -128,11 +142,13 @@ public class ConectivityCapabilitiesProvider {
         isOverWifi = false
     }
 
-    private func retrieveAvailableNetworksBasedOn(availableInterfaces: [NWInterface]) -> AvailableNetworks {
+    private func retrieveAvailableNetworksBasedOn(
+        availableInterfaces: [NWInterface]
+    ) -> AvailableNetworks {
         var availableNetworks = AvailableNetworks()
 
         isOverWifi = availableInterfaces.contains(where: { $0.type == .wifi })
-        
+
         netInterfaceName = availableInterfaces.first?.name ?? SignalConstants.empty
 
         availableInterfaces.forEach {
@@ -183,10 +199,63 @@ enum ProxyKey: String {
     case socks = "SOCKSEnable"
 }
 
+struct SimData: Encodable {
+    var simRegion: String
+    var simOperatorName: String
+    var simCountryCode: String
+    var simNetworkCode: String
+    var mobileRadioType: String
+    var serviceId: String
+
+    static func from(
+        radioData: (serviceId: String, radio: String),
+        carriers: [String: CTCarrier]
+    ) -> SimData {
+        let (serviceId, radio) = radioData
+        let carrier = carriers[serviceId]
+
+        return SimData(
+            simRegion: processProviderValue(
+                carrier?.isoCountryCode,
+                deprecatedValue: SIMStateDeprecatedValues.noISOCountryCode
+            ),
+            simOperatorName: processProviderValue(
+                carrier?.carrierName,
+                deprecatedValue: SIMStateDeprecatedValues.noCarrierName
+            ),
+            simCountryCode: processProviderValue(
+                carrier?.mobileCountryCode,
+                deprecatedValue: SIMStateDeprecatedValues.noMobileCountryCode
+            ),
+            simNetworkCode: processProviderValue(
+                carrier?.mobileNetworkCode,
+                deprecatedValue: SIMStateDeprecatedValues.noMobileNetworkCode
+            ),
+            mobileRadioType: radio,
+            serviceId: serviceId
+        )
+    }
+
+    static func processProviderValue(_ value: String?, deprecatedValue: String) -> String {
+        guard let code = value, code != deprecatedValue else {
+            return SignalConstants.deprecated
+        }
+        return code
+    }
+}
+
 struct SignalConstants {
+    static let empty = ""
     static let unknown = "UNKNOWN"
+    static let deprecated = "DEPRECATED"
+    
     static let intUnknown = -1
     static let intDisabled = 0
-    static let empty = ""
-    static let deprecated = "DEPRECATED"
+}
+
+struct SIMStateDeprecatedValues {
+    static let noMobileCountryCode = "65535"
+    static let noMobileNetworkCode = "65535"
+    static let noCarrierName = "--"
+    static let noISOCountryCode = "--"
 }

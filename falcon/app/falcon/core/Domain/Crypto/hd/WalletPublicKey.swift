@@ -64,3 +64,10 @@ extension WalletPublicKey: Equatable {
     }
 
 }
+
+// Remove when delete security cards POC
+extension WalletPublicKey {
+    func serializeUncompressed() -> Data? {
+        key.serializeUncompressed()
+    }
+}
