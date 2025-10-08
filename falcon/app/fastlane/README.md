@@ -31,14 +31,13 @@ publish to testflight beta
 
 Export an IPA pointing to prod env
 
-### ios internalPrd
+### ios dogfood
 
 ```sh
-[bundle exec] fastlane ios internalPrd
+[bundle exec] fastlane ios dogfood
 ```
 
-publish an internal build pointing to prod by default to testflight. 
-  If you want to change the env create a new lane
+Publish a Dogfood app, pointing to production by default.
 
 ### ios dev
 

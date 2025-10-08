@@ -35,4 +35,12 @@ struct ClientJson: Codable {
     let deviceCheckToken: String
     let fallbackDeviceToken: String
     let iCloudRecordId: String?
+    let iosAppDisplayName: String
+    let iosAppId: String
+    let iosAppName: String
+    let iosAppPrimaryIconHash: String
+    let iosIsSoftDevice: Bool
+    let iosSoftDeviceName: String?
+    let iosHasGyro: Bool
+    let iosInstallSource: Int
 }

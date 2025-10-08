@@ -1,6 +1,0 @@
-framework module NIOSSL {
-  umbrella header "SwiftNIOSSL-umbrella.h"
-
-  export *
-  module * { export * }
-}

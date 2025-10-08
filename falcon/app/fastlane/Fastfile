@@ -1,10 +1,30 @@
+require 'base64'
+require 'tmpdir'
+require 'fileutils'
 
 default_platform(:ios)
 
 platform :ios do
 
+  # Environment Constants
+  ENV_PROD = "prod"
+  ENV_DOGFOOD = "dogfood"
+  ENV_DEV = "dev"
+  ENV_REGTEST = "regtest"
+  DOGFOOD_KEYCHAIN_NAME = "dogfood_keychain"
+  TEMP_CODE_SIGNING_FILES_DIR = File.join(Dir.tmpdir, "fastlane_dogfood_signing")
+
+  # Vars to be shared during the lane execution. They are isolated from the console envars.
+  module SharedValues
+    CERT_P12_PATH = :CERT_P12_PATH
+    DIST_MOBILEPROVISION_PATH = :DIST_MOBILEPROVISION_PATH
+    DIST_NOTIFICATIONS_MOBILEPROVISION_PATH = :DIST_NOTIFICATIONS_MOBILEPROVISION_PATH
+    TEMP_KEYCHAIN_PASSWORD = :TEMP_KEYCHAIN_PASSWORD
+  end
+
   desc "publish to testflight beta"
-  lane :prd do
+  lane :prd do |options|
+    Actions.lane_context[SharedValues::ENVIRONMENT] = ENV_PROD
 
     version_number = get_version_number(target: "Muun")
 
@@ -12,48 +32,92 @@ platform :ios do
     ensure_git_branch(branch: "^falcon-#{version_number}$")
     ensure_git_status_clean
 
-    upload_testflight(env: "prod")
+    upload_testflight(skip_internal_distribution: options[:skip_internal_distribution])
   end
 
   desc "Export an IPA pointing to prod env"
   lane :export_prod_ipa do
+    Actions.lane_context[SharedValues::ENVIRONMENT] = ENV_PROD
 
-    export_ipa(env: "prod")
+    export_ipa
   end
 
-  desc "publish an internal build pointing to prod by default to testflight. 
-  If you want to change the env create a new lane"
-  lane :internalPrd do
-    ensure_git_status_clean
-    upload_testflight(env: "internalPrd")
+  desc "Publish a Dogfood app, pointing to production by default.
+  Required envars ->
+  FASTLANE_USER => email of an user with Appstore Connect permissions [App Manager for dogfood or greater required].
+  INDIVIDUAL_API_KEY_CONTENT_BASE64 => Individual api key belonging to the fastlane user. export.
+  INDIVIDUAL_API_KEY_ID => "" ID.
+  FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD => App specific password for the appstore connect user"
+  lane :dogfood do
+    Actions.lane_context[SharedValues::ENVIRONMENT] = ENV_DOGFOOD
+    set_appstore_connect_auth
+    upload_testflight(skip_internal_distribution: options[:skip_internal_distribution])
+  end
+
+  private_lane :set_appstore_connect_auth do 
+    app_store_connect_api_key(
+      key_id: ENV.fetch("INDIVIDUAL_API_KEY_ID"),
+      key_content: ENV.fetch("INDIVIDUAL_API_KEY_CONTENT_BASE64"),
+      is_key_content_base64: true,
+    )
   end
 
   desc "publish to testflight dev"
   lane :dev do
+    Actions.lane_context[SharedValues::ENVIRONMENT] = ENV_DEV
     ensure_git_status_clean
-    upload_testflight(env: "dev")
+    upload_testflight(skip_internal_distribution: options[:skip_internal_distribution])
+  end
+
+  private_lane :get_current_env do
+    Actions.lane_context[SharedValues::ENVIRONMENT]
+  end
+
+  private_lane :get_xcode_build_configuration do
+    env = get_current_env
+    case env
+    when ENV_DOGFOOD
+      "Release-Dogfood"
+    else
+      "Release"
+    end
+  end
+
+  private_lane :get_muun_email do
+    if ENV["FASTLANE_USER"]
+      ENV["FASTLANE_USER"]
+    else
+      current_env = get_current_env
+      if current_env == ENV_DOGFOOD
+        UI.user_error!("FASTLANE_USER environment variable must be set for dogfood environment.")
+      else
+        user_email = prompt(text: "Your muun email: ")
+        ENV["FASTLANE_USER"] = user_email
+        user_email
+      end
+    end
   end
 
   private_lane :set_env do |params|
-    env = params[:env]
+    env = get_current_env
     sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../app/falcon/core/Environment.swift")
     sh("sed", "-i", "", "s/static let current: Environment = [^ ]*/static let current: Environment = .#{get_env_for_app_env_case(env:env)}/", "../../app/falconPushNotifications/Environment.swift")
-    sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{get_env_for_app_identification(env:env)}\"/", "../../app/falconPushNotifications/Environment.swift")
-    sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{get_env_for_app_identification(env:env)}\"/", "../../app/falcon/Resource/Environment+Extension.swift")
-  end
-
-  private_lane :get_env_for_app_identification do |params| # This is because I prefer to avoid changing app id in internal distr because of the extra work (signing and creating the app)
-    env = params[:env]
-    env == "internalPrd" ? "stg" : env
+    sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{env}\"/", "../../app/falconPushNotifications/Environment.swift")
+    sh("sed", "-i", "", "s/let env = rawValue*/let env = \"#{env}\"/", "../../app/falcon/Resource/Environment+Extension.swift")
   end
 
   private_lane :get_env_for_app_env_case do |params|
     env = params[:env]
-    env == "internalPrd" ? "prod" : env
+    case env
+    when ENV_DOGFOOD
+      "prod"
+    else
+      env
+    end
   end
 
   private_lane :customize_app_for_a_not_production_environment do |params|
-    env = params[:env]
+    env = get_current_env
     app_identifier = params[:app_identifier]
     extension_identifier = params[:extension_identifier]
 
@@ -82,73 +146,221 @@ platform :ios do
   private_lane :get_app_identifier do |params|
     env = params[:env]
     is_prod = params[:is_prod]
-    if is_prod then
-      app_identifier = "com.muun.falcon"
-    else 
-      app_identifier = "com.muun.falcon.#{get_env_for_app_identification(env: env)}"
+    if is_prod
+      "com.muun.falcon"
+    elsif env == ENV_DOGFOOD
+      "com.muun.falcon.internal.beta"
+    else
+      "com.muun.falcon.#{env}"
     end
-    app_identifier
   end
 
   private_lane :update_signing_provisioning do |params|
     app_identifier = params[:app_identifier]
     extension_identifier = params[:extension_identifier]
-    muun_email = params[:muun_email]
+    muun_email = get_muun_email
 
     sigh(app_identifier: app_identifier, username: muun_email)
     sigh(app_identifier: extension_identifier, username: muun_email)
   end
 
-  private_lane :update_build_number do |params|
-    env = params[:env]
-    muun_email = params[:muun_email]
-    app_identifier = params[:app_identifier]
+  private_lane :update_build_number do
+    DOGFOOD_MAX_BUILD_INDEX = 999
+    DOGFOOD_ARCH_SUFFIX = "1"
+    PROD_BUILD_SUFFIX = "2"
 
-    if env == "internalPrd" then 
-      build_number = latest_testflight_build_number(username: muun_email, app_identifier: app_identifier)
-      increment_build_number({
-        build_number: build_number + 1
-      })
+    current_env = get_current_env
+    if current_env == ENV_DOGFOOD then
+      # --- Dogfood/Internal Production Logic ---
+      # The build number format is: major|minor|patch*2|dogfood_index*3|arch. EJ: 1|2|33|044|1
+      # The app version format is: major|minor|dogfood_index||decimal_commit_hash. EJ: 1.2.4434512453 (44 based on the previous example. No padding needed).
+      # In the case of the decimalCommitHash if it has less than 9 characters, padding will be added as zeros at the beginning to forced it to 9 characters to avoid lengh issues.
+      # We are incrementing the dogfood number.
+
+      dogfood_app_id = get_app_identifier(env: ENV_DOGFOOD, is_prod: false)
+
+      latest_tf_build_number = latest_testflight_build_number(app_identifier: dogfood_app_id).to_i
+      UI.user_error!("testflight build number: '#{latest_tf_build_number}' must be 8 digits.") if latest_tf_build_number.to_s.length != 8
+
+      # Extract components: first 4 digits for version, next 3 for dogfood index
+      tf_version_part = (latest_tf_build_number / 10000).to_s
+      tf_dogfood_index = (latest_tf_build_number / 10 % 1000)
+
+      # Ensure the dogfood index doesn't exceed the maximum
+      UI.user_error!("Max dogfood build number index reached") if tf_dogfood_index >= DOGFOOD_MAX_BUILD_INDEX
+
+      # Get the current plist build number and check for version mismatch
+      plist_version_part = (get_build_number.to_i / 10000).to_s
+      UI.user_error!("Build number version mismatch! Current plist version '#{plist_version_part}' does not match dogfood version '#{tf_version_part}'.") if plist_version_part < tf_version_part
+
+      new_dogfood_index = tf_dogfood_index + 1
+
+      new_build_number = "#{tf_version_part}#{format('%03d', new_dogfood_index)}#{DOGFOOD_ARCH_SUFFIX}"
+
+      increment_build_number(
+        build_number: new_build_number
+      )
+
+      current_full_version = get_version_number(target: "Muun")
+      current_commit_hash = last_git_commit[:commit_hash]
+      short_commit_hash = current_commit_hash[0..5]
+
+      major_minor_version = current_full_version.split('.')[0..1].join('.')
+      decimal_commit_hash = format('%09d', short_commit_hash.to_i(16))
+      # This will always be one commit before the version commit.
+      new_app_version_string = "#{major_minor_version}.#{new_dogfood_index}#{decimal_commit_hash}"
+
+      increment_version_number(
+        version_number: new_app_version_string
+      )
+
     else
-      increment_build_number
+      UI.user_error!("testflight build number: '#{get_build_number}' must be 8 digits.") if get_build_number.to_s.length != 8
+      
+      current_plist_version = (get_build_number.to_i / 10000)
+
+      new_plist_version_part = current_plist_version + 1
+      new_build_number = "#{new_plist_version_part}000#{PROD_BUILD_SUFFIX}"
+
+      increment_build_number(build_number: new_build_number)
     end
+
+=begin
+### This table documents various input combinations for `latest_testflight_build_number`,
+`get_build_number`, and `env`, and illustrates the corresponding outcome of the
+`update_build_number` lane.
+
+| `latest_testflight_build_number` | `get_build_number` | `env`        | Expected Result                                                                                                   |
+| :------------------------------- | :----------------- | :----------- | :---------------------------------------------------------------------------------------------------------------- |
+| `12341111`                       | `12340002`         | `dogfood`    | `increment_build_number(build_number: "12341121")`                                                                |
+| `12341112`                       | `12340002`         | `dogfood`    | `increment_build_number(build_number: "12341121")`                                                                |
+| `13160002`                       | `13160002`         | `dogfood`    | `increment_build_number(build_number: "13160011")`                                                                |
+| `13160102`                       | `13160002`         | `dogfood`    | `increment_build_number(build_number: "13160111")`                                                                |
+| `13161002`                       | `13160002`         | `dogfood`    | `increment_build_number(build_number: "13161011")`                                                                |
+| `12349991`                       | `12340002`         | `dogfood`    | `UI.user_error!("Max dogfood build number index reached")`                                                       |
+| `1234567`                        | `12340002`         | `dogfood`    | `UI.user_error!("testflight build number: '1234567' must be 8 digits.")`                                         |
+| `123456789`                      | `12340002`         | `dogfood`    | `UI.user_error!("testflight build number: '123456789' must be 8 digits.")`                                       |
+| (N/A)                            | `20240000`         | `production` | `increment_build_number(build_number: "20250002")`                                                                |
+| (N/A)                            | `20243430`         | `production` | `increment_build_number(build_number: "20250002")`                                                                |
+| (N/A)                            | `2024000`          | `production` | `UI.user_error!("testflight build number: '2024000' must be 8 digits.")`                                         |
+| (N/A)                            | `202400000`        | `production` | `UI.user_error!("testflight build number: '202400000' must be 8 digits.")`                                       |
+=end
   end
 
   private_lane :upload_build_with_dsyms do |params|
-    env = params[:env]
-    muun_email = params[:muun_email]
+    env = get_current_env
+    muun_email = get_muun_email
     app_identifier = params[:app_identifier]
+    skip_internal_distribution = params[:skip_internal_distribution].nil? ? false : params[:skip_internal_distribution]
 
+    # When skip_internal_distribution == true, we upload only; no internal/external distribution.
     upload_to_testflight(
       username: muun_email,
-      app_identifier: app_identifier
-    )
-
-    # Download latest dsyms
-    download_dsyms(
-      username: muun_email,
-      app_identifier: app_identifier, 
-      build_number: get_build_number
+      app_identifier: app_identifier,
+      skip_submission: skip_internal_distribution,
     )
 
     # Upload them to crashlytics
     upload_symbols_to_crashlytics(
-      gsp_path:"falcon/GoogleService-Info-#{get_env_for_app_identification(env: env)}.plist",
+      gsp_path:"falcon/GoogleService-Info-#{env}.plist",
       dsym_worker_threads: 10
     )
   end
 
+  private_lane :setup_dogfood_provisioning do |params|
+    # Just in case it is somehow there before the build starts. It may happen in local envs.
+    attempt_to_delete_dogfood_keychain
+    decode_and_prepare_signing_files
+
+    random_keychain_password = `openssl rand -base64 32`.strip
+
+    create_keychain(
+      name: DOGFOOD_KEYCHAIN_NAME,
+      password: random_keychain_password,
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600
+    )
+    
+    import_certificate(
+      certificate_path: lane_context[SharedValues::CERT_P12_PATH],
+      certificate_password: ENV["DISTRIBUTION_CERTIFICATE_PASSWORD"],
+      keychain_name: DOGFOOD_KEYCHAIN_NAME,
+      keychain_password: random_keychain_password
+    )
+    
+    install_provisioning_profile(
+      path: lane_context[SharedValues::DIST_MOBILEPROVISION_PATH]
+    )
+
+    install_provisioning_profile(
+      path: lane_context[SharedValues::DIST_NOTIFICATIONS_MOBILEPROVISION_PATH]
+    )
+  end
+
+  private_lane :decode_and_prepare_signing_files do
+    clean_up_temp_code_signing_files
+    FileUtils.mkdir_p(TEMP_CODE_SIGNING_FILES_DIR)
+
+    # Distribution Certificate
+    cert_p12_path = File.join(TEMP_CODE_SIGNING_FILES_DIR, "apple_distribution_muun.p12")
+    File.open(cert_p12_path, "wb") do |file|
+      file.write(Base64.decode64(ENV["DISTRIBUTION_CERTIFICATE_BASE64"]))
+    end
+
+    lane_context[SharedValues::CERT_P12_PATH] = cert_p12_path
+
+    # Distribution Mobile Provision
+    dist_mobileprovision_path = File.join(TEMP_CODE_SIGNING_FILES_DIR, "distribution.mobileprovision")
+    File.open(dist_mobileprovision_path, "wb") do |file|
+      file.write(Base64.decode64(ENV["DISTRIBUTION_MOBILEPROVISION_BASE64"]))
+    end
+    lane_context[SharedValues::DIST_MOBILEPROVISION_PATH] = dist_mobileprovision_path
+
+    # Distribution Notifications Mobile Provision
+    dist_notifications_mobileprovision_path = File.join(TEMP_CODE_SIGNING_FILES_DIR, "distribution_notifications.mobileprovision")
+    File.open(dist_notifications_mobileprovision_path, "wb") do |file|
+      file.write(Base64.decode64(ENV["DISTRIBUTION_NOTIFICATIONS_MOBILEPROVISION_BASE64"]))
+    end
+    lane_context[SharedValues::DIST_NOTIFICATIONS_MOBILEPROVISION_PATH] = dist_notifications_mobileprovision_path
+
+  end
+
+  private_lane :clean_up_temp_code_signing_files do
+    begin
+      if File.directory?(TEMP_CODE_SIGNING_FILES_DIR)
+        FileUtils.rm_rf(TEMP_CODE_SIGNING_FILES_DIR)
+      end
+    rescue => e
+      UI.error("🚨 Failed to delete temporary code signing files directory '#{TEMP_CODE_SIGNING_FILES_DIR}': #{e.message}. Manual cleanup may be required.")
+    end
+  end
+
+  private_lane :attempt_to_delete_dogfood_keychain do |params|
+    begin
+        delete_keychain(
+          name: DOGFOOD_KEYCHAIN_NAME
+        )
+        UI.success("Successfully deleted temporary keychain '#{DOGFOOD_KEYCHAIN_NAME}'")
+      rescue => e
+        # Do nothing. This is just a not so necessary best effort. 
+        # As the CI machines are spawned on demand the dogfood keychain will be eventually deleted anyway.
+      end
+  end
+
   private_lane :clean_up_build_dir do |params|
-    env = params[:env]
+    env = get_current_env
     is_prod = params[:is_prod]
 
     # Clean up preparing for the tag
     clean_build_artifacts
 
-    if env == "internalPrd" then # Revert version updates for internalPrd
+    if env == ENV_DOGFOOD then
       reset_git_repo(
         force: true
       )
+
+      attempt_to_delete_dogfood_keychain
     else
       reset_git_repo(
         force: true,
@@ -161,8 +373,7 @@ platform :ios do
       )
     end
 
-    # Revert the visual name changes
-    if !is_prod then
+    if !is_prod && env != ENV_DOGFOOD then
       update_info_plist(
         plist_path: "falcon/Info.plist",
         display_name: "Muun",
@@ -186,41 +397,69 @@ platform :ios do
   end
 
   private_lane :upload_testflight do |params|
-    env = params[:env]
-    muun_email = prompt(text: "Your muun email: ")
-    is_prod = env == "prod"
+    env = get_current_env
+    is_prod = env == ENV_PROD
     git_prefix = is_prod ? "" : "-#{env}"
     app_identifier = get_app_identifier(env: env, is_prod: is_prod)
     extension_identifier = "#{app_identifier}.falconPushNotifications"
+    xcode_build_config = get_xcode_build_configuration
+    skip_internal_distribution = params[:skip_internal_distribution].nil? ? false : params[:skip_internal_distribution]
 
-    update_signing_provisioning(app_identifier: app_identifier,
-                                extension_identifier: extension_identifier,
-                                muun_email: muun_email)
+    # Dogfood will have the provisioning profiles/certs available though bitrise actions.
+    if env == ENV_DOGFOOD then
+      setup_dogfood_provisioning
+    else
+      update_signing_provisioning(app_identifier: app_identifier,
+                                  extension_identifier: extension_identifier)
+    end
 
-    set_env(env: env)
+    set_env
 
     sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
 
-    if !is_prod then
-      customize_app_for_a_not_production_environment(env: env, 
-                                                     app_identifier: app_identifier,
+    if env == ENV_DOGFOOD then
+      sh("sed", "-i", "", "s/static let group = \"[^\"]*\"/static let group = \"5YYLBTUB6W.group.com.muun.falcon.internal.beta\"/", "../../app/falcon/Resource/Identifiers.swift")
+    end
+
+    unless is_prod
+      customize_app_for_a_not_production_environment(app_identifier: app_identifier,
                                                      extension_identifier: extension_identifier)
     end
 
-    update_build_number(env: env, muun_email: muun_email, app_identifier: app_identifier)
-
+    update_build_number
+    
     version_number = get_version_number(target: "Muun")
 
-    build_app(
-      scheme: "Muun", 
-      workspace: "falcon.xcworkspace", 
-      include_symbols: true,
-      export_method: "app-store"
-    )
-    
-    upload_build_with_dsyms(env: env, muun_email: muun_email, app_identifier: app_identifier)
+    export_opts = {
+      signingStyle: "manual",
+      codeSigningIdentity: "Apple Distribution"
+    }
 
-    clean_up_build_dir(env: env, is_prod: is_prod)
+    if env == ENV_DOGFOOD then
+      export_opts[:provisioningProfiles] = {
+        "com.muun.falcon.internal.beta" => "Dogfood distribution",
+        "com.muun.falcon.internal.beta.falconPushNotifications" => "Dogfood distribution - Notifications"
+      }
+    elsif is_prod then
+      export_opts[:provisioningProfiles] = {
+        "com.muun.falcon" => "com.muun.falcon AppStore",
+        "com.muun.falcon.falconPushNotifications" => "com.muun.falcon.falconPushNotifications AppStore"
+      }
+    end
+
+    build_app(
+      scheme: "Muun",
+      workspace: "falcon.xcworkspace",
+      include_symbols: true,
+      export_method: "app-store",
+      configuration: xcode_build_config,
+      skip_profile_detection: false,
+      export_options: export_opts
+    )
+
+    upload_build_with_dsyms(app_identifier: app_identifier, skip_internal_distribution: skip_internal_distribution)
+
+    clean_up_build_dir(is_prod: is_prod)
 
     if is_prod then # nothing to commit for envs that are not prod
         # We're done, tag it
@@ -229,28 +468,33 @@ platform :ios do
         xcodeproj: "falcon.xcodeproj"
         )
     end
-    add_git_tag(tag: "falcon#{git_prefix}-#{version_number}-#{get_build_number}")
-    push_to_git_remote
+
+    if env != ENV_DOGFOOD then
+      add_git_tag(tag: "falcon#{git_prefix}-#{version_number}-#{get_build_number}")  
+
+      push_to_git_remote
+    end
   end
 
   desc "Upload symbols to crashlytics"
   lane :upload_crashlytics do
 
-    muun_email = prompt(text: "Your muun email: ")
+    muun_email = get_muun_email
     app_identifier = "com.muun.falcon"
     build_number = prompt(text: "Build number (ie: 45): ")
+    env = get_current_env # Assume env is set elsewhere
 
     # Download latest dsyms
     download_dsyms(
       username: muun_email,
-      app_identifier: app_identifier, 
+      app_identifier: app_identifier,
       build_number: build_number
     )
 
     # Upload them to crashlytics
     upload_symbols_to_crashlytics(
-    	gsp_path:"falcon/GoogleService-Info-#{get_env_for_app_identification(env: env)}.plist",
-    	dsym_worker_threads: 10
+      gsp_path:"falcon/GoogleService-Info-#{env}.plist",
+      dsym_worker_threads: 10
     )
 
     # Clean up preparing for the tag
@@ -259,53 +503,56 @@ platform :ios do
 
   desc "set regtest as env"
   lane :regtest do
-    set_env(env: "regtest")
+    Actions.lane_context[SharedValues::ENVIRONMENT] = ENV_REGTEST
+    set_env(env: ENV_REGTEST)
   end
 
   lane :refresh_dsyms do
-    
-    download_dsyms                  # Download dSYM files from iTC
-    upload_symbols_to_crashlytics   # Upload them to Crashlytics
-    clean_build_artifacts           # Delete the local dSYM files
+    env = get_current_env
+
+    download_dsyms
+    upload_symbols_to_crashlytics(
+      gsp_path:"falcon/GoogleService-Info-#{env}.plist",
+      dsym_worker_threads: 10
+    )
+    clean_build_artifacts
   end
 
   private_lane :export_ipa do |params|
-
-    env = params[:env]
-    muun_email = prompt(text: "Your muun email: ")
-    is_prod = env == "prod"
+    env = get_current_env
+    is_prod = env == ENV_PROD
     git_prefix = is_prod ? "" : "-#{env}"
     app_identifier = get_app_identifier(env: env, is_prod: is_prod)
     extension_identifier = "#{app_identifier}.falconPushNotifications"
+    xcode_build_config = get_xcode_build_configuration
 
     update_signing_provisioning(app_identifier: app_identifier,
-                                extension_identifier: extension_identifier,
-                                muun_email: muun_email)
+                                extension_identifier: extension_identifier)
 
-    set_env(env: env)
+    set_env
 
     sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
 
     # Avoid build crashing in device farm because of entitlements
     sh("sed", "-i", "", "s/public func setup() { */public func setup() { return/", "../../app/falcon/core/Data/Service/CapabilitiesProvider/ICloudCapabilitiesProvider.swift")
 
-    if !is_prod then
-      customize_app_for_a_not_production_environment(env: env, 
-                                                     app_identifier: app_identifier,
+    unless is_prod
+      customize_app_for_a_not_production_environment(app_identifier: app_identifier,
                                                      extension_identifier: extension_identifier)
     end
 
     build_app(
-      scheme: "Muun", 
-      workspace: "falcon.xcworkspace", 
+      scheme: "Muun",
+      workspace: "falcon.xcworkspace",
       include_symbols: true,
       export_method: "app-store",
-      output_directory:'~/.'
+      output_directory:'~/.',
+      configuration: xcode_build_config
     )
 
     # Upload them to crashlytics
     upload_symbols_to_crashlytics(
-      gsp_path:"falcon/GoogleService-Info-#{get_env_for_app_identification(env: env)}.plist",
+      gsp_path:"falcon/GoogleService-Info-#{env}.plist",
       dsym_worker_threads: 10
     )
 

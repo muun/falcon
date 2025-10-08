@@ -55,21 +55,35 @@ func extract_value(array CCharArray) []byte {
 	return res
 }
 
-func Plonky2ServerKeyVerify(proof []byte, ephemeral_public_key []byte, recovery_kit_public_key []byte, shared_public_key []byte) []byte {
+func Plonky2ServerKeyVerify(
+	proof []byte,
+	recovery_code_public_key []byte,
+	hpke_ephemeral_public_key []byte,
+	ciphertext []byte,
+	plaintext_public_key []byte,
+) []byte {
+
 	proof_char_array := make_char_array(proof)
 	defer free_char_array(proof_char_array)
-	ephemeral_public_key_char_array := make_char_array(ephemeral_public_key)
-	defer free_char_array(ephemeral_public_key_char_array)
-	recovery_kit_public_key_char_array := make_char_array(recovery_kit_public_key)
-	defer free_char_array(recovery_kit_public_key_char_array)
-	shared_public_key_char_array := make_char_array(shared_public_key)
-	defer free_char_array(shared_public_key_char_array)
+
+	recovery_code_public_key_char_array := make_char_array(recovery_code_public_key)
+	defer free_char_array(recovery_code_public_key_char_array)
+
+	hpke_ephemeral_public_key_char_array := make_char_array(hpke_ephemeral_public_key)
+	defer free_char_array(hpke_ephemeral_public_key_char_array)
+
+	ciphertext_char_array := make_char_array(ciphertext)
+	defer free_char_array(ciphertext_char_array)
+
+	plaintext_public_key_char_array := make_char_array(plaintext_public_key)
+	defer free_char_array(plaintext_public_key_char_array)
 
 	result_char_array := CCharArray{array: C.plonky2_server_key_verify(
 		proof_char_array.array,
-		ephemeral_public_key_char_array.array,
-		recovery_kit_public_key_char_array.array,
-		shared_public_key_char_array.array,
+		recovery_code_public_key_char_array.array,
+		hpke_ephemeral_public_key_char_array.array,
+		ciphertext_char_array.array,
+		plaintext_public_key_char_array.array,
 	)}
 	defer free_char_array(result_char_array)
 

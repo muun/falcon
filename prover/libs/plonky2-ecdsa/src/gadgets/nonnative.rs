@@ -63,7 +63,13 @@ pub trait CircuitBuilderNonNative<F: RichField + Extendable<D>, const D: usize> 
         rhs: &NonNativeTarget<FF>,
     );
 
+    /// Add a virtual NonNativeTarget, constrained to be a valid representation of a field element.
     fn add_virtual_nonnative_target<FF: Field>(&mut self) -> NonNativeTarget<FF>;
+
+    /// Add a virtual NonNativeTarget. No constraints are added meaning that the caller MUST be sure
+    /// that the U32Target limbs are in the range  [0,2^32) and that the corresponding BigUintTarget
+    /// is in the range [0,field_order).
+    fn add_virtual_nonnative_target_unsafe<FF: Field>(&mut self) -> NonNativeTarget<FF>;
 
     fn add_virtual_nonnative_target_sized<FF: Field>(
         &mut self,
@@ -131,6 +137,8 @@ pub trait CircuitBuilderNonNative<F: RichField + Extendable<D>, const D: usize> 
         x: &NonNativeTarget<FF>,
         b: BoolTarget,
     ) -> NonNativeTarget<FF>;
+
+    fn register_public_nonnative<FF: Field>(&mut self, target: &NonNativeTarget<FF>);
 }
 
 impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderNonNative<F, D>
@@ -178,6 +186,16 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderNonNative<F, D>
 
         let field_order = self.constant_biguint(&FF::characteristic());
         self.range_check_biguint(&value, &field_order);
+
+        NonNativeTarget {
+            value,
+            _phantom: PhantomData,
+        }
+    }
+
+    fn add_virtual_nonnative_target_unsafe<FF: Field>(&mut self) -> NonNativeTarget<FF> {
+        let num_limbs = Self::num_nonnative_limbs::<FF>();
+        let value = self.add_virtual_biguint_target_unsafe(num_limbs);
 
         NonNativeTarget {
             value,
@@ -268,9 +286,6 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderNonNative<F, D>
             overflow,
             _phantom: PhantomData,
         });
-
-        range_check_u32_circuit(self, sum.value.limbs.clone());
-        range_check_u32_circuit(self, vec![overflow]);
 
         let sum_expected = summands
             .iter()
@@ -456,6 +471,17 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderNonNative<F, D>
         let x_if_false = self.mul_nonnative_by_bool(x, not_b);
 
         self.add_nonnative(&x_if_true, &x_if_false)
+    }
+
+    fn register_public_nonnative<FF: Field>(&mut self, target: &NonNativeTarget<FF>) {
+        self.register_public_inputs(
+            &target
+                .value
+                .limbs
+                .iter()
+                .map(|limb| limb.0)
+                .collect::<Vec<_>>(),
+        );
     }
 }
 

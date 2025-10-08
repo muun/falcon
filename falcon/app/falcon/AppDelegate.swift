@@ -37,10 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal let apiMigrationsManager: ApiMigrationsManager = resolve()
     private let deviceCheckTokenProvider: DeviceCheckTokenProvider = resolve()
     private let reachabilityService: ReachabilityService = resolve()
-    // Instance this as early as possible to load schema and migrations and crash early
     internal let databaseCoordinator: DatabaseCoordinator = resolve()
 
     internal let storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider = resolve()
+    internal let appinfoProvider: AppInfoProvider = resolve()
     internal let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider = resolve()
     internal let keychainRepository: KeychainRepository = resolve()
     var debugModeDisplayer: DebugModeDisplayer?
@@ -59,6 +59,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        configureLibwallet()
+        do {
+            _ = try doWithError { error in
+                Libwallet_initStartServer(error)
+            }
+        } catch {
+            Logger.log(.err,
+                       "Error initializing libwallet server: \(error.localizedDescription)")
+        }
+        // Run this as early as possible to load schema and migrations and crash early
+        databaseCoordinator.migrate()
+
         wipeDataForTests()
         disableAnimationsForTests()
         configureRxForErrorHandling()
@@ -71,19 +83,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureFirebase()
         ConectivityCapabilitiesProvider.shared.startMonitoring()
         storeKitCapabilitiesProvider.start()
+        appinfoProvider.start()
         deviceCheckTokenProvider.start()
         if sessionActions.isFirstLaunch() {
             lockManager.firstLaunch()
-        }
-        configureLibwallet()
-
-        do {
-            _ = try doWithError { error in
-                Libwallet_initStartServer(error)
-            }
-        } catch {
-            Logger.log(.err,
-                       "Error initializing libwallet server: \(error.localizedDescription)")
         }
 
         registerUserData()

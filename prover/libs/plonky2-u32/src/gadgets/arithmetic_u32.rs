@@ -30,9 +30,18 @@ use crate::witness::GeneratedValuesU32;
 pub struct U32Target(pub Target);
 
 pub trait CircuitBuilderU32<F: RichField + Extendable<D>, const D: usize> {
+    /// Add a virtual U32Target with a range check ensuring it is in the range [0,2^32).
     fn add_virtual_u32_target(&mut self) -> U32Target;
 
+    /// Add a virtual U32Target without any range check. Caller must be sure it is constrained
+    /// to the range [0,2^32).
+    fn add_virtual_u32_target_unsafe(&mut self) -> U32Target;
+
+    /// Add n virtual U32Targets with a range check ensuring they are in the range [0,2^32).
     fn add_virtual_u32_targets(&mut self, n: usize) -> Vec<U32Target>;
+
+    /// Add n virtual U32Targets without any range check. Caller must be sure they are in the range [0,2^32).
+    fn add_virtual_u32_targets_unsafe(&mut self, n: usize) -> Vec<U32Target>;
 
     /// Returns a U32Target for the value `c`, which is assumed to be at most 32 bits.
     fn constant_u32(&mut self, c: u32) -> U32Target;
@@ -77,16 +86,27 @@ pub trait CircuitBuilderU32<F: RichField + Extendable<D>, const D: usize> {
 impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderU32<F, D>
     for CircuitBuilder<F, D>
 {
-    // UNSAFE! the caller must ensure the target is in range
-    // TODO: do a range check
     fn add_virtual_u32_target(&mut self) -> U32Target {
+        let virtual_u32_target = self.add_virtual_u32_target_unsafe();
+        range_check_u32_circuit(self, vec![virtual_u32_target]);
+        virtual_u32_target
+    }
+
+    fn add_virtual_u32_target_unsafe(&mut self) -> U32Target {
         U32Target(self.add_virtual_target())
     }
 
     fn add_virtual_u32_targets(&mut self, n: usize) -> Vec<U32Target> {
-        let u32_targets: Vec<U32Target> = (0..n).map(|_| self.add_virtual_u32_target()).collect();
-
+        let u32_targets: Vec<U32Target> = self.add_virtual_u32_targets_unsafe(n);
         range_check_u32_circuit(self, u32_targets.clone());
+
+        u32_targets
+    }
+
+    fn add_virtual_u32_targets_unsafe(&mut self, n: usize) -> Vec<U32Target> {
+        let u32_targets: Vec<U32Target> = (0..n)
+            .map(|_| self.add_virtual_u32_target_unsafe())
+            .collect();
 
         u32_targets
     }
@@ -349,7 +369,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore] // u32 targets don't do range checks
     pub fn test_range_check() {
         const D: usize = 2;
         type C = KeccakGoldilocksConfig;

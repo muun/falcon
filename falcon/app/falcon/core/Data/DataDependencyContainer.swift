@@ -62,6 +62,8 @@ public extension DependencyContainer {
             container.register(factory: ICloudCapabilitiesProvider.init)
             container.register(.weakSingleton, factory: LocaleTimeZoneProvider.init)
             container.register(.weakSingleton, factory: StoreKitCapabilitiesProvider.init)
+            container.register(.weakSingleton, factory: AppInfoProvider.init)
+            container.register(.weakSingleton, factory: HardwareCapabilitiesProvider.init)
 
             container.register(factory: NotificationScheduler.init)
             container.register(.singleton, factory: ErrorReporter.init)

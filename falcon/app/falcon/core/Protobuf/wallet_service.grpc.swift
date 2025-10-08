@@ -16,15 +16,91 @@ internal protocol Rpc_WalletServiceClientProtocol: GRPCClient {
   var serviceName: String { get }
   var interceptors: Rpc_WalletServiceClientInterceptorFactoryProtocol? { get }
 
-  func deleteWallet(
-    _ request: Rpc_EmptyMessage,
+  func setupSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
-  ) -> UnaryCall<Rpc_EmptyMessage, Rpc_OperationStatus>
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_XpubResponse>
 
-  func nfcTransmit(
-    _ request: Rpc_NfcTransmitRequest,
+  func resetSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
-  ) -> UnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func signMessageSecurityCard(
+    _ request: Rpc_SignMessageSecurityCardRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SignMessageSecurityCardRequest, Rpc_SignMessageSecurityCardResponse>
+
+  func setupSecurityCardV2(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>
+
+  func startDiagnosticSession(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_DiagnosticSessionDescriptor>
+
+  func performDiagnosticScanForUtxos(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions?,
+    handler: @escaping (Rpc_ScanProgressUpdate) -> Void
+  ) -> ServerStreamingCall<Rpc_DiagnosticSessionDescriptor, Rpc_ScanProgressUpdate>
+
+  func submitDiagnosticLog(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_DiagnosticSessionDescriptor, Rpc_DiagnosticSubmitStatus>
+
+  func prepareSweepTx(
+    _ request: Rpc_PrepareSweepTxRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_PrepareSweepTxRequest, Rpc_PrepareSweepTxResponse>
+
+  func signAndBroadcastSweepTx(
+    _ request: Rpc_SignAndBroadcastSweepTxRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SignAndBroadcastSweepTxRequest, Rpc_SignAndBroadcastSweepTxResponse>
+
+  func startChallengeSetup(
+    _ request: Rpc_ChallengeSetupRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_ChallengeSetupRequest, Rpc_SetupChallengeResponse>
+
+  func finishRecoveryCodeSetup(
+    _ request: Rpc_FinishRecoveryCodeSetupRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_FinishRecoveryCodeSetupRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func populateEncryptedMuunKey(
+    _ request: Rpc_PopulateEncryptedMuunKeyRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_PopulateEncryptedMuunKeyRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func save(
+    _ request: Rpc_SaveRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SaveRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func get(
+    _ request: Rpc_GetRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_GetRequest, Rpc_GetResponse>
+
+  func delete(
+    _ request: Rpc_DeleteRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_DeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func saveBatch(
+    _ request: Rpc_SaveBatchRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SaveBatchRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func getBatch(
+    _ request: Rpc_GetBatchRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_GetBatchRequest, Rpc_GetBatchResponse>
 }
 
 extension Rpc_WalletServiceClientProtocol {
@@ -32,39 +108,312 @@ extension Rpc_WalletServiceClientProtocol {
     return "rpc.WalletService"
   }
 
-  /// Unary call to DeleteWallet
+  /// V3 - NFC security cards Native->Libwallet API
   ///
   /// - Parameters:
-  ///   - request: Request to send to DeleteWallet.
+  ///   - request: Request to send to SetupSecurityCard.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func deleteWallet(
-    _ request: Rpc_EmptyMessage,
+  internal func setupSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Rpc_EmptyMessage, Rpc_OperationStatus> {
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_XpubResponse> {
     return self.makeUnaryCall(
-      path: Rpc_WalletServiceClientMetadata.Methods.deleteWallet.path,
+      path: Rpc_WalletServiceClientMetadata.Methods.setupSecurityCard.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? []
+      interceptors: self.interceptors?.makeSetupSecurityCardInterceptors() ?? []
     )
   }
 
-  /// V2 - use then discard API
+  /// Unary call to ResetSecurityCard
   ///
   /// - Parameters:
-  ///   - request: Request to send to NfcTransmit.
+  ///   - request: Request to send to ResetSecurityCard.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func nfcTransmit(
-    _ request: Rpc_NfcTransmitRequest,
+  internal func resetSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse> {
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty> {
     return self.makeUnaryCall(
-      path: Rpc_WalletServiceClientMetadata.Methods.nfcTransmit.path,
+      path: Rpc_WalletServiceClientMetadata.Methods.resetSecurityCard.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? []
+      interceptors: self.interceptors?.makeResetSecurityCardInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to SignMessageSecurityCard
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SignMessageSecurityCard.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func signMessageSecurityCard(
+    _ request: Rpc_SignMessageSecurityCardRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SignMessageSecurityCardRequest, Rpc_SignMessageSecurityCardResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to SetupSecurityCardV2
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SetupSecurityCardV2.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func setupSecurityCardV2(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.setupSecurityCardV2.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? []
+    )
+  }
+
+  /// Diagnostic Mode API
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to StartDiagnosticSession.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func startDiagnosticSession(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_DiagnosticSessionDescriptor> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.startDiagnosticSession.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStartDiagnosticSessionInterceptors() ?? []
+    )
+  }
+
+  /// Server streaming call to PerformDiagnosticScanForUtxos
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PerformDiagnosticScanForUtxos.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  internal func performDiagnosticScanForUtxos(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Rpc_ScanProgressUpdate) -> Void
+  ) -> ServerStreamingCall<Rpc_DiagnosticSessionDescriptor, Rpc_ScanProgressUpdate> {
+    return self.makeServerStreamingCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.performDiagnosticScanForUtxos.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePerformDiagnosticScanForUtxosInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Unary call to SubmitDiagnosticLog
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SubmitDiagnosticLog.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func submitDiagnosticLog(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_DiagnosticSessionDescriptor, Rpc_DiagnosticSubmitStatus> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.submitDiagnosticLog.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSubmitDiagnosticLogInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PrepareSweepTx
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PrepareSweepTx.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func prepareSweepTx(
+    _ request: Rpc_PrepareSweepTxRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_PrepareSweepTxRequest, Rpc_PrepareSweepTxResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.prepareSweepTx.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePrepareSweepTxInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to SignAndBroadcastSweepTx
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SignAndBroadcastSweepTx.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func signAndBroadcastSweepTx(
+    _ request: Rpc_SignAndBroadcastSweepTxRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SignAndBroadcastSweepTxRequest, Rpc_SignAndBroadcastSweepTxResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signAndBroadcastSweepTx.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignAndBroadcastSweepTxInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to StartChallengeSetup
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to StartChallengeSetup.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func startChallengeSetup(
+    _ request: Rpc_ChallengeSetupRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_ChallengeSetupRequest, Rpc_SetupChallengeResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.startChallengeSetup.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStartChallengeSetupInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to FinishRecoveryCodeSetup
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to FinishRecoveryCodeSetup.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func finishRecoveryCodeSetup(
+    _ request: Rpc_FinishRecoveryCodeSetupRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_FinishRecoveryCodeSetupRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.finishRecoveryCodeSetup.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFinishRecoveryCodeSetupInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PopulateEncryptedMuunKey
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PopulateEncryptedMuunKey.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func populateEncryptedMuunKey(
+    _ request: Rpc_PopulateEncryptedMuunKeyRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_PopulateEncryptedMuunKeyRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.populateEncryptedMuunKey.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePopulateEncryptedMuunKeyInterceptors() ?? []
+    )
+  }
+
+  /// Key-Value Storage
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Save.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func save(
+    _ request: Rpc_SaveRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SaveRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.save.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSaveInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to Get
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Get.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func get(
+    _ request: Rpc_GetRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_GetRequest, Rpc_GetResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.get.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to Delete
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Delete.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func delete(
+    _ request: Rpc_DeleteRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_DeleteRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.delete.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to SaveBatch
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SaveBatch.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func saveBatch(
+    _ request: Rpc_SaveBatchRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SaveBatchRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.saveBatch.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSaveBatchInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetBatch
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetBatch.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func getBatch(
+    _ request: Rpc_GetBatchRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_GetBatchRequest, Rpc_GetBatchResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.getBatch.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBatchInterceptors() ?? []
     )
   }
 }
@@ -131,15 +480,90 @@ internal protocol Rpc_WalletServiceAsyncClientProtocol: GRPCClient {
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Rpc_WalletServiceClientInterceptorFactoryProtocol? { get }
 
-  func makeDeleteWalletCall(
-    _ request: Rpc_EmptyMessage,
+  func makeSetupSecurityCardCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
-  ) -> GRPCAsyncUnaryCall<Rpc_EmptyMessage, Rpc_OperationStatus>
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_XpubResponse>
 
-  func makeNfcTransmitCall(
-    _ request: Rpc_NfcTransmitRequest,
+  func makeResetSecurityCardCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
-  ) -> GRPCAsyncUnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeSignMessageSecurityCardCall(
+    _ request: Rpc_SignMessageSecurityCardRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SignMessageSecurityCardRequest, Rpc_SignMessageSecurityCardResponse>
+
+  func makeSetupSecurityCardV2Call(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>
+
+  func makeStartDiagnosticSessionCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_DiagnosticSessionDescriptor>
+
+  func makePerformDiagnosticScanForUtxosCall(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncServerStreamingCall<Rpc_DiagnosticSessionDescriptor, Rpc_ScanProgressUpdate>
+
+  func makeSubmitDiagnosticLogCall(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_DiagnosticSessionDescriptor, Rpc_DiagnosticSubmitStatus>
+
+  func makePrepareSweepTxCall(
+    _ request: Rpc_PrepareSweepTxRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_PrepareSweepTxRequest, Rpc_PrepareSweepTxResponse>
+
+  func makeSignAndBroadcastSweepTxCall(
+    _ request: Rpc_SignAndBroadcastSweepTxRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SignAndBroadcastSweepTxRequest, Rpc_SignAndBroadcastSweepTxResponse>
+
+  func makeStartChallengeSetupCall(
+    _ request: Rpc_ChallengeSetupRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_ChallengeSetupRequest, Rpc_SetupChallengeResponse>
+
+  func makeFinishRecoveryCodeSetupCall(
+    _ request: Rpc_FinishRecoveryCodeSetupRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_FinishRecoveryCodeSetupRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makePopulateEncryptedMuunKeyCall(
+    _ request: Rpc_PopulateEncryptedMuunKeyRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_PopulateEncryptedMuunKeyRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeSaveCall(
+    _ request: Rpc_SaveRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SaveRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeGetCall(
+    _ request: Rpc_GetRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_GetRequest, Rpc_GetResponse>
+
+  func makeDeleteCall(
+    _ request: Rpc_DeleteRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_DeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeSaveBatchCall(
+    _ request: Rpc_SaveBatchRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SaveBatchRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeGetBatchCall(
+    _ request: Rpc_GetBatchRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_GetBatchRequest, Rpc_GetBatchResponse>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -152,54 +576,414 @@ extension Rpc_WalletServiceAsyncClientProtocol {
     return nil
   }
 
-  internal func makeDeleteWalletCall(
-    _ request: Rpc_EmptyMessage,
+  internal func makeSetupSecurityCardCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncUnaryCall<Rpc_EmptyMessage, Rpc_OperationStatus> {
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_XpubResponse> {
     return self.makeAsyncUnaryCall(
-      path: Rpc_WalletServiceClientMetadata.Methods.deleteWallet.path,
+      path: Rpc_WalletServiceClientMetadata.Methods.setupSecurityCard.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? []
+      interceptors: self.interceptors?.makeSetupSecurityCardInterceptors() ?? []
     )
   }
 
-  internal func makeNfcTransmitCall(
-    _ request: Rpc_NfcTransmitRequest,
+  internal func makeResetSecurityCardCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncUnaryCall<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse> {
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty> {
     return self.makeAsyncUnaryCall(
-      path: Rpc_WalletServiceClientMetadata.Methods.nfcTransmit.path,
+      path: Rpc_WalletServiceClientMetadata.Methods.resetSecurityCard.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? []
+      interceptors: self.interceptors?.makeResetSecurityCardInterceptors() ?? []
+    )
+  }
+
+  internal func makeSignMessageSecurityCardCall(
+    _ request: Rpc_SignMessageSecurityCardRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SignMessageSecurityCardRequest, Rpc_SignMessageSecurityCardResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? []
+    )
+  }
+
+  internal func makeSetupSecurityCardV2Call(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.setupSecurityCardV2.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? []
+    )
+  }
+
+  internal func makeStartDiagnosticSessionCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_DiagnosticSessionDescriptor> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.startDiagnosticSession.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStartDiagnosticSessionInterceptors() ?? []
+    )
+  }
+
+  internal func makePerformDiagnosticScanForUtxosCall(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncServerStreamingCall<Rpc_DiagnosticSessionDescriptor, Rpc_ScanProgressUpdate> {
+    return self.makeAsyncServerStreamingCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.performDiagnosticScanForUtxos.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePerformDiagnosticScanForUtxosInterceptors() ?? []
+    )
+  }
+
+  internal func makeSubmitDiagnosticLogCall(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_DiagnosticSessionDescriptor, Rpc_DiagnosticSubmitStatus> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.submitDiagnosticLog.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSubmitDiagnosticLogInterceptors() ?? []
+    )
+  }
+
+  internal func makePrepareSweepTxCall(
+    _ request: Rpc_PrepareSweepTxRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_PrepareSweepTxRequest, Rpc_PrepareSweepTxResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.prepareSweepTx.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePrepareSweepTxInterceptors() ?? []
+    )
+  }
+
+  internal func makeSignAndBroadcastSweepTxCall(
+    _ request: Rpc_SignAndBroadcastSweepTxRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SignAndBroadcastSweepTxRequest, Rpc_SignAndBroadcastSweepTxResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signAndBroadcastSweepTx.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignAndBroadcastSweepTxInterceptors() ?? []
+    )
+  }
+
+  internal func makeStartChallengeSetupCall(
+    _ request: Rpc_ChallengeSetupRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_ChallengeSetupRequest, Rpc_SetupChallengeResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.startChallengeSetup.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStartChallengeSetupInterceptors() ?? []
+    )
+  }
+
+  internal func makeFinishRecoveryCodeSetupCall(
+    _ request: Rpc_FinishRecoveryCodeSetupRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_FinishRecoveryCodeSetupRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.finishRecoveryCodeSetup.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFinishRecoveryCodeSetupInterceptors() ?? []
+    )
+  }
+
+  internal func makePopulateEncryptedMuunKeyCall(
+    _ request: Rpc_PopulateEncryptedMuunKeyRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_PopulateEncryptedMuunKeyRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.populateEncryptedMuunKey.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePopulateEncryptedMuunKeyInterceptors() ?? []
+    )
+  }
+
+  internal func makeSaveCall(
+    _ request: Rpc_SaveRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SaveRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.save.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSaveInterceptors() ?? []
+    )
+  }
+
+  internal func makeGetCall(
+    _ request: Rpc_GetRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_GetRequest, Rpc_GetResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.get.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInterceptors() ?? []
+    )
+  }
+
+  internal func makeDeleteCall(
+    _ request: Rpc_DeleteRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_DeleteRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.delete.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteInterceptors() ?? []
+    )
+  }
+
+  internal func makeSaveBatchCall(
+    _ request: Rpc_SaveBatchRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SaveBatchRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.saveBatch.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSaveBatchInterceptors() ?? []
+    )
+  }
+
+  internal func makeGetBatchCall(
+    _ request: Rpc_GetBatchRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_GetBatchRequest, Rpc_GetBatchResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.getBatch.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBatchInterceptors() ?? []
     )
   }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Rpc_WalletServiceAsyncClientProtocol {
-  internal func deleteWallet(
-    _ request: Rpc_EmptyMessage,
+  internal func setupSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) async throws -> Rpc_OperationStatus {
+  ) async throws -> Rpc_XpubResponse {
     return try await self.performAsyncUnaryCall(
-      path: Rpc_WalletServiceClientMetadata.Methods.deleteWallet.path,
+      path: Rpc_WalletServiceClientMetadata.Methods.setupSecurityCard.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? []
+      interceptors: self.interceptors?.makeSetupSecurityCardInterceptors() ?? []
     )
   }
 
-  internal func nfcTransmit(
-    _ request: Rpc_NfcTransmitRequest,
+  internal func resetSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) async throws -> Rpc_NfcTransmitResponse {
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
     return try await self.performAsyncUnaryCall(
-      path: Rpc_WalletServiceClientMetadata.Methods.nfcTransmit.path,
+      path: Rpc_WalletServiceClientMetadata.Methods.resetSecurityCard.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? []
+      interceptors: self.interceptors?.makeResetSecurityCardInterceptors() ?? []
+    )
+  }
+
+  internal func signMessageSecurityCard(
+    _ request: Rpc_SignMessageSecurityCardRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SignMessageSecurityCardResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? []
+    )
+  }
+
+  internal func setupSecurityCardV2(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SetupSecurityCardResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.setupSecurityCardV2.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? []
+    )
+  }
+
+  internal func startDiagnosticSession(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_DiagnosticSessionDescriptor {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.startDiagnosticSession.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStartDiagnosticSessionInterceptors() ?? []
+    )
+  }
+
+  internal func performDiagnosticScanForUtxos(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncResponseStream<Rpc_ScanProgressUpdate> {
+    return self.performAsyncServerStreamingCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.performDiagnosticScanForUtxos.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePerformDiagnosticScanForUtxosInterceptors() ?? []
+    )
+  }
+
+  internal func submitDiagnosticLog(
+    _ request: Rpc_DiagnosticSessionDescriptor,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_DiagnosticSubmitStatus {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.submitDiagnosticLog.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSubmitDiagnosticLogInterceptors() ?? []
+    )
+  }
+
+  internal func prepareSweepTx(
+    _ request: Rpc_PrepareSweepTxRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_PrepareSweepTxResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.prepareSweepTx.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePrepareSweepTxInterceptors() ?? []
+    )
+  }
+
+  internal func signAndBroadcastSweepTx(
+    _ request: Rpc_SignAndBroadcastSweepTxRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SignAndBroadcastSweepTxResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signAndBroadcastSweepTx.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignAndBroadcastSweepTxInterceptors() ?? []
+    )
+  }
+
+  internal func startChallengeSetup(
+    _ request: Rpc_ChallengeSetupRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SetupChallengeResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.startChallengeSetup.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStartChallengeSetupInterceptors() ?? []
+    )
+  }
+
+  internal func finishRecoveryCodeSetup(
+    _ request: Rpc_FinishRecoveryCodeSetupRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.finishRecoveryCodeSetup.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFinishRecoveryCodeSetupInterceptors() ?? []
+    )
+  }
+
+  internal func populateEncryptedMuunKey(
+    _ request: Rpc_PopulateEncryptedMuunKeyRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.populateEncryptedMuunKey.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePopulateEncryptedMuunKeyInterceptors() ?? []
+    )
+  }
+
+  internal func save(
+    _ request: Rpc_SaveRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.save.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSaveInterceptors() ?? []
+    )
+  }
+
+  internal func get(
+    _ request: Rpc_GetRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_GetResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.get.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInterceptors() ?? []
+    )
+  }
+
+  internal func delete(
+    _ request: Rpc_DeleteRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.delete.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteInterceptors() ?? []
+    )
+  }
+
+  internal func saveBatch(
+    _ request: Rpc_SaveBatchRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.saveBatch.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSaveBatchInterceptors() ?? []
+    )
+  }
+
+  internal func getBatch(
+    _ request: Rpc_GetBatchRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_GetBatchResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.getBatch.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBatchInterceptors() ?? []
     )
   }
 }
@@ -223,11 +1007,56 @@ internal struct Rpc_WalletServiceAsyncClient: Rpc_WalletServiceAsyncClientProtoc
 
 internal protocol Rpc_WalletServiceClientInterceptorFactoryProtocol: Sendable {
 
-  /// - Returns: Interceptors to use when invoking 'deleteWallet'.
-  func makeDeleteWalletInterceptors() -> [ClientInterceptor<Rpc_EmptyMessage, Rpc_OperationStatus>]
+  /// - Returns: Interceptors to use when invoking 'setupSecurityCard'.
+  func makeSetupSecurityCardInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_XpubResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'nfcTransmit'.
-  func makeNfcTransmitInterceptors() -> [ClientInterceptor<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>]
+  /// - Returns: Interceptors to use when invoking 'resetSecurityCard'.
+  func makeResetSecurityCardInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'signMessageSecurityCard'.
+  func makeSignMessageSecurityCardInterceptors() -> [ClientInterceptor<Rpc_SignMessageSecurityCardRequest, Rpc_SignMessageSecurityCardResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'setupSecurityCardV2'.
+  func makeSetupSecurityCardV2Interceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'startDiagnosticSession'.
+  func makeStartDiagnosticSessionInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_DiagnosticSessionDescriptor>]
+
+  /// - Returns: Interceptors to use when invoking 'performDiagnosticScanForUtxos'.
+  func makePerformDiagnosticScanForUtxosInterceptors() -> [ClientInterceptor<Rpc_DiagnosticSessionDescriptor, Rpc_ScanProgressUpdate>]
+
+  /// - Returns: Interceptors to use when invoking 'submitDiagnosticLog'.
+  func makeSubmitDiagnosticLogInterceptors() -> [ClientInterceptor<Rpc_DiagnosticSessionDescriptor, Rpc_DiagnosticSubmitStatus>]
+
+  /// - Returns: Interceptors to use when invoking 'prepareSweepTx'.
+  func makePrepareSweepTxInterceptors() -> [ClientInterceptor<Rpc_PrepareSweepTxRequest, Rpc_PrepareSweepTxResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'signAndBroadcastSweepTx'.
+  func makeSignAndBroadcastSweepTxInterceptors() -> [ClientInterceptor<Rpc_SignAndBroadcastSweepTxRequest, Rpc_SignAndBroadcastSweepTxResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'startChallengeSetup'.
+  func makeStartChallengeSetupInterceptors() -> [ClientInterceptor<Rpc_ChallengeSetupRequest, Rpc_SetupChallengeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'finishRecoveryCodeSetup'.
+  func makeFinishRecoveryCodeSetupInterceptors() -> [ClientInterceptor<Rpc_FinishRecoveryCodeSetupRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'populateEncryptedMuunKey'.
+  func makePopulateEncryptedMuunKeyInterceptors() -> [ClientInterceptor<Rpc_PopulateEncryptedMuunKeyRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'save'.
+  func makeSaveInterceptors() -> [ClientInterceptor<Rpc_SaveRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'get'.
+  func makeGetInterceptors() -> [ClientInterceptor<Rpc_GetRequest, Rpc_GetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'delete'.
+  func makeDeleteInterceptors() -> [ClientInterceptor<Rpc_DeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'saveBatch'.
+  func makeSaveBatchInterceptors() -> [ClientInterceptor<Rpc_SaveBatchRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'getBatch'.
+  func makeGetBatchInterceptors() -> [ClientInterceptor<Rpc_GetBatchRequest, Rpc_GetBatchResponse>]
 }
 
 internal enum Rpc_WalletServiceClientMetadata {
@@ -235,21 +1064,126 @@ internal enum Rpc_WalletServiceClientMetadata {
     name: "WalletService",
     fullName: "rpc.WalletService",
     methods: [
-      Rpc_WalletServiceClientMetadata.Methods.deleteWallet,
-      Rpc_WalletServiceClientMetadata.Methods.nfcTransmit,
+      Rpc_WalletServiceClientMetadata.Methods.setupSecurityCard,
+      Rpc_WalletServiceClientMetadata.Methods.resetSecurityCard,
+      Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard,
+      Rpc_WalletServiceClientMetadata.Methods.setupSecurityCardV2,
+      Rpc_WalletServiceClientMetadata.Methods.startDiagnosticSession,
+      Rpc_WalletServiceClientMetadata.Methods.performDiagnosticScanForUtxos,
+      Rpc_WalletServiceClientMetadata.Methods.submitDiagnosticLog,
+      Rpc_WalletServiceClientMetadata.Methods.prepareSweepTx,
+      Rpc_WalletServiceClientMetadata.Methods.signAndBroadcastSweepTx,
+      Rpc_WalletServiceClientMetadata.Methods.startChallengeSetup,
+      Rpc_WalletServiceClientMetadata.Methods.finishRecoveryCodeSetup,
+      Rpc_WalletServiceClientMetadata.Methods.populateEncryptedMuunKey,
+      Rpc_WalletServiceClientMetadata.Methods.save,
+      Rpc_WalletServiceClientMetadata.Methods.get,
+      Rpc_WalletServiceClientMetadata.Methods.delete,
+      Rpc_WalletServiceClientMetadata.Methods.saveBatch,
+      Rpc_WalletServiceClientMetadata.Methods.getBatch,
     ]
   )
 
   internal enum Methods {
-    internal static let deleteWallet = GRPCMethodDescriptor(
-      name: "DeleteWallet",
-      path: "/rpc.WalletService/DeleteWallet",
+    internal static let setupSecurityCard = GRPCMethodDescriptor(
+      name: "SetupSecurityCard",
+      path: "/rpc.WalletService/SetupSecurityCard",
       type: GRPCCallType.unary
     )
 
-    internal static let nfcTransmit = GRPCMethodDescriptor(
-      name: "NfcTransmit",
-      path: "/rpc.WalletService/NfcTransmit",
+    internal static let resetSecurityCard = GRPCMethodDescriptor(
+      name: "ResetSecurityCard",
+      path: "/rpc.WalletService/ResetSecurityCard",
+      type: GRPCCallType.unary
+    )
+
+    internal static let signMessageSecurityCard = GRPCMethodDescriptor(
+      name: "SignMessageSecurityCard",
+      path: "/rpc.WalletService/SignMessageSecurityCard",
+      type: GRPCCallType.unary
+    )
+
+    internal static let setupSecurityCardV2 = GRPCMethodDescriptor(
+      name: "SetupSecurityCardV2",
+      path: "/rpc.WalletService/SetupSecurityCardV2",
+      type: GRPCCallType.unary
+    )
+
+    internal static let startDiagnosticSession = GRPCMethodDescriptor(
+      name: "StartDiagnosticSession",
+      path: "/rpc.WalletService/StartDiagnosticSession",
+      type: GRPCCallType.unary
+    )
+
+    internal static let performDiagnosticScanForUtxos = GRPCMethodDescriptor(
+      name: "PerformDiagnosticScanForUtxos",
+      path: "/rpc.WalletService/PerformDiagnosticScanForUtxos",
+      type: GRPCCallType.serverStreaming
+    )
+
+    internal static let submitDiagnosticLog = GRPCMethodDescriptor(
+      name: "SubmitDiagnosticLog",
+      path: "/rpc.WalletService/SubmitDiagnosticLog",
+      type: GRPCCallType.unary
+    )
+
+    internal static let prepareSweepTx = GRPCMethodDescriptor(
+      name: "PrepareSweepTx",
+      path: "/rpc.WalletService/PrepareSweepTx",
+      type: GRPCCallType.unary
+    )
+
+    internal static let signAndBroadcastSweepTx = GRPCMethodDescriptor(
+      name: "SignAndBroadcastSweepTx",
+      path: "/rpc.WalletService/SignAndBroadcastSweepTx",
+      type: GRPCCallType.unary
+    )
+
+    internal static let startChallengeSetup = GRPCMethodDescriptor(
+      name: "StartChallengeSetup",
+      path: "/rpc.WalletService/StartChallengeSetup",
+      type: GRPCCallType.unary
+    )
+
+    internal static let finishRecoveryCodeSetup = GRPCMethodDescriptor(
+      name: "FinishRecoveryCodeSetup",
+      path: "/rpc.WalletService/FinishRecoveryCodeSetup",
+      type: GRPCCallType.unary
+    )
+
+    internal static let populateEncryptedMuunKey = GRPCMethodDescriptor(
+      name: "PopulateEncryptedMuunKey",
+      path: "/rpc.WalletService/PopulateEncryptedMuunKey",
+      type: GRPCCallType.unary
+    )
+
+    internal static let save = GRPCMethodDescriptor(
+      name: "Save",
+      path: "/rpc.WalletService/Save",
+      type: GRPCCallType.unary
+    )
+
+    internal static let get = GRPCMethodDescriptor(
+      name: "Get",
+      path: "/rpc.WalletService/Get",
+      type: GRPCCallType.unary
+    )
+
+    internal static let delete = GRPCMethodDescriptor(
+      name: "Delete",
+      path: "/rpc.WalletService/Delete",
+      type: GRPCCallType.unary
+    )
+
+    internal static let saveBatch = GRPCMethodDescriptor(
+      name: "SaveBatch",
+      path: "/rpc.WalletService/SaveBatch",
+      type: GRPCCallType.unary
+    )
+
+    internal static let getBatch = GRPCMethodDescriptor(
+      name: "GetBatch",
+      path: "/rpc.WalletService/GetBatch",
       type: GRPCCallType.unary
     )
   }
@@ -259,10 +1193,42 @@ internal enum Rpc_WalletServiceClientMetadata {
 internal protocol Rpc_WalletServiceProvider: CallHandlerProvider {
   var interceptors: Rpc_WalletServiceServerInterceptorFactoryProtocol? { get }
 
-  func deleteWallet(request: Rpc_EmptyMessage, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_OperationStatus>
+  /// V3 - NFC security cards Native->Libwallet API
+  func setupSecurityCard(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_XpubResponse>
 
-  /// V2 - use then discard API
-  func nfcTransmit(request: Rpc_NfcTransmitRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_NfcTransmitResponse>
+  func resetSecurityCard(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func signMessageSecurityCard(request: Rpc_SignMessageSecurityCardRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SignMessageSecurityCardResponse>
+
+  func setupSecurityCardV2(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SetupSecurityCardResponse>
+
+  /// Diagnostic Mode API
+  func startDiagnosticSession(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_DiagnosticSessionDescriptor>
+
+  func performDiagnosticScanForUtxos(request: Rpc_DiagnosticSessionDescriptor, context: StreamingResponseCallContext<Rpc_ScanProgressUpdate>) -> EventLoopFuture<GRPCStatus>
+
+  func submitDiagnosticLog(request: Rpc_DiagnosticSessionDescriptor, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_DiagnosticSubmitStatus>
+
+  func prepareSweepTx(request: Rpc_PrepareSweepTxRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_PrepareSweepTxResponse>
+
+  func signAndBroadcastSweepTx(request: Rpc_SignAndBroadcastSweepTxRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SignAndBroadcastSweepTxResponse>
+
+  func startChallengeSetup(request: Rpc_ChallengeSetupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SetupChallengeResponse>
+
+  func finishRecoveryCodeSetup(request: Rpc_FinishRecoveryCodeSetupRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func populateEncryptedMuunKey(request: Rpc_PopulateEncryptedMuunKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  /// Key-Value Storage
+  func save(request: Rpc_SaveRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func get(request: Rpc_GetRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GetResponse>
+
+  func delete(request: Rpc_DeleteRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func saveBatch(request: Rpc_SaveBatchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func getBatch(request: Rpc_GetBatchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GetBatchResponse>
 }
 
 extension Rpc_WalletServiceProvider {
@@ -277,22 +1243,157 @@ extension Rpc_WalletServiceProvider {
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
     switch name {
-    case "DeleteWallet":
+    case "SetupSecurityCard":
       return UnaryServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Rpc_EmptyMessage>(),
-        responseSerializer: ProtobufSerializer<Rpc_OperationStatus>(),
-        interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? [],
-        userFunction: self.deleteWallet(request:context:)
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_XpubResponse>(),
+        interceptors: self.interceptors?.makeSetupSecurityCardInterceptors() ?? [],
+        userFunction: self.setupSecurityCard(request:context:)
       )
 
-    case "NfcTransmit":
+    case "ResetSecurityCard":
       return UnaryServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Rpc_NfcTransmitRequest>(),
-        responseSerializer: ProtobufSerializer<Rpc_NfcTransmitResponse>(),
-        interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? [],
-        userFunction: self.nfcTransmit(request:context:)
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeResetSecurityCardInterceptors() ?? [],
+        userFunction: self.resetSecurityCard(request:context:)
+      )
+
+    case "SignMessageSecurityCard":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SignMessageSecurityCardRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SignMessageSecurityCardResponse>(),
+        interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? [],
+        userFunction: self.signMessageSecurityCard(request:context:)
+      )
+
+    case "SetupSecurityCardV2":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_SetupSecurityCardResponse>(),
+        interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? [],
+        userFunction: self.setupSecurityCardV2(request:context:)
+      )
+
+    case "StartDiagnosticSession":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_DiagnosticSessionDescriptor>(),
+        interceptors: self.interceptors?.makeStartDiagnosticSessionInterceptors() ?? [],
+        userFunction: self.startDiagnosticSession(request:context:)
+      )
+
+    case "PerformDiagnosticScanForUtxos":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_DiagnosticSessionDescriptor>(),
+        responseSerializer: ProtobufSerializer<Rpc_ScanProgressUpdate>(),
+        interceptors: self.interceptors?.makePerformDiagnosticScanForUtxosInterceptors() ?? [],
+        userFunction: self.performDiagnosticScanForUtxos(request:context:)
+      )
+
+    case "SubmitDiagnosticLog":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_DiagnosticSessionDescriptor>(),
+        responseSerializer: ProtobufSerializer<Rpc_DiagnosticSubmitStatus>(),
+        interceptors: self.interceptors?.makeSubmitDiagnosticLogInterceptors() ?? [],
+        userFunction: self.submitDiagnosticLog(request:context:)
+      )
+
+    case "PrepareSweepTx":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_PrepareSweepTxRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_PrepareSweepTxResponse>(),
+        interceptors: self.interceptors?.makePrepareSweepTxInterceptors() ?? [],
+        userFunction: self.prepareSweepTx(request:context:)
+      )
+
+    case "SignAndBroadcastSweepTx":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SignAndBroadcastSweepTxRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SignAndBroadcastSweepTxResponse>(),
+        interceptors: self.interceptors?.makeSignAndBroadcastSweepTxInterceptors() ?? [],
+        userFunction: self.signAndBroadcastSweepTx(request:context:)
+      )
+
+    case "StartChallengeSetup":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_ChallengeSetupRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SetupChallengeResponse>(),
+        interceptors: self.interceptors?.makeStartChallengeSetupInterceptors() ?? [],
+        userFunction: self.startChallengeSetup(request:context:)
+      )
+
+    case "FinishRecoveryCodeSetup":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_FinishRecoveryCodeSetupRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeFinishRecoveryCodeSetupInterceptors() ?? [],
+        userFunction: self.finishRecoveryCodeSetup(request:context:)
+      )
+
+    case "PopulateEncryptedMuunKey":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_PopulateEncryptedMuunKeyRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makePopulateEncryptedMuunKeyInterceptors() ?? [],
+        userFunction: self.populateEncryptedMuunKey(request:context:)
+      )
+
+    case "Save":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SaveRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSaveInterceptors() ?? [],
+        userFunction: self.save(request:context:)
+      )
+
+    case "Get":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_GetRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_GetResponse>(),
+        interceptors: self.interceptors?.makeGetInterceptors() ?? [],
+        userFunction: self.get(request:context:)
+      )
+
+    case "Delete":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_DeleteRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeDeleteInterceptors() ?? [],
+        userFunction: self.delete(request:context:)
+      )
+
+    case "SaveBatch":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SaveBatchRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSaveBatchInterceptors() ?? [],
+        userFunction: self.saveBatch(request:context:)
+      )
+
+    case "GetBatch":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_GetBatchRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_GetBatchResponse>(),
+        interceptors: self.interceptors?.makeGetBatchInterceptors() ?? [],
+        userFunction: self.getBatch(request:context:)
       )
 
     default:
@@ -307,16 +1408,94 @@ internal protocol Rpc_WalletServiceAsyncProvider: CallHandlerProvider, Sendable 
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Rpc_WalletServiceServerInterceptorFactoryProtocol? { get }
 
-  func deleteWallet(
-    request: Rpc_EmptyMessage,
+  /// V3 - NFC security cards Native->Libwallet API
+  func setupSecurityCard(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
     context: GRPCAsyncServerCallContext
-  ) async throws -> Rpc_OperationStatus
+  ) async throws -> Rpc_XpubResponse
 
-  /// V2 - use then discard API
-  func nfcTransmit(
-    request: Rpc_NfcTransmitRequest,
+  func resetSecurityCard(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
     context: GRPCAsyncServerCallContext
-  ) async throws -> Rpc_NfcTransmitResponse
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func signMessageSecurityCard(
+    request: Rpc_SignMessageSecurityCardRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SignMessageSecurityCardResponse
+
+  func setupSecurityCardV2(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SetupSecurityCardResponse
+
+  /// Diagnostic Mode API
+  func startDiagnosticSession(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_DiagnosticSessionDescriptor
+
+  func performDiagnosticScanForUtxos(
+    request: Rpc_DiagnosticSessionDescriptor,
+    responseStream: GRPCAsyncResponseStreamWriter<Rpc_ScanProgressUpdate>,
+    context: GRPCAsyncServerCallContext
+  ) async throws
+
+  func submitDiagnosticLog(
+    request: Rpc_DiagnosticSessionDescriptor,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_DiagnosticSubmitStatus
+
+  func prepareSweepTx(
+    request: Rpc_PrepareSweepTxRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_PrepareSweepTxResponse
+
+  func signAndBroadcastSweepTx(
+    request: Rpc_SignAndBroadcastSweepTxRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SignAndBroadcastSweepTxResponse
+
+  func startChallengeSetup(
+    request: Rpc_ChallengeSetupRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SetupChallengeResponse
+
+  func finishRecoveryCodeSetup(
+    request: Rpc_FinishRecoveryCodeSetupRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func populateEncryptedMuunKey(
+    request: Rpc_PopulateEncryptedMuunKeyRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  /// Key-Value Storage
+  func save(
+    request: Rpc_SaveRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func get(
+    request: Rpc_GetRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_GetResponse
+
+  func delete(
+    request: Rpc_DeleteRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func saveBatch(
+    request: Rpc_SaveBatchRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func getBatch(
+    request: Rpc_GetBatchRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_GetBatchResponse
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -338,22 +1517,157 @@ extension Rpc_WalletServiceAsyncProvider {
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
     switch name {
-    case "DeleteWallet":
+    case "SetupSecurityCard":
       return GRPCAsyncServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Rpc_EmptyMessage>(),
-        responseSerializer: ProtobufSerializer<Rpc_OperationStatus>(),
-        interceptors: self.interceptors?.makeDeleteWalletInterceptors() ?? [],
-        wrapping: { try await self.deleteWallet(request: $0, context: $1) }
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_XpubResponse>(),
+        interceptors: self.interceptors?.makeSetupSecurityCardInterceptors() ?? [],
+        wrapping: { try await self.setupSecurityCard(request: $0, context: $1) }
       )
 
-    case "NfcTransmit":
+    case "ResetSecurityCard":
       return GRPCAsyncServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Rpc_NfcTransmitRequest>(),
-        responseSerializer: ProtobufSerializer<Rpc_NfcTransmitResponse>(),
-        interceptors: self.interceptors?.makeNfcTransmitInterceptors() ?? [],
-        wrapping: { try await self.nfcTransmit(request: $0, context: $1) }
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeResetSecurityCardInterceptors() ?? [],
+        wrapping: { try await self.resetSecurityCard(request: $0, context: $1) }
+      )
+
+    case "SignMessageSecurityCard":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SignMessageSecurityCardRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SignMessageSecurityCardResponse>(),
+        interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? [],
+        wrapping: { try await self.signMessageSecurityCard(request: $0, context: $1) }
+      )
+
+    case "SetupSecurityCardV2":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_SetupSecurityCardResponse>(),
+        interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? [],
+        wrapping: { try await self.setupSecurityCardV2(request: $0, context: $1) }
+      )
+
+    case "StartDiagnosticSession":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_DiagnosticSessionDescriptor>(),
+        interceptors: self.interceptors?.makeStartDiagnosticSessionInterceptors() ?? [],
+        wrapping: { try await self.startDiagnosticSession(request: $0, context: $1) }
+      )
+
+    case "PerformDiagnosticScanForUtxos":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_DiagnosticSessionDescriptor>(),
+        responseSerializer: ProtobufSerializer<Rpc_ScanProgressUpdate>(),
+        interceptors: self.interceptors?.makePerformDiagnosticScanForUtxosInterceptors() ?? [],
+        wrapping: { try await self.performDiagnosticScanForUtxos(request: $0, responseStream: $1, context: $2) }
+      )
+
+    case "SubmitDiagnosticLog":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_DiagnosticSessionDescriptor>(),
+        responseSerializer: ProtobufSerializer<Rpc_DiagnosticSubmitStatus>(),
+        interceptors: self.interceptors?.makeSubmitDiagnosticLogInterceptors() ?? [],
+        wrapping: { try await self.submitDiagnosticLog(request: $0, context: $1) }
+      )
+
+    case "PrepareSweepTx":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_PrepareSweepTxRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_PrepareSweepTxResponse>(),
+        interceptors: self.interceptors?.makePrepareSweepTxInterceptors() ?? [],
+        wrapping: { try await self.prepareSweepTx(request: $0, context: $1) }
+      )
+
+    case "SignAndBroadcastSweepTx":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SignAndBroadcastSweepTxRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SignAndBroadcastSweepTxResponse>(),
+        interceptors: self.interceptors?.makeSignAndBroadcastSweepTxInterceptors() ?? [],
+        wrapping: { try await self.signAndBroadcastSweepTx(request: $0, context: $1) }
+      )
+
+    case "StartChallengeSetup":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_ChallengeSetupRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SetupChallengeResponse>(),
+        interceptors: self.interceptors?.makeStartChallengeSetupInterceptors() ?? [],
+        wrapping: { try await self.startChallengeSetup(request: $0, context: $1) }
+      )
+
+    case "FinishRecoveryCodeSetup":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_FinishRecoveryCodeSetupRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeFinishRecoveryCodeSetupInterceptors() ?? [],
+        wrapping: { try await self.finishRecoveryCodeSetup(request: $0, context: $1) }
+      )
+
+    case "PopulateEncryptedMuunKey":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_PopulateEncryptedMuunKeyRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makePopulateEncryptedMuunKeyInterceptors() ?? [],
+        wrapping: { try await self.populateEncryptedMuunKey(request: $0, context: $1) }
+      )
+
+    case "Save":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SaveRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSaveInterceptors() ?? [],
+        wrapping: { try await self.save(request: $0, context: $1) }
+      )
+
+    case "Get":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_GetRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_GetResponse>(),
+        interceptors: self.interceptors?.makeGetInterceptors() ?? [],
+        wrapping: { try await self.get(request: $0, context: $1) }
+      )
+
+    case "Delete":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_DeleteRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeDeleteInterceptors() ?? [],
+        wrapping: { try await self.delete(request: $0, context: $1) }
+      )
+
+    case "SaveBatch":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SaveBatchRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSaveBatchInterceptors() ?? [],
+        wrapping: { try await self.saveBatch(request: $0, context: $1) }
+      )
+
+    case "GetBatch":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_GetBatchRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_GetBatchResponse>(),
+        interceptors: self.interceptors?.makeGetBatchInterceptors() ?? [],
+        wrapping: { try await self.getBatch(request: $0, context: $1) }
       )
 
     default:
@@ -364,13 +1678,73 @@ extension Rpc_WalletServiceAsyncProvider {
 
 internal protocol Rpc_WalletServiceServerInterceptorFactoryProtocol: Sendable {
 
-  /// - Returns: Interceptors to use when handling 'deleteWallet'.
+  /// - Returns: Interceptors to use when handling 'setupSecurityCard'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteWalletInterceptors() -> [ServerInterceptor<Rpc_EmptyMessage, Rpc_OperationStatus>]
+  func makeSetupSecurityCardInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_XpubResponse>]
 
-  /// - Returns: Interceptors to use when handling 'nfcTransmit'.
+  /// - Returns: Interceptors to use when handling 'resetSecurityCard'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeNfcTransmitInterceptors() -> [ServerInterceptor<Rpc_NfcTransmitRequest, Rpc_NfcTransmitResponse>]
+  func makeResetSecurityCardInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'signMessageSecurityCard'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSignMessageSecurityCardInterceptors() -> [ServerInterceptor<Rpc_SignMessageSecurityCardRequest, Rpc_SignMessageSecurityCardResponse>]
+
+  /// - Returns: Interceptors to use when handling 'setupSecurityCardV2'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSetupSecurityCardV2Interceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>]
+
+  /// - Returns: Interceptors to use when handling 'startDiagnosticSession'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStartDiagnosticSessionInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_DiagnosticSessionDescriptor>]
+
+  /// - Returns: Interceptors to use when handling 'performDiagnosticScanForUtxos'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePerformDiagnosticScanForUtxosInterceptors() -> [ServerInterceptor<Rpc_DiagnosticSessionDescriptor, Rpc_ScanProgressUpdate>]
+
+  /// - Returns: Interceptors to use when handling 'submitDiagnosticLog'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSubmitDiagnosticLogInterceptors() -> [ServerInterceptor<Rpc_DiagnosticSessionDescriptor, Rpc_DiagnosticSubmitStatus>]
+
+  /// - Returns: Interceptors to use when handling 'prepareSweepTx'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePrepareSweepTxInterceptors() -> [ServerInterceptor<Rpc_PrepareSweepTxRequest, Rpc_PrepareSweepTxResponse>]
+
+  /// - Returns: Interceptors to use when handling 'signAndBroadcastSweepTx'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSignAndBroadcastSweepTxInterceptors() -> [ServerInterceptor<Rpc_SignAndBroadcastSweepTxRequest, Rpc_SignAndBroadcastSweepTxResponse>]
+
+  /// - Returns: Interceptors to use when handling 'startChallengeSetup'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStartChallengeSetupInterceptors() -> [ServerInterceptor<Rpc_ChallengeSetupRequest, Rpc_SetupChallengeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'finishRecoveryCodeSetup'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeFinishRecoveryCodeSetupInterceptors() -> [ServerInterceptor<Rpc_FinishRecoveryCodeSetupRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'populateEncryptedMuunKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePopulateEncryptedMuunKeyInterceptors() -> [ServerInterceptor<Rpc_PopulateEncryptedMuunKeyRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'save'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSaveInterceptors() -> [ServerInterceptor<Rpc_SaveRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'get'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInterceptors() -> [ServerInterceptor<Rpc_GetRequest, Rpc_GetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'delete'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteInterceptors() -> [ServerInterceptor<Rpc_DeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'saveBatch'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSaveBatchInterceptors() -> [ServerInterceptor<Rpc_SaveBatchRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'getBatch'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetBatchInterceptors() -> [ServerInterceptor<Rpc_GetBatchRequest, Rpc_GetBatchResponse>]
 }
 
 internal enum Rpc_WalletServiceServerMetadata {
@@ -378,21 +1752,126 @@ internal enum Rpc_WalletServiceServerMetadata {
     name: "WalletService",
     fullName: "rpc.WalletService",
     methods: [
-      Rpc_WalletServiceServerMetadata.Methods.deleteWallet,
-      Rpc_WalletServiceServerMetadata.Methods.nfcTransmit,
+      Rpc_WalletServiceServerMetadata.Methods.setupSecurityCard,
+      Rpc_WalletServiceServerMetadata.Methods.resetSecurityCard,
+      Rpc_WalletServiceServerMetadata.Methods.signMessageSecurityCard,
+      Rpc_WalletServiceServerMetadata.Methods.setupSecurityCardV2,
+      Rpc_WalletServiceServerMetadata.Methods.startDiagnosticSession,
+      Rpc_WalletServiceServerMetadata.Methods.performDiagnosticScanForUtxos,
+      Rpc_WalletServiceServerMetadata.Methods.submitDiagnosticLog,
+      Rpc_WalletServiceServerMetadata.Methods.prepareSweepTx,
+      Rpc_WalletServiceServerMetadata.Methods.signAndBroadcastSweepTx,
+      Rpc_WalletServiceServerMetadata.Methods.startChallengeSetup,
+      Rpc_WalletServiceServerMetadata.Methods.finishRecoveryCodeSetup,
+      Rpc_WalletServiceServerMetadata.Methods.populateEncryptedMuunKey,
+      Rpc_WalletServiceServerMetadata.Methods.save,
+      Rpc_WalletServiceServerMetadata.Methods.get,
+      Rpc_WalletServiceServerMetadata.Methods.delete,
+      Rpc_WalletServiceServerMetadata.Methods.saveBatch,
+      Rpc_WalletServiceServerMetadata.Methods.getBatch,
     ]
   )
 
   internal enum Methods {
-    internal static let deleteWallet = GRPCMethodDescriptor(
-      name: "DeleteWallet",
-      path: "/rpc.WalletService/DeleteWallet",
+    internal static let setupSecurityCard = GRPCMethodDescriptor(
+      name: "SetupSecurityCard",
+      path: "/rpc.WalletService/SetupSecurityCard",
       type: GRPCCallType.unary
     )
 
-    internal static let nfcTransmit = GRPCMethodDescriptor(
-      name: "NfcTransmit",
-      path: "/rpc.WalletService/NfcTransmit",
+    internal static let resetSecurityCard = GRPCMethodDescriptor(
+      name: "ResetSecurityCard",
+      path: "/rpc.WalletService/ResetSecurityCard",
+      type: GRPCCallType.unary
+    )
+
+    internal static let signMessageSecurityCard = GRPCMethodDescriptor(
+      name: "SignMessageSecurityCard",
+      path: "/rpc.WalletService/SignMessageSecurityCard",
+      type: GRPCCallType.unary
+    )
+
+    internal static let setupSecurityCardV2 = GRPCMethodDescriptor(
+      name: "SetupSecurityCardV2",
+      path: "/rpc.WalletService/SetupSecurityCardV2",
+      type: GRPCCallType.unary
+    )
+
+    internal static let startDiagnosticSession = GRPCMethodDescriptor(
+      name: "StartDiagnosticSession",
+      path: "/rpc.WalletService/StartDiagnosticSession",
+      type: GRPCCallType.unary
+    )
+
+    internal static let performDiagnosticScanForUtxos = GRPCMethodDescriptor(
+      name: "PerformDiagnosticScanForUtxos",
+      path: "/rpc.WalletService/PerformDiagnosticScanForUtxos",
+      type: GRPCCallType.serverStreaming
+    )
+
+    internal static let submitDiagnosticLog = GRPCMethodDescriptor(
+      name: "SubmitDiagnosticLog",
+      path: "/rpc.WalletService/SubmitDiagnosticLog",
+      type: GRPCCallType.unary
+    )
+
+    internal static let prepareSweepTx = GRPCMethodDescriptor(
+      name: "PrepareSweepTx",
+      path: "/rpc.WalletService/PrepareSweepTx",
+      type: GRPCCallType.unary
+    )
+
+    internal static let signAndBroadcastSweepTx = GRPCMethodDescriptor(
+      name: "SignAndBroadcastSweepTx",
+      path: "/rpc.WalletService/SignAndBroadcastSweepTx",
+      type: GRPCCallType.unary
+    )
+
+    internal static let startChallengeSetup = GRPCMethodDescriptor(
+      name: "StartChallengeSetup",
+      path: "/rpc.WalletService/StartChallengeSetup",
+      type: GRPCCallType.unary
+    )
+
+    internal static let finishRecoveryCodeSetup = GRPCMethodDescriptor(
+      name: "FinishRecoveryCodeSetup",
+      path: "/rpc.WalletService/FinishRecoveryCodeSetup",
+      type: GRPCCallType.unary
+    )
+
+    internal static let populateEncryptedMuunKey = GRPCMethodDescriptor(
+      name: "PopulateEncryptedMuunKey",
+      path: "/rpc.WalletService/PopulateEncryptedMuunKey",
+      type: GRPCCallType.unary
+    )
+
+    internal static let save = GRPCMethodDescriptor(
+      name: "Save",
+      path: "/rpc.WalletService/Save",
+      type: GRPCCallType.unary
+    )
+
+    internal static let get = GRPCMethodDescriptor(
+      name: "Get",
+      path: "/rpc.WalletService/Get",
+      type: GRPCCallType.unary
+    )
+
+    internal static let delete = GRPCMethodDescriptor(
+      name: "Delete",
+      path: "/rpc.WalletService/Delete",
+      type: GRPCCallType.unary
+    )
+
+    internal static let saveBatch = GRPCMethodDescriptor(
+      name: "SaveBatch",
+      path: "/rpc.WalletService/SaveBatch",
+      type: GRPCCallType.unary
+    )
+
+    internal static let getBatch = GRPCMethodDescriptor(
+      name: "GetBatch",
+      path: "/rpc.WalletService/GetBatch",
       type: GRPCCallType.unary
     )
   }

@@ -2,11 +2,81 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/muun/libwallet/service/model"
+	"log"
+	"os"
 	"strconv"
+	"strings"
 	"testing"
+	"time"
 )
 
-const houstonUrl = "http://localhost:8080"
+// 127.0.0.1 instead of localhost to avoid problems with network interfaces in local env
+const houstonUrl string = "http://127.0.0.1:8080"
+
+func defaultProvider() *TestProvider {
+	return &TestProvider{
+		ClientVersion:     "1205",
+		ClientVersionName: "2.9.2",
+		Language:          "en",
+		ClientType:        "FALCON",
+		BaseURL:           houstonUrl,
+	}
+}
+
+// TestMain is run before all tests defined in this package
+func TestMain(m *testing.M) {
+	shouldRunHealthcheck := false
+
+	for _, arg := range os.Args {
+		if strings.Contains(arg, "-test.run=_Integration") {
+			shouldRunHealthcheck = true
+			break
+		}
+	}
+
+	if shouldRunHealthcheck {
+		log.Println("Running healthcheck setup for integration tests...")
+
+		if err := waitForHealthcheck(); err != nil {
+			log.Fatalf("Healthcheck failed: %v", err)
+		}
+	} else {
+		log.Println("Skipping healthcheck setup (not running integration tests).")
+	}
+
+	code := m.Run()
+	os.Exit(code)
+}
+
+// waitForHealthcheck pings the healthcheck endpoint until it gets a 200 OK
+func waitForHealthcheck() error {
+	timeout := 30 * time.Second
+	interval := 500 * time.Millisecond
+	deadline := time.Now().Add(timeout)
+	for {
+		if time.Now().After(deadline) {
+			return fmt.Errorf("healthcheck failed after %s", timeout)
+		}
+
+		houstonService := NewHoustonService(defaultProvider()).(*HoustonClient)
+
+		r := request[any]{
+			Method: MethodGet,
+			Path:   "/admin/healthcheck",
+		}
+		_, err := r.do(&houstonService.client)
+
+		if err == nil {
+			log.Println("Healthcheck successful.")
+			return nil
+		}
+
+		log.Println("Healthcheck failed:", err)
+		time.Sleep(interval)
+	}
+}
 
 func TestInvalidEndpoint_Integration(t *testing.T) {
 	provider := TestProvider{
@@ -16,7 +86,7 @@ func TestInvalidEndpoint_Integration(t *testing.T) {
 		ClientType:        "APOLLO",
 		BaseURL:           houstonUrl,
 	}
-	houstonService := NewHoustonService(&provider)
+	houstonService := NewHoustonService(&provider).(*HoustonClient)
 	r := request[any]{
 		Method: MethodGet,
 		Path:   "/invalid-endpoint",
@@ -26,10 +96,12 @@ func TestInvalidEndpoint_Integration(t *testing.T) {
 		t.Fatal("expected error")
 	}
 
-	devError := DeveloperError{}
-	err = json.Unmarshal([]byte(err.Error()), &devError)
-	if err != nil {
-		t.Fatal(err)
+	devError := HoustonResponseError{}
+
+	unmarshallingErr := json.Unmarshal([]byte(err.Error()), &devError)
+	if unmarshallingErr != nil {
+		log.Println(err.Error()[:])
+		t.Fatal(unmarshallingErr)
 	}
 	if devError.RequestId == 0 {
 		t.Fatal("RequestId should not be zero")
@@ -58,7 +130,7 @@ func TestValidEndpointButNoAuthToken_Integration(t *testing.T) {
 		ClientType:        "APOLLO",
 		BaseURL:           houstonUrl,
 	}
-	houstonService := NewHoustonService(&provider)
+	houstonService := NewHoustonService(&provider).(*HoustonClient)
 	r := request[any]{
 		Method: MethodGet,
 		Path:   "/user",
@@ -68,10 +140,12 @@ func TestValidEndpointButNoAuthToken_Integration(t *testing.T) {
 		t.Fatal("expected error")
 	}
 
-	devError := DeveloperError{}
-	err = json.Unmarshal([]byte(err.Error()), &devError)
-	if err != nil {
-		t.Fatal(err)
+	devError := HoustonResponseError{}
+
+	unmarshallingErr := json.Unmarshal([]byte(err.Error()), &devError)
+	if unmarshallingErr != nil {
+		log.Println(err.Error()[:])
+		t.Fatal(unmarshallingErr)
 	}
 	if devError.RequestId == 0 {
 		t.Fatal("RequestId should not be zero")
@@ -109,27 +183,30 @@ func TestValidEndpointButInvalidAuthToken_Integration(t *testing.T) {
 		t.Fatal("expected error")
 	}
 
-	devError := DeveloperError{}
-	err = json.Unmarshal([]byte(err.Error()), &devError)
-	if err != nil {
-		t.Fatal(err)
+	houstonError := HoustonResponseError{}
+
+	unmarshallingErr := json.Unmarshal([]byte(err.Error()), &houstonError)
+	if unmarshallingErr != nil {
+		log.Println(err.Error()[:])
+		t.Fatal(unmarshallingErr)
 	}
-	if devError.RequestId == 0 {
+
+	if houstonError.RequestId == 0 {
 		t.Fatal("RequestId should not be zero")
 	}
-	if devError.ErrorCode != 2016 {
-		t.Fatalf("want %v, but got %v", 2016, devError.ErrorCode)
+	if houstonError.ErrorCode != 2016 {
+		t.Fatalf("want %v, but got %v", 2016, houstonError.ErrorCode)
 	}
-	if devError.Status != 400 {
-		t.Fatalf("want %v, but got %v", 400, devError.Status)
+	if houstonError.Status != 400 {
+		t.Fatalf("want %v, but got %v", 400, houstonError.Status)
 	}
 	want := "Not authorized"
-	if devError.Message != want {
-		t.Fatalf("want %v, but got %v", want, devError.Message)
+	if houstonError.Message != want {
+		t.Fatalf("want %v, but got %v", want, houstonError.Message)
 	}
 	want = "Missing or invalid auth token"
-	if devError.DeveloperMessage != want {
-		t.Fatalf("want %v, but got %v", want, devError.Message)
+	if houstonError.DeveloperMessage != want {
+		t.Fatalf("want %v, but got %v", want, houstonError.Message)
 	}
 }
 
@@ -149,17 +226,17 @@ func TestValidEndpointAndValidAuthToken_Integration(t *testing.T) {
 	houstonService := NewHoustonService(&provider)
 
 	// Create first session to get and set a valid AuthToken
-	sessionJson := CreateFirstSessionJson{
-		ClientJson{
+	sessionJson := model.CreateFirstSessionJson{
+		Client: model.ClientJson{
 			Type:        provider.ClientType,
 			BuildType:   "debug",
 			Version:     strClientVersion,
 			VersionName: provider.ClientVersionName,
 			Language:    provider.Language,
 		},
-		nil,
-		"USD",
-		PublicKeyJson{
+		GcmToken:        nil,
+		PrimaryCurrency: "USD",
+		BasePublicKey: model.PublicKeyJson{
 			Key:  "tpubDAygaiK3eZ9hpC3aQkxtu5fGSTK4P7QKTwwGExN8hGZytjpEfsrUjtM8ics8Y7YLrvf1GLBZTFjcpmkEP1KKTRyo8D2ku5zz49bRudDrngd",
 			Path: "m/schema:1'/recovery:1'",
 		},

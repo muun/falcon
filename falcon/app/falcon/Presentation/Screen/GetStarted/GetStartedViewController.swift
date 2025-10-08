@@ -12,7 +12,7 @@ import Lottie
 class GetStartedViewController: MUViewController {
 
     @IBOutlet private weak var descriptionLabel: UILabel!
-    @IBOutlet private weak var muunLogo: AnimationView!
+    @IBOutlet private weak var muunLogo: LottieAnimationView!
     @IBOutlet private weak var createWalletButton: ButtonView!
     @IBOutlet private weak var recoverWalletButton: LinkButtonView!
 
@@ -58,7 +58,7 @@ class GetStartedViewController: MUViewController {
     }
 
     private func setUpLottieView() {
-        muunLogo.animation = Animation.named("animation")
+        muunLogo.animation = LottieAnimation.named("animation")
         muunLogo.animationSpeed = 1.25
         muunLogo.contentMode = .scaleAspectFit
         muunLogo.loopMode = .playOnce

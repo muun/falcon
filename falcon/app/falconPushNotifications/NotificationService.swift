@@ -232,7 +232,9 @@ class NotificationService: UNNotificationServiceExtension {
         }
 
         let resultCodeLoad = withUnsafeMutablePointer(to: &result) {
+            // swiftlint:disable forbidden_raw_keychain_calls
             SecItemCopyMatching(queryLoad as CFDictionary, UnsafeMutablePointer($0))
+            // swiftlint:enable forbidden_raw_keychain_calls
         }
 
         if resultCodeLoad == noErr {
@@ -242,7 +244,9 @@ class NotificationService: UNNotificationServiceExtension {
                 // Found successfully
                 return keyValue
             } else {
+                // swiftlint:disable forbidden_raw_keychain_calls
                 throw KeychainBadDataError(data: result)
+                // swiftlint:enable forbidden_raw_keychain_calls
             }
         }
 

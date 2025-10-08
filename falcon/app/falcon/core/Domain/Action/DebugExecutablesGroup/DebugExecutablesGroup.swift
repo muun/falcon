@@ -20,6 +20,7 @@ public protocol DebugExecutable {
 
 public protocol DebugMenuExecutableContext {
     func askUserForText(message: String, completion: @escaping (String) -> Void)
+    func showAlert(title: String?, message: String?)
     func showRequests()
     func showAnalytics()
 }

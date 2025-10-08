@@ -14,6 +14,7 @@ protocol DebugMenuPresenterDelegate: BasePresenterDelegate,
     func askUserForText(message: String, completion: @escaping (String) -> Void)
     func showRequests()
     func showAnalytics()
+    func showAlert(title: String?, message: String?)
 }
 
 class DebugMenuPresenter<Delegate: DebugMenuPresenterDelegate>: BasePresenter<Delegate> {
@@ -67,5 +68,9 @@ extension DebugMenuPresenter: DebugMenuExecutableContext {
 
     func showAnalytics() {
         delegate.showAnalytics()
+    }
+    
+    func showAlert(title: String?, message: String?) {
+        delegate.showAlert(title: title, message: message)
     }
 }

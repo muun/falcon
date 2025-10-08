@@ -22,8 +22,8 @@ final class CardPairingDebugExecutable: DebugExecutable {
         if #available(iOS 13.0, *) {
             paidNfcCardAction.run(seed: "00112233445566778899AABBCCDDEEFF",
                                   slot: 0)
-            .subscribe { statusCode in
-                Logger.log(.debug, "Setup Card response: \(statusCode)")
+            .subscribe {
+                Logger.log(.debug, "Card was paired")
                 completion()
             }.disposed(by: disposeBag)
         }

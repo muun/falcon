@@ -13,6 +13,10 @@ const (
 	BackendFeatureEffectiveFeesCalculation = "EFFECTIVE_FEES_CALCULATION"
 	BackendFeatureOsVersionDeprecatedFlow  = "OS_VERSION_DEPRECATED_FLOW"
 	BackendFeatureNfcCard                  = "NFC_CARD"
+	BackendFeatureNfcSensors               = "NFC_SENSORS"
+	BackendFeatureDiagnosticMode           = "DIAGNOSTIC_MODE"
+
+	BackendFeatureUnsupported = "UNSUPPORTED_FEATURE"
 
 	UserActivatedFeatureStatusOff                 = "off"
 	UserActivatedFeatureStatusCanPreactivate      = "can_preactivate"

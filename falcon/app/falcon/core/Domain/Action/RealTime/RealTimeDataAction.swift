@@ -57,6 +57,7 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                     self.exchangeRateWindowRepository.setExchangeRateWindow(data.exchangeRateWindow)
                     self.blockchainHeightRepository.setBlockchainHeight(data.currentBlockchainHeight)
                     self.forwardingPoliciesRepository.store(policies: data.forwardingPolicies)
+                    self.checkIfItIsFirstNFCFlagActivation(newFlags: data.features)
                     self.featureFlagsRepository.store(flags: data.features)
 
                     // When the FF is ON, this data will be stored by PreloadFeeDataAction
@@ -65,14 +66,6 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                         self.minFeeRateRepository
                             .store(satsPerWeightUnit: data.minFeeRateInWeightUnits)
                     }
-
-                    /// If the NFC_CARD feature flag is active, we set cardActivated as true
-                    /// in order to test NFC card interactions during internal testing.
-                    /// This avoids requiring real users to pair an actual NFC card — we only want
-                    /// to test the new operation flow involving NFC card interaction.
-                    /// When the flag is off, cardActivated is set to false.
-                    let isNfcCardFlagActivated = data.features.contains(.nfcCard)
-                    self.userRepository.setCardActivated(isActivated: isNfcCardFlagActivated)
                 })
         } else {
             let realData = RealTimeData(
@@ -100,6 +93,16 @@ public class RealTimeDataAction: AsyncAction<RealTimeData> {
                 || Date().timeIntervalSince(feeWindow.fetchDate) >= secondsForFreshData
         }
         return true
+    }
+
+    private func checkIfItIsFirstNFCFlagActivation(newFlags: [FeatureFlags]) {
+        // On first-time enable of the NFC_CARD flag,
+        // reset `cardActivated` to false so the user must pair
+        // the security card on their first interaction.
+        guard newFlags.contains(.nfcCard) else { return }
+        if !featureFlagsRepository.fetch().contains(.nfcCard) {
+            self.userRepository.setCardActivated(isActivated: false)
+        }
     }
 
 }

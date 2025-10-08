@@ -27,7 +27,8 @@ private let libwalletStorageURL = try! FileManager.default
 private let databaseCoordinator = try! DatabaseCoordinator(
     queue: DatabaseQueue(path: databaseURL.path),
     preferences: Preferences(userDefaults: UserDefaults(suiteName: userDefaultsDomain)!),
-    secureStorage: SecureStorage(keychainRepository: keychainRepository)
+    secureStorage: SecureStorage(keychainRepository: keychainRepository),
+    walletService: WalletService()
 )
 
 var keychainRepository = KeychainRepository(keyPrefix: secureStoragePrefix, group: Identifiers.group)

@@ -3,278 +3,278 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0075D9F38371DFE1A8B39864A1F71E0C /* FIRCLSMachOBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = B581B180FFAEB1F92CA0ABE035C38D3E /* FIRCLSMachOBinary.m */; };
-		01E873C43561FBF3689F868A9AAC6A76 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 70CEA864C6AC70F527D10106D10D3F76 /* PrivacyInfo.xcprivacy */; };
-		0266DA5C09C0CEF6504711451BD9493B /* FIRCLSInternalLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BFD4B487A0E5B0509AC5637BA81926 /* FIRCLSInternalLogging.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		02FF1F6020A95CB1D728756D72503B72 /* FIRCLSMetricKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EE74408B6E22BA1C51186BA66D68D3 /* FIRCLSMetricKitManager.m */; };
-		0653F2E627ACD018F482D9213D3A3F95 /* FIRCLSDemangleOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18CBEB626A0794A2109E2B14750F67C3 /* FIRCLSDemangleOperation.mm */; };
-		06BD9980F07E7E10EEF21E72C5B1D0BB /* FIRCLSMachException.c in Sources */ = {isa = PBXBuildFile; fileRef = 7968256A3E2A089647F584D78BF47A5A /* FIRCLSMachException.c */; };
-		0814C6422814A4F79BFA71330AE48A9E /* FIRCLSProcessReportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2E21374FC3A5A7232BAF6DC881839 /* FIRCLSProcessReportOperation.m */; };
-		097C159D727CABA44128056A6739F7EF /* FIRCLSDownloadAndSaveSettingsOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = DEE3C4941A45C5D2CB33EEBB892F07DB /* FIRCLSDownloadAndSaveSettingsOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		0A55A405B029DDE7D5E7A92801DDED53 /* FirebaseCoreInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7430DC50E1CB9174EF8B43501B9ED6F7 /* FirebaseCoreInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		0B241146F3F724D1CB137FBF060FB0EF /* FirebaseCrashlytics.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD7E706ADADC168DD5030720121A67D /* FirebaseCrashlytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0BBC2401887C771E17603EDFFB17D4F4 /* FIRCLSDownloadAndSaveSettingsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD947393932C5B081301B17A319071C /* FIRCLSDownloadAndSaveSettingsOperation.m */; };
-		0C7F0FFECDC5A809B073EF72B3876645 /* FIRCLSMachO.m in Sources */ = {isa = PBXBuildFile; fileRef = 467C12D1E5D5C6A7BC928D0DEB454837 /* FIRCLSMachO.m */; };
-		0D53CBE025DDB2C78DCB5A9555C114B1 /* FIRStackFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E3120160E8850A004FA05D8A4F2BC09 /* FIRStackFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0E6CD446BB198083C791AC0C6736B5D4 /* FIRCLSReportUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 95776A86D14CE0A8F258CE2B685823B6 /* FIRCLSReportUploader.m */; };
-		0F7893FEE5D66A422A5D4D3956D4F029 /* FIRCLSOnDemandModel.h in Headers */ = {isa = PBXBuildFile; fileRef = B13F9B0C2FE5F8710CEE049DCFAD7915 /* FIRCLSOnDemandModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		0FEB4DB1FEC42E342BE3174374F524AD /* FIRExceptionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 26CDBE537FD03F65E14A873D2124CD26 /* FIRExceptionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		10724AE89D43B821C036B3EE0C73F1AB /* FIRCLSRecordHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B92A4C238FE0B7F0E56177EA897058 /* FIRCLSRecordHost.m */; };
-		1180CB952D68B4ECFE3E133AE5381187 /* FIRCLSAnalyticsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E27A8A444D4F0AB63F097C4BC53482E1 /* FIRCLSAnalyticsManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		12AB7B35DF01DA9473DD52F669A6507F /* FIRCLSUnwind_x86.c in Sources */ = {isa = PBXBuildFile; fileRef = 66FE3579BF4B40E3651F9E304F71AE59 /* FIRCLSUnwind_x86.c */; };
-		13591A907E6CCFB423677880CC586F0E /* FIRCLSDwarfExpressionMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = B1FE7D35E0BE4A285F3E68FFC3E53F1C /* FIRCLSDwarfExpressionMachine.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		178834EC9ED291730B6855C987753CE4 /* FIRCLSNetworkResponseHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DB77E07DEF7717AD6462875C938FC0C /* FIRCLSNetworkResponseHandler.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		17C05277E565B1D593A45B89DDBEB6C3 /* FIRCLSMultipartMimeStreamEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F238F15B4BFD6DB44F2542752B47C5D /* FIRCLSMultipartMimeStreamEncoder.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		189C6676967E240F9338CB3E9A8BA0B8 /* FIRCLSInstallIdentifierModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 107963D37F3FC37BEED1D2208DC5A927 /* FIRCLSInstallIdentifierModel.m */; };
-		18D3DD13B007DFD433B7FA8EEE0EE1DF /* FIRCLSAllocate.c in Sources */ = {isa = PBXBuildFile; fileRef = 36AEEEE434094C00F13DA6A7F57C6E68 /* FIRCLSAllocate.c */; };
-		1A92D3985302BFF9620C16E98FEDDF00 /* FIRCLSNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D13E210268D678239A74E8C0C83D0D /* FIRCLSNotificationManager.m */; };
-		1EA24000FFA4490928D7D02582E532D8 /* FIRCLSRecordIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 503C2899B4B531CFB22F5EE5806292D2 /* FIRCLSRecordIdentity.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		20B080C63F0D247037BACAA7F3225C34 /* FIRCLSCompactUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A54C836CF1C0BB7F27D0B768BBE9D74 /* FIRCLSCompactUnwind.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		20DB8BB0ECE93BF4C84FC54E2223CFA6 /* FIRCLSMachO.h in Headers */ = {isa = PBXBuildFile; fileRef = 42642F1B2DFCA20955D375AA4F5D89BC /* FIRCLSMachO.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		20E7613A27A50EDEE52E18CA8DB07057 /* FIRCLSSerializeSymbolicatedFramesOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = BA928563151C7879D54ABF337CEBF490 /* FIRCLSSerializeSymbolicatedFramesOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		21B9AD61EF753CDDF6046090855FA7F4 /* FIRCLSURLBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 716E95D7861CE398A88227A70A3B7D0B /* FIRCLSURLBuilder.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		222AD29961CCA41A058EB8E6E1A53452 /* FIRCLSAnalyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F570BAEA5DB1FD2C94A4BD75A3193C12 /* FIRCLSAnalyticsManager.m */; };
-		226C185F0D429AA31E1FEAA288C1D870 /* FIRCLSRecordIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = F5640A13AB35C977AB79EBFA607FABA2 /* FIRCLSRecordIdentity.m */; };
-		22D1B353B61AD815E2796079578C09C6 /* FIRHeartbeatLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0B559CE34FEEF8B61AAE7C1175A1ED1F /* FIRHeartbeatLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		23E5F0C78D9B4DF2C30E6758E87B8275 /* FIRCLSdSYM.h in Headers */ = {isa = PBXBuildFile; fileRef = CBBE814F04E7E1238D24C38A4DCCFCC2 /* FIRCLSdSYM.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		248678D39D94DC4147790A91A26A8838 /* FIRCLSByteUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 9906831D604CC3845D5921B5A285F481 /* FIRCLSByteUtility.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		27578AF4FED907E735ABF7E729129F4F /* FIRCLSApplicationIdentifierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 31B5C66BFFFEF33DD210F5915987356E /* FIRCLSApplicationIdentifierModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		27A0361D4EE40416F44872E17BFE53B7 /* FIRCLSDemangleOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C88B35F1661D8D7A2D305A5B414745C /* FIRCLSDemangleOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		2AE09DF48EC51027ECB2D09D4EA970DD /* FIRCLSExistingReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD523D434536AFB599123332C26D3E22 /* FIRCLSExistingReportManager.m */; };
-		2CAAA8F1A068C98E5847BC349079569C /* FIRCLSRecordHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C862710176B90727DEFCCF794716501 /* FIRCLSRecordHost.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		2DE21238CAF14AC6622DB3F9660DF366 /* FIRCLSUserLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = DFC47416184E2EF3CDE692217EC68909 /* FIRCLSUserLogging.m */; };
-		2EEC0B7901917183E3570BEE47FEBC35 /* FIRCLSdSYM.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FF929CBF71794DFBD75844F01A8B25 /* FIRCLSdSYM.m */; };
-		2F3DCAE1048D72F41B00617EB3E069D9 /* FIRCrashlyticsReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D3C78FD7B9CB9F9EEF5E4064FDEDFE6 /* FIRCrashlyticsReport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2FB012ADED2DF63848C0BEEB6983CD63 /* FIRCLSDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = F3A068E6EDB44581FF63D36DAA30A345 /* FIRCLSDefines.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		30C4AD988A94E897EA25313A812C5850 /* FIRCLSSymbolResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 358E8A9FED1B8DB5D2C19D33212162AA /* FIRCLSSymbolResolver.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		33BBA279DED6BFB514F93EEBF3114F0B /* FIRCLSAsyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C98BBE2AF985B9F71A7864F3C516ECB /* FIRCLSAsyncOperation.m */; };
-		34C734550AB13B7EED2A19F2CB94C806 /* FIRCLSDataCollectionArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36EE45CC4846DD51F3A21F36AD07149C /* FIRCLSDataCollectionArbiter.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		3876F71E577FC146B512FE337C4F6BBB /* FIRCLSMetricKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6240DF3360FC526EFC35F70947C79366 /* FIRCLSMetricKitManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		38F3FE6F9607E07F77E79230709ADF51 /* FIRAppInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E39AB4E59C25B464CD750862346283C /* FIRAppInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		3927389A052C54BB7AB9EE327227F0B4 /* FIRCLSSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B1F383D9187DC5DC70C48AB93FA881F /* FIRCLSSettings.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		3B0B3A6810F4F5DF04FDB9D061B68F0D /* FIRCLSFABAsyncOperation_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EBC51C174ECD587F7CBCF9CCF9EE906 /* FIRCLSFABAsyncOperation_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		3B0D646F60BE89DE2D9DDFCCE42E454E /* FIRCLSFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E9E8459D05E1777684E44787AF99DA /* FIRCLSFile.m */; };
-		440C319484FF521C81C8ED340AB361B5 /* FIRCLSUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = B836A965CC1D414D926E9142B8EF1C1D /* FIRCLSUnwind.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		46500F9AB45BDD4ED338ABE5D46BBA9D /* FIRCLSSerializeSymbolicatedFramesOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 614C455B120FDE43EE62E23DECE6B3E5 /* FIRCLSSerializeSymbolicatedFramesOperation.m */; };
-		46AA9CEB1F9EEE3E8039AB02A32C1DE1 /* FIRCLSFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F15C538B190C952F109ABF6A6F681DDD /* FIRCLSFileManager.m */; };
-		46CD18BD93C9EE84252F5B7741C6259C /* StringToHexConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCBFC3E5C19E989C1A79D2F559FFB67 /* StringToHexConverter.swift */; };
-		47B62D9FC69320C7E68C9716938EBB21 /* FIRCLSThreadArrayOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = D05FB27DD4B3B0FF9A381FDADB11DE02 /* FIRCLSThreadArrayOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		4826EC16775E33A18593CE265B75917C /* FIRCLSNetworkOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E65495DDDE213D6B317DA5A574B046B /* FIRCLSNetworkOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		48712FE787F4003201E0CC14BF7CCAD5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F30505EDD7DE02B47EBC6844E8AF0418 /* Foundation.framework */; };
-		4B3F114F5A14ACA245C4A5EEBBB5D10B /* FIRCrashlytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D7A6607A6E2715CDF671CE7854BA6941 /* FIRCrashlytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4D71850382F75290339500A4E1785EF3 /* FIRCLSOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 58AC305BF23EDBB16D9212001FE37DBC /* FIRCLSOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		4E0953CE6A068C2A4BAB6859A545DFE6 /* FIRCLSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E69564F0925381EAA779C2A40755E64 /* FIRCLSContext.m */; };
-		4EE0C4CE2FA24CCE52FF293B67C5F414 /* FIRCLSInstallIdentifierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = CB805BCCD0A9643424B354C021DB71AE /* FIRCLSInstallIdentifierModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		4F5C358BCC5E40B31BAD76BC105C1F26 /* FIRCLSContextManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FACC006DDC85463FE22747EBAD32658D /* FIRCLSContextManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		50A48A98FA1EF26FA86A7D158AEDCAAB /* FIRCLSFABHost.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E55BDD6BC6306A274C379816495045 /* FIRCLSFABHost.m */; };
-		50DC9E27D33C3E5937E0B410CD1ADAE3 /* FIRCLSLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EAFFB8448DB61330805CD307919F9B8 /* FIRCLSLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		510917DB85AB311D85CF6E83C1705816 /* FIRCLSThreadState.c in Sources */ = {isa = PBXBuildFile; fileRef = 86DC8CE2F46234DE3E5A9A0583650933 /* FIRCLSThreadState.c */; };
-		51696C0154C56FEE20E4C558200CDE99 /* FIRCLSLaunchMarkerModel.h in Headers */ = {isa = PBXBuildFile; fileRef = AA7E1AD5667470A4CE1F942B85A99193 /* FIRCLSLaunchMarkerModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		519EB46CB15A1A8BDFCC3AC302648640 /* FIRExceptionModel_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = F699CEB3B2E663834698146390B1E87D /* FIRExceptionModel_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		51E074EFDFF7BB315EB0EB6A5469BB89 /* FIRCLSReportManager_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D3A60B3A8A7B8F627133EE362C37F2A /* FIRCLSReportManager_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5224B5512B297E7C847851A1E218FF1B /* FIRCLSUserDefaults_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 76B340E2C8AC7F393C0C993B4CE71272 /* FIRCLSUserDefaults_private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		52C9E2F3F780FBCF2490D4CDA2B40D0A /* FIRCLSSettingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF728D20000590D9FBBBF8B5D58B65F /* FIRCLSSettingsManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5472D33D44CA03B1FBDCF632C29EA468 /* FIRCLSProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = B4D7BE88CE9CFC1C23E24414A13B7D9D /* FIRCLSProcess.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		54CB8BAB7AFF0CCEE3AFFA795CB1D17C /* FIRCLSCompoundOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 82CF0CA93D81389AB778B8F2BF8DC163 /* FIRCLSCompoundOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		559DECB694D0D698F3FD39F783FF66F3 /* FIRCLSSignal.c in Sources */ = {isa = PBXBuildFile; fileRef = AC90740B4628CF7404380E9117E0E371 /* FIRCLSSignal.c */; };
-		56AEFD290F20FED050285D68D00D43BC /* FIRCLSCompactUnwind_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = ABEF0234F6AF01B0CF6947263BA4B4DE /* FIRCLSCompactUnwind_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5789296AAD976CE7CF2E651897C61D35 /* FirebaseCrashlytics-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 38256AC42EA3869C30099A9600BB8394 /* FirebaseCrashlytics-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5B6869A2A9E56B8A6C80586C91B40410 /* FIRCLSRolloutsPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 688A1EC4D7C24208B94EC9EADA6294F3 /* FIRCLSRolloutsPersistenceManager.m */; };
-		5C08341F6C48CE281FE4336102299F62 /* FIRCLSThreadState.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6026002221E95244458D870E906643 /* FIRCLSThreadState.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5C5D7704EE01A9A57F6B984785FE62D1 /* EncodedRolloutAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCCBC67B9E1371C9E66E867D3E5B921 /* EncodedRolloutAssignment.swift */; };
-		5EBAC1F911AF7CA948C992AAB2A0CCB3 /* FIRCLSReportUploader_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EA8743678F5F85DEE28C99DD25E2A5F /* FIRCLSReportUploader_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5F36BD6E9993121A4DD0561EB17A2377 /* FIRCLSReportUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = ECF0EAE05CB483AAF1BCDD5CE9599B4D /* FIRCLSReportUploader.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5FC03325B216F58410737D71BEE6E7E0 /* FIRCLSExecutionIdentifierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E00CD3B13B76625DBA775CD3764195 /* FIRCLSExecutionIdentifierModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		6044FFF152AA9A6A82A6509B354DD3AF /* dwarf.h in Headers */ = {isa = PBXBuildFile; fileRef = F08A0F9D38259C074A3A90DB07DCF6D2 /* dwarf.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		66251344C714CE7732339B5643D4B3B5 /* crashlytics.nanopb.c in Sources */ = {isa = PBXBuildFile; fileRef = B0FB06C8403BC8245EE50B6A357A5D8C /* crashlytics.nanopb.c */; };
-		671638B72FCB70A01B91640FC4036F4F /* FIRCLSAllocate.h in Headers */ = {isa = PBXBuildFile; fileRef = 61506F5C62F490CC437544BFB38423DB /* FIRCLSAllocate.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		67A0A767B122B8E668C00215671FAA80 /* FIRCLSFABNetworkClient.m in Sources */ = {isa = PBXBuildFile; fileRef = ED06E1BDB9FCE7E76BF6C2466E0B481C /* FIRCLSFABNetworkClient.m */; };
-		67FEF7417B2FECB9F5391393371E98C5 /* FIRCLSProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = 94B3F2E129C36289CE6196A36B2ACC94 /* FIRCLSProcess.c */; };
-		6852CE0FEAC1A6B13A741E1AECFB312B /* FIRCLSReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3CA1A5E9D8C3330291BB044CA884F /* FIRCLSReportManager.m */; };
-		6C340135524718C2929235123E1B5224 /* FIRCLSApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 72D90B130C7A0D60D29ECD58EF1D05F7 /* FIRCLSApplication.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		6C684E37084D9FE1272F62D035D30307 /* FIRCLSHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5C249E51B586427DB7B91659C5A370 /* FIRCLSHost.m */; };
-		6CFBEDA5A42BDB0CE5C79965AD3E1246 /* FIRCLSContextInitData.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CA4B8EFC8C71A359391785CB4D09BA /* FIRCLSContextInitData.m */; };
-		6E3B225F5B596C4C1947ED72007D40F5 /* FIRCLSRolloutsPersistenceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6C9D379E0D7087F9A205B719D18921 /* FIRCLSRolloutsPersistenceManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		707D076A03B48C05F96A25DECFE33C25 /* FIRCLSNetworkResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 791AF2D24E327B889CC8FCFEE7DAC27F /* FIRCLSNetworkResponseHandler.m */; };
-		707ED0E22D6AC3698BFBDB3398CE54FE /* FIRExceptionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D590893670A27FFC6CADCBA0C4678670 /* FIRExceptionModel.m */; };
-		73050DD7E21A154C8F014F1CADD9904A /* FIRCLSMachOSlice.h in Headers */ = {isa = PBXBuildFile; fileRef = 51B9EFFEFD8FD6A2037F782CB95C1877 /* FIRCLSMachOSlice.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		735D986041BFCADC67A37B67AA7DD588 /* FIRCLSDataParsing.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EB099D441BAACCE4D314D91AA61E1CF /* FIRCLSDataParsing.c */; };
-		74AE341DC5CAAE9721B863605E348AAC /* FIRCLSUnwind_arm.c in Sources */ = {isa = PBXBuildFile; fileRef = 56CE5E8343774BDB881C15F8CF2F0FFF /* FIRCLSUnwind_arm.c */; };
-		75D621DFAEFDFDA856D9A7B2F7704C67 /* FIRCLSUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = CA443AE4F7566731FC028808A525DC52 /* FIRCLSUUID.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		76DB6F7B2123AB5535BF5286BD71371A /* crashlytics.nanopb.h in Headers */ = {isa = PBXBuildFile; fileRef = 35947F721E0C3C25599BA56D23548391 /* crashlytics.nanopb.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		76DD9F5FC91EA93567ADACFBFC942F45 /* FIRCLSUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = A01FF56ACFA10094D2E2C5F0B78E4FA2 /* FIRCLSUnwind.c */; };
-		7796813F27495CCF303EA35854B95CEB /* FIRCLSApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 87462A8340C863BD8EB5CC7AE4FC4504 /* FIRCLSApplication.m */; };
-		79CC2089BCB35CADB9148FC4B0E943B6 /* FIRCLSSymbolResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = D3EC59D1A9532B73239F9190733A3C6F /* FIRCLSSymbolResolver.m */; };
-		79CD08FF9C3162B7CABE415402C62802 /* FIRComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B23170E683C477100CB6404BE2D6CE1 /* FIRComponent.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		7D8A1C60EFF85C28AC474221615E89B2 /* FIRCLSLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F48097153E5FBFC1D974187C07F76107 /* FIRCLSLogger.m */; };
-		7F27296343AFD351F24FBFB1536047E9 /* FIRCLSLaunchMarkerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB91A5A5DFA1DE55E1A92468B8212F /* FIRCLSLaunchMarkerModel.m */; };
-		7F3F6F992C393A27E770E5DFE83CAFF5 /* FIRCLSByteUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4538AF6649F5A62FEEE811C3D3CB6EE8 /* FIRCLSByteUtility.m */; };
-		81230EB24DDA98A3732EC6D9D3DDEE8E /* FIRCLSRecordApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BFA836A87D4385FF4AB26C77F571AC0 /* FIRCLSRecordApplication.m */; };
-		842240C82785FEF373A9BBF7D60F1F37 /* FIRCLSUserLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FD06BF29D21CE04B20FF51A4EAD0A8 /* FIRCLSUserLogging.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		8734D1C72598918E4FCC78A8AF573B82 /* FIRCLSDwarfUnwindRegisters.h in Headers */ = {isa = PBXBuildFile; fileRef = D93429F3C66BCA62C3BC60E8F033CC04 /* FIRCLSDwarfUnwindRegisters.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		87D9EED9B0D70D32FB0E1158AC92E2CB /* FIRCLSExistingReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BE99A03A4DFF06D005FD055001245F1 /* FIRCLSExistingReportManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		88068830FDF24392030B271B1B896077 /* FIRCLSReportAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = C7265B40E22A6D188E2C74F34F096302 /* FIRCLSReportAdapter.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		8AB3511D31B299100F461DE797FA4857 /* FIRCLSMachOSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EC07532CF713093FB44F1D83316CFE /* FIRCLSMachOSlice.m */; };
-		8DDF3CAAE91A45D2ADEB16DC69ED4D0F /* CrashlyticsRemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3C6C560EDE6B1684559F7CA0CECEC /* CrashlyticsRemoteConfigManager.swift */; };
-		8F65A272D94EFB02C60C078F93412AD1 /* FIRCrashlytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F03C55E7F536F68EF0C3FD67C376EB1B /* FIRCrashlytics.m */; };
-		8FB63353A87337E54A3FC0A30CFE5B7B /* FIRCLSSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = A7C0EF66509DC8F02C05FEF05D1F7403 /* FIRCLSSignal.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		8FC369EF29423FB39A7BB1156A884CF8 /* FIRCLSGlobals.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5EDAB291F5FAD6D1403817DDC741B4 /* FIRCLSGlobals.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		8FF060FC85DE6FFC9B884F2D92BABB04 /* FIRLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D14BBCDDEB252FA84FA1EBBF90F3042 /* FIRLibrary.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		90E0E7C15A6C14769E0B01E3DAEB67C5 /* FIRInteropParameterNames.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFBD0665BCCDF743FAA9B29696687CE /* FIRInteropParameterNames.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		957543A7BA2B9B043B14EB1688926648 /* FIRCLSInternalLogging.c in Sources */ = {isa = PBXBuildFile; fileRef = 6490796AC708C9A7E1928EC3BC030EFF /* FIRCLSInternalLogging.c */; };
-		95B0DAC2DEFEB0917977E47D1D85D10E /* FIRCLSUnwind_x86.h in Headers */ = {isa = PBXBuildFile; fileRef = EBCA3476AC16B2B473A16598E73FDCA7 /* FIRCLSUnwind_x86.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		96019BEF505F9BB934B18C97E71B5860 /* FIRCLSReportAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFB976C4A3A22F60E641BE29FB89DE /* FIRCLSReportAdapter.m */; };
-		96788F72EE82142C14E4A2FD1B10F1B9 /* FIRCLSURLBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 076B598FE33A963D3892422A3D5D7FCB /* FIRCLSURLBuilder.m */; };
-		97BDAE78C12491C4EA2297C1D84C8142 /* FIRCLSHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 77081A120B03483974187A1D356C291B /* FIRCLSHandler.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		97F2EE04B23903EA6AD79D1650384365 /* FIRCLSDataParsing.h in Headers */ = {isa = PBXBuildFile; fileRef = DFE056C353F6590E1BD63C4E5E187AD2 /* FIRCLSDataParsing.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		9B77571EC3568D1D1979650D5B3EB00A /* FIRCLSMultipartMimeStreamEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8774B8B33420AA730EFF08C68343A4 /* FIRCLSMultipartMimeStreamEncoder.m */; };
-		9CB1928D222F6A6780261DE573B1BF2C /* FIRCLSThreadArrayOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0F74A7CBB32A61B5E43A99408EBB30 /* FIRCLSThreadArrayOperation.m */; };
-		A31E49A23B8C9A9C3152C3A2B5180846 /* FIRCLSFABAsyncOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 97D05EFB8EF6C261B416BACCA6DC48D6 /* FIRCLSFABAsyncOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		A741CC6878F37AD8BB005AFBC1350434 /* FIRCLSDwarfUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = D18A136A20CB86BA5AEADB080C6EADF1 /* FIRCLSDwarfUnwind.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		A7C770C7A3F0F5ACCA0810DD6158E460 /* FIRCLSHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ECABD432BE989F6589CE5353BCCD10F1 /* FIRCLSHandler.m */; };
-		A9000A43E34B18FDE1B0AC631CA3EBCD /* FIRCLSProcessReportOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE6FCB8178ED7BA3ECB22E63123338F /* FIRCLSProcessReportOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		AE445B5DCC117C3A6BEDA6717DC2E9E2 /* FIRComponentType.h in Headers */ = {isa = PBXBuildFile; fileRef = CBC771A2EE8CBDCCC9670297F725EF88 /* FIRComponentType.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		B08CDC54D2C40F361C238884FF6EB813 /* FirebaseCrashlytics-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C6264B9AF598A0235D1AF2100D76A9 /* FirebaseCrashlytics-dummy.m */; };
-		B1EDAF3AF8ED4FAE11FDF995B064A0AF /* FIRCLSUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 68385F0396E26B3DEC21A2E3AD60D521 /* FIRCLSUUID.m */; };
-		B3A9F4BF88BF2B01F7D4412F3AFB91F1 /* FIRAnalyticsInterop.h in Headers */ = {isa = PBXBuildFile; fileRef = 347F32D4A22092B1B22D762FB96D84B4 /* FIRAnalyticsInterop.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		B3AE407236C54C05D7073D9F08D15A5A /* FIRCLSOnDemandModel_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A6880B88D2BFE311070DBC7F576E8FEB /* FIRCLSOnDemandModel_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		B523DC2EA6D7D20E803BAD4AC923BCE2 /* FIRCLSAsyncOperation_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EBABBAA75838E5D2C41CF57DA82201 /* FIRCLSAsyncOperation_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		B75169C4DAE6E24FD95F28602E6111FE /* FIRCLSRecordApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C4B49A2660EB667BF0184F14077CF0A /* FIRCLSRecordApplication.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		B997DA6B192A16E4A3A9F1E05C3566DF /* FIRCLSBinaryImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E0D943DDBD415B005CD2F96C7F357C7 /* FIRCLSBinaryImage.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		BC4A07A90038F653D88AD00437DE4D17 /* FIRCLSContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4530E457DDC23FCE7E1E804E7A1A4D /* FIRCLSContextManager.m */; };
-		BCC61B416CC9D803823DAED94B6254C3 /* FIRCLSException.mm in Sources */ = {isa = PBXBuildFile; fileRef = C61AB4C447CC75EC3FB9006E3BADC011 /* FIRCLSException.mm */; };
-		BEA1AE1B082AB0A7508CB5DFEF0D149A /* FIRCLSAsyncOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = DA925AC9CA9FCE5FA3656314FAC40AC2 /* FIRCLSAsyncOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C28879A283563A7090AAD2BA83F361B3 /* FIRCLSFABNetworkClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 615F011D9296E5E0834EE63A45A929F2 /* FIRCLSFABNetworkClient.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C2C03F7C29789520F6605AE9D927FE27 /* FIRCLSNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 49020FFF1BC5CB20BE38A3107265DB0B /* FIRCLSNotificationManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C325255735ECB5A6024BD08D74B8987E /* FIRLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = C3B33E18986A6F30D961FEF6BCCDC5D7 /* FIRLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C34228859C25CFF7355FABA585D9BEA5 /* FIROptionsInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = B6DE56A400308609A5EA4BD80D40E25D /* FIROptionsInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C583BC85E1247D43BA5E62475368E2AE /* FIRCLSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 401B984F80B78690A8CBA05D2B9625F5 /* FIRCLSConstants.m */; };
-		C826F6C6611A4F28ED8FFB6305040A1D /* FIRCLSRecordBase.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A415C3959A20FAFD66E873DBC3749C /* FIRCLSRecordBase.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C82F88660AD9F2C79A0A61FADC07F1C0 /* FIRCLSDwarfUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A5FE7E81EB2011FC3F370FEF1D0D9 /* FIRCLSDwarfUnwind.c */; };
-		C8403B155EDD89AF8EBD44FC1F7883BB /* FIRCLSContextInitData.h in Headers */ = {isa = PBXBuildFile; fileRef = CB64C22C7A364510FE6378BF6233B078 /* FIRCLSContextInitData.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C9988EB986A364A50A972FF1C2E62A6B /* FIRCrashlyticsReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 73CD62CA97A4F6B38D6D59984E84693B /* FIRCrashlyticsReport.m */; };
-		CB85445FA90B6D5F5ABD9B0CD4C2E204 /* FIRCLSOnDemandModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FB83EC91BC20FE144C9EF54C64315E5 /* FIRCLSOnDemandModel.m */; };
-		CDA9F360E1E71E13DCF43F375AF4A7DB /* FIRCLSSymbolicationOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 57963F24A9E75CD678C340B60A4D289E /* FIRCLSSymbolicationOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		CDE90B41BA1BEB41E68F0AB4B6244FDC /* FIRCLSRecordBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B263468F9B0EDFE15A103C8CD4F31BF3 /* FIRCLSRecordBase.m */; };
-		CF51DB353A16539EAFFBABFE7ABB793C /* FIRCLSCompactUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = B99F4F926DE652953F2B6003B5269D98 /* FIRCLSCompactUnwind.c */; };
-		CFA27B2C8314E1114F6D35F76F1FE9DD /* FIRCLSHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 2528DFF92318FC6A9613ACCFE8F72D47 /* FIRCLSHost.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		CFCF33FFF11BEDD5622EE4B0964364F7 /* FIRCLSCodeMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E82AAAEC41D120CAA9EFF1CDD97BB1 /* FIRCLSCodeMapping.m */; };
-		CFEACB60B97F50049574720ED1288704 /* FIRCLSFABHost.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E9CE470258D768AC8215E3C588D7B9 /* FIRCLSFABHost.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		D283DB812C1E5B8B935235330684B372 /* FIRComponentContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4472CC4239BDB78BB3C4A5297435BB50 /* FIRComponentContainer.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		D2DC34BD317D1490112518C525724E8E /* FIRCLSInternalReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DB5C7151AC652548083CF9D3831D39 /* FIRCLSInternalReport.m */; };
-		D38C5D1BC9190357DA66400DE98BC313 /* FIRCLSFABAsyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E70718FF50992A645ACAB6E4015CD004 /* FIRCLSFABAsyncOperation.m */; };
-		D55105A2C3A70C4EDCDC39428CE59998 /* FIRCLSCompoundOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C876C547C6C8D6303BD686BDB26EC7 /* FIRCLSCompoundOperation.m */; };
-		D681A37F469CB5616568C6D10874AC5C /* FIRCLSDataCollectionArbiter.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BD9B670B60265724DF303807269F88 /* FIRCLSDataCollectionArbiter.m */; };
-		D89D9EADCFB4E1342962F927AA3FDD35 /* FIRCLSSymbolicationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E973B591813934844D24031752AB8E1A /* FIRCLSSymbolicationOperation.m */; };
-		DB1D8BBEE1C8302154BF2F9557A9974F /* FIRCLSUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A98E26C7544134A48689A091C0759A9D /* FIRCLSUserDefaults.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		DB3C188CE2FEF4144931407DA192883C /* FIRCLSCrashedMarkerFile.c in Sources */ = {isa = PBXBuildFile; fileRef = 3AA2FAB29C34A4D110746B7DBB12253C /* FIRCLSCrashedMarkerFile.c */; };
-		DB453E9847DB8EAF6C750B23387A0156 /* FIRCLSDataCollectionToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D00434AF5F14EA3A689162FE9051B73 /* FIRCLSDataCollectionToken.m */; };
-		DC424FA8708C74E1ED1CC41C89CA9CAB /* FIRCLSExecutionIdentifierModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DCB7712AB28AD96A1E4825E4DF091514 /* FIRCLSExecutionIdentifierModel.m */; };
-		DC439EFAC332CDB6CD17159F5F6A13F2 /* FIRCLSInternalReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 73CAC35D1A9926C8EE926C58619558A3 /* FIRCLSInternalReport.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		DC9B2685802FF39151E9014F8153BE40 /* FIRCLSFile.h in Headers */ = {isa = PBXBuildFile; fileRef = C0759DAB513499F33B31AEC843AB61F6 /* FIRCLSFile.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		DD434A45D76C4055A2F51758126B7750 /* FIRCLSDwarfExpressionMachine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B64AC1534FB5BBE1B42BC8EEB34E432 /* FIRCLSDwarfExpressionMachine.c */; };
-		E00BFB083EF06614ED02BE1A7B6D89F8 /* FIRCLSUnwind_arch.h in Headers */ = {isa = PBXBuildFile; fileRef = 6118B3C02D00FE9F0502CC419B77031E /* FIRCLSUnwind_arch.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E0815C13A647823ACB9956A2B1F04BB2 /* FIRInteropEventNames.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E8DCAEF9A744E9FB8926B0364CA6B25 /* FIRInteropEventNames.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E12543DB8FB9AD42A644B6A52E389D8F /* FIRCLSConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 9626313B08ABD4CFB46554CF8389D524 /* FIRCLSConstants.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E2A7509EAA1C25E10C2CBAB9762425ED /* FIRCLSManagerData.h in Headers */ = {isa = PBXBuildFile; fileRef = D24AF1220A0FC89ACF11AD9A2D7F3C16 /* FIRCLSManagerData.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E2AF6B9D075267CC1C79A22970F9E80B /* FIRCLSCallStackTree.m in Sources */ = {isa = PBXBuildFile; fileRef = D0035A8CB7B35842FE87932AA86F8453 /* FIRCLSCallStackTree.m */; };
-		E46112116B784DC5778C79093BECF261 /* FIRAnalyticsInteropListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 5304DC29C37B38ED7C35B45920A14179 /* FIRAnalyticsInteropListener.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E499A27F6E85E786A222E824756D3A62 /* FIRCLSUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B87D23568A50F9912281F828BA33A05 /* FIRCLSUtility.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E6A9DDDFC344DE6E25BB6C0BA8DCCC10 /* FIRCLSMachOBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 15EE2763EE858C6F987056A14E376474 /* FIRCLSMachOBinary.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E9370738DF90177901C6AC09397848BD /* FIRCLSSettingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 80980FA78E7A619DCDDAC22E4A4DF4DE /* FIRCLSSettingsManager.m */; };
-		E94B4B0E568A033EF0EB44F7EAF6EDCA /* FIRCLSUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 366D48531279CCE1441876C62F72B8A8 /* FIRCLSUtility.m */; };
-		E97B213B4ED91392576BC6B211F57FA5 /* FIRStackFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = F768FDF03D64A707CCC463B511F7C8BD /* FIRStackFrame.m */; };
-		EA4893A235961FD876449CCC3E8F6507 /* FIRCLSFeatures.h in Headers */ = {isa = PBXBuildFile; fileRef = DB8627AC224D2214F41B87318DC1D001 /* FIRCLSFeatures.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		EA6B813957E30DAD1BEE1A02E7CF7979 /* FIRCLSNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D721AA22A527BE0C33843988FBD54493 /* FIRCLSNetworkOperation.m */; };
-		EAB501EE02013588F8FEA0B2810612C0 /* FIRCLSDataCollectionToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 6232193FD56C4C8DEF85DC39BABC7426 /* FIRCLSDataCollectionToken.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		EB49F1B2C38EC295C40E092FC989B899 /* FIRCLSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FD3F80653D65E584E82AA3D792A356F /* FIRCLSUserDefaults.m */; };
-		EBC46F842F6EFC9B37CB5B33BB856E92 /* FIRCLSCodeMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 9800FCA59F5C7B113DDEF5D289C21846 /* FIRCLSCodeMapping.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		EC1F734F8832C4DA017A84929D50ABEC /* FIRCLSCallStackTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E753BD7A31A24E8B1157002F0641C32 /* FIRCLSCallStackTree.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		EFC3B57A50E39C83DB8FE2B821637001 /* FIRCLSFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A41EBD75306E3C7336DEE7AEDE003BED /* FIRCLSFileManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F0A3483E257AB80DE3597D744A870554 /* FIRCLSReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E310D62D0550B0EB2F2122250D3921CD /* FIRCLSReportManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F397399F71909B7018B20D44EB26F9B6 /* FIRCLSExistingReportManager_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EF4134E5C62E1B49BD32E1CF834C88D3 /* FIRCLSExistingReportManager_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F4C7090E3C5BA2CA5B0C9A35357649D5 /* FirebaseInstallationsInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = FC2F4D44EC89E3E96EF1A3E8A40FF88A /* FirebaseInstallationsInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F6F054C5D744E263926580E53BB1C249 /* FIRCLSManagerData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B325AE4DCBABF766959D5FC63C8BBD /* FIRCLSManagerData.m */; };
-		F78ED166DA9B13E97EA35C03281D132D /* FIRCLSCrashedMarkerFile.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAD207D5CE2BE1ED71C332DCA61D92 /* FIRCLSCrashedMarkerFile.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F908A539C26C07A4CB72D14E358AA2BA /* FIRCLSApplicationIdentifierModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 452CAF2AFA7E328A6D83F16FA5CC0CA1 /* FIRCLSApplicationIdentifierModel.m */; };
-		F9212A2DBC5984ED464BF6D1649C1F31 /* FIRCLSReportAdapter_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F7020693E2621D7D5DE62F317A62A00 /* FIRCLSReportAdapter_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		F92E9F11AEDE5105AD4E0FDB81778708 /* FIRCLSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C12732ECE327DE00BA33426821FA276 /* FIRCLSContext.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		FA2BEF3E68C0E24679D22E7DE7BAF8B1 /* FIRCLSBinaryImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D9FCA834945B32B38412664BE4CF47 /* FIRCLSBinaryImage.m */; };
-		FAA56CE40E5C8DE72DAFBCB92D86996D /* FIRCrashlyticsReport_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3919CFE5926109C1F575CD14F89ADDAF /* FIRCrashlyticsReport_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		FB8831115C43116F36D889882A5D7926 /* FIRCLSException.h in Headers */ = {isa = PBXBuildFile; fileRef = B80C26201F37D2C8DE6AFCFCDB597BB5 /* FIRCLSException.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		FCE3E01A474B1D1CF976D371D2354219 /* FIRDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = C798C48454D270E13FE8EEE6E15A8F1F /* FIRDependency.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		FDF1695C0201ACE6ABB03FF5E2DB341E /* FIRCLSMachException.h in Headers */ = {isa = PBXBuildFile; fileRef = 661416DC4CE0AA6C7C6F161F405D3463 /* FIRCLSMachException.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		FEC1EE3BF900741DE7E8F904707092B8 /* FIRCLSSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE2D7837AF962FC428148CB62F2E04C /* FIRCLSSettings.m */; };
-		FF5097331E697E67ADF56362106825CA /* FIRStackFrame_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 032254E74B1BCF9D7F980585CC91BCEF /* FIRStackFrame_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0086E6A567B1A26DE7A4B09C92330C05 /* FIRCLSUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B87D23568A50F9912281F828BA33A05 /* FIRCLSUtility.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		02E5FB7BAD825DC81E3AF8BC2CBB5F33 /* FIRCLSFABAsyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E70718FF50992A645ACAB6E4015CD004 /* FIRCLSFABAsyncOperation.m */; };
+		03A7C0395184C858ED53480EA679B1A6 /* FIRCLSSymbolResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 358E8A9FED1B8DB5D2C19D33212162AA /* FIRCLSSymbolResolver.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		05CCF25285892EE31B1B549311E55B01 /* FIRCLSHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 2528DFF92318FC6A9613ACCFE8F72D47 /* FIRCLSHost.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0804591D7D138D76AF8386297D526946 /* FIRCLSDemangleOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18CBEB626A0794A2109E2B14750F67C3 /* FIRCLSDemangleOperation.mm */; };
+		0868CCC77499BA2DD8FD5A5CDD2C78EF /* crashlytics.nanopb.h in Headers */ = {isa = PBXBuildFile; fileRef = 35947F721E0C3C25599BA56D23548391 /* crashlytics.nanopb.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0A5419423AF95404842F9DBB7DA955F3 /* FIRCLSReportUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 95776A86D14CE0A8F258CE2B685823B6 /* FIRCLSReportUploader.m */; };
+		0BA3C24039FE23A150F002F07F58B529 /* FIRCLSBinaryImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D9FCA834945B32B38412664BE4CF47 /* FIRCLSBinaryImage.m */; };
+		0C2CAA082E9E600F3E0C47C02529D277 /* FIRCLSProcess.c in Sources */ = {isa = PBXBuildFile; fileRef = 94B3F2E129C36289CE6196A36B2ACC94 /* FIRCLSProcess.c */; };
+		0C611AB160BF6A6EA85AD35DBCF03791 /* FIRCLSUserLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = D2FD06BF29D21CE04B20FF51A4EAD0A8 /* FIRCLSUserLogging.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0C6BCF31BF06591C3D040FC1E86DEA38 /* FIRLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D14BBCDDEB252FA84FA1EBBF90F3042 /* FIRLibrary.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0D84EB614F6CB6EB75D2047BDA55D893 /* FIRCLSUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 366D48531279CCE1441876C62F72B8A8 /* FIRCLSUtility.m */; };
+		0D88CC35FD0A48F3333A4AE12816C109 /* FIRCLSURLBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 716E95D7861CE398A88227A70A3B7D0B /* FIRCLSURLBuilder.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0DD9AF6893897A47490A064782DFFFDF /* FIRCLSReportManager_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D3A60B3A8A7B8F627133EE362C37F2A /* FIRCLSReportManager_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0ED3257F01D5B774937D8009B09CDC47 /* FIRCLSHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ECABD432BE989F6589CE5353BCCD10F1 /* FIRCLSHandler.m */; };
+		0FD77FF601DCD341038E47B98B8D1CB5 /* FIRCLSFABNetworkClient.m in Sources */ = {isa = PBXBuildFile; fileRef = ED06E1BDB9FCE7E76BF6C2466E0B481C /* FIRCLSFABNetworkClient.m */; };
+		10496930EFFF1CDA9ED8BFAE51712D26 /* FIRCLSContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4530E457DDC23FCE7E1E804E7A1A4D /* FIRCLSContextManager.m */; };
+		10CEBF7B2411FE6FE7F083257D7A1E28 /* FIRCLSUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = CA443AE4F7566731FC028808A525DC52 /* FIRCLSUUID.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		12EF3CF1D3365BA17BCDEF4808AB18B6 /* FIRCLSDwarfUnwindRegisters.h in Headers */ = {isa = PBXBuildFile; fileRef = D93429F3C66BCA62C3BC60E8F033CC04 /* FIRCLSDwarfUnwindRegisters.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		12FADF39C0CC3BF97C2044263CAC01E7 /* FIRCLSNetworkResponseHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DB77E07DEF7717AD6462875C938FC0C /* FIRCLSNetworkResponseHandler.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		130D705090A714A48B1B73AAB3E6C66D /* FIRCLSExecutionIdentifierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E00CD3B13B76625DBA775CD3764195 /* FIRCLSExecutionIdentifierModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		13296889E0E55D836779322577D72CB4 /* FIRCLSFABNetworkClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 615F011D9296E5E0834EE63A45A929F2 /* FIRCLSFABNetworkClient.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		1744428136E30C72F7E738B8760CD4FA /* FIRCLSOnDemandModel.h in Headers */ = {isa = PBXBuildFile; fileRef = B13F9B0C2FE5F8710CEE049DCFAD7915 /* FIRCLSOnDemandModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		1A7B4E3FD20A7A38DA81042D00C213C1 /* FIRCLSManagerData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B325AE4DCBABF766959D5FC63C8BBD /* FIRCLSManagerData.m */; };
+		1AE0CD96CC4C8A040505A553D3E9F1E3 /* FIRCLSThreadArrayOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0F74A7CBB32A61B5E43A99408EBB30 /* FIRCLSThreadArrayOperation.m */; };
+		1B4A8CA2E8876F23ADF1C742408C358D /* FIRCLSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E69564F0925381EAA779C2A40755E64 /* FIRCLSContext.m */; };
+		1C23256F8883AC7BAD29B1CE5A1892BC /* FIRCLSMultipartMimeStreamEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8774B8B33420AA730EFF08C68343A4 /* FIRCLSMultipartMimeStreamEncoder.m */; };
+		1C38E6F18CE8EC7979AC3D3162D9917E /* FIRCLSDemangleOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C88B35F1661D8D7A2D305A5B414745C /* FIRCLSDemangleOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		1D02CA9CBF016DF346E5DC52B7D09957 /* FIRCLSDataCollectionArbiter.h in Headers */ = {isa = PBXBuildFile; fileRef = 36EE45CC4846DD51F3A21F36AD07149C /* FIRCLSDataCollectionArbiter.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		21793C442B77BF36A739914CEF9078A6 /* FIRCLSUnwind_arm.c in Sources */ = {isa = PBXBuildFile; fileRef = 56CE5E8343774BDB881C15F8CF2F0FFF /* FIRCLSUnwind_arm.c */; };
+		240AD89FF39A9F9833552FFE7901D320 /* FIRCLSDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = F3A068E6EDB44581FF63D36DAA30A345 /* FIRCLSDefines.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		2724C23E06A3288C099C6614AC999675 /* FIRExceptionModel_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = F699CEB3B2E663834698146390B1E87D /* FIRExceptionModel_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		284E73A3D1AE8BC8012EBD25C5F42674 /* FIRCLSFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F15C538B190C952F109ABF6A6F681DDD /* FIRCLSFileManager.m */; };
+		2A322001EA67F50A5ACB8821708A5135 /* FIRComponentContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4472CC4239BDB78BB3C4A5297435BB50 /* FIRComponentContainer.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		2BEA92DFB319EC646B750FA0A36940E7 /* FIRCLSFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A41EBD75306E3C7336DEE7AEDE003BED /* FIRCLSFileManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		2C93FF7EB02F67FB422F1B81821B395C /* FIRCLSDataCollectionToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D00434AF5F14EA3A689162FE9051B73 /* FIRCLSDataCollectionToken.m */; };
+		2D94498D3D751C9AC8D557CCD26042CE /* FIRCLSRecordBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B263468F9B0EDFE15A103C8CD4F31BF3 /* FIRCLSRecordBase.m */; };
+		306E8F20BDC57FBAE559970DE8677286 /* FIRCLSDataCollectionToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 6232193FD56C4C8DEF85DC39BABC7426 /* FIRCLSDataCollectionToken.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		343B365AE2C744430FD79887C613A38B /* FIRCLSMultipartMimeStreamEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F238F15B4BFD6DB44F2542752B47C5D /* FIRCLSMultipartMimeStreamEncoder.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		34BA72C99C77C7A4550176D75C6B378C /* FIRCLSRecordBase.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A415C3959A20FAFD66E873DBC3749C /* FIRCLSRecordBase.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		34BFBD647BE027F059821DA8F0462ED1 /* FIRCLSAllocate.c in Sources */ = {isa = PBXBuildFile; fileRef = 36AEEEE434094C00F13DA6A7F57C6E68 /* FIRCLSAllocate.c */; };
+		356028AB28A0C30DAB6A52FB5F9AE3DD /* FIRCLSInternalLogging.c in Sources */ = {isa = PBXBuildFile; fileRef = 6490796AC708C9A7E1928EC3BC030EFF /* FIRCLSInternalLogging.c */; };
+		3696C9EFAE4F8C71C4C62AF6BD29CB11 /* FIRHeartbeatLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0B559CE34FEEF8B61AAE7C1175A1ED1F /* FIRHeartbeatLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3746057B5A49A2DBB0DDE18B8C031EAF /* FIRCLSUnwind_arch.h in Headers */ = {isa = PBXBuildFile; fileRef = 6118B3C02D00FE9F0502CC419B77031E /* FIRCLSUnwind_arch.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3855BD3B479E3B85571201C5DF807260 /* FIRCLSCrashedMarkerFile.c in Sources */ = {isa = PBXBuildFile; fileRef = 3AA2FAB29C34A4D110746B7DBB12253C /* FIRCLSCrashedMarkerFile.c */; };
+		386266546845721CDE650155441B7EFB /* FIRCLSNetworkResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 791AF2D24E327B889CC8FCFEE7DAC27F /* FIRCLSNetworkResponseHandler.m */; };
+		38EE54B45E3D9EF81DE246A3950D8B1B /* FIRStackFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = F768FDF03D64A707CCC463B511F7C8BD /* FIRStackFrame.m */; };
+		395D6D6F7AD67364DB742EAAA31D3227 /* FIRInteropParameterNames.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFBD0665BCCDF743FAA9B29696687CE /* FIRInteropParameterNames.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		39B8AE97174B77D4A6D671B5D866DEE4 /* FIRAppInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E39AB4E59C25B464CD750862346283C /* FIRAppInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3AA96DD95F3C643D41D54952DA30E07E /* FIRCLSReportAdapter_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F7020693E2621D7D5DE62F317A62A00 /* FIRCLSReportAdapter_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3B3797235496CA9757426538F6ED37A3 /* FIRCLSInternalReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DB5C7151AC652548083CF9D3831D39 /* FIRCLSInternalReport.m */; };
+		3CE55E1AF40AD0CB07BD894AA7E7CB96 /* FIRCLSReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C3CA1A5E9D8C3330291BB044CA884F /* FIRCLSReportManager.m */; };
+		3D7C4789E833CE55A4D74AE1DCE3FAD2 /* FIRCLSAsyncOperation_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EBABBAA75838E5D2C41CF57DA82201 /* FIRCLSAsyncOperation_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3FB7E82CF8F319721B2779AAE1591C49 /* FIRCLSDataCollectionArbiter.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BD9B670B60265724DF303807269F88 /* FIRCLSDataCollectionArbiter.m */; };
+		415E1DEC20599CC0F9938A3F34E55C64 /* FIRCLSUserDefaults_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 76B340E2C8AC7F393C0C993B4CE71272 /* FIRCLSUserDefaults_private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		41D4836F964147C9A03A6C96DD768BAA /* FIRCLSFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E9E8459D05E1777684E44787AF99DA /* FIRCLSFile.m */; };
+		435265CB5A74189A6284FBD7D6E8184E /* FIRCLSSymbolResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = D3EC59D1A9532B73239F9190733A3C6F /* FIRCLSSymbolResolver.m */; };
+		4445A8153AC68FDEF27F25D981777897 /* FIRCLSContextInitData.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CA4B8EFC8C71A359391785CB4D09BA /* FIRCLSContextInitData.m */; };
+		44AFC369444C74B92268137ADD923B34 /* FIRCLSSignal.c in Sources */ = {isa = PBXBuildFile; fileRef = AC90740B4628CF7404380E9117E0E371 /* FIRCLSSignal.c */; };
+		44C1F04D13EC3357CF9478C884DF5044 /* FIRCLSDwarfExpressionMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = B1FE7D35E0BE4A285F3E68FFC3E53F1C /* FIRCLSDwarfExpressionMachine.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		453C5D3D1BE864043695AAFD4EA2A99C /* FIRCLSUnwind_x86.h in Headers */ = {isa = PBXBuildFile; fileRef = EBCA3476AC16B2B473A16598E73FDCA7 /* FIRCLSUnwind_x86.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		489E376876DEE41C0C5715D12597CDFA /* FIRCLSAsyncOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = DA925AC9CA9FCE5FA3656314FAC40AC2 /* FIRCLSAsyncOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		4950CDC0C8BBFC88B75659222B52196D /* FIRCrashlyticsReport_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3919CFE5926109C1F575CD14F89ADDAF /* FIRCrashlyticsReport_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		4CDEAF22FBC2A513D263B0B4C3463D10 /* FirebaseCrashlytics.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD7E706ADADC168DD5030720121A67D /* FirebaseCrashlytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4EF08893B22B4748188BE97408F31303 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 70CEA864C6AC70F527D10106D10D3F76 /* PrivacyInfo.xcprivacy */; };
+		5170D5176A5BA217CB6FA964CDE3F1CA /* FIRCLSThreadState.c in Sources */ = {isa = PBXBuildFile; fileRef = 86DC8CE2F46234DE3E5A9A0583650933 /* FIRCLSThreadState.c */; };
+		51BEF8A12DAA93D381E24F702FE13878 /* FIRCLSSymbolicationOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 57963F24A9E75CD678C340B60A4D289E /* FIRCLSSymbolicationOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		53B50DC69FD677FEFE299248E1A9718C /* EncodedRolloutAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCCBC67B9E1371C9E66E867D3E5B921 /* EncodedRolloutAssignment.swift */; };
+		57B695B1690BBC2549011ED1B8A51C86 /* FIROptionsInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = B6DE56A400308609A5EA4BD80D40E25D /* FIROptionsInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5AB29BF7C9540A1902AF329F2DCE14F2 /* FIRCLSDataParsing.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EB099D441BAACCE4D314D91AA61E1CF /* FIRCLSDataParsing.c */; };
+		5AE68383C70C066523CD0351E11C4BBE /* FIRDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = C798C48454D270E13FE8EEE6E15A8F1F /* FIRDependency.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5B5B4A9E8A61B7D5C996E5AE05B5DBE7 /* FIRCLSHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F5C249E51B586427DB7B91659C5A370 /* FIRCLSHost.m */; };
+		5CB0418F82937FC170E4CEDFBDE5FD26 /* FIRCLSMetricKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EE74408B6E22BA1C51186BA66D68D3 /* FIRCLSMetricKitManager.m */; };
+		5D19B3164D051F6F4A8CB04687D0ABCF /* FIRCLSLaunchMarkerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB91A5A5DFA1DE55E1A92468B8212F /* FIRCLSLaunchMarkerModel.m */; };
+		5E14BA0989B2A5822C1950AD2C0153CC /* CrashlyticsRemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3C6C560EDE6B1684559F7CA0CECEC /* CrashlyticsRemoteConfigManager.swift */; };
+		5F0D390286C8E356A19DF77F52863CDD /* FIRCLSOnDemandModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FB83EC91BC20FE144C9EF54C64315E5 /* FIRCLSOnDemandModel.m */; };
+		5F2F911B95631D824A4C6EF21BCF2361 /* FIRCLSApplicationIdentifierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 31B5C66BFFFEF33DD210F5915987356E /* FIRCLSApplicationIdentifierModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		6106F7A92F8A6F32B53B58C06F4EAE3C /* FIRCLSCompactUnwind_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = ABEF0234F6AF01B0CF6947263BA4B4DE /* FIRCLSCompactUnwind_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		627735DCAF7035FB69CF0290F37DA966 /* FIRCLSDwarfUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = D18A136A20CB86BA5AEADB080C6EADF1 /* FIRCLSDwarfUnwind.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		62B7F0D5CFB00227D2E8C8C19BEEF9F3 /* FIRCLSSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B1F383D9187DC5DC70C48AB93FA881F /* FIRCLSSettings.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		64A8EEB6C0E3068888AAF5FF236676AB /* FIRCLSDwarfExpressionMachine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B64AC1534FB5BBE1B42BC8EEB34E432 /* FIRCLSDwarfExpressionMachine.c */; };
+		65AE0555C723F906E2D1C6797B723D51 /* FIRCLSUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A98E26C7544134A48689A091C0759A9D /* FIRCLSUserDefaults.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		668603E0A69F7DD4D115F174C19EFD13 /* FIRCLSHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 77081A120B03483974187A1D356C291B /* FIRCLSHandler.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		66D5705A14CD865D42E8067FB4A5C5EB /* FIRExceptionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 26CDBE537FD03F65E14A873D2124CD26 /* FIRExceptionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6727037D042D080220B37AF84CCCEE5F /* FIRCLSMachO.m in Sources */ = {isa = PBXBuildFile; fileRef = 467C12D1E5D5C6A7BC928D0DEB454837 /* FIRCLSMachO.m */; };
+		6816851AE56C833DD92469250AC29B2B /* FIRCLSCompactUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A54C836CF1C0BB7F27D0B768BBE9D74 /* FIRCLSCompactUnwind.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		6891C3B18FD16877ED5D71B2A7450CE0 /* FIRCLSMachOSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EC07532CF713093FB44F1D83316CFE /* FIRCLSMachOSlice.m */; };
+		696D3DF595DAC938199B7D1ABA556061 /* FIRComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B23170E683C477100CB6404BE2D6CE1 /* FIRComponent.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		69A2EB2EB21777182642AD5108B9A1A7 /* FIRCrashlytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D7A6607A6E2715CDF671CE7854BA6941 /* FIRCrashlytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		69D8A84DE418B88D9D330D1E96DE411A /* FIRCLSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 401B984F80B78690A8CBA05D2B9625F5 /* FIRCLSConstants.m */; };
+		69F811352E08670879C60BC0189A8769 /* FIRCLSNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D13E210268D678239A74E8C0C83D0D /* FIRCLSNotificationManager.m */; };
+		6B6366978457F8ECE2DC67C05BD49932 /* FIRCLSLaunchMarkerModel.h in Headers */ = {isa = PBXBuildFile; fileRef = AA7E1AD5667470A4CE1F942B85A99193 /* FIRCLSLaunchMarkerModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		721957D35B1EBD7C7ECD918B5680750E /* FIRCLSRecordHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B92A4C238FE0B7F0E56177EA897058 /* FIRCLSRecordHost.m */; };
+		726D4145E97F656044794F13788D51E4 /* StringToHexConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCBFC3E5C19E989C1A79D2F559FFB67 /* StringToHexConverter.swift */; };
+		7273B9827E546866A6DB7106C58A13FE /* FIRCLSCodeMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 9800FCA59F5C7B113DDEF5D289C21846 /* FIRCLSCodeMapping.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		74ECBA33533C3C8AB4A7F77E685CECE5 /* FIRCLSGlobals.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5EDAB291F5FAD6D1403817DDC741B4 /* FIRCLSGlobals.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		77D7D2E3EAEDBCE86315B2EF63CDBC88 /* FIRCLSExistingReportManager_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EF4134E5C62E1B49BD32E1CF834C88D3 /* FIRCLSExistingReportManager_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		7A2D4F7B4CC32ABF53747EFE9564653C /* FIRCLSProcessReportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2E21374FC3A5A7232BAF6DC881839 /* FIRCLSProcessReportOperation.m */; };
+		7BBE2DA3952A5C6745F9082FEEA71AD1 /* FIRCLSSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE2D7837AF962FC428148CB62F2E04C /* FIRCLSSettings.m */; };
+		7CF288A97C91AD1EAFC018736AC74A2D /* FIRCLSFile.h in Headers */ = {isa = PBXBuildFile; fileRef = C0759DAB513499F33B31AEC843AB61F6 /* FIRCLSFile.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		7E170DFA0E2729BE3C3AD74879C10F4D /* FIRCLSFABHost.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E9CE470258D768AC8215E3C588D7B9 /* FIRCLSFABHost.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		80D929FB023856095EB88AB78A5D6B3E /* FIRInteropEventNames.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E8DCAEF9A744E9FB8926B0364CA6B25 /* FIRInteropEventNames.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		849C8E33D703BF5A659EEF3915581893 /* FIRCLSMetricKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6240DF3360FC526EFC35F70947C79366 /* FIRCLSMetricKitManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		84F538315413E974B056C0468652B86F /* FIRCLSReportAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFB976C4A3A22F60E641BE29FB89DE /* FIRCLSReportAdapter.m */; };
+		88183F2EB6920827FA9DE8A15416402C /* FIRCLSDownloadAndSaveSettingsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD947393932C5B081301B17A319071C /* FIRCLSDownloadAndSaveSettingsOperation.m */; };
+		8962AE9A4474ACEDDB553856BAC217F1 /* FIRCLSException.mm in Sources */ = {isa = PBXBuildFile; fileRef = C61AB4C447CC75EC3FB9006E3BADC011 /* FIRCLSException.mm */; };
+		8A09A8A1E6D753BE9D3706071C59DF5A /* FIRCLSConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 9626313B08ABD4CFB46554CF8389D524 /* FIRCLSConstants.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		8A2DC4BB91F8657965E1D8906FD886C3 /* FIRCLSLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F48097153E5FBFC1D974187C07F76107 /* FIRCLSLogger.m */; };
+		8DF8ECA1AA4EC4A46E95890596703512 /* FIRCLSRolloutsPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 688A1EC4D7C24208B94EC9EADA6294F3 /* FIRCLSRolloutsPersistenceManager.m */; };
+		8E7557EE548486F2C249EF5663325DE0 /* FIRCLSAnalyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F570BAEA5DB1FD2C94A4BD75A3193C12 /* FIRCLSAnalyticsManager.m */; };
+		8F8CA0320EF7D0CC87C541751F78919A /* FIRCLSExecutionIdentifierModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DCB7712AB28AD96A1E4825E4DF091514 /* FIRCLSExecutionIdentifierModel.m */; };
+		9051E613C22CBC56D3C0D5FA2831554C /* FIRCLSCrashedMarkerFile.h in Headers */ = {isa = PBXBuildFile; fileRef = C9FAD207D5CE2BE1ED71C332DCA61D92 /* FIRCLSCrashedMarkerFile.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		9289E72E213EF08ECDCAEF6CD45509DB /* FIRCLSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C12732ECE327DE00BA33426821FA276 /* FIRCLSContext.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		94D219DE3DEB5EDC39E4775CE55464E2 /* FIRCLSInternalReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 73CAC35D1A9926C8EE926C58619558A3 /* FIRCLSInternalReport.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		95AAF7667DF3AE8216494DC60AB93301 /* FIRCLSApplicationIdentifierModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 452CAF2AFA7E328A6D83F16FA5CC0CA1 /* FIRCLSApplicationIdentifierModel.m */; };
+		9766AACBAF8BCC7ECBFC752A9384C17D /* FIRCLSRecordApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C4B49A2660EB667BF0184F14077CF0A /* FIRCLSRecordApplication.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		9847736DB8A33FE886A1F2266BBE2E83 /* FIRCLSUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = A01FF56ACFA10094D2E2C5F0B78E4FA2 /* FIRCLSUnwind.c */; };
+		989726E8652F458B1CC0B94EEF6A54F8 /* FIRCLSSettingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF728D20000590D9FBBBF8B5D58B65F /* FIRCLSSettingsManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		992008BEC25A437EB80488DFFCF1F589 /* FIRCLSNetworkOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E65495DDDE213D6B317DA5A574B046B /* FIRCLSNetworkOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		9D6E37ECE5146BFD13037D12F365A0DE /* FIRCLSApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 72D90B130C7A0D60D29ECD58EF1D05F7 /* FIRCLSApplication.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		A1056AD247666F7A885DD72F6E996616 /* FIRCrashlytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F03C55E7F536F68EF0C3FD67C376EB1B /* FIRCrashlytics.m */; };
+		A2722BDB412E3F380F8D8A088C7B28BC /* FIRCLSByteUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4538AF6649F5A62FEEE811C3D3CB6EE8 /* FIRCLSByteUtility.m */; };
+		A28B447A359B038768A8E2B919DAEB17 /* FIRCLSdSYM.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FF929CBF71794DFBD75844F01A8B25 /* FIRCLSdSYM.m */; };
+		A3D92FC72B81E2A2F78CA86D1C02A044 /* FIRCLSMachOBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 15EE2763EE858C6F987056A14E376474 /* FIRCLSMachOBinary.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		A545BE4F0FDAD9CCBD5CCBA861CEEA5B /* FIRCLSCompoundOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C876C547C6C8D6303BD686BDB26EC7 /* FIRCLSCompoundOperation.m */; };
+		A565DCDC1DE57063DDDC94F4B6CFA0BB /* FIRCLSCompoundOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 82CF0CA93D81389AB778B8F2BF8DC163 /* FIRCLSCompoundOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		A63A0CADB5A4196F807E1AE9CE323A36 /* FirebaseInstallationsInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = FC2F4D44EC89E3E96EF1A3E8A40FF88A /* FirebaseInstallationsInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		A8E597A2D04BF017D9E6A1895126F04C /* FIRCLSByteUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 9906831D604CC3845D5921B5A285F481 /* FIRCLSByteUtility.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		AB7EE3F099EBE724AC40CF939DAF07AA /* FIRCLSApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 87462A8340C863BD8EB5CC7AE4FC4504 /* FIRCLSApplication.m */; };
+		AC843B505BE8A64061968470A2B05A3C /* FIRCrashlyticsReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 73CD62CA97A4F6B38D6D59984E84693B /* FIRCrashlyticsReport.m */; };
+		AD3D14E2ECD7EF87965CE791B496579A /* FIRCLSAllocate.h in Headers */ = {isa = PBXBuildFile; fileRef = 61506F5C62F490CC437544BFB38423DB /* FIRCLSAllocate.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		AE95A7578243EC5EAB39D74B0378AFBE /* FIRCLSInternalLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BFD4B487A0E5B0509AC5637BA81926 /* FIRCLSInternalLogging.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		AF1F3C878EA19DCEE1A3ADE9D0B33F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F30505EDD7DE02B47EBC6844E8AF0418 /* Foundation.framework */; };
+		AF6C165F63B3D6CC016937CDAC863967 /* FIRStackFrame_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 032254E74B1BCF9D7F980585CC91BCEF /* FIRStackFrame_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		AFDC199CC8EB986FAD1574B2D251CFCC /* FIRCLSThreadArrayOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = D05FB27DD4B3B0FF9A381FDADB11DE02 /* FIRCLSThreadArrayOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B196BE9368A37B5058AF477729C66FE0 /* FIRCLSSerializeSymbolicatedFramesOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 614C455B120FDE43EE62E23DECE6B3E5 /* FIRCLSSerializeSymbolicatedFramesOperation.m */; };
+		B27383A5449F8E5E673DE4225AB5B367 /* FirebaseCrashlytics-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C6264B9AF598A0235D1AF2100D76A9 /* FirebaseCrashlytics-dummy.m */; };
+		B2743B7666815399751C693454CBDA59 /* FIRAnalyticsInterop.h in Headers */ = {isa = PBXBuildFile; fileRef = 347F32D4A22092B1B22D762FB96D84B4 /* FIRAnalyticsInterop.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B31B80B152A463E0DBFC2831B8B97EBF /* FIRCLSUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = B836A965CC1D414D926E9142B8EF1C1D /* FIRCLSUnwind.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B4BCDF8B1BDB640DDA68F2A6607AC00D /* FIRCLSProcessReportOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EE6FCB8178ED7BA3ECB22E63123338F /* FIRCLSProcessReportOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B51E08D2D45D4D67424D821C69953FBB /* FIRCLSMachException.h in Headers */ = {isa = PBXBuildFile; fileRef = 661416DC4CE0AA6C7C6F161F405D3463 /* FIRCLSMachException.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B6B8A418822A5972807D604DAB8DBF34 /* FIRCLSNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 49020FFF1BC5CB20BE38A3107265DB0B /* FIRCLSNotificationManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		B8590C8A0E797C5D7A576DB7D3D1B787 /* FIRCLSExistingReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD523D434536AFB599123332C26D3E22 /* FIRCLSExistingReportManager.m */; };
+		BA0E47CF225A8D90C3AD6381F94F28D7 /* FIRCLSUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 68385F0396E26B3DEC21A2E3AD60D521 /* FIRCLSUUID.m */; };
+		BC43AF5E472D847980BAB2BBCC962793 /* FIRCLSInstallIdentifierModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 107963D37F3FC37BEED1D2208DC5A927 /* FIRCLSInstallIdentifierModel.m */; };
+		BC489D9031129F168B3A159686759891 /* FIRCLSMachOSlice.h in Headers */ = {isa = PBXBuildFile; fileRef = 51B9EFFEFD8FD6A2037F782CB95C1877 /* FIRCLSMachOSlice.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		BD2242722D74472CE29C3CCBA7C4C788 /* FIRCLSRecordIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 503C2899B4B531CFB22F5EE5806292D2 /* FIRCLSRecordIdentity.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C207666E701B56363D391E298CE24AFF /* FIRCLSReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E310D62D0550B0EB2F2122250D3921CD /* FIRCLSReportManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C248539C11DF02841ABF165F3F0F2F4C /* FIRCLSExistingReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BE99A03A4DFF06D005FD055001245F1 /* FIRCLSExistingReportManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C317951573C01A3BA465FABA40E253D6 /* FIRCLSProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = B4D7BE88CE9CFC1C23E24414A13B7D9D /* FIRCLSProcess.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C552A667557EBA3D2681FE7D99BAAF2E /* FIRCLSSettingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 80980FA78E7A619DCDDAC22E4A4DF4DE /* FIRCLSSettingsManager.m */; };
+		C80CA0EEC6EFE62C7A301CD130C6018A /* FIRCLSSymbolicationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E973B591813934844D24031752AB8E1A /* FIRCLSSymbolicationOperation.m */; };
+		C9A0CA38333710FD9C7BB233993D9B60 /* FIRCLSRolloutsPersistenceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6C9D379E0D7087F9A205B719D18921 /* FIRCLSRolloutsPersistenceManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CC191C564F7174FC994910FE54F4E6CD /* FIRCLSUnwind_x86.c in Sources */ = {isa = PBXBuildFile; fileRef = 66FE3579BF4B40E3651F9E304F71AE59 /* FIRCLSUnwind_x86.c */; };
+		CD7C2FAC9CD470A2E2BD683F88108A8D /* FIRCLSReportAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = C7265B40E22A6D188E2C74F34F096302 /* FIRCLSReportAdapter.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CDE0A90AB378A0A689DFA7B0987861EE /* FIRCLSCodeMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E82AAAEC41D120CAA9EFF1CDD97BB1 /* FIRCLSCodeMapping.m */; };
+		CE7E6280C0B825AF40D0358F34291FA5 /* FirebaseCrashlytics-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 38256AC42EA3869C30099A9600BB8394 /* FirebaseCrashlytics-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D09F2FD2EF1ED6FCE948ABC4055710E4 /* FIRCLSUserLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = DFC47416184E2EF3CDE692217EC68909 /* FIRCLSUserLogging.m */; };
+		D35052B19B3CD55E6E9B54D327FC1BB7 /* FIRCLSDwarfUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E2A5FE7E81EB2011FC3F370FEF1D0D9 /* FIRCLSDwarfUnwind.c */; };
+		D3C5DBA19C9CFCB487E46D88495B6611 /* FIRCLSContextManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FACC006DDC85463FE22747EBAD32658D /* FIRCLSContextManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		D4FBB1685C0B2F41C3F4F68678F72995 /* FIRCLSLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EAFFB8448DB61330805CD307919F9B8 /* FIRCLSLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		D54C70DAE8640903BE8D4F58FEE814D5 /* FIRCLSCompactUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = B99F4F926DE652953F2B6003B5269D98 /* FIRCLSCompactUnwind.c */; };
+		D685FBFF40CB73D1DA08E85DB487824E /* FIRCLSMachO.h in Headers */ = {isa = PBXBuildFile; fileRef = 42642F1B2DFCA20955D375AA4F5D89BC /* FIRCLSMachO.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		D7955C91167FEBABB59CAB67F62B23E5 /* FIRCLSThreadState.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E6026002221E95244458D870E906643 /* FIRCLSThreadState.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		D927C65555E218C92FE2D0A913F03C42 /* crashlytics.nanopb.c in Sources */ = {isa = PBXBuildFile; fileRef = B0FB06C8403BC8245EE50B6A357A5D8C /* crashlytics.nanopb.c */; };
+		DA60475A91D18156483B5E045EBA862C /* dwarf.h in Headers */ = {isa = PBXBuildFile; fileRef = F08A0F9D38259C074A3A90DB07DCF6D2 /* dwarf.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DA74BD2D0845C77B249EDB5EAF1A165C /* FIRCLSURLBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 076B598FE33A963D3892422A3D5D7FCB /* FIRCLSURLBuilder.m */; };
+		DB419B5D47553ACB12ECA40BA42DEA2B /* FirebaseCoreInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7430DC50E1CB9174EF8B43501B9ED6F7 /* FirebaseCoreInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DBBC68BE7F7C134ECAD0D8944A19D74C /* FIRCLSdSYM.h in Headers */ = {isa = PBXBuildFile; fileRef = CBBE814F04E7E1238D24C38A4DCCFCC2 /* FIRCLSdSYM.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DBFA1F4E261610AF074BE794890F7C6E /* FIRCLSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FD3F80653D65E584E82AA3D792A356F /* FIRCLSUserDefaults.m */; };
+		DEB02501E8A50132745384FC33070C7A /* FIRCLSCallStackTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E753BD7A31A24E8B1157002F0641C32 /* FIRCLSCallStackTree.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DF5B9D9E8E1891365D17AD984EF2D5FC /* FIRCLSInstallIdentifierModel.h in Headers */ = {isa = PBXBuildFile; fileRef = CB805BCCD0A9643424B354C021DB71AE /* FIRCLSInstallIdentifierModel.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DFE84549CE365C38DB0E0CA925C8B79C /* FIRCLSReportUploader_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EA8743678F5F85DEE28C99DD25E2A5F /* FIRCLSReportUploader_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E04261CB7795F633C1B28780D648B304 /* FIRCrashlyticsReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D3C78FD7B9CB9F9EEF5E4064FDEDFE6 /* FIRCrashlyticsReport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E07BD8C0A97AE4CEC4BB195E90663440 /* FIRCLSFeatures.h in Headers */ = {isa = PBXBuildFile; fileRef = DB8627AC224D2214F41B87318DC1D001 /* FIRCLSFeatures.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E2E4D37F1A209D93336C2611A61D223A /* FIRCLSMachOBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = B581B180FFAEB1F92CA0ABE035C38D3E /* FIRCLSMachOBinary.m */; };
+		E412E4ABD321EF29D5CD89954DB9179E /* FIRLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = C3B33E18986A6F30D961FEF6BCCDC5D7 /* FIRLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E42EC2FFF8D50E30FABC984F70351C31 /* FIRCLSReportUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = ECF0EAE05CB483AAF1BCDD5CE9599B4D /* FIRCLSReportUploader.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E56D87B40F09042DEB303677A7E49F86 /* FIRCLSSerializeSymbolicatedFramesOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = BA928563151C7879D54ABF337CEBF490 /* FIRCLSSerializeSymbolicatedFramesOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E71980D4B1DB7A0DE27DAFFBB86BE7B9 /* FIRCLSAsyncOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C98BBE2AF985B9F71A7864F3C516ECB /* FIRCLSAsyncOperation.m */; };
+		E7ADEA9A58E0D60B76B8BE0B2FC8DDC3 /* FIRCLSBinaryImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E0D943DDBD415B005CD2F96C7F357C7 /* FIRCLSBinaryImage.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E7C87B23CA769E7A65205151E669A2A8 /* FIRCLSFABHost.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E55BDD6BC6306A274C379816495045 /* FIRCLSFABHost.m */; };
+		E880C30E0AFB140C42A11A5F05C01178 /* FIRCLSManagerData.h in Headers */ = {isa = PBXBuildFile; fileRef = D24AF1220A0FC89ACF11AD9A2D7F3C16 /* FIRCLSManagerData.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		EAC047C6BAA20479F9ED40AD0D2000B1 /* FIRCLSMachException.c in Sources */ = {isa = PBXBuildFile; fileRef = 7968256A3E2A089647F584D78BF47A5A /* FIRCLSMachException.c */; };
+		EB7561DA951AF8C5558E0795F9BDEB26 /* FIRCLSDownloadAndSaveSettingsOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = DEE3C4941A45C5D2CB33EEBB892F07DB /* FIRCLSDownloadAndSaveSettingsOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		ED2B846A8A903F5382EE6B56DA03C90E /* FIRCLSException.h in Headers */ = {isa = PBXBuildFile; fileRef = B80C26201F37D2C8DE6AFCFCDB597BB5 /* FIRCLSException.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		EFCAAAC0D298601B25F55415CDA46F63 /* FIRCLSFABAsyncOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 97D05EFB8EF6C261B416BACCA6DC48D6 /* FIRCLSFABAsyncOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F0A34A273FB0BD8D0A1CB9D3CFD01593 /* FIRCLSContextInitData.h in Headers */ = {isa = PBXBuildFile; fileRef = CB64C22C7A364510FE6378BF6233B078 /* FIRCLSContextInitData.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F23650197436B4857202FDAE63987818 /* FIRStackFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E3120160E8850A004FA05D8A4F2BC09 /* FIRStackFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F2D5295228423F0B98B0272DF9DF8B1C /* FIRCLSAnalyticsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E27A8A444D4F0AB63F097C4BC53482E1 /* FIRCLSAnalyticsManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F43E94D5C532D8CE4FDA919951C55641 /* FIRAnalyticsInteropListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 5304DC29C37B38ED7C35B45920A14179 /* FIRAnalyticsInteropListener.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F58033E43DF41319E698BE8EE6E6F219 /* FIRCLSOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 58AC305BF23EDBB16D9212001FE37DBC /* FIRCLSOperation.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F5BDD82753279247E7F33867A81613D9 /* FIRCLSRecordApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BFA836A87D4385FF4AB26C77F571AC0 /* FIRCLSRecordApplication.m */; };
+		F740CDDA2504862767BAF1F763885C18 /* FIRCLSFABAsyncOperation_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EBC51C174ECD587F7CBCF9CCF9EE906 /* FIRCLSFABAsyncOperation_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F7974AFF65FB64AC0BA5AFFACD5A97B5 /* FIRCLSCallStackTree.m in Sources */ = {isa = PBXBuildFile; fileRef = D0035A8CB7B35842FE87932AA86F8453 /* FIRCLSCallStackTree.m */; };
+		F803CD513AED48FBF5DED87833DF82B0 /* FIRCLSDataParsing.h in Headers */ = {isa = PBXBuildFile; fileRef = DFE056C353F6590E1BD63C4E5E187AD2 /* FIRCLSDataParsing.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F8DAC3F9EE565A590FBD20CBCB4141AB /* FIRCLSRecordIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = F5640A13AB35C977AB79EBFA607FABA2 /* FIRCLSRecordIdentity.m */; };
+		F8FFD328F165F279628956C7B6BA1D56 /* FIRCLSOnDemandModel_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A6880B88D2BFE311070DBC7F576E8FEB /* FIRCLSOnDemandModel_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F98243EC72E2EAC3B2184184C29B26DB /* FIRExceptionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D590893670A27FFC6CADCBA0C4678670 /* FIRExceptionModel.m */; };
+		F9ECD8648007D931DF08C590C9A8A7B5 /* FIRCLSRecordHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C862710176B90727DEFCCF794716501 /* FIRCLSRecordHost.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		FA5C0B2D7AFA5DC84B14C2CB8ED17CD1 /* FIRCLSNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D721AA22A527BE0C33843988FBD54493 /* FIRCLSNetworkOperation.m */; };
+		FACC23A62D9D30ADFA9C548DA01FEE9A /* FIRComponentType.h in Headers */ = {isa = PBXBuildFile; fileRef = CBC771A2EE8CBDCCC9670297F725EF88 /* FIRComponentType.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		FD59A7CE0A583D7EB6AA5C935DDBC2B5 /* FIRCLSSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = A7C0EF66509DC8F02C05FEF05D1F7403 /* FIRCLSSignal.h */; settings = {ATTRIBUTES = (Project, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		28370D0DA46D4E4BE1E3537B6AA05422 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E34CDFFCD33AE43C64F6D53ABF8F0605 /* GoogleDataTransport.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 78B41281B6D2EAC6C3C75FFE5052E985;
-			remoteInfo = GoogleDataTransport;
-		};
-		55E564DDC5AD85F8C32D41A3B1ABE7C7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8857F4E72174C4EB456D552848A5E4BC /* PromisesObjC.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 615BB6D15EC37D16C898941802F0D251;
-			remoteInfo = PromisesObjC;
-		};
-		6FCC1078089AC1CDD8649821EE90D0EC /* PBXContainerItemProxy */ = {
+		05FF62FE46116FC2ABE5E54347A9BB7C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 66698C5FF5DD07D23E9059890DA7A96B /* FirebaseSessions.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = EAD207B5ED8AD7FA4A70C0723B4901AA;
 			remoteInfo = FirebaseSessions;
 		};
-		7E54D992EA49915E7EDC69465BBC0CDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94233927AB5EB82A58625982DCD35CDE /* FirebaseInstallations.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5141209CC29AF79FFB5703E3712E76EF;
-			remoteInfo = FirebaseInstallations;
-		};
-		88F3424ED875AD00E2EA6E00A08B2AB5 /* PBXContainerItemProxy */ = {
+		06374069D3F37A6F9A64BDE35F54610E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8052FE6D977270B976FF0F69D7F76120 /* FirebaseRemoteConfigInterop.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = B0AF320DC874CA8819AE2752BD84CC6E;
 			remoteInfo = FirebaseRemoteConfigInterop;
 		};
-		994C7101145E1B05A6D1EC636888A1F3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7CC2467FD0A94F8AF4E84193022DA6A1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6214883FB1AF845D8EE5278ED9E53CEE;
-			remoteInfo = "FirebaseCrashlytics-FirebaseCrashlytics_Privacy";
-		};
-		D7760B24023969AE95863C8A86F4D3EC /* PBXContainerItemProxy */ = {
+		168D5F9F1B8484CF34E8B45545B92D55 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 912FDA37C6D872DDFFC8CADC1FC499A8 /* nanopb.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 052B66B57BF269A4B160A5659F7D46D4;
 			remoteInfo = nanopb;
 		};
-		FDBD137B143C559BEDFE53E0AC82AAF6 /* PBXContainerItemProxy */ = {
+		3CD5AE1EBDCAC8160ABA7C04C3781AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94233927AB5EB82A58625982DCD35CDE /* FirebaseInstallations.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5141209CC29AF79FFB5703E3712E76EF;
+			remoteInfo = FirebaseInstallations;
+		};
+		6782ED9A89CEB9FD4DC3D72CBE5CD883 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E34CDFFCD33AE43C64F6D53ABF8F0605 /* GoogleDataTransport.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 78B41281B6D2EAC6C3C75FFE5052E985;
+			remoteInfo = GoogleDataTransport;
+		};
+		6D27D94FD63A4C1ABEAF0CDE75561D44 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CAFAE947F255428E4A883C057FBDE5CD /* FirebaseCore.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
 			remoteInfo = FirebaseCore;
 		};
-		FF2842BFD35C335CD3D2F6819520E0AB /* PBXContainerItemProxy */ = {
+		81328B49A29BED7C445C083F0AFC5E3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8857F4E72174C4EB456D552848A5E4BC /* PromisesObjC.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 615BB6D15EC37D16C898941802F0D251;
+			remoteInfo = PromisesObjC;
+		};
+		DB9A1AC446DACE9EE0B67C679B4FD7AD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D0A6F3A42720774230C1EA1427B0C7F8 /* GoogleUtilities.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 80B861CBFC18436AFD9A3703F00CEEC4;
 			remoteInfo = GoogleUtilities;
+		};
+		EA7C18C8120DFC74C34502EDC19B69C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CC2467FD0A94F8AF4E84193022DA6A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6214883FB1AF845D8EE5278ED9E53CEE;
+			remoteInfo = "FirebaseCrashlytics-FirebaseCrashlytics_Privacy";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -500,15 +500,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		67E3CEFAD43A1DD08BE2C5AE60F31A01 /* Frameworks */ = {
+		2BA1848C4C738FF1FEABF763924D8469 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48712FE787F4003201E0CC14BF7CCAD5 /* Foundation.framework in Frameworks */,
+				AF1F3C878EA19DCEE1A3ADE9D0B33F48 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FBA8EF051D1CE431D980BF1907EAD84D /* Frameworks */ = {
+		4C6679F3A8F6D18124914CE9E5CE15EB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -803,126 +803,126 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		C05C2BD4D7440228F5642B4C4308828D /* Headers */ = {
+		A48E5BE9656924D2E6C4CE258A126F35 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76DB6F7B2123AB5535BF5286BD71371A /* crashlytics.nanopb.h in Headers */,
-				6044FFF152AA9A6A82A6509B354DD3AF /* dwarf.h in Headers */,
-				B3A9F4BF88BF2B01F7D4412F3AFB91F1 /* FIRAnalyticsInterop.h in Headers */,
-				E46112116B784DC5778C79093BECF261 /* FIRAnalyticsInteropListener.h in Headers */,
-				38F3FE6F9607E07F77E79230709ADF51 /* FIRAppInternal.h in Headers */,
-				671638B72FCB70A01B91640FC4036F4F /* FIRCLSAllocate.h in Headers */,
-				1180CB952D68B4ECFE3E133AE5381187 /* FIRCLSAnalyticsManager.h in Headers */,
-				6C340135524718C2929235123E1B5224 /* FIRCLSApplication.h in Headers */,
-				27578AF4FED907E735ABF7E729129F4F /* FIRCLSApplicationIdentifierModel.h in Headers */,
-				BEA1AE1B082AB0A7508CB5DFEF0D149A /* FIRCLSAsyncOperation.h in Headers */,
-				B523DC2EA6D7D20E803BAD4AC923BCE2 /* FIRCLSAsyncOperation_Private.h in Headers */,
-				B997DA6B192A16E4A3A9F1E05C3566DF /* FIRCLSBinaryImage.h in Headers */,
-				248678D39D94DC4147790A91A26A8838 /* FIRCLSByteUtility.h in Headers */,
-				EC1F734F8832C4DA017A84929D50ABEC /* FIRCLSCallStackTree.h in Headers */,
-				EBC46F842F6EFC9B37CB5B33BB856E92 /* FIRCLSCodeMapping.h in Headers */,
-				20B080C63F0D247037BACAA7F3225C34 /* FIRCLSCompactUnwind.h in Headers */,
-				56AEFD290F20FED050285D68D00D43BC /* FIRCLSCompactUnwind_Private.h in Headers */,
-				54CB8BAB7AFF0CCEE3AFFA795CB1D17C /* FIRCLSCompoundOperation.h in Headers */,
-				E12543DB8FB9AD42A644B6A52E389D8F /* FIRCLSConstants.h in Headers */,
-				F92E9F11AEDE5105AD4E0FDB81778708 /* FIRCLSContext.h in Headers */,
-				C8403B155EDD89AF8EBD44FC1F7883BB /* FIRCLSContextInitData.h in Headers */,
-				4F5C358BCC5E40B31BAD76BC105C1F26 /* FIRCLSContextManager.h in Headers */,
-				F78ED166DA9B13E97EA35C03281D132D /* FIRCLSCrashedMarkerFile.h in Headers */,
-				34C734550AB13B7EED2A19F2CB94C806 /* FIRCLSDataCollectionArbiter.h in Headers */,
-				EAB501EE02013588F8FEA0B2810612C0 /* FIRCLSDataCollectionToken.h in Headers */,
-				97F2EE04B23903EA6AD79D1650384365 /* FIRCLSDataParsing.h in Headers */,
-				2FB012ADED2DF63848C0BEEB6983CD63 /* FIRCLSDefines.h in Headers */,
-				27A0361D4EE40416F44872E17BFE53B7 /* FIRCLSDemangleOperation.h in Headers */,
-				097C159D727CABA44128056A6739F7EF /* FIRCLSDownloadAndSaveSettingsOperation.h in Headers */,
-				23E5F0C78D9B4DF2C30E6758E87B8275 /* FIRCLSdSYM.h in Headers */,
-				13591A907E6CCFB423677880CC586F0E /* FIRCLSDwarfExpressionMachine.h in Headers */,
-				A741CC6878F37AD8BB005AFBC1350434 /* FIRCLSDwarfUnwind.h in Headers */,
-				8734D1C72598918E4FCC78A8AF573B82 /* FIRCLSDwarfUnwindRegisters.h in Headers */,
-				FB8831115C43116F36D889882A5D7926 /* FIRCLSException.h in Headers */,
-				5FC03325B216F58410737D71BEE6E7E0 /* FIRCLSExecutionIdentifierModel.h in Headers */,
-				87D9EED9B0D70D32FB0E1158AC92E2CB /* FIRCLSExistingReportManager.h in Headers */,
-				F397399F71909B7018B20D44EB26F9B6 /* FIRCLSExistingReportManager_Private.h in Headers */,
-				A31E49A23B8C9A9C3152C3A2B5180846 /* FIRCLSFABAsyncOperation.h in Headers */,
-				3B0B3A6810F4F5DF04FDB9D061B68F0D /* FIRCLSFABAsyncOperation_Private.h in Headers */,
-				CFEACB60B97F50049574720ED1288704 /* FIRCLSFABHost.h in Headers */,
-				C28879A283563A7090AAD2BA83F361B3 /* FIRCLSFABNetworkClient.h in Headers */,
-				EA4893A235961FD876449CCC3E8F6507 /* FIRCLSFeatures.h in Headers */,
-				DC9B2685802FF39151E9014F8153BE40 /* FIRCLSFile.h in Headers */,
-				EFC3B57A50E39C83DB8FE2B821637001 /* FIRCLSFileManager.h in Headers */,
-				8FC369EF29423FB39A7BB1156A884CF8 /* FIRCLSGlobals.h in Headers */,
-				97BDAE78C12491C4EA2297C1D84C8142 /* FIRCLSHandler.h in Headers */,
-				CFA27B2C8314E1114F6D35F76F1FE9DD /* FIRCLSHost.h in Headers */,
-				4EE0C4CE2FA24CCE52FF293B67C5F414 /* FIRCLSInstallIdentifierModel.h in Headers */,
-				0266DA5C09C0CEF6504711451BD9493B /* FIRCLSInternalLogging.h in Headers */,
-				DC439EFAC332CDB6CD17159F5F6A13F2 /* FIRCLSInternalReport.h in Headers */,
-				51696C0154C56FEE20E4C558200CDE99 /* FIRCLSLaunchMarkerModel.h in Headers */,
-				50DC9E27D33C3E5937E0B410CD1ADAE3 /* FIRCLSLogger.h in Headers */,
-				FDF1695C0201ACE6ABB03FF5E2DB341E /* FIRCLSMachException.h in Headers */,
-				20DB8BB0ECE93BF4C84FC54E2223CFA6 /* FIRCLSMachO.h in Headers */,
-				E6A9DDDFC344DE6E25BB6C0BA8DCCC10 /* FIRCLSMachOBinary.h in Headers */,
-				73050DD7E21A154C8F014F1CADD9904A /* FIRCLSMachOSlice.h in Headers */,
-				E2A7509EAA1C25E10C2CBAB9762425ED /* FIRCLSManagerData.h in Headers */,
-				3876F71E577FC146B512FE337C4F6BBB /* FIRCLSMetricKitManager.h in Headers */,
-				17C05277E565B1D593A45B89DDBEB6C3 /* FIRCLSMultipartMimeStreamEncoder.h in Headers */,
-				4826EC16775E33A18593CE265B75917C /* FIRCLSNetworkOperation.h in Headers */,
-				178834EC9ED291730B6855C987753CE4 /* FIRCLSNetworkResponseHandler.h in Headers */,
-				C2C03F7C29789520F6605AE9D927FE27 /* FIRCLSNotificationManager.h in Headers */,
-				0F7893FEE5D66A422A5D4D3956D4F029 /* FIRCLSOnDemandModel.h in Headers */,
-				B3AE407236C54C05D7073D9F08D15A5A /* FIRCLSOnDemandModel_Private.h in Headers */,
-				4D71850382F75290339500A4E1785EF3 /* FIRCLSOperation.h in Headers */,
-				5472D33D44CA03B1FBDCF632C29EA468 /* FIRCLSProcess.h in Headers */,
-				A9000A43E34B18FDE1B0AC631CA3EBCD /* FIRCLSProcessReportOperation.h in Headers */,
-				B75169C4DAE6E24FD95F28602E6111FE /* FIRCLSRecordApplication.h in Headers */,
-				C826F6C6611A4F28ED8FFB6305040A1D /* FIRCLSRecordBase.h in Headers */,
-				2CAAA8F1A068C98E5847BC349079569C /* FIRCLSRecordHost.h in Headers */,
-				1EA24000FFA4490928D7D02582E532D8 /* FIRCLSRecordIdentity.h in Headers */,
-				88068830FDF24392030B271B1B896077 /* FIRCLSReportAdapter.h in Headers */,
-				F9212A2DBC5984ED464BF6D1649C1F31 /* FIRCLSReportAdapter_Private.h in Headers */,
-				F0A3483E257AB80DE3597D744A870554 /* FIRCLSReportManager.h in Headers */,
-				51E074EFDFF7BB315EB0EB6A5469BB89 /* FIRCLSReportManager_Private.h in Headers */,
-				5F36BD6E9993121A4DD0561EB17A2377 /* FIRCLSReportUploader.h in Headers */,
-				5EBAC1F911AF7CA948C992AAB2A0CCB3 /* FIRCLSReportUploader_Private.h in Headers */,
-				6E3B225F5B596C4C1947ED72007D40F5 /* FIRCLSRolloutsPersistenceManager.h in Headers */,
-				20E7613A27A50EDEE52E18CA8DB07057 /* FIRCLSSerializeSymbolicatedFramesOperation.h in Headers */,
-				3927389A052C54BB7AB9EE327227F0B4 /* FIRCLSSettings.h in Headers */,
-				52C9E2F3F780FBCF2490D4CDA2B40D0A /* FIRCLSSettingsManager.h in Headers */,
-				8FB63353A87337E54A3FC0A30CFE5B7B /* FIRCLSSignal.h in Headers */,
-				CDA9F360E1E71E13DCF43F375AF4A7DB /* FIRCLSSymbolicationOperation.h in Headers */,
-				30C4AD988A94E897EA25313A812C5850 /* FIRCLSSymbolResolver.h in Headers */,
-				47B62D9FC69320C7E68C9716938EBB21 /* FIRCLSThreadArrayOperation.h in Headers */,
-				5C08341F6C48CE281FE4336102299F62 /* FIRCLSThreadState.h in Headers */,
-				440C319484FF521C81C8ED340AB361B5 /* FIRCLSUnwind.h in Headers */,
-				E00BFB083EF06614ED02BE1A7B6D89F8 /* FIRCLSUnwind_arch.h in Headers */,
-				95B0DAC2DEFEB0917977E47D1D85D10E /* FIRCLSUnwind_x86.h in Headers */,
-				21B9AD61EF753CDDF6046090855FA7F4 /* FIRCLSURLBuilder.h in Headers */,
-				DB1D8BBEE1C8302154BF2F9557A9974F /* FIRCLSUserDefaults.h in Headers */,
-				5224B5512B297E7C847851A1E218FF1B /* FIRCLSUserDefaults_private.h in Headers */,
-				842240C82785FEF373A9BBF7D60F1F37 /* FIRCLSUserLogging.h in Headers */,
-				E499A27F6E85E786A222E824756D3A62 /* FIRCLSUtility.h in Headers */,
-				75D621DFAEFDFDA856D9A7B2F7704C67 /* FIRCLSUUID.h in Headers */,
-				79CD08FF9C3162B7CABE415402C62802 /* FIRComponent.h in Headers */,
-				D283DB812C1E5B8B935235330684B372 /* FIRComponentContainer.h in Headers */,
-				AE445B5DCC117C3A6BEDA6717DC2E9E2 /* FIRComponentType.h in Headers */,
-				4B3F114F5A14ACA245C4A5EEBBB5D10B /* FIRCrashlytics.h in Headers */,
-				2F3DCAE1048D72F41B00617EB3E069D9 /* FIRCrashlyticsReport.h in Headers */,
-				FAA56CE40E5C8DE72DAFBCB92D86996D /* FIRCrashlyticsReport_Private.h in Headers */,
-				FCE3E01A474B1D1CF976D371D2354219 /* FIRDependency.h in Headers */,
-				0A55A405B029DDE7D5E7A92801DDED53 /* FirebaseCoreInternal.h in Headers */,
-				0B241146F3F724D1CB137FBF060FB0EF /* FirebaseCrashlytics.h in Headers */,
-				5789296AAD976CE7CF2E651897C61D35 /* FirebaseCrashlytics-umbrella.h in Headers */,
-				F4C7090E3C5BA2CA5B0C9A35357649D5 /* FirebaseInstallationsInternal.h in Headers */,
-				0FEB4DB1FEC42E342BE3174374F524AD /* FIRExceptionModel.h in Headers */,
-				519EB46CB15A1A8BDFCC3AC302648640 /* FIRExceptionModel_Private.h in Headers */,
-				22D1B353B61AD815E2796079578C09C6 /* FIRHeartbeatLogger.h in Headers */,
-				E0815C13A647823ACB9956A2B1F04BB2 /* FIRInteropEventNames.h in Headers */,
-				90E0E7C15A6C14769E0B01E3DAEB67C5 /* FIRInteropParameterNames.h in Headers */,
-				8FF060FC85DE6FFC9B884F2D92BABB04 /* FIRLibrary.h in Headers */,
-				C325255735ECB5A6024BD08D74B8987E /* FIRLogger.h in Headers */,
-				C34228859C25CFF7355FABA585D9BEA5 /* FIROptionsInternal.h in Headers */,
-				0D53CBE025DDB2C78DCB5A9555C114B1 /* FIRStackFrame.h in Headers */,
-				FF5097331E697E67ADF56362106825CA /* FIRStackFrame_Private.h in Headers */,
+				0868CCC77499BA2DD8FD5A5CDD2C78EF /* crashlytics.nanopb.h in Headers */,
+				DA60475A91D18156483B5E045EBA862C /* dwarf.h in Headers */,
+				B2743B7666815399751C693454CBDA59 /* FIRAnalyticsInterop.h in Headers */,
+				F43E94D5C532D8CE4FDA919951C55641 /* FIRAnalyticsInteropListener.h in Headers */,
+				39B8AE97174B77D4A6D671B5D866DEE4 /* FIRAppInternal.h in Headers */,
+				AD3D14E2ECD7EF87965CE791B496579A /* FIRCLSAllocate.h in Headers */,
+				F2D5295228423F0B98B0272DF9DF8B1C /* FIRCLSAnalyticsManager.h in Headers */,
+				9D6E37ECE5146BFD13037D12F365A0DE /* FIRCLSApplication.h in Headers */,
+				5F2F911B95631D824A4C6EF21BCF2361 /* FIRCLSApplicationIdentifierModel.h in Headers */,
+				489E376876DEE41C0C5715D12597CDFA /* FIRCLSAsyncOperation.h in Headers */,
+				3D7C4789E833CE55A4D74AE1DCE3FAD2 /* FIRCLSAsyncOperation_Private.h in Headers */,
+				E7ADEA9A58E0D60B76B8BE0B2FC8DDC3 /* FIRCLSBinaryImage.h in Headers */,
+				A8E597A2D04BF017D9E6A1895126F04C /* FIRCLSByteUtility.h in Headers */,
+				DEB02501E8A50132745384FC33070C7A /* FIRCLSCallStackTree.h in Headers */,
+				7273B9827E546866A6DB7106C58A13FE /* FIRCLSCodeMapping.h in Headers */,
+				6816851AE56C833DD92469250AC29B2B /* FIRCLSCompactUnwind.h in Headers */,
+				6106F7A92F8A6F32B53B58C06F4EAE3C /* FIRCLSCompactUnwind_Private.h in Headers */,
+				A565DCDC1DE57063DDDC94F4B6CFA0BB /* FIRCLSCompoundOperation.h in Headers */,
+				8A09A8A1E6D753BE9D3706071C59DF5A /* FIRCLSConstants.h in Headers */,
+				9289E72E213EF08ECDCAEF6CD45509DB /* FIRCLSContext.h in Headers */,
+				F0A34A273FB0BD8D0A1CB9D3CFD01593 /* FIRCLSContextInitData.h in Headers */,
+				D3C5DBA19C9CFCB487E46D88495B6611 /* FIRCLSContextManager.h in Headers */,
+				9051E613C22CBC56D3C0D5FA2831554C /* FIRCLSCrashedMarkerFile.h in Headers */,
+				1D02CA9CBF016DF346E5DC52B7D09957 /* FIRCLSDataCollectionArbiter.h in Headers */,
+				306E8F20BDC57FBAE559970DE8677286 /* FIRCLSDataCollectionToken.h in Headers */,
+				F803CD513AED48FBF5DED87833DF82B0 /* FIRCLSDataParsing.h in Headers */,
+				240AD89FF39A9F9833552FFE7901D320 /* FIRCLSDefines.h in Headers */,
+				1C38E6F18CE8EC7979AC3D3162D9917E /* FIRCLSDemangleOperation.h in Headers */,
+				EB7561DA951AF8C5558E0795F9BDEB26 /* FIRCLSDownloadAndSaveSettingsOperation.h in Headers */,
+				DBBC68BE7F7C134ECAD0D8944A19D74C /* FIRCLSdSYM.h in Headers */,
+				44C1F04D13EC3357CF9478C884DF5044 /* FIRCLSDwarfExpressionMachine.h in Headers */,
+				627735DCAF7035FB69CF0290F37DA966 /* FIRCLSDwarfUnwind.h in Headers */,
+				12EF3CF1D3365BA17BCDEF4808AB18B6 /* FIRCLSDwarfUnwindRegisters.h in Headers */,
+				ED2B846A8A903F5382EE6B56DA03C90E /* FIRCLSException.h in Headers */,
+				130D705090A714A48B1B73AAB3E6C66D /* FIRCLSExecutionIdentifierModel.h in Headers */,
+				C248539C11DF02841ABF165F3F0F2F4C /* FIRCLSExistingReportManager.h in Headers */,
+				77D7D2E3EAEDBCE86315B2EF63CDBC88 /* FIRCLSExistingReportManager_Private.h in Headers */,
+				EFCAAAC0D298601B25F55415CDA46F63 /* FIRCLSFABAsyncOperation.h in Headers */,
+				F740CDDA2504862767BAF1F763885C18 /* FIRCLSFABAsyncOperation_Private.h in Headers */,
+				7E170DFA0E2729BE3C3AD74879C10F4D /* FIRCLSFABHost.h in Headers */,
+				13296889E0E55D836779322577D72CB4 /* FIRCLSFABNetworkClient.h in Headers */,
+				E07BD8C0A97AE4CEC4BB195E90663440 /* FIRCLSFeatures.h in Headers */,
+				7CF288A97C91AD1EAFC018736AC74A2D /* FIRCLSFile.h in Headers */,
+				2BEA92DFB319EC646B750FA0A36940E7 /* FIRCLSFileManager.h in Headers */,
+				74ECBA33533C3C8AB4A7F77E685CECE5 /* FIRCLSGlobals.h in Headers */,
+				668603E0A69F7DD4D115F174C19EFD13 /* FIRCLSHandler.h in Headers */,
+				05CCF25285892EE31B1B549311E55B01 /* FIRCLSHost.h in Headers */,
+				DF5B9D9E8E1891365D17AD984EF2D5FC /* FIRCLSInstallIdentifierModel.h in Headers */,
+				AE95A7578243EC5EAB39D74B0378AFBE /* FIRCLSInternalLogging.h in Headers */,
+				94D219DE3DEB5EDC39E4775CE55464E2 /* FIRCLSInternalReport.h in Headers */,
+				6B6366978457F8ECE2DC67C05BD49932 /* FIRCLSLaunchMarkerModel.h in Headers */,
+				D4FBB1685C0B2F41C3F4F68678F72995 /* FIRCLSLogger.h in Headers */,
+				B51E08D2D45D4D67424D821C69953FBB /* FIRCLSMachException.h in Headers */,
+				D685FBFF40CB73D1DA08E85DB487824E /* FIRCLSMachO.h in Headers */,
+				A3D92FC72B81E2A2F78CA86D1C02A044 /* FIRCLSMachOBinary.h in Headers */,
+				BC489D9031129F168B3A159686759891 /* FIRCLSMachOSlice.h in Headers */,
+				E880C30E0AFB140C42A11A5F05C01178 /* FIRCLSManagerData.h in Headers */,
+				849C8E33D703BF5A659EEF3915581893 /* FIRCLSMetricKitManager.h in Headers */,
+				343B365AE2C744430FD79887C613A38B /* FIRCLSMultipartMimeStreamEncoder.h in Headers */,
+				992008BEC25A437EB80488DFFCF1F589 /* FIRCLSNetworkOperation.h in Headers */,
+				12FADF39C0CC3BF97C2044263CAC01E7 /* FIRCLSNetworkResponseHandler.h in Headers */,
+				B6B8A418822A5972807D604DAB8DBF34 /* FIRCLSNotificationManager.h in Headers */,
+				1744428136E30C72F7E738B8760CD4FA /* FIRCLSOnDemandModel.h in Headers */,
+				F8FFD328F165F279628956C7B6BA1D56 /* FIRCLSOnDemandModel_Private.h in Headers */,
+				F58033E43DF41319E698BE8EE6E6F219 /* FIRCLSOperation.h in Headers */,
+				C317951573C01A3BA465FABA40E253D6 /* FIRCLSProcess.h in Headers */,
+				B4BCDF8B1BDB640DDA68F2A6607AC00D /* FIRCLSProcessReportOperation.h in Headers */,
+				9766AACBAF8BCC7ECBFC752A9384C17D /* FIRCLSRecordApplication.h in Headers */,
+				34BA72C99C77C7A4550176D75C6B378C /* FIRCLSRecordBase.h in Headers */,
+				F9ECD8648007D931DF08C590C9A8A7B5 /* FIRCLSRecordHost.h in Headers */,
+				BD2242722D74472CE29C3CCBA7C4C788 /* FIRCLSRecordIdentity.h in Headers */,
+				CD7C2FAC9CD470A2E2BD683F88108A8D /* FIRCLSReportAdapter.h in Headers */,
+				3AA96DD95F3C643D41D54952DA30E07E /* FIRCLSReportAdapter_Private.h in Headers */,
+				C207666E701B56363D391E298CE24AFF /* FIRCLSReportManager.h in Headers */,
+				0DD9AF6893897A47490A064782DFFFDF /* FIRCLSReportManager_Private.h in Headers */,
+				E42EC2FFF8D50E30FABC984F70351C31 /* FIRCLSReportUploader.h in Headers */,
+				DFE84549CE365C38DB0E0CA925C8B79C /* FIRCLSReportUploader_Private.h in Headers */,
+				C9A0CA38333710FD9C7BB233993D9B60 /* FIRCLSRolloutsPersistenceManager.h in Headers */,
+				E56D87B40F09042DEB303677A7E49F86 /* FIRCLSSerializeSymbolicatedFramesOperation.h in Headers */,
+				62B7F0D5CFB00227D2E8C8C19BEEF9F3 /* FIRCLSSettings.h in Headers */,
+				989726E8652F458B1CC0B94EEF6A54F8 /* FIRCLSSettingsManager.h in Headers */,
+				FD59A7CE0A583D7EB6AA5C935DDBC2B5 /* FIRCLSSignal.h in Headers */,
+				51BEF8A12DAA93D381E24F702FE13878 /* FIRCLSSymbolicationOperation.h in Headers */,
+				03A7C0395184C858ED53480EA679B1A6 /* FIRCLSSymbolResolver.h in Headers */,
+				AFDC199CC8EB986FAD1574B2D251CFCC /* FIRCLSThreadArrayOperation.h in Headers */,
+				D7955C91167FEBABB59CAB67F62B23E5 /* FIRCLSThreadState.h in Headers */,
+				B31B80B152A463E0DBFC2831B8B97EBF /* FIRCLSUnwind.h in Headers */,
+				3746057B5A49A2DBB0DDE18B8C031EAF /* FIRCLSUnwind_arch.h in Headers */,
+				453C5D3D1BE864043695AAFD4EA2A99C /* FIRCLSUnwind_x86.h in Headers */,
+				0D88CC35FD0A48F3333A4AE12816C109 /* FIRCLSURLBuilder.h in Headers */,
+				65AE0555C723F906E2D1C6797B723D51 /* FIRCLSUserDefaults.h in Headers */,
+				415E1DEC20599CC0F9938A3F34E55C64 /* FIRCLSUserDefaults_private.h in Headers */,
+				0C611AB160BF6A6EA85AD35DBCF03791 /* FIRCLSUserLogging.h in Headers */,
+				0086E6A567B1A26DE7A4B09C92330C05 /* FIRCLSUtility.h in Headers */,
+				10CEBF7B2411FE6FE7F083257D7A1E28 /* FIRCLSUUID.h in Headers */,
+				696D3DF595DAC938199B7D1ABA556061 /* FIRComponent.h in Headers */,
+				2A322001EA67F50A5ACB8821708A5135 /* FIRComponentContainer.h in Headers */,
+				FACC23A62D9D30ADFA9C548DA01FEE9A /* FIRComponentType.h in Headers */,
+				69A2EB2EB21777182642AD5108B9A1A7 /* FIRCrashlytics.h in Headers */,
+				E04261CB7795F633C1B28780D648B304 /* FIRCrashlyticsReport.h in Headers */,
+				4950CDC0C8BBFC88B75659222B52196D /* FIRCrashlyticsReport_Private.h in Headers */,
+				5AE68383C70C066523CD0351E11C4BBE /* FIRDependency.h in Headers */,
+				DB419B5D47553ACB12ECA40BA42DEA2B /* FirebaseCoreInternal.h in Headers */,
+				4CDEAF22FBC2A513D263B0B4C3463D10 /* FirebaseCrashlytics.h in Headers */,
+				CE7E6280C0B825AF40D0358F34291FA5 /* FirebaseCrashlytics-umbrella.h in Headers */,
+				A63A0CADB5A4196F807E1AE9CE323A36 /* FirebaseInstallationsInternal.h in Headers */,
+				66D5705A14CD865D42E8067FB4A5C5EB /* FIRExceptionModel.h in Headers */,
+				2724C23E06A3288C099C6614AC999675 /* FIRExceptionModel_Private.h in Headers */,
+				3696C9EFAE4F8C71C4C62AF6BD29CB11 /* FIRHeartbeatLogger.h in Headers */,
+				80D929FB023856095EB88AB78A5D6B3E /* FIRInteropEventNames.h in Headers */,
+				395D6D6F7AD67364DB742EAAA31D3227 /* FIRInteropParameterNames.h in Headers */,
+				0C6BCF31BF06591C3D040FC1E86DEA38 /* FIRLibrary.h in Headers */,
+				E412E4ABD321EF29D5CD89954DB9179E /* FIRLogger.h in Headers */,
+				57B695B1690BBC2549011ED1B8A51C86 /* FIROptionsInternal.h in Headers */,
+				F23650197436B4857202FDAE63987818 /* FIRStackFrame.h in Headers */,
+				AF6C165F63B3D6CC016937CDAC863967 /* FIRStackFrame_Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,11 +931,11 @@
 /* Begin PBXNativeTarget section */
 		6214883FB1AF845D8EE5278ED9E53CEE /* FirebaseCrashlytics-FirebaseCrashlytics_Privacy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 292D64BBBDF96516A9C35E7BE86A8E1C /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics-FirebaseCrashlytics_Privacy" */;
+			buildConfigurationList = 15C659BA65C7F9F8E99BEE45EF66D9A2 /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics-FirebaseCrashlytics_Privacy" */;
 			buildPhases = (
-				D3DF6E0F8AB34F5B675FB5545AE9A3B2 /* Sources */,
-				FBA8EF051D1CE431D980BF1907EAD84D /* Frameworks */,
-				00083FE883AF43DAEF146128590CEF93 /* Resources */,
+				B8A546B11CBE7AFA6A667C270AC755F2 /* Sources */,
+				4C6679F3A8F6D18124914CE9E5CE15EB /* Frameworks */,
+				B0B3CBCCA5623862FDF9E25CB5ACCB46 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -948,25 +948,25 @@
 		};
 		F8006328C579782402418E6C6605DE15 /* FirebaseCrashlytics */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 53A64F6621B9A351CCB213427DF11124 /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics" */;
+			buildConfigurationList = A7EAECCCF888EF2F95D864BAF9919BDE /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics" */;
 			buildPhases = (
-				C05C2BD4D7440228F5642B4C4308828D /* Headers */,
-				6D6AB11ECC498E3F9FC3011A37512EE3 /* Sources */,
-				67E3CEFAD43A1DD08BE2C5AE60F31A01 /* Frameworks */,
-				57ED5216DC45515D93AD3865454FFF3F /* Resources */,
+				A48E5BE9656924D2E6C4CE258A126F35 /* Headers */,
+				A210868629BD699972E3C051981504AB /* Sources */,
+				2BA1848C4C738FF1FEABF763924D8469 /* Frameworks */,
+				594B24883525479B788D63BF6092FD3E /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DE5EACF71527E07593A04F3F3D282BFA /* PBXTargetDependency */,
-				94CFBF9F416226E9A71662858A6F81C2 /* PBXTargetDependency */,
-				4D60378BBD6441F4102DC3284128441D /* PBXTargetDependency */,
-				3A91586374137CFCEE72E713BE7F4AB2 /* PBXTargetDependency */,
-				81E2B91DD36AC7CCBAB1E16F4A12B64E /* PBXTargetDependency */,
-				2F8C3F8D7D6A06CD41411ACAAA469EC2 /* PBXTargetDependency */,
-				CAA1F0E27040296FF6C629607C7BBE7D /* PBXTargetDependency */,
-				3F65D445458319F12D85DF180816BC51 /* PBXTargetDependency */,
-				94FD624075A6B46D4F3675B81165D10C /* PBXTargetDependency */,
+				F54CC83CB8704AF6EAE23CA88B5A6FF0 /* PBXTargetDependency */,
+				82C163042949D3B0DB3A03248176E06A /* PBXTargetDependency */,
+				BE68F21E4C6EC09AEF3347B9188C6DC6 /* PBXTargetDependency */,
+				34FEBCBB8BAE2405B396537EAFE12B84 /* PBXTargetDependency */,
+				026CE24169F3647A7EAD9165480DFFD2 /* PBXTargetDependency */,
+				431C602179491422AA0F59BE030F3478 /* PBXTargetDependency */,
+				682D822B63DEB859070C1272C046B49D /* PBXTargetDependency */,
+				A5868C0318B3BEDF9368C3F6CD17AE76 /* PBXTargetDependency */,
+				827F4AED07FB75210481F7EE076B68D2 /* PBXTargetDependency */,
 			);
 			name = FirebaseCrashlytics;
 			productName = FirebaseCrashlytics;
@@ -983,7 +983,7 @@
 				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 64905587A3A2E29DA94C2A82DFAD3F0C /* Build configuration list for PBXProject "FirebaseCrashlytics" */;
-			compatibilityVersion = "Xcode 12.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1028,117 +1028,117 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		00083FE883AF43DAEF146128590CEF93 /* Resources */ = {
+		594B24883525479B788D63BF6092FD3E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01E873C43561FBF3689F868A9AAC6A76 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		57ED5216DC45515D93AD3865454FFF3F /* Resources */ = {
+		B0B3CBCCA5623862FDF9E25CB5ACCB46 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EF08893B22B4748188BE97408F31303 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6D6AB11ECC498E3F9FC3011A37512EE3 /* Sources */ = {
+		A210868629BD699972E3C051981504AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66251344C714CE7732339B5643D4B3B5 /* crashlytics.nanopb.c in Sources */,
-				8DDF3CAAE91A45D2ADEB16DC69ED4D0F /* CrashlyticsRemoteConfigManager.swift in Sources */,
-				5C5D7704EE01A9A57F6B984785FE62D1 /* EncodedRolloutAssignment.swift in Sources */,
-				18D3DD13B007DFD433B7FA8EEE0EE1DF /* FIRCLSAllocate.c in Sources */,
-				222AD29961CCA41A058EB8E6E1A53452 /* FIRCLSAnalyticsManager.m in Sources */,
-				7796813F27495CCF303EA35854B95CEB /* FIRCLSApplication.m in Sources */,
-				F908A539C26C07A4CB72D14E358AA2BA /* FIRCLSApplicationIdentifierModel.m in Sources */,
-				33BBA279DED6BFB514F93EEBF3114F0B /* FIRCLSAsyncOperation.m in Sources */,
-				FA2BEF3E68C0E24679D22E7DE7BAF8B1 /* FIRCLSBinaryImage.m in Sources */,
-				7F3F6F992C393A27E770E5DFE83CAFF5 /* FIRCLSByteUtility.m in Sources */,
-				E2AF6B9D075267CC1C79A22970F9E80B /* FIRCLSCallStackTree.m in Sources */,
-				CFCF33FFF11BEDD5622EE4B0964364F7 /* FIRCLSCodeMapping.m in Sources */,
-				CF51DB353A16539EAFFBABFE7ABB793C /* FIRCLSCompactUnwind.c in Sources */,
-				D55105A2C3A70C4EDCDC39428CE59998 /* FIRCLSCompoundOperation.m in Sources */,
-				C583BC85E1247D43BA5E62475368E2AE /* FIRCLSConstants.m in Sources */,
-				4E0953CE6A068C2A4BAB6859A545DFE6 /* FIRCLSContext.m in Sources */,
-				6CFBEDA5A42BDB0CE5C79965AD3E1246 /* FIRCLSContextInitData.m in Sources */,
-				BC4A07A90038F653D88AD00437DE4D17 /* FIRCLSContextManager.m in Sources */,
-				DB3C188CE2FEF4144931407DA192883C /* FIRCLSCrashedMarkerFile.c in Sources */,
-				D681A37F469CB5616568C6D10874AC5C /* FIRCLSDataCollectionArbiter.m in Sources */,
-				DB453E9847DB8EAF6C750B23387A0156 /* FIRCLSDataCollectionToken.m in Sources */,
-				735D986041BFCADC67A37B67AA7DD588 /* FIRCLSDataParsing.c in Sources */,
-				0653F2E627ACD018F482D9213D3A3F95 /* FIRCLSDemangleOperation.mm in Sources */,
-				0BBC2401887C771E17603EDFFB17D4F4 /* FIRCLSDownloadAndSaveSettingsOperation.m in Sources */,
-				2EEC0B7901917183E3570BEE47FEBC35 /* FIRCLSdSYM.m in Sources */,
-				DD434A45D76C4055A2F51758126B7750 /* FIRCLSDwarfExpressionMachine.c in Sources */,
-				C82F88660AD9F2C79A0A61FADC07F1C0 /* FIRCLSDwarfUnwind.c in Sources */,
-				BCC61B416CC9D803823DAED94B6254C3 /* FIRCLSException.mm in Sources */,
-				DC424FA8708C74E1ED1CC41C89CA9CAB /* FIRCLSExecutionIdentifierModel.m in Sources */,
-				2AE09DF48EC51027ECB2D09D4EA970DD /* FIRCLSExistingReportManager.m in Sources */,
-				D38C5D1BC9190357DA66400DE98BC313 /* FIRCLSFABAsyncOperation.m in Sources */,
-				50A48A98FA1EF26FA86A7D158AEDCAAB /* FIRCLSFABHost.m in Sources */,
-				67A0A767B122B8E668C00215671FAA80 /* FIRCLSFABNetworkClient.m in Sources */,
-				3B0D646F60BE89DE2D9DDFCCE42E454E /* FIRCLSFile.m in Sources */,
-				46AA9CEB1F9EEE3E8039AB02A32C1DE1 /* FIRCLSFileManager.m in Sources */,
-				A7C770C7A3F0F5ACCA0810DD6158E460 /* FIRCLSHandler.m in Sources */,
-				6C684E37084D9FE1272F62D035D30307 /* FIRCLSHost.m in Sources */,
-				189C6676967E240F9338CB3E9A8BA0B8 /* FIRCLSInstallIdentifierModel.m in Sources */,
-				957543A7BA2B9B043B14EB1688926648 /* FIRCLSInternalLogging.c in Sources */,
-				D2DC34BD317D1490112518C525724E8E /* FIRCLSInternalReport.m in Sources */,
-				7F27296343AFD351F24FBFB1536047E9 /* FIRCLSLaunchMarkerModel.m in Sources */,
-				7D8A1C60EFF85C28AC474221615E89B2 /* FIRCLSLogger.m in Sources */,
-				06BD9980F07E7E10EEF21E72C5B1D0BB /* FIRCLSMachException.c in Sources */,
-				0C7F0FFECDC5A809B073EF72B3876645 /* FIRCLSMachO.m in Sources */,
-				0075D9F38371DFE1A8B39864A1F71E0C /* FIRCLSMachOBinary.m in Sources */,
-				8AB3511D31B299100F461DE797FA4857 /* FIRCLSMachOSlice.m in Sources */,
-				F6F054C5D744E263926580E53BB1C249 /* FIRCLSManagerData.m in Sources */,
-				02FF1F6020A95CB1D728756D72503B72 /* FIRCLSMetricKitManager.m in Sources */,
-				9B77571EC3568D1D1979650D5B3EB00A /* FIRCLSMultipartMimeStreamEncoder.m in Sources */,
-				EA6B813957E30DAD1BEE1A02E7CF7979 /* FIRCLSNetworkOperation.m in Sources */,
-				707D076A03B48C05F96A25DECFE33C25 /* FIRCLSNetworkResponseHandler.m in Sources */,
-				1A92D3985302BFF9620C16E98FEDDF00 /* FIRCLSNotificationManager.m in Sources */,
-				CB85445FA90B6D5F5ABD9B0CD4C2E204 /* FIRCLSOnDemandModel.m in Sources */,
-				67FEF7417B2FECB9F5391393371E98C5 /* FIRCLSProcess.c in Sources */,
-				0814C6422814A4F79BFA71330AE48A9E /* FIRCLSProcessReportOperation.m in Sources */,
-				81230EB24DDA98A3732EC6D9D3DDEE8E /* FIRCLSRecordApplication.m in Sources */,
-				CDE90B41BA1BEB41E68F0AB4B6244FDC /* FIRCLSRecordBase.m in Sources */,
-				10724AE89D43B821C036B3EE0C73F1AB /* FIRCLSRecordHost.m in Sources */,
-				226C185F0D429AA31E1FEAA288C1D870 /* FIRCLSRecordIdentity.m in Sources */,
-				96019BEF505F9BB934B18C97E71B5860 /* FIRCLSReportAdapter.m in Sources */,
-				6852CE0FEAC1A6B13A741E1AECFB312B /* FIRCLSReportManager.m in Sources */,
-				0E6CD446BB198083C791AC0C6736B5D4 /* FIRCLSReportUploader.m in Sources */,
-				5B6869A2A9E56B8A6C80586C91B40410 /* FIRCLSRolloutsPersistenceManager.m in Sources */,
-				46500F9AB45BDD4ED338ABE5D46BBA9D /* FIRCLSSerializeSymbolicatedFramesOperation.m in Sources */,
-				FEC1EE3BF900741DE7E8F904707092B8 /* FIRCLSSettings.m in Sources */,
-				E9370738DF90177901C6AC09397848BD /* FIRCLSSettingsManager.m in Sources */,
-				559DECB694D0D698F3FD39F783FF66F3 /* FIRCLSSignal.c in Sources */,
-				D89D9EADCFB4E1342962F927AA3FDD35 /* FIRCLSSymbolicationOperation.m in Sources */,
-				79CC2089BCB35CADB9148FC4B0E943B6 /* FIRCLSSymbolResolver.m in Sources */,
-				9CB1928D222F6A6780261DE573B1BF2C /* FIRCLSThreadArrayOperation.m in Sources */,
-				510917DB85AB311D85CF6E83C1705816 /* FIRCLSThreadState.c in Sources */,
-				76DD9F5FC91EA93567ADACFBFC942F45 /* FIRCLSUnwind.c in Sources */,
-				74AE341DC5CAAE9721B863605E348AAC /* FIRCLSUnwind_arm.c in Sources */,
-				12AB7B35DF01DA9473DD52F669A6507F /* FIRCLSUnwind_x86.c in Sources */,
-				96788F72EE82142C14E4A2FD1B10F1B9 /* FIRCLSURLBuilder.m in Sources */,
-				EB49F1B2C38EC295C40E092FC989B899 /* FIRCLSUserDefaults.m in Sources */,
-				2DE21238CAF14AC6622DB3F9660DF366 /* FIRCLSUserLogging.m in Sources */,
-				E94B4B0E568A033EF0EB44F7EAF6EDCA /* FIRCLSUtility.m in Sources */,
-				B1EDAF3AF8ED4FAE11FDF995B064A0AF /* FIRCLSUUID.m in Sources */,
-				8F65A272D94EFB02C60C078F93412AD1 /* FIRCrashlytics.m in Sources */,
-				C9988EB986A364A50A972FF1C2E62A6B /* FIRCrashlyticsReport.m in Sources */,
-				B08CDC54D2C40F361C238884FF6EB813 /* FirebaseCrashlytics-dummy.m in Sources */,
-				707ED0E22D6AC3698BFBDB3398CE54FE /* FIRExceptionModel.m in Sources */,
-				E97B213B4ED91392576BC6B211F57FA5 /* FIRStackFrame.m in Sources */,
-				46CD18BD93C9EE84252F5B7741C6259C /* StringToHexConverter.swift in Sources */,
+				D927C65555E218C92FE2D0A913F03C42 /* crashlytics.nanopb.c in Sources */,
+				5E14BA0989B2A5822C1950AD2C0153CC /* CrashlyticsRemoteConfigManager.swift in Sources */,
+				53B50DC69FD677FEFE299248E1A9718C /* EncodedRolloutAssignment.swift in Sources */,
+				34BFBD647BE027F059821DA8F0462ED1 /* FIRCLSAllocate.c in Sources */,
+				8E7557EE548486F2C249EF5663325DE0 /* FIRCLSAnalyticsManager.m in Sources */,
+				AB7EE3F099EBE724AC40CF939DAF07AA /* FIRCLSApplication.m in Sources */,
+				95AAF7667DF3AE8216494DC60AB93301 /* FIRCLSApplicationIdentifierModel.m in Sources */,
+				E71980D4B1DB7A0DE27DAFFBB86BE7B9 /* FIRCLSAsyncOperation.m in Sources */,
+				0BA3C24039FE23A150F002F07F58B529 /* FIRCLSBinaryImage.m in Sources */,
+				A2722BDB412E3F380F8D8A088C7B28BC /* FIRCLSByteUtility.m in Sources */,
+				F7974AFF65FB64AC0BA5AFFACD5A97B5 /* FIRCLSCallStackTree.m in Sources */,
+				CDE0A90AB378A0A689DFA7B0987861EE /* FIRCLSCodeMapping.m in Sources */,
+				D54C70DAE8640903BE8D4F58FEE814D5 /* FIRCLSCompactUnwind.c in Sources */,
+				A545BE4F0FDAD9CCBD5CCBA861CEEA5B /* FIRCLSCompoundOperation.m in Sources */,
+				69D8A84DE418B88D9D330D1E96DE411A /* FIRCLSConstants.m in Sources */,
+				1B4A8CA2E8876F23ADF1C742408C358D /* FIRCLSContext.m in Sources */,
+				4445A8153AC68FDEF27F25D981777897 /* FIRCLSContextInitData.m in Sources */,
+				10496930EFFF1CDA9ED8BFAE51712D26 /* FIRCLSContextManager.m in Sources */,
+				3855BD3B479E3B85571201C5DF807260 /* FIRCLSCrashedMarkerFile.c in Sources */,
+				3FB7E82CF8F319721B2779AAE1591C49 /* FIRCLSDataCollectionArbiter.m in Sources */,
+				2C93FF7EB02F67FB422F1B81821B395C /* FIRCLSDataCollectionToken.m in Sources */,
+				5AB29BF7C9540A1902AF329F2DCE14F2 /* FIRCLSDataParsing.c in Sources */,
+				0804591D7D138D76AF8386297D526946 /* FIRCLSDemangleOperation.mm in Sources */,
+				88183F2EB6920827FA9DE8A15416402C /* FIRCLSDownloadAndSaveSettingsOperation.m in Sources */,
+				A28B447A359B038768A8E2B919DAEB17 /* FIRCLSdSYM.m in Sources */,
+				64A8EEB6C0E3068888AAF5FF236676AB /* FIRCLSDwarfExpressionMachine.c in Sources */,
+				D35052B19B3CD55E6E9B54D327FC1BB7 /* FIRCLSDwarfUnwind.c in Sources */,
+				8962AE9A4474ACEDDB553856BAC217F1 /* FIRCLSException.mm in Sources */,
+				8F8CA0320EF7D0CC87C541751F78919A /* FIRCLSExecutionIdentifierModel.m in Sources */,
+				B8590C8A0E797C5D7A576DB7D3D1B787 /* FIRCLSExistingReportManager.m in Sources */,
+				02E5FB7BAD825DC81E3AF8BC2CBB5F33 /* FIRCLSFABAsyncOperation.m in Sources */,
+				E7C87B23CA769E7A65205151E669A2A8 /* FIRCLSFABHost.m in Sources */,
+				0FD77FF601DCD341038E47B98B8D1CB5 /* FIRCLSFABNetworkClient.m in Sources */,
+				41D4836F964147C9A03A6C96DD768BAA /* FIRCLSFile.m in Sources */,
+				284E73A3D1AE8BC8012EBD25C5F42674 /* FIRCLSFileManager.m in Sources */,
+				0ED3257F01D5B774937D8009B09CDC47 /* FIRCLSHandler.m in Sources */,
+				5B5B4A9E8A61B7D5C996E5AE05B5DBE7 /* FIRCLSHost.m in Sources */,
+				BC43AF5E472D847980BAB2BBCC962793 /* FIRCLSInstallIdentifierModel.m in Sources */,
+				356028AB28A0C30DAB6A52FB5F9AE3DD /* FIRCLSInternalLogging.c in Sources */,
+				3B3797235496CA9757426538F6ED37A3 /* FIRCLSInternalReport.m in Sources */,
+				5D19B3164D051F6F4A8CB04687D0ABCF /* FIRCLSLaunchMarkerModel.m in Sources */,
+				8A2DC4BB91F8657965E1D8906FD886C3 /* FIRCLSLogger.m in Sources */,
+				EAC047C6BAA20479F9ED40AD0D2000B1 /* FIRCLSMachException.c in Sources */,
+				6727037D042D080220B37AF84CCCEE5F /* FIRCLSMachO.m in Sources */,
+				E2E4D37F1A209D93336C2611A61D223A /* FIRCLSMachOBinary.m in Sources */,
+				6891C3B18FD16877ED5D71B2A7450CE0 /* FIRCLSMachOSlice.m in Sources */,
+				1A7B4E3FD20A7A38DA81042D00C213C1 /* FIRCLSManagerData.m in Sources */,
+				5CB0418F82937FC170E4CEDFBDE5FD26 /* FIRCLSMetricKitManager.m in Sources */,
+				1C23256F8883AC7BAD29B1CE5A1892BC /* FIRCLSMultipartMimeStreamEncoder.m in Sources */,
+				FA5C0B2D7AFA5DC84B14C2CB8ED17CD1 /* FIRCLSNetworkOperation.m in Sources */,
+				386266546845721CDE650155441B7EFB /* FIRCLSNetworkResponseHandler.m in Sources */,
+				69F811352E08670879C60BC0189A8769 /* FIRCLSNotificationManager.m in Sources */,
+				5F0D390286C8E356A19DF77F52863CDD /* FIRCLSOnDemandModel.m in Sources */,
+				0C2CAA082E9E600F3E0C47C02529D277 /* FIRCLSProcess.c in Sources */,
+				7A2D4F7B4CC32ABF53747EFE9564653C /* FIRCLSProcessReportOperation.m in Sources */,
+				F5BDD82753279247E7F33867A81613D9 /* FIRCLSRecordApplication.m in Sources */,
+				2D94498D3D751C9AC8D557CCD26042CE /* FIRCLSRecordBase.m in Sources */,
+				721957D35B1EBD7C7ECD918B5680750E /* FIRCLSRecordHost.m in Sources */,
+				F8DAC3F9EE565A590FBD20CBCB4141AB /* FIRCLSRecordIdentity.m in Sources */,
+				84F538315413E974B056C0468652B86F /* FIRCLSReportAdapter.m in Sources */,
+				3CE55E1AF40AD0CB07BD894AA7E7CB96 /* FIRCLSReportManager.m in Sources */,
+				0A5419423AF95404842F9DBB7DA955F3 /* FIRCLSReportUploader.m in Sources */,
+				8DF8ECA1AA4EC4A46E95890596703512 /* FIRCLSRolloutsPersistenceManager.m in Sources */,
+				B196BE9368A37B5058AF477729C66FE0 /* FIRCLSSerializeSymbolicatedFramesOperation.m in Sources */,
+				7BBE2DA3952A5C6745F9082FEEA71AD1 /* FIRCLSSettings.m in Sources */,
+				C552A667557EBA3D2681FE7D99BAAF2E /* FIRCLSSettingsManager.m in Sources */,
+				44AFC369444C74B92268137ADD923B34 /* FIRCLSSignal.c in Sources */,
+				C80CA0EEC6EFE62C7A301CD130C6018A /* FIRCLSSymbolicationOperation.m in Sources */,
+				435265CB5A74189A6284FBD7D6E8184E /* FIRCLSSymbolResolver.m in Sources */,
+				1AE0CD96CC4C8A040505A553D3E9F1E3 /* FIRCLSThreadArrayOperation.m in Sources */,
+				5170D5176A5BA217CB6FA964CDE3F1CA /* FIRCLSThreadState.c in Sources */,
+				9847736DB8A33FE886A1F2266BBE2E83 /* FIRCLSUnwind.c in Sources */,
+				21793C442B77BF36A739914CEF9078A6 /* FIRCLSUnwind_arm.c in Sources */,
+				CC191C564F7174FC994910FE54F4E6CD /* FIRCLSUnwind_x86.c in Sources */,
+				DA74BD2D0845C77B249EDB5EAF1A165C /* FIRCLSURLBuilder.m in Sources */,
+				DBFA1F4E261610AF074BE794890F7C6E /* FIRCLSUserDefaults.m in Sources */,
+				D09F2FD2EF1ED6FCE948ABC4055710E4 /* FIRCLSUserLogging.m in Sources */,
+				0D84EB614F6CB6EB75D2047BDA55D893 /* FIRCLSUtility.m in Sources */,
+				BA0E47CF225A8D90C3AD6381F94F28D7 /* FIRCLSUUID.m in Sources */,
+				A1056AD247666F7A885DD72F6E996616 /* FIRCrashlytics.m in Sources */,
+				AC843B505BE8A64061968470A2B05A3C /* FIRCrashlyticsReport.m in Sources */,
+				B27383A5449F8E5E673DE4225AB5B367 /* FirebaseCrashlytics-dummy.m in Sources */,
+				F98243EC72E2EAC3B2184184C29B26DB /* FIRExceptionModel.m in Sources */,
+				38EE54B45E3D9EF81DE246A3950D8B1B /* FIRStackFrame.m in Sources */,
+				726D4145E97F656044794F13788D51E4 /* StringToHexConverter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D3DF6E0F8AB34F5B675FB5545AE9A3B2 /* Sources */ = {
+		B8A546B11CBE7AFA6A667C270AC755F2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1148,56 +1148,56 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2F8C3F8D7D6A06CD41411ACAAA469EC2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GoogleDataTransport;
-			targetProxy = 28370D0DA46D4E4BE1E3537B6AA05422 /* PBXContainerItemProxy */;
-		};
-		3A91586374137CFCEE72E713BE7F4AB2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FirebaseRemoteConfigInterop;
-			targetProxy = 88F3424ED875AD00E2EA6E00A08B2AB5 /* PBXContainerItemProxy */;
-		};
-		3F65D445458319F12D85DF180816BC51 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = PromisesObjC;
-			targetProxy = 55E564DDC5AD85F8C32D41A3B1ABE7C7 /* PBXContainerItemProxy */;
-		};
-		4D60378BBD6441F4102DC3284128441D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FirebaseInstallations;
-			targetProxy = 7E54D992EA49915E7EDC69465BBC0CDF /* PBXContainerItemProxy */;
-		};
-		81E2B91DD36AC7CCBAB1E16F4A12B64E /* PBXTargetDependency */ = {
+		026CE24169F3647A7EAD9165480DFFD2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseSessions;
-			targetProxy = 6FCC1078089AC1CDD8649821EE90D0EC /* PBXContainerItemProxy */;
+			targetProxy = 05FF62FE46116FC2ABE5E54347A9BB7C /* PBXContainerItemProxy */;
 		};
-		94CFBF9F416226E9A71662858A6F81C2 /* PBXTargetDependency */ = {
+		34FEBCBB8BAE2405B396537EAFE12B84 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FirebaseRemoteConfigInterop;
+			targetProxy = 06374069D3F37A6F9A64BDE35F54610E /* PBXContainerItemProxy */;
+		};
+		431C602179491422AA0F59BE030F3478 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleDataTransport;
+			targetProxy = 6782ED9A89CEB9FD4DC3D72CBE5CD883 /* PBXContainerItemProxy */;
+		};
+		682D822B63DEB859070C1272C046B49D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleUtilities;
+			targetProxy = DB9A1AC446DACE9EE0B67C679B4FD7AD /* PBXContainerItemProxy */;
+		};
+		827F4AED07FB75210481F7EE076B68D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = nanopb;
+			targetProxy = 168D5F9F1B8484CF34E8B45545B92D55 /* PBXContainerItemProxy */;
+		};
+		82C163042949D3B0DB3A03248176E06A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "FirebaseCrashlytics-FirebaseCrashlytics_Privacy";
 			target = 6214883FB1AF845D8EE5278ED9E53CEE /* FirebaseCrashlytics-FirebaseCrashlytics_Privacy */;
-			targetProxy = 994C7101145E1B05A6D1EC636888A1F3 /* PBXContainerItemProxy */;
+			targetProxy = EA7C18C8120DFC74C34502EDC19B69C5 /* PBXContainerItemProxy */;
 		};
-		94FD624075A6B46D4F3675B81165D10C /* PBXTargetDependency */ = {
+		A5868C0318B3BEDF9368C3F6CD17AE76 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = nanopb;
-			targetProxy = D7760B24023969AE95863C8A86F4D3EC /* PBXContainerItemProxy */;
+			name = PromisesObjC;
+			targetProxy = 81328B49A29BED7C445C083F0AFC5E3F /* PBXContainerItemProxy */;
 		};
-		CAA1F0E27040296FF6C629607C7BBE7D /* PBXTargetDependency */ = {
+		BE68F21E4C6EC09AEF3347B9188C6DC6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = GoogleUtilities;
-			targetProxy = FF2842BFD35C335CD3D2F6819520E0AB /* PBXContainerItemProxy */;
+			name = FirebaseInstallations;
+			targetProxy = 3CD5AE1EBDCAC8160ABA7C04C3781AFB /* PBXContainerItemProxy */;
 		};
-		DE5EACF71527E07593A04F3F3D282BFA /* PBXTargetDependency */ = {
+		F54CC83CB8704AF6EAE23CA88B5A6FF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseCore;
-			targetProxy = FDBD137B143C559BEDFE53E0AC82AAF6 /* PBXContainerItemProxy */;
+			targetProxy = 6D27D94FD63A4C1ABEAF0CDE75561D44 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		2F193954C9C499A96529ED301CA3F2C4 /* Release */ = {
+		06AE4B693E53A246DEC5BBF1C5B50F14 /* Release-Dogfood */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7BE1805860A2805B9CE9CE3D0AAEAA44 /* FirebaseCrashlytics.release.xcconfig */;
 			buildSettings = {
@@ -1232,9 +1232,27 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = "Release-Dogfood";
 		};
-		429BD320589167659FFE4611AE839AA4 /* Release */ = {
+		18DDDEB7CE18F74EEA7808930BBDE961 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2ED4B496D4A7BD34B39411F7B119F1F /* FirebaseCrashlytics.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FirebaseCrashlytics";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IBSC_MODULE = FirebaseCrashlytics;
+				INFOPLIST_FILE = "Target Support Files/FirebaseCrashlytics/ResourceBundle-FirebaseCrashlytics_Privacy-FirebaseCrashlytics-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_NAME = FirebaseCrashlytics_Privacy;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		409AE5EC3D68A3AD77084CA3B438A9E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7BE1805860A2805B9CE9CE3D0AAEAA44 /* FirebaseCrashlytics.release.xcconfig */;
 			buildSettings = {
@@ -1315,7 +1333,7 @@
 			};
 			name = Release;
 		};
-		7530D4D22ED31E7C68DAF6156650BFEF /* Debug */ = {
+		64AC53B8153AE1B484BD2823B58BA971 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D2ED4B496D4A7BD34B39411F7B119F1F /* FirebaseCrashlytics.debug.xcconfig */;
 			buildSettings = {
@@ -1351,10 +1369,74 @@
 			};
 			name = Debug;
 		};
-		BC0795FA1545F9605A651D1A1CAE6C36 /* Debug */ = {
+		83D20F29FC3D73554936D03DF8D22EC5 /* Release-Dogfood */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D2ED4B496D4A7BD34B39411F7B119F1F /* FirebaseCrashlytics.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE_DOGFOOD=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = "Release-Dogfood";
+		};
+		96377A335BC20060980AFAA94B4479E8 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BE1805860A2805B9CE9CE3D0AAEAA44 /* FirebaseCrashlytics.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGNING_ALLOWED = NO;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FirebaseCrashlytics";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
@@ -1365,9 +1447,10 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
-			name = Debug;
+			name = "Release-Dogfood";
 		};
 		E7A293F44F93965CF59AF946ED646090 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1436,23 +1519,52 @@
 			};
 			name = Debug;
 		};
+		FD53C794072AFF4E3264BFF522713CBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BE1805860A2805B9CE9CE3D0AAEAA44 /* FirebaseCrashlytics.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/FirebaseCrashlytics/FirebaseCrashlytics-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/FirebaseCrashlytics/FirebaseCrashlytics.modulemap";
+				PRODUCT_MODULE_NAME = FirebaseCrashlytics;
+				PRODUCT_NAME = FirebaseCrashlytics;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		292D64BBBDF96516A9C35E7BE86A8E1C /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics-FirebaseCrashlytics_Privacy" */ = {
+		15C659BA65C7F9F8E99BEE45EF66D9A2 /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics-FirebaseCrashlytics_Privacy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BC0795FA1545F9605A651D1A1CAE6C36 /* Debug */,
-				429BD320589167659FFE4611AE839AA4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		53A64F6621B9A351CCB213427DF11124 /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7530D4D22ED31E7C68DAF6156650BFEF /* Debug */,
-				2F193954C9C499A96529ED301CA3F2C4 /* Release */,
+				18DDDEB7CE18F74EEA7808930BBDE961 /* Debug */,
+				409AE5EC3D68A3AD77084CA3B438A9E5 /* Release */,
+				96377A335BC20060980AFAA94B4479E8 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1462,6 +1574,17 @@
 			buildConfigurations = (
 				E7A293F44F93965CF59AF946ED646090 /* Debug */,
 				52FD49C16DF5919956FA08DD727BC221 /* Release */,
+				83D20F29FC3D73554936D03DF8D22EC5 /* Release-Dogfood */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7EAECCCF888EF2F95D864BAF9919BDE /* Build configuration list for PBXNativeTarget "FirebaseCrashlytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64AC53B8153AE1B484BD2823B58BA971 /* Debug */,
+				FD53C794072AFF4E3264BFF522713CBA /* Release */,
+				06AE4B693E53A246DEC5BBF1C5B50F14 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -3,78 +3,78 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
 		653AF76FD912AA49F6645199D1C392BB /* Firebase.default-CoreOnly */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 81E5545DB08106F57A96EC0485F9F321 /* Build configuration list for PBXAggregateTarget "Firebase.default-CoreOnly" */;
+			buildConfigurationList = 26CEDC0F5E385BAA429D83CFF425C871 /* Build configuration list for PBXAggregateTarget "Firebase.default-CoreOnly" */;
 			buildPhases = (
 			);
 			dependencies = (
-				83062CEFBE5B4531D3E7B8A07B55FBCF /* PBXTargetDependency */,
-				2E5FFF835B391DA654186E06E506218C /* PBXTargetDependency */,
+				F9A85A8DFDCE8873F550E95079BB2B0D /* PBXTargetDependency */,
+				44CA212FCC36E00DA7022275A4DDEA2C /* PBXTargetDependency */,
 			);
 			name = "Firebase.default-CoreOnly";
 		};
 		C75A99DD64880BCFE15DA7AFAA653EE6 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = D399E2A17D94AC8D1BEFA816AB088EAD /* Build configuration list for PBXAggregateTarget "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging" */;
+			buildConfigurationList = C0B387A17BBF97167D0945FBEC622328 /* Build configuration list for PBXAggregateTarget "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging" */;
 			buildPhases = (
 			);
 			dependencies = (
-				9556102CB370601A4BF81C22265B9499 /* PBXTargetDependency */,
-				B9EAEAB4F33FA40A2F80696DC19534FA /* PBXTargetDependency */,
-				D4C642BAF9DF39C2F087A4DF6B737304 /* PBXTargetDependency */,
-				FBD2DD897F65874D8D9D8A3CA5039E2C /* PBXTargetDependency */,
+				45C884DE9089D6FA9BF75B7804A04039 /* PBXTargetDependency */,
+				C518E3AB6DB0C41A2FD11C2EB4288380 /* PBXTargetDependency */,
+				510B66354E8B313B92CC20A101A1A770 /* PBXTargetDependency */,
+				B6683505729E0EA30E3C6D20FE005D1F /* PBXTargetDependency */,
 			);
 			name = "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging";
 		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
-		35E0B2425A25EAAFAB36BB88BBA58BA6 /* PBXContainerItemProxy */ = {
+		0EFC5A7275E107BBBA4308F61710B1F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DC59710253F562E6B3BE135BABFBA19;
+			remoteInfo = FirebaseAnalytics;
+		};
+		1DBCDDDFC27B0FBDDC55BA04641A1923 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AE607646CCBE20FC247A31103856B3BB /* FirebaseCrashlytics.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = F8006328C579782402418E6C6605DE15;
 			remoteInfo = FirebaseCrashlytics;
 		};
-		4BF2B396F2C1512AADF4311FD1F99F75 /* PBXContainerItemProxy */ = {
+		A26BE0D35D67BFA83BAEE4F81A1DCB59 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 70D15AA89E1DD416A3293530DDF6FD25 /* FirebaseCore.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
 			remoteInfo = FirebaseCore;
 		};
-		BC0E0326F6A1957DE8A084AF1811FD04 /* PBXContainerItemProxy */ = {
+		E2CB8054CD08374AF06124A6210DB4C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EB1D51DB4E9A84CAF30AB866C06F379E /* FirebaseMessaging.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 07B1CA595486D0B88A10EEBC5BAF2614;
 			remoteInfo = FirebaseMessaging;
 		};
-		C50D8F9F98400B8A731A11EAE3150908 /* PBXContainerItemProxy */ = {
+		E91F3D0D570DF5FFDF36826309598836 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DC59710253F562E6B3BE135BABFBA19;
+			remoteInfo = FirebaseAnalytics;
+		};
+		EAE471C1FBA2CD9A2B91600A5E7391D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 70D15AA89E1DD416A3293530DDF6FD25 /* FirebaseCore.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 4BD5DE1E00ED67A59118DB4A3CD5F288;
 			remoteInfo = FirebaseCore;
-		};
-		EBF59D4E65A5AD9EB13494DE687DD050 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3DC59710253F562E6B3BE135BABFBA19;
-			remoteInfo = FirebaseAnalytics;
-		};
-		FCF38BFA05E1FCF315005EFEF13AF65D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A20DF837F2BA1455E048EC0F73B74083 /* FirebaseAnalytics.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3DC59710253F562E6B3BE135BABFBA19;
-			remoteInfo = FirebaseAnalytics;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -166,7 +166,7 @@
 				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 198012EF7A45C9DD9AF96756AF40414F /* Build configuration list for PBXProject "Firebase" */;
-			compatibilityVersion = "Xcode 12.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -199,58 +199,39 @@
 /* End PBXProject section */
 
 /* Begin PBXTargetDependency section */
-		2E5FFF835B391DA654186E06E506218C /* PBXTargetDependency */ = {
+		44CA212FCC36E00DA7022275A4DDEA2C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseCore;
-			targetProxy = C50D8F9F98400B8A731A11EAE3150908 /* PBXContainerItemProxy */;
+			targetProxy = EAE471C1FBA2CD9A2B91600A5E7391D2 /* PBXContainerItemProxy */;
 		};
-		83062CEFBE5B4531D3E7B8A07B55FBCF /* PBXTargetDependency */ = {
+		45C884DE9089D6FA9BF75B7804A04039 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseAnalytics;
-			targetProxy = FCF38BFA05E1FCF315005EFEF13AF65D /* PBXContainerItemProxy */;
+			targetProxy = 0EFC5A7275E107BBBA4308F61710B1F3 /* PBXContainerItemProxy */;
 		};
-		9556102CB370601A4BF81C22265B9499 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FirebaseAnalytics;
-			targetProxy = EBF59D4E65A5AD9EB13494DE687DD050 /* PBXContainerItemProxy */;
-		};
-		B9EAEAB4F33FA40A2F80696DC19534FA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FirebaseCore;
-			targetProxy = 4BF2B396F2C1512AADF4311FD1F99F75 /* PBXContainerItemProxy */;
-		};
-		D4C642BAF9DF39C2F087A4DF6B737304 /* PBXTargetDependency */ = {
+		510B66354E8B313B92CC20A101A1A770 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseCrashlytics;
-			targetProxy = 35E0B2425A25EAAFAB36BB88BBA58BA6 /* PBXContainerItemProxy */;
+			targetProxy = 1DBCDDDFC27B0FBDDC55BA04641A1923 /* PBXContainerItemProxy */;
 		};
-		FBD2DD897F65874D8D9D8A3CA5039E2C /* PBXTargetDependency */ = {
+		B6683505729E0EA30E3C6D20FE005D1F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FirebaseMessaging;
-			targetProxy = BC0E0326F6A1957DE8A084AF1811FD04 /* PBXContainerItemProxy */;
+			targetProxy = E2CB8054CD08374AF06124A6210DB4C2 /* PBXContainerItemProxy */;
+		};
+		C518E3AB6DB0C41A2FD11C2EB4288380 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FirebaseCore;
+			targetProxy = A26BE0D35D67BFA83BAEE4F81A1DCB59 /* PBXContainerItemProxy */;
+		};
+		F9A85A8DFDCE8873F550E95079BB2B0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FirebaseAnalytics;
+			targetProxy = E91F3D0D570DF5FFDF36826309598836 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		15761E6D17458C5EE00720AB093ED6C8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22B187EBD73AD59BE4688E24D230BDE9 /* Firebase.default-CoreOnly.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		3202CCBE9911D0488D07D929E3E47B19 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -314,9 +295,72 @@
 			};
 			name = Release;
 		};
-		836E7D058839A8F7B9A2756517B3A238 /* Release */ = {
+		682A65B2F5DE7884CD786F20D145926F /* Release-Dogfood */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9A78C753B9E46E9110A2C58C2929A7E /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE_DOGFOOD=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = "Release-Dogfood";
+		};
+		964FB84366DA6446FE2489EC95419079 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22B187EBD73AD59BE4688E24D230BDE9 /* Firebase.default-CoreOnly.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -331,43 +375,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
-		};
-		95504798FD42428EE7BDABAE26A4C077 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FF7383892D8284B19E64BBD9661CFD85 /* Firebase.default-CoreOnly.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		98A2F1E4B481EFE6DC030E0C6F9DF604 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6CA14C541C3092BBEB1E6942DF5CE623 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
+			name = "Release-Dogfood";
 		};
 		B7CE31B12D53B379A8FC28F0FD385FC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -436,6 +444,99 @@
 			};
 			name = Debug;
 		};
+		B9EE9D2CFA09B1A5E8C5C4253C175825 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22B187EBD73AD59BE4688E24D230BDE9 /* Firebase.default-CoreOnly.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BC39C5D99A34954722A01338BE35E67B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF7383892D8284B19E64BBD9661CFD85 /* Firebase.default-CoreOnly.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D42986270131C44B6F24DAAB81921B11 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A9A78C753B9E46E9110A2C58C2929A7E /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Dogfood";
+		};
+		E6C9347B8E950E6175831A1A8F6A562C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6CA14C541C3092BBEB1E6942DF5CE623 /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F814336EF27F263B70597098AE9967C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A9A78C753B9E46E9110A2C58C2929A7E /* Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -444,24 +545,27 @@
 			buildConfigurations = (
 				B7CE31B12D53B379A8FC28F0FD385FC6 /* Debug */,
 				3202CCBE9911D0488D07D929E3E47B19 /* Release */,
+				682A65B2F5DE7884CD786F20D145926F /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		81E5545DB08106F57A96EC0485F9F321 /* Build configuration list for PBXAggregateTarget "Firebase.default-CoreOnly" */ = {
+		26CEDC0F5E385BAA429D83CFF425C871 /* Build configuration list for PBXAggregateTarget "Firebase.default-CoreOnly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				95504798FD42428EE7BDABAE26A4C077 /* Debug */,
-				15761E6D17458C5EE00720AB093ED6C8 /* Release */,
+				BC39C5D99A34954722A01338BE35E67B /* Debug */,
+				B9EE9D2CFA09B1A5E8C5C4253C175825 /* Release */,
+				964FB84366DA6446FE2489EC95419079 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D399E2A17D94AC8D1BEFA816AB088EAD /* Build configuration list for PBXAggregateTarget "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging" */ = {
+		C0B387A17BBF97167D0945FBEC622328 /* Build configuration list for PBXAggregateTarget "Firebase-Analytics-Core-CoreOnly-Crashlytics-Messaging" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				98A2F1E4B481EFE6DC030E0C6F9DF604 /* Debug */,
-				836E7D058839A8F7B9A2756517B3A238 /* Release */,
+				E6C9347B8E950E6175831A1A8F6A562C /* Debug */,
+				F814336EF27F263B70597098AE9967C2 /* Release */,
+				D42986270131C44B6F24DAAB81921B11 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -10,12 +10,18 @@ class ClientSelector {
 
     private let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider
     private let keychainRepository: KeychainRepository
+    private let appInfoProvider: AppInfoProvider
+    private let hardwareCapabilitiesProvider: HardwareCapabilitiesProvider
 
     init(iCloudCapabilitiesProvider: ICloudCapabilitiesProvider,
-         keychainRepository: KeychainRepository
+         keychainRepository: KeychainRepository,
+         appInfoProvider: AppInfoProvider,
+         hardwareCapabilitiesProvider: HardwareCapabilitiesProvider
     ) {
         self.iCloudCapabilitiesProvider = iCloudCapabilitiesProvider
         self.keychainRepository = keychainRepository
+        self.appInfoProvider = appInfoProvider
+        self.hardwareCapabilitiesProvider = hardwareCapabilitiesProvider
     }
 
     func run() -> Client {
@@ -29,7 +35,15 @@ class ClientSelector {
             deviceCheckToken: getDeviceCheckToken(),
             fallbackDeviceToken: getFallbackDeviceToken(),
             systemUptime: ProcessInfo.processInfo.systemUptime,
-            iCloudRecordId: iCloudCapabilitiesProvider.fetchRecordId()
+            iCloudRecordId: iCloudCapabilitiesProvider.fetchRecordId(),
+            appDisplayName: appInfoProvider.getAppDisplayName(),
+            appId: appInfoProvider.getAppId(),
+            appName: appInfoProvider.getAppName(),
+            appPrimaryIconHash: appInfoProvider.getAppPrimaryIconHash(),
+            isSoftDevice: hardwareCapabilitiesProvider.isSoftDevice(),
+            softDeviceName: hardwareCapabilitiesProvider.getSoftDeviceName(),
+            hasGyro: hardwareCapabilitiesProvider.hasGyro(),
+            installSource: appInfoProvider.getInstallSource().rawValue
         )
     }
 
