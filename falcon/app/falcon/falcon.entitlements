@@ -33,6 +33,7 @@
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)group.com.muun.falcon</string>
+		<string>$(AppIdentifierPrefix)group.com.muun.falcon.internal.beta</string>
 	</array>
 </dict>
 </plist>

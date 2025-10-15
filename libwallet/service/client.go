@@ -30,7 +30,7 @@ const DefaultRetries = 3
 const DefaultTimeout = 30 * time.Second
 const AuthTokenSchemePrefix = "Bearer"
 
-type DeveloperError struct {
+type HoustonResponseError struct {
 	DeveloperMessage string
 	ErrorCode        int
 	Message          string
@@ -38,13 +38,13 @@ type DeveloperError struct {
 	Status           int
 }
 
-// Satisfy "error" interface for DeveloperError
-func (e *DeveloperError) Error() string {
+// Satisfy "error" interface for HoustonResponseError
+func (e *HoustonResponseError) Error() string {
 	errorJson, err := json.Marshal(e)
 	if err != nil {
 		// This should never happen since the error response should be unmarshalled previously
-		slog.Error("failed to parse DeveloperError", slog.Any("error", err))
-		return "failed to parse DeveloperError: " + err.Error()
+		slog.Error("failed to parse HoustonResponseError", slog.Any("error", err))
+		return "failed to parse HoustonResponseError: " + err.Error()
 	}
 	return string(errorJson)
 }
@@ -168,19 +168,19 @@ func (r request[T]) do(c *client) (T, error) {
 		if response.StatusCode >= 400 {
 
 			// Parse the error response
-			devError := &DeveloperError{}
-			err = json.Unmarshal(responseBody, devError)
+			houstonError := &HoustonResponseError{}
+			err = json.Unmarshal(responseBody, houstonError)
 			if err != nil {
 				return zero, fmt.Errorf("client.Do: failed to parse error response: %w", err)
 			}
 
 			if response.StatusCode >= 500 {
 				// Retries are in order
-				lastError = devError
+				lastError = houstonError
 				continue
 			}
 
-			return zero, devError
+			return zero, houstonError
 		}
 
 		authToken, found := bearerToken(response)

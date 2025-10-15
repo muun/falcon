@@ -8,6 +8,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
  - vendor
  - fastlane
  - falcon/core/Protobuf
+ - .build 
+ - SPM
 warning_threshold: 1196
 swiftlint_version: 0.50.1 # Keep in mind you will need to modify Podfile
 line_length: 100
@@ -27,6 +29,13 @@ custom_rules:
     name: "Avoid try?"
     message: "Avoid using `try?` as it suppresses errors silently.."
     regex: "try\\?"
+    severity: error
+  forbidden_raw_keychain_calls:
+    name: "Keychain - make sure you set kSecAttrService and kSecAttrAccessGroup"
+    regex: 'SecItem(Add|CopyMatching|Update|Delete)\('
+    message: "Turn this error of if you are specifyfing both the kSecAttrService and kSecAttrAccessGroup. 
+      DO NOT make any query without specifying the group as it may cause critical issues.
+      Use buildQuery function unless you have a very good reason not to"
     severity: error
 type_name:
     allowed_symbols: "_"

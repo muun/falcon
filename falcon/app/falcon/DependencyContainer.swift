@@ -397,6 +397,26 @@ extension PresenterInstantior {
                 try! DIManager.activeContainer.resolve() as J
             ))
     }
+
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I, J, K>(
+        _ factory: ((U, A, B, C, D, E, F, G, H, I, J, K)) -> T, delegate: U) -> T
+        where T: BasePresenter<U> {
+
+            return factory((
+                delegate,
+                try! DIManager.activeContainer.resolve() as A,
+                try! DIManager.activeContainer.resolve() as B,
+                try! DIManager.activeContainer.resolve() as C,
+                try! DIManager.activeContainer.resolve() as D,
+                try! DIManager.activeContainer.resolve() as E,
+                try! DIManager.activeContainer.resolve() as F,
+                try! DIManager.activeContainer.resolve() as G,
+                try! DIManager.activeContainer.resolve() as H,
+                try! DIManager.activeContainer.resolve() as I,
+                try! DIManager.activeContainer.resolve() as J,
+                try! DIManager.activeContainer.resolve() as K
+            ))
+    }
 }
 
 // swiftlint:enable force_try large_tuple

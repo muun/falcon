@@ -34,6 +34,19 @@ class KeyProvider: NSObject, App_provided_dataKeyProviderProtocol {
         return keyData
     }
 
+    func fetchEncryptedMuunPrivateKey(_ error: NSErrorPointer) -> String {
+        do {
+            let encryptedKey = try keysRepository.getMuunPrivateKey()
+
+            return encryptedKey
+        } catch let thrownError as NSError {
+            error?.pointee = thrownError
+
+            return ""
+        }
+    }
+    
+
     func fetchMaxDerivedIndex() -> Int {
         return keysRepository.getMaxWatchingIndex()
     }

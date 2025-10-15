@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
 		DF739ADE66FA54F9BBFF97A8CB609E34 /* SwiftLint */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 882C4ADB1F3D6B533558D88EDDACF5F6 /* Build configuration list for PBXAggregateTarget "SwiftLint" */;
+			buildConfigurationList = E7F92FAD80F5D219E57AF83208643745 /* Build configuration list for PBXAggregateTarget "SwiftLint" */;
 			buildPhases = (
 			);
 			dependencies = (
@@ -76,7 +76,7 @@
 				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 4FB14426193C9C27F7C8689611A6338E /* Build configuration list for PBXProject "SwiftLint" */;
-			compatibilityVersion = "Xcode 12.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -94,7 +94,7 @@
 /* End PBXProject section */
 
 /* Begin XCBuildConfiguration section */
-		5B866B0765F0E9C1B5AA65F4F5E863C2 /* Release */ = {
+		391B1F9A41D07F8292410495C2CFF4AD /* Release-Dogfood */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 69189491D33210796F0D9773CE3088A1 /* SwiftLint.release.xcconfig */;
 			buildSettings = {
@@ -110,7 +110,70 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "Release-Dogfood";
+		};
+		478418AA07EA1578BADA41371DD5D380 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE_DOGFOOD=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = "Release-Dogfood";
 		};
 		8FBC46F485EAC1150274CFA10C3A5567 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -179,7 +242,25 @@
 			};
 			name = Debug;
 		};
-		F6F0620B33914702C98D5A771F45A9EF /* Debug */ = {
+		A9AB331F35572E005B9F80E1A3BA67EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 69189491D33210796F0D9773CE3088A1 /* SwiftLint.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D13AC4C053E4FBA444FC0A09B4568C3E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B9EAB0A9B81404A1DC9E52E3B263551 /* SwiftLint.debug.xcconfig */;
 			buildSettings = {
@@ -267,15 +348,17 @@
 			buildConfigurations = (
 				8FBC46F485EAC1150274CFA10C3A5567 /* Debug */,
 				FE1C63D518256A8EDC9560415AA4351C /* Release */,
+				478418AA07EA1578BADA41371DD5D380 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		882C4ADB1F3D6B533558D88EDDACF5F6 /* Build configuration list for PBXAggregateTarget "SwiftLint" */ = {
+		E7F92FAD80F5D219E57AF83208643745 /* Build configuration list for PBXAggregateTarget "SwiftLint" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F6F0620B33914702C98D5A771F45A9EF /* Debug */,
-				5B866B0765F0E9C1B5AA65F4F5E863C2 /* Release */,
+				D13AC4C053E4FBA444FC0A09B4568C3E /* Debug */,
+				A9AB331F35572E005B9F80E1A3BA67EE /* Release */,
+				391B1F9A41D07F8292410495C2CFF4AD /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

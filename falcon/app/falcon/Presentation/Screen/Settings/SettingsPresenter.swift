@@ -47,6 +47,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     private let operationActions: OperationActions
     private let balanceActions: BalanceActions
     private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
+    private let featureFlagsRepository: FeatureFlagsRepository
 
     var sections: [SettingsSection] = []
 
@@ -63,7 +64,8 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
          changeCurrencyAction: ChangeCurrencyAction,
          operationActions: OperationActions,
          balanceActions: BalanceActions,
-         userActivatedFeatureSelector: UserActivatedFeaturesSelector) {
+         userActivatedFeatureSelector: UserActivatedFeaturesSelector,
+         featureFlagsRepository: FeatureFlagsRepository) {
         self.logoutAction = logoutAction
         self.sessionActions = sessionActions
         self.exchangeRateRepository = exchangeRateWindowRepository
@@ -71,6 +73,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
         self.operationActions = operationActions
         self.balanceActions = balanceActions
         self.userActivatedFeatureSelector = userActivatedFeatureSelector
+        self.featureFlagsRepository = featureFlagsRepository
 
         super.init(delegate: delegate)
     }
@@ -189,6 +192,21 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
 
     func hasPendingIncomingSwapOperations() -> Bool {
         return hasPendingIncomingSwaps
+    }
+
+    func getFlagLabelText() -> String {
+        var textForDisplay = ""
+        var featureFlags = featureFlagsRepository.fetch()
+        let featureFlagsForDisplay = featureFlags.filter {
+            $0 != .Taproot &&
+            $0 != .TaprootPreactivation &&
+            $0 != .effectiveFeesCalculation &&
+            $0 != .osVersionDeprecatedFlow
+        }
+        featureFlagsForDisplay.forEach {
+            textForDisplay += "\($0.rawValue)\n"
+        }
+        return textForDisplay
     }
 
 #if DEBUG

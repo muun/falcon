@@ -28,6 +28,8 @@ use plonky2::plonk::config::KeccakGoldilocksConfig;
 use plonky2::plonk::proof::CompressedProofWithPublicInputs;
 use plonky2::read_gate_impl;
 use plonky2::util::serialization::GateSerializer;
+use plonky2_precomputed_windowed_mul::from_compressed_private_key;
+use plonky2_precomputed_windowed_mul::from_uncompressed_public_key;
 use plonky2_u32::gates::add_many_u32::U32AddManyGate;
 use plonky2_u32::gates::arithmetic_u32::U32ArithmeticGate;
 use plonky2_u32::gates::comparison::ComparisonGate;
@@ -35,14 +37,15 @@ use plonky2_u32::gates::range_check_u32::U32RangeCheckGate;
 use plonky2_u32::gates::subtraction_u32::U32SubtractionGate;
 
 use crate::circuit::Circuit;
-use crate::curve::utils::from_compressed_private_key;
-use crate::curve::utils::from_compressed_public_key;
+use crate::inputs::CIPHERTEXT_LENGTH_IN_BYTES;
 use crate::inputs::Inputs;
+use crate::inputs::PRIVATE_KEY_LENGTH_IN_BYTES;
 use crate::inputs::PublicInputs;
 use crate::inputs::TargetInputs;
+use crate::inputs::UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES;
 
 pub struct ProverData {
-    targets: TargetInputs,
+    target_inputs: TargetInputs,
     circuit_data: ProverCircuitData<GoldilocksField, KeccakGoldilocksConfig, 2>,
 }
 
@@ -51,16 +54,19 @@ pub struct VerifierData {
 }
 
 pub struct ProverInputs {
-    pub ephemeral_private_key: [u8; 32],
-    pub ephemeral_public_key: [u8; 33],
-    pub recovery_code_public_key: [u8; 33],
-    pub shared_public_key: [u8; 33],
+    pub hpke_ephemeral_private_key: [u8; PRIVATE_KEY_LENGTH_IN_BYTES],
+    pub hpke_ephemeral_public_key: [u8; UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES],
+    pub recovery_code_public_key: [u8; UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES],
+    pub plaintext_scalar: [u8; PRIVATE_KEY_LENGTH_IN_BYTES],
+    pub plaintext_public_key: [u8; UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES],
+    pub ciphertext: [u8; CIPHERTEXT_LENGTH_IN_BYTES],
 }
 
 pub struct VerifierInputs {
-    pub ephemeral_public_key: [u8; 33],
-    pub recovery_code_public_key: [u8; 33],
-    pub shared_public_key: [u8; 33],
+    pub hpke_ephemeral_public_key: [u8; UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES],
+    pub recovery_code_public_key: [u8; UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES],
+    pub plaintext_public_key: [u8; UNCOMPRESSED_PUBLIC_KEY_LENGTH_IN_BYTES],
+    pub ciphertext: [u8; CIPHERTEXT_LENGTH_IN_BYTES],
 }
 
 pub struct Proof(pub Vec<u8>);
@@ -72,7 +78,7 @@ pub fn precompute() -> (ProverData, VerifierData) {
     let verifier_data = circuit.circuit.verifier_data();
     (
         ProverData {
-            targets: circuit.target_inputs,
+            target_inputs: circuit.target_inputs,
             circuit_data: circuit.circuit.prover_data(),
         },
         VerifierData {
@@ -82,11 +88,13 @@ pub fn precompute() -> (ProverData, VerifierData) {
 }
 
 pub fn prove(data: &ProverData, inputs: &ProverInputs) -> Result<Proof> {
-    let partial_witness = data.targets.set_inputs(&Inputs::new(
-        from_compressed_private_key(inputs.ephemeral_private_key),
-        from_compressed_public_key(inputs.ephemeral_public_key)?,
-        from_compressed_public_key(inputs.recovery_code_public_key)?,
-        from_compressed_public_key(inputs.shared_public_key)?,
+    let partial_witness = data.target_inputs.set_inputs(&Inputs::new(
+        from_compressed_private_key(inputs.hpke_ephemeral_private_key),
+        inputs.hpke_ephemeral_public_key,
+        from_uncompressed_public_key(inputs.recovery_code_public_key)?,
+        from_compressed_private_key(inputs.plaintext_scalar),
+        from_uncompressed_public_key(inputs.plaintext_public_key)?,
+        inputs.ciphertext,
     ));
 
     let proof = data.circuit_data.prove(partial_witness)?;
@@ -111,9 +119,10 @@ pub fn prove(data: &ProverData, inputs: &ProverInputs) -> Result<Proof> {
 
 pub fn verify(data: &VerifierData, proof: Proof, inputs: &VerifierInputs) -> Result<()> {
     let inputs = PublicInputs::new(
-        from_compressed_public_key(inputs.ephemeral_public_key)?,
-        from_compressed_public_key(inputs.recovery_code_public_key)?,
-        from_compressed_public_key(inputs.shared_public_key)?,
+        inputs.hpke_ephemeral_public_key,
+        from_uncompressed_public_key(inputs.plaintext_public_key)?,
+        from_uncompressed_public_key(inputs.recovery_code_public_key)?,
+        inputs.ciphertext,
     );
 
     let public_inputs = inputs.prepare_public_inputs()?;

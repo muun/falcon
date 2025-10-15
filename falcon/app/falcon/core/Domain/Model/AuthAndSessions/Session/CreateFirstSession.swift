@@ -37,5 +37,13 @@ struct Client {
     let fallbackDeviceToken: String
     let systemUptime: TimeInterval
     let iCloudRecordId: String?
+    let appDisplayName: String
+    let appId: String
+    let appName: String
+    let appPrimaryIconHash: String
+    let isSoftDevice: Bool
+    let softDeviceName: String?
+    let hasGyro: Bool
+    let installSource: Int
 
 }

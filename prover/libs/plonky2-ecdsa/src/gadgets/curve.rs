@@ -2,7 +2,6 @@ use alloc::vec;
 use alloc::vec::Vec;
 
 use plonky2::field::extension::Extendable;
-use plonky2::field::secp256k1_base::Secp256K1Base;
 use plonky2::field::types::PrimeField64;
 use plonky2::field::types::Sample;
 use plonky2::hash::hash_types::RichField;
@@ -41,7 +40,15 @@ pub trait CircuitBuilderCurve<F: RichField + Extendable<D>, const D: usize> {
         rhs: &AffinePointTarget<C>,
     );
 
+    /// Add a virtual AffinePointTarget, with all the range checks that ensure its coordinates are
+    /// valid base field elements.
     fn add_virtual_affine_point_target<C: Curve>(&mut self) -> AffinePointTarget<C>;
+
+    /// Add a virtual AffinePointTarget, without any range checks. The caller MUST be sure that each
+    /// coordinate is a valid base field element. This means making sure the U32Target limbs of each
+    /// of its coordinates are in the range [0,2^32) and that the BigUintTarget coordinates are in
+    /// the range [0,base_field_order).
+    fn add_virtual_affine_point_target_unsafe<C: Curve>(&mut self) -> AffinePointTarget<C>;
 
     fn curve_assert_valid<C: Curve>(&mut self, p: &AffinePointTarget<C>);
 
@@ -80,6 +87,8 @@ pub trait CircuitBuilderCurve<F: RichField + Extendable<D>, const D: usize> {
         p: &AffinePointTarget<C>,
         n: &NonNativeTarget<C::ScalarField>,
     ) -> AffinePointTarget<C>;
+
+    fn register_public_affine_point<C: Curve>(&mut self, p: &AffinePointTarget<C>);
 }
 
 impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderCurve<F, D>
@@ -105,6 +114,13 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderCurve<F, D>
     fn add_virtual_affine_point_target<C: Curve>(&mut self) -> AffinePointTarget<C> {
         let x = self.add_virtual_nonnative_target();
         let y = self.add_virtual_nonnative_target();
+
+        AffinePointTarget { x, y }
+    }
+
+    fn add_virtual_affine_point_target_unsafe<C: Curve>(&mut self) -> AffinePointTarget<C> {
+        let x = self.add_virtual_nonnative_target_unsafe();
+        let y = self.add_virtual_nonnative_target_unsafe();
 
         AffinePointTarget { x, y }
     }
@@ -261,14 +277,18 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderCurve<F, D>
 
         result
     }
+
+    fn register_public_affine_point<C: Curve>(&mut self, p: &AffinePointTarget<C>) {
+        self.register_public_nonnative(&p.x);
+        self.register_public_nonnative(&p.y);
+    }
 }
 
 pub trait WitnessPoint<F: PrimeField64>: Witness<F> {
     fn set_affine_point_target(
         &mut self,
         target: &AffinePointTarget<Secp256K1>,
-        x: &Secp256K1Base,
-        y: &Secp256K1Base,
+        affine_point: &AffinePoint<Secp256K1>,
     );
 }
 
@@ -276,11 +296,10 @@ impl<T: Witness<F>, F: PrimeField64> WitnessPoint<F> for T {
     fn set_affine_point_target(
         &mut self,
         target: &AffinePointTarget<Secp256K1>,
-        x: &Secp256K1Base,
-        y: &Secp256K1Base,
+        affine_point: &AffinePoint<Secp256K1>,
     ) {
-        self.set_non_native_target(&target.x, x);
-        self.set_non_native_target(&target.y, y);
+        self.set_non_native_target(&target.x, &affine_point.x);
+        self.set_non_native_target(&target.y, &affine_point.y);
     }
 }
 

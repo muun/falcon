@@ -3,6 +3,15 @@ import Libwallet
 
 class LibwalletLogHelper: NSObject, App_provided_dataAppLogSinkProtocol {
 
+    func getDefaultLogLevel() -> Int {
+        // This is passed to go code. The magic numbers match the levels in the slog package.
+        #if DEBUG || DOGFOOD
+        return -4 // slog.LevelDebug
+        #else
+        return 0 // slog.LevelInfo
+        #endif
+    }
+
     func write(_ msgData: Data?, n: UnsafeMutablePointer<Int>?) throws {
         n?.pointee = msgData?.count ?? 0
         guard let msg = msgData else {

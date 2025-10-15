@@ -3,39 +3,39 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		076418282D51421690C8AB92E604546C /* KeychainAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE82F3C36E1DC7F75C4F31A2D8B4569 /* KeychainAttribute.swift */; };
-		1EEC3E0A7DF20FE8DAD9BB65FEEF87BA /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ADB1011B6F3F382AE1276104D65CCF /* AuthSession.swift */; };
-		254A2B93F6F9E120D411DA2186D4708A /* AuthSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3736CAD4CBC267FFB4070AA6EF47612E /* AuthSessionDelegate.swift */; };
-		2A9CB59325784ED64A42B7E49430124A /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3E4344FD4E363E7675125C5112C41E /* KeychainStore.swift */; };
-		333F762F4C3D0E2C13697E2A73DCA7A4 /* GTMAppAuth-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 16585130A24E0848B02A8C3909363A0B /* GTMAppAuth-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		48A01BB02468422C72EA9C557B4FDA10 /* GTMOAuth2Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653813862F261955EE7ACDAEDC83CB63 /* GTMOAuth2Compatibility.swift */; };
-		49118E3EBDB4563D62716208E0BD6D1C /* GTMAppAuth-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 24897753B915AF573652D91B50A33100 /* GTMAppAuth-dummy.m */; };
-		9762D0454B408D9B1169C4CAA9089343 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E4D20EFBC3B16540B77E06EA1A99A984 /* PrivacyInfo.xcprivacy */; };
-		AC5FE88BF2274F6EAFB959C90BF6A184 /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5636E75E0D41B4FCA2F443792608FE55 /* AuthSessionStore.swift */; };
-		CDA52C8B8B3E03BA755B1DED5BDB1948 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F8B8D43504BBA6A6065B099C064C18 /* KeychainHelper.swift */; };
-		F92765577D0DBC32399860F5F239E1BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76508A845B7BCD9C9E4C05AD20EDD76 /* Foundation.framework */; };
+		118BDA4BF6AA4085145E8FDD25F0E4C8 /* GTMOAuth2Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653813862F261955EE7ACDAEDC83CB63 /* GTMOAuth2Compatibility.swift */; };
+		16744A923D94E9134906BE3510C1A1B9 /* GTMAppAuth-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 24897753B915AF573652D91B50A33100 /* GTMAppAuth-dummy.m */; };
+		2391B8F4B165BCDD7F3FE6D08959B508 /* AuthSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3736CAD4CBC267FFB4070AA6EF47612E /* AuthSessionDelegate.swift */; };
+		2D055B071DD9EB41CE2B9067D62F4B72 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F8B8D43504BBA6A6065B099C064C18 /* KeychainHelper.swift */; };
+		3D4CB9872D62D29FA626BC3666EDCAE6 /* GTMAppAuth-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 16585130A24E0848B02A8C3909363A0B /* GTMAppAuth-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FC57F133ED2627F460CD70D9B6A2543 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E4D20EFBC3B16540B77E06EA1A99A984 /* PrivacyInfo.xcprivacy */; };
+		8C1290D8A0DF564D23EA73F2A288839E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B76508A845B7BCD9C9E4C05AD20EDD76 /* Foundation.framework */; };
+		8CF25C7A987171DB3C392FA81202ED01 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3E4344FD4E363E7675125C5112C41E /* KeychainStore.swift */; };
+		AAD8DB73A303E36F1CADF50BCC6AD2E0 /* KeychainAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE82F3C36E1DC7F75C4F31A2D8B4569 /* KeychainAttribute.swift */; };
+		C3A065A2EFD6E98032BEE6D2058D891F /* AuthSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5636E75E0D41B4FCA2F443792608FE55 /* AuthSessionStore.swift */; };
+		F95403651228D628C9CC5EFFB0474DF4 /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ADB1011B6F3F382AE1276104D65CCF /* AuthSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1C790C07C0DC61C9234ED1793DECA561 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7CA3E8879B5A9958E5CC343E2B60A1CB /* AppAuth.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4EFA7E4CE531453CF475A9A4322A84F8;
-			remoteInfo = AppAuth;
-		};
-		829D114709605CE86B833C09F517D701 /* PBXContainerItemProxy */ = {
+		331CFCDC8759E73F1AC34F76AF7C420F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 62B62CED66FC4D4F569E3827EF1D0F63 /* GTMSessionFetcher.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = BD7A8A3BC22FD28DCB40568BE43D7C70;
 			remoteInfo = GTMSessionFetcher;
 		};
-		A0D55DB4E64FAB236D759C20365D654E /* PBXContainerItemProxy */ = {
+		38CCDAFDB463CF931A3D1F93BC6EBB1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3E8879B5A9958E5CC343E2B60A1CB /* AppAuth.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4EFA7E4CE531453CF475A9A4322A84F8;
+			remoteInfo = AppAuth;
+		};
+		43DE51D8FCB0180A6842E43E21F3B108 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 13AB4C6D75DFAACF11D71970177019B0 /* Project object */;
 			proxyType = 1;
@@ -68,15 +68,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2F8BBD263EFFE8493613A949414E7F6E /* Frameworks */ = {
+		7E8D5BF78ABDC924DF2333A6EE48E561 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F92765577D0DBC32399860F5F239E1BA /* Foundation.framework in Frameworks */,
+				8C1290D8A0DF564D23EA73F2A288839E /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AD37B2AAC34C56D012E92F27E225F778 /* Frameworks */ = {
+		9AD1E53AB2BA21B424545E37F70E17DC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -173,11 +173,11 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		EF97730596AD70D0EF13A867EA077276 /* Headers */ = {
+		79D434A7BF009F2CF0A5EEC726277CA5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				333F762F4C3D0E2C13697E2A73DCA7A4 /* GTMAppAuth-umbrella.h in Headers */,
+				3D4CB9872D62D29FA626BC3666EDCAE6 /* GTMAppAuth-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,11 +186,11 @@
 /* Begin PBXNativeTarget section */
 		70B97781C6C02C6D4DEDBE274052E6E9 /* GTMAppAuth-GTMAppAuth_Privacy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EE5BD7BE9F33D22CCA4959FBA80B7D52 /* Build configuration list for PBXNativeTarget "GTMAppAuth-GTMAppAuth_Privacy" */;
+			buildConfigurationList = 7F2BF6003E3F2756875EAFA7276256F0 /* Build configuration list for PBXNativeTarget "GTMAppAuth-GTMAppAuth_Privacy" */;
 			buildPhases = (
-				F72C230DF20F610F221D34DB6F1B9E7D /* Sources */,
-				AD37B2AAC34C56D012E92F27E225F778 /* Frameworks */,
-				71862749A355D74722DF3571633BC94D /* Resources */,
+				E45D8E79F1A09DFF6EF87781AC3495CD /* Sources */,
+				9AD1E53AB2BA21B424545E37F70E17DC /* Frameworks */,
+				5F77A307537834EF4D00CC64859A3636 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -203,19 +203,19 @@
 		};
 		AFFE62B58843E7D325544E4D760E8920 /* GTMAppAuth */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BB361F1D8E967C8B3688CF1507705C25 /* Build configuration list for PBXNativeTarget "GTMAppAuth" */;
+			buildConfigurationList = BC6A24F8624E136BD024389FD65A0547 /* Build configuration list for PBXNativeTarget "GTMAppAuth" */;
 			buildPhases = (
-				EF97730596AD70D0EF13A867EA077276 /* Headers */,
-				A31356D10763C846862CF238315DB482 /* Sources */,
-				2F8BBD263EFFE8493613A949414E7F6E /* Frameworks */,
-				B44D62F8CBC7D63AA77BF3E2B76D9273 /* Resources */,
+				79D434A7BF009F2CF0A5EEC726277CA5 /* Headers */,
+				C9CE46483D5C941FD0EC35F6459EBDB9 /* Sources */,
+				7E8D5BF78ABDC924DF2333A6EE48E561 /* Frameworks */,
+				40C6CEEEA91F471C1102C9EA6EC0BA38 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A79734A2F4B6169FC5A723CBF29B5482 /* PBXTargetDependency */,
-				A4427BA70E24AD30BB7A363D8CBA39C8 /* PBXTargetDependency */,
-				D5AD8DFB41B8A12A46A266A10546C599 /* PBXTargetDependency */,
+				84DA46411BED1D3B706D21B6545C7631 /* PBXTargetDependency */,
+				9A260737D46AF7ADB8FDC46D7683B3A6 /* PBXTargetDependency */,
+				6B19E6B58BCDACBCCF78EB88E7949F23 /* PBXTargetDependency */,
 			);
 			name = GTMAppAuth;
 			productName = GTMAppAuth;
@@ -232,7 +232,7 @@
 				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 032C97852926C1DDB94218B7FEAEB244 /* Build configuration list for PBXProject "GTMAppAuth" */;
-			compatibilityVersion = "Xcode 12.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -259,40 +259,40 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		71862749A355D74722DF3571633BC94D /* Resources */ = {
+		40C6CEEEA91F471C1102C9EA6EC0BA38 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9762D0454B408D9B1169C4CAA9089343 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B44D62F8CBC7D63AA77BF3E2B76D9273 /* Resources */ = {
+		5F77A307537834EF4D00CC64859A3636 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FC57F133ED2627F460CD70D9B6A2543 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A31356D10763C846862CF238315DB482 /* Sources */ = {
+		C9CE46483D5C941FD0EC35F6459EBDB9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EEC3E0A7DF20FE8DAD9BB65FEEF87BA /* AuthSession.swift in Sources */,
-				254A2B93F6F9E120D411DA2186D4708A /* AuthSessionDelegate.swift in Sources */,
-				AC5FE88BF2274F6EAFB959C90BF6A184 /* AuthSessionStore.swift in Sources */,
-				49118E3EBDB4563D62716208E0BD6D1C /* GTMAppAuth-dummy.m in Sources */,
-				48A01BB02468422C72EA9C557B4FDA10 /* GTMOAuth2Compatibility.swift in Sources */,
-				076418282D51421690C8AB92E604546C /* KeychainAttribute.swift in Sources */,
-				CDA52C8B8B3E03BA755B1DED5BDB1948 /* KeychainHelper.swift in Sources */,
-				2A9CB59325784ED64A42B7E49430124A /* KeychainStore.swift in Sources */,
+				F95403651228D628C9CC5EFFB0474DF4 /* AuthSession.swift in Sources */,
+				2391B8F4B165BCDD7F3FE6D08959B508 /* AuthSessionDelegate.swift in Sources */,
+				C3A065A2EFD6E98032BEE6D2058D891F /* AuthSessionStore.swift in Sources */,
+				16744A923D94E9134906BE3510C1A1B9 /* GTMAppAuth-dummy.m in Sources */,
+				118BDA4BF6AA4085145E8FDD25F0E4C8 /* GTMOAuth2Compatibility.swift in Sources */,
+				AAD8DB73A303E36F1CADF50BCC6AD2E0 /* KeychainAttribute.swift in Sources */,
+				2D055B071DD9EB41CE2B9067D62F4B72 /* KeychainHelper.swift in Sources */,
+				8CF25C7A987171DB3C392FA81202ED01 /* KeychainStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F72C230DF20F610F221D34DB6F1B9E7D /* Sources */ = {
+		E45D8E79F1A09DFF6EF87781AC3495CD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -302,61 +302,25 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A4427BA70E24AD30BB7A363D8CBA39C8 /* PBXTargetDependency */ = {
+		6B19E6B58BCDACBCCF78EB88E7949F23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GTMSessionFetcher;
+			targetProxy = 331CFCDC8759E73F1AC34F76AF7C420F /* PBXContainerItemProxy */;
+		};
+		84DA46411BED1D3B706D21B6545C7631 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AppAuth;
+			targetProxy = 38CCDAFDB463CF931A3D1F93BC6EBB1E /* PBXContainerItemProxy */;
+		};
+		9A260737D46AF7ADB8FDC46D7683B3A6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "GTMAppAuth-GTMAppAuth_Privacy";
 			target = 70B97781C6C02C6D4DEDBE274052E6E9 /* GTMAppAuth-GTMAppAuth_Privacy */;
-			targetProxy = A0D55DB4E64FAB236D759C20365D654E /* PBXContainerItemProxy */;
-		};
-		A79734A2F4B6169FC5A723CBF29B5482 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AppAuth;
-			targetProxy = 1C790C07C0DC61C9234ED1793DECA561 /* PBXContainerItemProxy */;
-		};
-		D5AD8DFB41B8A12A46A266A10546C599 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GTMSessionFetcher;
-			targetProxy = 829D114709605CE86B833C09F517D701 /* PBXContainerItemProxy */;
+			targetProxy = 43DE51D8FCB0180A6842E43E21F3B108 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		04603772A75917CB9ABE46C86F576CAE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8A21D5F5A0AF92008A037162F7FCC71 /* GTMAppAuth.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/GTMAppAuth/GTMAppAuth-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/GTMAppAuth/GTMAppAuth.modulemap";
-				PRODUCT_MODULE_NAME = GTMAppAuth;
-				PRODUCT_NAME = GTMAppAuth;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		35573F488C97623E4B4E7E80375DD65A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -420,9 +384,46 @@
 			};
 			name = Release;
 		};
-		6C6B17C47E92B38C46EF2D0F6865EB21 /* Release */ = {
+		40DF0948EFED51FB4249E8C083EA793A /* Release-Dogfood */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28771D7A49255BCA49FBA9061899A202 /* GTMAppAuth.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/GTMAppAuth/GTMAppAuth-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/GTMAppAuth/GTMAppAuth.modulemap";
+				PRODUCT_MODULE_NAME = GTMAppAuth;
+				PRODUCT_NAME = GTMAppAuth;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Release-Dogfood";
+		};
+		5AB0CD61FDC96020191958EBD5B67F5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8A21D5F5A0AF92008A037162F7FCC71 /* GTMAppAuth.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGNING_ALLOWED = NO;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/GTMAppAuth";
@@ -436,9 +437,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = bundle;
 			};
-			name = Release;
+			name = Debug;
 		};
-		9BC11C43866149E77CC104EAD35DFFF6 /* Release */ = {
+		64D95BDBC2C2DFF8F2C99B7A6DF3FDAE /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28771D7A49255BCA49FBA9061899A202 /* GTMAppAuth.release.xcconfig */;
 			buildSettings = {
@@ -474,6 +475,107 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
+		};
+		97F96614B1D3E175A7F28479F0FD7C77 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE_DOGFOOD=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = "Release-Dogfood";
+		};
+		A6C447B91D99EF98BBAA17467986A53B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28771D7A49255BCA49FBA9061899A202 /* GTMAppAuth.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/GTMAppAuth";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IBSC_MODULE = GTMAppAuth;
+				INFOPLIST_FILE = "Target Support Files/GTMAppAuth/ResourceBundle-GTMAppAuth_Privacy-GTMAppAuth-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_NAME = GTMAppAuth_Privacy;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		B71E0C78711D0BEC8C0980C9EDE82711 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28771D7A49255BCA49FBA9061899A202 /* GTMAppAuth.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/GTMAppAuth";
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IBSC_MODULE = GTMAppAuth;
+				INFOPLIST_FILE = "Target Support Files/GTMAppAuth/ResourceBundle-GTMAppAuth_Privacy-GTMAppAuth-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_NAME = GTMAppAuth_Privacy;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = "Release-Dogfood";
 		};
 		D8DD5D23313D0D9F65F381D3F9654B46 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -542,21 +644,39 @@
 			};
 			name = Debug;
 		};
-		F9FF476111DEB186C0C8894927F2B78A /* Debug */ = {
+		F82FE53BE220AF021B600DCF5EC0BF41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B8A21D5F5A0AF92008A037162F7FCC71 /* GTMAppAuth.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/GTMAppAuth";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IBSC_MODULE = GTMAppAuth;
-				INFOPLIST_FILE = "Target Support Files/GTMAppAuth/ResourceBundle-GTMAppAuth_Privacy-GTMAppAuth-Info.plist";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/GTMAppAuth/GTMAppAuth-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_NAME = GTMAppAuth_Privacy;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/GTMAppAuth/GTMAppAuth.modulemap";
+				PRODUCT_MODULE_NAME = GTMAppAuth;
+				PRODUCT_NAME = GTMAppAuth;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
@@ -568,24 +688,27 @@
 			buildConfigurations = (
 				D8DD5D23313D0D9F65F381D3F9654B46 /* Debug */,
 				35573F488C97623E4B4E7E80375DD65A /* Release */,
+				97F96614B1D3E175A7F28479F0FD7C77 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB361F1D8E967C8B3688CF1507705C25 /* Build configuration list for PBXNativeTarget "GTMAppAuth" */ = {
+		7F2BF6003E3F2756875EAFA7276256F0 /* Build configuration list for PBXNativeTarget "GTMAppAuth-GTMAppAuth_Privacy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				04603772A75917CB9ABE46C86F576CAE /* Debug */,
-				9BC11C43866149E77CC104EAD35DFFF6 /* Release */,
+				5AB0CD61FDC96020191958EBD5B67F5D /* Debug */,
+				A6C447B91D99EF98BBAA17467986A53B /* Release */,
+				B71E0C78711D0BEC8C0980C9EDE82711 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EE5BD7BE9F33D22CCA4959FBA80B7D52 /* Build configuration list for PBXNativeTarget "GTMAppAuth-GTMAppAuth_Privacy" */ = {
+		BC6A24F8624E136BD024389FD65A0547 /* Build configuration list for PBXNativeTarget "GTMAppAuth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F9FF476111DEB186C0C8894927F2B78A /* Debug */,
-				6C6B17C47E92B38C46EF2D0F6865EB21 /* Release */,
+				F82FE53BE220AF021B600DCF5EC0BF41 /* Debug */,
+				64D95BDBC2C2DFF8F2C99B7A6DF3FDAE /* Release */,
+				40DF0948EFED51FB4249E8C083EA793A /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

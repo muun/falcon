@@ -15,5 +15,4 @@ ${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities_Privacy.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises_Privacy.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/PromisesSwift/Promises_Privacy.bundle
-${PODS_CONFIGURATION_BUILD_DIR}/SwiftProtobuf/SwiftProtobuf.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb_Privacy.bundle

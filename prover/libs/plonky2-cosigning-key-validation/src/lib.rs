@@ -1,5 +1,4 @@
 mod circuit;
-mod curve;
 mod inputs;
 mod interface;
 mod testing;

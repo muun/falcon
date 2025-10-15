@@ -96,7 +96,15 @@ extension Client: APIConvertible {
             language: language,
             deviceCheckToken: deviceCheckToken,
             fallbackDeviceToken: fallbackDeviceToken,
-            iCloudRecordId: iCloudRecordId
+            iCloudRecordId: iCloudRecordId,
+            iosAppDisplayName: appDisplayName,
+            iosAppId: appId,
+            iosAppName: appName,
+            iosAppPrimaryIconHash: appPrimaryIconHash,
+            iosIsSoftDevice: isSoftDevice,
+            iosSoftDeviceName: softDeviceName,
+            iosHasGyro: hasGyro,
+            iosInstallSource: installSource
         )
     }
 }

@@ -21,6 +21,10 @@ enum NewOpError: ErrorViewModel {
     case amountBelowDust
     case unexpected
 
+    // Nfc
+    case signatureNotVerified
+    case nfcError(description: String)
+
     func title() -> String {
         switch self {
         case .invalidAddress: return L10n.NewOpError.s2
@@ -37,6 +41,8 @@ enum NewOpError: ErrorViewModel {
         case .invoiceUnreachableNode: return L10n.NewOpError.s13
         case .cyclicalSwap: return L10n.NewOpError.s13
         case .swapFailed: return L10n.NewOpError.s14
+        case .signatureNotVerified: return "Signature not verified"
+        case .nfcError: return "Error reading security card"
         }
     }
 
@@ -87,6 +93,11 @@ enum NewOpError: ErrorViewModel {
         case .cyclicalSwap:
             return L10n.NewOpError.s21
                 .attributedForDescription(alignment: .center)
+        case .signatureNotVerified:
+            return "Please check your security card and try again."
+                .attributedForDescription(alignment: .center)
+        case .nfcError(description: let description):
+            return description.attributedForDescription(alignment: .center)
         }
     }
     // swiftlint:enable function_body_length
@@ -103,7 +114,7 @@ enum NewOpError: ErrorViewModel {
             return (L10n.NewOpError.s23, attText)
         case .expiredInvoice, .invalidInvoice, .invoiceExpiresTooSoon, .invoiceAlreadyUsed, .noPaymentRoute,
                 .swapFailed, .amountBelowDust, .exchangeRateWindowTooOld, .invoiceMissingAmount, .unexpected,
-             .invoiceUnreachableNode, .cyclicalSwap:
+                .invoiceUnreachableNode, .cyclicalSwap, .signatureNotVerified, .nfcError:
             return nil
         }
     }
@@ -116,7 +127,8 @@ enum NewOpError: ErrorViewModel {
             return (L10n.NewOpError.s24, attText)
         case .invalidAddress, .expiredInvoice, .invalidInvoice, .invoiceExpiresTooSoon, .invoiceAlreadyUsed,
                 .noPaymentRoute, .swapFailed, .amountBelowDust, .exchangeRateWindowTooOld, .invoiceMissingAmount,
-             .unexpected, .invoiceUnreachableNode, .cyclicalSwap:
+                .unexpected, .invoiceUnreachableNode, .cyclicalSwap, .signatureNotVerified,
+                .nfcError:
             return nil
         }
     }
@@ -137,6 +149,8 @@ enum NewOpError: ErrorViewModel {
         case .unexpected: return "other"
         case .invoiceUnreachableNode: return "invoice_unreachable_node"
         case .cyclicalSwap: return "cyclical_swap"
+        case .signatureNotVerified: return "signature_not_verified"
+        case .nfcError: return "nfc_error"
         }
     }
 

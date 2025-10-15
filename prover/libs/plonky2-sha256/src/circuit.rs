@@ -5,6 +5,9 @@ use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2_u32::gadgets::arithmetic_u32::CircuitBuilderU32;
 use plonky2_u32::gadgets::arithmetic_u32::U32Target;
 
+// This code is optimized to minimize the number of conversions between bits and u32. For this
+// reason some of the functions below take inputs represented as &[BoolTarget] and return U32Target.
+
 #[rustfmt::skip]
 pub const H256: [u32; 8] = [
     0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
@@ -32,10 +35,7 @@ pub const K256: [u32; 64] = [
     0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2
 ];
 
-pub struct Sha256Targets {
-    pub message: Vec<BoolTarget>,
-    pub digest: Vec<BoolTarget>,
-}
+pub type Sha256DigestTarget = [BoolTarget; 256];
 
 pub fn array_to_bits(bytes: &[u8]) -> Vec<bool> {
     let mut ret = Vec::new();
@@ -48,12 +48,12 @@ pub fn array_to_bits(bytes: &[u8]) -> Vec<bool> {
     ret
 }
 
-pub fn u32_to_bits_target<F: RichField + Extendable<D>, const D: usize, const B: usize>(
+pub fn u32_to_bits_target<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
     a: &U32Target,
 ) -> Vec<BoolTarget> {
     let mut res = Vec::new();
-    let bit_targets = builder.split_le_base::<B>(a.0, 32);
+    let bit_targets = builder.split_le_base::<2>(a.0, 32);
     for i in (0..32).rev() {
         res.push(BoolTarget::new_unsafe(bit_targets[i]));
     }
@@ -69,7 +69,7 @@ pub fn bits_to_u32_target<F: RichField + Extendable<D>, const D: usize>(
     U32Target(builder.le_sum(bits_target[0..32].iter().rev()))
 }
 
-// define ROTATE(x, y)  (((x)>>(y)) | ((x)<<(32-(y))))
+// ROTATE(x, y) = (((x)>>(y)) | ((x)<<(32-(y))))
 fn rotate32(y: usize) -> Vec<usize> {
     let mut res = Vec::new();
     for i in 32 - y..32 {
@@ -91,40 +91,22 @@ fn shift32(y: usize) -> Vec<usize> {
     res
 }
 
-/*
-a ^ b ^ c = a+b+c - 2*a*b - 2*a*c - 2*b*c + 4*a*b*c
-          = a*( 1 - 2*b - 2*c + 4*b*c ) + b + c - 2*b*c
-          = a*( 1 - 2*b -2*c + 4*m ) + b + c - 2*m
-where m = b*c
- */
 fn xor3<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
     a: BoolTarget,
     b: BoolTarget,
     c: BoolTarget,
 ) -> BoolTarget {
-    let m = builder.mul(b.target, c.target);
-    let two_b = builder.add(b.target, b.target);
-    let two_c = builder.add(c.target, c.target);
-    let two_m = builder.add(m, m);
-    let four_m = builder.add(two_m, two_m);
-    let one = builder.one();
-    let one_sub_two_b = builder.sub(one, two_b);
-    let one_sub_two_b_sub_two_c = builder.sub(one_sub_two_b, two_c);
-    let one_sub_two_b_sub_two_c_add_four_m = builder.add(one_sub_two_b_sub_two_c, four_m);
-    let mut res = builder.mul(a.target, one_sub_two_b_sub_two_c_add_four_m);
-    res = builder.add(res, b.target);
-    res = builder.add(res, c.target);
-
-    BoolTarget::new_unsafe(builder.sub(res, two_m))
+    let a_plus_b_plus_c = builder.add_many([a.target, b.target, c.target]);
+    let x = vec![builder.zero(), builder.one(), builder.zero(), builder.one()];
+    BoolTarget::new_unsafe(builder.random_access(a_plus_b_plus_c, x))
 }
 
-//#define Sigma0(x)    (ROTATE((x), 2) ^ ROTATE((x),13) ^ ROTATE((x),22))
+// Sigma0(x) = (ROTATE((x), 2) ^ ROTATE((x),13) ^ ROTATE((x),22))
 fn big_sigma0<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
+    a_bits: &[BoolTarget],
 ) -> U32Target {
-    let a_bits = u32_to_bits_target::<F, D, 2>(builder, a);
     let rotate2 = rotate32(2);
     let rotate13 = rotate32(13);
     let rotate22 = rotate32(22);
@@ -140,12 +122,11 @@ fn big_sigma0<F: RichField + Extendable<D>, const D: usize>(
     bits_to_u32_target(builder, res_bits)
 }
 
-//#define Sigma1(x)    (ROTATE((x), 6) ^ ROTATE((x),11) ^ ROTATE((x),25))
+// Sigma1(x) = (ROTATE((x), 6) ^ ROTATE((x),11) ^ ROTATE((x),25))
 fn big_sigma1<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
+    a_bits: &[BoolTarget],
 ) -> U32Target {
-    let a_bits = u32_to_bits_target::<F, D, 2>(builder, a);
     let rotate6 = rotate32(6);
     let rotate11 = rotate32(11);
     let rotate25 = rotate32(25);
@@ -161,12 +142,11 @@ fn big_sigma1<F: RichField + Extendable<D>, const D: usize>(
     bits_to_u32_target(builder, res_bits)
 }
 
-//#define sigma0(x)    (ROTATE((x), 7) ^ ROTATE((x),18) ^ ((x)>> 3))
+// sigma0(x) = (ROTATE((x), 7) ^ ROTATE((x),18) ^ ((x)>> 3))
 fn sigma0<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
+    mut a_bits: Vec<BoolTarget>,
 ) -> U32Target {
-    let mut a_bits = u32_to_bits_target::<F, D, 2>(builder, a);
     a_bits.push(builder.constant_bool(false));
     let rotate7 = rotate32(7);
     let rotate18 = rotate32(18);
@@ -183,12 +163,11 @@ fn sigma0<F: RichField + Extendable<D>, const D: usize>(
     bits_to_u32_target(builder, res_bits)
 }
 
-//#define sigma1(x)    (ROTATE((x),17) ^ ROTATE((x),19) ^ ((x)>>10))
+// sigma1(x) = (ROTATE((x),17) ^ ROTATE((x),19) ^ ((x)>>10))
 fn sigma1<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
+    mut a_bits: Vec<BoolTarget>,
 ) -> U32Target {
-    let mut a_bits = u32_to_bits_target::<F, D, 2>(builder, a);
     a_bits.push(builder.constant_bool(false));
     let rotate17 = rotate32(17);
     let rotate19 = rotate32(19);
@@ -205,108 +184,116 @@ fn sigma1<F: RichField + Extendable<D>, const D: usize>(
     bits_to_u32_target(builder, res_bits)
 }
 
-/*
-ch = a&b ^ (!a)&c
-   = a*(b-c) + c
- */
+// ch(a, b, c) = a&b ^ (!a)&c
 fn ch<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
-    b: &U32Target,
-    c: &U32Target,
+    a_bits: &[BoolTarget],
+    b_bits: &[BoolTarget],
+    c_bits: &[BoolTarget],
 ) -> U32Target {
-    let a_bits = u32_to_bits_target::<F, D, 2>(builder, a);
-    let b_bits = u32_to_bits_target::<F, D, 2>(builder, b);
-    let c_bits = u32_to_bits_target::<F, D, 2>(builder, c);
+    // a & b ^ (!a) & c = a * b + (1-a) * c
+    //                  = a * (b - c) + c
     let mut res_bits = Vec::new();
     for i in 0..32 {
         let b_sub_c = builder.sub(b_bits[i].target, c_bits[i].target);
-        let a_mul_b_sub_c = builder.mul(a_bits[i].target, b_sub_c);
-        let a_mul_b_sub_c_add_c = builder.add(a_mul_b_sub_c, c_bits[i].target);
+        let a_mul_b_sub_c_add_c = builder.mul_add(a_bits[i].target, b_sub_c, c_bits[i].target);
         res_bits.push(BoolTarget::new_unsafe(a_mul_b_sub_c_add_c));
     }
     bits_to_u32_target(builder, res_bits)
 }
 
-/*
-maj = a&b ^ a&c ^ b&c
-    = a*b   +  a*c  +  b*c  -  2*a*b*c
-    = a*( b + c - 2*b*c ) + b*c
-    = a*( b + c - 2*m ) + m
-where m = b*c
- */
 fn maj<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
-    b: &U32Target,
-    c: &U32Target,
+    a_bits: &[BoolTarget],
+    b_bits: &[BoolTarget],
+    c_bits: &[BoolTarget],
 ) -> U32Target {
-    let a_bits = u32_to_bits_target::<F, D, 2>(builder, a);
-    let b_bits = u32_to_bits_target::<F, D, 2>(builder, b);
-    let c_bits = u32_to_bits_target::<F, D, 2>(builder, c);
     let mut res_bits = Vec::new();
     for i in 0..32 {
-        let m = builder.mul(b_bits[i].target, c_bits[i].target);
-        let two = builder.two();
-        let two_m = builder.mul(two, m);
-        let b_add_c = builder.add(b_bits[i].target, c_bits[i].target);
-        let b_add_c_sub_two_m = builder.sub(b_add_c, two_m);
-        let a_mul_b_add_c_sub_two_m = builder.mul(a_bits[i].target, b_add_c_sub_two_m);
-        let res = builder.add(a_mul_b_add_c_sub_two_m, m);
-
-        res_bits.push(BoolTarget::new_unsafe(res));
+        res_bits.push(maj_bool_target(builder, a_bits[i], b_bits[i], c_bits[i]));
     }
     bits_to_u32_target(builder, res_bits)
 }
 
+// majority is True if most of the inputs are True
+fn maj_bool_target<F: RichField + Extendable<D>, const D: usize>(
+    builder: &mut CircuitBuilder<F, D>,
+    a: BoolTarget,
+    b: BoolTarget,
+    c: BoolTarget,
+) -> BoolTarget {
+    let a_plus_b_plus_c = builder.add_many([a.target, b.target, c.target]);
+    let m = vec![builder.zero(), builder.zero(), builder.one(), builder.one()];
+    BoolTarget::new_unsafe(builder.random_access(a_plus_b_plus_c, m))
+}
+
 fn add_u32<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    a: &U32Target,
-    b: &U32Target,
+    a: U32Target,
+    b: U32Target,
 ) -> U32Target {
-    let (res, _carry) = builder.add_u32(*a, *b);
+    let (res, _carry) = builder.add_u32(a, b);
+    res
+}
+
+fn add_many_u32<F: RichField + Extendable<D>, const D: usize>(
+    builder: &mut CircuitBuilder<F, D>,
+    addends: &[U32Target],
+) -> U32Target {
+    let (res, _carry) = builder.add_many_u32(addends);
     res
 }
 
 // padded_msg_len = block_count x 512 bits
 // Size: msg_len_in_bits (L) |  p bits   | 64 bits
 // Bits:      msg            | 100...000 |    L
-pub fn make_circuits<F: RichField + Extendable<D>, const D: usize>(
+pub fn sha256<F: RichField + Extendable<D>, const D: usize>(
     builder: &mut CircuitBuilder<F, D>,
-    msg_len_in_bits: u64,
-) -> Sha256Targets {
-    let mut message = Vec::new();
-    let mut digest = Vec::new();
+    message: &[BoolTarget],
+) -> Sha256DigestTarget {
+    let msg_len_in_bits = message.len();
     let block_count = (msg_len_in_bits + 65).div_ceil(512);
     let padded_msg_len = 512 * block_count;
     let p = padded_msg_len - 64 - msg_len_in_bits;
     assert!(p > 1);
 
-    for _ in 0..msg_len_in_bits {
-        message.push(builder.add_virtual_bool_target_unsafe());
-    }
-    message.push(builder.constant_bool(true));
+    let mut padded_message = message.to_vec();
+    padded_message.push(builder.constant_bool(true));
     for _ in 0..p - 1 {
-        message.push(builder.constant_bool(false));
+        padded_message.push(builder.constant_bool(false));
     }
     for i in 0..64 {
         let b = (msg_len_in_bits >> (63 - i)) & 1;
-        message.push(builder.constant_bool(b == 1));
+        padded_message.push(builder.constant_bool(b == 1));
     }
 
-    // init states
-    let mut state = Vec::new();
-    for item in &H256 {
-        state.push(builder.constant_u32(*item));
-    }
+    // init state
+    let mut state = H256.map(|h| builder.constant_u32(h)).to_vec();
 
-    let mut k256 = Vec::new();
-    for item in &K256 {
-        k256.push(builder.constant_u32(*item));
-    }
+    for block_index in 0..block_count {
+        let mut w: Vec<U32Target> = Vec::new();
+        let mut w_bits: Vec<Vec<BoolTarget>> = Vec::new();
+        // The compression main loop only uses w (it does not use w_bits). However, computing w_bits
+        // in advance is useful to avoid recomputing it when computing w[i] for i between 16 and 64.
+        for i in 0..16 {
+            let index = block_index * 512 + i * 32;
+            let w_i = padded_message[index..index + 32].to_vec();
+            w_bits.push(w_i.clone());
+            w.push(bits_to_u32_target(builder, w_i));
+        }
 
-    for blk in 0..block_count {
-        let mut x = Vec::new();
+        for i in 16..64 {
+            let s0 = sigma0(builder, w_bits[i - 15].clone());
+            let s1 = sigma1(builder, w_bits[i - 2].clone());
+            let w_i = add_many_u32(builder, &[s1, w[i - 7], s0, w[i - 16]]);
+            w.push(w_i);
+            // Since we look 2 positions back to compute w_i, we only need w_bits up to 61 which is
+            // used to compute w[63].
+            if i < 62 {
+                w_bits.push(u32_to_bits_target(builder, &w_i))
+            }
+        }
+
         let mut a = state[0];
         let mut b = state[1];
         let mut c = state[2];
@@ -316,87 +303,70 @@ pub fn make_circuits<F: RichField + Extendable<D>, const D: usize>(
         let mut g = state[6];
         let mut h = state[7];
 
-        for i in 0..16 {
-            let index = blk as usize * 512 + i * 32;
-            let u32_target = builder.le_sum(message[index..index + 32].iter().rev());
+        // For the first iteration we deliberately compute the bits outside the compression main
+        // loop. The purpose is to recycle as much as possible at the end of the compression loop.
+        let mut a_bits = u32_to_bits_target(builder, &a);
+        let mut b_bits = u32_to_bits_target(builder, &b);
+        let mut c_bits = u32_to_bits_target(builder, &c);
+        let mut e_bits = u32_to_bits_target(builder, &e);
+        let mut f_bits = u32_to_bits_target(builder, &f);
+        let mut g_bits = u32_to_bits_target(builder, &g);
 
-            x.push(U32Target(u32_target));
-            let mut t1 = h;
-            let big_sigma1_e = big_sigma1(builder, &e);
-            t1 = add_u32(builder, &t1, &big_sigma1_e);
-            let ch_e_f_g = ch(builder, &e, &f, &g);
-            t1 = add_u32(builder, &t1, &ch_e_f_g);
-            t1 = add_u32(builder, &t1, &k256[i]);
-            t1 = add_u32(builder, &t1, &x[i]);
+        for i in 0..64 {
+            let big_s1_e = big_sigma1(builder, &e_bits);
+            let ch_e_f_g = ch(builder, &e_bits, &f_bits, &g_bits);
+            let k256_i = builder.constant_u32(K256[i]);
+            let t1 = add_many_u32(builder, &[h, big_s1_e, ch_e_f_g, k256_i, w[i]]);
+            let big_s0_a = big_sigma0(builder, &a_bits);
+            let maj_a_b_c = maj(builder, &a_bits, &b_bits, &c_bits);
 
-            let mut t2 = big_sigma0(builder, &a);
-            let maj_a_b_c = maj(builder, &a, &b, &c);
-            t2 = add_u32(builder, &t2, &maj_a_b_c);
-
-            h = g;
-            g = f;
-            f = e;
-            e = add_u32(builder, &d, &t1);
-            d = c;
-            c = b;
-            b = a;
-            a = add_u32(builder, &t1, &t2);
-        }
-
-        for i in 16..64 {
-            let s0 = sigma0(builder, &x[(i + 1) & 0x0f]);
-            let s1 = sigma1(builder, &x[(i + 14) & 0x0f]);
-
-            let s0_add_s1 = add_u32(builder, &s0, &s1);
-            let s0_add_s1_add_x = add_u32(builder, &s0_add_s1, &x[(i + 9) & 0xf]);
-            x[i & 0xf] = add_u32(builder, &x[i & 0xf], &s0_add_s1_add_x);
-
-            let big_sigma0_a = big_sigma0(builder, &a);
-            let big_sigma1_e = big_sigma1(builder, &e);
-            let ch_e_f_g = ch(builder, &e, &f, &g);
-            let maj_a_b_c = maj(builder, &a, &b, &c);
-
-            let h_add_sigma1 = add_u32(builder, &h, &big_sigma1_e);
-            let h_add_sigma1_add_ch_e_f_g = add_u32(builder, &h_add_sigma1, &ch_e_f_g);
-            let h_add_sigma1_add_ch_e_f_g_add_k256 =
-                add_u32(builder, &h_add_sigma1_add_ch_e_f_g, &k256[i]);
-
-            let t1 = add_u32(builder, &x[i & 0xf], &h_add_sigma1_add_ch_e_f_g_add_k256);
-            let t2 = add_u32(builder, &big_sigma0_a, &maj_a_b_c);
+            // We avoid computing t2 because using add_many_u32 is more efficient.
 
             h = g;
             g = f;
             f = e;
-            e = add_u32(builder, &d, &t1);
+            e = add_u32(builder, d, t1);
             d = c;
             c = b;
             b = a;
-            a = add_u32(builder, &t1, &t2);
+            a = add_many_u32(builder, &[t1, big_s0_a, maj_a_b_c]);
+
+            // Now we recycle the bit decompositions as much as possible to avoid recompute.
+            // Note that we only need to do this for i<63 because once we exit the compression main
+            // loop we don't need the bit decompositions anymore.
+            if i < 63 {
+                g_bits = f_bits.clone();
+                f_bits = e_bits.clone();
+                e_bits = u32_to_bits_target(builder, &e);
+                c_bits = b_bits.clone();
+                b_bits = a_bits.clone();
+                a_bits = u32_to_bits_target(builder, &a);
+            }
         }
 
-        state[0] = add_u32(builder, &state[0], &a);
-        state[1] = add_u32(builder, &state[1], &b);
-        state[2] = add_u32(builder, &state[2], &c);
-        state[3] = add_u32(builder, &state[3], &d);
-        state[4] = add_u32(builder, &state[4], &e);
-        state[5] = add_u32(builder, &state[5], &f);
-        state[6] = add_u32(builder, &state[6], &g);
-        state[7] = add_u32(builder, &state[7], &h);
+        state[0] = add_u32(builder, state[0], a);
+        state[1] = add_u32(builder, state[1], b);
+        state[2] = add_u32(builder, state[2], c);
+        state[3] = add_u32(builder, state[3], d);
+        state[4] = add_u32(builder, state[4], e);
+        state[5] = add_u32(builder, state[5], f);
+        state[6] = add_u32(builder, state[6], g);
+        state[7] = add_u32(builder, state[7], h);
     }
 
+    let mut digest: Vec<BoolTarget> = Vec::new();
     for item in state.iter().take(8) {
-        let bit_targets = builder.split_le_base::<2>(item.0, 32);
-        for j in (0..32).rev() {
-            digest.push(BoolTarget::new_unsafe(bit_targets[j]));
-        }
+        let bit_targets = u32_to_bits_target(builder, item);
+        digest.extend(bit_targets);
     }
 
-    Sha256Targets { message, digest }
+    digest.try_into().unwrap()
 }
 
 #[cfg(test)]
 mod tests {
     use anyhow::Result;
+    use plonky2::iop::target::BoolTarget;
     use plonky2::iop::witness::PartialWitness;
     use plonky2::iop::witness::WitnessWrite;
     use plonky2::plonk::circuit_builder::CircuitBuilder;
@@ -406,7 +376,7 @@ mod tests {
     use rand::Rng;
 
     use crate::circuit::array_to_bits;
-    use crate::circuit::make_circuits;
+    use crate::circuit::sha256;
 
     const EXPECTED_RES: [u8; 256] = [
         0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0,
@@ -422,7 +392,7 @@ mod tests {
 
     #[test]
     fn test_sha256() -> Result<()> {
-        let mut msg = vec![0; 128 as usize];
+        let mut msg = vec![0; 128];
         for i in 0..127 {
             msg[i] = i as u8;
         }
@@ -433,18 +403,22 @@ mod tests {
         type C = PoseidonGoldilocksConfig;
         type F = <C as GenericConfig<D>>::F;
         let mut builder = CircuitBuilder::<F, D>::new(CircuitConfig::standard_recursion_config());
-        let targets = make_circuits(&mut builder, len as u64);
+
+        let message: Vec<BoolTarget> = (0..len)
+            .map(|_| builder.add_virtual_bool_target_unsafe())
+            .collect();
+        let digest = sha256(&mut builder, message.as_slice());
         let mut pw = PartialWitness::new();
 
         for i in 0..len {
-            pw.set_bool_target(targets.message[i], msg_bits[i]);
+            pw.set_bool_target(message[i], msg_bits[i])?;
         }
 
         for i in 0..EXPECTED_RES.len() {
             if EXPECTED_RES[i] == 1 {
-                builder.assert_one(targets.digest[i].target);
+                builder.assert_one(digest[i].target);
             } else {
-                builder.assert_zero(targets.digest[i].target);
+                builder.assert_zero(digest[i].target);
             }
         }
 
@@ -457,7 +431,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_sha256_failure() {
-        let mut msg = vec![0; 128 as usize];
+        let mut msg = vec![0; 128];
         for i in 0..127 {
             msg[i] = i as u8;
         }
@@ -468,11 +442,15 @@ mod tests {
         type C = PoseidonGoldilocksConfig;
         type F = <C as GenericConfig<D>>::F;
         let mut builder = CircuitBuilder::<F, D>::new(CircuitConfig::standard_recursion_config());
-        let targets = make_circuits(&mut builder, len as u64);
+        let message: Vec<BoolTarget> = (0..len)
+            .map(|_| builder.add_virtual_bool_target_unsafe())
+            .collect();
+
+        let digest = sha256(&mut builder, message.as_slice());
         let mut pw = PartialWitness::new();
 
         for i in 0..len {
-            pw.set_bool_target(targets.message[i], msg_bits[i]);
+            pw.set_bool_target(message[i], msg_bits[i]).unwrap();
         }
 
         let mut rng = rand::thread_rng();
@@ -480,9 +458,9 @@ mod tests {
         for i in 0..EXPECTED_RES.len() {
             let b = (i == rnd && EXPECTED_RES[i] != 1) || (i != rnd && EXPECTED_RES[i] == 1);
             if b {
-                builder.assert_one(targets.digest[i].target);
+                builder.assert_one(digest[i].target);
             } else {
-                builder.assert_zero(targets.digest[i].target);
+                builder.assert_zero(digest[i].target);
             }
         }
 

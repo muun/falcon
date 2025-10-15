@@ -15,7 +15,7 @@ class FeedbackViewController: MUViewController {
     @IBOutlet fileprivate weak var titleLabel: UILabel!
     @IBOutlet fileprivate weak var descriptionLabel: UILabel!
     @IBOutlet fileprivate weak var buttonView: ButtonView!
-    @IBOutlet fileprivate weak var animationView: AnimationView!
+    @IBOutlet fileprivate weak var animationView: LottieAnimationView!
     fileprivate let blockClock = BlockClockView()
     @IBOutlet fileprivate weak var contentView: UIView!
     @IBOutlet weak var stackView: UIStackView!
@@ -148,7 +148,7 @@ class FeedbackViewController: MUViewController {
 
         if let animationName = feedback.lottieAnimationName {
             animationView.isHidden = false
-            animationView.animation = Animation.named(animationName)
+            animationView.animation = LottieAnimation.named(animationName)
             animationView.play()
 
             feedbackIImageView.isHidden = true

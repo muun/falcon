@@ -22,6 +22,18 @@ const (
 	Encrypted
 )
 
+const (
+	KeyIsBalanceHidden            string = "isBalanceHidden"
+	KeyNightMode                  string = "nightMode"
+	KeySecurityCardXpubSerialized string = "securityCardXpubSerialized"
+	KeySecurityCardPaired         string = "securityCardClientPaired"
+	// TODO: These three are marked as prototypes to avoid accidentally setting the non-prototype fields
+	//  in a consumer device before finalizing the design. Before production, the "Prototype" suffix must be removed
+	UnverifiedEncryptedMuunKey string = "unverifiedEncryptedMuungKeyPrototype"
+	VerifiedEncryptedMuunKey   string = "verifiedEncryptedMuunKeyPrototype"
+	EncryptedUserKey           string = "encryptedUserKeyPrototype"
+)
+
 type ValueType interface {
 	FromString(value string) (any, error)
 	ToString(value any) (string, error)
@@ -118,6 +130,42 @@ type Classification struct {
 }
 
 func BuildStorageSchema() map[string]Classification {
-	// TODO: See storage_test.buildStorageSchemaForTests() to create this map once it is required for prd release.
-	return nil
+	return map[string]Classification{
+		KeyIsBalanceHidden: {
+			BackupType: NoAutoBackup, BackupSecurity: NotApplicable, SecurityCritical: false, ValueType: &BoolType{},
+		},
+		KeyNightMode: {
+			BackupType: NoAutoBackup, BackupSecurity: NotApplicable, SecurityCritical: false, ValueType: &StringType{},
+		},
+		KeySecurityCardXpubSerialized: {
+			BackupType:       AsyncAutoBackup,
+			BackupSecurity:   NotApplicable,
+			SecurityCritical: false,
+			ValueType:        &StringType{},
+		},
+		UnverifiedEncryptedMuunKey: {
+			BackupType:       AsyncAutoBackup,
+			BackupSecurity:   Plain,
+			SecurityCritical: false,
+			ValueType:        &StringType{},
+		},
+		VerifiedEncryptedMuunKey: {
+			BackupType:       AsyncAutoBackup,
+			BackupSecurity:   Authenticated,
+			SecurityCritical: true,
+			ValueType:        &StringType{},
+		},
+		EncryptedUserKey: {
+			BackupType:       AsyncAutoBackup,
+			BackupSecurity:   Authenticated,
+			SecurityCritical: true,
+			ValueType:        &StringType{},
+		},
+		KeySecurityCardPaired: {
+			BackupType:       AsyncAutoBackup,
+			BackupSecurity:   NotApplicable,
+			SecurityCritical: false,
+			ValueType:        &BoolType{},
+		},
+	}
 }

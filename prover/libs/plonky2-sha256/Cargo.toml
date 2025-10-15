@@ -7,8 +7,4 @@ edition = "2024"
 plonky2 = {  version = "1.0.2", default-features = false, features = ["std", "parallel"] }
 plonky2_u32 = { path = "../plonky2-u32" }
 anyhow = "1.0.40"
-itertools = "0.10.0"
-log = "0.4.14"
-sha2 = "0.10"
-env_logger = "0.10.0"
 rand = "0.8.4"

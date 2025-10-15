@@ -44,8 +44,11 @@ public class KeychainRepository {
     }
 
     public func delete(_ key: String) {
+        // swiftlint disable: forbidden_raw_keychain_calls
         let query = buildQuery(for: key, forInsert: false)
+        // swiftlint:disable forbidden_raw_keychain_calls
         SecItemDelete(query as CFDictionary)
+        // swiftlint:enable forbidden_raw_keychain_calls
     }
 
     public func store(_ string: String, at key: String) throws {
@@ -61,11 +64,13 @@ public class KeychainRepository {
         let toSet = [kSecValueData as String: data!]
 
         // We first try to update it, and if we fail we store it
+        // swiftlint:disable forbidden_raw_keychain_calls
         var status = SecItemUpdate(query as CFDictionary, toSet as CFDictionary)
         if status == errSecItemNotFound {
             let addQuery = query.merging(toSet) { (k, _) in k }
             status = SecItemAdd(addQuery as CFDictionary, nil)
         }
+        // swiftlint:enable forbidden_raw_keychain_calls
 
         guard status == errSecSuccess else {
             throw MuunError(SecureStorage.Errors.secureStorageError)
@@ -78,7 +83,10 @@ public class KeychainRepository {
         query[kSecReturnData as String] = true
 
         var item: CFTypeRef?
+        // swiftlint:disable forbidden_raw_keychain_calls
         let status = SecItemCopyMatching(query as CFDictionary, &item)
+        // swiftlint:enable forbidden_raw_keychain_calls
+
         guard status == errSecSuccess,
             let value = item as? Data else {
             throw MuunError(SecureStorage.Errors.secureStorageError)
@@ -94,7 +102,9 @@ public class KeychainRepository {
     func has(_ key: String) throws -> Bool {
 
         let query = buildQuery(for: key, forInsert: false)
+        // swiftlint:disable forbidden_raw_keychain_calls
         let status = SecItemCopyMatching(query as CFDictionary, nil)
+        // swiftlint:enable forbidden_raw_keychain_calls
 
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw MuunError(SecureStorage.Errors.secureStorageError)
@@ -106,8 +116,14 @@ public class KeychainRepository {
     func wipe() {
         let keychainStoredKeys = getKeychainStoredKeys()
 
-        let dict: [NSString: Any] = [kSecClass: kSecClassGenericPassword]
+        let dict: [NSString: Any] = [kSecClass: kSecClassGenericPassword,
+                                     kSecAttrService: keyPrefix,
+                                     kSecAttrAccessGroup: group]
+
+        // swiftlint:disable forbidden_raw_keychain_calls
         let result = SecItemDelete(dict as CFDictionary)
+        // swiftlint:enable forbidden_raw_keychain_calls
+
         if result != noErr && result != errSecItemNotFound {
             Logger.log(error: NSError(domain: "wipe_secure_storage_failed", code: Int(result)))
             // What should we do here? deletion may fail and users will have

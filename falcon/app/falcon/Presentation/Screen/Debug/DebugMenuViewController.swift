@@ -69,6 +69,21 @@ extension DebugMenuViewController: DebugMenuPresenterDelegate {
                                                           animated: true)
         }
     }
+
+    func showAlert(title: String?, message: String?) {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: title,
+                                                    message: message,
+                                                    preferredStyle: .alert)
+
+            let acceptAction = UIAlertAction(title: "Accept",
+                                                style: .default)
+
+            alertController.addAction(acceptAction)
+
+            self.present(alertController, animated: true)
+        }
+    }
 }
 
 private extension DebugMenuViewController {

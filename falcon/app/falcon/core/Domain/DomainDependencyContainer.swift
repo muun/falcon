@@ -150,14 +150,18 @@ public extension DependencyContainer {
                 (service as! ApiReachabilityService).houstonService = try container.resolve()
             }
 
+            container.register(.singleton, factory: CreateVerifiedRcV1Executable.init)
+
             container.register {
-                [AppSyncingGroup.init(realTimeData: $0),
-                 AddressGenerationGroup(),
-                 WalletFundingGroup.init(addressActions: $1,
-                                         createInvoice: $2,
-                                         userPreferencesSelector: $3),
-                 NodeHandlingGroup(),
-                 NfcCardGroup()] as [DebugExecutablesGroup]
+                [
+                    UserAccountManagementGroup.init(createVerifiedRcV1Executable: $0),
+                    AppSyncingGroup.init(realTimeData: $1),
+                    AddressGenerationGroup(),
+                    WalletFundingGroup.init(addressActions: $2,
+                                            createInvoice: $3,
+                                            userPreferencesSelector: $4),
+                    NodeHandlingGroup(),
+                    NfcCardGroup()] as [DebugExecutablesGroup]
             }
         }
     }
