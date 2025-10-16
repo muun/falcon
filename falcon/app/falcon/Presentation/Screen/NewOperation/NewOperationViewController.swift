@@ -374,8 +374,10 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         displayErrorView(type: .unexpected)
     }
 
-    func nfc2faError() {
-        logEvent("nfc_2fa_failed")
+    func nfc2faError(_ error: NewOpError) {
+        let params = ["message": error.description().string]
+        logEvent("nfc_2fa_failed", parameters: params)
+        displayErrorView(type: error)
     }
 
     private func showDustError() {

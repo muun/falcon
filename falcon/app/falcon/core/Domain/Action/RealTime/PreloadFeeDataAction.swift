@@ -22,7 +22,7 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
     private let throttleInterval: TimeInterval = {
         #if DEBUG
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
-            return 0.1
+            return 0.3
         }
         #endif
         return 10

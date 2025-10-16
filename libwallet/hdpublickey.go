@@ -3,6 +3,7 @@ package libwallet
 import (
 	"errors"
 	"fmt"
+	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/muun/libwallet/hdpath"
@@ -118,4 +119,13 @@ func (p *HDPublicKey) Fingerprint() []byte {
 	hash := btcutil.Hash160(bytes)
 
 	return hash[:4]
+}
+
+// ECPubKey converts the hd public key to a btcec public key and returns it.
+func (p *HDPublicKey) ECPubKey() (*btcec.PublicKey, error) {
+	return p.key.ECPubKey()
+}
+
+func (p *HDPublicKey) ChainCode() []byte {
+	return p.key.ChainCode()
 }

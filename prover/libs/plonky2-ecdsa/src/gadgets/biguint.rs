@@ -56,7 +56,12 @@ pub trait CircuitBuilderBiguint<F: RichField + Extendable<D>, const D: usize> {
 
     fn cmp_biguint(&mut self, a: &BigUintTarget, b: &BigUintTarget) -> BoolTarget;
 
+    /// Add a virtual BigUintTarget with num_limbs limbs.
     fn add_virtual_biguint_target(&mut self, num_limbs: usize) -> BigUintTarget;
+
+    /// Add a virtual BigUintTarget with num_limbs limbs. The caller must be sure that the U32Target
+    /// limbs are constrained to the range [0,2^32) because the method sets no range checks to this end.
+    fn add_virtual_biguint_target_unsafe(&mut self, num_limbs: usize) -> BigUintTarget;
 
     /// Add two `BigUintTarget`s.
     fn add_biguint(&mut self, a: &BigUintTarget, b: &BigUintTarget) -> BigUintTarget;
@@ -150,6 +155,12 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilderBiguint<F, D>
 
     fn add_virtual_biguint_target(&mut self, num_limbs: usize) -> BigUintTarget {
         let limbs = self.add_virtual_u32_targets(num_limbs);
+
+        BigUintTarget { limbs }
+    }
+
+    fn add_virtual_biguint_target_unsafe(&mut self, num_limbs: usize) -> BigUintTarget {
+        let limbs = self.add_virtual_u32_targets_unsafe(num_limbs);
 
         BigUintTarget { limbs }
     }

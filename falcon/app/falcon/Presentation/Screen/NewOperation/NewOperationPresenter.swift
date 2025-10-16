@@ -12,6 +12,7 @@ import Foundation
 
 import Libwallet
 import RxSwift
+import GRPC
 
 protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func requestNextStep(_ data: NewOpState)
@@ -31,7 +32,7 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func amountBelowDust()
     func invoiceMissingAmount()
     func unexpectedError()
-    func nfc2faError()
+    func nfc2faError(_ error: NewOpError)
 
     func setExpires(_ expiresTime: Double)
     func cancel(confirm: Bool)
@@ -58,7 +59,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     private let userRepository: UserRepository = resolve()
     private let featureFlagsRepository: FeatureFlagsRepository = resolve()
     private let signMessageAction: SignMessageAction = SignMessageAction()
-    private let disposeBag = DisposeBag()
+    private var signMessageDisposable: Disposable?
 
     init(delegate: Delegate, operationActions: OperationActions) {
         self.operationActions = operationActions
@@ -544,24 +545,29 @@ extension NewOperationPresenter: OpLoadingTransitions {
 
 extension NewOperationPresenter: OpConfirmTransitions {
     func didConfirm() {
-        if hasNfc2fa
-            && featureFlagsRepository.fetch().contains(.nfcCard) {
+        if featureFlagsRepository.fetch().contains(.nfcCard) {
+            signMessageDisposable?.dispose()
             let message = "testing NFC in iOS"
-            signMessageAction.run(message: message, slot: 0)
-                .subscribe(onSuccess: { signedMessage in
-                    guard let signedMessage else {
-                        self.delegate.nfc2faError()
-                        return
-                    }
-                    Logger.log(.debug, "Card signed message response: \(signedMessage)")
+            signMessageDisposable = signMessageAction.run(message: message)
+                .observeOn(Scheduler.foregroundScheduler)
+                .subscribe(onSuccess: { signedMessageBytes in
+                    Logger.log(.debug, "Card signed message response: \(signedMessageBytes)")
 
                     // if signed was successful, continue with the operation.
                     // we will check the signed message in Libwallet in the final implementation
                     self.createOperation()
-
-                }, onError: { _ in
-                    self.delegate.nfc2faError()
-                }).disposed(by: disposeBag)
+                }, onError: { error in
+                    if let grpcError = error as? GRPCStatus, let message =  grpcError.message {
+                        if message.contains("invalid signature:") {
+                            self.delegate.nfc2faError(.signatureNotVerified)
+                        } else {
+                            self.delegate.nfc2faError(.nfcError(description: message))
+                        }
+                        Logger.log(.err, "NFC error: \(message)")
+                    }
+                    Logger.log(.err, "Unexpected NFC error: \(error.localizedDescription)")
+                    self.delegate.nfc2faError(.unexpected)
+                })
         } else {
             createOperation()
         }

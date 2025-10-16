@@ -10,9 +10,6 @@ target 'Muun' do
   use_frameworks! :linkage => :static
   platform :ios, $app_deployment_target
 
-  # Animations
-  pod 'lottie-ios', '3.0.6'
-
   # This dependencies are fixed at core.podspec
   # Firebase
   pod 'Firebase/Core'
@@ -32,10 +29,6 @@ target 'Muun' do
   pod 'RxGRDB', '0.18.0'
   pod 'RxSwift', '5.0.1'
   pod 'RxBlocking', '5.0.1'
-
-  # protobuf & gRPC
-  pod 'SwiftProtobuf', '~> 1.28'
-  pod 'gRPC-Swift', '~> 1.8.0'
 
   target 'falconTests' do
       inherit! :search_paths

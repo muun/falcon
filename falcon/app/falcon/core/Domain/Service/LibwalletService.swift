@@ -50,7 +50,7 @@ public class GoLibwalletService: LibwalletService {
                                              error)
             })
         } catch {
-            Logger.fatal(error: error)
+            Logger.log(error: error)
         }
     }
 

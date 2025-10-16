@@ -5,8 +5,8 @@
 //
 
 import Foundation
-
 import UIKit
+import CoreMotion
 
 public class HardwareCapabilitiesProvider {
     public static let shared = HardwareCapabilitiesProvider()
@@ -43,7 +43,7 @@ public class HardwareCapabilitiesProvider {
 
         var pagesize: vm_size_t = 0
         host_page_size(host_port, &pagesize)
-        
+
         var vm_stat: vm_statistics = vm_statistics_data_t()
         load(vm_stat: &vm_stat, host_port: host_port)
 
@@ -51,10 +51,31 @@ public class HardwareCapabilitiesProvider {
 
         return mem_free
     }
-    
+
     public func getTotalRam() -> UInt64 {
-        return ProcessInfo.processInfo.physicalMemory;
+        return ProcessInfo.processInfo.physicalMemory
     }
+
+    public func isSoftDevice() -> Bool {
+        #if targetEnvironment(simulator)
+                return true
+        #else
+                return false
+        #endif
+    }
+
+    public func getSoftDeviceName() -> String? {
+        guard let name = ProcessInfo().environment["SIMULATOR_DEVICE_NAME"] else {
+            return nil
+        }
+        return String(name.prefix(100))
+    }
+
+    public func hasGyro() -> Bool {
+        let motionManager = CMMotionManager()
+        return  motionManager.isGyroAvailable
+     }
+
     
     private func load(vm_stat: inout vm_statistics, host_port: mach_port_t) {
         withUnsafeMutablePointer(to: &vm_stat) { (vmStatPointer) -> Void in

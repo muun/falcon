@@ -9,12 +9,6 @@
 import CoreNFC
 import RxSwift
 
-enum NfcStatusCode: Int {
-    case responseOk = 0x9000
-    case swMuunCardSlotOcuppied = 0x6B02
-    case unknownError
-}
-
 @available(iOS 13.0, *)
 final class DefaultCardNfcService: NSObject, CardNfcService {
 
@@ -81,6 +75,14 @@ extension DefaultCardNfcService: NFCTagReaderSessionDelegate {
     }
 
     func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
+        // Ignores expected non-critical errors such as user cancellation or session timeout,
+        // and only logs and propagates other errors to observers.
+        if let readerError = error as? NFCReaderError {
+            if readerError.code == .readerSessionInvalidationErrorUserCanceled
+                || readerError.code == .readerSessionInvalidationErrorSessionTimeout {
+                return
+            }
+        }
         Logger.log(.warn, "NFC session invalidated with error: \(error.localizedDescription)")
         connectSubject?.onError(MuunError(error))
     }

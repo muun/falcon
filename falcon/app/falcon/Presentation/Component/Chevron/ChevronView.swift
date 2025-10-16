@@ -9,7 +9,6 @@
 import UIKit
 import Lottie
 
-
 protocol ChevronViewDelegate: AnyObject {
     func chevronTap()
 }
@@ -17,7 +16,7 @@ protocol ChevronViewDelegate: AnyObject {
 final class ChevronView: UIView {
 
     private var contentView: UIView! = UIView()
-    private var chevronLottieView: AnimationView! = AnimationView()
+    private var chevronLottieView: LottieAnimationView = LottieAnimationView()
 
     private weak var delegate: ChevronViewDelegate?
 
@@ -91,7 +90,7 @@ final class ChevronView: UIView {
     }
 
     private func setAnimation(name: String) {
-        chevronLottieView.animation = Animation.named(name)
+        chevronLottieView.animation = LottieAnimation.named(name)
         chevronLottieView.play()
     }
 

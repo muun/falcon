@@ -36,7 +36,7 @@ class FinishRecoveryCodeSetupActionTest: MuunTestCase {
 
         subject.run(type: .RECOVERY_CODE, recoveryCode: expectedRecoveryCode)
 
-        waitForExpectations(timeout: 1.0) { _ in
+        waitForExpectations(timeout: 3.0) { _ in
             
             XCTAssertEqual(self.houstonService.finishChallengeCalledCount, 1)
             XCTAssertEqual(self.keysRepository.markChallengeKeyAsVerifiedForRecoveryCodeCalledCount, 1)

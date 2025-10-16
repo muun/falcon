@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
 		548854F438ED9C4BB6CE5AE9861083C9 /* SwiftGen */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 3B37806597944E7395901BE6859D15B6 /* Build configuration list for PBXAggregateTarget "SwiftGen" */;
+			buildConfigurationList = F7BFC46E3EDE0B8AB3427B9267E1750B /* Build configuration list for PBXAggregateTarget "SwiftGen" */;
 			buildPhases = (
 			);
 			dependencies = (
@@ -76,7 +76,7 @@
 				LastUpgradeCheck = 1500;
 			};
 			buildConfigurationList = 09983F219F0DC35A3E634FE1DCCFF1F8 /* Build configuration list for PBXProject "SwiftGen" */;
-			compatibilityVersion = "Xcode 12.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -157,7 +157,25 @@
 			};
 			name = Release;
 		};
-		2B6206FDBE94318823A46C921E83C337 /* Debug */ = {
+		1E465A1A3F5DECEE9B92D8260BD7E02C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 74702070F3D0836003E74A0EC20FC78D /* SwiftGen.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		26D7B0EEE38D9205FAB7663C50AFC1D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 522BF415F26A63DA0CC6D11305C9B754 /* SwiftGen.debug.xcconfig */;
 			buildSettings = {
@@ -173,6 +191,24 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		4B8B7166A157CD83D6A4164186867D93 /* Release-Dogfood */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 74702070F3D0836003E74A0EC20FC78D /* SwiftGen.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				DEVELOPMENT_TEAM = 5YYLBTUB6W;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Dogfood";
 		};
 		ABAC377397AD856947A6E3602921F0B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -241,23 +277,68 @@
 			};
 			name = Debug;
 		};
-		B14159A53DA54A2E90837BA92A6C3175 /* Release */ = {
+		AFE4895488AD05EADF20BC45AB0E66B5 /* Release-Dogfood */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 74702070F3D0836003E74A0EC20FC78D /* SwiftGen.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5YYLBTUB6W;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE_DOGFOOD=1",
 					"$(inherited)",
-					"@executable_path/Frameworks",
 				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
 			};
-			name = Release;
+			name = "Release-Dogfood";
 		};
 /* End XCBuildConfiguration section */
 
@@ -267,15 +348,17 @@
 			buildConfigurations = (
 				ABAC377397AD856947A6E3602921F0B0 /* Debug */,
 				17625DF7B8D1332E957733AEF6AAC963 /* Release */,
+				AFE4895488AD05EADF20BC45AB0E66B5 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3B37806597944E7395901BE6859D15B6 /* Build configuration list for PBXAggregateTarget "SwiftGen" */ = {
+		F7BFC46E3EDE0B8AB3427B9267E1750B /* Build configuration list for PBXAggregateTarget "SwiftGen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2B6206FDBE94318823A46C921E83C337 /* Debug */,
-				B14159A53DA54A2E90837BA92A6C3175 /* Release */,
+				26D7B0EEE38D9205FAB7663C50AFC1D8 /* Debug */,
+				1E465A1A3F5DECEE9B92D8260BD7E02C /* Release */,
+				4B8B7166A157CD83D6A4164186867D93 /* Release-Dogfood */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

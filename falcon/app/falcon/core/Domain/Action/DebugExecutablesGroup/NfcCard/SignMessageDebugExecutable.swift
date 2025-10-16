@@ -20,14 +20,9 @@ final class SignMessageDebugExecutable: DebugExecutable {
     func execute(context: DebugMenuExecutableContext, completion: @escaping () -> Void) {
         if #available(iOS 13.0, *) {
             let message = "testing NFC in iOS"
-            signMessageAction.run(
-                message: message,
-                slot: 0
-            )
-            .subscribe(onSuccess: { signedMessage in
-                if let signedMessageText = signedMessage?.debugDescription {
-                    Logger.log(.debug, "Signed message response: \(signedMessageText)")
-                }
+            signMessageAction.run(message: message)
+            .subscribe(onSuccess: { signedMessageBytes in
+                Logger.log(.debug, "Signed message response: \(signedMessageBytes)")
                 completion()
             }).disposed(by: disposeBag)
         }

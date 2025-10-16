@@ -13,6 +13,8 @@ class SettingsViewController: MUViewController {
 
     @IBOutlet private weak var tableView: UITableView!
 
+    @IBOutlet private weak var featureFlagLabel: UILabel!
+
     private lazy var presenter = instancePresenter(SettingsPresenter.init, delegate: self)
 
     override var screenLoggingName: String {
@@ -34,6 +36,12 @@ class SettingsViewController: MUViewController {
 
         presenter.setUp()
         tableView.reloadData()
+        #if DOGFOOD || DEBUG
+        featureFlagLabel.isHidden = false
+        featureFlagLabel.text = presenter.getFlagLabelText()
+        #else
+        featureFlagLabel.isHidden = true
+        #endif
     }
 
     override func viewWillDisappear(_ animated: Bool) {

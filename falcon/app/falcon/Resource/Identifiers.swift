@@ -7,7 +7,7 @@
 //
 
 import Foundation
-// Keep it sync with Identifiers file on core project
+
 enum Identifiers {
     static let group = "5YYLBTUB6W.group.com.muun.falcon"
 

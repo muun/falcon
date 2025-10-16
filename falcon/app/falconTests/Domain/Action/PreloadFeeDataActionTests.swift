@@ -26,6 +26,11 @@ final class PreloadFeeDataActionTests: MuunTestCase {
         setUpBasicData()
     }
 
+    override func tearDown() {
+        action.reset()
+        super.tearDown()
+    }
+
     func testRunTwiceShouldRunOneTimeBecauseOfThrottling() {
 
         fakeHoustonService.fetchRealTimeFeesCalledCount = 0
@@ -45,7 +50,7 @@ final class PreloadFeeDataActionTests: MuunTestCase {
 
     func testRunTwiceWithThrottlingIntervalShouldRunTwoTimes() {
 
-        let throttlingTime: TimeInterval = 0.1
+        let throttlingTime: TimeInterval = 0.3
 
         fakeHoustonService.fetchRealTimeFeesCalledCount = 0
         fakeLibwalletService.persistFeeBumpFunctionsCalledCount = 0
@@ -57,7 +62,7 @@ final class PreloadFeeDataActionTests: MuunTestCase {
         XCTAssertEqual(fakeLibwalletService.persistFeeBumpFunctionsCalledCount, 1)
 
         let expectation: XCTestExpectation = expectation(description: "throttling delay")
-        // ThrottlingInterval = 0.1 for testing mode
+        // ThrottlingInterval = 0.3 for testing mode
         DispatchQueue.main.asyncAfter(deadline: .now() + throttlingTime) {
             expectation.fulfill()
         }

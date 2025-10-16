@@ -1,6 +1,6 @@
 module github.com/muun/libwallet
 
-go 1.22.1
+go 1.22
 
 require (
 	github.com/btcsuite/btcd v0.24.2-beta.rc1.0.20240403021926-ae5533602c46

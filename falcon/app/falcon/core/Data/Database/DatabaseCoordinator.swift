@@ -16,21 +16,24 @@ public class DatabaseCoordinator {
     public let queue: DatabaseQueue
     let preferences: Preferences
     let secureStorage: SecureStorage
+    let walletService: WalletService
 
-    public init(queue: DatabaseQueue, preferences: Preferences, secureStorage: SecureStorage) throws {
+    public init(queue: DatabaseQueue,
+                preferences: Preferences,
+                secureStorage: SecureStorage,
+                walletService: WalletService) throws {
         self.queue = queue
         self.preferences = preferences
         self.secureStorage = secureStorage
-
-        do {
-            try migrate()
-        } catch {
-            throw MuunError(error)
-        }
+        self.walletService = walletService
     }
 
-    private func migrate() throws {
-        try buildSchema().migrate(queue)
+    public func migrate() {
+        do {
+            try buildSchema().migrate(queue)
+        } catch {
+            Logger.fatal("Failed to migrate database schema: \(error.localizedDescription)")
+        }
     }
 
     // swiftlint:disable function_body_length
@@ -491,6 +494,12 @@ public class DatabaseCoordinator {
 
             let updatedNts = nts.initUtxoStatus()
             preferences.set(object: updatedNts, forKey: .nextTransactionSize)
+        }
+
+        migrator.registerMigration("move isBalanceHidden to libwallet storage") { _ in
+            let isBalanceHidden = self.preferences.bool(forKey: .isBalanceHidden)
+            self.walletService.saveBool(key: Persistence.isBalanceHidden.rawValue, value: isBalanceHidden)
+            self.preferences.remove(key: .isBalanceHidden)
         }
 
         return migrator

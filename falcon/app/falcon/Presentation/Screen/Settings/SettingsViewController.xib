@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="falcon" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="Muun" customModuleProvider="target">
             <connections>
+                <outlet property="featureFlagLabel" destination="j0r-HP-CjZ" id="mus-Ej-oTl"/>
                 <outlet property="tableView" destination="WCh-b2-e5u" id="IMo-pJ-RP2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" separatorInsetReference="fromAutomaticInsets" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="24" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="WCh-b2-e5u">
-                    <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                    <rect key="frame" x="0.0" y="100" width="375" height="644"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <inset key="separatorInset" minX="24" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <connections>
@@ -30,15 +30,29 @@
                         <outlet property="delegate" destination="-1" id="Cpr-vg-bnz"/>
                     </connections>
                 </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feature Flag" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j0r-HP-CjZ">
+                    <rect key="frame" x="29.999999999999993" y="723.66666666666663" width="94.333333333333314" height="20.333333333333371"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" name="muunRed"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="WCh-b2-e5u" secondAttribute="bottom" id="4df-XF-5x4"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="leading" secondItem="j0r-HP-CjZ" secondAttribute="leading" constant="-30" id="Hct-9X-xu1"/>
+                <constraint firstItem="j0r-HP-CjZ" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="K5l-tu-2ku"/>
                 <constraint firstItem="WCh-b2-e5u" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Pa2-QW-Aad"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="WCh-b2-e5u" secondAttribute="trailing" id="QqR-tn-Czw"/>
                 <constraint firstItem="WCh-b2-e5u" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="pyF-tP-jqf"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="140" y="16"/>
         </view>
     </objects>
+    <resources>
+        <namedColor name="muunRed">
+            <color red="0.81176470588235294" green="0.26666666666666666" blue="0.32941176470588235" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

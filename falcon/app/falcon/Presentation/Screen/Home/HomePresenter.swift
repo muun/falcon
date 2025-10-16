@@ -42,6 +42,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     private let balanceActions: BalanceActions
     private let realTimeDataAction: RealTimeDataAction
     private let preferences: Preferences
+    private let walletService: WalletService
     private let userPreferencesSelector: UserPreferencesSelector
     private let updateUserPreferencesAction: UpdateUserPreferencesAction
     private let sessionActions: SessionActions
@@ -58,6 +59,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
          realTimeDataAction: RealTimeDataAction,
          sessionActions: SessionActions,
          preferences: Preferences,
+         walletService: WalletService,
          userPreferencesSelector: UserPreferencesSelector,
          updateUserPreferencesAction: UpdateUserPreferencesAction,
          fetchNotificationsAction: FetchNotificationsAction,
@@ -69,6 +71,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         self.realTimeDataAction = realTimeDataAction
         self.sessionActions = sessionActions
         self.preferences = preferences
+        self.walletService = walletService
         self.userPreferencesSelector = userPreferencesSelector
         self.updateUserPreferencesAction = updateUserPreferencesAction
         self.fetchNotificationsAction = fetchNotificationsAction
@@ -295,7 +298,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     }
 
     func isBalanceHidden() -> Bool {
-        return preferences.bool(forKey: .isBalanceHidden)
+        return walletService.getBool(key: Persistence.isBalanceHidden.rawValue, defaultValue: false)
     }
 
     func toggleBalanceVisibility() {
@@ -305,7 +308,7 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     }
 
     private func setBalanceHidden(_ hidden: Bool) {
-        preferences.set(value: hidden, forKey: .isBalanceHidden)
+        walletService.saveBool(key: Persistence.isBalanceHidden.rawValue, value: hidden)
     }
 
     private func getExchangeRateWindow() -> ExchangeRateWindow? {
