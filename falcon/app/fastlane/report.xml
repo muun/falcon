@@ -5,229 +5,229 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000283">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000282">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: get_version_number" time="0.088232">
+      <testcase classname="fastlane.lanes" name="01: get_version_number" time="0.128173">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: ensure_git_branch" time="0.021857">
+      <testcase classname="fastlane.lanes" name="02: ensure_git_branch" time="0.019528">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: ensure_git_status_clean" time="0.191849">
+      <testcase classname="fastlane.lanes" name="03: ensure_git_status_clean" time="0.147933">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: Switch to ios upload_testflight lane" time="8.6e-05">
+      <testcase classname="fastlane.lanes" name="04: Switch to ios upload_testflight lane" time="0.00018">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: Switch to ios get_current_env lane" time="7.1e-05">
+      <testcase classname="fastlane.lanes" name="05: Switch to ios get_current_env lane" time="7.3e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: Switch to ios get_app_identifier lane" time="6.9e-05">
+      <testcase classname="fastlane.lanes" name="06: Switch to ios get_app_identifier lane" time="6.2e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: Switch to ios get_xcode_build_configuration lane" time="6.7e-05">
+      <testcase classname="fastlane.lanes" name="07: Switch to ios get_xcode_build_configuration lane" time="5.7e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: Switch to ios get_current_env lane" time="5.6e-05">
+      <testcase classname="fastlane.lanes" name="08: Switch to ios get_current_env lane" time="5.2e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: Switch to ios update_signing_provisioning lane" time="5.3e-05">
+      <testcase classname="fastlane.lanes" name="09: Switch to ios update_signing_provisioning lane" time="0.001104">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: Switch to ios get_muun_email lane" time="4.8e-05">
+      <testcase classname="fastlane.lanes" name="10: Switch to ios get_muun_email lane" time="9.7e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="11: Switch to ios get_current_env lane" time="4.8e-05">
+      <testcase classname="fastlane.lanes" name="11: Switch to ios get_current_env lane" time="6.7e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="12: prompt" time="4.182727">
+      <testcase classname="fastlane.lanes" name="12: prompt" time="6.138645">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="13: sigh" time="7.159196">
+      <testcase classname="fastlane.lanes" name="13: sigh" time="4.630447">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="14: sigh" time="7.135613">
+      <testcase classname="fastlane.lanes" name="14: sigh" time="2.064262">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="15: Switch to ios set_env lane" time="9.3e-05">
+      <testcase classname="fastlane.lanes" name="15: Switch to ios set_env lane" time="0.000105">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="16: Switch to ios get_current_env lane" time="6.6e-05">
+      <testcase classname="fastlane.lanes" name="16: Switch to ios get_current_env lane" time="5.9e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="17: Switch to ios get_env_for_app_env_case lane" time="5.1e-05">
+      <testcase classname="fastlane.lanes" name="17: Switch to ios get_env_for_app_env_case lane" time="5.8e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="18: sed -i &apos;&apos; s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../app/falcon/core/Environment.swift" time="0.006977">
+      <testcase classname="fastlane.lanes" name="18: sed -i &apos;&apos; s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../app/falcon/core/Environment.swift" time="0.008441">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="19: Switch to ios get_env_for_app_env_case lane" time="0.000136">
+      <testcase classname="fastlane.lanes" name="19: Switch to ios get_env_for_app_env_case lane" time="0.00025">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="20: sed -i &apos;&apos; s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../app/falconPushNotifications/Environment.swift" time="0.004477">
+      <testcase classname="fastlane.lanes" name="20: sed -i &apos;&apos; s/static\ let\ current:\ Environment\ \=\ \[\^\ \]\*/static\ let\ current:\ Environment\ \=\ .prod/ ../../app/falconPushNotifications/Environment.swift" time="0.006518">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="21: sed -i &apos;&apos; s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falconPushNotifications/Environment.swift" time="0.004374">
+      <testcase classname="fastlane.lanes" name="21: sed -i &apos;&apos; s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falconPushNotifications/Environment.swift" time="0.006765">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="22: sed -i &apos;&apos; s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falcon/Resource/Environment+Extension.swift" time="0.004799">
+      <testcase classname="fastlane.lanes" name="22: sed -i &apos;&apos; s/let\ env\ \=\ rawValue\*/let\ env\ \=\ \&quot;prod\&quot;/ ../../app/falcon/Resource/Environment+Extension.swift" time="0.005785">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="23: sed -i &apos;&apos; s/static\ let\ bundleId\ \=\ \&quot;\[\^\&quot;\]\*\&quot;/static\ let\ bundleId\ \=\ \&quot;com.muun.falcon\&quot;/ ../../app/falcon/Resource/Identifiers.swift" time="0.004923">
+      <testcase classname="fastlane.lanes" name="23: sed -i &apos;&apos; s/static\ let\ bundleId\ \=\ \&quot;\[\^\&quot;\]\*\&quot;/static\ let\ bundleId\ \=\ \&quot;com.muun.falcon\&quot;/ ../../app/falcon/Resource/Identifiers.swift" time="0.005665">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="24: Switch to ios update_build_number lane" time="0.000144">
+      <testcase classname="fastlane.lanes" name="24: Switch to ios update_build_number lane" time="0.000201">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="25: Switch to ios get_current_env lane" time="8.4e-05">
+      <testcase classname="fastlane.lanes" name="25: Switch to ios get_current_env lane" time="6.4e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="26: get_build_number" time="0.077485">
+      <testcase classname="fastlane.lanes" name="26: get_build_number" time="0.092835">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="27: get_build_number" time="0.078382">
+      <testcase classname="fastlane.lanes" name="27: get_build_number" time="0.08024">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="28: increment_build_number" time="0.235374">
+      <testcase classname="fastlane.lanes" name="28: increment_build_number" time="0.376066">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="29: get_version_number" time="0.090066">
+      <testcase classname="fastlane.lanes" name="29: get_version_number" time="0.116539">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="30: build_app" time="221.52395">
+      <testcase classname="fastlane.lanes" name="30: build_app" time="292.197578">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="31: Switch to ios upload_build_with_dsyms lane" time="7.9e-05">
+      <testcase classname="fastlane.lanes" name="31: Switch to ios upload_build_with_dsyms lane" time="0.00038">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="32: Switch to ios get_current_env lane" time="6.0e-05">
+      <testcase classname="fastlane.lanes" name="32: Switch to ios get_current_env lane" time="6.9e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="33: Switch to ios get_muun_email lane" time="5.7e-05">
+      <testcase classname="fastlane.lanes" name="33: Switch to ios get_muun_email lane" time="7.8e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="34: upload_to_testflight" time="225.687083">
+      <testcase classname="fastlane.lanes" name="34: upload_to_testflight" time="223.93668">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="35: upload_symbols_to_crashlytics" time="18.458858">
+      <testcase classname="fastlane.lanes" name="35: upload_symbols_to_crashlytics" time="22.455913">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="36: Switch to ios clean_up_build_dir lane" time="0.00021">
+      <testcase classname="fastlane.lanes" name="36: Switch to ios clean_up_build_dir lane" time="0.000222">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="37: Switch to ios get_current_env lane" time="8.3e-05">
+      <testcase classname="fastlane.lanes" name="37: Switch to ios get_current_env lane" time="6.6e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="38: clean_build_artifacts" time="0.001397">
+      <testcase classname="fastlane.lanes" name="38: clean_build_artifacts" time="0.021997">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="39: reset_git_repo" time="0.153705">
+      <testcase classname="fastlane.lanes" name="39: reset_git_repo" time="0.132435">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="40: get_build_number" time="0.078304">
+      <testcase classname="fastlane.lanes" name="40: get_build_number" time="0.082458">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="41: commit_version_bump" time="3.809176">
+      <testcase classname="fastlane.lanes" name="41: commit_version_bump" time="8.012173">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="42: get_build_number" time="0.103141">
+      <testcase classname="fastlane.lanes" name="42: get_build_number" time="0.085532">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="43: add_git_tag" time="0.062456">
+      <testcase classname="fastlane.lanes" name="43: add_git_tag" time="0.020529">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="44: push_to_git_remote" time="30.05757">
+      <testcase classname="fastlane.lanes" name="44: push_to_git_remote" time="1.596634">
         
-          <failure message="/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:229:in `chdir&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:475:in `block (2 levels) in parsing_binding&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/lane.rb:41:in `call&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:204:in `try_switch_to_lane&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:146:in `trigger_action_by_name&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:35:in `block (2 levels) in parsing_binding&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/lane.rb:41:in `call&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:45:in `chdir&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:45:in `execute&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/gems/fastlane-2.226.0/bin/fastlane:23:in `&lt;top (required)&gt;&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/bin/fastlane:25:in `load&apos;&#10;/Users/daniel/muun/falcon/app/vendor/bundle/ruby/3.1.0/bin/fastlane:25:in `&lt;top (required)&gt;&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/cli/exec.rb:58:in `load&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/cli/exec.rb:58:in `kernel_load&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/cli/exec.rb:23:in `run&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/cli.rb:479:in `exec&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor.rb:392:in `dispatch&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/cli.rb:31:in `dispatch&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor/base.rb:485:in `start&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/cli.rb:25:in `start&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/exe/bundle:48:in `block in &lt;top (required)&gt;&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/lib/bundler/friendly_errors.rb:117:in `with_friendly_errors&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/lib/ruby/gems/3.1.0/gems/bundler-2.3.16/exe/bundle:36:in `&lt;top (required)&gt;&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/bin/bundle:25:in `load&apos;&#10;/Users/daniel/.rbenv/versions/3.1.2/bin/bundle:25:in `&lt;main&gt;&apos;&#10;&#10;Exit status of command &apos;git push origin falcon-2.11.0:falcon-2.11.0 --tags&apos; was 128 instead of 0.&#10;sign_and_send_pubkey: signing failed for ECDSA-SK &quot;/Users/daniel/.ssh/id_ecdsa_sk&quot;: invalid format&#10;git@github.com: Permission denied (publickey).&#10;fatal: Could not read from remote repository.&#10;&#10;Please make sure you have the correct access rights&#10;and the repository exists.&#10;" />
+          <failure message="/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:229:in `chdir&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:475:in `block (2 levels) in parsing_binding&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/lane.rb:41:in `call&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:204:in `try_switch_to_lane&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:146:in `trigger_action_by_name&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:35:in `block (2 levels) in parsing_binding&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/lane.rb:41:in `call&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:45:in `chdir&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/runner.rb:45:in `execute&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.226.0/bin/fastlane:23:in `&lt;top (required)&gt;&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/bin/fastlane:25:in `load&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/bin/fastlane:25:in `&lt;top (required)&gt;&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/cli/exec.rb:58:in `load&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/cli/exec.rb:58:in `kernel_load&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/cli/exec.rb:23:in `run&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/cli.rb:479:in `exec&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor.rb:392:in `dispatch&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/cli.rb:31:in `dispatch&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/vendor/thor/lib/thor/base.rb:485:in `start&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/cli.rb:25:in `start&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/exe/bundle:48:in `block in &lt;top (required)&gt;&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/lib/bundler/friendly_errors.rb:117:in `with_friendly_errors&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/bundler-2.3.16/exe/bundle:36:in `&lt;top (required)&gt;&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/bin/bundle:25:in `load&apos;&#10;/Users/lucasserruya/.rbenv/versions/3.2.2/bin/bundle:25:in `&lt;main&gt;&apos;&#10;&#10;Exit status of command &apos;git push origin falcon-2.11.1:falcon-2.11.1 --tags&apos; was 1 instead of 0.&#10;To https://github.com/muun/muun.git&#10;   76e72991ff..b3ccdfec2c  falcon-2.11.1 -&gt; falcon-2.11.1&#10; * [new tag]               falcon-2.11.1-14040002 -&gt; falcon-2.11.1-14040002&#10; ! [rejected]              apollo-53.2-1302 -&gt; apollo-53.2-1302 (already exists)&#10; ! [rejected]              falcon-2.7.17-1041 -&gt; falcon-2.7.17-1041 (already exists)&#10; ! [rejected]              falcon-2.8.0-1101 -&gt; falcon-2.8.0-1101 (already exists)&#10;error: failed to push some refs to &apos;https://github.com/muun/muun.git&apos;&#10;hint: Updates were rejected because the tag already exists in the remote.&#10;" />
         
       </testcase>
     

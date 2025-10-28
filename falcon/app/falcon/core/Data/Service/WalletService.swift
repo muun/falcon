@@ -131,54 +131,60 @@ public class WalletService {
     }
 
     func performGrpcRequest<Req, Res>(_ call: UnaryCall<Req, Res>) -> Single<Res> {
-        return Single<Res>.create { single in
-            DispatchQueue.global(qos: .userInteractive).async {
-                do {
-                    let response = try call.response.wait()
+        return Single<Res>.create { [weak self] single in
+            call.response.whenComplete { result in
+                switch result {
+                case .success(let response):
                     single(.success(response))
-                } catch let error as GRPCStatus {
-                    if let detail = self.extractRpcErrorDetail(from: call) {
-                        Logger.log(
-                            .err,
-                            """
-                            Libwallet error detail:
-                            - type: \(detail.type)
-                            - code: \(detail.code)
-                            - message: \(detail.message)
-                            - developerMessage: \(detail.developerMessage)
-                            """
-                        )
-                        if detail.type == Rpc_ErrorType.houston {
-                            let devError = DeveloperError(
+                case .failure(let error):
+                    if let grpcError = error as? GRPCStatus {
+                        if let detail = self?.extractRpcErrorDetail(from: call) {
+                            Logger.log(
+                                .err,
+                                """
+                                Libwallet error detail:
+                                - type: \(detail.type)
+                                - code: \(detail.code)
+                                - message: \(detail.message)
+                                - developerMessage: \(detail.developerMessage)
+                                """
+                            )
+                            if detail.type == Rpc_ErrorType.houston {
                                 // errorCode is the only property used in UI flows.
                                 // The rest of properties of DeveloperError are used for
                                 // logging purposes only.
                                 // Logs for requestId and status are already handled by libwallet
                                 // TODO: Improve this structure.
-                                developerMessage: detail.developerMessage,
-                                errorCode: Int(detail.code),
-                                message: detail.message,
-                                requestId: 0,
-                                status: 0
-                            )
-                            let houstonError = MuunError(ServiceError.customError(devError))
-                            single(.error(houstonError))
+                                let devError = DeveloperError(
+                                    developerMessage: detail.developerMessage,
+                                    errorCode: Int(detail.code),
+                                    message: detail.message,
+                                    requestId: 0,
+                                    status: 0
+                                )
+                                let houstonError = MuunError(ServiceError.customError(devError))
+                                single(.error(houstonError))
+                            } else {
+                                // TODO:
+                                // Currently, we are only using error codes of houston for UI flows.
+                                // Client errors (Rpc_ErrorType.client) and libwallet errors
+                                // (Rpc_ErrorType.libwallet) should be considered in the early
+                                // future.
+                                single(.error(grpcError))
+                            }
                         } else {
-                            // TODO:
-                            //  Currently, we are only using error codes of houston for UI flows.
-                            //  Client errors (Rpc_ErrorType.client) and libwallet errors
-                            //  (Rpc_ErrorType.libwallet) should be considered in the early future.
-                            single(.error(error))
+                            Logger.log(
+                                .err,
+                                "gRPC code: \(grpcError.code), Message: \(grpcError.message ?? "No message")"
+                            )
+                            single(.error(grpcError))
                         }
                     } else {
-                        Logger.log(.err, "gRPC code: \(error.code), Message: \(error.message ?? "No message")")
                         single(.error(error))
                     }
-                } catch {
-                    single(.error(error))
                 }
             }
-            return Disposables.create()
+            return Disposables.create { call.cancel(promise: nil) }
         }
     }
 
