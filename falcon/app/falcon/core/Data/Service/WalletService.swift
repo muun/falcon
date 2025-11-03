@@ -66,30 +66,34 @@ public class WalletService {
             .map { $0.signedMessageHex.stringBytes }
     }
 
-    private func save(key: String, value: Rpc_Value) -> Completable {
-        guard let client = client else {
-            return Completable.error(MuunError(ServiceError.defaultError))
-        }
+    private func save(key: String, value: Rpc_Value) {
         let request = Rpc_SaveRequest.with {
             $0.key = key
             $0.value = value
         }
-        let call = client.save(request)
 
-        return performGrpcRequest(call).asCompletable()
+        let call = client!.save(request)
+        do {
+            _ = try call.response.wait()
+        } catch let error as GRPCStatus {
+            Logger.fatal("Status Code: \(error.code), Message: \(error.message ?? "No message")")
+        } catch {
+            Logger.fatal("Unexpected error: \(error.localizedDescription)")
+        }
     }
 
-    private func get(key: String) -> Single<Rpc_Value> {
-        guard let client = client else {
-            return Single.error(MuunError(ServiceError.defaultError))
-        }
+    private func get(key: String) -> Rpc_Value {
         let request = Rpc_GetRequest.with {
             $0.key = key
         }
-        let call = client.get(request)
-
-        return performGrpcRequest(call)
-            .map { $0.value }
+        do {
+            let response = try client!.get(request).response.wait()
+            return response.value
+        } catch let error as GRPCStatus {
+            Logger.fatal("Status Code: \(error.code), Message: \(error.message ?? "No message")")
+        } catch let error {
+            Logger.fatal("Unexpected error: \(error.localizedDescription)")
+        }
     }
 
     func saveBool(key: String, value: Bool?) {
@@ -99,31 +103,19 @@ public class WalletService {
         } else {
             rpcValue.kind = .nullValue(Rpc_NullValue.nullValue)
         }
-        do {
-            try save(key: key, value: rpcValue)
-                .andThen(Single.just(()))
-                .toBlocking()
-                .single()
-        } catch {
-            Logger.fatal("Failed to save key \(key) with value \(String(describing: value)): \(error)")
-        }
+        save(key: key, value: rpcValue)
     }
 
     func getBool(key: String) -> Bool? {
-        do {
-            let value = try get(key: key).toBlocking().single()
-            switch value.kind {
-            case .boolValue(let bool):
-                return bool
-            case .nullValue:
-                return nil
-            default:
-                Logger.fatal("Value for key \(key) is not of type Bool")
-            }
-        } catch {
-            Logger.fatal("Failed to get key \(key): \(error)")
+        let value = get(key: key)
+        switch value.kind {
+        case .boolValue(let bool):
+            return bool
+        case .nullValue:
+            return nil
+        default:
+            Logger.fatal("Value for key \(key) is not of type Bool")
         }
-
     }
 
     func getBool(key: String, defaultValue: Bool) -> Bool {
