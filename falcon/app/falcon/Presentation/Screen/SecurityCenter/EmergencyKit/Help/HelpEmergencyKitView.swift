@@ -34,8 +34,14 @@ final class HelpEmergencyKitView: UIView {
         addSubview(titleAndDescripionView)
         NSLayoutConstraint.activate([
             titleAndDescripionView.topAnchor.constraint(equalTo: topAnchor),
-            titleAndDescripionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            titleAndDescripionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+            titleAndDescripionView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: .sideMargin
+            ),
+            titleAndDescripionView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -.sideMargin
+            )
         ])
 
         titleAndDescripionView.titleText = L10n.HelpEmergencyKitView.s1

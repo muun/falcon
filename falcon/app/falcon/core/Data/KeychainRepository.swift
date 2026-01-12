@@ -14,7 +14,6 @@ public class KeychainRepository {
     public enum storedKeys: String, CaseIterable {
         case deviceCheckToken
         case fallbackDeviceToken
-        case iCloudRecordId
     }
 
     init(keyPrefix: String = Identifiers.bundleId,
@@ -113,8 +112,16 @@ public class KeychainRepository {
         return status == errSecSuccess
     }
 
-    func wipe() {
-        let keychainStoredKeys = getKeychainStoredKeys()
+    func wipe(preservePin: Bool = false) {
+        var keychainStoredKeys = getKeychainStoredKeys()
+
+        if preservePin {
+            do {
+                keychainStoredKeys[SecureStorage.Keys.pin.rawValue] = try get(SecureStorage.Keys.pin.rawValue)
+            } catch {
+                Logger.log(error: error)
+            }
+        }
 
         let dict: [NSString: Any] = [kSecClass: kSecClassGenericPassword,
                                      kSecAttrService: keyPrefix,

@@ -10,7 +10,11 @@ import UIKit
 
 class SyncViewController: MUViewController {
 
-    fileprivate lazy var presenter = instancePresenter(SyncPresenter.init, delegate: self, state: isExistingUser)
+    fileprivate lazy var presenter = instancePresenter(
+        SyncPresenter.init,
+        delegate: self,
+        state: isExistingUser
+    )
 
     private var isExistingUser = false
     private var shouldRunSyncAction = false
@@ -26,6 +30,13 @@ class SyncViewController: MUViewController {
         return "sync"
     }
 
+    /**
+     Be aware this screen will behave differently depending on how its invoked. If it is invoked
+     from pinViewController it will work because SyncAction already has an state with success or
+     failure so as soon as the presenter subscribes it gets the last state triggering either a retry or going to the home.
+     If it is invoked from the appDelegate shouldRunSyncAction will be true so the action will be run and handle by
+     SyncPresenter#onResponse.
+     */
     convenience init(existingUser: Bool, shouldRunSyncAction: Bool = false) {
         self.init()
         self.isExistingUser = existingUser

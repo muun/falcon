@@ -136,7 +136,10 @@ extension EmailPrimingViewController: LinkButtonViewDelegate {
 extension EmailPrimingViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
-        navigationController?.pushViewController(SignUpEmailViewController(wording: wording), animated: true)
+        navigationController?.pushViewController(
+            SignUpEmailViewController(wording: wording),
+            animated: true
+        )
     }
 
 }

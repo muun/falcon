@@ -326,22 +326,67 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         }
     }
 
+    func nfcNoSlotsAvailable() {
+        presentDisableSecurityCardFlagAlertView()
+    }
+
+    private func presentDisableSecurityCardFlagAlertView() {
+       let alert = UIAlertController(
+           title: L10n.NewOperationViewController.s7,
+           message: L10n.NewOperationViewController.s8,
+           preferredStyle: .actionSheet
+       )
+       alert.addAction(UIAlertAction(
+           title: L10n.NewOperationViewController.s5,
+           style: .cancel,
+           handler: { _ in
+               alert.dismiss(animated: true)
+               self.reportNewOpAction(type: "cancel_disable_flag")
+           }
+       ))
+
+       alert.addAction(UIAlertAction(
+           title: L10n.NewOperationViewController.s9,
+           style: .default,
+           handler: { _ in
+               self.reportNewOpAction(type: "disable_flag")
+               self.forceHideKeyboard()
+               self.presenter.disableSecurityCardFlag()
+           }
+       ))
+
+       alert.view.tintColor = Asset.Colors.muunGrayDark.color
+
+       self.navigationController!.present(alert, animated: true) {
+           self.reportNewOpAction(type: "disable_flag_dialog_shown")
+       }
+    }
+
     private func presentAbortAlertView() {
         let alert = UIAlertController(
             title: L10n.NewOperationViewController.s3,
             message: L10n.NewOperationViewController.s4,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: L10n.NewOperationViewController.s5, style: .default, handler: { _ in
-            alert.dismiss(animated: true)
-            self.presenter.cancelAbort()
-        }))
+        alert.addAction(UIAlertAction(
+            title: L10n.NewOperationViewController.s5,
+            style: .default,
+            handler: { _ in
+                alert.dismiss(animated: true)
+                self.reportNewOpAction(type: "cancel_abort")
+                self.presenter.cancelAbort()
+            }
+        ))
 
-        alert.addAction(UIAlertAction(title: L10n.NewOperationViewController.s6, style: .destructive, handler: { _ in
-            AnalyticsHelper.logEvent("NEW_OP_ABORTED")
-            self.forceHideKeyboard()
-            self.navigationController!.popToRootViewController(animated: true)
-        }))
+        alert.addAction(UIAlertAction(
+            title: L10n.NewOperationViewController.s6,
+            style: .destructive,
+            handler: { _ in
+                self.reportNewOpAction(type: "abort")
+                self.forceHideKeyboard()
+                self.navigationController!.popToRootViewController(animated: true)
+            }
+        ))
 
         alert.view.tintColor = Asset.Colors.muunGrayDark.color
 
@@ -375,8 +420,6 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
     }
 
     func nfc2faError(_ error: NewOpError) {
-        let params = ["message": error.description().string]
-        logEvent("nfc_2fa_failed", parameters: params)
         displayErrorView(type: error)
     }
 
@@ -384,6 +427,12 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
         displayErrorView(type: .amountBelowDust)
     }
 
+    private func reportNewOpAction(type: String) {
+        var parameters: [String: Any] = [:]
+        parameters["type"] = type
+        parameters["has_2fa"] = self.presenter.hasNfc2fa
+        AnalyticsHelper.logEvent("new_op_action", parameters: parameters)
+    }
 }
 
 // Keyboard stuff

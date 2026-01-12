@@ -14,16 +14,16 @@ public class SubmarineSwapAction: AsyncAction<SubmarineSwapCreated> {
     private let houstonService: HoustonService
     private let keysRepository: KeysRepository
     private let blockchainHeightRepository: BlockchainHeightRepository
-    private let backgroundTimesService: BackgroundTimesService
+    private let backgroundTimesProcessor: BackgroundTimesProcessor
 
     init(houstonService: HoustonService,
          keysRepository: KeysRepository,
          blockchainHeightRepository: BlockchainHeightRepository,
-         backgroundTimesService: BackgroundTimesService) {
+         backgroundTimesProcessor: BackgroundTimesProcessor) {
         self.houstonService = houstonService
         self.keysRepository = keysRepository
         self.blockchainHeightRepository = blockchainHeightRepository
-        self.backgroundTimesService = backgroundTimesService
+        self.backgroundTimesProcessor = backgroundTimesProcessor
 
         super.init(name: "SubmarineSwapAction")
     }
@@ -35,7 +35,7 @@ public class SubmarineSwapAction: AsyncAction<SubmarineSwapCreated> {
         let submarineSwapRequest = SubmarineSwapRequest(invoice: invoice,
                                                         swapExpirationInBlocks: swapExpirationInBlocks,
                                                         origin: origin, 
-                                                        bkgTimes: backgroundTimesService.retrieveTimeLapses())
+                                                        bkgTimes: backgroundTimesProcessor.retrieveTimeLapses())
         runSingle(
             houstonService.createSubmarineSwap(submarineSwapRequest: submarineSwapRequest)
                 .map({ swapCreated in

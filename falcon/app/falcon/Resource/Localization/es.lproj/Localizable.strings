@@ -253,6 +253,9 @@ El valor de las comisiones aumenta cuando la red se encuentra muy activa. Si est
 "NewOperationViewController.s4" = "¿Quieres cancelar el pago y volver a la pantalla de inicio?";
 "NewOperationViewController.s5" = "NO";
 "NewOperationViewController.s6" = "SI, CANCELAR";
+"NewOperationViewController.s7" = "¿Desactivar el flag de security card?";
+"NewOperationViewController.s8" = "¿Quieres desactivar el flag de security card para completar el pago?";
+"NewOperationViewController.s9" = "SI, DESACTIVAR";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
 "ManuallyEnterQRViewController.s1" = "Texto de dirección o factura";
 "ManuallyEnterQRViewController.s2" = "CONTINUAR";
@@ -832,6 +835,7 @@ Por favor revisa tu conexión e inténtalo de nuevo.";
 "SettingsViewController.s20" = "Perderás tu historial de transacciones.";
 "SettingsViewController.s22" = "Eliminar";
 "SettingsViewController.s23" = "Necesitas vaciar tu monedero. Realiza un pago con todos tus fondos, y vuelve a intentarlo cuando la transacción tenga 6 confirmaciones.";
+"SettingsViewController.s24" = "Desactivar feature flags";
 "SettingsViewController.advanced" = "Configuración avanzada";
 "SettingsViewController.lightningNetwork" = "Lightning Network";
 "SettingsViewController.onchain" = "Bitcoin Network";
@@ -920,3 +924,8 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedOption" = "Unificado";
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription" = "🧪 Experimental. Mostrar un código QR unificado que codifica tanto una dirección de bitcoin como una factura de lightning. Muchos servicios no soportan este formato unificado aún.";
 "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetUnifiedDescriptionUnderline" = "Experimental.";
+
+/* DisableFeatureFlagsViewController */
+"DisableFeatureFlagsViewController.title" = "Desactivar feature flags";
+"DisableFeatureFlagsViewController.nfcLabel" = "Security Card";
+"DisableFeatureFlagsViewController.informationLabel" = "Algunas de nuestras feature flags pueden activarse o desactivarse según sea necesario. Estas son las que pueden modificarse actualmente. Desactiva la opción para deshabilitar la función seleccionada.";

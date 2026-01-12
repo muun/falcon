@@ -27,6 +27,7 @@ public enum FeatureFlags: String, RawRepresentable {
     case collectDeviceCheckReachability = "COLLECT_DEVICE_CHECK_REACHABILITY"
     case effectiveFeesCalculation = "EFFECTIVE_FEES_CALCULATION"
     case nfcCard = "NFC_CARD"
+    case nfcCardV2 = "NFC_CARD_V2"
 }
 
 public struct FeeWindow: Codable {

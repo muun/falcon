@@ -1,5 +1,5 @@
 //
-//  CardNfcService.swift
+//  NfcSessionImpl.swift
 //  Muun
 //
 //  Created by Daniel Mankowski on 05/03/2025.
@@ -10,7 +10,7 @@ import CoreNFC
 import RxSwift
 
 @available(iOS 13.0, *)
-final class DefaultCardNfcService: NSObject, CardNfcService {
+final class NfcSessionImpl: NSObject, NfcSession {
 
     private var session: NFCTagReaderSession?
     private var connectSubject: PublishSubject<Void>?
@@ -69,8 +69,12 @@ final class DefaultCardNfcService: NSObject, CardNfcService {
 }
 
 @available(iOS 13.0, *)
-extension DefaultCardNfcService: NFCTagReaderSessionDelegate {
+extension NfcSessionImpl: NFCTagReaderSessionDelegate {
     func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
+        AnalyticsHelper.logEvent(
+            "security_card_tap",
+            parameters: ["type": "tag_reader_alert_shown"]
+        )
         Logger.log(.debug, "NFC session became active.")
     }
 
@@ -78,9 +82,17 @@ extension DefaultCardNfcService: NFCTagReaderSessionDelegate {
         // Ignores expected non-critical errors such as user cancellation or session timeout,
         // and only logs and propagates other errors to observers.
         if let readerError = error as? NFCReaderError {
-            if readerError.code == .readerSessionInvalidationErrorUserCanceled
-                || readerError.code == .readerSessionInvalidationErrorSessionTimeout {
+            switch readerError.code {
+            case .readerSessionInvalidationErrorUserCanceled:
                 return
+            case .readerSessionInvalidationErrorSessionTimeout:
+                AnalyticsHelper.logEvent(
+                    "security_card_tap",
+                    parameters: ["type": "tag_reader_session_timeout"]
+                )
+                return
+            default:
+                break
             }
         }
         Logger.log(.warn, "NFC session invalidated with error: \(error.localizedDescription)")

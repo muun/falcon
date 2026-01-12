@@ -291,6 +291,15 @@ internal enum L10n {
     internal static let s9 = L10n.tr("Localizable", "DetailViewController.s9")
   }
 
+  internal enum DisableFeatureFlagsViewController {
+    /// Some of our feature flags can be turned off and on again at your request. These are the ones you can currently modify. Turn the toggles off to disable the selected feature.
+    internal static let informationLabel = L10n.tr("Localizable", "DisableFeatureFlagsViewController.informationLabel")
+    /// Security Card
+    internal static let nfcLabel = L10n.tr("Localizable", "DisableFeatureFlagsViewController.nfcLabel")
+    /// Disable feature flags
+    internal static let title = L10n.tr("Localizable", "DisableFeatureFlagsViewController.title")
+  }
+
   internal enum EmailAlreadyUsedView {
     /// Another wallet is already using this email
     internal static let s1 = L10n.tr("Localizable", "EmailAlreadyUsedView.s1")
@@ -894,6 +903,12 @@ internal enum L10n {
     internal static let s5 = L10n.tr("Localizable", "NewOperationViewController.s5")
     /// YES, CANCEL
     internal static let s6 = L10n.tr("Localizable", "NewOperationViewController.s6")
+    /// Disable security card flag?
+    internal static let s7 = L10n.tr("Localizable", "NewOperationViewController.s7")
+    /// Do you want to deactivate security card flag to complete payment?
+    internal static let s8 = L10n.tr("Localizable", "NewOperationViewController.s8")
+    /// YES, DISABLE
+    internal static let s9 = L10n.tr("Localizable", "NewOperationViewController.s9")
   }
 
   internal enum NotificationService {
@@ -1485,6 +1500,8 @@ internal enum L10n {
     internal static let s22 = L10n.tr("Localizable", "SettingsViewController.s22")
     /// You need to empty your wallet. Make a payment using all your funds, and try again when the transaction has 6 confirmations.
     internal static let s23 = L10n.tr("Localizable", "SettingsViewController.s23")
+    /// Disable feature flags
+    internal static let s24 = L10n.tr("Localizable", "SettingsViewController.s24")
     /// SECURITY
     internal static let s3 = L10n.tr("Localizable", "SettingsViewController.s3")
     /// Log out

@@ -4,7 +4,7 @@
 
 set -e
 
-GO_VERSION=1.22.1
+GO_VERSION=1.24.7
 
 repo_root=$(git rev-parse --show-toplevel)
 

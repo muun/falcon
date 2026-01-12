@@ -63,7 +63,8 @@ struct LocaleAmountFormatter: Resolver {
         let scale = currency.maximumFractionDigits
 
         var newString = string
-        // Remove thousand separators so that the number can be parsed when adding things in the middle
+        // Remove thousand separators so that the number
+        // can be parsed when adding things in the middle
         if let groupingSeperator = locale.groupingSeparator {
             newString = newString.replacingOccurrences(of: groupingSeperator, with: "")
         }
@@ -85,7 +86,10 @@ struct LocaleAmountFormatter: Resolver {
                 decimalPart = ""
             }
 
-            return LocaleAmountFormatter.addGroupingSeparator(locale, integerPart) + decimalSeperator + decimalPart
+            return LocaleAmountFormatter.addGroupingSeparator(
+                locale,
+                integerPart
+            ) + decimalSeperator + decimalPart
 
         } else {
             return LocaleAmountFormatter.addGroupingSeparator(locale, newString)

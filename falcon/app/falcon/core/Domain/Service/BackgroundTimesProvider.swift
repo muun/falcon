@@ -1,12 +1,12 @@
 //
-//  BackgroundTimesService.swift
+//  BackgroundTimesProcessor.swift
 //
 //  Created by Lucas Serruya on 17/01/2024.
 //
 
 import Foundation
 
-public class BackgroundTimesService {
+public class BackgroundTimesProcessor {
     private let backgroundTimesRepository: BackgroundTimesRepository
 
     init(backgroundTimesRepository: BackgroundTimesRepository) {

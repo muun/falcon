@@ -16,12 +16,18 @@ struct Fee {
 
 struct FeeHelper {
 
-    static func amountInInput(satoshis: Satoshis, data: NewOperation.ConfirmData) -> MonetaryAmount {
+    static func amountInInput(
+        satoshis: Satoshis,
+        data: NewOperation.ConfirmData
+    ) -> MonetaryAmount {
         let currency = data.amount.inInputCurrency.currency
         return satoshis.valuation(at: rate(for: currency, data: data), currency: currency)
     }
 
-    static func amountInPrimary(satoshis: Satoshis, data: NewOperation.ConfirmData) -> MonetaryAmount {
+    static func amountInPrimary(
+        satoshis: Satoshis,
+        data: NewOperation.ConfirmData
+    ) -> MonetaryAmount {
         let currency = data.amount.inPrimaryCurrency.currency
         return satoshis.valuation(at: rate(for: currency, data: data), currency: currency)
     }
@@ -56,7 +62,10 @@ struct FeeHelper {
                 isValid = false
             } else {
                 let finalAmountInInput = amountInInput(satoshis: finalAmountInSatoshis, data: data)
-                let finalAmountInPrimary = amountInPrimary(satoshis: finalAmountInSatoshis, data: data)
+                let finalAmountInPrimary = amountInPrimary(
+                    satoshis: finalAmountInSatoshis,
+                    data: data
+                )
                 let finalAmount = BitcoinAmount(inSatoshis: finalAmountInSatoshis,
                                                 inInputCurrency: finalAmountInInput,
                                                 inPrimaryCurrency: finalAmountInPrimary)
@@ -71,13 +80,21 @@ struct FeeHelper {
                                         exchangeRateWindow: data.exchangeRateWindow,
                                         feeWindow: data.feeWindow,
                                         feeCalculator: data.feeCalculator,
-                                        fee: Fee(feeRate: fee.feeRate, state: state, isValid: isValid),
+                                        fee: Fee(
+                                            feeRate: fee.feeRate,
+                                            state: state,
+                                            isValid: isValid
+                                        ),
                                         takeFeeFromAmount: data.takeFeeFromAmount)
     }
 
     static func calculateFee(data: NewOperation.ConfirmData, target: UInt) -> Fee {
-        return calculateFee(data: data,
-                            feeRate: data.feeCalculator.getMinimumFeeRate(confirmationTarget: target))
+        return calculateFee(
+            data: data,
+            feeRate: data.feeCalculator.getMinimumFeeRate(
+                confirmationTarget: target
+            )
+        )
     }
 
     static func calculateFee(data: NewOperation.ConfirmData, feeRate: FeeRate) -> Fee {
@@ -92,8 +109,11 @@ struct FeeHelper {
             if data.takeFeeFromAmount {
                 validFee = data.feeCalculator.totalBalance() - feeInSatoshis > Satoshis.dust
             } else {
-                validFee = data.amount.inSatoshis + feeInSatoshis <= data.feeCalculator.totalBalance()
-                    && data.amount.inSatoshis > Satoshis.dust
+                let amountInSatoshis = data.amount.inSatoshis
+                let totalBalance = data.feeCalculator.totalBalance()
+                let amountIsGreaterThanDust = amountInSatoshis > Satoshis.dust
+                let amountAndFeeIsLessThanBalance = amountInSatoshis + feeInSatoshis <= totalBalance
+                validFee = amountAndFeeIsLessThanBalance && amountIsGreaterThanDust
             }
         } catch {
             do {
@@ -105,7 +125,8 @@ struct FeeHelper {
                 validFee = false
             } catch {
                 // This means that we couldnt calculate the fee even taking it from the amount.
-                // That could onyl happen if size progression were empty, or if houston were sending corrupted data
+                // That could onyl happen if size progression were empty,
+                // or if houston were sending corrupted data
                 Logger.fatal("No fee possible for satoshis: \(amount.inSatoshis)")
             }
         }

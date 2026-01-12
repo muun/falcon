@@ -44,7 +44,7 @@ public extension DependencyContainer {
                                  keysRepository: $4,
                                  verifyFulfillable: $5,
                                  notificationScheduler: try container.resolve(),
-                                 libwalletService: $6)
+                                 feeBumpFunctionsProvider: $6)
             }
             container.register(.singleton, factory: BalanceActions.init)
             container.register(.singleton, factory: CurrencyActions.init)
@@ -109,19 +109,32 @@ public extension DependencyContainer {
             container.register(.singleton, factory: EmergencyKitDataSelector.init)
             container.register(.singleton, factory: UserPreferencesSelector.init)
             container.register(.singleton, factory: UserActivatedFeaturesSelector.init)
+            container.register(.singleton, factory: FeatureFlagsLocalOverridesRepository.init)
             container.register(.singleton, factory: FeatureFlagsSelector.init)
             container.register(.singleton, factory: DeviceCheckTokenProvider.init)
-            container.register(.singleton, factory: BackgroundTimesService.init)
+            container.register(.singleton, factory: BackgroundTimesProcessor.init)
             container.register {
-                GoLibwalletService() as LibwalletService
+                LibwalletFeeBumpFunctionsProvider() as FeeBumpFunctionsProvider
             }
             container.register {
-                BackgroundExecutionMetricsProvider(localeTimeZoneProvider: try container.resolve(),
-                                                   storeKitCapabilitiesProvider: try container.resolve())
+                ReachabilityProvider()
             }.resolvingProperties {
                 $1.reachabilityService = try container.resolve()
             }
-
+            container.register {
+                BackgroundExecutionMetricsProvider(
+                    metricsProvider: try container.resolve())
+            }
+            container.register {
+                MetricsProvider(localeTimeZoneProvider: try container.resolve(),
+                    storeKitCapabilitiesProvider: try container.resolve(),
+                    conectivityCapabilitiesProvider: try container.resolve(),
+                    hardwareCapabilitiesProvider: try container.resolve(),
+                    processInfoProvider: try container.resolve(),
+                    reachabilityProvider: try container.resolve(),
+                    deviceCheckDataProvider: try container.resolve(),
+                    appInfoProvider: try container.resolve())
+            }
             container.register(.singleton, factory: ApiMigrationsManager.init)
 
             container.register(.singleton) {
@@ -141,13 +154,13 @@ public extension DependencyContainer {
             container.register(.singleton, factory: ClientSelector.init)
 
             container.register(.singleton) {
-                ApiReachabilityService(sessionActions: $0,
+                ApiReachabilityClient(sessionActions: $0,
                                        flagsRepository: $1,
                                        reachabilityStatusRepository: $2,
                                        pingService: $3) as ReachabilityService
-            }.resolvingProperties { container, service in
+            }.resolvingProperties { container, client in
                 // swiftlint:disable force_cast
-                (service as! ApiReachabilityService).houstonService = try container.resolve()
+                (client as! ApiReachabilityClient).houstonService = try container.resolve()
             }
 
             container.register(.singleton, factory: CreateVerifiedRcV1Executable.init)

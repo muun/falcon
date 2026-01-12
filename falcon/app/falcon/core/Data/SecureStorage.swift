@@ -39,8 +39,8 @@ public class SecureStorage {
         self.keychainRepository = keychainRepository
     }
 
-    func wipeAll() {
-        keychainRepository.wipe()
+    func wipeAll(preservePin: Bool = false) {
+        keychainRepository.wipe(preservePin: preservePin)
     }
 
     func delete(_ key: Keys) {

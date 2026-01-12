@@ -20,7 +20,7 @@ public class OperationActions {
     private let verifyFulfillable: VerifyFulfillableAction
     private let notificationScheduler: NotificationScheduler
     private let operationMetadataDecrypter: OperationMetadataDecrypter
-    private let libwalletService: LibwalletService
+    private let feeBumpFunctionsProvider: FeeBumpFunctionsProvider
 
     init(operationRepository: OperationRepository,
          houstonService: HoustonService,
@@ -29,7 +29,7 @@ public class OperationActions {
          keysRepository: KeysRepository,
          verifyFulfillable: VerifyFulfillableAction,
          notificationScheduler: NotificationScheduler,
-         libwalletService: LibwalletService) {
+         feeBumpFunctionsProvider: FeeBumpFunctionsProvider) {
 
         self.operationRepository = operationRepository
         self.houstonService = houstonService
@@ -39,7 +39,7 @@ public class OperationActions {
         self.verifyFulfillable = verifyFulfillable
         self.notificationScheduler = notificationScheduler
         self.operationMetadataDecrypter = OperationMetadataDecrypter(keysRepository: keysRepository)
-        self.libwalletService = libwalletService
+        self.feeBumpFunctionsProvider = feeBumpFunctionsProvider
     }
 
     public func getOperationsChange() -> Observable<OperationsChange> {
@@ -289,7 +289,7 @@ public class OperationActions {
                         self.logOnStaleNTS(pushTxResponse.nextTransactionSize)
                         self.nextTransactionSizeRepository
                             .setNextTransactionSize(pushTxResponse.nextTransactionSize)
-                        self.libwalletService.persistFeeBumpFunctions(
+                        self.feeBumpFunctionsProvider.persistFeeBumpFunctions(
                             feeBumpFunctions: pushTxResponse.feeBumpFunctions,
                             refreshPolicy: .ntsChanged
                         )

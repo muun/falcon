@@ -24,12 +24,12 @@ class ApiReachabiltiyServiceTest: MuunTestCase {
         pingService = replace(.singleton, PingURLService.self, FakePingURLService.init)
         houstonService = replace(.singleton, HoustonService.self, FakeHoustonService.init)
         reachabilityService = replace(.singleton, ReachabilityService.self) {
-            ApiReachabilityService(sessionActions: $0,
+            ApiReachabilityClient(sessionActions: $0,
                                    flagsRepository: $1,
                                    reachabilityStatusRepository: $2,
                                    pingService: $3) as ReachabilityService
         }
-        (reachabilityService as! ApiReachabilityService).houstonService = houstonService
+        (reachabilityService as! ApiReachabilityClient).houstonService = houstonService
     }
 
     func test_fallInFallbackLoggedIn_NothingHappens() {

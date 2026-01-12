@@ -35,8 +35,6 @@ struct Client {
     let language: String
     let deviceCheckToken: String
     let fallbackDeviceToken: String
-    let systemUptime: TimeInterval
-    let iCloudRecordId: String?
     let appDisplayName: String
     let appId: String
     let appName: String

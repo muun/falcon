@@ -267,7 +267,9 @@ public class NotificationProcessor {
 
         case .newOperation(let newOperation):
             return CallbackNotificationHandler(.LOGGED_IN) {
-                self.operationActions.received(newOperation: newOperation)
+                self.trackPaymentReceived(operation: newOperation.operation)
+
+                return self.operationActions.received(newOperation: newOperation)
             }
 
         case .operationUpdate(let operationUpdated):
@@ -344,6 +346,15 @@ public class NotificationProcessor {
 
     private func verifyOrigin(handler: NotificationHandler, notification: Notification) throws {
         // TODO: We don't have the info to do this yet
+    }
+
+    private func trackPaymentReceived(operation: Operation) {
+        let parameters: [String: Any] = [
+            "type": operation.incomingSwap == nil ? "onchain" : "lightning",
+            "is_external": operation.isExternal,
+            "is_rbf": operation.transaction?.isReplaceableByFee ?? false
+        ]
+        AnalyticsHelper.logEvent("payment_received", parameters: parameters)
     }
 
     enum Errors: Error {

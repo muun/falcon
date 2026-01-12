@@ -1,5 +1,5 @@
 //
-//  LibwalletService.swift
+//  FeeBumpFunctionsProvider.swift
 //  Muun
 //
 //  Created by Daniel Mankowski on 25/10/2024.
@@ -28,15 +28,17 @@ extension FeeBumpRefreshPolicy: APIConvertible {
     }
 }
 
-/// LibwalletService is a protocol that abstract interactions with Libwallet library.
-public protocol LibwalletService {
-    // MARK: Fee Bump Functions 
+// FeeBumpFunctionsProvider is a protocol that abstract interactions with Fee Bump Functions.
+// Note: this interface aims to decouple native code from Libwallet gomobile calls (enabling unit
+// tests) in our current state of libwallet usage while we transition to a grpc-client-server
+// architecture.
+public protocol FeeBumpFunctionsProvider {
     func persistFeeBumpFunctions(feeBumpFunctions: FeeBumpFunctions,
                                  refreshPolicy: FeeBumpRefreshPolicy)
     func areFeeBumpFunctionsInvalidated() -> Bool
 }
 
-public class GoLibwalletService: LibwalletService {
+public class LibwalletFeeBumpFunctionsProvider: FeeBumpFunctionsProvider {
     public func persistFeeBumpFunctions(feeBumpFunctions: FeeBumpFunctions,
                                         refreshPolicy: FeeBumpRefreshPolicy) {
         let feeBumpFunctionsStringList = LibwalletNewStringList()

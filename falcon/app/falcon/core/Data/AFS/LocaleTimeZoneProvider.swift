@@ -32,31 +32,11 @@ public class LocaleTimeZoneProvider {
         return locale.currencyCode ?? SignalConstants.empty
     }
 
-    func getDateFormat() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateStyle = .short
-        return dateFormatter.dateFormat ?? SignalConstants.empty
-    }
-
-    func getMeasurementSystem() -> String {
-        let locale = Locale.current
-        if #available(iOS 16, *) {
-            let measurementSystem = locale.measurementSystem
-            return measurementSystem.identifier
-        } else {
-            return SignalConstants.unknown
-        }
-    }
-
-    func getCalendarIdentifier() -> String {
-        let locale = Locale.current
-        let calendarIdentifier = locale.calendar.identifier
-        return String(describing: calendarIdentifier)
+    func createEpochInMiliseconds() -> Int64 {
+        return Int64(Date().timeIntervalSince1970 * 1000)
     }
 
     private struct SignalConstants {
         static let empty = ""
-        static let unknown = "UNKNOWN"
     }
 }

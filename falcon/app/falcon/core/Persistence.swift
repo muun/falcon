@@ -71,7 +71,7 @@ public enum Persistence: String, CaseIterable {
     case forwardingPolicies
 
     case minFeeRate
-    
+
     case hasResolvedARcChallenge
 
     case emergencyKitVerificationCodes // [String]
@@ -87,5 +87,7 @@ public enum Persistence: String, CaseIterable {
 
     case lastBackgroundBeginTime
     case backgroundTimes
-    case cardActivated
+
+    /// Feature flag override keys
+    case featureFlagOverridesNfcCardV2 = "featureFlagOverrides:NfcCardV2"
 }

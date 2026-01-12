@@ -16,12 +16,18 @@ protocol OpConfirmTransitions: NewOperationTransitions {
 class NewOpConfirmView: MUView, PresenterInstantior {
 
     private let feeState: FeeState
-    fileprivate lazy var presenter = instancePresenter(NewOpConfirmPresenter.init, delegate: self, state: feeState)
+    fileprivate lazy var presenter = instancePresenter(
+        NewOpConfirmPresenter.init, delegate: self, state: feeState
+    )
 
     weak var delegate: NewOpViewDelegate?
     weak var transitionDelegate: OpConfirmTransitions?
 
-    init(feeState: FeeState, delegate: NewOpViewDelegate?, transitionDelegate: OpConfirmTransitions?) {
+    init(
+        feeState: FeeState,
+        delegate: NewOpViewDelegate?,
+        transitionDelegate: OpConfirmTransitions?
+    ) {
         self.feeState = feeState
         self.delegate = delegate
         self.transitionDelegate = transitionDelegate

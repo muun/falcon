@@ -31,9 +31,9 @@ public class CreateFirstSessionAction: AsyncAction<(CreateFirstSessionOk)> {
         super.init(name: "CreateFirstSessionAction")
     }
 
-    public func run(gcmToken: String?, currencyCode: String) throws {
+    public func run(gcmToken: String?, currencyCode: String, preservePin: Bool = false) throws {
         // We have to wipe everything to avoid edgy bugs with the notifications
-        logoutAction.run(notifyHouston: false)
+        logoutAction.run(notifyHouston: false, preservePin: preservePin)
 
         let single = logoutAction.getValue()
             .catchErrorJustReturn(()) // If logout fails, it's all cool

@@ -44,7 +44,10 @@ enum Constant {
             return UIFont.italicSystemFont(ofSize: size.rawValue)
         }
 
-        static func monospacedDigitSystemFont(size: Constant.FontSize, weight: UIFont.Weight = .regular) -> UIFont {
+        static func monospacedDigitSystemFont(
+            size: Constant.FontSize,
+            weight: UIFont.Weight = .regular
+        ) -> UIFont {
             return UIFont.monospacedDigitSystemFont(ofSize: size.rawValue, weight: weight)
         }
     }
@@ -100,6 +103,7 @@ enum Constant {
     """
 
     public static let buildVersion = "\(Bundle.main.infoDictionary!["CFBundleVersion"]!)"
+    // swiftlint:disable:next line_length
     public static let buildVersionName = "\(Bundle.main.infoDictionary!["CFBundleShortVersionString"]!)"
     static let houstonLocale = Locale.init(identifier: "en_US")
 
@@ -109,7 +113,8 @@ enum Constant {
 
     public enum FeeProtocol {
         public static let minProtocolFeeRate: FeeRate = FeeRate(satsPerVByte: 1)
-        public static let maxFeeRateAllowed: FeeRate = FeeRate(satsPerVByte: 1000) // TODO: Check this max number
+        // TODO: Check this max number
+        public static let maxFeeRateAllowed: FeeRate = FeeRate(satsPerVByte: 1000)
     }
 }
 

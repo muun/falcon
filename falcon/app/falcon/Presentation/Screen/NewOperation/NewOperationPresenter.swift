@@ -33,6 +33,7 @@ protocol NewOperationPresenterDelegate: BasePresenterDelegate {
     func invoiceMissingAmount()
     func unexpectedError()
     func nfc2faError(_ error: NewOpError)
+    func nfcNoSlotsAvailable()
 
     func setExpires(_ expiresTime: Double)
     func cancel(confirm: Bool)
@@ -53,12 +54,14 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     var lastSelectedCurrency: Currency?
 
     var hasNfc2fa: Bool {
-        userRepository.isCardActivated()
+        featureFlagsSelector.isSecurityCardFlagEnabled() || featureFlagsSelector.fetch().contains(.nfcCard)
     }
 
     private let userRepository: UserRepository = resolve()
-    private let featureFlagsRepository: FeatureFlagsRepository = resolve()
+    private let featureFlagsSelector: FeatureFlagsSelector = resolve()
+    private let featureFlagsOverridesRepository: FeatureFlagsLocalOverridesRepository = resolve()
     private let signMessageAction: SignMessageAction = SignMessageAction()
+    private let signMessageActionV2: SignMessageActionV2 = SignMessageActionV2()
     private var signMessageDisposable: Disposable?
 
     init(delegate: Delegate, operationActions: OperationActions) {
@@ -447,6 +450,12 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         }
     }
 
+    func disableSecurityCardFlag() {
+        // Temporary UX shortcut for internal dogfood testing.
+        // Will be removed once the security card feature is stable.
+        featureFlagsOverridesRepository.setOverrideNfcCardV2(isDisabled: true)
+    }
+
     override func handleError(_ e: Error) {
         if e.isKindOf(.exchangeRateWindowTooOld) {
             delegate.showExchangeRateWindowTooOldError()
@@ -499,6 +508,82 @@ extension NewOperationPresenter: NewOperationTransitions {
             lastSelectedCurrency = GetCurrencyForCode().runAssumingCrashPosibility(code: primaryCurrency)
         }
     }
+
+    private func signWithSecurityCardAndCreateOperation() {
+        let message = "testing NFC in iOS"
+        signMessageDisposable = signMessageAction.run(message: message)
+            .observeOn(Scheduler.foregroundScheduler)
+            .subscribe(onSuccess: { signedMessageBytes in
+                Logger.log(.debug, "Card signed message response: \(signedMessageBytes)")
+
+                // if signed was successful, continue with the operation.
+                // we will check the signed message in Libwallet in the final implementation
+                self.createOperation()
+            }, onError: { error in
+                self.handleGrpcError(error)
+            })
+    }
+
+    private func signWithSecurityCardV2AndCreateOperation() {
+        signMessageDisposable = signMessageActionV2.run()
+            .observeOn(Scheduler.foregroundScheduler)
+            .subscribe(onCompleted: {
+                AnalyticsHelper.logEvent("security_card_sign_success")
+                // if signed was successful, continue with the operation.
+                self.createOperation()
+            }, onError: { error in
+                self.handleGrpcError(error)
+            })
+    }
+
+    private func handleGrpcError(_ error: any Error) {
+        if let muunError = error as? MuunError,
+           let grpcError = muunError.kind as? LibwalletGrpcError,
+           let errorDetail = grpcError.errorDetail {
+
+            switch errorDetail.libwalletCode {
+            case .signInternalError, .pairInternalError, .challengeExpired,
+                    .signMacValidationFailed, .muunAppletNotFound:
+                delegate.nfc2faError(
+                    .nfcError(
+                        description: grpcError.errorDetail?.developerMessage ?? "Internal error"
+                    )
+                )
+            case .noSlotsAvailable:
+                delegate.nfc2faError(
+                    .nfcError(
+                        description: grpcError.errorDetail?.developerMessage ?? "Internal error"
+                    )
+                )
+                delegate.nfcNoSlotsAvailable()
+            case .unknown:
+                // log as unknown error
+                logSecurityCardError(nil)
+                Logger.log(.err, "Unexpected NFC error: \(error.localizedDescription)")
+                delegate.nfc2faError(.unexpected)
+            }
+            logSecurityCardError(grpcError)
+            Logger.log(.err, grpcError.errorDetail?.message ?? "Unknown error")
+        } else {
+            // log as unknown error
+            logSecurityCardError(nil)
+            Logger.log(.err, "Unexpected NFC error: \(error.localizedDescription)")
+            delegate.nfc2faError(.unexpected)
+        }
+    }
+
+    private func logSecurityCardError(_ error: LibwalletGrpcError?) {
+        var parameters: [String: Any] = [:]
+        parameters["code"] = error?.errorDetail?.code
+        if error?.errorDetail?.developerMessage.isEmpty == false {
+            // Analytics parameter max length is 100 characteres
+            parameters["message"] = error?.errorDetail?.developerMessage
+                .truncate(
+                    maxLength: 100
+                )
+        }
+        AnalyticsHelper.logEvent("security_card_tap_error", parameters: parameters)
+    }
 }
 
 extension NewOperationPresenter: OpLoadingTransitions {
@@ -545,29 +630,11 @@ extension NewOperationPresenter: OpLoadingTransitions {
 
 extension NewOperationPresenter: OpConfirmTransitions {
     func didConfirm() {
-        if featureFlagsRepository.fetch().contains(.nfcCard) {
-            signMessageDisposable?.dispose()
-            let message = "testing NFC in iOS"
-            signMessageDisposable = signMessageAction.run(message: message)
-                .observeOn(Scheduler.foregroundScheduler)
-                .subscribe(onSuccess: { signedMessageBytes in
-                    Logger.log(.debug, "Card signed message response: \(signedMessageBytes)")
-
-                    // if signed was successful, continue with the operation.
-                    // we will check the signed message in Libwallet in the final implementation
-                    self.createOperation()
-                }, onError: { error in
-                    if let grpcError = error as? GRPCStatus, let message =  grpcError.message {
-                        if message.contains("invalid signature:") {
-                            self.delegate.nfc2faError(.signatureNotVerified)
-                        } else {
-                            self.delegate.nfc2faError(.nfcError(description: message))
-                        }
-                        Logger.log(.err, "NFC error: \(message)")
-                    }
-                    Logger.log(.err, "Unexpected NFC error: \(error.localizedDescription)")
-                    self.delegate.nfc2faError(.unexpected)
-                })
+        signMessageDisposable?.dispose()
+        if featureFlagsSelector.isSecurityCardFlagEnabled() {
+            signWithSecurityCardV2AndCreateOperation()
+        } else if featureFlagsSelector.fetch().contains(.nfcCard) {
+            signWithSecurityCardAndCreateOperation()
         } else {
             createOperation()
         }

@@ -106,9 +106,11 @@ class MultiOptionPickerCard: UIStackView {
         descriptionLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         addArrangedSubview(descriptionLabel)
 
-        // Always make it tappable so it intercepts touch events and the whole dialog isn't dismissed when tapping
-        // a disabled card
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped(sender:))))
+        // Always make it tappable so it intercepts touch events and
+        // the whole dialog isn't dismissed when tapping a disabled card
+        addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(tapped(sender:)))
+        )
     }
 
     @objc private func tapped(sender: UIView) {

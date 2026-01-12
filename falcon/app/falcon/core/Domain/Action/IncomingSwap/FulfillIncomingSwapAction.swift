@@ -14,7 +14,7 @@ class FulfillIncomingSwapAction {
     private let operationRepository: OperationRepository
     private let incomingSwapRepository: IncomingSwapRepository
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
-    private let libwalletService: LibwalletService
+    private let feeBumpFunctionsProvider: FeeBumpFunctionsProvider
 
     init(keysRepository: KeysRepository,
          houstonService: HoustonService,
@@ -22,14 +22,14 @@ class FulfillIncomingSwapAction {
          incomingSwapRepository: IncomingSwapRepository,
          verifyFulfillable: VerifyFulfillableAction,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
-         libwalletService: LibwalletService
+         feeBumpFunctionsProvider: FeeBumpFunctionsProvider
          ) {
         self.keysRepository = keysRepository
         self.houstonService = houstonService
         self.operationRepository = operationRepository
         self.incomingSwapRepository = incomingSwapRepository
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
-        self.libwalletService = libwalletService
+        self.feeBumpFunctionsProvider = feeBumpFunctionsProvider
     }
 
     func run(uuid: String) -> Completable {
@@ -111,7 +111,7 @@ class FulfillIncomingSwapAction {
                     Completable.executing {
                         self?.nextTransactionSizeRepository
                             .setNextTransactionSize(fulfillmentResult.nextTransactionSize)
-                        self?.libwalletService.persistFeeBumpFunctions(
+                        self?.feeBumpFunctionsProvider.persistFeeBumpFunctions(
                             feeBumpFunctions: fulfillmentResult.feeBumpFunctions,
                             refreshPolicy: .ntsChanged
                         )

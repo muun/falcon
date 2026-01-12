@@ -56,11 +56,44 @@ public class SyncAction: AsyncAction<()> {
         super.init(name: "SyncAction")
     }
 
-    public func run(signFlow: SignFlow, gcmToken: String?, currencyCode: String) {
+    /**
+     
+    @param preservePinOnAccountCreation
+     Controls whether to preserve the user's PIN during session
+    creation
+     
+     This action handles both account creation and account sync. During account creation, we
+     wipe all data (including PIN), but there's an edge case where the user has already set their
+     PIN in the current session before wallet creation and we might forget the user pin in those
+     cases.
+     
+     What changes between sync and create and sync is SignFlow which dependes on the param
+     isExistingUser in the case of SyncPresneter. if isExistingUser is true we don't have a problem
+     as the account will be synced instead of created.
+    
+     Usage scenarios:
+     - Sync after account creation attempt in pinPresenter (syncPresneter#runSyncAction) - isExistingUser = false
+        -> preservePinOnAccountCreation = true
+     - Account creation pre pin set (PinPresenter#setup) - isExistingUser = false
+        -> preservePinOnAccountCreation = false
+     - Sync after login scenarios  (syncPresenter#runSyncAction) - isExistingUser = true
+        -> the param doesn't matter in those cases and it will perform a sync instead of a creation.
+     */
+    public func run(
+        signFlow: SignFlow,
+        gcmToken: String?,
+        currencyCode: String,
+        preservePinOnAccountCreation: Bool = false
+    ) {
 
         do {
             if signFlow == .create { // is anon user
-                _ = try createFirstSessionAction.run(gcmToken: gcmToken, currencyCode: currencyCode)
+                // This direct call is unsafe as this action could run multiple times and concurrently since it isn't protected by the runSingle logic. It doesn't have a bug currently because of how it's being called. Do not take this direct call aproach as a reference as it is wrong.
+                _ = try createFirstSessionAction.run(
+                    gcmToken: gcmToken,
+                    currencyCode: currencyCode,
+                    preservePin: preservePinOnAccountCreation
+                )
 
                 runCompletable(createFirstSessionAction.getValue().asCompletable()
                     .andThen(

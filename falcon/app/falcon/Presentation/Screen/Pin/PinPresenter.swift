@@ -86,7 +86,8 @@ class PinPresenter<Delegate: PinPresenterDelegate>: BasePresenter<Delegate> {
         if state == .choosePin {
             let signFlow: SignFlow = (isExistingUser) ? .recover : .create
             let primaryCurrency = CurrencyHelper.currencyForLocale().code
-
+            // Do not remove this or consider the syncScreen will depend on the state the action
+            // gets here.
             syncAction.run(signFlow: signFlow,
                            gcmToken: getGcmToken(),
                            currencyCode: primaryCurrency)

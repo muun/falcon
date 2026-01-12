@@ -84,30 +84,48 @@ class CurrencyPickerViewController: MUViewController, Resolver {
     }
 
     fileprivate func setUpSearchBar() {
-        let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
+        let searchBar = UISearchBar(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: self.view.frame.size.width,
+                height: 44
+            )
+        )
         searchBar.tintColor = Asset.Colors.muunBlue.color
         searchBar.placeholder = L10n.CurrencyPickerViewController.s2
         searchBar.delegate = self
         self.tableView.tableHeaderView = searchBar
     }
 
-    static func createForCurrencySelection(exchangeRateWindow: NewopExchangeRateWindow,
-                                           delegate: CurrencyPickerDelegate?,
-                                           selectedCurrency: Currency?) -> CurrencyPickerViewController {
+    static func createForCurrencySelection(
+        exchangeRateWindow: NewopExchangeRateWindow,
+        delegate: CurrencyPickerDelegate?,
+        selectedCurrency: Currency?
+    ) -> CurrencyPickerViewController {
         let userSelector: UserSelector = resolve()
-        let currenciesRepository = InMemoryCurrenciesForPickerRetriever.createForContextualCurrencySelection(userSelector: userSelector,
-                                                                                                      exchangeRateWindow: exchangeRateWindow)
-        return CurrencyPickerViewController(delegate: delegate,
-                                            selectedCurrency: selectedCurrency,
-                                            currenciesForPickerRetrieverService: currenciesRepository)
+        let currenciesRepository = InMemoryCurrenciesForPickerRetriever
+            .createForContextualCurrencySelection(
+            userSelector: userSelector,
+            exchangeRateWindow: exchangeRateWindow
+        )
+        return CurrencyPickerViewController(
+            delegate: delegate,
+            selectedCurrency: selectedCurrency,
+            currenciesForPickerRetrieverService: currenciesRepository
+        )
     }
 
-    static func createForCurrencySettings(exchangeRateWindow: NewopExchangeRateWindow,
-                                          delegate: CurrencyPickerDelegate?,
-                                          selectedCurrency: Currency?) -> CurrencyPickerViewController {
+    static func createForCurrencySettings(
+        exchangeRateWindow: NewopExchangeRateWindow,
+        delegate: CurrencyPickerDelegate?,
+        selectedCurrency: Currency?
+    ) -> CurrencyPickerViewController {
         let userSelector: UserSelector = resolve()
-        let repository = InMemoryCurrenciesForPickerRetriever.createForSettings(userSelector: userSelector,
-                                                                                       exchangeRateWindow: exchangeRateWindow)
+        let repository = InMemoryCurrenciesForPickerRetriever.createForSettings(
+            userSelector: userSelector,
+            exchangeRateWindow: exchangeRateWindow
+        )
         return CurrencyPickerViewController(delegate: delegate,
                                             selectedCurrency: selectedCurrency,
                                             currenciesForPickerRetrieverService: repository)
@@ -146,7 +164,14 @@ extension CurrencyPickerViewController: UITableViewDelegate {
         let headerView = UIView()
         headerView.backgroundColor = Asset.Colors.muunHomeBackgroundColor.color
 
-        let headerLabel = UILabel(frame: CGRect(x: 24, y: 16, width: tableView.bounds.size.width, height: 20))
+        let headerLabel = UILabel(
+            frame: CGRect(
+                x: 24,
+                y: 16,
+                width: tableView.bounds.size.width,
+                height: 20
+            )
+        )
         headerLabel.font = Constant.Fonts.system(size: .opHelper)
         headerLabel.textColor = Asset.Colors.muunGrayDark.color
         let text = (section == 0)
@@ -187,7 +212,10 @@ extension CurrencyPickerViewController: UITableViewDataSource {
         let cell = tableView.dequeue(type: CurrencyTableViewCell.self, indexPath: indexPath)
         let currencyToDisplay = presenter.currency(forRowAt: indexPath)
 
-        cell.setUp(currencyToDisplay, isSelected: currencyToDisplay.displayCode == selectedCurrency?.displayCode)
+        cell.setUp(
+            currencyToDisplay,
+            isSelected: currencyToDisplay.displayCode == selectedCurrency?.displayCode
+        )
 
         return cell
     }

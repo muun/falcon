@@ -179,7 +179,7 @@ extension AppDelegate {
         libwalletConfig.featureStatusProvider = featureFlagsRepository
         libwalletConfig.appLogSink = LibwalletLogHelper()
         libwalletConfig.httpClientSessionProvider = httpClientSessionProvider
-        let libwalletNfcBridge = LibwalletNfcBridge(cardNfcService: cardNfcService)
+        let libwalletNfcBridge = LibwalletNfcBridge(nfcSession: nfcSession)
         libwalletConfig.nfcBridge = libwalletNfcBridge
         libwalletConfig.keyProvider = keyProvider
         libwalletConfig.network = Environment.current.network.name()

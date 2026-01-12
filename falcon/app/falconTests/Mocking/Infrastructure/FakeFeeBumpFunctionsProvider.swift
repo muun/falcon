@@ -1,5 +1,5 @@
 //
-//  FakeLibwalletService.swift
+//  FakeFeeBumpFunctionsProvider.swift
 //  falconTests
 //
 //  Created by Daniel Mankowski on 25/10/2024.
@@ -8,7 +8,7 @@
 
 @testable import Muun
 
-final class FakeLibwalletService: LibwalletService {
+final class FakeFeeBumpFunctionsProvider: FeeBumpFunctionsProvider {
 
     var persistFeeBumpFunctionsCalledCount = 0
     func persistFeeBumpFunctions(feeBumpFunctions: FeeBumpFunctions, refreshPolicy: FeeBumpRefreshPolicy) {

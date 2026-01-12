@@ -15,6 +15,7 @@ class CurrencyHelper: Resolver {
     static let euroCurrency: Currency = FiatCurrency(code: "EUR", symbol: "€", name: "Eurozone Euro", flag: "🇪🇺")
     static let bitcoinCurrency = BitcoinCurrency()
 
+    
     static var allCurrencies: [String: Currency] {
         var allCurrencies: [String: Currency] = [:]
 
@@ -26,12 +27,14 @@ class CurrencyHelper: Resolver {
         add(FiatCurrency(code: "AFN", symbol: "؋", name: "Afghan Afghani", flag: "🇦🇫"))
         add(FiatCurrency(code: "ALL", symbol: "LEK", name: "Albanian Lek", flag: "🇦🇱"))
         add(FiatCurrency(code: "AMD", symbol: "Դրամ", name: "Armenian Dram", flag: "🇦🇲"))
+        // swiftlint:disable:next line_length
         add(FiatCurrency(code: "ANG", symbol: "ƒ", name: "Netherlands Antillean Guilder", flag: "🇨🇼"))
         add(FiatCurrency(code: "AOA", symbol: "Kz", name: "Angolan Kwanza", flag: "🇦🇴"))
         add(FiatCurrency(code: "ARS", symbol: "$", name: "Argentine Peso", flag: "🇦🇷"))
         add(FiatCurrency(code: "AUD", symbol: "$", name: "Australian Dollar", flag: "🇦🇺"))
         add(FiatCurrency(code: "AWG", symbol: "ƒ", name: "Aruban Florin", flag: "🇦🇼"))
         add(FiatCurrency(code: "AZN", symbol: "ман", name: "Azerbaijani Manat", flag: "🇦🇿"))
+        // swiftlint:disable:next line_length
         add(FiatCurrency(code: "BAM", symbol: "KM", name: "Bosnia-Herzegovina Convertible Mark", flag: "🇧🇦"))
         add(FiatCurrency(code: "BBD", symbol: "$", name: "Barbadian Dollar", flag: "🇧🇧"))
         add(FiatCurrency(code: "BDT", symbol: "৳", name: "Bangladeshi Taka", flag: "🇧🇩"))
@@ -50,6 +53,7 @@ class CurrencyHelper: Resolver {
         add(FiatCurrency(code: "CAD", symbol: "$", name: "Canadian Dollar", flag: "🇨🇦"))
         add(FiatCurrency(code: "CDF", symbol: "FC", name: "Congolese Franc", flag: "🇨🇩"))
         add(FiatCurrency(code: "CHF", symbol: "CHF", name: "Swiss Franc", flag: "🇨🇭"))
+        // swiftlint:disable:next line_length
         add(FiatCurrency(code: "CLF", symbol: "UF", name: "Chilean Unit of Account (UF)", flag: "🇨🇱"))
         add(FiatCurrency(code: "CLP", symbol: "$", name: "Chilean Peso", flag: "🇨🇱"))
         add(FiatCurrency(code: "CNY", symbol: "¥", name: "Chinese Yuan", flag: "🇨🇳"))

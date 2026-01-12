@@ -5,78 +5,42 @@
 //
 
 import Foundation
-import UIKit
 
 class BackgroundExecutionMetricsProvider {
-    var reachabilityService: ReachabilityService?
-    let localeTimeZoneProvider: LocaleTimeZoneProvider
-    let asciiSanitizer: AsciiUtils
-    let storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider
+    private let asciiSanitizer: AsciiUtils
+    private let metricsProvider: MetricsProvider
 
     init(
-        localeTimeZoneProvider: LocaleTimeZoneProvider,
         asciiSanitizer: AsciiUtils = AsciiUtils(),
-        storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider
+        metricsProvider: MetricsProvider
     ) {
-        self.localeTimeZoneProvider = localeTimeZoneProvider
         self.asciiSanitizer = asciiSanitizer
-        self.storeKitCapabilitiesProvider = storeKitCapabilitiesProvider
+        self.metricsProvider = metricsProvider
     }
 
     func run() -> String? {
-        /// isBatteryMonitoringEnabled is required in order to get battery metrics.
-        UIDevice.current.isBatteryMonitoringEnabled = true
-
-        let conectivityCapabilities = ConectivityCapabilitiesProvider.shared
-        let hardwareCapabilities = HardwareCapabilitiesProvider.shared
-
-        let hasInternetConnectionProvidedByCarrier =
-            conectivityCapabilities.hasInternetConnectionProvidedByCarrier()
-
-        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-        let osVersionString =
-            "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
-
-        var availableNetworksDTO: AvailableNetworksDTO?
-        conectivityCapabilities.availableNetworks.map {
-            availableNetworksDTO = AvailableNetworksDTO.from(model: $0)
-        }
-
-        let reachabilityStatus = reachabilityService?.getReachabilityStatus()
-        var reachabilityStatusDTO: ReachabilityStatusDTO?
-
-        reachabilityStatus.map {
-            reachabilityStatusDTO = ReachabilityStatusDTO.from(model: $0)
-        }
-
-        let metrics = BackgroundExcecutionMetrics(
-            epochInMilliseconds: createEpochInMiliseconds(),
-            batteryLevel: hardwareCapabilities.getBatterylevel(),
-            batteryState: hardwareCapabilities.getBatteryState(),
-            freeRamStorage: hardwareCapabilities.getFreeRam(),
-            simState: conectivityCapabilities.getSimState().rawValue,
-            hasInternetConnectionProvidedByCarrier: hasInternetConnectionProvidedByCarrier,
-            currentlyOverWifi: conectivityCapabilities.isOverWifi,
-            currentNetInterface: conectivityCapabilities.netInterfaceName,
-            excludedTunnelAddresses: conectivityCapabilities.getExcludedTunnelAddresses(),
-            proxyHttp: conectivityCapabilities.getHTTPProxy(),
-            proxyHttps: conectivityCapabilities.getHTTPSProxy(),
-            socksEnable: conectivityCapabilities.isSOCKSEnable(),
-            availableNetworks: availableNetworksDTO,
-            reachabilityStatus: reachabilityStatusDTO,
-            totalRamStorage: hardwareCapabilities.getTotalRam(),
-            osVersion: osVersionString,
-            iosSimRegion: conectivityCapabilities.getSimRegion(),
-            iosTimeZoneId: localeTimeZoneProvider.getTimezoneId(),
-            iosCalendarIdentifier: localeTimeZoneProvider.getCalendarIdentifier(),
-            iosCurrencyCode: localeTimeZoneProvider.getCurrencyCode(),
-            iosDateFormat: localeTimeZoneProvider.getDateFormat(),
-            iosMeasurementSystem: localeTimeZoneProvider.getMeasurementSystem(),
-            language: localeTimeZoneProvider.getLanguage(),
-            regionCode: localeTimeZoneProvider.getRegionCode(),
-            timeZoneOffsetInSeconds: localeTimeZoneProvider.getTimeZoneOffsetInSeconds(),
-            storeCountry: storeKitCapabilitiesProvider.getStoreCountry(),
-            iosCellularProviders: conectivityCapabilities.getCellularProviders()
+        let metrics = BackgroundExecutionMetrics(
+            epochInMilliseconds: metricsProvider.createEpochInMiliseconds,
+            batteryLevel: metricsProvider.batterylevel,
+            batteryState: metricsProvider.batteryState,
+            simState: metricsProvider.simState.rawValue,
+            hasInternetConnectionProvidedByCarrier: metricsProvider
+                .hasInternetConnectionProvidedByCarrier,
+            currentlyOverWifi: metricsProvider.isOverWifi,
+            currentNetInterface: metricsProvider.netInterfaceName,
+            excludedTunnelAddressesType: metricsProvider.excludedTunnelAddressesType,
+            proxyHttpType: metricsProvider.proxyHTTPType,
+            proxyHttpsType: metricsProvider.proxyHTTPSType,
+            socksEnable: metricsProvider.socksEnable,
+            availableNetworks: metricsProvider.availableNetworks,
+            reachabilityStatus: metricsProvider.reachabilityStatus,
+            osVersion: metricsProvider.osVersion,
+            iosTimeZoneId: metricsProvider.timezoneId,
+            iosCurrencyCode: metricsProvider.currencyCode,
+            language: metricsProvider.language,
+            regionCode: metricsProvider.regionCode,
+            timeZoneOffsetInSeconds: metricsProvider.timeZoneOffsetInSeconds,
+            storeCountry: metricsProvider.storeCountry
         )
 
         var metricsAsData: Data?
@@ -94,54 +58,27 @@ class BackgroundExecutionMetricsProvider {
         let jsonString = String(decoding: metricsAsData, as: UTF8.self)
         return asciiSanitizer.toSafeAscii(jsonString)
     }
-
-    private func createEpochInMiliseconds() -> Int64 {
-        return Int64(Date().timeIntervalSince1970 * 1000)
-    }
 }
 
-struct BackgroundExcecutionMetrics: Encodable {
+struct BackgroundExecutionMetrics: Encodable {
     let epochInMilliseconds: Int64
     let batteryLevel: Float
     let batteryState: String
-    let freeRamStorage: Int64
     let simState: String
     let hasInternetConnectionProvidedByCarrier: Bool?
     let currentlyOverWifi: Bool?
     let currentNetInterface: String
-    let excludedTunnelAddresses: String
-    let proxyHttp: String
-    let proxyHttps: String
+    let excludedTunnelAddressesType: Int
+    let proxyHttpType: Int
+    let proxyHttpsType: Int
     let socksEnable: Int
-    let availableNetworks: AvailableNetworksDTO?
+    let availableNetworks: AvailableNetworks?
     let reachabilityStatus: ReachabilityStatusDTO?
-    let totalRamStorage: UInt64
     let osVersion: String
-    let iosSimRegion: String
     let iosTimeZoneId: String
-    let iosCalendarIdentifier: String
     let iosCurrencyCode: String
-    let iosDateFormat: String
-    let iosMeasurementSystem: String
     let language: String
     let regionCode: String
     let timeZoneOffsetInSeconds: Int
     let storeCountry: String
-    let iosCellularProviders: [SimData]
-}
-
-struct AvailableNetworksDTO: Encodable {
-    var wifi: Bool
-    var loopback: Bool
-    var wiredEthernet: Bool
-    var cellular: Bool
-    var other: Bool
-
-    static func from(model: AvailableNetworks) -> AvailableNetworksDTO {
-        return AvailableNetworksDTO(wifi: model.wifi,
-                                    loopback: model.loopback,
-                                    wiredEthernet: model.wiredEthernet,
-                                    cellular: model.cellular,
-                                    other: model.other)
-    }
 }

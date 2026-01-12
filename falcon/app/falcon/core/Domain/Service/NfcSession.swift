@@ -1,5 +1,5 @@
 //
-//  CardNfcService.swift
+//  NfcSession.swift
 //  Muun
 //
 //  Created by Daniel Mankowski on 28/02/2025.
@@ -20,7 +20,7 @@ enum CardNfcError: Error {
     case unsupportedTagConnected
 }
 
-protocol CardNfcService {
+protocol NfcSession {
     func connect(alertMessage: String) -> Completable
     func transmit(message: Data) -> Single<CardNfcResponse>
     func close()

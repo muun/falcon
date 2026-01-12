@@ -23,7 +23,10 @@ struct LocaleAmountFormatter {
         return formatter
     }()
 
-    static func formatter(for currency: String, style: NumberFormatter.Style = .currency) -> NumberFormatter {
+    static func formatter(
+        for currency: String,
+        style: NumberFormatter.Style = .currency
+    ) -> NumberFormatter {
 
         if currency == "BTC" {
             return btcFormatter
@@ -49,7 +52,8 @@ struct LocaleAmountFormatter {
         let scale = formatter(for: currency).maximumFractionDigits
 
         var newString = string
-        // Remove thousand separators so that the number can be parsed when adding things in the middle
+        // Remove thousand separators so that the number can
+        // be parsed when adding things in the middle
         if let groupingSeperator = locale.groupingSeparator {
             newString = newString.replacingOccurrences(of: groupingSeperator, with: "")
         }
@@ -70,8 +74,11 @@ struct LocaleAmountFormatter {
             } else {
                 decimalPart = ""
             }
-
-            return LocaleAmountFormatter.addGroupingSeparator(locale, integerPart) + decimalSeperator + decimalPart
+            let formattedIntegerPart = LocaleAmountFormatter.addGroupingSeparator(
+                locale,
+                integerPart
+            )
+            return formattedIntegerPart + decimalSeperator + decimalPart
 
         } else {
             return LocaleAmountFormatter.addGroupingSeparator(locale, newString)
@@ -79,7 +86,10 @@ struct LocaleAmountFormatter {
     }
 
     static func number(from value: String, in currency: String) -> MonetaryAmount? {
-        guard let amount = formatter(for: currency, style: .decimal).number(from: value)?.decimalValue else {
+        guard let amount =
+                formatter(for: currency, style: .decimal)
+            .number(from: value)?
+            .decimalValue else {
             return nil
         }
 
