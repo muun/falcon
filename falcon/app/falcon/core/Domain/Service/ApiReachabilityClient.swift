@@ -1,5 +1,5 @@
 //
-//  ApiReachabilityService.swift
+//  ApiReachabilityClient.swift
 //
 //  Created by Lucas Serruya on 19/10/2023.
 //
@@ -7,7 +7,7 @@
 import Foundation
 import RxSwift
 
-class ApiReachabilityService: ReachabilityService {
+class ApiReachabilityClient: ReachabilityService {
     var houstonService: HoustonService?
     private var disposeBag = DisposeBag()
 
@@ -46,7 +46,7 @@ class ApiReachabilityService: ReachabilityService {
     }
 }
 
-private extension ApiReachabilityService {
+private extension ApiReachabilityClient {
     func canReachDeviceCheck() -> Single<Bool> {
         return pingService.run(url: "https://humb.apple.com:443")
     }

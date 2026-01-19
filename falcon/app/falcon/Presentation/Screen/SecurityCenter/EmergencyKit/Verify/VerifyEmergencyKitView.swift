@@ -24,7 +24,11 @@ final class VerifyEmergencyKitView: UIView {
     private let option: EmergencyKitSavingOption
     private let hasLink: Bool
 
-    init(delegate: VerifyEmergencyKitViewDelegate?, option: EmergencyKitSavingOption, hasLink: Bool) {
+    init(
+        delegate: VerifyEmergencyKitViewDelegate?,
+        option: EmergencyKitSavingOption,
+        hasLink: Bool
+    ) {
         self.delegate = delegate
         self.option = option
         self.hasLink = hasLink
@@ -50,8 +54,14 @@ final class VerifyEmergencyKitView: UIView {
 
         NSLayoutConstraint.activate([
             buttonsStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin)
+            buttonsStackView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: .sideMargin
+            ),
+            buttonsStackView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -.sideMargin
+            )
         ])
 
         setUpButtons()
@@ -89,8 +99,14 @@ final class VerifyEmergencyKitView: UIView {
         contentContainerView.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
-            contentContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .sideMargin),
-            contentContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.sideMargin),
+            contentContainerView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: .sideMargin
+            ),
+            contentContainerView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -.sideMargin
+            ),
             contentContainerView.topAnchor.constraint(equalTo: topAnchor),
             contentContainerView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor),
 

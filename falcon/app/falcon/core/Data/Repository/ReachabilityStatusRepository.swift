@@ -14,7 +14,8 @@ class ReachabilityStatusRepository {
     }
 
     func fetch() -> ReachabilityStatus? {
-        guard let dto: ReachabilityStatusDTO = preferences.object(forKey: .reachabilityStatus) else {
+        guard let dto: ReachabilityStatusDTO =
+                preferences.object(forKey: .reachabilityStatus) else {
             return nil
         }
 
@@ -44,7 +45,7 @@ class ReachabilityStatusRepository {
 struct ReachabilityStatusDTO: Encodable, Decodable {
     let houston: Bool
     let deviceCheck: Bool
-    
+
     static func from(model: ReachabilityStatus) -> ReachabilityStatusDTO {
         return ReachabilityStatusDTO(houston: model.houston,
                                      deviceCheck: model.deviceCheck)

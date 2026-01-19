@@ -13,23 +13,47 @@ index 1194c3f295..14bc5da85d 100644
 --- a/VERSION
 +++ b/VERSION
 @@ -1,2 +1,2 @@
--go1.22.1
--time 2024-02-29T18:18:48Z
-+go1.22.1
-+time 2024-06-25T14:29:07Z
+-go1.24.7
+-time 2025-08-27T15:49:40Z
++go1.24.7
++time 2025-10-04T15:49:40Z
 diff --git a/src/cmd/cgo/out.go b/src/cmd/cgo/out.go
-index b2933e2d82..57d08480ff 100644
+index dfa54e41d3..47d4d41d8e 100644
 --- a/src/cmd/cgo/out.go
 +++ b/src/cmd/cgo/out.go
-@@ -1012,7 +1012,7 @@ func (p *Package) writeExports(fgo2, fm, fgcc, fgcch io.Writer) {
+@@ -947,6 +947,8 @@
+ 		fmt.Fprintf(gotype, "struct {\n")
+ 		off := int64(0)
+ 		npad := 0
++		// the align is at least 1 (for char)
++		maxAlign := int64(1)
+ 		argField := func(typ ast.Expr, namePat string, args ...interface{}) {
+ 			name := fmt.Sprintf(namePat, args...)
+ 			t := p.cgoType(typ)
+@@ -961,6 +963,11 @@
+ 			noSourceConf.Fprint(gotype, fset, typ)
+ 			fmt.Fprintf(gotype, "\n")
+ 			off += t.Size
++			// keep track of the maximum alignment among all fields
++			// so that we can align the struct correctl
++			if t.Align > maxAlign {
++				maxAlign = t.Align
++			}
+ 		}
+ 		if fn.Recv != nil {
+ 			argField(fn.Recv.List[0].Type, "recv")
+@@ -1043,7 +1050,11 @@
  		// string.h for memset, and is also robust to C++
  		// types with constructors. Both GCC and LLVM optimize
  		// this into just zeroing _cgo_a.
 -		fmt.Fprintf(fgcc, "\ttypedef %s %v _cgo_argtype;\n", ctype, p.packedAttribute())
-+		fmt.Fprintf(fgcc, "\ttypedef %s %v __attribute__((aligned(%v))) _cgo_argtype;\n", ctype, p.packedAttribute(), p.PtrSize)
++		//
++		// The struct should be aligned to the maximum alignment
++		// of any of its fields. This to avoid alignment
++		// issues.
++		fmt.Fprintf(fgcc, "\ttypedef %s %v __attribute__((aligned(%d))) _cgo_argtype;\n", ctype, p.packedAttribute(), maxAlign)
  		fmt.Fprintf(fgcc, "\tstatic _cgo_argtype _cgo_zero;\n")
  		fmt.Fprintf(fgcc, "\t_cgo_argtype _cgo_a = _cgo_zero;\n")
  		if gccResult != "void" && (len(fntype.Results.List) > 1 || len(fntype.Results.List[0].Names) > 1) {
--- 
+--
 2.45.0
-

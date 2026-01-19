@@ -29,7 +29,7 @@ public class LogoutAction: AsyncAction<Void> {
         super.init(name: "LogoutAction")
     }
 
-    public func run(notifyHouston: Bool = true) {
+    public func run(notifyHouston: Bool = true, preservePin: Bool = false) {
 
         let completable: Completable
         if notifyHouston {
@@ -41,7 +41,7 @@ public class LogoutAction: AsyncAction<Void> {
 
         // Once the request is built, we can wipe everything
         preferences.wipeAll()
-        secureStorage.wipeAll()
+        secureStorage.wipeAll(preservePin: preservePin)
 
         do {
             try databaseCoordinator.wipeAll()

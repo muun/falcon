@@ -252,6 +252,9 @@ Fees rise when there is more activity on the network. If fees increase while you
 "NewOperationViewController.s4" = "Do you want to cancel this payment and go back to the home screen?";
 "NewOperationViewController.s5" = "NO";
 "NewOperationViewController.s6" = "YES, CANCEL";
+"NewOperationViewController.s7" = "Disable security card flag?";
+"NewOperationViewController.s8" = "Do you want to deactivate security card flag to complete payment?";
+"NewOperationViewController.s9" = "YES, DISABLE";
 /* Presentation/Screen/NewOperation/ScanQR/EnterManually/ManuallyEnterQRViewController.swift */
 "ManuallyEnterQRViewController.s1" = "Text address or invoice";
 "ManuallyEnterQRViewController.s2" = "CONTINUE";
@@ -827,6 +830,7 @@ Please check your connection and try again.";
 "SettingsViewController.s20" = "You will lose your transaction history.";
 "SettingsViewController.s22" = "Delete";
 "SettingsViewController.s23" = "You need to empty your wallet. Make a payment using all your funds, and try again when the transaction has 6 confirmations.";
+"SettingsViewController.s24" = "Disable feature flags";
 "SettingsViewController.advanced" = "ADVANCED SETTINGS";
 "SettingsViewController.lightningNetwork" = "Lightning Network";
 "SettingsViewController.onchain" = "Bitcoin Network";
@@ -917,3 +921,7 @@ Many services are not yet compatible with Taproot and may label your addresses a
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescription" = "🧪 Experimental. Default to a unified QR code that encodes both a bitcoin address and a lightning invoice. Many services don’t support this unified format yet.";
 "ReceiveFormatSettingDropdownView.ReceiveFormatUnifiedDescriptionUnderline" = "Experimental.";
 
+/* DisableFeatureFlagsViewController */
+"DisableFeatureFlagsViewController.title" = "Disable feature flags";
+"DisableFeatureFlagsViewController.nfcLabel" = "Security Card";
+"DisableFeatureFlagsViewController.informationLabel" = "Some of our feature flags can be turned off and on again at your request. These are the ones you can currently modify. Turn the toggles off to disable the selected feature.";

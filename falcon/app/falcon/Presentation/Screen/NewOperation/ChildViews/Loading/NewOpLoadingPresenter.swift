@@ -35,7 +35,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
     private let bip70Action: BIP70Action
     private let preloadFeeDataAction: PreloadFeeDataAction
     private let featureFlagsRepository: FeatureFlagsRepository
-    private let libwalletService: LibwalletService
+    private let feeBumpFunctionsProvider: FeeBumpFunctionsProvider
 
     init(delegate: Delegate,
          state: PaymentIntent,
@@ -45,7 +45,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
          bip70Action: BIP70Action,
          preloadFeeDataAction: PreloadFeeDataAction,
          featureFlagsRepository: FeatureFlagsRepository,
-         libwalletService: LibwalletService) {
+         feeBumpFunctionsProvider: FeeBumpFunctionsProvider) {
         self.paymentIntent = state
         self.feeCalculatorAction = feeCalculatorAction
         self.userSelector = userSelector
@@ -53,7 +53,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
         self.bip70Action = bip70Action
         self.preloadFeeDataAction = preloadFeeDataAction
         self.featureFlagsRepository = featureFlagsRepository
-        self.libwalletService = libwalletService
+        self.feeBumpFunctionsProvider = feeBumpFunctionsProvider
 
         super.init(delegate: delegate)
     }
@@ -112,7 +112,7 @@ class NewOpLoadingPresenter<Delegate: NewOpLoadingPresenterDelegate>: BasePresen
     private func shouldLoadFeeData() -> Bool {
         let isEffectiveFeesCalculationTurnedOn = featureFlagsRepository.fetch()
             .contains(.effectiveFeesCalculation)
-        let areFeeBumpFunctionsInvalidated = libwalletService.areFeeBumpFunctionsInvalidated()
+        let areFeeBumpFunctionsInvalidated = feeBumpFunctionsProvider.areFeeBumpFunctionsInvalidated()
         return isEffectiveFeesCalculationTurnedOn && areFeeBumpFunctionsInvalidated
     }
 

@@ -8,20 +8,10 @@ import Foundation
 
 class ClientSelector {
 
-    private let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider
-    private let keychainRepository: KeychainRepository
-    private let appInfoProvider: AppInfoProvider
-    private let hardwareCapabilitiesProvider: HardwareCapabilitiesProvider
+    private let metricsProvider: MetricsProvider
 
-    init(iCloudCapabilitiesProvider: ICloudCapabilitiesProvider,
-         keychainRepository: KeychainRepository,
-         appInfoProvider: AppInfoProvider,
-         hardwareCapabilitiesProvider: HardwareCapabilitiesProvider
-    ) {
-        self.iCloudCapabilitiesProvider = iCloudCapabilitiesProvider
-        self.keychainRepository = keychainRepository
-        self.appInfoProvider = appInfoProvider
-        self.hardwareCapabilitiesProvider = hardwareCapabilitiesProvider
+    init(metricsProvider: MetricsProvider) {
+        self.metricsProvider = metricsProvider
     }
 
     func run() -> Client {
@@ -30,34 +20,18 @@ class ClientSelector {
             version: Int(Constant.buildVersion)!,
             versionName: Constant.buildVersionName,
             deviceModel: DeviceUtils.deviceInfo().model,
-            timezoneOffsetInSeconds: Int64(TimeZone.current.secondsFromGMT()),
-            language: Locale.current.identifier,
-            deviceCheckToken: getDeviceCheckToken(),
-            fallbackDeviceToken: getFallbackDeviceToken(),
-            systemUptime: ProcessInfo.processInfo.systemUptime,
-            iCloudRecordId: iCloudCapabilitiesProvider.fetchRecordId(),
-            appDisplayName: appInfoProvider.getAppDisplayName(),
-            appId: appInfoProvider.getAppId(),
-            appName: appInfoProvider.getAppName(),
-            appPrimaryIconHash: appInfoProvider.getAppPrimaryIconHash(),
-            isSoftDevice: hardwareCapabilitiesProvider.isSoftDevice(),
-            softDeviceName: hardwareCapabilitiesProvider.getSoftDeviceName(),
-            hasGyro: hardwareCapabilitiesProvider.hasGyro(),
-            installSource: appInfoProvider.getInstallSource().rawValue
+            timezoneOffsetInSeconds: Int64(metricsProvider.timeZoneOffsetInSeconds),
+            language: metricsProvider.language,
+            deviceCheckToken: metricsProvider.deviceCheckToken,
+            fallbackDeviceToken: metricsProvider.fallbackDeviceToken,
+            appDisplayName: metricsProvider.appDisplayName,
+            appId: metricsProvider.appId,
+            appName: metricsProvider.appName,
+            appPrimaryIconHash: metricsProvider.appPrimaryIconHash,
+            isSoftDevice: metricsProvider.isSoftDevice,
+            softDeviceName: metricsProvider.softDeviceName,
+            hasGyro: metricsProvider.hasGyro,
+            installSource: metricsProvider.installSource
         )
-    }
-
-    private func getDeviceCheckToken() -> String {
-        let deviceTokenKey = KeychainRepository.storedKeys.deviceCheckToken.rawValue
-        // swiftlint:disable force_error_handling
-        let deviceToken = try? keychainRepository.get(deviceTokenKey)
-        return deviceToken ?? DeviceTokenErrorValues.failToRetrieve.rawValue
-    }
-
-    private func getFallbackDeviceToken() -> String {
-        let deviceTokenKey = KeychainRepository.storedKeys.fallbackDeviceToken.rawValue
-        // swiftlint:disable force_error_handling
-        let deviceToken = try? keychainRepository.get(deviceTokenKey)
-        return deviceToken ?? DeviceTokenErrorValues.failToRetrieve.rawValue
     }
 }

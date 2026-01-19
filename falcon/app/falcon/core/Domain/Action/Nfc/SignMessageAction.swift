@@ -10,13 +10,13 @@ import RxSwift
 
 final class SignMessageAction: Resolver {
 
-    private let cardNfcService: CardNfcService = resolve()
+    private let nfcSession: NfcSession = resolve()
     private let walletService: WalletService = resolve()
     private let disposeBag = DisposeBag()
 
     func run(message: String) -> Single<[UInt8]> {
         return Single.create { single in
-            let connectionDisposable = self.cardNfcService
+            let connectionDisposable = self.nfcSession
                 .connect(alertMessage: "Approve transaction with you card")
                 .subscribe(onCompleted: {
                     self.walletService.signMessageWithSecurityCard(messageHex: message)
@@ -33,7 +33,7 @@ final class SignMessageAction: Resolver {
 
             return Disposables.create {
                 connectionDisposable.dispose()
-                self.cardNfcService.close()
+                self.nfcSession.close()
             }
         }
     }

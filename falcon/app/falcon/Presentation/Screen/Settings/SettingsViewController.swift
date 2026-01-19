@@ -82,7 +82,8 @@ class SettingsViewController: MUViewController {
             let currencyPicker = CurrencyPickerViewController.createForCurrencySettings(
                 exchangeRateWindow: window.toLibwallet(),
                 delegate: self,
-                selectedCurrency: GetCurrencyForCode().runAssumingCrashPosibility(code: presenter.getPrimaryCurrency())
+                selectedCurrency: GetCurrencyForCode()
+                    .runAssumingCrashPosibility(code: presenter.getPrimaryCurrency())
             )
 
             navigationController!.pushViewController(currencyPicker, animated: true)
@@ -94,7 +95,17 @@ class SettingsViewController: MUViewController {
     }
 
     private func showChangePassword() {
-        navigationController!.pushViewController(ChangePasswordPrimingViewController(), animated: true)
+        navigationController!.pushViewController(
+            ChangePasswordPrimingViewController(),
+            animated: true
+        )
+    }
+
+    private func showDisableFeatureFlags() {
+        navigationController!.pushViewController(
+            DisableFeatureFlagsViewController(),
+            animated: true
+        )
     }
 
     private func getChangeCurrencyCell() -> TwoLinesSettingsTableViewCell {
@@ -122,11 +133,17 @@ class SettingsViewController: MUViewController {
     }
 
     private func showLightningNetworkSettings() {
-        navigationController!.pushViewController(LightningNetworkSettingsViewController(), animated: true)
+        navigationController!.pushViewController(
+            LightningNetworkSettingsViewController(),
+            animated: true
+        )
     }
 
     private func showOnchainSettings() {
-        navigationController!.pushViewController(OnchainSettingsViewController(), animated: true)
+        navigationController!.pushViewController(
+            OnchainSettingsViewController(),
+            animated: true
+        )
     }
 }
 
@@ -138,7 +155,7 @@ extension SettingsViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
            switch presenter.sections[section] {
-           case .general, .logout, .deleteWallet, .security, .advanced:
+           case .general, .logout, .deleteWallet, .security, .advanced, .disableFeatureFlags:
             return UITableView.automaticDimension
            case .version:
                return 12
@@ -180,6 +197,9 @@ extension SettingsViewController: UITableViewDelegate {
 
         case .deleteWallet:
             decideDeleteWalletAction()
+
+        case .disableFeatureFlags:
+            showDisableFeatureFlags()
         }
     }
 
@@ -189,7 +209,7 @@ extension SettingsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch presenter.sections[section] {
-        case .logout, .version, .deleteWallet: return nil
+        case .logout, .version, .deleteWallet, .disableFeatureFlags: return nil
         case .general: return L10n.SettingsViewController.s2
         case .security: return L10n.SettingsViewController.s3
         case .advanced: return L10n.SettingsViewController.advanced
@@ -212,7 +232,7 @@ extension SettingsViewController: UITableViewDataSource {
         case .advanced(let rows):
             return rows.count
 
-        case .logout, .version, .deleteWallet:
+        case .logout, .version, .deleteWallet, .disableFeatureFlags:
             return 1
         }
     }
@@ -237,6 +257,9 @@ extension SettingsViewController: UITableViewDataSource {
 
         case .advanced(let rows):
             return settingsAdvancedCell(indexPath: indexPath, rows: rows)
+
+        case .disableFeatureFlags:
+            return disableFeatureFlagsCell()
         }
     }
 
@@ -265,11 +288,27 @@ extension SettingsViewController: UITableViewDataSource {
         return cell
     }
 
-    private func settingsGeneralCell(indexPath: IndexPath, generalRows: [GeneralRow]) -> UITableViewCell {
+    private func disableFeatureFlagsCell() -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.backgroundColor = .clear
+        cell.selectionStyle = .none
+        cell.textLabel?.style = .error
+        cell.textLabel?.text = L10n.SettingsViewController.s24
+
+        return cell
+    }
+
+    private func settingsGeneralCell(
+        indexPath: IndexPath,
+        generalRows: [GeneralRow]
+    ) -> UITableViewCell {
         switch generalRows[indexPath.row] {
 
         case .bitcoinUnit:
-            let cell = tableView.dequeue(type: TwoLinesSettingsTableViewCell.self, indexPath: indexPath)
+            let cell = tableView.dequeue(
+                type: TwoLinesSettingsTableViewCell.self,
+                indexPath: indexPath
+            )
 
             cell.setUp(mainLabel: L10n.SettingsViewController.s7,
                        secondLabel: presenter.getBitcoinUnit(),
@@ -279,7 +318,10 @@ extension SettingsViewController: UITableViewDataSource {
             return cell
 
         case .changeCurrency:
-            let cell = tableView.dequeue(type: TwoLinesSettingsTableViewCell.self, indexPath: indexPath)
+            let cell = tableView.dequeue(
+                type: TwoLinesSettingsTableViewCell.self,
+                indexPath: indexPath
+            )
             var image: UIImage?
             if presenter.shouldDisplayBtcLogo() {
                 image = Asset.Assets.btcLogo.image
@@ -295,7 +337,10 @@ extension SettingsViewController: UITableViewDataSource {
         }
     }
 
-    private func settingsSecurityCell(indexPath: IndexPath, rows: [SecurityRow]) -> UITableViewCell {
+    private func settingsSecurityCell(
+        indexPath: IndexPath,
+        rows: [SecurityRow]
+    ) -> UITableViewCell {
         switch rows[indexPath.row] {
 
         case .changePassword:
@@ -306,13 +351,19 @@ extension SettingsViewController: UITableViewDataSource {
         }
     }
 
-    private func settingsAdvancedCell(indexPath: IndexPath, rows: [AdvancedRow]) -> UITableViewCell {
+    private func settingsAdvancedCell(
+        indexPath: IndexPath,
+        rows: [AdvancedRow]
+    ) -> UITableViewCell {
 
         switch rows[indexPath.row] {
         case .lightningNetwork:
             let cell = tableView.dequeue(type: SettingsTableViewCell.self, indexPath: indexPath)
 
-            cell.setUp(L10n.SettingsViewController.lightningNetwork, color: Asset.Colors.title.color)
+            cell.setUp(
+                L10n.SettingsViewController.lightningNetwork,
+                color: Asset.Colors.title.color
+            )
             cell.showChevron()
             if rows.count > 1 {
                 cell.hideTopSeparator()
@@ -341,9 +392,11 @@ extension SettingsViewController {
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: L10n.SettingsViewController.ok, style: .default, handler: { _ in
-            alert.dismiss(animated: true)
-        }))
+        alert.addAction(
+            UIAlertAction(title: L10n.SettingsViewController.ok, style: .default, handler: { _ in
+                alert.dismiss(animated: true)
+            })
+        )
 
         alert.view.tintColor = Asset.Colors.muunBlue.color
         self.present(alert, animated: true)
@@ -356,9 +409,15 @@ extension SettingsViewController {
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: L10n.SettingsViewController.ok, style: .default, handler: { _ in
-            alert.dismiss(animated: true)
-        }))
+        alert.addAction(
+            UIAlertAction(
+                title: L10n.SettingsViewController.ok,
+                style: .default,
+                handler: { _ in
+                    alert.dismiss(animated: true)
+                }
+            )
+        )
 
         alert.view.tintColor = Asset.Colors.muunBlue.color
         self.present(alert, animated: true)
@@ -370,15 +429,27 @@ extension SettingsViewController {
             message: L10n.SettingsViewController.s16,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: L10n.SettingsViewController.cancel, style: .default, handler: { _ in
-            alert.dismiss(animated: true)
-        }))
+        alert.addAction(
+            UIAlertAction(
+                title: L10n.SettingsViewController.cancel,
+                style: .default,
+                handler: { _ in
+                    alert.dismiss(animated: true)
+                }
+            )
+        )
 
-        alert.addAction(UIAlertAction(title: L10n.SettingsViewController.s4, style: .destructive, handler: { _ in
-            self.logEvent("log_out")
-            self.presenter.logout()
-            self.resetWindowToGetStarted()
-        }))
+        alert.addAction(
+            UIAlertAction(
+                title: L10n.SettingsViewController.s4,
+                style: .destructive,
+                handler: { _ in
+                    self.logEvent("log_out")
+                    self.presenter.logout()
+                    self.resetWindowToGetStarted()
+                }
+            )
+        )
 
         alert.view.tintColor = Asset.Colors.muunGrayDark.color
 
@@ -391,18 +462,30 @@ extension SettingsViewController {
             message: L10n.SettingsViewController.s20,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: L10n.SettingsViewController.cancel, style: .default, handler: { _ in
-            alert.dismiss(animated: true)
-        }))
-
-        alert.addAction(UIAlertAction(title: L10n.SettingsViewController.s22, style: .destructive, handler: { _ in
-            self.logEvent("wallet_deleted")
-            self.presenter.deleteWallet()
-            self.navigationController!.setViewControllers(
-                [FeedbackViewController(feedback: FeedbackInfo.deleteWallet)],
-                animated: true
+        alert.addAction(
+            UIAlertAction(
+                title: L10n.SettingsViewController.cancel,
+                style: .default,
+                handler: { _ in
+                    alert.dismiss(animated: true)
+                }
             )
-        }))
+        )
+
+        alert.addAction(
+            UIAlertAction(
+                title: L10n.SettingsViewController.s22,
+                style: .destructive,
+                handler: { _ in
+                    self.logEvent("wallet_delete", parameters: ["type": "success"])
+                    self.presenter.deleteWallet()
+                    self.navigationController!.setViewControllers(
+                        [FeedbackViewController(feedback: FeedbackInfo.deleteWallet)],
+                        animated: true
+                    )
+                }
+            )
+        )
 
         alert.view.tintColor = Asset.Colors.muunGrayDark.color
 

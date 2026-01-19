@@ -31,8 +31,10 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
         self.signFlow = (state) ? .recover : .create
         self.syncAction = syncAction
         self.preferences = preferences
-
+        
         super.init(delegate: delegate)
+        
+        self.fatalIfEnteredSyncScreenByMistake()
     }
 
     override func setUp() {
@@ -71,7 +73,12 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
         syncAction.run(
             signFlow: signFlow,
             gcmToken: preferences.string(forKey: .gcmToken),
-            currencyCode: CurrencyHelper.currencyForLocale().code
+            currencyCode: CurrencyHelper.currencyForLocale().code,
+            // Sync presenter should never wipe the pin on account creation.
+            // If it runs for accountCreation is because we are after pinScreen. The other
+            // point in which we show this screen is when a user logs in, sets the pin and
+            // then sync never success but in those cases it isn't an account creation.
+            preservePinOnAccountCreation: true
         )
     }
 
@@ -92,5 +99,14 @@ class SyncPresenter<Delegate: SyncDelegate>: BasePresenter<Delegate> {
         return preferences.bool(forKey: .hasResolvedARcChallenge)
         && !preferences.bool(forKey: .hasRecoveryCode)
         && !hasUserAcknowledgedIsUsingAnUnverifiedRecoveryCode
+    }
+    
+    func fatalIfEnteredSyncScreenByMistake() {
+        // SyncStatus should never be success if the user hasn't sync yet. an existing user should
+        // never be here if already made a sync.
+        if preferences.string(forKey: .syncStatus) == "success"
+            && signFlow == .recover {
+            Logger.fatal("Attempt to expired a session of an existing user that was sync at the beginning")
+        }
     }
 }

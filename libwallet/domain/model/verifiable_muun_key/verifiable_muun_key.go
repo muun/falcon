@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"github.com/muun/libwallet/librs"
 	"log/slog"
 	"math/big"
 	"testing"
@@ -13,7 +14,6 @@ import (
 	"github.com/muun/libwallet/cryptography/bitcoin_hpke"
 	"github.com/muun/libwallet/domain/model/encrypted_key_v3"
 	"github.com/muun/libwallet/encryption"
-	"github.com/muun/libwallet/librs"
 	"github.com/muun/libwallet/service/model"
 )
 

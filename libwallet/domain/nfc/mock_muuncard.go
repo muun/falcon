@@ -13,13 +13,23 @@ import (
 	"github.com/btcsuite/btcd/btcutil/base58"
 	"github.com/muun/libwallet"
 	"github.com/muun/libwallet/app_provided_data"
-	"strings"
+	"log/slog"
 )
 
 type MockMuunCard struct {
 	network         *libwallet.Network
 	secureChannel   *muunCardSecureChannel
 	privateKeySlots []*libwallet.HDPrivateKey
+}
+
+// Enforce we implement the interface
+var _ JavaCardApplet = (*MockMuunCard)(nil)
+
+func NewMockMuunCard(network *libwallet.Network) *MockMuunCard {
+	return &MockMuunCard{
+		network:         network,
+		privateKeySlots: make([]*libwallet.HDPrivateKey, 1),
+	}
 }
 
 func (s *muunCardSecureChannel) processSecureCommand(apdu []byte) ([]byte, error) {
@@ -62,34 +72,14 @@ func (s *muunCardSecureChannel) processSecureCommand(apdu []byte) ([]byte, error
 	return decryptedPlaintext, nil
 }
 
-type MockNfcBridge struct {
-	mockCard *MockMuunCard
-}
-
-// Ensure MockNfcBridge complies with NfcBridge interface API
-var _ app_provided_data.NfcBridge = (*MockNfcBridge)(nil)
-
-func NewMockNfcBridge(network *libwallet.Network) *MockNfcBridge {
-	return &MockNfcBridge{
-		mockCard: &MockMuunCard{
-			network:         network,
-			privateKeySlots: make([]*libwallet.HDPrivateKey, 1),
-		},
-	}
-}
-
-func (m *MockNfcBridge) Transmit(apdu []byte) (*app_provided_data.NfcBridgeResponse, error) {
-	return m.mockCard.processCommand(apdu)
+func (c *MockMuunCard) getAppletId() string {
+	return muuncardAppletId
 }
 
 func (c *MockMuunCard) processCommand(apdu []byte) (*app_provided_data.NfcBridgeResponse, error) {
 	ins := apdu[iso7816OffsetIns]
 
-	fmt.Printf("command apdu %s\n", hex.EncodeToString(apdu))
-
 	switch ins {
-	case insSelect:
-		return c.handleSelectApplet(apdu)
 	case insMuuncardSetup:
 		return c.handleSetupCard(apdu)
 	case insMuuncardReset:
@@ -98,7 +88,6 @@ func (c *MockMuunCard) processCommand(apdu []byte) (*app_provided_data.NfcBridge
 		return c.handleInitSecureChannel(apdu)
 	case insMuuncardSignMessage:
 		return c.handleSignMessage(apdu)
-
 	}
 
 	// TODO return ISO7816.SW_INS_NOT_SUPPORTED
@@ -106,33 +95,6 @@ func (c *MockMuunCard) processCommand(apdu []byte) (*app_provided_data.NfcBridge
 		Response:   nil,
 		StatusCode: responseOk,
 	}, nil
-}
-
-func (c *MockMuunCard) handleSelectApplet(apdu []byte) (
-	*app_provided_data.NfcBridgeResponse,
-	error,
-) {
-	dataSize := int(apdu[iso7816OffsetLc])
-	data := apdu[iso7816OffsetCData:]
-
-	if len(data) != dataSize {
-		return nil, fmt.Errorf("invalid apdu: expected %v data bytes, got %v", dataSize, len(data))
-	}
-
-	// Handle deselect applet
-	if dataSize == 0 {
-		// return FCI template, contains several internal OS stuff like A000000151000000 (the ID of
-		// globalplatform).
-		return newSuccessResponse([]byte("6F108408A000000151000000A5049F6501FF")), nil
-	}
-
-	appletId := hex.EncodeToString(data)
-	if strings.ToUpper(appletId) != muuncardAppletId {
-		return nil, fmt.Errorf("incorrect applet id: %s", appletId)
-	}
-
-	// Return some internal OS stuff + "muun.com" in hex (e.g. 6D75756E2E636F6D).
-	return newSuccessResponse([]byte("D1010855046D75756E2E636F6D")), nil
 }
 
 func (c *MockMuunCard) handleSetupCard(apdu []byte) (*app_provided_data.NfcBridgeResponse, error) {
@@ -281,7 +243,7 @@ func (c *MockMuunCard) closeSecureChannel() {
 
 func newSuccessResponse(responseBytes []byte) *app_provided_data.NfcBridgeResponse {
 
-	fmt.Printf("response apdu %s\n", hex.EncodeToString(append(responseBytes, 0x90, 0x00)))
+	slog.Debug("response apdu", "apdu", hex.EncodeToString(append(responseBytes, 0x90, 0x00)))
 
 	return &app_provided_data.NfcBridgeResponse{
 		Response:   responseBytes,
@@ -291,7 +253,7 @@ func newSuccessResponse(responseBytes []byte) *app_provided_data.NfcBridgeRespon
 
 func newErrorResponse(statusCode int32) *app_provided_data.NfcBridgeResponse {
 
-	fmt.Printf("response apdu %s\n", fmt.Sprintf("%x", statusCode))
+	slog.Debug("error response apdu", "statusCode", statusCode)
 
 	return &app_provided_data.NfcBridgeResponse{
 		Response:   nil,

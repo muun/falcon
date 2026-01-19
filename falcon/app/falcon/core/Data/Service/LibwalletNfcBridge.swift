@@ -10,10 +10,10 @@ import Libwallet
 
 final class LibwalletNfcBridge: NSObject, App_provided_dataNfcBridgeProtocol {
 
-    private let cardNfcService: CardNfcService
+    private let nfcSession: NfcSession
 
-    init(cardNfcService: CardNfcService) {
-        self.cardNfcService = cardNfcService
+    init(nfcSession: NfcSession) {
+        self.nfcSession = nfcSession
     }
 
     /// Transmits a message to the NFC card and returns a synchronous response for Libwallet.
@@ -31,7 +31,7 @@ final class LibwalletNfcBridge: NSObject, App_provided_dataNfcBridgeProtocol {
         // a synchronous value.
         do {
             // Convert the asynchronous operation (Single) into a blocking call.
-            let cardResponse: CardNfcResponse = try cardNfcService.transmit(message: message)
+            let cardResponse: CardNfcResponse = try nfcSession.transmit(message: message)
                 .toBlocking()
                 .single()
             return cardResponse.toLibwallet()

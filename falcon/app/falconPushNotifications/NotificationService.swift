@@ -22,10 +22,14 @@ class NotificationService: UNNotificationServiceExtension {
         return (Identifiers.bundleId + "." + key).data(using: .utf8)!
     }
 
-    override func didReceive(_ request: UNNotificationRequest,
-                             withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+    override func didReceive(
+        _ request: UNNotificationRequest,
+        withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
+    ) {
 
-        if let firebaseOptions = FirebaseOptions(contentsOfFile: Environment.current.firebaseOptionsPath) {
+        if let firebaseOptions = FirebaseOptions(
+            contentsOfFile: Environment.current.firebaseOptionsPath
+        ) {
             FirebaseApp.configure(options: firebaseOptions)
         }
 
@@ -66,7 +70,9 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func getNotificationReport(_ userInfo: [AnyHashable: Any]) throws -> NotificationReportJson {
+    private func getNotificationReport(
+        _ userInfo: [AnyHashable: Any]
+    ) throws -> NotificationReportJson {
         if let aps = userInfo["aps"] as? [String: Any],
            let alertReport = aps["alert"] as? [String: Any],
            // swiftlint:disable force_error_handling
@@ -87,7 +93,9 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func getNotificationReportLegacy(_ userInfo: [AnyHashable: Any]) throws -> NotificationReportJson {
+    private func getNotificationReportLegacy(
+        _ userInfo: [AnyHashable: Any]
+    ) throws -> NotificationReportJson {
         if let aps = userInfo["aps"] as? [String: Any],
            let alert = aps["alert"] as? String,
            let data = alert.data(using: .utf8) {
@@ -191,7 +199,10 @@ class NotificationService: UNNotificationServiceExtension {
         }
 
         if let senderProfile = newOp.senderProfile {
-            let title = L10n.NotificationService.opFromContactTitle(senderProfile.firstName, amountString)
+            let title = L10n.NotificationService.opFromContactTitle(
+                senderProfile.firstName,
+                amountString
+            )
             return (title, description)
         }
 
@@ -287,8 +298,14 @@ class NotificationService: UNNotificationServiceExtension {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("\(Bundle.main.infoDictionary!["CFBundleVersion"]!)", forHTTPHeaderField: "X-Client-Version")
-        request.addValue(Locale.current.languageCode ?? "en", forHTTPHeaderField: "X-Client-Language")
+        request.addValue(
+            "\(Bundle.main.infoDictionary!["CFBundleVersion"]!)",
+            forHTTPHeaderField: "X-Client-Version"
+        )
+        request.addValue(
+            Locale.current.languageCode ?? "en",
+            forHTTPHeaderField: "X-Client-Language"
+        )
         request.addValue("FALCON", forHTTPHeaderField: "X-Client-Type")
         request.addValue(try getAuthToken(), forHTTPHeaderField: "Authorization")
 

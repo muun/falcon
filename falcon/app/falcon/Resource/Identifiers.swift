@@ -11,7 +11,8 @@ import Foundation
 enum Identifiers {
     static let group = "5YYLBTUB6W.group.com.muun.falcon"
 
-    // This string is hardcoded because it has to be the same one we use in PushNotification Extension
+    // This string is hardcoded because it has to be
+    // the same one we use in PushNotification Extension
     // This is to allow sharing the Keychain
     static let bundleId = "com.muun.falcon"
 }

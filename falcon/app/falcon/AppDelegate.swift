@@ -39,25 +39,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let reachabilityService: ReachabilityService = resolve()
     internal let databaseCoordinator: DatabaseCoordinator = resolve()
 
+    internal let conectivityCapabilitiesProvider: ConectivityCapabilitiesProvider = resolve()
     internal let storeKitCapabilitiesProvider: StoreKitCapabilitiesProvider = resolve()
     internal let appinfoProvider: AppInfoProvider = resolve()
-    internal let iCloudCapabilitiesProvider: ICloudCapabilitiesProvider = resolve()
     internal let keychainRepository: KeychainRepository = resolve()
     var debugModeDisplayer: DebugModeDisplayer?
-    private let backgroundTimesService: BackgroundTimesService = resolve()
+    private let backgroundTimesProcessor: BackgroundTimesProcessor = resolve()
     internal let gcmMessageIDKey = "gcm.message_id"
     // Used in firebase extension
     var fcmTokenHandlingAlreadyReported = false
-    
+
     internal let featureFlagsRepository: FeatureFlagsRepository = resolve()
     private let preloadFeeDataAction: PreloadFeeDataAction = resolve()
     private let feeDataSyncer: FeeDataSyncer = resolve()
     internal let httpClientSessionProvider: HttpClientSessionProvider = resolve()
-    internal let cardNfcService: CardNfcService = resolve()
+    internal let nfcSession: NfcSession = resolve()
     internal let keyProvider: KeyProvider = resolve()
 
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
 
         configureLibwallet()
         do {
@@ -81,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         configureFirebase()
-        ConectivityCapabilitiesProvider.shared.startMonitoring()
+        conectivityCapabilitiesProvider.startMonitoring()
         storeKitCapabilitiesProvider.start()
         appinfoProvider.start()
         deviceCheckTokenProvider.start()
@@ -90,7 +92,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         registerUserData()
-        iCloudCapabilitiesProvider.setup()
         generateDeviceToken()
         checkEnvironment()
 
@@ -103,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         checkIfAppWasOpenByNotification(launchOptions)
 
         setupDebugModeIfNeeded()
-        backgroundTimesService.onEnterForeground()
+        backgroundTimesProcessor.onEnterForeground()
 
         return true
     }
@@ -219,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DeviceUtils.appState = application.applicationState
         AnalyticsHelper.logEvent("app_will_enter_foreground")
         deviceCheckTokenProvider.reactToForegroundAppState()
-        backgroundTimesService.onEnterForeground()
+        backgroundTimesProcessor.onEnterForeground()
 
         if sessionActions.isLoggedIn() {
             preloadFeeDataAction.run(refreshPolicy: .foreground)
@@ -234,7 +235,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         DeviceUtils.appState = application.applicationState
-        backgroundTimesService.onEnterBackground()
+        backgroundTimesProcessor.onEnterBackground()
     }
 
     func getRootNavigationControllerOnMainWindow() -> UINavigationController? {
@@ -251,7 +252,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        Logger.log(.err, "failed to find a nav controller to open a URI: root \(String(describing: rootController))")
+        let rootControllerDesc = String(describing: rootController)
+        Logger.log(
+            .err,
+            "failed to find a nav controller to open a URI: root \(rootControllerDesc)"
+        )
         return nil
     }
 
@@ -365,9 +370,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Logger.log(.info, "Device Token: \(token)")
     }
 
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
         handle(notification: userInfo, completionHandler: completionHandler)
     }
 

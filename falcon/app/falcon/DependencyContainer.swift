@@ -307,8 +307,10 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F, G, H>(_ factory: ((U, A, B, C, D, E, F, G, H)) -> T,
-                                                         delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H>(
+        _ factory: ((U, A, B, C, D, E, F, G, H)) -> T,
+        delegate: U
+    ) -> T
         where T: BasePresenter<U> {
 
             return factory((
@@ -342,8 +344,10 @@ extension PresenterInstantior {
             ))
     }
 
-    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I>(_ factory: ((U, A, B, C, D, E, F, G, H, I)) -> T,
-                                                            delegate: U) -> T
+    func instancePresenter<T, U, A, B, C, D, E, F, G, H, I>(
+        _ factory: ((U, A, B, C, D, E, F, G, H, I)) -> T,
+        delegate: U
+    ) -> T
         where T: BasePresenter<U> {
 
             return factory((

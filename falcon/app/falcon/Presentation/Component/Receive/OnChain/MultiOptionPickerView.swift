@@ -37,7 +37,12 @@ class MultiOptionPickerView: UIStackView {
         axis = .horizontal
         alignment = .center
         isLayoutMarginsRelativeArrangement = true
-        layoutMargins = UIEdgeInsets(top: .verticalRowMargin, left: 8, bottom: .verticalRowMargin, right: 8)
+        layoutMargins = UIEdgeInsets(
+            top: .verticalRowMargin,
+            left: 8,
+            bottom: .verticalRowMargin,
+            right: 8
+        )
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 56)
@@ -58,7 +63,9 @@ class MultiOptionPickerView: UIStackView {
         controlView.distribution = .equalCentering
         controlView.alignment = .center
         controlView.isUserInteractionEnabled = true
-        controlView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .didTapControl))
+        controlView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: .didTapControl)
+        )
 
         controlLabel.font = Constant.Fonts.system(size: .desc)
         controlLabel.textColor = Asset.Colors.muunGrayDark.color

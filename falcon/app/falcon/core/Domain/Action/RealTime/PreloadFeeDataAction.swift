@@ -18,7 +18,7 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
     private let minFeeRateRepository: MinFeeRateRepository
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
     private let featureFlagsRepository: FeatureFlagsRepository
-    private let libwalletService: LibwalletService
+    private let feeBumpFunctionsProvider: FeeBumpFunctionsProvider
     private let throttleInterval: TimeInterval = {
         #if DEBUG
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
@@ -33,14 +33,14 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
          minFeeRateRepository: MinFeeRateRepository,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
          featureFlagsRepository: FeatureFlagsRepository,
-         libwalletService: LibwalletService) {
+         feeBumpFunctionsProvider: FeeBumpFunctionsProvider) {
 
         self.houstonService = houstonService
         self.feeWindowRepository = feeWindowRepository
         self.minFeeRateRepository = minFeeRateRepository
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
         self.featureFlagsRepository = featureFlagsRepository
-        self.libwalletService = libwalletService
+        self.feeBumpFunctionsProvider = feeBumpFunctionsProvider
 
         super.init(name: "PreloadFeeDataAction")
     }
@@ -75,8 +75,9 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
             // If there are no unconfirmed UTXOs, it means there are no fee bump functions.
             // Remove the fee bump functions by storing an empty list.
             let emptyFeeBumpFunctions = FeeBumpFunctions(uuid: "", functions: [String]())
-            libwalletService.persistFeeBumpFunctions(feeBumpFunctions: emptyFeeBumpFunctions,
-                                                     refreshPolicy: refreshPolicy)
+            feeBumpFunctionsProvider
+                .persistFeeBumpFunctions(feeBumpFunctions: emptyFeeBumpFunctions,
+                                         refreshPolicy: refreshPolicy)
         }
     }
 
@@ -89,7 +90,7 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
                 let minMempoolFeeRateInSatsPerWeightUnit = data.minMempoolFeeRateInSatPerVbyte / 4
                 self?.minFeeRateRepository
                     .store(satsPerWeightUnit: minMempoolFeeRateInSatsPerWeightUnit)
-                self?.libwalletService
+                self?.feeBumpFunctionsProvider
                     .persistFeeBumpFunctions(feeBumpFunctions: data.feeBumpFunctions,
                                              refreshPolicy: refreshPolicy)
                 self?.lastSyncTime = Date()

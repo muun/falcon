@@ -10,20 +10,20 @@ import RxSwift
 
 final class PairNfcCardAction: Resolver {
 
-    private let cardNfcService: CardNfcService = resolve()
+    private let nfcSession: NfcSession = resolve()
     private let walletService: WalletService = resolve()
     private let disposeBag = DisposeBag()
 
     func run(seed: String, slot: UInt8) -> Completable {
         return Completable.create { completable in
-            self.cardNfcService.connect(alertMessage: "Pair your Muun security card")
+            self.nfcSession.connect(alertMessage: "Pair your Muun security card")
                 .subscribe(onCompleted: {
                     self.walletService.pairSecurityCard()
                         .subscribe(onCompleted: {
                             completable(.completed)
-                            self.cardNfcService.close()
+                            self.nfcSession.close()
                         }, onError: { error in
-                            self.cardNfcService.close()
+                            self.nfcSession.close()
                             Logger.log(
                                 .debug,
                                 "Card pair failed! Error: \(error.localizedDescription)"
@@ -32,7 +32,7 @@ final class PairNfcCardAction: Resolver {
                         }).disposed(by: self.disposeBag)
                 }, onError: { error in
                     Logger.log(.err, "Can't connect security card: \(error.localizedDescription)")
-                    self.cardNfcService.close()
+                    self.nfcSession.close()
                     completable(.error(error))
                 })
         }

@@ -22,6 +22,7 @@ enum SettingsSection {
     case logout
     case deleteWallet
     case version
+    case disableFeatureFlags
 }
 
 enum GeneralRow {
@@ -47,7 +48,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     private let operationActions: OperationActions
     private let balanceActions: BalanceActions
     private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
-    private let featureFlagsRepository: FeatureFlagsRepository
+    private let featureFlagsSelector: FeatureFlagsSelector
 
     var sections: [SettingsSection] = []
 
@@ -65,7 +66,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
          operationActions: OperationActions,
          balanceActions: BalanceActions,
          userActivatedFeatureSelector: UserActivatedFeaturesSelector,
-         featureFlagsRepository: FeatureFlagsRepository) {
+         featureFlagsSelector: FeatureFlagsSelector) {
         self.logoutAction = logoutAction
         self.sessionActions = sessionActions
         self.exchangeRateRepository = exchangeRateWindowRepository
@@ -73,7 +74,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
         self.operationActions = operationActions
         self.balanceActions = balanceActions
         self.userActivatedFeatureSelector = userActivatedFeatureSelector
-        self.featureFlagsRepository = featureFlagsRepository
+        self.featureFlagsSelector = featureFlagsSelector
 
         super.init(delegate: delegate)
     }
@@ -126,6 +127,12 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
         }
 
         sections.append(.version)
+
+        #if DOGFOOD || DEBUG
+            if featureFlagsSelector.fetch().contains(.nfcCardV2) {
+                sections.append(.disableFeatureFlags)
+            }
+        #endif
         return sections
     }
 
@@ -196,7 +203,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
 
     func getFlagLabelText() -> String {
         var textForDisplay = ""
-        var featureFlags = featureFlagsRepository.fetch()
+        let featureFlags = featureFlagsSelector.fetch()
         let featureFlagsForDisplay = featureFlags.filter {
             $0 != .Taproot &&
             $0 != .TaprootPreactivation &&
@@ -212,8 +219,11 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
 #if DEBUG
     func debugChangeTaprootActivation() {
         userActivatedFeatureSelector.debugChangeTaprootActivation()
+        let newStatus = userActivatedFeatureSelector.get(
+            for: Libwallet.userActivatedFeatureTaproot()!
+        )
         delegate.showMessage(
-            "New status \(userActivatedFeatureSelector.get(for: Libwallet.userActivatedFeatureTaproot()!))"
+            "New status \(newStatus)"
         )
     }
 #endif

@@ -69,7 +69,10 @@ extension BitcoinUnitPickerViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
 
         let selectedCurrency = presenter.currency(forRowAt: indexPath)
-        logEvent("did_select_bitcoin_unit", parameters: ["type": selectedCurrency.code.lowercased()])
+        logEvent(
+            "did_select_bitcoin_unit",
+            parameters: ["type": selectedCurrency.code.lowercased()]
+        )
         presenter.selectUnit(selectedCurrency)
         navigationController?.popViewController(animated: true)
     }
