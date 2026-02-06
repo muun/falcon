@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import LocalAuthentication
 
 protocol LockDelegate: AnyObject {
     func unlockApp()
@@ -31,6 +30,7 @@ class PinViewController: MUViewController {
     private var state: PinPresenterState!
     private var isExistingUser = true
     private weak var appLockDelegate: LockDelegate?
+    private var biometricsStatusProvider: BiometricsStatusProvider = .init()
 
     fileprivate lazy var presenter = instancePresenter(PinPresenter.init, delegate: self, state: state)
 
@@ -38,9 +38,11 @@ class PinViewController: MUViewController {
         return "pin_\(state.loggingName())"
     }
 
-    convenience init(state: PinPresenterState,
-                     isExistingUser: Bool = true,
-                     lockDelegate: LockDelegate? = nil) {
+    convenience init(
+        state: PinPresenterState,
+        isExistingUser: Bool = true,
+        lockDelegate: LockDelegate? = nil,
+    ) {
 
         self.init()
 
@@ -74,21 +76,31 @@ class PinViewController: MUViewController {
         setUpUiTestLabel()
 
         animateView()
+        setupBiometricsButton()
 
         let isLocked = (state == .locked)
         if isLocked, presenter.getBiometricIdStatus() {
-            // TODO: refactor this
-            // 1 - View should not decide that it is necessary to ask for biometrics. That is a
-            // presenter responsability.
-            // 2 - The responsibility of validating access lies with the lock manager, as it serves
-            // as the access validator for PIN cases.
-            requestAuthentication(completion: {
-                self.presenter.onUserUnlockedAppSuccessfullyWithBiometrics()
-                self.unlockSuccessful(authMethod: .biometrics)
-            }, failure: {
-                self.presenter.onBiometricsAuthFailed()
-            })
+            requestBiometrics()
         }
+    }
+
+    private func requestBiometrics() {
+        // TODO: refactor this
+        // 1 - View should not decide that it is necessary to ask for biometrics. That is a
+        // presenter responsability.
+        // 2 - The responsibility of validating access lies with the lock manager, as it serves
+        // as the access validator for PIN cases.
+        biometricsStatusProvider.requestAuthentication(completion: {
+            self.presenter.onUserUnlockedAppSuccessfullyWithBiometrics()
+            self.unlockSuccessful(authMethod: .biometrics)
+        }, failure: {
+            self.presenter.onBiometricsAuthFailed()
+        })
+    }
+
+    private func setupBiometricsButton() {
+        let biometricsStatus = biometricsStatusProvider.biometricsStatus()
+        keyboardView.setupBiometrics(status: biometricsStatus)
     }
 
     fileprivate func setUpUiTestLabel() {
@@ -144,40 +156,6 @@ class PinViewController: MUViewController {
         }
     }
 
-    fileprivate func requestAuthentication(completion: @escaping () -> Void, failure: @escaping () -> Void) {
-
-        let myContext = LAContext()
-        var text = ""
-        var authError: NSError?
-
-        if myContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
-
-            switch myContext.biometryType {
-            case .faceID:
-                text = L10n.PinViewController.s1
-            case .touchID:
-                text = L10n.PinViewController.s2
-            case .none:
-                text = L10n.PinViewController.s3
-            @unknown default:
-                fatalError("Implement the new biometric type")
-            }
-
-            myContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: text) { success, _ in
-                DispatchQueue.main.async {
-                    if success {
-                        completion()
-                    } else {
-                        failure()
-                    }
-                }
-            }
-        } else {
-            // TODO: Show a "Face id not set up" pop up
-            failure()
-        }
-    }
-
     fileprivate func pushToSync() {
         let vc = SyncViewController(existingUser: self.isExistingUser)
         navigationController!.pushViewController(vc, animated: true)
@@ -218,6 +196,10 @@ extension PinViewController: KeyboardViewDelegate {
         currentPin = String(currentPin.dropLast())
 
         pinView.erasePin()
+    }
+
+    func onBiometricsPressed() {
+        requestBiometrics()
     }
 
 }
@@ -315,7 +297,7 @@ extension PinViewController: PinPresenterDelegate {
 
             logEvent("pin", parameters: ["type": PinTypeParam.created.rawValue])
 
-            requestAuthentication(completion: {
+            biometricsStatusProvider.requestAuthentication(completion: {
                 self.presenter.setBiometricIdStatus(true)
                 self.pushToSync()
             }, failure: {

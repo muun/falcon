@@ -11,6 +11,7 @@ import UIKit
 protocol KeyboardViewDelegate: AnyObject {
     func onNumberPressed(number: String)
     func onErasePressed()
+    func onBiometricsPressed()
 }
 
 @IBDesignable
@@ -22,6 +23,9 @@ class KeyboardView: MUView {
     @IBOutlet private var numberViews: [UIView]!
     @IBOutlet private var numberLabels: [UILabel]!
     @IBOutlet private var lettersLabels: [UILabel]!
+
+    @IBOutlet private weak var biometricsView: UIView!
+    @IBOutlet private weak var biometricsImageView: UIImageView!
 
     weak var delegate: KeyboardViewDelegate?
     private let notification = UINotificationFeedbackGenerator() // This is used to notify success or error to the user
@@ -41,6 +45,7 @@ class KeyboardView: MUView {
 
         addNumberViewActions()
         addDeleteAction()
+        addBiometricsAction()
 
         makeViewTestable()
     }
@@ -72,6 +77,13 @@ class KeyboardView: MUView {
         eraseView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: .eraseViewTouched))
     }
 
+    fileprivate func addBiometricsAction() {
+        biometricsView.isUserInteractionEnabled = true
+        biometricsView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: .biometricsViewTouched)
+        )
+    }
+
     @objc fileprivate func viewTouched(withSender sender: AnyObject) {
         if let number = sender.view?.accessibilityLabel {
             notification.notificationOccurred(.warning)
@@ -82,6 +94,11 @@ class KeyboardView: MUView {
     @objc fileprivate func eraseViewTouched() {
         notification.notificationOccurred(.warning)
         delegate?.onErasePressed()
+    }
+
+    @objc fileprivate func biometricsViewTouched() {
+        notification.notificationOccurred(.warning)
+        delegate?.onBiometricsPressed()
     }
 
     fileprivate func setEraseEnabled(_ isEnabled: Bool) {
@@ -113,6 +130,18 @@ class KeyboardView: MUView {
 
     }
 
+    func setupBiometrics(status: BiometricsStatus) {
+        switch status {
+        case .enabledFaceID:
+            biometricsView.isHidden = false
+            biometricsImageView.image = .faceID
+        case .enabledTouchID:
+            biometricsView.isHidden = false
+            biometricsImageView.image = .touchID
+        default:
+            biometricsView.isHidden = true
+        }
+    }
 }
 
 extension KeyboardView: UITestablePage {
@@ -142,4 +171,11 @@ fileprivate extension Selector {
     static let eraseViewTouched =
         #selector(KeyboardView.eraseViewTouched)
 
+    static let biometricsViewTouched =
+        #selector(KeyboardView.biometricsViewTouched)
+}
+
+private extension UIImage {
+    static let faceID = UIImage(systemName: "faceid")!
+    static let touchID = UIImage(systemName: "touchid")!
 }

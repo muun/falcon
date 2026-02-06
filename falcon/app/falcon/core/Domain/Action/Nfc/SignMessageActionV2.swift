@@ -20,18 +20,19 @@ final class SignMessageActionV2: Resolver {
                 .connect(alertMessage: "Approve transaction with you card")
                 .subscribe(onCompleted: {
                     AnalyticsHelper.logEvent(
-                        "security_card_tap",
-                        parameters: ["type": "detected"]
+                        SecurityCardTapEvent(type: .detected)
                     )
                     self.walletService.signMessageWithSecurityCardV2()
                         .subscribe(onCompleted: {
                             completable(.completed)
                         }, onError: { error in
                             Logger.log(.debug, "Sign message error: \(error.localizedDescription)")
+                            self.nfcSession.close(withErrorMessage: "Sign message failed")
                             completable(.error(error))
                        }).disposed(by: self.disposeBag)
                 }, onError: { error in
                     Logger.log(.err, "Can't connect security card: \(error.localizedDescription)")
+                    self.nfcSession.close(withErrorMessage: "Can't connect security card")
                     completable(.error(error))
                 })
 

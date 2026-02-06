@@ -54,12 +54,13 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     var lastSelectedCurrency: Currency?
 
     var hasNfc2fa: Bool {
-        featureFlagsSelector.isSecurityCardFlagEnabled() || featureFlagsSelector.fetch().contains(.nfcCard)
+        let featureFlags = featureFlagsSelector.fetch()
+        return featureFlags.contains(.nfcCardV2) || featureFlags.contains(.nfcCard)
     }
 
     private let userRepository: UserRepository = resolve()
     private let featureFlagsSelector: FeatureFlagsSelector = resolve()
-    private let featureFlagsOverridesRepository: FeatureFlagsLocalOverridesRepository = resolve()
+    private let featureFlagsOverridesRepository: FeatureFlagsOverridesRepository = resolve()
     private let signMessageAction: SignMessageAction = SignMessageAction()
     private let signMessageActionV2: SignMessageActionV2 = SignMessageActionV2()
     private var signMessageDisposable: Disposable?
@@ -453,7 +454,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
     func disableSecurityCardFlag() {
         // Temporary UX shortcut for internal dogfood testing.
         // Will be removed once the security card feature is stable.
-        featureFlagsOverridesRepository.setOverrideNfcCardV2(isDisabled: true)
+        featureFlagsOverridesRepository.setFlag(.nfcCardV2, isDisabled: true)
     }
 
     override func handleError(_ e: Error) {
@@ -631,9 +632,10 @@ extension NewOperationPresenter: OpLoadingTransitions {
 extension NewOperationPresenter: OpConfirmTransitions {
     func didConfirm() {
         signMessageDisposable?.dispose()
-        if featureFlagsSelector.isSecurityCardFlagEnabled() {
+        let featureFlags = featureFlagsSelector.fetch()
+        if featureFlags.contains(.nfcCardV2) {
             signWithSecurityCardV2AndCreateOperation()
-        } else if featureFlagsSelector.fetch().contains(.nfcCard) {
+        } else if featureFlags.contains(.nfcCard) {
             signWithSecurityCardAndCreateOperation()
         } else {
             createOperation()

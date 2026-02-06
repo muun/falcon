@@ -267,9 +267,11 @@ public class NotificationProcessor {
 
         case .newOperation(let newOperation):
             return CallbackNotificationHandler(.LOGGED_IN) {
-                self.trackPaymentReceived(operation: newOperation.operation)
+                if newOperation.operation.direction == .INCOMING {
+                    self.trackPaymentReceived(operation: newOperation.operation)
+                }
 
-                return self.operationActions.received(newOperation: newOperation)
+                return self.operationActions.handleNewOperation(newOperation)
             }
 
         case .operationUpdate(let operationUpdated):

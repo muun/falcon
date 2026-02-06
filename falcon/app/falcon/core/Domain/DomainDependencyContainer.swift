@@ -65,7 +65,7 @@ public extension DependencyContainer {
                 return FeeDataSyncer(preloadFeeDataAction: $0,
                                      nextTransactionRepository: $1,
                                      ntsChangesObservable: observable,
-                                     featureFlagsRepository: $2)
+                                     featureFlagsSelector: $2)
             }
             container.register(.singleton, factory: FCMTokenAction.init)
             container.register(.singleton, factory: SyncExternalAddresses.init)
@@ -109,7 +109,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: EmergencyKitDataSelector.init)
             container.register(.singleton, factory: UserPreferencesSelector.init)
             container.register(.singleton, factory: UserActivatedFeaturesSelector.init)
-            container.register(.singleton, factory: FeatureFlagsLocalOverridesRepository.init)
+            container.register(.singleton, factory: FeatureFlagsOverridesRepository.init)
             container.register(.singleton, factory: FeatureFlagsSelector.init)
             container.register(.singleton, factory: DeviceCheckTokenProvider.init)
             container.register(.singleton, factory: BackgroundTimesProcessor.init)
@@ -155,9 +155,9 @@ public extension DependencyContainer {
 
             container.register(.singleton) {
                 ApiReachabilityClient(sessionActions: $0,
-                                       flagsRepository: $1,
-                                       reachabilityStatusRepository: $2,
-                                       pingService: $3) as ReachabilityService
+                                      featureFlagsRepository: $1,
+                                      reachabilityStatusRepository: $2,
+                                      pingService: $3) as ReachabilityService
             }.resolvingProperties { container, client in
                 // swiftlint:disable force_cast
                 (client as! ApiReachabilityClient).houstonService = try container.resolve()

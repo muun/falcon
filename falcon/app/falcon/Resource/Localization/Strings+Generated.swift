@@ -296,7 +296,7 @@ internal enum L10n {
     internal static let informationLabel = L10n.tr("Localizable", "DisableFeatureFlagsViewController.informationLabel")
     /// Security Card
     internal static let nfcLabel = L10n.tr("Localizable", "DisableFeatureFlagsViewController.nfcLabel")
-    /// Disable feature flags
+    /// Your Feature Flags
     internal static let title = L10n.tr("Localizable", "DisableFeatureFlagsViewController.title")
   }
 
@@ -1500,8 +1500,14 @@ internal enum L10n {
     internal static let s22 = L10n.tr("Localizable", "SettingsViewController.s22")
     /// You need to empty your wallet. Make a payment using all your funds, and try again when the transaction has 6 confirmations.
     internal static let s23 = L10n.tr("Localizable", "SettingsViewController.s23")
-    /// Disable feature flags
+    /// Your Feature Flags
     internal static let s24 = L10n.tr("Localizable", "SettingsViewController.s24")
+    /// Internal Debug Settings
+    internal static let s25 = L10n.tr("Localizable", "SettingsViewController.s25")
+    /// Use Face ID instead of PIN
+    internal static let s26 = L10n.tr("Localizable", "SettingsViewController.s26")
+    /// Use Touch ID instead of PIN
+    internal static let s27 = L10n.tr("Localizable", "SettingsViewController.s27")
     /// SECURITY
     internal static let s3 = L10n.tr("Localizable", "SettingsViewController.s3")
     /// Log out

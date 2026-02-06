@@ -26,7 +26,8 @@ public class SessionActions {
          secureStorage: SecureStorage,
          preferences: Preferences,
          updateUserPreferences: UpdateUserPreferencesAction,
-         userPreferencesSelector: UserPreferencesSelector) {
+         userPreferencesSelector: UserPreferencesSelector
+    ) {
         self.sessionRepository = repository
         self.userRepository = userRepository
         self.exchangeRateWindowRepository = exchangeRateWindowRepository

@@ -128,23 +128,39 @@ enum NewOpError: ErrorViewModel {
         }
     }
 
-    func loggingName() -> String {
+    func analyticsEvent() -> AnalyticsEvent {
         switch self {
-        case .invalidAddress: return "invalid_address"
-        case .expiredInvoice: return "expired_invoice"
-        case .invalidInvoice: return "invalid_invoice"
-        case .invoiceExpiresTooSoon: return "invoice_expires_too_soon"
-        case .invoiceAlreadyUsed: return "invoice_already_used"
-        case .noPaymentRoute: return "no_payment_route"
-        case .swapFailed: return "swap_failed"
-        case .insufficientFunds: return "insufficient_funds"
-        case .amountBelowDust: return "amount_below_dust"
-        case .exchangeRateWindowTooOld: return "exchange_rate_window_too_old"
-        case .invoiceMissingAmount: return "invoice_missing_amount"
-        case .unexpected: return "other"
-        case .invoiceUnreachableNode: return "invoice_unreachable_node"
-        case .cyclicalSwap: return "cyclical_swap"
-        case .nfcError: return "nfc_error"
+        case .invalidAddress:
+            return ScreenNewOpErrorEvent(type: .invalidAddress)
+        case .expiredInvoice:
+            return ScreenNewOpErrorEvent(type: .expiredInvoice)
+        case .invalidInvoice:
+            return ScreenNewOpErrorEvent(type: .invalidInvoice)
+        case .invoiceExpiresTooSoon:
+            return ScreenNewOpErrorEvent(type: .invoiceExpiresTooSoon)
+        case .invoiceAlreadyUsed:
+            return ScreenNewOpErrorEvent(type: .invoiceAlreadyUsed)
+        case .noPaymentRoute:
+            return ScreenNewOpErrorEvent(type: .noPaymentRoute)
+        case .swapFailed:
+            return ScreenNewOpErrorEvent(type: .swapFailed)
+        case .insufficientFunds:
+            return ScreenNewOpErrorEvent(type: .insufficientFunds)
+        case .amountBelowDust:
+            return ScreenNewOpErrorEvent(type: .amountBelowDust)
+        case .exchangeRateWindowTooOld:
+            return ScreenNewOpErrorEvent(type: .exchangeRateWindowTooOld)
+        case .invoiceMissingAmount:
+            return ScreenNewOpErrorEvent(type: .invoiceMissingAmount)
+        case .unexpected:
+            return ScreenNewOpErrorEvent(type: .other)
+        case .invoiceUnreachableNode:
+            return ScreenNewOpErrorEvent(type: .invoiceUnreachableNode)
+        case .cyclicalSwap:
+            return ScreenNewOpErrorEvent(type: .cyclicalSwap)
+        case .nfcError:
+            return ScreenNewOpErrorEvent(type: .nfcError)
+
         }
     }
 

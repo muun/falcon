@@ -75,9 +75,8 @@ public extension DependencyContainer {
             container.register(.singleton, factory: WalletService.init)
             container.register(.singleton, factory: HttpClientSessionProvider.init)
             container.register(.singleton, factory: KeyProvider.init)
-            if #available(iOS 13.0, *) {
-                container.register(.singleton) { NfcSessionImpl() as NfcSession }
-            }
+            container.register(.singleton, factory: BiometricsStatusProvider.init)
+            container.register(.singleton) { NfcSessionImpl() as NfcSession }
         }
     }
 

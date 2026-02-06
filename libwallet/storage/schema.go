@@ -27,6 +27,7 @@ const (
 	KeyNightMode                  string = "nightMode"
 	KeySecurityCardXpubSerialized string = "securityCardXpubSerialized"
 	KeyBiometricsOptIn            string = "biometricsOptIn"
+	KeyPinLength                  string = "pinLength"
 	// TODO: These three are marked as prototypes to avoid accidentally setting the non-prototype fields
 	//  in a consumer device before finalizing the design. Before production, the "Prototype" suffix must be removed
 	UnverifiedEncryptedMuunKey string = "unverifiedEncryptedMuungKeyPrototype"
@@ -34,7 +35,7 @@ const (
 	EncryptedUserKey           string = "encryptedUserKeyPrototype"
 
 	// ==== Feature flag overrides ====
-	FeatureFlagOverridesNfcCardV2Key = "featureFlagOverrides:NfcCardV2"
+	FeatureFlagOverridesNfcCardV2Key = "featureFlagOverrides:nfcCardV2"
 	// ==== End of feature flag overrides ====
 	// ==== Temporary keys for mock houston. Will remove soon ====
 	KeyLastRandomPrivKeyInHex           string = "lastRandomPrivKeyInHex"
@@ -159,6 +160,12 @@ func BuildStorageSchema() map[string]Classification {
                         BackupSecurity:   NotApplicable,
                         SecurityCritical: false,
                         ValueType:        &BoolType{},
+                },
+                KeyPinLength: {
+                        BackupType:       NoAutoBackup,
+                        BackupSecurity:   NotApplicable,
+                        SecurityCritical: false,
+                        ValueType:        &IntType{},
                 },
 		UnverifiedEncryptedMuunKey: {
 			BackupType:       AsyncAutoBackup,

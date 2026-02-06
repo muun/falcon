@@ -19,10 +19,10 @@ enum SettingsSection {
     case general(_ generalRows: [GeneralRow])
     case security(_ securityRows: [SecurityRow])
     case advanced(_ rows: [AdvancedRow])
+    case disableFeatureFlags
     case logout
     case deleteWallet
     case version
-    case disableFeatureFlags
 }
 
 enum GeneralRow {
@@ -32,6 +32,7 @@ enum GeneralRow {
 
 enum SecurityRow {
     case changePassword
+    case manageBiometrics(_ biometricsStatus: BiometricsStatus)
 }
 
 enum AdvancedRow {
@@ -49,6 +50,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     private let balanceActions: BalanceActions
     private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
     private let featureFlagsSelector: FeatureFlagsSelector
+    private let biometricsStatusProvider: BiometricsStatusProvider
 
     var sections: [SettingsSection] = []
 
@@ -57,6 +59,13 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     private var hasPendingOps = false
     // Users can't log out with pending incoming swaps, because they'd lose the preimages
     private var hasPendingIncomingSwaps = false
+    
+    var biometricsAnalyticsParameters: [String: Any] {
+        var parameters: [String: Any] = [:]
+        parameters["biometrics_feature_status"] = biometricsStatusProvider.analyticsBiometricsStatus
+        parameters["biometrics_feature_status_reason"] = biometricsStatusProvider.analyticsBiometricsStatusReason
+        return parameters
+    }
 
     init(delegate: Delegate,
          logoutAction: LogoutAction,
@@ -66,7 +75,9 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
          operationActions: OperationActions,
          balanceActions: BalanceActions,
          userActivatedFeatureSelector: UserActivatedFeaturesSelector,
-         featureFlagsSelector: FeatureFlagsSelector) {
+         featureFlagsSelector: FeatureFlagsSelector,
+         biometricsStatusProvider: BiometricsStatusProvider
+    ) {
         self.logoutAction = logoutAction
         self.sessionActions = sessionActions
         self.exchangeRateRepository = exchangeRateWindowRepository
@@ -75,6 +86,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
         self.balanceActions = balanceActions
         self.userActivatedFeatureSelector = userActivatedFeatureSelector
         self.featureFlagsSelector = featureFlagsSelector
+        self.biometricsStatusProvider = biometricsStatusProvider
 
         super.init(delegate: delegate)
     }
@@ -109,8 +121,11 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
         var sections: [SettingsSection] = []
         sections.append(.general([.bitcoinUnit, .changeCurrency]))
 
+        let biometricsStatus = biometricsStatusProvider.biometricsStatus()
         if sessionActions.hasPasswordChallengeKey() {
-            sections.append(.security([.changePassword]))
+            sections.append(.security([.changePassword, .manageBiometrics(biometricsStatus)]))
+        } else {
+            sections.append(.security([.manageBiometrics(biometricsStatus)]))
         }
 
         switch userActivatedFeatureSelector.get(for: Libwallet.userActivatedFeatureTaproot()!) {
@@ -120,6 +135,14 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
             sections.append(.advanced([.lightningNetwork]))
         }
 
+        #if DOGFOOD || DEBUG
+        if featureFlagsSelector.fetchWithoutOverrides().filter({
+            $0.overrideMetadata.isOverridable
+        }).count > 0 {
+            sections.append(.disableFeatureFlags)
+        }
+        #endif
+
         if sessionActions.isUnrecoverableUser() {
             sections.append(.deleteWallet)
         } else {
@@ -128,11 +151,6 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
 
         sections.append(.version)
 
-        #if DOGFOOD || DEBUG
-            if featureFlagsSelector.fetch().contains(.nfcCardV2) {
-                sections.append(.disableFeatureFlags)
-            }
-        #endif
         return sections
     }
 
@@ -199,21 +217,6 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
 
     func hasPendingIncomingSwapOperations() -> Bool {
         return hasPendingIncomingSwaps
-    }
-
-    func getFlagLabelText() -> String {
-        var textForDisplay = ""
-        let featureFlags = featureFlagsSelector.fetch()
-        let featureFlagsForDisplay = featureFlags.filter {
-            $0 != .Taproot &&
-            $0 != .TaprootPreactivation &&
-            $0 != .effectiveFeesCalculation &&
-            $0 != .osVersionDeprecatedFlow
-        }
-        featureFlagsForDisplay.forEach {
-            textForDisplay += "\($0.rawValue)\n"
-        }
-        return textForDisplay
     }
 
 #if DEBUG

@@ -18,14 +18,11 @@ final class CardPairingDebugExecutable: DebugExecutable {
     }
 
     func execute(context: DebugMenuExecutableContext, completion: @escaping () -> Void) {
-
-        if #available(iOS 13.0, *) {
-            paidNfcCardAction.run(seed: "00112233445566778899AABBCCDDEEFF",
-                                  slot: 0)
-            .subscribe {
-                Logger.log(.debug, "Card was paired")
-                completion()
-            }.disposed(by: disposeBag)
-        }
+        paidNfcCardAction.run(seed: "00112233445566778899AABBCCDDEEFF",
+                              slot: 0)
+        .subscribe {
+            Logger.log(.debug, "Card was paired")
+            completion()
+        }.disposed(by: disposeBag)
     }
 }

@@ -9,7 +9,6 @@
 import CoreNFC
 import RxSwift
 
-@available(iOS 13.0, *)
 final class NfcSessionImpl: NSObject, NfcSession {
 
     private var session: NFCTagReaderSession?
@@ -17,7 +16,8 @@ final class NfcSessionImpl: NSObject, NfcSession {
 
     /// Initiates an NFC tag reading session.
     func connect(alertMessage: String) -> Completable {
-        invalidateSession()
+        // Ensure no previous session is left open
+        close()
 
         let subject = PublishSubject<Void>()
         connectSubject = subject
@@ -57,23 +57,30 @@ final class NfcSessionImpl: NSObject, NfcSession {
         }
     }
 
-    func close() {
-        invalidateSession()
-    }
-
-    private func invalidateSession() {
-        session?.invalidate()
+    /// Closes the active NFC session and dismisses the system alert.
+    ///
+    /// - Behavior:
+    ///   - If `withErrorMessage` is `nil`, the session is closed successfully
+    ///     and the system displays a success checkmark.
+    ///   - If `withErrorMessage` is not `nil`, the session is closed with a failure,
+    ///     showing the provided error message and a failure icon.
+    func close(withErrorMessage msg: String?) {
+        if let msg {
+            Logger.log(.err, msg)
+            session?.invalidate(errorMessage: msg)
+        } else {
+            // Invalidate with success
+            session?.invalidate()
+        }
         session = nil
         connectSubject = nil
     }
 }
 
-@available(iOS 13.0, *)
 extension NfcSessionImpl: NFCTagReaderSessionDelegate {
     func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
         AnalyticsHelper.logEvent(
-            "security_card_tap",
-            parameters: ["type": "tag_reader_alert_shown"]
+            SecurityCardTapEvent(type: .tagReaderAlertShown)
         )
         Logger.log(.debug, "NFC session became active.")
     }
@@ -87,8 +94,7 @@ extension NfcSessionImpl: NFCTagReaderSessionDelegate {
                 return
             case .readerSessionInvalidationErrorSessionTimeout:
                 AnalyticsHelper.logEvent(
-                    "security_card_tap",
-                    parameters: ["type": "tag_reader_session_timeout"]
+                    SecurityCardTapEvent(type: .tagReaderSessionTimeout)
                 )
                 return
             default:
@@ -101,7 +107,8 @@ extension NfcSessionImpl: NFCTagReaderSessionDelegate {
 
     func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         if tags.count > 1 {
-            session.alertMessage = "More than 1 tags found. Please present only 1 tag."
+            session.alertMessage = "More than 1 tags found. Use only Muuncard"
+            session.restartPolling()
             return
         }
 

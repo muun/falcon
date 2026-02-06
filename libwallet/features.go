@@ -16,6 +16,7 @@ const (
 	BackendFeatureNfcCardV2                = "NFC_CARD_V2"
 	BackendFeatureNfcSensors               = "NFC_SENSORS"
 	BackendFeatureDiagnosticMode           = "DIAGNOSTIC_MODE"
+	BackendFeatureSecurityCardsMarketplace = "SECURITY_CARDS_MARKETPLACE"
 
 	BackendFeatureUnsupported = "UNSUPPORTED_FEATURE"
 

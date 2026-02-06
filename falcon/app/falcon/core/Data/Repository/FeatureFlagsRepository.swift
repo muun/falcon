@@ -32,18 +32,3 @@ public class FeatureFlagsRepository : NSObject {
         return (array as? [String])?.compactMap { FeatureFlags(rawValue: $0) } ?? []
     }
 }
-
-// Not for application use. This is a bridge to provide feature flag information to libwallet
-// until we implement a more generic libwallet-side storage mechanism.
-extension FeatureFlagsRepository : App_provided_dataBackendActivatedFeatureStatusProviderProtocol {
-    public func isBackendFlagEnabled(_ flag: String?) -> Bool {
-        guard let flag = flag else {
-            Logger.log(.err, "Tried to read null feature flag from libwallet.")
-            return false
-        }
-        if let flags = preferences.array(forKey: .featureFlags) as? [String] {
-            return flags.contains(flag)
-        }
-        return false
-    }
-}

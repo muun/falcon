@@ -21,22 +21,22 @@ class FeeDataSyncer {
     private let preloadFeeDataAction: PreloadFeeDataAction
     private let nextTransactionRepository: NextTransactionSizeRepository
     private let ntsChangesObservable: Observable<NotificationProcessingState>
-    private let featureFlagsRepository: FeatureFlagsRepository
+    private let featureFlagsSelector: FeatureFlagsSelector
 
     private let dispatchGroup = DispatchGroup()
 
     init(preloadFeeDataAction: PreloadFeeDataAction,
          nextTransactionRepository: NextTransactionSizeRepository,
          ntsChangesObservable: Observable<NotificationProcessingState>,
-         featureFlagsRepository: FeatureFlagsRepository) {
+         featureFlagsSelector: FeatureFlagsSelector) {
         self.preloadFeeDataAction = preloadFeeDataAction
         self.nextTransactionRepository = nextTransactionRepository
         self.ntsChangesObservable = ntsChangesObservable
-        self.featureFlagsRepository = featureFlagsRepository
+        self.featureFlagsSelector = featureFlagsSelector
     }
 
     func appDidBecomeActive() {
-        guard featureFlagsRepository.fetch().contains(.effectiveFeesCalculation)
+        guard featureFlagsSelector.isFlagEnabled(.effectiveFeesCalculation)
         else { return }
 
         ntsChangesObservable.subscribe(onNext: { [weak self] state in

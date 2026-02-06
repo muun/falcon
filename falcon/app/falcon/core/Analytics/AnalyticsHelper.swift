@@ -80,11 +80,31 @@ class AnalyticsHelper: Resolver {
     static func setAnalyticsCollection(enabled: Bool) {
         Analytics.setAnalyticsCollectionEnabled(enabled)
     }
-
+    
+    @available(
+        *,
+        deprecated,
+        message: "Use logEvent(_:) with AnalyticsEvent to enable typed, maintainable analytics tracking."
+    )
     static func logEvent(_ event: String, parameters: [String: Any]? = nil) {
         let eventName = "e_\(event)"
 
         actuallyLogEvent(eventName, parameters: parameters)
+    }
+
+    /// Preferred way of tracking analytics events.
+    /// Accepts an `AnalyticsEvent`, converts its typed parameters to raw values,
+    /// and delegates to the legacy logging pipeline.
+    static func logEvent(_ event: AnalyticsEvent) {
+        actuallyLogEvent(event.name, parameters: event.parameters)
+    }
+
+    /// Same as `logEvent(_:)` but allows enriching parameters at call site.
+    /// Useful when additional context is only available at a higher layer.
+    static func logEvent(_ event: AnalyticsEvent, extraParameters: [String: Any]) {
+        var params = event.parameters ?? [:]
+        params.merge(extraParameters) { _, new in new } // hidrate with extra data
+        actuallyLogEvent(event.name, parameters: params)
     }
 
     static func logScreen(_ name: String, parameters: [String: Any]?) {

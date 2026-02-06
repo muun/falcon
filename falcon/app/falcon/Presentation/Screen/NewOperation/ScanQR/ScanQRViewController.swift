@@ -204,8 +204,8 @@ extension ScanQRViewController: AddressInputPresenterDelegate {
 
 extension ScanQRViewController: ErrorViewDelegate {
 
-    func logErrorView(_ name: String, params: [String: Any]?) {
-        logScreen(name, parameters: params)
+    func logErrorEvent(_ event: AnalyticsEvent) {
+        AnalyticsHelper.logEvent(event)
     }
 
     func secondaryButtonTouched() {

@@ -61,7 +61,7 @@ public class OperationActions {
             .asCompletable()
     }
 
-    func received(newOperation: Notification.NewOperation) -> Completable {
+    func handleNewOperation(_ newOperation: Notification.NewOperation) -> Completable {
 
         return applyMetadata(newOperation.operation)
             .flatMap { operation in

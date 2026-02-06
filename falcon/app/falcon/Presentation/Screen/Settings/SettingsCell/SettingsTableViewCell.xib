@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SettingsTableViewCell" customModule="falcon" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SettingsTableViewCell" customModule="Muun" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -46,6 +46,9 @@
                             <constraint firstAttribute="width" constant="32" id="ab2-iC-Xnd"/>
                         </constraints>
                     </imageView>
+                    <switch hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IIj-vc-jDm">
+                        <rect key="frame" x="255" y="6.5" width="51" height="31"/>
+                    </switch>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
@@ -56,15 +59,17 @@
                     <constraint firstItem="A69-pJ-NZT" firstAttribute="top" secondItem="GnC-A1-H3G" secondAttribute="bottom" priority="999" constant="10" id="NUy-UX-X1l"/>
                     <constraint firstItem="A69-pJ-NZT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Oy6-kh-LWL"/>
                     <constraint firstAttribute="bottom" secondItem="A69-pJ-NZT" secondAttribute="bottom" id="ard-a1-z6j"/>
+                    <constraint firstItem="IIj-vc-jDm" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="cjq-io-O38"/>
                     <constraint firstAttribute="trailing" secondItem="A69-pJ-NZT" secondAttribute="trailing" id="miV-CM-UZ7"/>
                     <constraint firstItem="pMG-pU-2xf" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="tBr-Zp-lEq"/>
                     <constraint firstItem="w8g-bO-qb3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="wA2-AW-uWU"/>
                     <constraint firstItem="w8g-bO-qb3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="yD0-tI-wld"/>
                     <constraint firstAttribute="trailing" secondItem="w8g-bO-qb3" secondAttribute="trailing" id="ytQ-TB-vHT"/>
+                    <constraint firstAttribute="trailing" secondItem="IIj-vc-jDm" secondAttribute="trailing" constant="16" id="zeg-3S-gUt"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="bottomSeparator" destination="A69-pJ-NZT" id="hlb-QU-RPm"/>
                 <outlet property="bottomSeparatorHeight" destination="31G-9T-7Eg" id="qX5-78-Lcf"/>
@@ -72,6 +77,7 @@
                 <outlet property="rightImageView" destination="pMG-pU-2xf" id="PJE-uf-ZcY"/>
                 <outlet property="topSeparator" destination="w8g-bO-qb3" id="BM4-Sm-Jfa"/>
                 <outlet property="topSeparatorHeight" destination="PdQ-4d-60i" id="C6V-4u-iW1"/>
+                <outlet property="uiSwitch" destination="IIj-vc-jDm" id="4X9-T5-kcE"/>
             </connections>
             <point key="canvasLocation" x="141" y="140"/>
         </tableViewCell>

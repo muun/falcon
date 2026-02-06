@@ -182,7 +182,7 @@ extension SignInEmailAndRCViewController: SignInEmailAndRCPresenterDelegate {
     }
 
     func showStaleRcError() {
-        AnalyticsHelper.logEvent("rc_stale_error")
+        AnalyticsHelper.logEvent(ErrorEvent(type: .rcStaleError))
         let desc = L10n.SignInEmailAndRCViewController.s10
         let alert = UIAlertController(title: L10n.SignInEmailAndRCViewController.s9,
                                       message: desc,
@@ -197,7 +197,7 @@ extension SignInEmailAndRCViewController: SignInEmailAndRCPresenterDelegate {
     }
 
     func showCredentialsDontMatchError(userEmail: String) {
-        AnalyticsHelper.logEvent("rc_credentials_dont_match_error")
+        AnalyticsHelper.logEvent(ErrorEvent(type: .rcCredentialsDontMatchError))
         let desc = L10n.SignInEmailAndRCViewController.s12(userEmail)
         let alert = UIAlertController(title: L10n.SignInEmailAndRCViewController.s11,
                                       message: desc,

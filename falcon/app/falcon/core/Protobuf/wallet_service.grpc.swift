@@ -106,6 +106,11 @@ internal protocol Rpc_WalletServiceClientProtocol: GRPCClient {
     _ request: Rpc_GetBatchRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Rpc_GetBatchRequest, Rpc_GetBatchResponse>
+
+  func getByPrefix(
+    _ request: Rpc_GetByPrefixRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse>
 }
 
 extension Rpc_WalletServiceClientProtocol {
@@ -439,6 +444,24 @@ extension Rpc_WalletServiceClientProtocol {
       interceptors: self.interceptors?.makeGetBatchInterceptors() ?? []
     )
   }
+
+  /// Unary call to GetByPrefix
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetByPrefix.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func getByPrefix(
+    _ request: Rpc_GetByPrefixRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.getByPrefix.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetByPrefixInterceptors() ?? []
+    )
+  }
 }
 
 @available(*, deprecated)
@@ -592,6 +615,11 @@ internal protocol Rpc_WalletServiceAsyncClientProtocol: GRPCClient {
     _ request: Rpc_GetBatchRequest,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<Rpc_GetBatchRequest, Rpc_GetBatchResponse>
+
+  func makeGetByPrefixCall(
+    _ request: Rpc_GetByPrefixRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -819,6 +847,18 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeGetBatchInterceptors() ?? []
     )
   }
+
+  internal func makeGetByPrefixCall(
+    _ request: Rpc_GetByPrefixRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.getByPrefix.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetByPrefixInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -1038,6 +1078,18 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeGetBatchInterceptors() ?? []
     )
   }
+
+  internal func getByPrefix(
+    _ request: Rpc_GetByPrefixRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_GetBatchResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.getByPrefix.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetByPrefixInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -1112,6 +1164,9 @@ internal protocol Rpc_WalletServiceClientInterceptorFactoryProtocol: Sendable {
 
   /// - Returns: Interceptors to use when invoking 'getBatch'.
   func makeGetBatchInterceptors() -> [ClientInterceptor<Rpc_GetBatchRequest, Rpc_GetBatchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getByPrefix'.
+  func makeGetByPrefixInterceptors() -> [ClientInterceptor<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse>]
 }
 
 internal enum Rpc_WalletServiceClientMetadata {
@@ -1137,6 +1192,7 @@ internal enum Rpc_WalletServiceClientMetadata {
       Rpc_WalletServiceClientMetadata.Methods.delete,
       Rpc_WalletServiceClientMetadata.Methods.saveBatch,
       Rpc_WalletServiceClientMetadata.Methods.getBatch,
+      Rpc_WalletServiceClientMetadata.Methods.getByPrefix,
     ]
   )
 
@@ -1248,6 +1304,12 @@ internal enum Rpc_WalletServiceClientMetadata {
       path: "/rpc.WalletService/GetBatch",
       type: GRPCCallType.unary
     )
+
+    internal static let getByPrefix = GRPCMethodDescriptor(
+      name: "GetByPrefix",
+      path: "/rpc.WalletService/GetByPrefix",
+      type: GRPCCallType.unary
+    )
   }
 }
 
@@ -1293,6 +1355,8 @@ internal protocol Rpc_WalletServiceProvider: CallHandlerProvider {
   func saveBatch(request: Rpc_SaveBatchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
 
   func getBatch(request: Rpc_GetBatchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GetBatchResponse>
+
+  func getByPrefix(request: Rpc_GetByPrefixRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GetBatchResponse>
 }
 
 extension Rpc_WalletServiceProvider {
@@ -1469,6 +1533,15 @@ extension Rpc_WalletServiceProvider {
         userFunction: self.getBatch(request:context:)
       )
 
+    case "GetByPrefix":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_GetByPrefixRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_GetBatchResponse>(),
+        interceptors: self.interceptors?.makeGetByPrefixInterceptors() ?? [],
+        userFunction: self.getByPrefix(request:context:)
+      )
+
     default:
       return nil
     }
@@ -1572,6 +1645,11 @@ internal protocol Rpc_WalletServiceAsyncProvider: CallHandlerProvider, Sendable 
 
   func getBatch(
     request: Rpc_GetBatchRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_GetBatchResponse
+
+  func getByPrefix(
+    request: Rpc_GetByPrefixRequest,
     context: GRPCAsyncServerCallContext
   ) async throws -> Rpc_GetBatchResponse
 }
@@ -1757,6 +1835,15 @@ extension Rpc_WalletServiceAsyncProvider {
         wrapping: { try await self.getBatch(request: $0, context: $1) }
       )
 
+    case "GetByPrefix":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_GetByPrefixRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_GetBatchResponse>(),
+        interceptors: self.interceptors?.makeGetByPrefixInterceptors() ?? [],
+        wrapping: { try await self.getByPrefix(request: $0, context: $1) }
+      )
+
     default:
       return nil
     }
@@ -1836,6 +1923,10 @@ internal protocol Rpc_WalletServiceServerInterceptorFactoryProtocol: Sendable {
   /// - Returns: Interceptors to use when handling 'getBatch'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetBatchInterceptors() -> [ServerInterceptor<Rpc_GetBatchRequest, Rpc_GetBatchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getByPrefix'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetByPrefixInterceptors() -> [ServerInterceptor<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse>]
 }
 
 internal enum Rpc_WalletServiceServerMetadata {
@@ -1861,6 +1952,7 @@ internal enum Rpc_WalletServiceServerMetadata {
       Rpc_WalletServiceServerMetadata.Methods.delete,
       Rpc_WalletServiceServerMetadata.Methods.saveBatch,
       Rpc_WalletServiceServerMetadata.Methods.getBatch,
+      Rpc_WalletServiceServerMetadata.Methods.getByPrefix,
     ]
   )
 
@@ -1970,6 +2062,12 @@ internal enum Rpc_WalletServiceServerMetadata {
     internal static let getBatch = GRPCMethodDescriptor(
       name: "GetBatch",
       path: "/rpc.WalletService/GetBatch",
+      type: GRPCCallType.unary
+    )
+
+    internal static let getByPrefix = GRPCMethodDescriptor(
+      name: "GetByPrefix",
+      path: "/rpc.WalletService/GetByPrefix",
       type: GRPCCallType.unary
     )
   }

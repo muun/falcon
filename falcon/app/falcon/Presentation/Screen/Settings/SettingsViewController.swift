@@ -8,15 +8,16 @@
 
 import UIKit
 
-
 class SettingsViewController: MUViewController {
 
     @IBOutlet private weak var tableView: UITableView!
 
-    @IBOutlet private weak var featureFlagLabel: UILabel!
-
     private lazy var presenter = instancePresenter(SettingsPresenter.init, delegate: self)
 
+    override func customLoggingParameters() -> [String: Any]? {
+        return presenter.biometricsAnalyticsParameters
+    }
+    
     override var screenLoggingName: String {
         return "settings"
     }
@@ -36,12 +37,6 @@ class SettingsViewController: MUViewController {
 
         presenter.setUp()
         tableView.reloadData()
-        #if DOGFOOD || DEBUG
-        featureFlagLabel.isHidden = false
-        featureFlagLabel.text = presenter.getFlagLabelText()
-        #else
-        featureFlagLabel.isHidden = true
-        #endif
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,6 +101,14 @@ class SettingsViewController: MUViewController {
             DisableFeatureFlagsViewController(),
             animated: true
         )
+    }
+    
+    private func showSystemSettings(for biometricsStatus: BiometricsStatus) {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
     }
 
     private func getChangeCurrencyCell() -> TwoLinesSettingsTableViewCell {
@@ -180,6 +183,7 @@ extension SettingsViewController: UITableViewDelegate {
         case .security(let rows):
             switch rows[indexPath.row] {
             case .changePassword: showChangePassword()
+            case .manageBiometrics(let biometricsStatus): showSystemSettings(for: biometricsStatus)
             }
 
         case .advanced(let rows):
@@ -209,10 +213,11 @@ extension SettingsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch presenter.sections[section] {
-        case .logout, .version, .deleteWallet, .disableFeatureFlags: return nil
+        case .logout, .version, .deleteWallet: return nil
         case .general: return L10n.SettingsViewController.s2
         case .security: return L10n.SettingsViewController.s3
         case .advanced: return L10n.SettingsViewController.advanced
+        case .disableFeatureFlags: return L10n.SettingsViewController.s25
         }
     }
 
@@ -259,7 +264,7 @@ extension SettingsViewController: UITableViewDataSource {
             return settingsAdvancedCell(indexPath: indexPath, rows: rows)
 
         case .disableFeatureFlags:
-            return disableFeatureFlagsCell()
+            return disableFeatureFlagsCell(indexPath: indexPath)
         }
     }
 
@@ -288,12 +293,11 @@ extension SettingsViewController: UITableViewDataSource {
         return cell
     }
 
-    private func disableFeatureFlagsCell() -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
-        cell.textLabel?.style = .error
-        cell.textLabel?.text = L10n.SettingsViewController.s24
+    private func disableFeatureFlagsCell(indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeue(type: SettingsTableViewCell.self, indexPath: indexPath)
+
+        cell.setUp(L10n.SettingsViewController.s24, color: Asset.Colors.title.color)
+        cell.showChevron()
 
         return cell
     }
@@ -345,8 +349,28 @@ extension SettingsViewController: UITableViewDataSource {
 
         case .changePassword:
             let cell = tableView.dequeue(type: SettingsTableViewCell.self, indexPath: indexPath)
-
             cell.setUp(L10n.SettingsViewController.s9, color: Asset.Colors.title.color)
+            return cell
+            
+        case .manageBiometrics(let biometricsStatus):
+            let cell = tableView.dequeue(type: SettingsTableViewCell.self, indexPath: indexPath)
+            var title: String
+            var enabledBiometrics: Bool?
+            switch biometricsStatus {
+            case .enabledFaceID:
+                enabledBiometrics = true
+                title = L10n.SettingsViewController.s26
+            case .enabledTouchID:
+                enabledBiometrics = true
+                title = L10n.SettingsViewController.s27
+            case .disabledFaceID:
+                enabledBiometrics = false
+                title = L10n.SettingsViewController.s26
+            case .disabledTouchID:
+                enabledBiometrics = false
+                title = L10n.SettingsViewController.s27
+            }
+            cell.setUp(title, color: Asset.Colors.title.color, switchEnabled: enabledBiometrics)
             return cell
         }
     }

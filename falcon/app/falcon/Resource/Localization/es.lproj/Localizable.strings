@@ -835,7 +835,10 @@ Por favor revisa tu conexión e inténtalo de nuevo.";
 "SettingsViewController.s20" = "Perderás tu historial de transacciones.";
 "SettingsViewController.s22" = "Eliminar";
 "SettingsViewController.s23" = "Necesitas vaciar tu monedero. Realiza un pago con todos tus fondos, y vuelve a intentarlo cuando la transacción tenga 6 confirmaciones.";
-"SettingsViewController.s24" = "Desactivar feature flags";
+"SettingsViewController.s24" = "Tus Feature Flags";
+"SettingsViewController.s25" = "Ajustes de debug";
+"SettingsViewController.s26" = "Usar Face ID en vez de PIN";
+"SettingsViewController.s27" = "Usar Touch ID en vez de PIN";
 "SettingsViewController.advanced" = "Configuración avanzada";
 "SettingsViewController.lightningNetwork" = "Lightning Network";
 "SettingsViewController.onchain" = "Bitcoin Network";
@@ -926,6 +929,6 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 "ReceiveFormatSettingDropdownView.ReceiveFormatActionSheetUnifiedDescriptionUnderline" = "Experimental.";
 
 /* DisableFeatureFlagsViewController */
-"DisableFeatureFlagsViewController.title" = "Desactivar feature flags";
+"DisableFeatureFlagsViewController.title" = "Tus Feature Flags";
 "DisableFeatureFlagsViewController.nfcLabel" = "Security Card";
 "DisableFeatureFlagsViewController.informationLabel" = "Algunas de nuestras feature flags pueden activarse o desactivarse según sea necesario. Estas son las que pueden modificarse actualmente. Desactiva la opción para deshabilitar la función seleccionada.";

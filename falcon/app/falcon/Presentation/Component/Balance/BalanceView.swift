@@ -30,6 +30,7 @@ final class BalanceView: UIView {
 
     private var btcBalance: MonetaryAmount?
     private var primaryBalance: MonetaryAmount?
+    private var clockCenterYConstraint: NSLayoutConstraint?
 
     init(delegate: BalanceViewDelegate?) {
         self.delegate = delegate
@@ -116,9 +117,14 @@ final class BalanceView: UIView {
         clockImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(clockImageView)
 
+        let centerY = clockImageView.centerYAnchor.constraint(
+            equalTo: bitcoinAmountContainerView.centerYAnchor
+        )
+        clockCenterYConstraint = centerY
+
         NSLayoutConstraint.activate([
             clockImageView.trailingAnchor.constraint(equalTo: bitcoinAmountContainerView.leadingAnchor, constant: -8),
-            clockImageView.centerYAnchor.constraint(equalTo: bitcoinAmountContainerView.centerYAnchor),
+            centerY,
             clockImageView.heightAnchor.constraint(equalToConstant: 20),
             clockImageView.widthAnchor.constraint(equalToConstant: 20)
         ])
@@ -260,8 +266,10 @@ final class BalanceView: UIView {
     fileprivate func decideBalanceVisibility(isHidden: Bool, animated: Bool) {
         if isHidden {
             self.setLabelsInHiddenState(animated: animated)
+            self.clockCenterYConstraint?.constant = .clockImageHiddenOffset
         } else {
             self.populateBalanceLabels(animated: animated)
+            self.clockCenterYConstraint?.constant = 0
         }
     }
 
@@ -306,4 +314,8 @@ extension BalanceView: UITestablePage {
 
 fileprivate extension Selector {
     static let balanceTap = #selector(BalanceView.balanceTap)
+}
+
+fileprivate extension CGFloat {
+    static let clockImageHiddenOffset: CGFloat = -6
 }

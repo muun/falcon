@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Used in firebase extension
     var fcmTokenHandlingAlreadyReported = false
 
-    internal let featureFlagsRepository: FeatureFlagsRepository = resolve()
+    internal let featureFlagsSelector: FeatureFlagsSelector = resolve()
     private let preloadFeeDataAction: PreloadFeeDataAction = resolve()
     private let feeDataSyncer: FeeDataSyncer = resolve()
     internal let httpClientSessionProvider: HttpClientSessionProvider = resolve()

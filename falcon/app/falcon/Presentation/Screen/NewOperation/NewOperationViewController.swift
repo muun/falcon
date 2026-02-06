@@ -83,6 +83,7 @@ class NewOperationViewController: MUViewController {
         case .lnurlWithdraw:
             Logger.fatal("Intent is not handled by this view controller: \(paymentIntent)")
         }
+        newOpParams["has_2fa"] = "\(presenter.hasNfc2fa)"
     }
 
     override func loadView() {
@@ -396,7 +397,6 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
     func requestFinish(_ operation: Operation) {
         toggleUserInteraction(isEnabled: false)
         newOpView.isLoading = true
-        newOpParams["has_2fa"] = presenter.hasNfc2fa
 
         logEvent("\(screenLoggingName)_submitted", parameters: newOpParams)
     }
@@ -430,7 +430,7 @@ extension NewOperationViewController: NewOpStateMachineDelegate {
     private func reportNewOpAction(type: String) {
         var parameters: [String: Any] = [:]
         parameters["type"] = type
-        parameters["has_2fa"] = self.presenter.hasNfc2fa
+        parameters["has_2fa"] = "\(presenter.hasNfc2fa)"
         AnalyticsHelper.logEvent("new_op_action", parameters: parameters)
     }
 }
@@ -457,8 +457,12 @@ extension NewOperationViewController {
 
 extension NewOperationViewController: ErrorViewDelegate {
 
-    func logErrorView(_ name: String, params: [String: Any]?) {
-        logScreen(name, parameters: params)
+    func logErrorEvent(_ event: AnalyticsEvent) {
+        var extraParameters: [String: Any] = ["has_nfc_2fa": "\(presenter.hasNfc2fa)"]
+        if let swapUUID = presenter.submarineSwapCreated?.swap.swapUuid() {
+            extraParameters["swap_uuid"] = swapUUID
+        }
+        AnalyticsHelper.logEvent(event, extraParameters: extraParameters)
     }
 
     func secondaryButtonTouched() {

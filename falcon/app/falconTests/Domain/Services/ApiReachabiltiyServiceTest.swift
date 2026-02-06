@@ -25,7 +25,7 @@ class ApiReachabiltiyServiceTest: MuunTestCase {
         houstonService = replace(.singleton, HoustonService.self, FakeHoustonService.init)
         reachabilityService = replace(.singleton, ReachabilityService.self) {
             ApiReachabilityClient(sessionActions: $0,
-                                   flagsRepository: $1,
+                                   featureFlagsRepository: $1,
                                    reachabilityStatusRepository: $2,
                                    pingService: $3) as ReachabilityService
         }

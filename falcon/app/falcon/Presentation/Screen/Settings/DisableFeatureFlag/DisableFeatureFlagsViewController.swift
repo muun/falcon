@@ -12,10 +12,7 @@ final class DisableFeatureFlagsViewController: MUViewController {
 
     // MARK: - Properties
     private let contentView = UIView()
-    private let disableNfcCardStackView = UIStackView()
-    private let informationLabelView = UILabel()
-    private let disableNfcLabelView = UILabel()
-    private let toggleButton = UISwitch()
+    private let tableView = UITableView()
 
     private lazy var presenter = instancePresenter(
         DisableFeatureFlagsPresenter.init,
@@ -45,7 +42,7 @@ final class DisableFeatureFlagsViewController: MUViewController {
         super.viewWillAppear(animated)
 
         presenter.setUp()
-        toggleButton.setOn(presenter.isNfcCardEnabled, animated: false)
+        tableView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -56,99 +53,64 @@ final class DisableFeatureFlagsViewController: MUViewController {
 
     // MARK: - Private Methods
     private func configureViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = Asset.Colors.background.color
         title = L10n.DisableFeatureFlagsViewController.title
 
         configureContentView()
-        configureStackViews()
-        configureLabels()
-        configureToggles()
+        configureTableView()
     }
 
     private func configureContentView() {
         view.addSubview(contentView)
-        contentView.addSubview(informationLabelView)
-        contentView.addSubview(disableNfcCardStackView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            contentView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: .spacing
-            ),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
-    private func configureStackViews() {
-        disableNfcCardStackView.axis = .horizontal
-        disableNfcCardStackView.alignment = .center
-        disableNfcCardStackView.spacing = .closeSpacing
-        disableNfcCardStackView.distribution = .fill
-        disableNfcCardStackView.translatesAutoresizingMaskIntoConstraints = false
-        disableNfcCardStackView.addArrangedSubview(disableNfcLabelView)
-        disableNfcCardStackView.addArrangedSubview(toggleButton)
-
-        NSLayoutConstraint.activate([
-            disableNfcCardStackView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: .closeSpacing
-            ),
-            disableNfcCardStackView.topAnchor.constraint(
-                equalTo: informationLabelView.bottomAnchor,
-                constant: .bigSpacing
-            ),
-            disableNfcCardStackView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -.closeSpacing
-            )
-        ])
-    }
-
-    private func configureLabels() {
-        disableNfcLabelView.numberOfLines = 0
-        disableNfcLabelView.textAlignment = .left
-        disableNfcLabelView.text = L10n.DisableFeatureFlagsViewController.nfcLabel
-        disableNfcLabelView.font = Constant.Fonts.system(size: .desc, weight: .bold)
-        disableNfcLabelView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        disableNfcLabelView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
-        informationLabelView.translatesAutoresizingMaskIntoConstraints = false
-        informationLabelView.numberOfLines = 0
-        informationLabelView.textColor = .gray
-        informationLabelView.text = L10n.DisableFeatureFlagsViewController.informationLabel
-        NSLayoutConstraint.activate([
-            informationLabelView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: .closeSpacing
-            ),
-            informationLabelView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: .closeSpacing
-            ),
-            informationLabelView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -.closeSpacing
-            )
-        ])
-    }
-
-    private func configureToggles() {
-        toggleButton.setContentHuggingPriority(.required, for: .horizontal)
-        toggleButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        toggleButton.addTarget(
-            self,
-            action: #selector(didTapToggle),
-            for: UIControl.Event.valueChanged
+    private func configureTableView() {
+        tableView.register(
+            DisableFlagTableViewCell.self,
+            forCellReuseIdentifier: DisableFlagTableViewCell.reuseIdentifier
         )
-    }
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.dataSource = self
 
-    @objc func didTapToggle() {
-        presenter.setNfcFlagEnabled(toggleButton.isOn)
+        contentView.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: tableView.topAnchor),
+            contentView.leftAnchor.constraint(equalTo: tableView.leftAnchor),
+            contentView.rightAnchor.constraint(equalTo: tableView.rightAnchor),
+            contentView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+        ])
     }
 }
 
 extension DisableFeatureFlagsViewController: DisableFeatureFlagsPresenterDelegate {}
+
+extension DisableFeatureFlagsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        presenter.numberOfRows()
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let flag = presenter.flag(for: indexPath)
+        let isFlagOn = presenter.isOn(flag: flag)
+        let cell = tableView.dequeue(type: DisableFlagTableViewCell.self, indexPath: indexPath)
+        cell.setUp(flag: flag, isOn: isFlagOn)
+        cell.delegate = self
+        return cell
+    }
+}
+
+extension DisableFeatureFlagsViewController: DisableFlagTableViewCellDelegate {
+    func disableFlagToggleValueChanged(flag: FeatureFlags, isOn: Bool) {
+        presenter.setFlagDisabled(flag, isDisabled: !isOn)
+    }
+}

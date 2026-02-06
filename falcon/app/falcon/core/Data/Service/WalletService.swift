@@ -83,7 +83,10 @@ public class WalletService {
             $0.value = value
         }
 
-        let call = client!.save(request)
+        guard let client = client else {
+            Logger.fatal("grpc client shouldn't be nil")
+        }
+        let call = client.save(request)
         do {
             _ = try performSyncRequest(call)
         } catch {
@@ -96,7 +99,10 @@ public class WalletService {
             $0.key = key
         }
 
-        let call = client!.get(request)
+        guard let client = client else {
+            Logger.fatal("grpc client shouldn't be nil")
+        }
+        let call = client.get(request)
         do {
             return try performSyncRequest(call).value
         } catch {
@@ -128,6 +134,38 @@ public class WalletService {
 
     func getBool(key: String, defaultValue: Bool) -> Bool {
         return getBool(key: key) ?? defaultValue
+    }
+
+    private func getByPrefix(prefix: String) -> Rpc_Struct {
+        let request = Rpc_GetByPrefixRequest.with {
+            $0.prefix = prefix
+        }
+
+        guard let client = client else {
+            Logger.fatal("grpc client shouldn't be nil")
+        }
+        let call = client.getByPrefix(request)
+        do {
+            return try performSyncRequest(call).items
+        } catch {
+            Logger.fatal("Unexpected error: \(error.localizedDescription)")
+        }
+    }
+
+    func getBoolByPrefix(prefix: String) -> [String: Bool] {
+        let items = getByPrefix(prefix: prefix)
+        var result: [String: Bool] = [:]
+        items.fields.forEach {
+            switch $0.value.kind {
+            case .boolValue(let bool):
+                return result[$0.key] = bool
+            case .nullValue:
+                break
+            default:
+                Logger.fatal("Value for key \($0.key) is not of type Bool")
+            }
+        }
+        return result
     }
 
     func performSyncRequest<Req, Res>(_ call: UnaryCall<Req, Res>) throws -> Res {

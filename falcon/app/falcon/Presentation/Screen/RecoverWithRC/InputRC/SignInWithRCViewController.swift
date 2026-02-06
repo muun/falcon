@@ -92,7 +92,7 @@ extension SignInWithRCViewController: SignInWithRCViewDelegate {
 
 extension SignInWithRCViewController: SignInWithRCPresenterDelegate {
     func showStaleRcError() {
-        AnalyticsHelper.logEvent("rc_stale_error")
+        AnalyticsHelper.logEvent(ErrorEvent(type: .rcStaleError))
         let desc = L10n.SignInEmailAndRCViewController.s10
         let alert = UIAlertController(title: L10n.SignInEmailAndRCViewController.s9,
                                       message: desc,

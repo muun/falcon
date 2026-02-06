@@ -17,6 +17,7 @@ final class FeeDataSyncerTests: MuunTestCase {
     private var nextTransactionSizeRepository: NextTransactionSizeRepository!
     private var processingObservable: PublishSubject<NotificationProcessingState>!
     private lazy var featureFlagsRepository: FeatureFlagsRepository = resolve()
+    private lazy var featureFlagsSelector: FeatureFlagsSelector = resolve()
 
     override func setUp() {
         super.setUp()
@@ -30,7 +31,7 @@ final class FeeDataSyncerTests: MuunTestCase {
         feeDataSyncer = FeeDataSyncer(preloadFeeDataAction: fakePreloadFeeDataAction,
                                       nextTransactionRepository: nextTransactionSizeRepository,
                                       ntsChangesObservable: observable,
-                                      featureFlagsRepository: featureFlagsRepository)
+                                      featureFlagsSelector: featureFlagsSelector)
     }
 
     func test_withNTSEmpty_shouldNotCallForceRun() {

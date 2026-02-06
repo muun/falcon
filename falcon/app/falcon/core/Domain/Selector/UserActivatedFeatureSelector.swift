@@ -19,22 +19,24 @@ public enum UserActivatedFeatureStatus {
 public class UserActivatedFeaturesSelector {
 
     private let blockheightRepository: BlockchainHeightRepository
-    private let featureFlagsRepository: FeatureFlagsRepository
+    private let featureFlagsSelector: FeatureFlagsSelector
     private let userRepository: UserRepository
 
     init(blockheightRepository: BlockchainHeightRepository,
-         featureFlagsRepository: FeatureFlagsRepository,
+         featureFlagsSelector: FeatureFlagsSelector,
          userRepository: UserRepository) {
         self.blockheightRepository = blockheightRepository
-        self.featureFlagsRepository = featureFlagsRepository
+        self.featureFlagsSelector = featureFlagsSelector
         self.userRepository = userRepository
     }
 
-    public func watch(for feature: LibwalletUserActivatedFeatureProtocol) -> Observable<UserActivatedFeatureStatus> {
+    public func watch(
+        for feature: LibwalletUserActivatedFeatureProtocol
+    ) -> Observable<UserActivatedFeatureStatus> {
 
         return Observable.combineLatest(
             blockheightRepository.watch(),
-            featureFlagsRepository.watch(),
+            featureFlagsSelector.run(),
             userRepository.watchUser()
         ).map { (height, flags, user) in
             self.determineStatus(for: feature, blockHeight: height, user: user, featureFlags: flags)
@@ -47,7 +49,7 @@ public class UserActivatedFeaturesSelector {
             for: feature,
             blockHeight: blockheightRepository.getCurrentBlockchainHeight(),
             user: userRepository.getUser(),
-            featureFlags: featureFlagsRepository.fetch()
+            featureFlags: featureFlagsSelector.fetch()
         )
     }
 

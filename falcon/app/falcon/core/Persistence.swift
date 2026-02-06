@@ -87,7 +87,4 @@ public enum Persistence: String, CaseIterable {
 
     case lastBackgroundBeginTime
     case backgroundTimes
-
-    /// Feature flag override keys
-    case featureFlagOverridesNfcCardV2 = "featureFlagOverrides:NfcCardV2"
 }

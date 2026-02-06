@@ -8,12 +8,11 @@
 
 import UIKit
 
-
 protocol ErrorViewDelegate: AnyObject {
     func retryTouched(button: ButtonView)
     func sendReportTouched()
     func secondaryButtonTouched()
-    func logErrorView(_ name: String, params: [String: Any]?)
+    func logErrorEvent(_ event: AnalyticsEvent)
     func descriptionTouched(type: ErrorViewModel)
 }
 
@@ -38,7 +37,7 @@ protocol ErrorViewModel {
     func description() -> NSAttributedString
     func firstBoxTexts() -> (title: String, content: NSAttributedString)?
     func secondBoxTexts() -> (title: String, content: NSAttributedString)?
-    func loggingName() -> String
+    func analyticsEvent() -> AnalyticsEvent
     func kind() -> ErrorViewKind
     func secondaryButtonText() -> String
 }
@@ -125,12 +124,7 @@ class ErrorView: UIView {
         self.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
 
         if let model = model {
-            // Special-casing for NewOpError to avoid changing behavior
-            if model is NewOpError {
-                delegate?.logErrorView("new_op_error", params: ["type": model.loggingName()])
-            } else {
-                delegate?.logErrorView("error", params: ["type": model.loggingName()])
-            }
+            delegate?.logErrorEvent(model.analyticsEvent())
         }
 
         UIView.animate(withDuration: 0.25) {

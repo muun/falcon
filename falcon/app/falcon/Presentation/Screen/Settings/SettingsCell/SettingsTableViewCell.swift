@@ -16,6 +16,7 @@ class SettingsTableViewCell: UITableViewCell {
     @IBOutlet private weak var bottomSeparator: UIView!
     @IBOutlet private weak var bottomSeparatorHeight: NSLayoutConstraint!
     @IBOutlet private weak var rightImageView: UIImageView!
+    @IBOutlet private weak var uiSwitch: UISwitch!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,6 +28,9 @@ class SettingsTableViewCell: UITableViewCell {
         backgroundColor = Asset.Colors.cellBackground.color
         setUpSeparators()
         setUpLabel()
+        // This switch is read-only and redirects to system settings
+        uiSwitch.isUserInteractionEnabled = false
+        uiSwitch.isHidden = true
     }
 
     private func setUpSeparators() {
@@ -39,10 +43,21 @@ class SettingsTableViewCell: UITableViewCell {
         mainLabel.font = Constant.Fonts.description
         mainLabel.textColor = Asset.Colors.title.color
     }
+    
+    private func setupSwitch(enabled: Bool?) {
+        if let enabled = enabled {
+            uiSwitch.isHidden = false
+            uiSwitch.isOn = enabled
+            rightImageView.isHidden = true
+        } else {
+            uiSwitch.isHidden = true
+        }
+    }
 
-    func setUp(_ text: String, color: UIColor) {
+    func setUp(_ text: String, color: UIColor, switchEnabled: Bool? = nil) {
         mainLabel.text = text
         mainLabel.textColor = color
+        setupSwitch(enabled: switchEnabled)
     }
 
     func showChevron() {

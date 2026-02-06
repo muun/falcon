@@ -38,6 +38,11 @@ Export an IPA pointing to prod env
 ```
 
 Publish a Dogfood app, pointing to production by default.
+  Required envars ->
+  FASTLANE_USER => email of an user with Appstore Connect permissions [App Manager for dogfood or greater required].
+  INDIVIDUAL_API_KEY_CONTENT_BASE64 => Individual api key belonging to the fastlane user. export.
+  INDIVIDUAL_API_KEY_ID =>  ID.
+  FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD => App specific password for the appstore connect user
 
 ### ios dev
 

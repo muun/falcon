@@ -6,7 +6,6 @@
 //  Copyright © 2018 muun. All rights reserved.
 //
 
-
 import UIKit
 
 protocol PinPresenterDelegate: BasePresenterDelegate {

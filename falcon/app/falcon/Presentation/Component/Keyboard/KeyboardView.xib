@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="KeyboardView" customModule="falcon" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="KeyboardView" customModule="Muun" customModuleProvider="target">
             <connections>
+                <outlet property="biometricsImageView" destination="qRr-xf-hJy" id="YHZ-Yx-pJr"/>
+                <outlet property="biometricsView" destination="i9c-Ut-r5S" id="nC6-zk-TiY"/>
                 <outlet property="eraseImageView" destination="hfb-Ov-DaQ" id="zIw-SJ-y6x"/>
                 <outlet property="eraseView" destination="frc-l6-EqB" id="yea-CF-oqx"/>
                 <outletCollection property="numberViews" destination="qjH-lg-osY" collectionClass="NSMutableArray" id="1GJ-Nt-0Bp"/>
@@ -308,6 +309,24 @@
                                         <constraint firstItem="hfb-Ov-DaQ" firstAttribute="centerX" secondItem="frc-l6-EqB" secondAttribute="centerX" id="nHP-uX-GQu"/>
                                     </constraints>
                                 </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i9c-Ut-r5S">
+                                    <rect key="frame" x="0.0" y="188" width="105.5" height="52"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faceid" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qRr-xf-hJy">
+                                            <rect key="frame" x="40.5" y="8.5" width="24" height="22.5"/>
+                                            <color key="tintColor" systemColor="labelColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="24" id="aXJ-gx-LaZ"/>
+                                                <constraint firstAttribute="height" constant="24" id="ubA-pX-Hf9"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="qRr-xf-hJy" firstAttribute="top" secondItem="i9c-Ut-r5S" secondAttribute="top" constant="8" id="Cz7-15-Iv5"/>
+                                        <constraint firstItem="qRr-xf-hJy" firstAttribute="centerX" secondItem="i9c-Ut-r5S" secondAttribute="centerX" id="gEu-Sn-dGb"/>
+                                    </constraints>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -315,6 +334,7 @@
                                 <constraint firstItem="1YW-6N-uEX" firstAttribute="top" secondItem="zVc-cA-mUk" secondAttribute="bottom" constant="12" id="1Uf-g1-xye"/>
                                 <constraint firstItem="Mc9-yZ-nBM" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6sg-Vt-VPm" secondAttribute="trailing" constant="10" id="3Sn-8R-FUA"/>
                                 <constraint firstItem="6sg-Vt-VPm" firstAttribute="width" secondItem="5PW-4T-b1c" secondAttribute="width" multiplier="3/10" id="4GI-4x-fsw"/>
+                                <constraint firstItem="i9c-Ut-r5S" firstAttribute="top" secondItem="1YW-6N-uEX" secondAttribute="bottom" constant="8" symbolic="YES" id="4Tb-AU-7vM"/>
                                 <constraint firstAttribute="trailing" secondItem="qWd-EH-KYx" secondAttribute="trailing" id="5Kk-uf-aUM"/>
                                 <constraint firstItem="1YW-6N-uEX" firstAttribute="height" secondItem="zVc-cA-mUk" secondAttribute="height" id="5OF-lK-BGy"/>
                                 <constraint firstItem="eUc-1s-O9P" firstAttribute="top" secondItem="6sg-Vt-VPm" secondAttribute="bottom" constant="12" id="65k-KS-6gB"/>
@@ -328,6 +348,7 @@
                                 <constraint firstItem="qjH-lg-osY" firstAttribute="width" secondItem="5PW-4T-b1c" secondAttribute="width" multiplier="3/10" id="CnN-5L-eVV"/>
                                 <constraint firstAttribute="trailing" secondItem="frc-l6-EqB" secondAttribute="trailing" id="DAF-1w-Osf"/>
                                 <constraint firstItem="emc-Bt-cSa" firstAttribute="top" secondItem="eUc-1s-O9P" secondAttribute="bottom" constant="12" id="Es9-Lg-KvU"/>
+                                <constraint firstAttribute="bottom" secondItem="i9c-Ut-r5S" secondAttribute="bottom" id="Fpy-XJ-nys"/>
                                 <constraint firstItem="1YW-6N-uEX" firstAttribute="leading" secondItem="5PW-4T-b1c" secondAttribute="leading" id="GSt-IN-ZK4"/>
                                 <constraint firstItem="nKW-se-cnX" firstAttribute="width" secondItem="emc-Bt-cSa" secondAttribute="width" id="Jcn-iL-uZB"/>
                                 <constraint firstItem="emc-Bt-cSa" firstAttribute="centerX" secondItem="5PW-4T-b1c" secondAttribute="centerX" id="Jco-0c-TG6"/>
@@ -346,6 +367,7 @@
                                 <constraint firstItem="emc-Bt-cSa" firstAttribute="width" secondItem="eUc-1s-O9P" secondAttribute="width" id="d8E-Mp-07x"/>
                                 <constraint firstItem="Mc9-yZ-nBM" firstAttribute="top" secondItem="5PW-4T-b1c" secondAttribute="top" id="dCl-UH-cz5"/>
                                 <constraint firstItem="eUc-1s-O9P" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zVc-cA-mUk" secondAttribute="trailing" constant="10" id="elS-N4-9Nq"/>
+                                <constraint firstItem="nKW-se-cnX" firstAttribute="leading" secondItem="i9c-Ut-r5S" secondAttribute="trailing" constant="17.5" id="fS2-Uw-HLb"/>
                                 <constraint firstItem="qWd-EH-KYx" firstAttribute="height" secondItem="emc-Bt-cSa" secondAttribute="height" id="h1n-ta-dww"/>
                                 <constraint firstItem="frc-l6-EqB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nKW-se-cnX" secondAttribute="trailing" constant="10" id="h9O-X5-Gc5"/>
                                 <constraint firstItem="b2m-xN-yZI" firstAttribute="height" secondItem="eUc-1s-O9P" secondAttribute="height" id="hJT-l8-OiX"/>
@@ -359,6 +381,7 @@
                                 <constraint firstItem="b2m-xN-yZI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eUc-1s-O9P" secondAttribute="trailing" constant="10" id="ruE-hE-N41"/>
                                 <constraint firstItem="b2m-xN-yZI" firstAttribute="width" secondItem="Mc9-yZ-nBM" secondAttribute="width" id="tJ5-tu-TNy"/>
                                 <constraint firstItem="qWd-EH-KYx" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="emc-Bt-cSa" secondAttribute="trailing" constant="10" id="tyn-Tq-63V"/>
+                                <constraint firstItem="i9c-Ut-r5S" firstAttribute="leading" secondItem="5PW-4T-b1c" secondAttribute="leading" id="vrW-Cr-XyU"/>
                                 <constraint firstItem="6sg-Vt-VPm" firstAttribute="height" secondItem="qjH-lg-osY" secondAttribute="height" id="xOW-eA-z9b"/>
                                 <constraint firstItem="emc-Bt-cSa" firstAttribute="height" secondItem="1YW-6N-uEX" secondAttribute="height" id="xco-Tk-NEk"/>
                                 <constraint firstItem="qjH-lg-osY" firstAttribute="top" secondItem="5PW-4T-b1c" secondAttribute="top" id="xgw-M1-rJI"/>
@@ -376,6 +399,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="NHq-iA-7Lw" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="2Wt-1Q-4aX"/>
@@ -384,10 +408,14 @@
                 <constraint firstItem="NHq-iA-7Lw" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="WSU-5f-XXb"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="-26" y="-15"/>
         </view>
     </objects>
     <resources>
-        <image name="erase" width="48" height="48"/>
+        <image name="erase" width="24" height="24"/>
+        <image name="faceid" catalog="system" width="128" height="115"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

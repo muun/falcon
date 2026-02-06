@@ -23,5 +23,11 @@ enum CardNfcError: Error {
 protocol NfcSession {
     func connect(alertMessage: String) -> Completable
     func transmit(message: Data) -> Single<CardNfcResponse>
-    func close()
+    func close(withErrorMessage msg: String?)
+}
+
+extension NfcSession {
+    func close() {
+        close(withErrorMessage: nil)
+    }
 }

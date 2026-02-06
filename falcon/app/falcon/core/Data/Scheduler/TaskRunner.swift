@@ -18,21 +18,18 @@ public class TaskRunner {
     let refreshInvoicesAction: RefreshInvoicesAction
     let fcmTokenAction: FCMTokenAction
     private let preloadFeeDataAction: PreloadFeeDataAction
-    private let featureFlagsRepository: FeatureFlagsRepository
     private let disposeBag = DisposeBag()
 
     public init(syncExternalAddressesAction: SyncExternalAddresses,
                 fetchNotificationsAction: FetchNotificationsAction,
                 refreshInvoicesAction: RefreshInvoicesAction,
                 fcmTokenAction: FCMTokenAction,
-                preloadFeeDataAction: PreloadFeeDataAction,
-                featureFlagsRepository: FeatureFlagsRepository) {
+                preloadFeeDataAction: PreloadFeeDataAction) {
         self.syncExternalAddressesAction = syncExternalAddressesAction
         self.fetchNotificationsAction = fetchNotificationsAction
         self.refreshInvoicesAction = refreshInvoicesAction
         self.fcmTokenAction = fcmTokenAction
         self.preloadFeeDataAction = preloadFeeDataAction
-        self.featureFlagsRepository = featureFlagsRepository
     }
 
     public func run() {

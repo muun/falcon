@@ -238,28 +238,28 @@ struct LNURLWithdrawErrorViewModel: ErrorViewModel {
         }
     }
 
-    func loggingName() -> String {
+    func analyticsEvent() -> AnalyticsEvent {
         switch error {
         case .invalidCode:
-            return "lnurl_invalid_code"
+            return ErrorEvent(type: .lnurlInvalidCode)
         case .unresponsive:
-            return "lnurl_unresponsive"
+            return ErrorEvent(type: .lnurlUnresponsive)
         case .wrongTag:
-            return "lnurl_wrong_tag"
+            return ErrorEvent(type: .lnurlInvalidTag) // previously lnurl_wrong_tag
         case .requestExpired:
-            return "lnurl_request_expired"
+            return ErrorEvent(type: .lnurlRequestExpired)
         case .noAvailableBalance:
-            return "lnurl_no_balance"
+            return ErrorEvent(type: .lnurlNoBalance)
         case .noRoute:
-            return "lnurl_no_route"
+            return ErrorEvent(type: .lnurlNoRoute)
         case .unknown:
-            return "lnurl_unknown_error"
+            return ErrorEvent(type: .lnurlUnknownError)
         case .expiredInvoice:
-            return "lnurl_expired_invoice"
-        case .alreadyUsed:
-            return "lnurl_already_used"
+            return ErrorEvent(type: .lnurlExpiredInvoice)
         case .countryNotSupported:
-            return "lnurl_countryNotSupported"
+            return ErrorEvent(type: .lnurlCountryNotSupported)
+        case .alreadyUsed:
+            return ErrorEvent(type: .lnurlAlreadyUsed)
         }
     }
 

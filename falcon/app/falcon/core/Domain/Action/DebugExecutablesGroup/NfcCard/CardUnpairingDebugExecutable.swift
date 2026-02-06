@@ -18,12 +18,10 @@ final class CardUnpairingDebugExecutable: DebugExecutable {
     }
 
     func execute(context: DebugMenuExecutableContext, completion: @escaping () -> Void) {
-        if #available(iOS 13.0, *) {
-            unpairNfcCardAction.run(slot: 0)
-                .subscribe {
-                    Logger.log(.debug, "Card was unpaired")
-                    completion()
-                }.disposed(by: disposeBag)
-        }
+        unpairNfcCardAction.run(slot: 0)
+            .subscribe {
+                Logger.log(.debug, "Card was unpaired")
+                completion()
+            }.disposed(by: disposeBag)
     }
 }

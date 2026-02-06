@@ -17,7 +17,7 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
     private let feeWindowRepository: FeeWindowRepository
     private let minFeeRateRepository: MinFeeRateRepository
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
-    private let featureFlagsRepository: FeatureFlagsRepository
+    private let featureFlagsSelector: FeatureFlagsSelector
     private let feeBumpFunctionsProvider: FeeBumpFunctionsProvider
     private let throttleInterval: TimeInterval = {
         #if DEBUG
@@ -32,14 +32,14 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
          feeWindowRepository: FeeWindowRepository,
          minFeeRateRepository: MinFeeRateRepository,
          nextTransactionSizeRepository: NextTransactionSizeRepository,
-         featureFlagsRepository: FeatureFlagsRepository,
+         featureFlagsSelector: FeatureFlagsSelector,
          feeBumpFunctionsProvider: FeeBumpFunctionsProvider) {
 
         self.houstonService = houstonService
         self.feeWindowRepository = feeWindowRepository
         self.minFeeRateRepository = minFeeRateRepository
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
-        self.featureFlagsRepository = featureFlagsRepository
+        self.featureFlagsSelector = featureFlagsSelector
         self.feeBumpFunctionsProvider = feeBumpFunctionsProvider
 
         super.init(name: "PreloadFeeDataAction")
@@ -67,7 +67,7 @@ public class PreloadFeeDataAction: AsyncAction<()>, Runnable {
     private func refreshFeeData(refreshPolicy: FeeBumpRefreshPolicy) {
         // Fee Data only should be updated in foreground.
         guard DeviceUtils.appState == .active else { return }
-        guard featureFlagsRepository.fetch().contains(.effectiveFeesCalculation) else { return }
+        guard featureFlagsSelector.isFlagEnabled(.effectiveFeesCalculation) else { return }
         if let request = makeRealTimeFeeRequest(refreshPolicy: refreshPolicy) {
             runCompletable(fetchRealTimeFees(realTimeFeesRequest: request,
                                              refreshPolicy: refreshPolicy))

@@ -37,5 +37,11 @@ custom_rules:
       DO NOT make any query without specifying the group as it may cause critical issues.
       Use buildQuery function unless you have a very good reason not to"
     severity: error
+  legacy_analytics_log_event:
+    name: "Legacy analytics logging"
+    message: "Use logEvent(_ event: AnalyticsEvent) instead of the legacy string-based API."
+    severity: warning # change to error when we finish migration
+    regex: 'AnalyticsHelper\.logEvent\s*\(\s*"'
+
 type_name:
     allowed_symbols: "_"

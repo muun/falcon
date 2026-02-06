@@ -6,8 +6,6 @@
 //  Copyright © 2023 muun. All rights reserved.
 //
 
-
-
 class FundWalletOnchainDebugExecutable: DebugExecutable {
     private var addressActions: AddressActions
 
@@ -22,7 +20,7 @@ class FundWalletOnchainDebugExecutable: DebugExecutable {
             fatalError("Error generating address")
         }
 
-        TestLapp.send(to: address, amount: 0.0005)
+        TestLapp.send(to: address, amount: 0.4)
         completion()
     }
 

@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum SetupRecoveryCodeError: ErrorViewModel {
     case failedToStartSetup
     case failedToFinishSetup
@@ -35,12 +34,12 @@ enum SetupRecoveryCodeError: ErrorViewModel {
         return .retryable
     }
 
-    func loggingName() -> String {
+    func analyticsEvent() -> AnalyticsEvent {
         switch self {
         case .failedToStartSetup:
-            return "rc_setup_start_connection_error"
+            return ErrorEvent(type: .rcSetupStartConnectionError)
         case .failedToFinishSetup:
-            return "rc_setup_finish_connection_error"
+            return ErrorEvent(type: .rcSetupFinishConnectionError)
         }
     }
 

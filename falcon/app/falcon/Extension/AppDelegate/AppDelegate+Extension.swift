@@ -176,7 +176,7 @@ extension AppDelegate {
         let libwalletConfig = App_provided_dataConfig()
         libwalletConfig.dataDir = Environment.current.libwalletDataDirectory.absoluteString
         libwalletConfig.socketPath = Environment.current.libwalletSocketFile.path
-        libwalletConfig.featureStatusProvider = featureFlagsRepository
+        libwalletConfig.featureStatusProvider = featureFlagsSelector
         libwalletConfig.appLogSink = LibwalletLogHelper()
         libwalletConfig.httpClientSessionProvider = httpClientSessionProvider
         let libwalletNfcBridge = LibwalletNfcBridge(nfcSession: nfcSession)

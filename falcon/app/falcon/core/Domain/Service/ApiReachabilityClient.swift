@@ -12,17 +12,17 @@ class ApiReachabilityClient: ReachabilityService {
     private var disposeBag = DisposeBag()
 
     private let sessionActions: SessionActions
-    private let flagsRepository: FeatureFlagsRepository
+    private let featureFlagsRepository: FeatureFlagsRepository
     private let reachabilityStatusRepository: ReachabilityStatusRepository
     private let pingService: PingURLService
 
     init(sessionActions: SessionActions,
-         flagsRepository: FeatureFlagsRepository,
+         featureFlagsRepository: FeatureFlagsRepository,
          reachabilityStatusRepository: ReachabilityStatusRepository,
          pingService: PingURLService) {
         self.reachabilityStatusRepository = reachabilityStatusRepository
         self.sessionActions = sessionActions
-        self.flagsRepository = flagsRepository
+        self.featureFlagsRepository = featureFlagsRepository
         self.pingService = pingService
 
         collectReachabilityOnCollectFlagOn()
@@ -74,7 +74,7 @@ private extension ApiReachabilityClient {
     }
 
     func collectReachabilityOnCollectFlagOn() {
-        flagsRepository.watch().subscribe { [weak self] flags in
+        featureFlagsRepository.watch().subscribe { [weak self] flags in
             if flags.contains(.collectDeviceCheckReachability) {
                 self?.collectReachabilityStatusUnlessCached()
             }
