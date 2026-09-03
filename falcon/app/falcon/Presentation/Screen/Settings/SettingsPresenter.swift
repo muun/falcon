@@ -62,7 +62,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
 
     var sections: [SettingsSection] = []
 
-    private var userBalance: MonetaryAmount?
+    private var userBalance: BitcoinAmount?
     // We will use this property to determine if anon users can delete their wallet
     private var hasPendingOps = false
     // Users can't log out with pending incoming swaps, because they'd lose the preimages
@@ -118,7 +118,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
         hasPendingOps = operationActions.hasPendingOperations(includeUnsettled: true)
     }
 
-    private func onBalanceChange(_ balance: MonetaryAmount) {
+    private func onBalanceChange(_ balance: BitcoinAmount) {
         self.userBalance = balance
     }
 
@@ -243,7 +243,7 @@ class SettingsPresenter<Delegate: SettingsPresenterDelegate>: BasePresenter<Dele
     }
 
     func canDeleteWallet() -> Bool {
-        if let balance = userBalance, balance.amount > 0 {
+        if let balance = userBalance, balance.inSatoshis.value > 0 {
             return false
         }
 

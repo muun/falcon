@@ -9,6 +9,11 @@ option go_package = "github.com/muun/libwallet/api";
 service WalletService {
   // NFC security cards Native->Libwallet API
   rpc SetupSecurityCardV2(google.protobuf.Empty) returns (SetupSecurityCardResponse);
+  // Signs with whichever security card version the user taps, so the client
+  // no longer picks the protocol.
+  rpc SignMessageSecurityCard(google.protobuf.Empty) returns (google.protobuf.Empty);
+  // Deprecated: use SignMessageSecurityCard. Kept while apollo and falcon still call
+  // this name; remove it once both moved over.
   rpc SignMessageSecurityCardV2(google.protobuf.Empty) returns (google.protobuf.Empty);
 
   rpc PairRequestChallenge(google.protobuf.Empty) returns (google.protobuf.Empty);
@@ -33,8 +38,14 @@ service WalletService {
   rpc GetBatch(GetBatchRequest) returns (GetBatchResponse);
   rpc GetByPrefix(GetByPrefixRequest) returns (GetBatchResponse);
 
-  // Marketplace
-  rpc GetSecurityCardsMarketplace(google.protobuf.Empty) returns (GetSecurityCardsMarketplaceResponse);
+  // Marketplace (deprecated: use screen-specific endpoints below)
+  rpc GetSecurityCardsMarketplace(google.protobuf.Empty) returns (SCMDeprecated.GetSecurityCardsMarketplaceResponse);
+
+  // SCM (Security Cards Marketplace) — screen-specific endpoints
+  rpc FetchSecurityCardsCountries(google.protobuf.Empty) returns (SCMCountriesResponse);
+  rpc FetchSecurityCardsMarketplaceByCountry(SCMMarketplaceRequest) returns (SCMMarketplaceResponse);
+  rpc FetchSecurityCardDetail(SCMCardDetailRequest) returns (SCMCardDetailResponse);
+  rpc FetchSecurityCardFullSpecs(SCMFullSpecsRequest) returns (SCMFullSpecsResponse);
 
   // Emergency Kit PDF Generation
   rpc GenerateEmergencyKitPDF(GenerateEmergencyKitPDFRequest) returns (GenerateEmergencyKitPDFResponse);
@@ -48,6 +59,8 @@ service WalletService {
   // Secure Key-Value Storage (native hardware-encrypted storage bridge)
   rpc SecureKeyValueStoragePut(SecureKeyValueStoragePutRequest) returns (google.protobuf.Empty);
   rpc SecureKeyValueStorageGet(SecureKeyValueStorageGetRequest) returns (SecureKeyValueStorageGetResponse);
+  rpc SecureKeyValueStorageDelete(SecureKeyValueStorageDeleteRequest) returns (google.protobuf.Empty);
+  rpc SecureKeyValueStorageWipe(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 enum ErrorType {
@@ -61,6 +74,22 @@ message ErrorDetail {
   int64 code = 2;
   string message = 3;
   string developer_message = 4;
+  ErrorStackTrace stack_trace = 5;
+}
+
+message StackFrame {
+  string file = 1;
+  int32 line = 2;
+  string function = 3;
+  string package = 4;
+}
+
+// ErrorStackTrace is a representation of a Go error tree.
+message ErrorStackTrace {
+  string message = 1;
+  repeated StackFrame frames = 2;
+  ErrorStackTrace cause = 3;
+  repeated ErrorStackTrace siblings = 4;
 }
 
 message SetupSecurityCardResponse {
@@ -213,65 +242,196 @@ message GetByPrefixRequest {
   string prefix = 1;
 }
 
-message SecurityCardsProviderTheme {
-  string primary_color = 1;
-  string surface_color = 2;
+// Deprecated: old monolithic marketplace response types.
+// Use the new screen-specific SC* messages and endpoints instead.
+message SCMDeprecated {
+  message SecurityCardsProviderTheme {
+    string primary_color = 1;
+    string surface_color = 2;
+  }
+
+  message PriceInfo {
+    string currency_code = 1;
+    string amount = 2;
+  }
+
+  message CountryInfo {
+    string code = 1;
+    string name = 2;
+    string flag = 3;
+  }
+
+  message ShippingPriceInfo {
+    PriceInfo price = 1;
+    repeated CountryInfo countries = 2;
+  }
+
+  message SecurityCardsProvider {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string site_url = 4;
+    SecurityCardsProviderTheme light_theme = 5;
+    SecurityCardsProviderTheme dark_theme = 6;
+    repeated SecurityCard security_cards = 7;
+    repeated ShippingPriceInfo estimated_shipping_prices = 8;
+  }
+
+  message SecurityCard {
+    string id = 1;
+    string asset_url = 2;
+    string tag = 3;
+    string spec_id = 4;
+    PriceInfo card_cost = 5;
+  }
+
+  message SpecsItem {
+    string icon_url = 1;
+    string label = 2;
+    string value = 3;
+    string additional_data = 4;
+  }
+
+  message SpecsItemList {
+    repeated SpecsItem items = 1;
+  }
+
+  message SecurityCardSpec {
+    string spec_id = 1;
+    map<string, SpecsItemList> items = 2;
+  }
+
+  message GetSecurityCardsMarketplaceResponse {
+    repeated SecurityCardsProvider providers = 1;
+    repeated SecurityCardSpec specs = 2;
+  }
 }
 
-message PriceInfo {
+// SCM (Security Cards Marketplace) — reusable models
+
+message SCMCountryInfo {
+  string code = 1;
+}
+
+message SCMMonetaryAmount {
   string currency_code = 1;
   string amount = 2;
 }
 
-message CountryInfo {
-  string code = 1;
+message SCMBitcoinAmount {
+  int64 in_sat = 1;
+  SCMMonetaryAmount in_input_currency = 2;
+  SCMMonetaryAmount in_primary_currency = 3;
+}
+
+message SCMProviderTheme {
+  fixed32 primary_color_hex = 1;
+  fixed32 surface_color_hex = 2;
+}
+
+message SCMProvider {
+  string uuid = 1;
   string name = 2;
-  string flag = 3;
+  string site_url = 3;
+  SCMProviderTheme light_theme = 4;
+  SCMProviderTheme dark_theme = 5;
 }
 
-message ShippingPriceInfo {
-  PriceInfo price = 1;
-  repeated CountryInfo countries = 2;
+message SCMCard {
+  string uuid = 1;
+  string sku = 2;
+  string image_url = 3;
+  bool has_stock = 4;
 }
 
-message SecurityCardsProvider {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string site_url = 4;
-  SecurityCardsProviderTheme light_theme = 5;
-  SecurityCardsProviderTheme dark_theme = 6;
-  repeated SecurityCard security_cards = 7;
-  repeated ShippingPriceInfo estimated_shipping_prices = 8;
+enum SCMCardMaterial {
+  SCM_MATERIAL_PLASTIC = 0;
+  SCM_MATERIAL_METAL = 1;
 }
 
-message SecurityCard {
-  string id = 1;
-  string asset_url = 2;
-  string tag = 3;
-  string spec_id = 4;
-  PriceInfo card_cost = 5;
+enum SCMSecureElement {
+  SCM_EAL_5 = 0;
+  SCM_EAL_5_PLUS = 1;
+  SCM_EAL_6 = 2;
+  SCM_EAL_6_PLUS = 3;
 }
 
-message SpecsItem {
-  string icon_url = 1;
-  string label = 2;
-  string value = 3;
-  string additional_data = 4;
+// SCM — FetchSecurityCardsCountries
+
+message SCMCountriesResponse {
+  repeated SCMCountryInfo countries = 1;
 }
 
-message SpecsItemList {
-  repeated SpecsItem items = 1;
+// SCM — FetchSecurityCardsMarketplaceByCountry
+
+message SCMMarketplaceRequest {
+  SCMCountryInfo country = 1;
 }
 
-message SecurityCardSpec {
-  string spec_id = 1;
-  map<string, SpecsItemList> items = 2;
+message SCMMarketplaceResponse {
+  message ProviderListing {
+    SCMProvider provider = 1;
+    repeated SCMCard cards = 2;
+    SCMBitcoinAmount estimated_shipping_price = 3;
+    SCMBitcoinAmount card_price = 4;
+  }
+
+  repeated ProviderListing providers = 1;
 }
 
-message GetSecurityCardsMarketplaceResponse {
-  repeated SecurityCardsProvider providers = 1;
-  repeated SecurityCardSpec specs = 2;
+// SCM — FetchSecurityCardDetail
+
+message SCMCardDetailRequest {
+  SCMCountryInfo country = 1;
+  string security_card_uuid = 2;
+}
+
+message SCMCardDetailResponse {
+  message Provider {
+    SCMProvider provider = 1;
+    SCMCountryInfo shipping_country = 2;
+    int32 min_shipping_time_days = 3;
+    int32 max_shipping_time_days = 4;
+    SCMBitcoinAmount estimated_shipping_price = 5;
+    SCMBitcoinAmount card_price = 6;
+  }
+
+  message Card {
+    SCMCard card = 1;
+    SCMCardMaterial material = 2;
+  }
+
+  Provider provider = 1;
+  Card card = 2;
+}
+
+// SCM — FetchSecurityCardFullSpecs
+
+message SCMFullSpecsRequest {
+  SCMCountryInfo country = 1;
+  string security_card_uuid = 2;
+}
+
+message SCMFullSpecsResponse {
+  message Provider {
+    SCMProvider provider = 1;
+    SCMCountryInfo shipping_country = 2;
+    int32 min_shipping_time_days = 3;
+    int32 max_shipping_time_days = 4;
+  }
+
+  message Card {
+    SCMCard card = 1;
+    float width_mm = 2;
+    float height_mm = 3;
+    SCMCardMaterial material = 4;
+    float thickness_mm = 5;
+    float weight_grams = 6;
+    SCMSecureElement secure_element = 7;
+  }
+
+  Provider provider = 1;
+  Card card = 2;
 }
 
 message EKInputRequest {
@@ -291,6 +451,24 @@ message GenerateEmergencyKitPDFRequest {
 message GenerateEmergencyKitPDFResponse {
   string verification_code = 1;
   int32 version = 2;
+  // Per-render profiling, so prod telemetry can validate the offline profiling.
+  RenderProfiling profiling = 3;
+}
+
+// RenderProfiling carries per-stage durations (milliseconds) and total allocation stats for a
+// single PDF render. Alloc stats are a process-wide delta and thus an approximation.
+message RenderProfiling {
+  int64 load_translations_ms = 1;
+  int64 register_fonts_ms = 2;
+  int64 register_images_ms = 3;
+  int64 components_rendering_ms = 4;
+  int64 create_and_save_on_disk_ms = 5;
+  int64 total_heap_allocated_bytes = 6;
+  int64 total_objects_allocated = 7;
+  int64 embed_metadata_ms = 8;
+  int64 total_inside_go_ms = 9;
+  int64 kit_size_bytes = 10;
+  int64 draw_icons_ms = 11;
 }
 
 message ZipDataDirRequest {
@@ -308,4 +486,8 @@ message SecureKeyValueStorageGetRequest {
 
 message SecureKeyValueStorageGetResponse {
   bytes value = 1;
+}
+
+message SecureKeyValueStorageDeleteRequest {
+  string key = 1;
 }

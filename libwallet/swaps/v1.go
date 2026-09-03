@@ -17,7 +17,7 @@ import (
 
 func (swap *SubmarineSwap) validateV1(
 	rawInvoice string,
-	userPublicKey, muunPublicKey *KeyDescriptor,
+	userPublicKey, cosignerPublicKey *KeyDescriptor,
 	network *chaincfg.Params,
 ) error {
 
@@ -50,15 +50,15 @@ func (swap *SubmarineSwap) validateV1(
 	if err != nil {
 		return errors.Errorf("failed to derive user key: %w", err)
 	}
-	derivedMuunKey, err := muunPublicKey.DeriveTo(swapRefundAddress.DerivationPath())
+	derivedCosignerKey, err := cosignerPublicKey.DeriveTo(swapRefundAddress.DerivationPath())
 	if err != nil {
-		return errors.Errorf("failed to derive muun key: %w", err)
+		return errors.Errorf("failed to derive cosigner key: %w", err)
 	}
 
 	refundAddress, err := addresses.Create(
 		swapRefundAddress.Version(),
 		derivedUserKey,
-		derivedMuunKey,
+		derivedCosignerKey,
 		swapRefundAddress.DerivationPath(),
 		network,
 	)

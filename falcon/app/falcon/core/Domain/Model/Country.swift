@@ -14,6 +14,9 @@ struct Country: Equatable {
 
 extension Country {
 
+    /// Fallback used when no country has been selected yet in onboarding / marketplace.
+    static let `default` = Country(code: "AR", name: "Argentina", flag: "🇦🇷")
+
     static let all: [Country] = [
         Country(code: "AR", name: "Argentina", flag: "🇦🇷"),
         Country(code: "AU", name: "Australia", flag: "🇦🇺"),

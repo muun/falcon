@@ -159,7 +159,7 @@ func (r *keyValueRepository) GetBatch(keys []string) (map[string]*string, error)
 
 	placeholders := make([]string, len(keys))
 	args := make(
-		[]interface{}, //nolint:modernize // TODO: use any instead of interface{}
+		[]any,
 		len(keys),
 	)
 	for i, key := range keys {
@@ -177,7 +177,7 @@ func (r *keyValueRepository) GetBatch(keys []string) (map[string]*string, error)
 		if err != nil {
 			return err
 		}
-		defer rows.Close() //nolint:errcheck // TODO: check error
+		defer func() { _ = rows.Close() }()
 
 		for rows.Next() {
 			var key string

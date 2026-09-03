@@ -37,7 +37,7 @@ func Validate(
 	if err != nil {
 		return err
 	}
-	defer onionProcessor.Stop() //nolint:errcheck // TODO: check error
+	defer func() { _ = onionProcessor.Stop() }()
 
 	iterator, err := onionProcessor.ReconstructHopIterator(
 		bytes.NewReader(onionBlob),

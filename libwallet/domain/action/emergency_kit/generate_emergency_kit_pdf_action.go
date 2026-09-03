@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/go-errors/errors"
 
@@ -16,6 +17,8 @@ import (
 type GeneratedEKPDF struct {
 	VerificationCode string
 	Version          int
+	// Profiling holds per-stage timings and allocation stats for this render.
+	Profiling *go_render.RenderProfiling
 }
 
 // GenerateEmergencyKitPDFAction action for generating emergency kit PDFs
@@ -60,6 +63,7 @@ func (a *GenerateEmergencyKitPDFAction) Run(
 		return nil, err
 	}
 
+	startEmbed := time.Now()
 	metadata, err := libwallet.CreateEmergencyKitMetadata(ekParams)
 	if err != nil {
 		return nil, errors.Errorf("GenerateEkHtml failed to create metadata: %w", err)
@@ -90,9 +94,16 @@ func (a *GenerateEmergencyKitPDFAction) Run(
 		return nil, err
 	}
 
+	result.Profiling.EmbedMetadataMs = time.Since(startEmbed).Milliseconds()
+
+	if finalInfo, err := os.Stat(outputPath); err == nil {
+		result.Profiling.KitSizeBytes = finalInfo.Size()
+	}
+
 	return &GeneratedEKPDF{
 		VerificationCode: result.VerificationCode,
 		Version:          result.Version,
+		Profiling:        result.Profiling,
 	}, nil
 }
 

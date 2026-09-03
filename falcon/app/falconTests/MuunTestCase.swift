@@ -31,7 +31,7 @@ private let databaseCoordinator = try! DatabaseCoordinator(
     walletService: WalletService()
 )
 
-var keychainRepository = KeychainRepository(keyPrefix: secureStoragePrefix, group: Identifiers.group)
+var keychainRepository = KeychainRepository(keyPrefix: secureStoragePrefix, group: Identifiers.keychainAccessGroup)
 
 class MuunTestCase: XCTestCase {
     
@@ -74,7 +74,7 @@ class MuunTestCase: XCTestCase {
                 secureStoragePrefix
             }
             container.register(.singleton, type: String.self, tag: DependencyContainer.DataTags.secureStorageGroup) {
-                Identifiers.group
+                Identifiers.keychainAccessGroup
             }
 
             container.register { URLSession.shared }

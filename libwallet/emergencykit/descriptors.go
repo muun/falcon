@@ -120,8 +120,8 @@ var checksumCharset = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
 func calculateChecksum(desc string) string {
 	var c uint64 = 1
-	var cls int = 0      //nolint:staticcheck // TODO: should omit type int from declaration; it will be inferred from the right-hand side
-	var clscount int = 0 //nolint:staticcheck // TODO: should omit type int from declaration; it will be inferred from the right-hand side
+	var cls = 0
+	var clscount = 0
 
 	for _, ch := range desc {
 		pos := strings.IndexRune(inputCharset, ch)
@@ -145,14 +145,14 @@ func calculateChecksum(desc string) string {
 		c = polyMod(c, cls)
 	}
 
-	for i := 0; i < 8; i++ { //nolint:modernize // TODO: use range over int
+	for range 8 {
 		c = polyMod(c, 0)
 	}
 
 	c ^= 1
 
 	ret := make([]byte, 8)
-	for i := 0; i < 8; i++ { //nolint:modernize // TODO: use range over int
+	for i := range 8 {
 		ret[i] = checksumCharset[(c>>(5*(7-i)))&31]
 	}
 

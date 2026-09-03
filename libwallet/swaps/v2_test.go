@@ -10,7 +10,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 	type args struct {
 		rawInvoice                 string
 		userPublicKey              *KeyDescriptor
-		muunPublicKey              *KeyDescriptor
+		cosignerPublicKey          *KeyDescriptor
 		swap                       *SubmarineSwap
 		originalExpirationInBlocks int64
 		network                    *chaincfg.Params
@@ -33,7 +33,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 					),
 					Path: "m",
 				},
-				muunPublicKey: &KeyDescriptor{
+				cosignerPublicKey: &KeyDescriptor{
 					Key: decodeKey(
 						"tpubD6NzVbkrYhZ4XbhomyY2axxKe3KB1FK2Wq2z7XYyDF3T4QCuEDZFBUyGfjfHChvEbsbP9RpaYA8cwxkZpQjEcNdaPfuj3cKGqCiHC5YeRTo", //nolint:lll
 					),
@@ -59,7 +59,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 					),
 					Path: "m",
 				},
-				muunPublicKey: &KeyDescriptor{
+				cosignerPublicKey: &KeyDescriptor{
 					Key: decodeKey(
 						"tpubD6NzVbkrYhZ4XbhomyY2axxKe3KB1FK2Wq2z7XYyDF3T4QCuEDZFBUyGfjfHChvEbsbP9RpaYA8cwxkZpQjEcNdaPfuj3cKGqCiHC5YeRTo", //nolint:lll
 					),
@@ -85,7 +85,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 					),
 					Path: "m",
 				},
-				muunPublicKey: &KeyDescriptor{
+				cosignerPublicKey: &KeyDescriptor{
 					Key: decodeKey(
 						"tpubD6NzVbkrYhZ4XbhomyY2axxKe3KB1FK2Wq2z7XYyDF3T4QCuEDZFBUyGfjfHChvEbsbP9RpaYA8cwxkZpQjEcNdaPfuj3cKGqCiHC5YeRTo", //nolint:lll
 					),
@@ -108,7 +108,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 						UserPublicKey: decodeKey(
 							"tpubD6NzVbkrYhZ4Y3iy9soFSA9zoYbpyhUFu3eAH1sDWyERxH2yJVZUhPUX5QsxD6bZfMWRKzxw28ohD5n6AZWmvZbDpZzgxSVxUnMevqzTXQk", //nolint:lll
 						),
-						MuunPublicKey: decodeKey(
+						CosignerPublicKey: decodeKey(
 							"tpubD6NzVbkrYhZ4XbhomyY2axxKe3KB1FK2Wq2z7XYyDF3T4QCuEDZFBUyGfjfHChvEbsbP9RpaYA8cwxkZpQjEcNdaPfuj3cKGqCiHC5YeRTo", //nolint:lll
 						),
 						KeyPath: "m",
@@ -124,7 +124,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 					),
 					Path: "m",
 				},
-				muunPublicKey: &KeyDescriptor{
+				cosignerPublicKey: &KeyDescriptor{
 					Key: decodeKey(
 						"tpubD6NzVbkrYhZ4XbhomyY2axxKe3KB1FK2Wq2z7XYyDF3T4QCuEDZFBUyGfjfHChvEbsbP9RpaYA8cwxkZpQjEcNdaPfuj3cKGqCiHC5YeRTo", //nolint:lll
 					),
@@ -141,7 +141,7 @@ func TestValidateSubmarineSwapV2(t *testing.T) {
 			err := tt.args.swap.validateV2(
 				tt.args.rawInvoice,
 				tt.args.userPublicKey,
-				tt.args.muunPublicKey,
+				tt.args.cosignerPublicKey,
 				tt.args.originalExpirationInBlocks,
 				tt.args.network,
 			)

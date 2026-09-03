@@ -2,6 +2,7 @@ package electrum
 
 import (
 	"bufio"
+	"context"
 	"crypto/sha256"
 	"crypto/tls"
 	"encoding/hex"
@@ -37,7 +38,7 @@ type Client struct {
 	nextRequestID int
 	conn          net.Conn
 	log           *slog.Logger
-	requireTls    bool //nolint:staticcheck // TODO: struct field requireTls should be requireTLS
+	requireTLS    bool
 }
 
 // Request models the structure of all Electrum protocol requests.
@@ -49,8 +50,8 @@ type Request struct {
 
 // ErrorResponse models the structure of a generic error response.
 type ErrorResponse struct {
-	ID    int         `json:"id"`
-	Error interface{} `json:"error"` //nolint:modernize // TODO: use any instead of interface{} // type varies among Electrum implementations.
+	ID    int `json:"id"`
+	Error any `json:"error"` // type varies among Electrum implementations
 }
 
 // ServerVersionResponse models the structure of a `server.version` response.
@@ -67,8 +68,8 @@ type ServerFeaturesResponse struct {
 
 // ServerPeersResponse models the structure (or lack thereof) of a `server.peers.subscribe` response
 type ServerPeersResponse struct {
-	ID     int           `json:"id"`
-	Result []interface{} `json:"result"` //nolint:modernize // TODO: use any instead of interface{}
+	ID     int   `json:"id"`
+	Result []any `json:"result"`
 }
 
 // ListUnspentResponse models a `blockchain.scripthash.listunspent` response.
@@ -120,22 +121,22 @@ type ServerFeatures struct {
 }
 
 // Param is a convenience type that models an item in the `Params` array of an Request.
-type Param = interface{} //nolint:modernize // TODO: use any instead of interface{}
+type Param = any
 
 // NewClient creates an initialized Client instance.
 func NewClient(
-	requireTls bool, //nolint:staticcheck // TODO: func parameter requireTls should be requireTLS
+	requireTLS bool,
 	logger *slog.Logger,
 ) *Client {
 	return &Client{
 		log:        logger,
-		requireTls: requireTls,
+		requireTLS: requireTLS,
 	}
 }
 
 // Connect establishes a TLS connection to an Electrum server.
 func (c *Client) Connect(server string) error {
-	c.Disconnect() //nolint:errcheck // TODO: check error
+	_ = c.Disconnect()
 
 	c.log = c.log.With(slog.String("source", "Electrum/"+server))
 	c.Server = server
@@ -144,7 +145,7 @@ func (c *Client) Connect(server string) error {
 
 	err := c.establishConnection()
 	if err != nil {
-		c.Disconnect() //nolint:errcheck // TODO: check error
+		_ = c.Disconnect()
 		c.log.Error("Connect failed", "error", err)
 		return err
 	}
@@ -152,7 +153,7 @@ func (c *Client) Connect(server string) error {
 	// Before calling it a day send a test request (trust me), and as we do identify the server:
 	err = c.identifyServer()
 	if err != nil {
-		c.Disconnect() //nolint:errcheck // TODO: check error
+		_ = c.Disconnect()
 		c.log.Error("Identifying server failed", "error", err)
 		return err
 	}
@@ -240,8 +241,8 @@ func (c *Client) ServerPeers() ([]string, error) {
 
 	for _, entry := range res {
 		// Get ready for some hot casting action. Not for the faint of heart.
-		addr := entry.([]interface{})[1].(string)                        //nolint:modernize // TODO: use any instead of interface{}
-		port := entry.([]interface{})[2].([]interface{})[1].(string)[1:] //nolint:modernize // TODO: use any instead of interface{}
+		addr := entry.([]any)[1].(string)
+		port := entry.([]any)[2].([]any)[1].(string)[1:]
 
 		peers = append(peers, addr+":"+port)
 	}
@@ -254,7 +255,7 @@ func (c *Client) ServerPeers() ([]string, error) {
 //	[ "<ip>", "<domain>", ["<version>", "s<SSL port>", "t<TLS port>"] ]
 //
 // Ports can be in any order, or absent if the protocol is not supported
-func (c *Client) rawServerPeers() ([]interface{}, error) { //nolint:modernize // TODO: use any instead of interface{}
+func (c *Client) rawServerPeers() ([]any, error) {
 	request := Request{
 		Method: "server.peers.subscribe",
 		Params: []Param{},
@@ -382,35 +383,35 @@ func (c *Client) ListUnspentBatch(indexHashes []string) ([][]UnspentRef, error) 
 
 func (c *Client) establishConnection() error {
 	// We first try to connect over TCP+TLS
-	// If we fail and requireTls is false, we try over TCP
+	// If we fail and requireTLS is false, we try over TCP
 
 	// TODO: check if insecure is necessary
 	config := &tls.Config{
 		InsecureSkipVerify: true,
 	}
 
-	dialer := &net.Dialer{
-		Timeout: connectionTimeout,
+	tlsDialer := &tls.Dialer{
+		NetDialer: &net.Dialer{Timeout: connectionTimeout},
+		Config:    config,
 	}
 
-	tlsConn, err := tls.DialWithDialer( //nolint:noctx // TODO: use (*tls.Dialer).DialContext
-		dialer,
+	tlsConn, err := tlsDialer.DialContext(
+		context.Background(),
 		"tcp",
 		c.Server,
-		config,
 	)
 	if err == nil {
 		c.conn = tlsConn
 		return nil
 	}
-	if c.requireTls {
+	if c.requireTLS {
 		return err
 	}
 
-	conn, err := net.DialTimeout( //nolint:noctx // TODO: use (*net.Dialer).DialContext
+	conn, err := (&net.Dialer{Timeout: connectionTimeout}).DialContext(
+		context.Background(),
 		"tcp",
 		c.Server,
-		connectionTimeout,
 	)
 	if err != nil {
 		return err
@@ -444,7 +445,7 @@ func (c *Client) IsConnected() bool {
 // call executes a request with JSON marshalling, and loads the response into a pointer.
 func (c *Client) call(
 	request *Request,
-	response interface{}, //nolint:modernize // TODO: use any instead of interface{}
+	response any,
 	timeout time.Duration,
 ) error {
 	// Assign a fresh request ID:
@@ -493,7 +494,7 @@ func (c *Client) call(
 func (c *Client) callBatch(
 	method string,
 	requests []*Request,
-	response interface{}, //nolint:modernize // TODO: use any instead of interface{}
+	response any,
 	timeout time.Duration,
 ) error {
 	// Assign fresh request IDs:

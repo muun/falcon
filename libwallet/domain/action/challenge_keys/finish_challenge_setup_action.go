@@ -13,45 +13,46 @@ import (
 )
 
 type FinishChallengeSetupAction struct {
-	houstonService                  service.HoustonService
-	keyValueStorage                 *storage.KeyValueStorage
-	computeAndStoreEncryptedMuunKey *recovery.ComputeAndStoreEncryptedMuunKeyAction
+	houstonService                      service.HoustonService
+	keyValueStorage                     *storage.KeyValueStorage
+	computeAndStoreEncryptedCosignerKey *recovery.ComputeAndStoreEncryptedCosignerKeyAction
 }
 
 func NewFinishChallengeSetupAction(
 	houstonService service.HoustonService,
 	keyValueStorage *storage.KeyValueStorage,
-	computeAndStoreEncryptedMuunKey *recovery.ComputeAndStoreEncryptedMuunKeyAction,
+	computeAndStoreEncryptedCosignerKey *recovery.ComputeAndStoreEncryptedCosignerKeyAction,
 ) *FinishChallengeSetupAction {
 	return &FinishChallengeSetupAction{
 		houstonService,
 		keyValueStorage,
-		computeAndStoreEncryptedMuunKey,
+		computeAndStoreEncryptedCosignerKey,
 	}
 }
 
 func (action *FinishChallengeSetupAction) Run(recoveryCodePublicKey *btcec.PublicKey) error {
 
-	challengeSetupVerifyJson := model.ChallengeSetupVerifyJson{ //nolint:staticcheck // TODO: var challengeSetupVerifyJson should be challengeSetupVerifyJSON
+	challengeSetupVerifyJSON := model.ChallengeSetupVerifyJSON{
 		ChallengeType: "RECOVERY_CODE",
 		PublicKey:     hex.EncodeToString(recoveryCodePublicKey.SerializeCompressed()),
 	}
 
-	verifiableMuunKeyJson, err := action.houstonService.ChallengeSetupFinishWithVerifiableMuunKey( //nolint:staticcheck // TODO: var verifiableMuunKeyJson should be verifiableMuunKeyJSON
-		challengeSetupVerifyJson,
-	)
+	verifiableCosignerKeyJSON, err :=
+		action.houstonService.ChallengeSetupFinishWithVerifiableCosignerKey(
+			challengeSetupVerifyJSON,
+		)
 	if err != nil {
 		return err
 	}
 
 	// If an error occurs during verification we log it, but we do not return it.
-	err = action.computeAndStoreEncryptedMuunKey.Run(
+	err = action.computeAndStoreEncryptedCosignerKey.Run(
 		recoveryCodePublicKey,
-		&verifiableMuunKeyJson,
+		&verifiableCosignerKeyJSON,
 	)
 	if err != nil {
 		slog.Error(
-			"An error occurred during encrypted muun key verification",
+			"An error occurred during encrypted cosigner key verification",
 			slog.Any("error", err),
 		)
 	}

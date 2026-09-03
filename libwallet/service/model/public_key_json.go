@@ -1,6 +1,6 @@
 package model
 
-type PublicKeyJson struct { //nolint:staticcheck // TODO: type PublicKeyJson should be PublicKeyJSON
+type PublicKeyJSON struct {
 	Key  string `json:"key"`
 	Path string `json:"path"`
 }

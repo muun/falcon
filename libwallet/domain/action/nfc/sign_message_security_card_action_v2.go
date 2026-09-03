@@ -1,6 +1,7 @@
 package nfc
 
 import (
+	"context"
 	"encoding/hex"
 	"log/slog"
 
@@ -33,14 +34,17 @@ func NewSignMessageSecurityCardActionV2(
 	}
 }
 
-func (ac *SignMessageSecurityCardActionV2) Run() error {
+// The context is unused: neither the V2 card transport nor its Houston calls take one.
+func (ac *SignMessageSecurityCardActionV2) Run(_ context.Context) error {
 
-	value, err := ac.keyValueStorage.Get(storage.KeySecurityCardPairingSlot)
+	// Re-pair when the paired version isn't this flow's: nothing paired yet, or a
+	// card of a different version was swapped in. See the pairedVersion constants.
+	pairedVersion, err := ac.keyValueStorage.Get(storage.KeySecurityCardPairedVersion)
 	if err != nil {
 		return errors.Errorf("error loading security card info: %w", err)
 	}
-	if value == nil {
-		slog.Debug("doing automatic pairing")
+	if needsPairing(pairedVersion, pairedVersionV2) {
+		slog.Debug("doing automatic V2 pairing")
 		_, err = ac.pairSecurityCardActionV2.Run()
 		if err != nil {
 			var noSlotsAvailableErr *NoSlotsAvailableError
@@ -48,9 +52,13 @@ func (ac *SignMessageSecurityCardActionV2) Run() error {
 				return err
 			}
 			return &PairInternalError{
-				Message: "automating first pairing failed",
+				Message: "automating V2 pairing failed",
 				Cause:   err,
 			}
+		}
+		err = ac.keyValueStorage.Save(storage.KeySecurityCardPairedVersion, pairedVersionV2)
+		if err != nil {
+			return errors.Errorf("error saving paired card version: %w", err)
 		}
 	}
 
@@ -58,7 +66,7 @@ func (ac *SignMessageSecurityCardActionV2) Run() error {
 	// It is needed for card firmware compatibility
 	reasonBytes := []byte("A")
 	reasonInHex := hex.EncodeToString(reasonBytes)
-	request := model.ChallengeSecurityCardSignJson{
+	request := model.ChallengeSecurityCardSignJSON{
 		ReasonInHex: reasonInHex,
 	}
 	challengeResponse, err := ac.houstonService.ChallengeSecurityCardSign(request)
@@ -78,12 +86,12 @@ func (ac *SignMessageSecurityCardActionV2) Run() error {
 
 	cardPublicKeyInHex := hex.EncodeToString(signChallengeResponse.CardPublicKey)
 	macInHex := hex.EncodeToString(signChallengeResponse.MAC)
-	securityCardChallengeJson := model.SolveSecurityCardChallengeJson{ //nolint:staticcheck // TODO: var securityCardChallengeJson should be securityCardChallengeJSON
+	securityCardChallengeJSON := model.SolveSecurityCardChallengeJSON{
 		PublicKeyInHex: cardPublicKeyInHex,
 		MacInHex:       macInHex,
 	}
 
-	err = ac.houstonService.SolveSecurityCardChallenge(securityCardChallengeJson)
+	err = ac.houstonService.SolveSecurityCardChallenge(securityCardChallengeJSON)
 	if err != nil {
 		var houstonError *service.HoustonResponseError
 		if errors.As(err, &houstonError) {

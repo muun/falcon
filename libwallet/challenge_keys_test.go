@@ -48,8 +48,8 @@ func TestChallengeKeySignSha(t *testing.T) {
 func TestChallengeKeyCrypto(t *testing.T) {
 
 	const (
-		birthday            = 376
-		v2MuunSerializedKey = "4TZDw4ndUdVxGL1up8aCxeJHP3nz4RZdz7VHzSskvs7jLc8GbhM2Ey3YhHnT2EopAPkAvqDs3eUDM5uMRfnEqWPSkNVbZ73zNf6KZDWideKKkBQsCkQPXeBbygf6RioEsYpbJYsuGyMnY6QuJHh" //nolint:lll
+		birthday                = 376
+		v2CosignerSerializedKey = "4TZDw4ndUdVxGL1up8aCxeJHP3nz4RZdz7VHzSskvs7jLc8GbhM2Ey3YhHnT2EopAPkAvqDs3eUDM5uMRfnEqWPSkNVbZ73zNf6KZDWideKKkBQsCkQPXeBbygf6RioEsYpbJYsuGyMnY6QuJHh" //nolint:lll
 	)
 
 	network := Regtest()
@@ -59,7 +59,7 @@ func TestChallengeKeyCrypto(t *testing.T) {
 	challengePrivKey := NewChallengePrivateKey([]byte("a very good password"), salt)
 
 	encryptedKey, err := challengePrivKey.PubKey().
-		EncryptKey(privKey, salt, birthday, v2MuunSerializedKey)
+		EncryptKey(privKey, salt, birthday, v2CosignerSerializedKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,12 +83,12 @@ func TestChallengeKeyCrypto(t *testing.T) {
 
 func TestChallengeKeyCryptoV2(t *testing.T) {
 	const (
-		encodedKey          = "tprv8ZgxMBicQKsPcxg1GFGZgL5zALjPwijrYNUqTi2s9JsVqDLzbpX55U9JH2PKAQKExtpdTyboZmV2ytaqr9pAHuxE1hX8k9bQgZAjq25E6P7"                                     //nolint:lll
-		encryptedKey        = "4LbSKwcepbbx4dPetoxvTWszb6mLyJHFhumzmdPRVprbn8XZBvFa6Ffarm6R3WGKutFzdxxJgQDdSHuYdjhDp1EZfSNbj12gXMND1AgmNijSxEua3LwVURU3nzWsvV5b1AsWEjJca24CaFY6T3C" //nolint:lll
-		v2MuunSerializedKey = "4TZDw4ndUdVxGL1up8aCxeJHP3nz4RZdz7VHzSskvs7jLc8GbhM2Ey3YhHnT2EopAPkAvqDs3eUDM5uMRfnEqWPSkNVbZ73zNf6KZDWideKKkBQsCkQPXeBbygf6RioEsYpbJYsuGyMnY6QuJHh" //nolint:lll
-		password            = "a very good password"
-		saltLength          = 8
-		birthday            = 376
+		encodedKey              = "tprv8ZgxMBicQKsPcxg1GFGZgL5zALjPwijrYNUqTi2s9JsVqDLzbpX55U9JH2PKAQKExtpdTyboZmV2ytaqr9pAHuxE1hX8k9bQgZAjq25E6P7"                                     //nolint:lll
+		encryptedKey            = "4LbSKwcepbbx4dPetoxvTWszb6mLyJHFhumzmdPRVprbn8XZBvFa6Ffarm6R3WGKutFzdxxJgQDdSHuYdjhDp1EZfSNbj12gXMND1AgmNijSxEua3LwVURU3nzWsvV5b1AsWEjJca24CaFY6T3C" //nolint:lll
+		v2CosignerSerializedKey = "4TZDw4ndUdVxGL1up8aCxeJHP3nz4RZdz7VHzSskvs7jLc8GbhM2Ey3YhHnT2EopAPkAvqDs3eUDM5uMRfnEqWPSkNVbZ73zNf6KZDWideKKkBQsCkQPXeBbygf6RioEsYpbJYsuGyMnY6QuJHh" //nolint:lll
+		password                = "a very good password"
+		saltLength              = 8
+		birthday                = 376
 	)
 
 	extractSalt := func(rawKey string) []byte {
@@ -111,7 +111,7 @@ func TestChallengeKeyCryptoV2(t *testing.T) {
 	}
 
 	_, err = challengeKey.PubKey().
-		EncryptKey(decryptedKey.Key, extractSalt(encryptedKey), birthday, v2MuunSerializedKey)
+		EncryptKey(decryptedKey.Key, extractSalt(encryptedKey), birthday, v2CosignerSerializedKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -121,12 +121,12 @@ func TestChallengeKeyCryptoV3(t *testing.T) {
 	const (
 		// TODO: How do I extract the encoded key in order to test withouth extracting it from the
 		// test failure?
-		encodedKey          = "tprv8ZgxMBicQKsPevsz5yq38nX4LGUVyumVV4jLQuNRa9XSBwYydujAMcyVttkSnEQPwmJpe3DhcpFuc6AeL7vz1L7Lo313ygWuvwRmwE1hrYr"                                  //nolint:lll
-		v3MuunSerializedKey = "FwASVLD82GhZTPCuf2C4tk3einixU2EVAoSEE7vK2RnLBQT4d5Uy6vH42EzLq6MLWzRQQAA9ppwTkdj2NSXmXQYTKpmzf5pjPanxguNJMgyo6bnGzCtgQsExVVGbhpCewX3u1pDFZdB6MFiY" //nolint:lll
-		password            = "a very good password"
-		checksum            = "ba2aa3af07aaaa5f"
-		saltLength          = 8
-		birthday            = 0
+		encodedKey              = "tprv8ZgxMBicQKsPevsz5yq38nX4LGUVyumVV4jLQuNRa9XSBwYydujAMcyVttkSnEQPwmJpe3DhcpFuc6AeL7vz1L7Lo313ygWuvwRmwE1hrYr"                                  //nolint:lll
+		v3CosignerSerializedKey = "FwASVLD82GhZTPCuf2C4tk3einixU2EVAoSEE7vK2RnLBQT4d5Uy6vH42EzLq6MLWzRQQAA9ppwTkdj2NSXmXQYTKpmzf5pjPanxguNJMgyo6bnGzCtgQsExVVGbhpCewX3u1pDFZdB6MFiY" //nolint:lll
+		password                = "a very good password"
+		checksum                = "ba2aa3af07aaaa5f"
+		saltLength              = 8
+		birthday                = 0
 	)
 
 	extractSalt := func(rawKey string) []byte {
@@ -134,8 +134,8 @@ func TestChallengeKeyCryptoV3(t *testing.T) {
 		return bytes[len(bytes)-saltLength:]
 	}
 
-	challengeKey := NewChallengePrivateKey([]byte(password), extractSalt(v3MuunSerializedKey))
-	decryptedKey, err := challengeKey.DecryptRawKey(v3MuunSerializedKey, Regtest())
+	challengeKey := NewChallengePrivateKey([]byte(password), extractSalt(v3CosignerSerializedKey))
+	decryptedKey, err := challengeKey.DecryptRawKey(v3CosignerSerializedKey, Regtest())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,9 +156,9 @@ func TestChallengeKeyCryptoV3(t *testing.T) {
 
 	_, err = challengeKey.PubKey().EncryptKey(
 		decryptedKey.Key,
-		extractSalt(v3MuunSerializedKey),
+		extractSalt(v3CosignerSerializedKey),
 		birthday,
-		v3MuunSerializedKey,
+		v3CosignerSerializedKey,
 	)
 
 	if err != nil {
@@ -230,7 +230,7 @@ func TestDecodeKeyWithOrWithoutSalt(t *testing.T) {
 
 func TestDecodeKeyV3(t *testing.T) {
 	const (
-		v3MuunSerializedKey = "FwBs2Fh3TCTMhTg9DNrr3MuiGhVmiNGeqpg8Zubo8mbZkYpNejJZkmsTU7iJNXEtxmWDVXaF8auAaQhFj8oMH5BhfLAdieLVAuy59RGHsCvEwzubbY7dzqYvpcSfWypzcERHxKVTMmjqwtTK" //nolint:lll
+		v3CosignerSerializedKey = "FwBs2Fh3TCTMhTg9DNrr3MuiGhVmiNGeqpg8Zubo8mbZkYpNejJZkmsTU7iJNXEtxmWDVXaF8auAaQhFj8oMH5BhfLAdieLVAuy59RGHsCvEwzubbY7dzqYvpcSfWypzcERHxKVTMmjqwtTK" //nolint:lll
 	)
 
 	expected := &EncryptedPrivateKeyInfo{
@@ -242,7 +242,7 @@ func TestDecodeKeyV3(t *testing.T) {
 	}
 
 	// Verify the salted version:
-	actual, err := DecodeEncryptedPrivateKey(v3MuunSerializedKey)
+	actual, err := DecodeEncryptedPrivateKey(v3CosignerSerializedKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -252,11 +252,11 @@ func TestDecodeKeyV3(t *testing.T) {
 
 func TestDecodeUnknownKeyVersion(t *testing.T) {
 	const (
-		sixtyInBase58       = "2j"
-		v3MuunSerializedKey = sixtyInBase58 + "63FwBs2Fh3TCTMhTg9DNrr3MuiGhVmiNGeqpg8Zubo8mbZkYpNejJZkmsTU7iJNXEtxmWDVXaF8auAaQhFj8oMH5BhfLAdieLVAuy59RGHsCvEwzubbY7dzqYvpcSfWypzcERHxKVTMmjqwtTK" //nolint:lll
+		sixtyInBase58           = "2j"
+		v3CosignerSerializedKey = sixtyInBase58 + "63FwBs2Fh3TCTMhTg9DNrr3MuiGhVmiNGeqpg8Zubo8mbZkYpNejJZkmsTU7iJNXEtxmWDVXaF8auAaQhFj8oMH5BhfLAdieLVAuy59RGHsCvEwzubbY7dzqYvpcSfWypzcERHxKVTMmjqwtTK" //nolint:lll
 	)
 
-	_, err := DecodeEncryptedPrivateKey(v3MuunSerializedKey)
+	_, err := DecodeEncryptedPrivateKey(v3CosignerSerializedKey)
 
 	if err.Error() != "unrecognized key version 60" {
 		t.Fatalf("Serialized key version was invalid but test didn't fail")

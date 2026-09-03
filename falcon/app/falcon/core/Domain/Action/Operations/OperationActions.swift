@@ -178,6 +178,7 @@ public class OperationActions {
     // swiftlint:disable function_body_length
     public func newOperation(
         _ operation: Operation,
+        expectedDebtInSat: Satoshis,
         with swapParameters: SwapExecutionParameters? = nil,
         maxAlternativeTransactionCount: Int = 0
     ) -> Single<Operation> {
@@ -257,7 +258,8 @@ public class OperationActions {
                         amount: outputAmount,
                         fee: operation.fee.inSatoshis,
                         change: created.change,
-                        alternative: false
+                        alternative: false,
+                        expectedDebtInSat: expectedDebtInSat
                     )
 
                     let signedTransaction = try created.partiallySignedTransaction.sign(

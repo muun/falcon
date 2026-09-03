@@ -15,6 +15,9 @@ const (
 	V4              = 4
 	V5              = 5
 	V6              = 6
+	V7              = 7
+	V8              = 8
+	V9              = 9
 	SubmarineSwapV1 = 101
 	SubmarineSwapV2 = 102
 	IncomingSwap    = 201
@@ -36,7 +39,7 @@ func New(version int, derivationPath string, address string) *WalletAddress {
 
 func Create(
 	version int,
-	userKey, muunKey *hdkeychain.ExtendedKey,
+	userKey, cosignerKey *hdkeychain.ExtendedKey,
 	path string,
 	network *chaincfg.Params,
 ) (*WalletAddress, error) {
@@ -44,15 +47,15 @@ func Create(
 	case V1:
 		return CreateAddressV1(userKey, path, network)
 	case V2:
-		return CreateAddressV2(userKey, muunKey, path, network)
+		return CreateAddressV2(userKey, cosignerKey, path, network)
 	case V3:
-		return CreateAddressV3(userKey, muunKey, path, network)
+		return CreateAddressV3(userKey, cosignerKey, path, network)
 	case V4:
-		return CreateAddressV4(userKey, muunKey, path, network)
+		return CreateAddressV4(userKey, cosignerKey, path, network)
 	case V5:
-		return CreateAddressV5(userKey, muunKey, path, network)
+		return CreateAddressV5(userKey, cosignerKey, path, network)
 	case V6:
-		return CreateAddressV6(userKey, muunKey, path, network)
+		return CreateAddressV6(userKey, cosignerKey, path, network)
 	default:
 		return nil, errors.Errorf("unknown or unsupported version %v", version)
 	}

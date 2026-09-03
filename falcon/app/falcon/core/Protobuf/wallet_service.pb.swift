@@ -89,6 +89,82 @@ enum Rpc_NullValue: SwiftProtobuf.Enum, Swift.CaseIterable {
 
 }
 
+enum Rpc_SCMCardMaterial: SwiftProtobuf.Enum, Swift.CaseIterable {
+  typealias RawValue = Int
+  case scmMaterialPlastic // = 0
+  case scmMaterialMetal // = 1
+  case UNRECOGNIZED(Int)
+
+  init() {
+    self = .scmMaterialPlastic
+  }
+
+  init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .scmMaterialPlastic
+    case 1: self = .scmMaterialMetal
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  var rawValue: Int {
+    switch self {
+    case .scmMaterialPlastic: return 0
+    case .scmMaterialMetal: return 1
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  static let allCases: [Rpc_SCMCardMaterial] = [
+    .scmMaterialPlastic,
+    .scmMaterialMetal,
+  ]
+
+}
+
+enum Rpc_SCMSecureElement: SwiftProtobuf.Enum, Swift.CaseIterable {
+  typealias RawValue = Int
+  case scmEal5 // = 0
+  case scmEal5Plus // = 1
+  case scmEal6 // = 2
+  case scmEal6Plus // = 3
+  case UNRECOGNIZED(Int)
+
+  init() {
+    self = .scmEal5
+  }
+
+  init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .scmEal5
+    case 1: self = .scmEal5Plus
+    case 2: self = .scmEal6
+    case 3: self = .scmEal6Plus
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  var rawValue: Int {
+    switch self {
+    case .scmEal5: return 0
+    case .scmEal5Plus: return 1
+    case .scmEal6: return 2
+    case .scmEal6Plus: return 3
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  static let allCases: [Rpc_SCMSecureElement] = [
+    .scmEal5,
+    .scmEal5Plus,
+    .scmEal6,
+    .scmEal6Plus,
+  ]
+
+}
+
 struct Rpc_ErrorDetail: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -680,21 +756,228 @@ struct Rpc_GetByPrefixRequest: Sendable {
   init() {}
 }
 
-struct Rpc_SecurityCardsProviderTheme: Sendable {
+/// Deprecated: old monolithic marketplace response types.
+/// Use the new screen-specific SC* messages and endpoints instead.
+struct Rpc_SCMDeprecated: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var primaryColor: String = String()
+  var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  var surfaceColor: String = String()
+  struct SecurityCardsProviderTheme: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var primaryColor: String = String()
+
+    var surfaceColor: String = String()
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct PriceInfo: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var currencyCode: String = String()
+
+    var amount: String = String()
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct CountryInfo: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var code: String = String()
+
+    var name: String = String()
+
+    var flag: String = String()
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct ShippingPriceInfo: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var price: Rpc_SCMDeprecated.PriceInfo {
+      get {return _price ?? Rpc_SCMDeprecated.PriceInfo()}
+      set {_price = newValue}
+    }
+    /// Returns true if `price` has been explicitly set.
+    var hasPrice: Bool {return self._price != nil}
+    /// Clears the value of `price`. Subsequent reads from it will return its default value.
+    mutating func clearPrice() {self._price = nil}
+
+    var countries: [Rpc_SCMDeprecated.CountryInfo] = []
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _price: Rpc_SCMDeprecated.PriceInfo? = nil
+  }
+
+  struct SecurityCardsProvider: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var id: String = String()
+
+    var name: String = String()
+
+    var description_p: String = String()
+
+    var siteURL: String = String()
+
+    var lightTheme: Rpc_SCMDeprecated.SecurityCardsProviderTheme {
+      get {return _lightTheme ?? Rpc_SCMDeprecated.SecurityCardsProviderTheme()}
+      set {_lightTheme = newValue}
+    }
+    /// Returns true if `lightTheme` has been explicitly set.
+    var hasLightTheme: Bool {return self._lightTheme != nil}
+    /// Clears the value of `lightTheme`. Subsequent reads from it will return its default value.
+    mutating func clearLightTheme() {self._lightTheme = nil}
+
+    var darkTheme: Rpc_SCMDeprecated.SecurityCardsProviderTheme {
+      get {return _darkTheme ?? Rpc_SCMDeprecated.SecurityCardsProviderTheme()}
+      set {_darkTheme = newValue}
+    }
+    /// Returns true if `darkTheme` has been explicitly set.
+    var hasDarkTheme: Bool {return self._darkTheme != nil}
+    /// Clears the value of `darkTheme`. Subsequent reads from it will return its default value.
+    mutating func clearDarkTheme() {self._darkTheme = nil}
+
+    var securityCards: [Rpc_SCMDeprecated.SecurityCard] = []
+
+    var estimatedShippingPrices: [Rpc_SCMDeprecated.ShippingPriceInfo] = []
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _lightTheme: Rpc_SCMDeprecated.SecurityCardsProviderTheme? = nil
+    fileprivate var _darkTheme: Rpc_SCMDeprecated.SecurityCardsProviderTheme? = nil
+  }
+
+  struct SecurityCard: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var id: String = String()
+
+    var assetURL: String = String()
+
+    var tag: String = String()
+
+    var specID: String = String()
+
+    var cardCost: Rpc_SCMDeprecated.PriceInfo {
+      get {return _cardCost ?? Rpc_SCMDeprecated.PriceInfo()}
+      set {_cardCost = newValue}
+    }
+    /// Returns true if `cardCost` has been explicitly set.
+    var hasCardCost: Bool {return self._cardCost != nil}
+    /// Clears the value of `cardCost`. Subsequent reads from it will return its default value.
+    mutating func clearCardCost() {self._cardCost = nil}
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _cardCost: Rpc_SCMDeprecated.PriceInfo? = nil
+  }
+
+  struct SpecsItem: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var iconURL: String = String()
+
+    var label: String = String()
+
+    var value: String = String()
+
+    var additionalData: String = String()
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct SpecsItemList: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var items: [Rpc_SCMDeprecated.SpecsItem] = []
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct SecurityCardSpec: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var specID: String = String()
+
+    var items: Dictionary<String,Rpc_SCMDeprecated.SpecsItemList> = [:]
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct GetSecurityCardsMarketplaceResponse: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var providers: [Rpc_SCMDeprecated.SecurityCardsProvider] = []
+
+    var specs: [Rpc_SCMDeprecated.SecurityCardSpec] = []
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  init() {}
+}
+
+struct Rpc_SCMCountryInfo: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var code: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 }
 
-struct Rpc_PriceInfo: Sendable {
+struct Rpc_SCMMonetaryAmount: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -708,60 +991,66 @@ struct Rpc_PriceInfo: Sendable {
   init() {}
 }
 
-struct Rpc_CountryInfo: Sendable {
+struct Rpc_SCMBitcoinAmount: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var code: String = String()
+  var inSat: Int64 = 0
 
-  var name: String = String()
-
-  var flag: String = String()
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Rpc_ShippingPriceInfo: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var price: Rpc_PriceInfo {
-    get {return _price ?? Rpc_PriceInfo()}
-    set {_price = newValue}
+  var inInputCurrency: Rpc_SCMMonetaryAmount {
+    get {return _inInputCurrency ?? Rpc_SCMMonetaryAmount()}
+    set {_inInputCurrency = newValue}
   }
-  /// Returns true if `price` has been explicitly set.
-  var hasPrice: Bool {return self._price != nil}
-  /// Clears the value of `price`. Subsequent reads from it will return its default value.
-  mutating func clearPrice() {self._price = nil}
+  /// Returns true if `inInputCurrency` has been explicitly set.
+  var hasInInputCurrency: Bool {return self._inInputCurrency != nil}
+  /// Clears the value of `inInputCurrency`. Subsequent reads from it will return its default value.
+  mutating func clearInInputCurrency() {self._inInputCurrency = nil}
 
-  var countries: [Rpc_CountryInfo] = []
+  var inPrimaryCurrency: Rpc_SCMMonetaryAmount {
+    get {return _inPrimaryCurrency ?? Rpc_SCMMonetaryAmount()}
+    set {_inPrimaryCurrency = newValue}
+  }
+  /// Returns true if `inPrimaryCurrency` has been explicitly set.
+  var hasInPrimaryCurrency: Bool {return self._inPrimaryCurrency != nil}
+  /// Clears the value of `inPrimaryCurrency`. Subsequent reads from it will return its default value.
+  mutating func clearInPrimaryCurrency() {self._inPrimaryCurrency = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 
-  fileprivate var _price: Rpc_PriceInfo? = nil
+  fileprivate var _inInputCurrency: Rpc_SCMMonetaryAmount? = nil
+  fileprivate var _inPrimaryCurrency: Rpc_SCMMonetaryAmount? = nil
 }
 
-struct Rpc_SecurityCardsProvider: Sendable {
+struct Rpc_SCMProviderTheme: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var id: String = String()
+  var primaryColorHex: UInt32 = 0
+
+  var surfaceColorHex: UInt32 = 0
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Rpc_SCMProvider: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var uuid: String = String()
 
   var name: String = String()
-
-  var description_p: String = String()
 
   var siteURL: String = String()
 
-  var lightTheme: Rpc_SecurityCardsProviderTheme {
-    get {return _lightTheme ?? Rpc_SecurityCardsProviderTheme()}
+  var lightTheme: Rpc_SCMProviderTheme {
+    get {return _lightTheme ?? Rpc_SCMProviderTheme()}
     set {_lightTheme = newValue}
   }
   /// Returns true if `lightTheme` has been explicitly set.
@@ -769,8 +1058,8 @@ struct Rpc_SecurityCardsProvider: Sendable {
   /// Clears the value of `lightTheme`. Subsequent reads from it will return its default value.
   mutating func clearLightTheme() {self._lightTheme = nil}
 
-  var darkTheme: Rpc_SecurityCardsProviderTheme {
-    get {return _darkTheme ?? Rpc_SecurityCardsProviderTheme()}
+  var darkTheme: Rpc_SCMProviderTheme {
+    get {return _darkTheme ?? Rpc_SCMProviderTheme()}
     set {_darkTheme = newValue}
   }
   /// Returns true if `darkTheme` has been explicitly set.
@@ -778,103 +1067,375 @@ struct Rpc_SecurityCardsProvider: Sendable {
   /// Clears the value of `darkTheme`. Subsequent reads from it will return its default value.
   mutating func clearDarkTheme() {self._darkTheme = nil}
 
-  var securityCards: [Rpc_SecurityCard] = []
-
-  var estimatedShippingPrices: [Rpc_ShippingPriceInfo] = []
-
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 
-  fileprivate var _lightTheme: Rpc_SecurityCardsProviderTheme? = nil
-  fileprivate var _darkTheme: Rpc_SecurityCardsProviderTheme? = nil
+  fileprivate var _lightTheme: Rpc_SCMProviderTheme? = nil
+  fileprivate var _darkTheme: Rpc_SCMProviderTheme? = nil
 }
 
-struct Rpc_SecurityCard: Sendable {
+struct Rpc_SCMCard: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var id: String = String()
+  var uuid: String = String()
 
-  var assetURL: String = String()
+  var sku: String = String()
 
-  var tag: String = String()
+  var imageURL: String = String()
 
-  var specID: String = String()
+  var hasStock_p: Bool = false
 
-  var cardCost: Rpc_PriceInfo {
-    get {return _cardCost ?? Rpc_PriceInfo()}
-    set {_cardCost = newValue}
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Rpc_SCMCountriesResponse: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var countries: [Rpc_SCMCountryInfo] = []
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Rpc_SCMMarketplaceRequest: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var country: Rpc_SCMCountryInfo {
+    get {return _country ?? Rpc_SCMCountryInfo()}
+    set {_country = newValue}
   }
-  /// Returns true if `cardCost` has been explicitly set.
-  var hasCardCost: Bool {return self._cardCost != nil}
-  /// Clears the value of `cardCost`. Subsequent reads from it will return its default value.
-  mutating func clearCardCost() {self._cardCost = nil}
+  /// Returns true if `country` has been explicitly set.
+  var hasCountry: Bool {return self._country != nil}
+  /// Clears the value of `country`. Subsequent reads from it will return its default value.
+  mutating func clearCountry() {self._country = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 
-  fileprivate var _cardCost: Rpc_PriceInfo? = nil
+  fileprivate var _country: Rpc_SCMCountryInfo? = nil
 }
 
-struct Rpc_SpecsItem: Sendable {
+struct Rpc_SCMMarketplaceResponse: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var iconURL: String = String()
-
-  var label: String = String()
-
-  var value: String = String()
-
-  var additionalData: String = String()
+  var providers: [Rpc_SCMMarketplaceResponse.ProviderListing] = []
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  struct ProviderListing: @unchecked Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var provider: Rpc_SCMProvider {
+      get {return _storage._provider ?? Rpc_SCMProvider()}
+      set {_uniqueStorage()._provider = newValue}
+    }
+    /// Returns true if `provider` has been explicitly set.
+    var hasProvider: Bool {return _storage._provider != nil}
+    /// Clears the value of `provider`. Subsequent reads from it will return its default value.
+    mutating func clearProvider() {_uniqueStorage()._provider = nil}
+
+    var cards: [Rpc_SCMCard] {
+      get {return _storage._cards}
+      set {_uniqueStorage()._cards = newValue}
+    }
+
+    var estimatedShippingPrice: Rpc_SCMBitcoinAmount {
+      get {return _storage._estimatedShippingPrice ?? Rpc_SCMBitcoinAmount()}
+      set {_uniqueStorage()._estimatedShippingPrice = newValue}
+    }
+    /// Returns true if `estimatedShippingPrice` has been explicitly set.
+    var hasEstimatedShippingPrice: Bool {return _storage._estimatedShippingPrice != nil}
+    /// Clears the value of `estimatedShippingPrice`. Subsequent reads from it will return its default value.
+    mutating func clearEstimatedShippingPrice() {_uniqueStorage()._estimatedShippingPrice = nil}
+
+    var cardPrice: Rpc_SCMBitcoinAmount {
+      get {return _storage._cardPrice ?? Rpc_SCMBitcoinAmount()}
+      set {_uniqueStorage()._cardPrice = newValue}
+    }
+    /// Returns true if `cardPrice` has been explicitly set.
+    var hasCardPrice: Bool {return _storage._cardPrice != nil}
+    /// Clears the value of `cardPrice`. Subsequent reads from it will return its default value.
+    mutating func clearCardPrice() {_uniqueStorage()._cardPrice = nil}
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _storage = _StorageClass.defaultInstance
+  }
 
   init() {}
 }
 
-struct Rpc_SpecsItemList: Sendable {
+struct Rpc_SCMCardDetailRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var items: [Rpc_SpecsItem] = []
+  var country: Rpc_SCMCountryInfo {
+    get {return _country ?? Rpc_SCMCountryInfo()}
+    set {_country = newValue}
+  }
+  /// Returns true if `country` has been explicitly set.
+  var hasCountry: Bool {return self._country != nil}
+  /// Clears the value of `country`. Subsequent reads from it will return its default value.
+  mutating func clearCountry() {self._country = nil}
+
+  var securityCardUuid: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _country: Rpc_SCMCountryInfo? = nil
 }
 
-struct Rpc_SecurityCardSpec: Sendable {
+struct Rpc_SCMCardDetailResponse: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var specID: String = String()
+  var provider: Rpc_SCMCardDetailResponse.Provider {
+    get {return _provider ?? Rpc_SCMCardDetailResponse.Provider()}
+    set {_provider = newValue}
+  }
+  /// Returns true if `provider` has been explicitly set.
+  var hasProvider: Bool {return self._provider != nil}
+  /// Clears the value of `provider`. Subsequent reads from it will return its default value.
+  mutating func clearProvider() {self._provider = nil}
 
-  var items: Dictionary<String,Rpc_SpecsItemList> = [:]
+  var card: Rpc_SCMCardDetailResponse.Card {
+    get {return _card ?? Rpc_SCMCardDetailResponse.Card()}
+    set {_card = newValue}
+  }
+  /// Returns true if `card` has been explicitly set.
+  var hasCard: Bool {return self._card != nil}
+  /// Clears the value of `card`. Subsequent reads from it will return its default value.
+  mutating func clearCard() {self._card = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
+  struct Provider: @unchecked Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var provider: Rpc_SCMProvider {
+      get {return _storage._provider ?? Rpc_SCMProvider()}
+      set {_uniqueStorage()._provider = newValue}
+    }
+    /// Returns true if `provider` has been explicitly set.
+    var hasProvider: Bool {return _storage._provider != nil}
+    /// Clears the value of `provider`. Subsequent reads from it will return its default value.
+    mutating func clearProvider() {_uniqueStorage()._provider = nil}
+
+    var shippingCountry: Rpc_SCMCountryInfo {
+      get {return _storage._shippingCountry ?? Rpc_SCMCountryInfo()}
+      set {_uniqueStorage()._shippingCountry = newValue}
+    }
+    /// Returns true if `shippingCountry` has been explicitly set.
+    var hasShippingCountry: Bool {return _storage._shippingCountry != nil}
+    /// Clears the value of `shippingCountry`. Subsequent reads from it will return its default value.
+    mutating func clearShippingCountry() {_uniqueStorage()._shippingCountry = nil}
+
+    var minShippingTimeDays: Int32 {
+      get {return _storage._minShippingTimeDays}
+      set {_uniqueStorage()._minShippingTimeDays = newValue}
+    }
+
+    var maxShippingTimeDays: Int32 {
+      get {return _storage._maxShippingTimeDays}
+      set {_uniqueStorage()._maxShippingTimeDays = newValue}
+    }
+
+    var estimatedShippingPrice: Rpc_SCMBitcoinAmount {
+      get {return _storage._estimatedShippingPrice ?? Rpc_SCMBitcoinAmount()}
+      set {_uniqueStorage()._estimatedShippingPrice = newValue}
+    }
+    /// Returns true if `estimatedShippingPrice` has been explicitly set.
+    var hasEstimatedShippingPrice: Bool {return _storage._estimatedShippingPrice != nil}
+    /// Clears the value of `estimatedShippingPrice`. Subsequent reads from it will return its default value.
+    mutating func clearEstimatedShippingPrice() {_uniqueStorage()._estimatedShippingPrice = nil}
+
+    var cardPrice: Rpc_SCMBitcoinAmount {
+      get {return _storage._cardPrice ?? Rpc_SCMBitcoinAmount()}
+      set {_uniqueStorage()._cardPrice = newValue}
+    }
+    /// Returns true if `cardPrice` has been explicitly set.
+    var hasCardPrice: Bool {return _storage._cardPrice != nil}
+    /// Clears the value of `cardPrice`. Subsequent reads from it will return its default value.
+    mutating func clearCardPrice() {_uniqueStorage()._cardPrice = nil}
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _storage = _StorageClass.defaultInstance
+  }
+
+  struct Card: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var card: Rpc_SCMCard {
+      get {return _card ?? Rpc_SCMCard()}
+      set {_card = newValue}
+    }
+    /// Returns true if `card` has been explicitly set.
+    var hasCard: Bool {return self._card != nil}
+    /// Clears the value of `card`. Subsequent reads from it will return its default value.
+    mutating func clearCard() {self._card = nil}
+
+    var material: Rpc_SCMCardMaterial = .scmMaterialPlastic
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _card: Rpc_SCMCard? = nil
+  }
+
   init() {}
+
+  fileprivate var _provider: Rpc_SCMCardDetailResponse.Provider? = nil
+  fileprivate var _card: Rpc_SCMCardDetailResponse.Card? = nil
 }
 
-struct Rpc_GetSecurityCardsMarketplaceResponse: Sendable {
+struct Rpc_SCMFullSpecsRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var providers: [Rpc_SecurityCardsProvider] = []
+  var country: Rpc_SCMCountryInfo {
+    get {return _country ?? Rpc_SCMCountryInfo()}
+    set {_country = newValue}
+  }
+  /// Returns true if `country` has been explicitly set.
+  var hasCountry: Bool {return self._country != nil}
+  /// Clears the value of `country`. Subsequent reads from it will return its default value.
+  mutating func clearCountry() {self._country = nil}
 
-  var specs: [Rpc_SecurityCardSpec] = []
+  var securityCardUuid: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _country: Rpc_SCMCountryInfo? = nil
+}
+
+struct Rpc_SCMFullSpecsResponse: @unchecked Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var provider: Rpc_SCMFullSpecsResponse.Provider {
+    get {return _storage._provider ?? Rpc_SCMFullSpecsResponse.Provider()}
+    set {_uniqueStorage()._provider = newValue}
+  }
+  /// Returns true if `provider` has been explicitly set.
+  var hasProvider: Bool {return _storage._provider != nil}
+  /// Clears the value of `provider`. Subsequent reads from it will return its default value.
+  mutating func clearProvider() {_uniqueStorage()._provider = nil}
+
+  var card: Rpc_SCMFullSpecsResponse.Card {
+    get {return _storage._card ?? Rpc_SCMFullSpecsResponse.Card()}
+    set {_uniqueStorage()._card = newValue}
+  }
+  /// Returns true if `card` has been explicitly set.
+  var hasCard: Bool {return _storage._card != nil}
+  /// Clears the value of `card`. Subsequent reads from it will return its default value.
+  mutating func clearCard() {_uniqueStorage()._card = nil}
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  struct Provider: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var provider: Rpc_SCMProvider {
+      get {return _provider ?? Rpc_SCMProvider()}
+      set {_provider = newValue}
+    }
+    /// Returns true if `provider` has been explicitly set.
+    var hasProvider: Bool {return self._provider != nil}
+    /// Clears the value of `provider`. Subsequent reads from it will return its default value.
+    mutating func clearProvider() {self._provider = nil}
+
+    var shippingCountry: Rpc_SCMCountryInfo {
+      get {return _shippingCountry ?? Rpc_SCMCountryInfo()}
+      set {_shippingCountry = newValue}
+    }
+    /// Returns true if `shippingCountry` has been explicitly set.
+    var hasShippingCountry: Bool {return self._shippingCountry != nil}
+    /// Clears the value of `shippingCountry`. Subsequent reads from it will return its default value.
+    mutating func clearShippingCountry() {self._shippingCountry = nil}
+
+    var minShippingTimeDays: Int32 = 0
+
+    var maxShippingTimeDays: Int32 = 0
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _provider: Rpc_SCMProvider? = nil
+    fileprivate var _shippingCountry: Rpc_SCMCountryInfo? = nil
+  }
+
+  struct Card: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var card: Rpc_SCMCard {
+      get {return _card ?? Rpc_SCMCard()}
+      set {_card = newValue}
+    }
+    /// Returns true if `card` has been explicitly set.
+    var hasCard: Bool {return self._card != nil}
+    /// Clears the value of `card`. Subsequent reads from it will return its default value.
+    mutating func clearCard() {self._card = nil}
+
+    var widthMm: Float = 0
+
+    var heightMm: Float = 0
+
+    var material: Rpc_SCMCardMaterial = .scmMaterialPlastic
+
+    var thicknessMm: Float = 0
+
+    var weightGrams: Float = 0
+
+    var secureElement: Rpc_SCMSecureElement = .scmEal5
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _card: Rpc_SCMCard? = nil
+  }
+
+  init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 struct Rpc_EKInputRequest: Sendable {
@@ -931,6 +1492,52 @@ struct Rpc_GenerateEmergencyKitPDFResponse: Sendable {
 
   var version: Int32 = 0
 
+  /// Per-render profiling, so prod telemetry can validate the offline profiling.
+  var profiling: Rpc_RenderProfiling {
+    get {return _profiling ?? Rpc_RenderProfiling()}
+    set {_profiling = newValue}
+  }
+  /// Returns true if `profiling` has been explicitly set.
+  var hasProfiling: Bool {return self._profiling != nil}
+  /// Clears the value of `profiling`. Subsequent reads from it will return its default value.
+  mutating func clearProfiling() {self._profiling = nil}
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+
+  fileprivate var _profiling: Rpc_RenderProfiling? = nil
+}
+
+/// RenderProfiling carries per-stage durations (milliseconds) and total allocation stats for a
+/// single PDF render. Alloc stats are a process-wide delta and thus an approximation.
+struct Rpc_RenderProfiling: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var loadTranslationsMs: Int64 = 0
+
+  var registerFontsMs: Int64 = 0
+
+  var registerImagesMs: Int64 = 0
+
+  var componentsRenderingMs: Int64 = 0
+
+  var createAndSaveOnDiskMs: Int64 = 0
+
+  var totalHeapAllocatedBytes: Int64 = 0
+
+  var totalObjectsAllocated: Int64 = 0
+
+  var embedMetadataMs: Int64 = 0
+
+  var totalInsideGoMs: Int64 = 0
+
+  var kitSizeBytes: Int64 = 0
+
+  var drawIconsMs: Int64 = 0
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -962,6 +1569,42 @@ struct Rpc_SecureKeyValueStoragePutRequest: @unchecked Sendable {
   init() {}
 }
 
+struct Rpc_SecureKeyValueStorageGetRequest: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var key: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Rpc_SecureKeyValueStorageGetResponse: @unchecked Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var value: Data = Data()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Rpc_SecureKeyValueStorageDeleteRequest: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var key: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "rpc"
@@ -977,6 +1620,22 @@ extension Rpc_ErrorType: SwiftProtobuf._ProtoNameProviding {
 extension Rpc_NullValue: SwiftProtobuf._ProtoNameProviding {
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "NULL_VALUE"),
+  ]
+}
+
+extension Rpc_SCMCardMaterial: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "SCM_MATERIAL_PLASTIC"),
+    1: .same(proto: "SCM_MATERIAL_METAL"),
+  ]
+}
+
+extension Rpc_SCMSecureElement: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "SCM_EAL_5"),
+    1: .same(proto: "SCM_EAL_5_PLUS"),
+    2: .same(proto: "SCM_EAL_6"),
+    3: .same(proto: "SCM_EAL_6_PLUS"),
   ]
 }
 
@@ -2212,8 +2871,27 @@ extension Rpc_GetByPrefixRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension Rpc_SecurityCardsProviderTheme: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SecurityCardsProviderTheme"
+extension Rpc_SCMDeprecated: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMDeprecated"
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    // Load everything into unknown fields
+    while try decoder.nextFieldNumber() != nil {}
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMDeprecated, rhs: Rpc_SCMDeprecated) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMDeprecated.SecurityCardsProviderTheme: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".SecurityCardsProviderTheme"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "primary_color"),
     2: .standard(proto: "surface_color"),
@@ -2242,7 +2920,7 @@ extension Rpc_SecurityCardsProviderTheme: SwiftProtobuf.Message, SwiftProtobuf._
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_SecurityCardsProviderTheme, rhs: Rpc_SecurityCardsProviderTheme) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.SecurityCardsProviderTheme, rhs: Rpc_SCMDeprecated.SecurityCardsProviderTheme) -> Bool {
     if lhs.primaryColor != rhs.primaryColor {return false}
     if lhs.surfaceColor != rhs.surfaceColor {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -2250,8 +2928,8 @@ extension Rpc_SecurityCardsProviderTheme: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rpc_PriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PriceInfo"
+extension Rpc_SCMDeprecated.PriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".PriceInfo"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "currency_code"),
     2: .same(proto: "amount"),
@@ -2280,7 +2958,7 @@ extension Rpc_PriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_PriceInfo, rhs: Rpc_PriceInfo) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.PriceInfo, rhs: Rpc_SCMDeprecated.PriceInfo) -> Bool {
     if lhs.currencyCode != rhs.currencyCode {return false}
     if lhs.amount != rhs.amount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -2288,8 +2966,8 @@ extension Rpc_PriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   }
 }
 
-extension Rpc_CountryInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".CountryInfo"
+extension Rpc_SCMDeprecated.CountryInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".CountryInfo"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "code"),
     2: .same(proto: "name"),
@@ -2323,7 +3001,7 @@ extension Rpc_CountryInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_CountryInfo, rhs: Rpc_CountryInfo) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.CountryInfo, rhs: Rpc_SCMDeprecated.CountryInfo) -> Bool {
     if lhs.code != rhs.code {return false}
     if lhs.name != rhs.name {return false}
     if lhs.flag != rhs.flag {return false}
@@ -2332,8 +3010,8 @@ extension Rpc_CountryInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   }
 }
 
-extension Rpc_ShippingPriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ShippingPriceInfo"
+extension Rpc_SCMDeprecated.ShippingPriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".ShippingPriceInfo"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "price"),
     2: .same(proto: "countries"),
@@ -2366,7 +3044,7 @@ extension Rpc_ShippingPriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_ShippingPriceInfo, rhs: Rpc_ShippingPriceInfo) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.ShippingPriceInfo, rhs: Rpc_SCMDeprecated.ShippingPriceInfo) -> Bool {
     if lhs._price != rhs._price {return false}
     if lhs.countries != rhs.countries {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -2374,8 +3052,8 @@ extension Rpc_ShippingPriceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rpc_SecurityCardsProvider: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SecurityCardsProvider"
+extension Rpc_SCMDeprecated.SecurityCardsProvider: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".SecurityCardsProvider"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .same(proto: "name"),
@@ -2438,7 +3116,7 @@ extension Rpc_SecurityCardsProvider: SwiftProtobuf.Message, SwiftProtobuf._Messa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_SecurityCardsProvider, rhs: Rpc_SecurityCardsProvider) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.SecurityCardsProvider, rhs: Rpc_SCMDeprecated.SecurityCardsProvider) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs.name != rhs.name {return false}
     if lhs.description_p != rhs.description_p {return false}
@@ -2452,8 +3130,8 @@ extension Rpc_SecurityCardsProvider: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rpc_SecurityCard: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SecurityCard"
+extension Rpc_SCMDeprecated.SecurityCard: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".SecurityCard"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .standard(proto: "asset_url"),
@@ -2501,7 +3179,7 @@ extension Rpc_SecurityCard: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_SecurityCard, rhs: Rpc_SecurityCard) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.SecurityCard, rhs: Rpc_SCMDeprecated.SecurityCard) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs.assetURL != rhs.assetURL {return false}
     if lhs.tag != rhs.tag {return false}
@@ -2512,8 +3190,8 @@ extension Rpc_SecurityCard: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rpc_SpecsItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SpecsItem"
+extension Rpc_SCMDeprecated.SpecsItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".SpecsItem"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "icon_url"),
     2: .same(proto: "label"),
@@ -2552,7 +3230,7 @@ extension Rpc_SpecsItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_SpecsItem, rhs: Rpc_SpecsItem) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.SpecsItem, rhs: Rpc_SCMDeprecated.SpecsItem) -> Bool {
     if lhs.iconURL != rhs.iconURL {return false}
     if lhs.label != rhs.label {return false}
     if lhs.value != rhs.value {return false}
@@ -2562,8 +3240,8 @@ extension Rpc_SpecsItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   }
 }
 
-extension Rpc_SpecsItemList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SpecsItemList"
+extension Rpc_SCMDeprecated.SpecsItemList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".SpecsItemList"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "items"),
   ]
@@ -2587,15 +3265,15 @@ extension Rpc_SpecsItemList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_SpecsItemList, rhs: Rpc_SpecsItemList) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.SpecsItemList, rhs: Rpc_SCMDeprecated.SpecsItemList) -> Bool {
     if lhs.items != rhs.items {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Rpc_SecurityCardSpec: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SecurityCardSpec"
+extension Rpc_SCMDeprecated.SecurityCardSpec: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".SecurityCardSpec"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "spec_id"),
     2: .same(proto: "items"),
@@ -2608,7 +3286,7 @@ extension Rpc_SecurityCardSpec: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.specID) }()
-      case 2: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Rpc_SpecsItemList>.self, value: &self.items) }()
+      case 2: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Rpc_SCMDeprecated.SpecsItemList>.self, value: &self.items) }()
       default: break
       }
     }
@@ -2619,12 +3297,12 @@ extension Rpc_SecurityCardSpec: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       try visitor.visitSingularStringField(value: self.specID, fieldNumber: 1)
     }
     if !self.items.isEmpty {
-      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Rpc_SpecsItemList>.self, value: self.items, fieldNumber: 2)
+      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Rpc_SCMDeprecated.SpecsItemList>.self, value: self.items, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_SecurityCardSpec, rhs: Rpc_SecurityCardSpec) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.SecurityCardSpec, rhs: Rpc_SCMDeprecated.SecurityCardSpec) -> Bool {
     if lhs.specID != rhs.specID {return false}
     if lhs.items != rhs.items {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -2632,8 +3310,8 @@ extension Rpc_SecurityCardSpec: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rpc_GetSecurityCardsMarketplaceResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GetSecurityCardsMarketplaceResponse"
+extension Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMDeprecated.protoMessageName + ".GetSecurityCardsMarketplaceResponse"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "providers"),
     2: .same(proto: "specs"),
@@ -2662,9 +3340,957 @@ extension Rpc_GetSecurityCardsMarketplaceResponse: SwiftProtobuf.Message, SwiftP
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Rpc_GetSecurityCardsMarketplaceResponse, rhs: Rpc_GetSecurityCardsMarketplaceResponse) -> Bool {
+  static func ==(lhs: Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse, rhs: Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse) -> Bool {
     if lhs.providers != rhs.providers {return false}
     if lhs.specs != rhs.specs {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCountryInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMCountryInfo"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "code"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.code) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.code.isEmpty {
+      try visitor.visitSingularStringField(value: self.code, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCountryInfo, rhs: Rpc_SCMCountryInfo) -> Bool {
+    if lhs.code != rhs.code {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMMonetaryAmount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMMonetaryAmount"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "currency_code"),
+    2: .same(proto: "amount"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.currencyCode) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.amount) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.currencyCode.isEmpty {
+      try visitor.visitSingularStringField(value: self.currencyCode, fieldNumber: 1)
+    }
+    if !self.amount.isEmpty {
+      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMMonetaryAmount, rhs: Rpc_SCMMonetaryAmount) -> Bool {
+    if lhs.currencyCode != rhs.currencyCode {return false}
+    if lhs.amount != rhs.amount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMBitcoinAmount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMBitcoinAmount"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "in_sat"),
+    2: .standard(proto: "in_input_currency"),
+    3: .standard(proto: "in_primary_currency"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.inSat) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._inInputCurrency) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._inPrimaryCurrency) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.inSat != 0 {
+      try visitor.visitSingularInt64Field(value: self.inSat, fieldNumber: 1)
+    }
+    try { if let v = self._inInputCurrency {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._inPrimaryCurrency {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMBitcoinAmount, rhs: Rpc_SCMBitcoinAmount) -> Bool {
+    if lhs.inSat != rhs.inSat {return false}
+    if lhs._inInputCurrency != rhs._inInputCurrency {return false}
+    if lhs._inPrimaryCurrency != rhs._inPrimaryCurrency {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMProviderTheme: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMProviderTheme"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "primary_color_hex"),
+    2: .standard(proto: "surface_color_hex"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularFixed32Field(value: &self.primaryColorHex) }()
+      case 2: try { try decoder.decodeSingularFixed32Field(value: &self.surfaceColorHex) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.primaryColorHex != 0 {
+      try visitor.visitSingularFixed32Field(value: self.primaryColorHex, fieldNumber: 1)
+    }
+    if self.surfaceColorHex != 0 {
+      try visitor.visitSingularFixed32Field(value: self.surfaceColorHex, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMProviderTheme, rhs: Rpc_SCMProviderTheme) -> Bool {
+    if lhs.primaryColorHex != rhs.primaryColorHex {return false}
+    if lhs.surfaceColorHex != rhs.surfaceColorHex {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMProvider: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMProvider"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "uuid"),
+    2: .same(proto: "name"),
+    3: .standard(proto: "site_url"),
+    4: .standard(proto: "light_theme"),
+    5: .standard(proto: "dark_theme"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.uuid) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.siteURL) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._lightTheme) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._darkTheme) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.uuid.isEmpty {
+      try visitor.visitSingularStringField(value: self.uuid, fieldNumber: 1)
+    }
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 2)
+    }
+    if !self.siteURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.siteURL, fieldNumber: 3)
+    }
+    try { if let v = self._lightTheme {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._darkTheme {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMProvider, rhs: Rpc_SCMProvider) -> Bool {
+    if lhs.uuid != rhs.uuid {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.siteURL != rhs.siteURL {return false}
+    if lhs._lightTheme != rhs._lightTheme {return false}
+    if lhs._darkTheme != rhs._darkTheme {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCard: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMCard"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "uuid"),
+    2: .same(proto: "sku"),
+    3: .standard(proto: "image_url"),
+    4: .standard(proto: "has_stock"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.uuid) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.sku) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.imageURL) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self.hasStock_p) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.uuid.isEmpty {
+      try visitor.visitSingularStringField(value: self.uuid, fieldNumber: 1)
+    }
+    if !self.sku.isEmpty {
+      try visitor.visitSingularStringField(value: self.sku, fieldNumber: 2)
+    }
+    if !self.imageURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.imageURL, fieldNumber: 3)
+    }
+    if self.hasStock_p != false {
+      try visitor.visitSingularBoolField(value: self.hasStock_p, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCard, rhs: Rpc_SCMCard) -> Bool {
+    if lhs.uuid != rhs.uuid {return false}
+    if lhs.sku != rhs.sku {return false}
+    if lhs.imageURL != rhs.imageURL {return false}
+    if lhs.hasStock_p != rhs.hasStock_p {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCountriesResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMCountriesResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "countries"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.countries) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.countries.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.countries, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCountriesResponse, rhs: Rpc_SCMCountriesResponse) -> Bool {
+    if lhs.countries != rhs.countries {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMMarketplaceRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMMarketplaceRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "country"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._country) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._country {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMMarketplaceRequest, rhs: Rpc_SCMMarketplaceRequest) -> Bool {
+    if lhs._country != rhs._country {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMMarketplaceResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMMarketplaceResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "providers"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.providers) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.providers.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.providers, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMMarketplaceResponse, rhs: Rpc_SCMMarketplaceResponse) -> Bool {
+    if lhs.providers != rhs.providers {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMMarketplaceResponse.ProviderListing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMMarketplaceResponse.protoMessageName + ".ProviderListing"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "provider"),
+    2: .same(proto: "cards"),
+    3: .standard(proto: "estimated_shipping_price"),
+    4: .standard(proto: "card_price"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _provider: Rpc_SCMProvider? = nil
+    var _cards: [Rpc_SCMCard] = []
+    var _estimatedShippingPrice: Rpc_SCMBitcoinAmount? = nil
+    var _cardPrice: Rpc_SCMBitcoinAmount? = nil
+
+      // This property is used as the initial default value for new instances of the type.
+      // The type itself is protecting the reference to its storage via CoW semantics.
+      // This will force a copy to be made of this reference when the first mutation occurs;
+      // hence, it is safe to mark this as `nonisolated(unsafe)`.
+      static nonisolated(unsafe) let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _provider = source._provider
+      _cards = source._cards
+      _estimatedShippingPrice = source._estimatedShippingPrice
+      _cardPrice = source._cardPrice
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._provider) }()
+        case 2: try { try decoder.decodeRepeatedMessageField(value: &_storage._cards) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._estimatedShippingPrice) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._cardPrice) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._provider {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      if !_storage._cards.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._cards, fieldNumber: 2)
+      }
+      try { if let v = _storage._estimatedShippingPrice {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._cardPrice {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMMarketplaceResponse.ProviderListing, rhs: Rpc_SCMMarketplaceResponse.ProviderListing) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._provider != rhs_storage._provider {return false}
+        if _storage._cards != rhs_storage._cards {return false}
+        if _storage._estimatedShippingPrice != rhs_storage._estimatedShippingPrice {return false}
+        if _storage._cardPrice != rhs_storage._cardPrice {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCardDetailRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMCardDetailRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "country"),
+    2: .standard(proto: "security_card_uuid"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._country) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.securityCardUuid) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._country {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.securityCardUuid.isEmpty {
+      try visitor.visitSingularStringField(value: self.securityCardUuid, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCardDetailRequest, rhs: Rpc_SCMCardDetailRequest) -> Bool {
+    if lhs._country != rhs._country {return false}
+    if lhs.securityCardUuid != rhs.securityCardUuid {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCardDetailResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMCardDetailResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "provider"),
+    2: .same(proto: "card"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._provider) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._card) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._provider {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._card {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCardDetailResponse, rhs: Rpc_SCMCardDetailResponse) -> Bool {
+    if lhs._provider != rhs._provider {return false}
+    if lhs._card != rhs._card {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCardDetailResponse.Provider: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMCardDetailResponse.protoMessageName + ".Provider"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "provider"),
+    2: .standard(proto: "shipping_country"),
+    3: .standard(proto: "min_shipping_time_days"),
+    4: .standard(proto: "max_shipping_time_days"),
+    5: .standard(proto: "estimated_shipping_price"),
+    6: .standard(proto: "card_price"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _provider: Rpc_SCMProvider? = nil
+    var _shippingCountry: Rpc_SCMCountryInfo? = nil
+    var _minShippingTimeDays: Int32 = 0
+    var _maxShippingTimeDays: Int32 = 0
+    var _estimatedShippingPrice: Rpc_SCMBitcoinAmount? = nil
+    var _cardPrice: Rpc_SCMBitcoinAmount? = nil
+
+      // This property is used as the initial default value for new instances of the type.
+      // The type itself is protecting the reference to its storage via CoW semantics.
+      // This will force a copy to be made of this reference when the first mutation occurs;
+      // hence, it is safe to mark this as `nonisolated(unsafe)`.
+      static nonisolated(unsafe) let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _provider = source._provider
+      _shippingCountry = source._shippingCountry
+      _minShippingTimeDays = source._minShippingTimeDays
+      _maxShippingTimeDays = source._maxShippingTimeDays
+      _estimatedShippingPrice = source._estimatedShippingPrice
+      _cardPrice = source._cardPrice
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._provider) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._shippingCountry) }()
+        case 3: try { try decoder.decodeSingularInt32Field(value: &_storage._minShippingTimeDays) }()
+        case 4: try { try decoder.decodeSingularInt32Field(value: &_storage._maxShippingTimeDays) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._estimatedShippingPrice) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._cardPrice) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._provider {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._shippingCountry {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+      if _storage._minShippingTimeDays != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._minShippingTimeDays, fieldNumber: 3)
+      }
+      if _storage._maxShippingTimeDays != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._maxShippingTimeDays, fieldNumber: 4)
+      }
+      try { if let v = _storage._estimatedShippingPrice {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._cardPrice {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCardDetailResponse.Provider, rhs: Rpc_SCMCardDetailResponse.Provider) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._provider != rhs_storage._provider {return false}
+        if _storage._shippingCountry != rhs_storage._shippingCountry {return false}
+        if _storage._minShippingTimeDays != rhs_storage._minShippingTimeDays {return false}
+        if _storage._maxShippingTimeDays != rhs_storage._maxShippingTimeDays {return false}
+        if _storage._estimatedShippingPrice != rhs_storage._estimatedShippingPrice {return false}
+        if _storage._cardPrice != rhs_storage._cardPrice {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMCardDetailResponse.Card: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMCardDetailResponse.protoMessageName + ".Card"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "card"),
+    2: .same(proto: "material"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._card) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.material) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._card {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.material != .scmMaterialPlastic {
+      try visitor.visitSingularEnumField(value: self.material, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMCardDetailResponse.Card, rhs: Rpc_SCMCardDetailResponse.Card) -> Bool {
+    if lhs._card != rhs._card {return false}
+    if lhs.material != rhs.material {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMFullSpecsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMFullSpecsRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "country"),
+    2: .standard(proto: "security_card_uuid"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._country) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.securityCardUuid) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._country {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.securityCardUuid.isEmpty {
+      try visitor.visitSingularStringField(value: self.securityCardUuid, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMFullSpecsRequest, rhs: Rpc_SCMFullSpecsRequest) -> Bool {
+    if lhs._country != rhs._country {return false}
+    if lhs.securityCardUuid != rhs.securityCardUuid {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMFullSpecsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SCMFullSpecsResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "provider"),
+    2: .same(proto: "card"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _provider: Rpc_SCMFullSpecsResponse.Provider? = nil
+    var _card: Rpc_SCMFullSpecsResponse.Card? = nil
+
+      // This property is used as the initial default value for new instances of the type.
+      // The type itself is protecting the reference to its storage via CoW semantics.
+      // This will force a copy to be made of this reference when the first mutation occurs;
+      // hence, it is safe to mark this as `nonisolated(unsafe)`.
+      static nonisolated(unsafe) let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _provider = source._provider
+      _card = source._card
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._provider) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._card) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._provider {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._card {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMFullSpecsResponse, rhs: Rpc_SCMFullSpecsResponse) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._provider != rhs_storage._provider {return false}
+        if _storage._card != rhs_storage._card {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMFullSpecsResponse.Provider: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMFullSpecsResponse.protoMessageName + ".Provider"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "provider"),
+    2: .standard(proto: "shipping_country"),
+    3: .standard(proto: "min_shipping_time_days"),
+    4: .standard(proto: "max_shipping_time_days"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._provider) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._shippingCountry) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self.minShippingTimeDays) }()
+      case 4: try { try decoder.decodeSingularInt32Field(value: &self.maxShippingTimeDays) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._provider {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._shippingCountry {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if self.minShippingTimeDays != 0 {
+      try visitor.visitSingularInt32Field(value: self.minShippingTimeDays, fieldNumber: 3)
+    }
+    if self.maxShippingTimeDays != 0 {
+      try visitor.visitSingularInt32Field(value: self.maxShippingTimeDays, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMFullSpecsResponse.Provider, rhs: Rpc_SCMFullSpecsResponse.Provider) -> Bool {
+    if lhs._provider != rhs._provider {return false}
+    if lhs._shippingCountry != rhs._shippingCountry {return false}
+    if lhs.minShippingTimeDays != rhs.minShippingTimeDays {return false}
+    if lhs.maxShippingTimeDays != rhs.maxShippingTimeDays {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SCMFullSpecsResponse.Card: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Rpc_SCMFullSpecsResponse.protoMessageName + ".Card"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "card"),
+    2: .standard(proto: "width_mm"),
+    3: .standard(proto: "height_mm"),
+    4: .same(proto: "material"),
+    5: .standard(proto: "thickness_mm"),
+    6: .standard(proto: "weight_grams"),
+    7: .standard(proto: "secure_element"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._card) }()
+      case 2: try { try decoder.decodeSingularFloatField(value: &self.widthMm) }()
+      case 3: try { try decoder.decodeSingularFloatField(value: &self.heightMm) }()
+      case 4: try { try decoder.decodeSingularEnumField(value: &self.material) }()
+      case 5: try { try decoder.decodeSingularFloatField(value: &self.thicknessMm) }()
+      case 6: try { try decoder.decodeSingularFloatField(value: &self.weightGrams) }()
+      case 7: try { try decoder.decodeSingularEnumField(value: &self.secureElement) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._card {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.widthMm.bitPattern != 0 {
+      try visitor.visitSingularFloatField(value: self.widthMm, fieldNumber: 2)
+    }
+    if self.heightMm.bitPattern != 0 {
+      try visitor.visitSingularFloatField(value: self.heightMm, fieldNumber: 3)
+    }
+    if self.material != .scmMaterialPlastic {
+      try visitor.visitSingularEnumField(value: self.material, fieldNumber: 4)
+    }
+    if self.thicknessMm.bitPattern != 0 {
+      try visitor.visitSingularFloatField(value: self.thicknessMm, fieldNumber: 5)
+    }
+    if self.weightGrams.bitPattern != 0 {
+      try visitor.visitSingularFloatField(value: self.weightGrams, fieldNumber: 6)
+    }
+    if self.secureElement != .scmEal5 {
+      try visitor.visitSingularEnumField(value: self.secureElement, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SCMFullSpecsResponse.Card, rhs: Rpc_SCMFullSpecsResponse.Card) -> Bool {
+    if lhs._card != rhs._card {return false}
+    if lhs.widthMm != rhs.widthMm {return false}
+    if lhs.heightMm != rhs.heightMm {return false}
+    if lhs.material != rhs.material {return false}
+    if lhs.thicknessMm != rhs.thicknessMm {return false}
+    if lhs.weightGrams != rhs.weightGrams {return false}
+    if lhs.secureElement != rhs.secureElement {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -2779,6 +4405,7 @@ extension Rpc_GenerateEmergencyKitPDFResponse: SwiftProtobuf.Message, SwiftProto
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "verification_code"),
     2: .same(proto: "version"),
+    3: .same(proto: "profiling"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -2789,24 +4416,125 @@ extension Rpc_GenerateEmergencyKitPDFResponse: SwiftProtobuf.Message, SwiftProto
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.verificationCode) }()
       case 2: try { try decoder.decodeSingularInt32Field(value: &self.version) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._profiling) }()
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.verificationCode.isEmpty {
       try visitor.visitSingularStringField(value: self.verificationCode, fieldNumber: 1)
     }
     if self.version != 0 {
       try visitor.visitSingularInt32Field(value: self.version, fieldNumber: 2)
     }
+    try { if let v = self._profiling {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Rpc_GenerateEmergencyKitPDFResponse, rhs: Rpc_GenerateEmergencyKitPDFResponse) -> Bool {
     if lhs.verificationCode != rhs.verificationCode {return false}
     if lhs.version != rhs.version {return false}
+    if lhs._profiling != rhs._profiling {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_RenderProfiling: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".RenderProfiling"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "load_translations_ms"),
+    2: .standard(proto: "register_fonts_ms"),
+    3: .standard(proto: "register_images_ms"),
+    4: .standard(proto: "components_rendering_ms"),
+    5: .standard(proto: "create_and_save_on_disk_ms"),
+    6: .standard(proto: "total_heap_allocated_bytes"),
+    7: .standard(proto: "total_objects_allocated"),
+    8: .standard(proto: "embed_metadata_ms"),
+    9: .standard(proto: "total_inside_go_ms"),
+    10: .standard(proto: "kit_size_bytes"),
+    11: .standard(proto: "draw_icons_ms"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.loadTranslationsMs) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.registerFontsMs) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.registerImagesMs) }()
+      case 4: try { try decoder.decodeSingularInt64Field(value: &self.componentsRenderingMs) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.createAndSaveOnDiskMs) }()
+      case 6: try { try decoder.decodeSingularInt64Field(value: &self.totalHeapAllocatedBytes) }()
+      case 7: try { try decoder.decodeSingularInt64Field(value: &self.totalObjectsAllocated) }()
+      case 8: try { try decoder.decodeSingularInt64Field(value: &self.embedMetadataMs) }()
+      case 9: try { try decoder.decodeSingularInt64Field(value: &self.totalInsideGoMs) }()
+      case 10: try { try decoder.decodeSingularInt64Field(value: &self.kitSizeBytes) }()
+      case 11: try { try decoder.decodeSingularInt64Field(value: &self.drawIconsMs) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.loadTranslationsMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.loadTranslationsMs, fieldNumber: 1)
+    }
+    if self.registerFontsMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.registerFontsMs, fieldNumber: 2)
+    }
+    if self.registerImagesMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.registerImagesMs, fieldNumber: 3)
+    }
+    if self.componentsRenderingMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.componentsRenderingMs, fieldNumber: 4)
+    }
+    if self.createAndSaveOnDiskMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.createAndSaveOnDiskMs, fieldNumber: 5)
+    }
+    if self.totalHeapAllocatedBytes != 0 {
+      try visitor.visitSingularInt64Field(value: self.totalHeapAllocatedBytes, fieldNumber: 6)
+    }
+    if self.totalObjectsAllocated != 0 {
+      try visitor.visitSingularInt64Field(value: self.totalObjectsAllocated, fieldNumber: 7)
+    }
+    if self.embedMetadataMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.embedMetadataMs, fieldNumber: 8)
+    }
+    if self.totalInsideGoMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.totalInsideGoMs, fieldNumber: 9)
+    }
+    if self.kitSizeBytes != 0 {
+      try visitor.visitSingularInt64Field(value: self.kitSizeBytes, fieldNumber: 10)
+    }
+    if self.drawIconsMs != 0 {
+      try visitor.visitSingularInt64Field(value: self.drawIconsMs, fieldNumber: 11)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_RenderProfiling, rhs: Rpc_RenderProfiling) -> Bool {
+    if lhs.loadTranslationsMs != rhs.loadTranslationsMs {return false}
+    if lhs.registerFontsMs != rhs.registerFontsMs {return false}
+    if lhs.registerImagesMs != rhs.registerImagesMs {return false}
+    if lhs.componentsRenderingMs != rhs.componentsRenderingMs {return false}
+    if lhs.createAndSaveOnDiskMs != rhs.createAndSaveOnDiskMs {return false}
+    if lhs.totalHeapAllocatedBytes != rhs.totalHeapAllocatedBytes {return false}
+    if lhs.totalObjectsAllocated != rhs.totalObjectsAllocated {return false}
+    if lhs.embedMetadataMs != rhs.embedMetadataMs {return false}
+    if lhs.totalInsideGoMs != rhs.totalInsideGoMs {return false}
+    if lhs.kitSizeBytes != rhs.kitSizeBytes {return false}
+    if lhs.drawIconsMs != rhs.drawIconsMs {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -2877,6 +4605,102 @@ extension Rpc_SecureKeyValueStoragePutRequest: SwiftProtobuf.Message, SwiftProto
   static func ==(lhs: Rpc_SecureKeyValueStoragePutRequest, rhs: Rpc_SecureKeyValueStoragePutRequest) -> Bool {
     if lhs.key != rhs.key {return false}
     if lhs.value != rhs.value {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SecureKeyValueStorageGetRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SecureKeyValueStorageGetRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "key"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.key) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.key.isEmpty {
+      try visitor.visitSingularStringField(value: self.key, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SecureKeyValueStorageGetRequest, rhs: Rpc_SecureKeyValueStorageGetRequest) -> Bool {
+    if lhs.key != rhs.key {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SecureKeyValueStorageGetResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SecureKeyValueStorageGetResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "value"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBytesField(value: &self.value) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.value.isEmpty {
+      try visitor.visitSingularBytesField(value: self.value, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SecureKeyValueStorageGetResponse, rhs: Rpc_SecureKeyValueStorageGetResponse) -> Bool {
+    if lhs.value != rhs.value {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Rpc_SecureKeyValueStorageDeleteRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".SecureKeyValueStorageDeleteRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "key"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.key) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.key.isEmpty {
+      try visitor.visitSingularStringField(value: self.key, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Rpc_SecureKeyValueStorageDeleteRequest, rhs: Rpc_SecureKeyValueStorageDeleteRequest) -> Bool {
+    if lhs.key != rhs.key {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

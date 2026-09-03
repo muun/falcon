@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -63,7 +64,7 @@ func GenerateHTML(params *Input, lang string) (*Output, error) {
 
 	// Render complete HTML page:
 	page, err := render("EmergencyKitPage", lang, &pageData{
-		Css:     css,
+		CSS:     css,
 		Content: content,
 	})
 	if err != nil {
@@ -80,8 +81,8 @@ func GenerateDeterministicCode(params *Input) string {
 	// NOTE:
 	// This function creates a stable verification code given the inputs to render the
 	// Emergency Kit. For now, the implementation relies exclusively on the SecondEncryptedKey,
-	// which is the Muun key. This is obviously not ideal, since we're both dropping part of the
-	// input and introducing the assumption that the Muun key will always be rendered second --
+	// which is the cosigner key. This is obviously not ideal, since we're both dropping part of the
+	// input and introducing the assumption that the cosigner key will always be rendered second --
 	// but it compensates for a problem with one of our clients that causes the user key
 	// serialization to be recreated each time the kit is rendered (making this deterministic
 	// approach useless).
@@ -93,17 +94,17 @@ func GenerateDeterministicCode(params *Input) string {
 	inputHash := sha256.Sum256([]byte(inputMaterial))
 
 	// Extract a verification code from the hash (doesn't matter if we discard bytes):
-	var code string
+	var code strings.Builder
 	for _, b := range inputHash[:6] {
-		code += strconv.Itoa(int(b) % 10) //nolint:modernize // TODO: use strings.Builder
+		code.WriteString(strconv.Itoa(int(b) % 10))
 	}
 
-	return code
+	return code.String()
 }
 
 func render(
 	name, language string,
-	data interface{}, //nolint:modernize // TODO: use any instead of interface{}
+	data any,
 ) (string, error) {
 	tmpl, err := template.New(name).Parse(getContent(name, language))
 	if err != nil {

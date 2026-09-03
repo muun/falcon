@@ -12,7 +12,7 @@ import (
 
 // Implementation to interact with our reference security card firmware v2.
 
-const MuuncardV2AppletId = "A00000015100133900" //nolint:staticcheck // TODO: const MuuncardV2AppletId should be MuuncardV2AppletID
+const MuuncardV2AppletID = "A00000015100133900"
 
 // Muuncard V2 specific APDU bytes.
 const insMuuncardV2Setup = 0x10
@@ -32,10 +32,8 @@ const swMuuncardV2InvalidCounter = 0x6B18
 const swMuuncardV2SlotNotPaired = 0x6B19
 
 const (
-	Secp256R1PointSize = 65
-	PairingSlotSize    = 2
-	MetadataSize       = 75
-	MacSize            = 32
+	PairingSlotSize = 2
+	MetadataSize    = 75
 	// C + pub_client = 130 bytes
 	TotalPairInputSize = Secp256R1PointSize * 2
 	// 174 bytes
@@ -43,9 +41,6 @@ const (
 		PairingSlotSize +
 		MetadataSize +
 		MacSize
-	// 97 bytes
-	SignChallengeResponseSize = Secp256R1PointSize + MacSize
-	MaxApduSize               = 255
 )
 
 type MuunCardV2 struct {
@@ -119,7 +114,7 @@ func (c *MuunCardV2) GetVersion() (*AppletVersion, error) {
 		[]byte{},
 	)
 
-	response, err := c.rawCard.transmit(apdu.serialize())
+	response, err := c.rawCard.transmit(apdu.serializeShort())
 	if err != nil {
 		return nil, errors.Errorf(
 			"failed to transmit insMuuncardV2GetVersion: %w",
@@ -156,7 +151,7 @@ func (c *MuunCardV2) GetMetadata() (*CardMetadata, error) {
 		[]byte{},
 	)
 
-	response, err := c.rawCard.transmit(apdu.serialize())
+	response, err := c.rawCard.transmit(apdu.serializeShort())
 	if err != nil {
 		return nil, errors.Errorf(
 			"failed to transmit insMuuncardV2GetMetadata: %w",
@@ -202,7 +197,7 @@ func (c *MuunCardV2) Pair(serverRandomPublicKey, clientPublicKey []byte) (*Pairi
 		input,
 	)
 
-	response, err := c.transmit(apdu.serialize())
+	response, err := c.transmit(apdu.serializeShort())
 	if err != nil {
 		return nil, errors.Errorf("failed to transmit insMuuncardV2Setup: %w", err)
 	}
@@ -218,7 +213,7 @@ func (c *MuunCardV2) SignChallenge(
 	// Calculate maximum reason size for single chunk
 	// Format: C(65) + count(2) + index(2) + has_more_chunks(1) + reason + mac(32) = 102 + reason
 	// Max APDU = 255, so max single reason = 255 - 102 = 153 bytes
-	maxSingleReasonSize := MaxApduSize - 65 - 2 - 2 - 1 - 32 // 153 bytes
+	maxSingleReasonSize := MaxShortApduDataSize - 65 - 2 - 2 - 1 - 32 // 153 bytes
 
 	if len(reason) <= maxSingleReasonSize {
 		return c.signChallengeSingle(challenge, reason)
@@ -242,7 +237,7 @@ func (c *MuunCardV2) signChallengeSingle(
 	)
 	apdu := buildSignChallengeAPDU(data)
 
-	response, err := c.transmit(apdu.serialize())
+	response, err := c.transmit(apdu.serializeShort())
 	if err != nil {
 		return nil, errors.Errorf("failed to transmit Sign Challenge: %w", err)
 	}
@@ -252,9 +247,9 @@ func (c *MuunCardV2) signChallengeSingle(
 
 func (c *MuunCardV2) transmit(apdu []byte) (*CardResponse, error) {
 
-	err := c.rawCard.selectApplet(MuuncardV2AppletId)
+	err := c.rawCard.selectApplet(MuuncardV2AppletID)
 	if err != nil {
-		return nil, newCardError(ErrAppletIdNotFound, "error selecting muuncard applet")
+		return nil, newCardError(ErrAppletIDNotFound, "error selecting muuncard applet")
 	}
 
 	resp, err := c.rawCard.transmit(apdu)

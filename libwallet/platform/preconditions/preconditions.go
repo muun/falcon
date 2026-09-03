@@ -127,6 +127,10 @@ func CheckPositivef[T number](n T, format string, args ...any) T {
 	return n
 }
 
+func Failf(format string, args ...any) {
+	fail(format, args...)
+}
+
 func fail(format string, args ...any) {
 	panic(PreconditionError{errors.Errorf(format, args...)})
 }

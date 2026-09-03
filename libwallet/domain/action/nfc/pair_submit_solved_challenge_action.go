@@ -33,7 +33,7 @@ func (ac *PairSubmitSolvedChallengeAction) Run(
 ) (*security_card.SecurityCardPaired, error) {
 	defer ac.protocolRepository.ClearPendingPairChallenge()
 
-	registerJSON, err := service.MapRegisterSecurityCardJson(
+	registerJSON, err := service.MapRegisterSecurityCardJSON(
 		signed.PairingResponse,
 		signed.ClientPublicKey,
 	)

@@ -54,6 +54,26 @@ final class ShippingFormView: UIView {
     private let stateField = SecurityCardTextField(label: L10n.ShippingFormView.state)
     private let zipCodeField = SecurityCardTextField(label: L10n.ShippingFormView.zipCode)
 
+    /// Single source of the editable fields, in form order. Add new fields here so error
+    /// display, delegate wiring and keyboard navigation pick them up automatically. The
+    /// country row is excluded: it's a picker that opens a modal instead of the keyboard.
+    private lazy var editableFields: [(key: ShippingFormField, field: SecurityCardTextField)] = [
+        (.fullName, fullNameField),
+        (.email, emailField),
+        (.shippingAddress, shippingAddressField),
+        (.city, cityField),
+        (.state, stateField),
+        (.zipCode, zipCodeField)
+    ]
+
+    private var orderedEditableFields: [SecurityCardTextField] {
+        editableFields.map(\.field)
+    }
+
+    private var allFields: [SecurityCardTextField] {
+        orderedEditableFields + [countryField]
+    }
+
     // MARK: - Init
 
     override init(frame: CGRect) {
@@ -85,7 +105,7 @@ final class ShippingFormView: UIView {
 
     /// Shows the given per-field errors and clears any field not present in the map.
     func showErrors(_ errors: [ShippingFormField: String]) {
-        for (key, field) in fieldsByKey {
+        for (key, field) in editableFields {
             field.errorText = errors[key]
         }
     }
@@ -137,29 +157,64 @@ final class ShippingFormView: UIView {
         for field in allFields {
             field.delegate = self
         }
+
+        configureKeyboardNavigation()
+    }
+
+    // MARK: - Keyboard navigation
+
+    /// Wires the return key and a prev/next/done toolbar so the user can move between
+    /// editable fields without dismissing the keyboard.
+    private func configureKeyboardNavigation() {
+        let fields = orderedEditableFields
+        for (index, field) in fields.enumerated() {
+            let isLast = index == fields.count - 1
+            field.returnKeyType = isLast ? .done : .next
+            field.keyboardAccessoryView = makeNavigationToolbar(for: index)
+        }
+    }
+
+    private func makeNavigationToolbar(for index: Int) -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+
+        let previous = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.up"),
+            primaryAction: UIAction { [weak self] _ in self?.focusField(at: index - 1) }
+        )
+        previous.isEnabled = index > 0
+        previous.accessibilityLabel = L10n.KeyboardToolbar.previous
+
+        let next = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.down"),
+            primaryAction: UIAction { [weak self] _ in self?.focusField(at: index + 1) }
+        )
+        next.isEnabled = index < orderedEditableFields.count - 1
+        next.accessibilityLabel = L10n.KeyboardToolbar.next
+
+        let done = UIBarButtonItem(
+            systemItem: .done,
+            primaryAction: UIAction { [weak self] _ in self?.endEditing(true) }
+        )
+
+        toolbar.items = [
+            previous,
+            next,
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            done
+        ]
+        return toolbar
+    }
+
+    private func focusField(at index: Int) {
+        guard orderedEditableFields.indices.contains(index) else { return }
+        orderedEditableFields[index].becomeFirstResponder()
     }
 
     // MARK: - Helpers
 
     private func trimmed(_ field: SecurityCardTextField) -> String {
         field.text.trimmingCharacters(in: .whitespaces)
-    }
-
-    /// Single source of the editable fields keyed by `ShippingFormField`. Add new fields
-    /// here so error display and delegate wiring pick them up automatically.
-    private var fieldsByKey: [ShippingFormField: SecurityCardTextField] {
-        [
-            .fullName: fullNameField,
-            .email: emailField,
-            .shippingAddress: shippingAddressField,
-            .city: cityField,
-            .state: stateField,
-            .zipCode: zipCodeField
-        ]
-    }
-
-    private var allFields: [SecurityCardTextField] {
-        Array(fieldsByKey.values) + [countryField]
     }
 }
 
@@ -170,5 +225,18 @@ extension ShippingFormView: SecurityCardTextFieldDelegate {
     func securityCardTextFieldDidTap(_ field: SecurityCardTextField) {
         guard field === countryField else { return }
         delegate?.shippingFormViewDidTapCountry(self)
+    }
+
+    func securityCardTextFieldShouldReturn(_ field: SecurityCardTextField) -> Bool {
+        guard let index = orderedEditableFields.firstIndex(where: { $0 === field }) else {
+            return true
+        }
+        let nextIndex = index + 1
+        if orderedEditableFields.indices.contains(nextIndex) {
+            focusField(at: nextIndex)
+        } else {
+            endEditing(true)
+        }
+        return false
     }
 }

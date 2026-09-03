@@ -16,7 +16,6 @@ final class MarketplaceViewController: MUViewController {
     private let titleLabel = UILabel()
     private let providerTabsView = SecurityCardProvidersTabsView()
     private var selectedProviderIndex = 0
-    private var selectedCountry: Country
     private lazy var presenter = instancePresenter(MarketplacePresenter.init, delegate: self)
     private var cachedProviders: [SecurityCardProvider] = []
     private var pages: [UIViewController] = []
@@ -33,8 +32,7 @@ final class MarketplaceViewController: MUViewController {
         "security_cards_marketplace"
     }
 
-    init(selectedCountry: Country) {
-        self.selectedCountry = selectedCountry
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -53,11 +51,15 @@ final class MarketplaceViewController: MUViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         additionalSafeAreaInsets = .zero
+        presenter.setUp()
         setupTransparentNavBar()
+        // Refresh in case the country changed downstream (e.g. in the shipping screen).
+        navigationItem.rightBarButtonItem?.title = presenter.selectedCountryFlag
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        presenter.tearDown()
         restoreNavBar()
     }
 
@@ -123,7 +125,7 @@ final class MarketplaceViewController: MUViewController {
 
     private func setupCountryBarButton() {
         let countryButtonItem = UIBarButtonItem(
-            title: selectedCountry.flag,
+            title: presenter.selectedCountryFlag,
             style: .plain,
             target: self,
             action: #selector(MarketplaceViewController.didTapCountry)
@@ -137,7 +139,7 @@ final class MarketplaceViewController: MUViewController {
     @objc
     private func didTapCountry() {
         let vc = CountrySelectorViewController(
-            selectedCountryCode: selectedCountry.code,
+            selectedCountryCode: presenter.selectedCountryCode,
             delegate: self
         )
         let nav = UINavigationController(rootViewController: vc)
@@ -215,8 +217,8 @@ extension MarketplaceViewController: SecurityCardProvidersTabsViewDelegate {
 
 extension MarketplaceViewController: CountrySelectorViewControllerDelegate {
     func countrySelectorDidSelect(country: Country) {
-        selectedCountry = country
-        navigationItem.rightBarButtonItem?.title = country.flag
+        presenter.set(selectedCountry: country)
+        navigationItem.rightBarButtonItem?.title = presenter.selectedCountryFlag
     }
 }
 

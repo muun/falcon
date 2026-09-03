@@ -16,22 +16,22 @@ import (
 
 type FakeWithdrawClient struct {
 	WithdrawClient WithdrawClient
-	ServerUrl      string //nolint:staticcheck // TODO: struct field ServerUrl should be ServerURL
+	ServerURL      string
 }
 
 func (fwc *FakeWithdrawClient) Get(urlString string) (resp *http.Response, err error) {
 
-	URL := parseUrl(urlString)
+	URL := parseURL(urlString)
 
 	if URL.Host == "test.com" {
-		host := parseUrl(fwc.ServerUrl).Host
+		host := parseURL(fwc.ServerURL).Host
 		return fwc.WithdrawClient.Get(strings.Replace(urlString, "test.com", host, 1))
 	} else {
 		return fwc.WithdrawClient.Get(urlString)
 	}
 }
 
-func parseUrl( //nolint:staticcheck // TODO: func parseUrl should be parseURL
+func parseURL(
 	urlString string,
 ) *url.URL {
 	URL, err := url.Parse(urlString)
@@ -58,7 +58,7 @@ func TestWithdraw(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusOK,
 			})
@@ -107,7 +107,7 @@ func TestWithdrawWithCompatibilityTag(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusOK,
 			})
@@ -147,7 +147,7 @@ func TestWithdrawWithDifferentDomainHosts(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/withdraw/",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&WithdrawResponse{
 				K1: "foobar",
 				// Callback url has a different host than localhost
@@ -161,7 +161,7 @@ func TestWithdrawWithDifferentDomainHosts(t *testing.T) {
 
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusOK,
 			})
@@ -208,7 +208,7 @@ func TestWithdrawWithDifferentDomainHosts(t *testing.T) {
 func TestDecodeError(t *testing.T) {
 	qr := "lightning:abcde"
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -227,7 +227,7 @@ func TestWrongTagError(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/channelRequest",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&WithdrawResponse{
 				Tag: "channelRequest",
 			})
@@ -238,7 +238,7 @@ func TestWrongTagError(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/channelRequest", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -263,7 +263,7 @@ func TestUnreachableError(t *testing.T) {
 	// LNURL QR pointing to a non-responding domain
 	qr := "LIGHTNING:LNURL1DP68GURN8GHJ7ARGD9EJUER0D4SKJM3WV3HK2UEWDEHHGTN90P5HXAPWV4UXZMTSD3JJUCM0D5LHXETRWFJHG0F3XGENGDGQ8EH52" //nolint:lll
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -292,7 +292,7 @@ func TestServiceError(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusError,
 				Reason: "something something",
@@ -332,7 +332,7 @@ func TestInvalidResponseError(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/withdraw/",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			w.Write([]byte("foobar"))
 		},
 	)
@@ -341,7 +341,7 @@ func TestInvalidResponseError(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -358,7 +358,7 @@ func TestInvalidResponseError(t *testing.T) {
 func TestUnsafeURLError(t *testing.T) {
 	qr, _ := encode("http://localhost/withdraw")
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -373,7 +373,7 @@ func TestWrongTagInQR(t *testing.T) {
 	// LNURL QR with a `login` tag value in its query params
 	qr := "lightning:lnurl1dp68gurn8ghj7mrww4exctt5dahkccn00qhxget8wfjk2um0veax2un09e3k7mf0w5lhgct884kx7emfdcnxkvfa8qexxc35vymnxcf5xumkxvfsv4snxwph8qunzv3hxesnyv3jvv6nyv3e8yuxzvnpv4skvepnxg6rwv34xqck2c3sxcerzdpnv56r2dss2vt96" //nolint:lll
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -390,7 +390,7 @@ func TestWrongTagInQR(t *testing.T) {
 func TestOnionLinkNotSupported(t *testing.T) {
 	qr := "LNURL1DP68GUP69UHKVMM0VFSHYTN0DE5K7MSHXU8YD"
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -409,7 +409,7 @@ func TestExpiredCheck(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/withdraw/",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: "ERROR",
 				Reason: "something something Expired blabla",
@@ -418,7 +418,7 @@ func TestExpiredCheck(t *testing.T) {
 	)
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusOK,
 			})
@@ -429,7 +429,7 @@ func TestExpiredCheck(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -461,7 +461,7 @@ func TestNoAvailableBalance(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -489,7 +489,7 @@ func TestNoRouteCheck(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusError,
 				Reason: "Unable to pay LN Invoice: FAILURE_REASON_NO_ROUTE",
@@ -501,7 +501,7 @@ func TestNoRouteCheck(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		return "12345", nil
 	}
 
@@ -584,7 +584,7 @@ func TestStringlyTypedNumberFields(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&Response{
 				Status: StatusOK,
 			})
@@ -624,7 +624,7 @@ func TestErrorContainsResponseBody(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/withdraw/",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(400)
 			w.Write([]byte("this is a custom error response"))
 		},
@@ -634,7 +634,7 @@ func TestErrorContainsResponseBody(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -667,7 +667,7 @@ func TestErrorContainsResponseBodyForFinishRequest(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(400)
 			w.Write([]byte("this is a custom error response"))
 		},
@@ -677,7 +677,7 @@ func TestErrorContainsResponseBodyForFinishRequest(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		return "12345", nil
 	}
 
@@ -701,7 +701,7 @@ func TestForbidden(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/withdraw/",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(403)
 			w.Write([]byte("Forbidden"))
 		},
@@ -711,7 +711,7 @@ func TestForbidden(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 
@@ -732,7 +732,7 @@ func TestZebedee403MapsToCountryNotSupported(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(
 		"/withdraw/",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(403)
 			w.Write([]byte("Forbidden"))
 		},
@@ -748,7 +748,7 @@ func TestZebedee403MapsToCountryNotSupported(t *testing.T) {
 
 	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
 
-	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) { //nolint:revive // TODO: use or remove amt
+	createInvoiceFunc := func(_ lnwire.MilliSatoshi, _ string, _ string) (string, error) {
 		panic("should not reach here")
 	}
 

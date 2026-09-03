@@ -10,7 +10,7 @@ public class BalanceActions {
     private let currencyActions: CurrencyActions
     private let nextTransactionSizeRepository: NextTransactionSizeRepository
 
-    private let balanceCache: BehaviorSubject<MonetaryAmount>
+    private let balanceCache: BehaviorSubject<BitcoinAmount>
     private let disposeBag: DisposeBag
 
     init(
@@ -22,7 +22,11 @@ public class BalanceActions {
         self.nextTransactionSizeRepository = nextTransactionSizeRepository
 
         self.disposeBag = DisposeBag()
-        self.balanceCache = BehaviorSubject(value: MonetaryAmount(amount: 0, currency: "BTC"))
+        self.balanceCache = BehaviorSubject(value: BitcoinAmount(
+            inSatoshis: Satoshis.zero,
+            inInputCurrency: MonetaryAmount(amount: 0, currency: "BTC"),
+            inPrimaryCurrency: MonetaryAmount(amount: 0, currency: "BTC")
+        ))
 
         generateBalanceCache()
     }
@@ -33,9 +37,15 @@ public class BalanceActions {
             watchBalanceInSatoshis(),
             currencyActions.watchPrimaryExchangeRate().compactMap { $0 }
         )
-        .map({ (inSatoshis: Satoshis, exchangeRate: (String, Decimal)) -> MonetaryAmount in
+        .map({ (inSatoshis: Satoshis, exchangeRate: (String, Decimal)) -> BitcoinAmount in
             let (currency, rate) = exchangeRate
-            return inSatoshis.valuation(at: rate, currency: currency)
+            // Satoshis are the source of truth: only convert forward (multiply by the rate),
+            // never divide fiat back into satoshis.
+            return BitcoinAmount(
+                inSatoshis: inSatoshis,
+                inInputCurrency: inSatoshis.toBTC(),
+                inPrimaryCurrency: inSatoshis.valuation(at: rate, currency: currency)
+            )
         })
         .subscribe(onNext: self.balanceCache.onNext)
         .disposed(by: disposeBag)
@@ -48,7 +58,7 @@ public class BalanceActions {
             })
     }
 
-    public func watchBalance() -> Observable<MonetaryAmount> {
+    public func watchBalance() -> Observable<BitcoinAmount> {
         return balanceCache.asObservable()
     }
 }

@@ -42,7 +42,7 @@ func Generate() string {
 	sb.WriteByte(Alphabet[CurrentVersion-2])
 
 	codeLen := 30
-	for i := 0; i < codeLen; i++ { //nolint:modernize // TODO: use range over int
+	for i := range codeLen {
 		sb.WriteByte(randChar(Alphabet))
 		j := i + 3 // we count the two bytes we wrote before the loop
 		if j != 0 && i != codeLen-1 && j%4 == 0 {

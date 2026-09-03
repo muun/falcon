@@ -9,7 +9,8 @@
 import Foundation
 
 enum Identifiers {
-    static let group = "5YYLBTUB6W.group.com.muun.falcon"
+    static let keychainAccessGroup = "5YYLBTUB6W.group.com.muun.falcon"
+    static let appGroup = "group.com.muun.falcon"
 
     // This string is hardcoded because it has to be
     // the same one we use in PushNotification Extension

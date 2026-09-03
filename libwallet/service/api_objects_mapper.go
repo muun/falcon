@@ -10,17 +10,17 @@ import (
 	"github.com/muun/libwallet/service/model"
 )
 
-func MapRegisterSecurityCardJson( //nolint:staticcheck // TODO: func MapRegisterSecurityCardJson should be MapRegisterSecurityCardJSON
+func MapRegisterSecurityCardJSON(
 	pairingResponse *nfc.PairingResponse,
 	clientPublicKey []byte,
-) (*model.RegisterSecurityCardJson, error) {
+) (*model.RegisterSecurityCardJSON, error) {
 
-	metadata, err := mapSecurityCardMetadataJson(pairingResponse.Metadata)
+	metadata, err := mapSecurityCardMetadataJSON(pairingResponse.Metadata)
 	if err != nil {
 		return nil, err
 	}
 
-	return &model.RegisterSecurityCardJson{
+	return &model.RegisterSecurityCardJSON{
 		CardPublicKeyInHex:   hex.EncodeToString(pairingResponse.CardPublicKey),
 		ClientPublicKeyInHex: hex.EncodeToString(clientPublicKey),
 		PairingSlot:          binary.BigEndian.Uint16(pairingResponse.PairingSlot),
@@ -30,9 +30,9 @@ func MapRegisterSecurityCardJson( //nolint:staticcheck // TODO: func MapRegister
 	}, nil
 }
 
-func mapSecurityCardMetadataJson( //nolint:staticcheck // TODO: func mapSecurityCardMetadataJson should be mapSecurityCardMetadataJSON
+func mapSecurityCardMetadataJSON(
 	metadata *nfc.CardMetadata,
-) (*model.SecurityCardMetadataJson, error) {
+) (*model.SecurityCardMetadataJSON, error) {
 	if metadata == nil {
 		return nil, errors.Errorf("missing card metadata in pairing response")
 	}
@@ -43,7 +43,7 @@ func mapSecurityCardMetadataJson( //nolint:staticcheck // TODO: func mapSecurity
 	firmwareVersion := binary.BigEndian.Uint16(metadata.FirmwareVersion[:])
 	languageCodeInHex := hex.EncodeToString(metadata.LanguageCode[:])
 
-	metadataJson := &model.SecurityCardMetadataJson{ //nolint:staticcheck // TODO: var metadataJson should be metadataJSON
+	metadataJSON := &model.SecurityCardMetadataJSON{
 		GlobalPublicKeyInHex: globalPubCardInHex,
 		CardVendorInHex:      cardVendorInHex,
 		CardModelInHex:       cardModelInHex,
@@ -52,5 +52,24 @@ func mapSecurityCardMetadataJson( //nolint:staticcheck // TODO: func mapSecurity
 		LanguageCodeInHex:    languageCodeInHex,
 	}
 
-	return metadataJson, nil
+	return metadataJSON, nil
+}
+
+func mapSecurityCardV3MetadataJSON(
+	metadata *nfc.CardMetadataV3,
+) (*model.SecurityCardV3MetadataJSON, error) {
+	if metadata == nil {
+		return nil, errors.Errorf("missing card metadata in pairing response")
+	}
+
+	return &model.SecurityCardV3MetadataJSON{
+		AttestationPubKeyInHex: hex.EncodeToString(metadata.AttestationPub[:]),
+		CardVendorInHex:        hex.EncodeToString(metadata.CardVendor[:]),
+		CardModelInHex:         hex.EncodeToString(metadata.CardModel[:]),
+		FirmwareVersion:        binary.BigEndian.Uint16(metadata.FirmwareVersion[:]),
+		CapabilitiesInHex:      hex.EncodeToString(metadata.Capabilities[:]),
+		OperationCount:         metadata.OperationCount,
+		ProviderPubKeyInHex:    hex.EncodeToString(metadata.ProviderPub[:]),
+		ProviderSigInHex:       hex.EncodeToString(metadata.ProviderSig),
+	}, nil
 }

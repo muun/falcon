@@ -16,7 +16,7 @@ func NewStartChallengeSetupAction(
 }
 
 func (action *StartChallengeSetupAction) Run(
-	challengeSetupJson model.ChallengeSetupJson, //nolint:staticcheck // TODO: method parameter challengeSetupJson should be challengeSetupJSON
-) (model.SetupChallengeResponseJson, error) {
-	return action.HoustonService.ChallengeKeySetupStart(challengeSetupJson)
+	challengeSetupJSON model.ChallengeSetupJSON,
+) (model.SetupChallengeResponseJSON, error) {
+	return action.HoustonService.ChallengeKeySetupStart(challengeSetupJSON)
 }

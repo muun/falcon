@@ -13,6 +13,7 @@ protocol DebugMenuPresenterDelegate: BasePresenterDelegate,
     func askUserForText(message: String, completion: @escaping (String) -> Void)
     func showRequests()
     func showAnalytics()
+    func showSecureKeyValueStorage()
     func showAlert(title: String?, message: String?)
 }
 
@@ -69,6 +70,10 @@ extension DebugMenuPresenter: DebugMenuExecutableContext {
 
     func showAnalytics() {
         delegate.showAnalytics()
+    }
+
+    func showSecureKeyValueStorage() {
+        delegate.showSecureKeyValueStorage()
     }
 
     func showAlert(title: String?, message: String?) {

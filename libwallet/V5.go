@@ -14,40 +14,40 @@ import (
 )
 
 // CreateAddressV5 returns a P2TR MuunAddress using Musig with the signing and cosigning keys.
-func CreateAddressV5(userKey, muunKey *HDPublicKey) (MuunAddress, error) {
+func CreateAddressV5(userKey, cosignerKey *HDPublicKey) (MuunAddress, error) {
 	return addresses.CreateAddressV5(
 		&userKey.key,
-		&muunKey.key,
+		&cosignerKey.key,
 		userKey.Path,
 		userKey.Network.network,
 	)
 }
 
 type coinV5 struct {
-	Network        *chaincfg.Params
-	OutPoint       wire.OutPoint
-	KeyPath        string
-	Amount         btcutil.Amount
-	UserSessionId  [32]byte //nolint:staticcheck // TODO: struct field UserSessionId should be UserSessionID
-	MuunPubNonce   [66]byte
-	MuunPartialSig [32]byte
-	SigHashes      *txscriptw.TaprootSigHashes
+	Network            *chaincfg.Params
+	OutPoint           wire.OutPoint
+	KeyPath            string
+	Amount             btcutil.Amount
+	UserSessionID      [32]byte
+	CosignerPubNonce   [66]byte
+	CosignerPartialSig [32]byte
+	SigHashes          *txscriptw.TaprootSigHashes
 }
 
 func (c *coinV5) SignInput(
 	index int,
 	tx *wire.MsgTx,
 	userKey *HDPrivateKey,
-	muunKey *HDPublicKey,
+	cosignerKey *HDPublicKey,
 ) error {
 	derivedUserKey, err := userKey.DeriveTo(c.KeyPath)
 	if err != nil {
 		return errors.Errorf("failed to derive user private key: %w", err)
 	}
 
-	derivedMuunKey, err := muunKey.DeriveTo(c.KeyPath)
+	derivedCosignerKey, err := cosignerKey.DeriveTo(c.KeyPath)
 	if err != nil {
-		return errors.Errorf("failed to derive muun public key: %w", err)
+		return errors.Errorf("failed to derive cosigner public key: %w", err)
 	}
 
 	userEcPriv, err := derivedUserKey.key.ECPrivKey()
@@ -55,9 +55,9 @@ func (c *coinV5) SignInput(
 		return errors.Errorf("failed to obtain ECPrivKey from derivedUserKey: %w", err)
 	}
 
-	muunEcPub, err := derivedMuunKey.key.ECPubKey()
+	cosignerEcPub, err := derivedCosignerKey.key.ECPubKey()
 	if err != nil {
-		return errors.Errorf("failed to obtain ECPubKey from derivedMuunKey: %w", err)
+		return errors.Errorf("failed to obtain ECPubKey from derivedCosignerKey: %w", err)
 	}
 
 	sigHash, err := txscriptw.CalcTaprootSigHash(tx, c.SigHashes, index, txscript.SigHashAll)
@@ -67,18 +67,22 @@ func (c *coinV5) SignInput(
 	var toSign [32]byte
 	copy(toSign[:], sigHash)
 
-	return c.signSecondWith(index, tx, userEcPriv, muunEcPub, c.UserSessionId, toSign)
+	return c.signSecondWith(index, tx, userEcPriv, cosignerEcPub, c.UserSessionID, toSign)
 }
 
-func (c *coinV5) FullySignInput(index int, tx *wire.MsgTx, userKey, muunKey *HDPrivateKey) error {
+func (c *coinV5) FullySignInput(
+	index int,
+	tx *wire.MsgTx,
+	userKey, cosignerKey *HDPrivateKey,
+) error {
 	derivedUserKey, err := userKey.DeriveTo(c.KeyPath)
 	if err != nil {
 		return errors.Errorf("failed to derive user private key: %w", err)
 	}
 
-	derivedMuunKey, err := muunKey.DeriveTo(c.KeyPath)
+	derivedCosignerKey, err := cosignerKey.DeriveTo(c.KeyPath)
 	if err != nil {
-		return errors.Errorf("failed to derive muun private key: %w", err)
+		return errors.Errorf("failed to derive cosigner private key: %w", err)
 	}
 
 	userEcPriv, err := derivedUserKey.key.ECPrivKey()
@@ -86,9 +90,9 @@ func (c *coinV5) FullySignInput(index int, tx *wire.MsgTx, userKey, muunKey *HDP
 		return errors.Errorf("failed to obtain ECPrivKey from derivedUserKey: %w", err)
 	}
 
-	muunEcPriv, err := derivedMuunKey.key.ECPrivKey()
+	cosignerEcPriv, err := derivedCosignerKey.key.ECPrivKey()
 	if err != nil {
-		return errors.Errorf("failed to obtain ECPrivKey from derivedMuunKey: %w", err)
+		return errors.Errorf("failed to obtain ECPrivKey from derivedCosignerKey: %w", err)
 	}
 
 	sigHash, err := txscriptw.CalcTaprootSigHash(tx, c.SigHashes, index, txscript.SigHashAll)
@@ -100,59 +104,62 @@ func (c *coinV5) FullySignInput(index int, tx *wire.MsgTx, userKey, muunKey *HDP
 
 	userPubNonce, err := musig.MuSig2GenerateNonce(
 		musig.Musig2v040Muun,
-		c.UserSessionId[:],
+		c.UserSessionID[:],
 		nil,
 	)
 	if err != nil {
 		return err
 	}
 
-	err = c.signFirstWith(index, tx, userEcPriv.PubKey(), muunEcPriv, userPubNonce.PubNonce, toSign)
+	err = c.signFirstWith(
+		userEcPriv.PubKey(),
+		cosignerEcPriv,
+		userPubNonce.PubNonce,
+		toSign,
+	)
 	if err != nil {
 		return err
 	}
 
-	return c.signSecondWith(index, tx, userEcPriv, muunEcPriv.PubKey(), c.UserSessionId, toSign)
+	return c.signSecondWith(index, tx, userEcPriv, cosignerEcPriv.PubKey(), c.UserSessionID, toSign)
 }
 
 func (c *coinV5) signFirstWith(
-	index int, //nolint:revive // TODO: use or remove index
-	tx *wire.MsgTx, //nolint:revive // TODO: use or remove tx
 	userPub *btcec.PublicKey,
-	muunPriv *btcec.PrivateKey,
+	cosignerPriv *btcec.PrivateKey,
 	userPubNonce [66]byte,
 	toSign [32]byte,
 ) error {
 
 	// NOTE:
 	// This will only be called in a recovery context, where both private keys are provided by the
-	// user. We call the variables below "muunSessionId" and "muunPubNonce" to follow convention,
+	// user. We call the variables below "cosignerSessionID" and "cosignerPubNonce" to follow convention,
 	// but Muun servers play no role in this code path and both are locally generated.
-	muunSessionId := musig.RandomSessionId() //nolint:staticcheck // TODO: var muunSessionId should be muunSessionID
-	muunPubNonce, err := musig.MuSig2GenerateNonce(
+	cosignerSessionID := musig.RandomSessionID()
+	cosignerPubNonce, err := musig.MuSig2GenerateNonce(
 		musig.Musig2v040Muun,
-		muunSessionId[:],
-		muunPriv.PubKey().SerializeCompressed(),
+		cosignerSessionID[:],
+		cosignerPriv.PubKey().SerializeCompressed(),
 	)
 	if err != nil {
 		return errors.Errorf("failed to generate nonce: %w", err)
 	}
 
-	muunPartialSig, err := musig.ComputeMuunPartialSignature(
+	cosignerPartialSig, err := musig.ComputeCosignerPartialSignature( //nolint:staticcheck // V5 keeps the deprecated flow
 		musig.Musig2v040Muun,
 		toSign[:],
 		userPub.SerializeCompressed(),
-		muunPriv.Serialize(),
+		cosignerPriv.Serialize(),
 		userPubNonce[:],
-		muunSessionId[:],
+		cosignerSessionID[:],
 		musig.KeySpendOnlyTweak(),
 	)
 	if err != nil {
 		return errors.Errorf("failed to add first signature: %w", err)
 	}
 
-	copy(c.MuunPubNonce[:], muunPubNonce.PubNonce[0:66])
-	copy(c.MuunPartialSig[:], muunPartialSig[0:32])
+	copy(c.CosignerPubNonce[:], cosignerPubNonce.PubNonce[0:66])
+	copy(c.CosignerPartialSig[:], cosignerPartialSig[0:32])
 
 	return nil
 }
@@ -161,19 +168,19 @@ func (c *coinV5) signSecondWith(
 	index int,
 	tx *wire.MsgTx,
 	userPriv *btcec.PrivateKey,
-	muunPub *btcec.PublicKey,
-	userSessionId [32]byte, //nolint:staticcheck // TODO: method parameter userSessionId should be userSessionID
+	cosignerPub *btcec.PublicKey,
+	userSessionID [32]byte,
 	toSign [32]byte,
 ) error {
 
-	rawCombinedSig, err := musig.ComputeUserPartialSignature(
+	rawCombinedSig, err := musig.ComputeUserPartialSignature( //nolint:staticcheck // V5 keeps the deprecated flow
 		musig.Musig2v040Muun,
 		toSign[:],
 		userPriv.Serialize(),
-		muunPub.SerializeCompressed(),
-		c.MuunPartialSig[:],
-		c.MuunPubNonce[:],
-		userSessionId[:],
+		cosignerPub.SerializeCompressed(),
+		c.CosignerPartialSig[:],
+		c.CosignerPubNonce[:],
+		userSessionID[:],
 		musig.KeySpendOnlyTweak(),
 	)
 	if err != nil {

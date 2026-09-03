@@ -9,6 +9,8 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/lightningnetwork/lnd/lnwire"
 	"github.com/lightningnetwork/lnd/zpay32"
+
+	"github.com/muun/libwallet/walletdb"
 )
 
 func TestInvoiceSecrets(t *testing.T) {
@@ -18,8 +20,8 @@ func TestInvoiceSecrets(t *testing.T) {
 
 	userKey, _ := NewHDPrivateKey(randomBytes(32), network)
 	userKey.Path = "m/schema:1'/recovery:1'"
-	muunKey, _ := NewHDPrivateKey(randomBytes(32), network)
-	muunKey.Path = "m/schema:1'/recovery:1'"
+	cosignerKey, _ := NewHDPrivateKey(randomBytes(32), network)
+	cosignerKey.Path = "m/schema:1'/recovery:1'"
 
 	routeHints := &RouteHints{
 		Pubkey:                    "03c48d1ff96fa32e2776f71bba02102ffc2a1b91e2136586418607d32e762869fd", //nolint:lll
@@ -28,7 +30,7 @@ func TestInvoiceSecrets(t *testing.T) {
 		CltvExpiryDelta:           8,
 	}
 
-	secrets, err := GenerateInvoiceSecrets(userKey.PublicKey(), muunKey.PublicKey())
+	secrets, err := GenerateInvoiceSecrets(userKey.PublicKey(), cosignerKey.PublicKey())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -43,13 +45,13 @@ func TestInvoiceSecrets(t *testing.T) {
 
 	t.Run("generating more invoices", func(t *testing.T) {
 		// Make sure the secrets list is already topped up
-		_, err := GenerateInvoiceSecrets(userKey.PublicKey(), muunKey.PublicKey())
+		_, err := GenerateInvoiceSecrets(userKey.PublicKey(), cosignerKey.PublicKey())
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		// try to generate more secrets
-		moreSecrets, err := GenerateInvoiceSecrets(userKey.PublicKey(), muunKey.PublicKey())
+		moreSecrets, err := GenerateInvoiceSecrets(userKey.PublicKey(), cosignerKey.PublicKey())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -186,13 +188,12 @@ func TestInvoiceSecrets(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		db, err := openDB()
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer db.Close()
-		invoiceMetadata, err := db.FindByPaymentHash(payreq3.PaymentHash[:])
-		if err != nil {
+		var invoiceMetadata *walletdb.Invoice
+		if err := Pool.WithDB(func(db *walletdb.DB) error {
+			var err error
+			invoiceMetadata, err = db.FindByPaymentHash(payreq3.PaymentHash[:])
+			return err
+		}); err != nil {
 			t.Fatal(err)
 		}
 

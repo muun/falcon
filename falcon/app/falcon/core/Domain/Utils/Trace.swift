@@ -20,6 +20,7 @@ final class Trace {
     private let startTime: UInt64
     private var finished = false
     private var children: [ChildTrace] = []
+    private var manualChildren: [(String, String)] = []
 
     init(label: String) {
         self.label = label
@@ -33,6 +34,12 @@ final class Trace {
         return child
     }
 
+    /// Attach a child whose value was measured elsewhere (e.g. inside libwallet and returned over
+    /// gRPC), rather than timed by this Trace.
+    func addChild(_ label: String, value: Int64) {
+        manualChildren.append((label, String(value)))
+    }
+
     /// Report the elapsed time to analytics.
     func finish() {
         guard !finished else {
@@ -43,7 +50,10 @@ final class Trace {
         }
         finished = true
         let elapsedMs = (clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW) - startTime) / 1_000_000
-        let childMap = Dictionary(uniqueKeysWithValues: children.map { $0.result() })
+        let childMap = Dictionary(
+            children.map { $0.result() } + manualChildren,
+            uniquingKeysWith: { _, latest in latest }
+        )
         AnalyticsHelper.logEvent(
             TimeTrackerEvent(
                 label: label,

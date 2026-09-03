@@ -33,9 +33,8 @@ struct FeeHelper {
     }
 
     static func rate(for currency: String, data: NewOperation.ConfirmData) -> Decimal {
-        do {
-            return try data.exchangeRateWindow.rate(for: currency)
-        } catch { Logger.fatal(error: error) }
+        // An unusable or missing rate degrades to 0 (yielding a 0 amount) instead of crashing.
+        return data.exchangeRateWindow.displayRate(for: currency) ?? 0
     }
 
     static func apply(fee: Fee, in data: NewOperation.ConfirmData) -> NewOperation.ConfirmData {

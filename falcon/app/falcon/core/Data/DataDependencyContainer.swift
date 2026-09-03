@@ -58,6 +58,7 @@ public extension DependencyContainer {
             container.register(factory: MinFeeRateRepository.init)
             container.register(factory: FeatureFlagsRepository.init)
             container.register(factory: ReachabilityStatusRepository.init)
+            container.register(.singleton, factory: MarketplaceSelectedCountryRepository.init)
             container.register(.unique, factory: MUTimer.init)
             container.register(.singleton, factory: BackgroundTimesRepository.init)
             container.register { AppleDeviceCheckAdapter() as DeviceCheckAdapter }
@@ -77,6 +78,7 @@ public extension DependencyContainer {
             container.register(.singleton, factory: WalletService.init)
             container.register(.singleton, factory: HttpClientSessionProvider.init)
             container.register(.singleton, factory: KeyProvider.init)
+            container.register(.singleton, factory: LibwalletSecureKeyValueStorage.init)
             container.register(.singleton, factory: BiometricsStatusProvider.init)
             container.register(.singleton) { NfcSessionImpl() as NfcSession }
         }

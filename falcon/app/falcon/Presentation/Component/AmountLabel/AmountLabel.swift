@@ -109,30 +109,32 @@ private extension AmountLabel {
         for bitcoinAmountWithSelectedCurrency: BitcoinAmountWithSelectedCurrency
     ) -> NSAttributedString {
         let currentValue = self.attributedText!.string
-        let amountInInput = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inInput)
-        let amountInPrimary = readableAmount(
-            from: bitcoinAmountWithSelectedCurrency,
-            in: .inPrimary
-        )
-        let amountInBTC = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inBTC)
+        let input = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inInput)
+        let primary = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inPrimary)
+        let btc = readableAmount(from: bitcoinAmountWithSelectedCurrency, in: .inBTC)
 
-        if currentValue == amountInInput.string {
-            if currentValue == amountInPrimary.string {
-                return amountInBTC
+        // Cycle input → primary → BTC, but drop the primary value when its rate is unusable so we
+        // fall back to BTC instead of showing a misleading "0.00 <ccy>".
+        let bitcoinAmount = bitcoinAmountWithSelectedCurrency.bitcoinAmount
+        let cycle = canShowPrimary(for: bitcoinAmount) ? [input, primary, btc] : [input, btc]
+
+        // Advance to the next value that reads differently from the current one (wrapping around).
+        let start = cycle.firstIndex { $0.string == currentValue } ?? 0
+        for offset in 1...cycle.count {
+            let candidate = cycle[(start + offset) % cycle.count]
+            if candidate.string != currentValue {
+                return candidate
             }
-            return amountInPrimary
-        } else if currentValue == amountInPrimary.string {
-            if currentValue == amountInBTC.string {
-                return amountInInput
-            }
-            return amountInBTC
-        } else if currentValue == amountInBTC.string {
-            if currentValue == amountInInput.string {
-                return amountInPrimary
-            }
-            return amountInInput
         }
-        return amountInBTC
+        return cycle[start]
+    }
+
+    /// A primary currency with an unusable rate converts to 0 (a valid rate always yields a
+    /// strictly positive amount), so we drop it from the cycle and fall back to BTC. A genuinely
+    /// zero amount (no sats) keeps it, since there's nothing misleading to hide.
+    func canShowPrimary(for bitcoinAmount: BitcoinAmount) -> Bool {
+        return bitcoinAmount.inSatoshis == Satoshis(value: 0)
+            || bitcoinAmount.inPrimaryCurrency.amount != 0
     }
 
     /// Become a value readable.

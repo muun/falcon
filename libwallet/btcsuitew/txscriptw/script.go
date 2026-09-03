@@ -122,7 +122,7 @@ func calcHashOutputs(tx *wire.MsgTx) chainhash.Hash {
 	b := new(bytes.Buffer)
 
 	for _, txOut := range tx.TxOut {
-		wire.WriteTxOut(b, 0, 0, txOut) //nolint:errcheck // TODO: check error
+		_ = wire.WriteTxOut(b, 0, 0, txOut)
 	}
 
 	return chainhash.HashH(b.Bytes())
@@ -132,7 +132,7 @@ func calcHashScriptPubKeys(txOuts []*wire.TxOut) chainhash.Hash {
 	b := new(bytes.Buffer)
 
 	for _, txOut := range txOuts {
-		wire.WriteVarInt(b, 0, uint64(len(txOut.PkScript))) //nolint:errcheck // TODO: check error
+		_ = wire.WriteVarInt(b, 0, uint64(len(txOut.PkScript)))
 		b.Write(txOut.PkScript)
 	}
 

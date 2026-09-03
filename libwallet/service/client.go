@@ -2,6 +2,7 @@ package service
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"log/slog"
@@ -34,13 +35,13 @@ type HoustonResponseError struct {
 	DeveloperMessage string
 	ErrorCode        int
 	Message          string
-	RequestId        int //nolint:staticcheck // TODO: struct field RequestId should be RequestID
+	RequestID        int
 	Status           int
 }
 
 // Satisfy "error" interface for HoustonResponseError
 func (e *HoustonResponseError) Error() string {
-	errorJson, err := json.Marshal( //nolint:staticcheck // TODO: var errorJson should be errorJSON
+	errorJSON, err := json.Marshal(
 		e,
 	)
 	if err != nil {
@@ -48,7 +49,7 @@ func (e *HoustonResponseError) Error() string {
 		slog.Error("failed to parse HoustonResponseError", slog.Any("error", err))
 		return "failed to parse HoustonResponseError: " + err.Error()
 	}
-	return string(errorJson)
+	return string(errorJSON)
 }
 
 type request[T any] struct {
@@ -91,7 +92,7 @@ func (r request[T]) do(c *client) (T, error) {
 
 	idempotencyKey := uuid.New().String()
 
-	baseUrl, err := url.Parse( //nolint:staticcheck // TODO: var baseUrl should be baseURL
+	baseURL, err := url.Parse(
 		session.BaseURL,
 	)
 	if err != nil {
@@ -101,13 +102,14 @@ func (r request[T]) do(c *client) (T, error) {
 	if err != nil {
 		return zero, errors.Errorf("client.Do: failed to parse request Path: %w", err)
 	}
-	httpUrl := baseUrl.ResolveReference( //nolint:staticcheck // TODO: var httpUrl should be httpURL
+	httpURL := baseURL.ResolveReference(
 		relativePath,
 	)
 
-	httpRequest, err := http.NewRequest( //nolint:noctx // TODO: use http.NewRequestWithContext
+	httpRequest, err := http.NewRequestWithContext(
+		context.Background(),
 		r.Method,
-		httpUrl.String(),
+		httpURL.String(),
 		bytes.NewReader(body),
 	)
 	if err != nil {
@@ -153,23 +155,23 @@ func (r request[T]) do(c *client) (T, error) {
 		client := http.Client{
 			Timeout: timeout,
 		}
-		response, err := client.Do(httpRequest) //nolint:bodyclose // TODO: close response body
+		response, err := client.Do(httpRequest)
 		if err != nil {
 			var urlError *url.Error
 			lastError := errors.Errorf("client.Do: request failed: %w", err)
-			isUrlError := errors.As( //nolint:staticcheck // TODO: var isUrlError should be isURLError
+			isURLError := errors.As(
 				err,
 				&urlError,
 			)
-			if isUrlError && (urlError.Timeout() || urlError.Temporary()) {
+			if isURLError && (urlError.Timeout() || urlError.Temporary()) {
 				// Retries are in order
 				continue
 			} else {
 				return zero, lastError
 			}
 		}
-
 		responseBody, err := io.ReadAll(response.Body)
+		_ = response.Body.Close()
 		if err != nil {
 			return zero, errors.Errorf("client.Do: failed to parse error response: %w", err)
 		}

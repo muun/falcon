@@ -353,7 +353,7 @@ func ComputeHMACSHA256(key, data []byte) []byte {
 	innerPad := make([]byte, blockSize)
 	outerPad := make([]byte, blockSize)
 
-	for i := 0; i < blockSize; i++ { //nolint:modernize // TODO: use range over int
+	for i := range blockSize {
 		innerPad[i] = paddedKey[i] ^ 0x36
 		outerPad[i] = paddedKey[i] ^ 0x5c
 	}

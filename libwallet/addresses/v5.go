@@ -12,11 +12,11 @@ import (
 // CreateAddressV5 returns a P2TR WalletAddress using Musig2v040Muun with the signing and cosigning
 // keys.
 func CreateAddressV5(
-	userKey, muunKey *hdkeychain.ExtendedKey,
+	userKey, cosignerKey *hdkeychain.ExtendedKey,
 	path string,
 	network *chaincfg.Params,
 ) (*WalletAddress, error) {
-	witnessProgram, err := CreateWitnessScriptV5(userKey, muunKey)
+	witnessProgram, err := CreateWitnessScriptV5(userKey, cosignerKey)
 	if err != nil {
 		return nil, errors.Errorf("failed to generate witness script v5: %w", err)
 	}
@@ -33,19 +33,19 @@ func CreateAddressV5(
 	}, nil
 }
 
-func CreateWitnessScriptV5(userKey, muunKey *hdkeychain.ExtendedKey) ([]byte, error) {
+func CreateWitnessScriptV5(userKey, cosignerKey *hdkeychain.ExtendedKey) ([]byte, error) {
 	userPublicKey, err := userKey.ECPubKey()
 	if err != nil {
 		return nil, errors.Errorf("error getting pub key: %w", err)
 	}
-	muunPublicKey, err := muunKey.ECPubKey()
+	cosignerPublicKey, err := cosignerKey.ECPubKey()
 	if err != nil {
 		return nil, errors.Errorf("error getting pub key: %w", err)
 	}
 
 	pubKeys := [][]byte{
 		userPublicKey.SerializeCompressed(),
-		muunPublicKey.SerializeCompressed(),
+		cosignerPublicKey.SerializeCompressed(),
 	}
 
 	tweak := musig.KeySpendOnlyTweak()

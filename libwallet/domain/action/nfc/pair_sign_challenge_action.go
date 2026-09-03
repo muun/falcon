@@ -24,7 +24,7 @@ func (ac *PairSignChallengeAction) Run(
 	fresh *security_card.FreshPairChallenge,
 ) (*SignedPairChallenge, error) {
 	// TODO: remove the client keypair (and the second argument to muunCard.Pair below
-	// + the clientPublicKey param of MapRegisterSecurityCardJson) once the card
+	// + the clientPublicKey param of MapRegisterSecurityCardJSON) once the card
 	// firmware drops pub_client from its MAC input. Today the card still MACs over
 	// pub_client (retro-compat with cards in the field) and the mock mirrors that
 	// by re-running the same MAC check; the real Houston contract already omits it.
@@ -44,7 +44,7 @@ func (ac *PairSignChallengeAction) Run(
 					Message: "error during pairing with card",
 					Cause:   err,
 				}
-			case nfc.ErrAppletIdNotFound:
+			case nfc.ErrAppletIDNotFound:
 				return nil, &MuunAppletNotFoundError{
 					Message: "muun applet not found",
 					Cause:   err,

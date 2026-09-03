@@ -9,7 +9,9 @@ const (
 	ErrInternal           CardErrorCode = 1
 	ErrSlotOccupied       CardErrorCode = 2
 	ErrSlotNotInitialized CardErrorCode = 3
-	ErrAppletIdNotFound   CardErrorCode = 4 //nolint:staticcheck // TODO: const ErrAppletIdNotFound should be ErrAppletIDNotFound
+	ErrAppletIDNotFound   CardErrorCode = 4
+	// ErrTransport marks a failure in the underlying NFC bridge (card moved away, link dropped, etc)
+	ErrTransport CardErrorCode = 5
 )
 
 type CardError struct {

@@ -12,7 +12,7 @@ import (
 // TestKeys holds all cryptographic keys needed for testing recovery and challenge key actions.
 type TestKeys struct {
 	UserKey         *libwallet.HDPrivateKey
-	MuunKey         *libwallet.HDPrivateKey
+	CosignerKey     *libwallet.HDPrivateKey
 	RecoveryCodeKey *btcec.PrivateKey
 	RecoveryCode    string
 }
@@ -24,9 +24,9 @@ func GenerateTestKeys() *TestKeys {
 		panic("failed to generate user key: " + err.Error())
 	}
 
-	muunKey, err := libwallet.NewHDPrivateKey(randomBytes(32), libwallet.Regtest())
+	cosignerKey, err := libwallet.NewHDPrivateKey(randomBytes(32), libwallet.Regtest())
 	if err != nil {
-		panic("failed to generate muun key: " + err.Error())
+		panic("failed to generate cosigner key: " + err.Error())
 	}
 
 	rc := recoverycode.Generate()
@@ -37,7 +37,7 @@ func GenerateTestKeys() *TestKeys {
 
 	return &TestKeys{
 		UserKey:         userKey,
-		MuunKey:         muunKey,
+		CosignerKey:     cosignerKey,
 		RecoveryCodeKey: rcKey,
 		RecoveryCode:    rc,
 	}

@@ -23,6 +23,7 @@ var ErrorCodes = struct {
 	ErrPairInternalError        ErrorCode
 	ErrNoSlotsAvailable         ErrorCode
 	ErrAppletNotFound           ErrorCode
+	ErrUnsupportedCardVersion   ErrorCode
 	ErrSecureKvNotFound         ErrorCode
 	ErrSecureKvDecryptionFailed ErrorCode
 	ErrSecureKvStorageFailed    ErrorCode
@@ -50,6 +51,11 @@ var ErrorCodes = struct {
 	ErrAppletNotFound: ErrorCode{
 		Code:    14_105,
 		Message: "Muun applet id not found",
+		Type:    LIBWALLET,
+	},
+	ErrUnsupportedCardVersion: ErrorCode{
+		Code:    14_106,
+		Message: "Unsupported security card version",
 		Type:    LIBWALLET,
 	},
 

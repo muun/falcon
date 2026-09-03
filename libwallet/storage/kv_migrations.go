@@ -77,5 +77,36 @@ func BuildKVMigrationPlan() []Migration {
 				&LongType{},
 			),
 		}},
+		{"Mock Houston V3 replay counter", []Change{
+			Define("securityCardReplayCounter", NoAutoBackup, NotApplicable, false, &IntType{}),
+		}},
+		{"NFC empirical Extended APDU signals", []Change{
+			Define(
+				"nfc_extended_apdu_supported",
+				NoAutoBackup,
+				NotApplicable,
+				false,
+				&BoolType{},
+			),
+			Define(
+				"nfc_max_transceive_length",
+				NoAutoBackup,
+				NotApplicable,
+				false,
+				&IntType{},
+			),
+		}},
+		{"Exchange rate window", []Change{
+			Define("exchangeRateWindow", NoAutoBackup, NotApplicable, false, &JSONType{}),
+		}},
+		{"Security card paired version", []Change{
+			Define(
+				"securityCardPairedVersion",
+				NoAutoBackup,
+				NotApplicable,
+				false,
+				&StringType{},
+			),
+		}},
 	}
 }

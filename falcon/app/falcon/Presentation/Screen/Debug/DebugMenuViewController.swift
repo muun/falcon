@@ -78,6 +78,15 @@ extension DebugMenuViewController: DebugMenuPresenterDelegate {
         }
     }
 
+    func showSecureKeyValueStorage() {
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(
+                SecureKeyValueStorageDebugViewController(),
+                animated: true
+            )
+        }
+    }
+
     func showAlert(title: String?, message: String?) {
         DispatchQueue.main.async {
             let alertController = UIAlertController(

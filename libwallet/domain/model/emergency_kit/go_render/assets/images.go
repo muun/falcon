@@ -4,14 +4,17 @@ import (
 	_ "embed"
 )
 
-// Embed image files as binary data in the compiled binary
-// This eliminates the need for external image files at runtime
+// The icons are quality-100 JPEGs flattened over the exact panel background colors they sit on
+// (padlock: RGB(223, 236, 251); help: RGB(246, 249, 255)) because JPEG has no alpha channel.
+// gofpdf embeds JPEG verbatim (DCTDecode), so registering them costs no decoding or
+// recompression at render time — profiling showed the old PNGs' per-render decode+recompress
+// was the single largest cost of the whole kit generation.
 
-//go:embed images/padlock.png
-var PadlockPNG []byte
+//go:embed images/padlock.jpg
+var PadlockJPEG []byte
 
-//go:embed images/help.png
-var HelpPNG []byte
+//go:embed images/help.jpg
+var HelpJPEG []byte
 
 const (
 	PadlockImageName = "padlock"

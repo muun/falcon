@@ -13,7 +13,7 @@ struct BuyDetailsViewModel {
     let description: String
     let providerColor: UIColor
     let imageName: String
-    let material: String
+    let material: SecurityCardMaterial
     let shipsFrom: String
     let deliveryDays: String
     let priceViewModel: SecurityCardFullPriceView.ViewModel

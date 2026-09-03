@@ -28,16 +28,20 @@ class TransactionSchemeV2Tests: XCTestCase {
 
         let privateKey = WalletPrivateKey.fromBase58("tprv8f8dgxCNT9QD3coYhy1pPrQJiyLmKNcyNbatb5zWYRjhL5ctu4UhmsRawtAqxmuiDciuuLj98P72QNfCzMqEWf38EgCEj3RK6QSsHG2aK24", on: "m/schema:1'/recovery:1'")
 
-        // expectactions are kinda ignored right now
         _ = try partiallySigned.sign(
             key: privateKey,
             muunKey: muunKey,
             expectations: PartiallySignedTransaction.Expectations(
                 destination: "2N9Byuz8A5CBHMjJAisG6BVaG6D3TQAVkK7",
                 amount: Satoshis.from(bitcoin: 9.9995),
-                fee: Satoshis(value: 0),
-                change: nil,
-                alternative: false
+                fee: Satoshis(value: 25000),
+                change: MuunAddress(
+                    version: 2,
+                    derivationPath: "m/schema:1'/recovery:1'/external:1/3",
+                    address: "2NCx9ZzLEA5XGTQK3suZQpuexXxAsr3j5M2"
+                ),
+                alternative: false,
+                expectedDebtInSat: Satoshis(value: 0)
             ),
             nonces: LibwalletGenerateMusigNonces(1)!
         )

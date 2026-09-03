@@ -90,7 +90,7 @@ func (k keyProvider) WithPathUsingHardenedBug(path string) (*btcec.PrivateKey, e
 			modifier = hdkeychain.HardenedKeyStart
 		}
 		//lint:ignore SA1019 using deprecated method for backwards compat with the bug
-		key, err = key.DeriveNonStandard( //nolint:staticcheck // TODO: key.DeriveNonStandard is deprecated: This is a non-standard derivation that is affected by issue #172. 1-of-256 hardened derivations will be wrong.  See note in the Derive method and IsAffectedByIssue172.
+		key, err = key.DeriveNonStandard( //nolint:staticcheck // intentional use of deprecated method
 			index.Index | modifier,
 		)
 		if err != nil {

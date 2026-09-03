@@ -24,7 +24,7 @@ type Invoice struct {
 	PaymentHash   []byte
 	PaymentSecret []byte
 	KeyPath       string
-	ShortChanId   uint64 //nolint:staticcheck // TODO: struct field ShortChanId should be ShortChanID
+	ShortChanId   uint64 //nolint:staticcheck // gomobile export
 	AmountSat     int64
 	State         InvoiceState
 	Metadata      string
@@ -35,7 +35,7 @@ type DB struct {
 	db *gorm.DB
 }
 
-func Open(path string) (*DB, error) {
+func open(path string) (*DB, error) {
 	// _busy_timeout: retry for up to 1s before returning "database is locked" on concurrent writes.
 	// Without it, SQLite fails immediately when two concurrent writes overlap. _journal_mode=WAL:
 	// improves read/write concurrency. Readers can proceed concurrently with a writer, though
@@ -98,7 +98,7 @@ func migrate(db *gorm.DB) error {
 					PaymentHash   []byte
 					PaymentSecret []byte
 					KeyPath       string
-					ShortChanId   uint64 //nolint:staticcheck // TODO: struct field ShortChanId should be ShortChanID
+					ShortChanId   uint64 //nolint:staticcheck // gomobile export
 					State         string
 					UsedAt        *time.Time
 				}
@@ -123,7 +123,7 @@ func migrate(db *gorm.DB) error {
 					PaymentHash   []byte
 					PaymentSecret []byte
 					KeyPath       string
-					ShortChanId   uint64 //nolint:staticcheck // TODO: struct field ShortChanId should be ShortChanID
+					ShortChanId   uint64 //nolint:staticcheck // gomobile export
 					AmountSat     int64
 					State         string
 					UsedAt        *time.Time
@@ -143,7 +143,7 @@ func migrate(db *gorm.DB) error {
 					PaymentHash   []byte
 					PaymentSecret []byte
 					KeyPath       string
-					ShortChanId   uint64 //nolint:staticcheck // TODO: struct field ShortChanId should be ShortChanID
+					ShortChanId   uint64 //nolint:staticcheck // gomobile export
 					AmountSat     int64
 					State         InvoiceState
 					Metadata      string

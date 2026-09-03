@@ -6,13 +6,15 @@ import (
 	"log/slog"
 	"path"
 	"runtime/debug"
-	"time"
 
 	"github.com/go-errors/errors"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/muun/libwallet/platform/observability/otel"
 )
 
 // RecoverUnknownErrorUnaryInterceptor converts UNKNOWN gRPC errors into INTERNAL gRPC errors
@@ -21,7 +23,7 @@ func RecoverUnknownErrorUnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req any,
-		info *grpc.UnaryServerInfo, //nolint:revive // TODO: use or remove info
+		_ *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler,
 	) (resp any, err error) {
 
@@ -43,18 +45,21 @@ func RecoverPanicUnaryInterceptor() grpc.UnaryServerInterceptor {
 	)
 }
 
-// LoggingUnaryInterceptor logs each incoming gRPC method, its duration and error status.
-func LoggingUnaryInterceptor() grpc.UnaryServerInterceptor {
+// TracingUnaryInterceptor registers tracingInterceptorHandler for unary endpoints.
+func TracingUnaryInterceptor(otelSetup *otel.Setup) grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req any,
 		info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler,
 	) (resp any, err error) {
-		startTime := time.Now()
-		resp, err = handler(ctx, req)
-		duration := time.Since(startTime)
-		logCall(path.Base(info.FullMethod), duration, err)
+		method := path.Base(info.FullMethod)
+
+		err = tracingInterceptorHandler(ctx, otelSetup, method, func(ctx context.Context) error {
+			resp, err = handler(ctx, req)
+			return err
+		})
+
 		return resp, err
 	}
 }
@@ -86,44 +91,33 @@ func RecoverPanicStreamInterceptor() grpc.StreamServerInterceptor {
 	)
 }
 
-// LoggingStreamInterceptor logs each streaming gRPC method, its duration and error status.
-func LoggingStreamInterceptor() grpc.StreamServerInterceptor {
+// TracingStreamInterceptor registers tracingInterceptorHandler for stream endpoints.
+func TracingStreamInterceptor(otelSetup *otel.Setup) grpc.StreamServerInterceptor {
 	return func(
 		srv any,
 		ss grpc.ServerStream,
 		info *grpc.StreamServerInfo,
 		handler grpc.StreamHandler,
 	) error {
-		startTime := time.Now()
-		err := handler(srv, ss)
-		duration := time.Since(startTime)
-		logCall(path.Base(info.FullMethod), duration, err)
-		return err
+		ctx := ss.Context()
+		method := path.Base(info.FullMethod)
+
+		return tracingInterceptorHandler(ctx, otelSetup, method, func(ctx context.Context) error {
+			return handler(srv, &grpc_middleware.WrappedServerStream{
+				ServerStream:   ss,
+				WrappedContext: ctx,
+			})
+		})
 	}
 }
 
 func panicRecoveryHandler(p any) error {
-	stack := debug.Stack()
 	slog.Error(
 		"recovery from panic",
 		slog.Any("panic", fmt.Sprintf("%v", p)),
-		slog.String("stack", string(stack)),
+		slog.String("stack", string(debug.Stack())),
 	)
-	return NewGrpcError(errors.Errorf("panic: %v", p))
-}
 
-func logCall(method string, duration time.Duration, err error) {
-	statusCode := status.Code(err)
-	attrs := []any{
-		slog.String("method", method),
-		slog.Int("duration_ms", int(duration.Milliseconds())),
-		slog.String("status_code", statusCode.String()),
-	}
-
-	if err != nil {
-		attrs = append(attrs, slog.Any("error", err))
-		slog.Error("gRPC call failed", attrs...)
-	} else {
-		slog.Debug("gRPC call succeeded", attrs...)
-	}
+	// Capture the stacktrace of the panic into an error (if not done already), and mark error as a panic.
+	return NewGrpcError(errors.WrapPrefix(p, "panic", 0))
 }

@@ -73,7 +73,7 @@ func NewMockMuunCardV2() (*MockMuunCardV2, error) {
 }
 
 func (c *MockMuunCardV2) getAppletId() string {
-	return MuuncardV2AppletId
+	return MuuncardV2AppletID
 }
 
 func (c *MockMuunCardV2) processCommand(apdu []byte) (*app_provided_data.NfcBridgeResponse, error) {

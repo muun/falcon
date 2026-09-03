@@ -1,6 +1,8 @@
 package securekv
 
 import (
+	"github.com/go-errors/errors"
+
 	"github.com/muun/libwallet/app_provided_data"
 	"github.com/muun/libwallet/platform/preconditions"
 )
@@ -20,12 +22,19 @@ func NewSecret(key string, fetcher app_provided_data.SecureKeyValueStorage) *Sec
 
 // WithSecret fetches fresh on every call.
 func (s *Secret) WithSecret(fn func([]byte) error) error {
-	b, err := s.fetcher.Get(s.key)
+	resp, err := s.fetcher.Get(s.key)
 	if err != nil {
-		return classifyError(err)
+		return newStorageFailedError(err)
 	}
-	defer wipeSecret(b)
-	return fn(b)
+	if resp == nil {
+		return newStorageFailedError(errors.Errorf("bridge returned nil response"))
+	}
+	// Wipe runs regardless of status.
+	defer wipeSecret(resp.Value)
+	if resp.StatusCode == app_provided_data.SecureKvStatusOk {
+		return fn(resp.Value)
+	}
+	return errorFromGetStatus(resp.StatusCode)
 }
 
 // wipeSecret routes through observeBytes to defeat dead-store elimination.

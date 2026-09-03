@@ -1,6 +1,12 @@
 package nfc
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/go-errors/errors"
+
+	"github.com/muun/libwallet/service"
+)
 
 type MuunAppletNotFoundError struct {
 	Message string
@@ -66,6 +72,25 @@ func (e NoSlotsAvailableError) Unwrap() error {
 	return e.Cause
 }
 
+// UnsupportedCardVersionError is returned when the tapped card's version cannot be
+// determined or maps to no known protocol flow, meaning this app build doesn't recognize
+// the card's firmware and the user should update the app.
+type UnsupportedCardVersionError struct {
+	Message string
+	Cause   error
+}
+
+func (e UnsupportedCardVersionError) Error() string {
+	if e.Cause != nil {
+		return fmt.Sprintf("unsupported card version: %s: %v", e.Message, e.Cause)
+	}
+	return fmt.Sprintf("unsupported card version: %s", e.Message)
+}
+
+func (e UnsupportedCardVersionError) Unwrap() error {
+	return e.Cause
+}
+
 // PairInternalError Adding this error to track security cards internal testing
 // It will be removed later
 type PairInternalError struct {
@@ -82,4 +107,28 @@ func (e PairInternalError) Error() string {
 
 func (e PairInternalError) Unwrap() error {
 	return e.Cause
+}
+
+// mapHoustonCardError returns the action-level error for a security card failure reported
+// by Houston, or nil when the failure is not one the presentation layer discriminates on —
+// the caller wraps those itself, naming the step that failed.
+func mapHoustonCardError(err error) error {
+	var houstonError *service.HoustonResponseError
+	if !errors.As(err, &houstonError) {
+		return nil
+	}
+
+	switch houstonError.ErrorCode {
+	case service.ErrInvalidMac, service.ErrInvalidSignature:
+		return &InvalidMacError{
+			Message: "mac verification failed",
+			Cause:   houstonError,
+		}
+	case service.ErrChallengeExpired:
+		return &ChallengeExpiredError{
+			Message: "challenge has expired",
+			Cause:   houstonError,
+		}
+	}
+	return nil
 }

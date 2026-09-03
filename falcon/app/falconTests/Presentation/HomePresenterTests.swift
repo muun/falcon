@@ -150,9 +150,9 @@ private class BalanceDelegate: ExpectablePresenterDelegate, HomePresenterDelegat
     
     func onOperationsChange() {}
     
-    func onBalanceChange(_ balance: MonetaryAmount) {
-        XCTAssertEqual(balance.amount, expectedBalance)
-        
+    func onBalanceChange(_ balance: BitcoinAmount) {
+        XCTAssertEqual(balance.inSatoshis.toBTC().amount, expectedBalance)
+
         self.expectation.fulfill()
     }
     

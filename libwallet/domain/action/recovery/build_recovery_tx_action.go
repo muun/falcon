@@ -95,8 +95,8 @@ func (action *BuildSweepTxAction) Run(
 }
 
 type input struct {
-	utxo          *scanner.Utxo
-	muunSignature []byte
+	utxo              *scanner.Utxo
+	cosignerSignature []byte
 }
 
 func (i *input) OutPoint() libwallet.Outpoint {
@@ -112,7 +112,7 @@ func (i *input) UserSignature() []byte {
 }
 
 func (i *input) MuunSignature() []byte {
-	return i.muunSignature
+	return i.cosignerSignature
 }
 
 func (i *input) SubmarineSwapV1() libwallet.InputSubmarineSwapV1 {
@@ -138,7 +138,7 @@ type outpoint struct {
 	utxo *scanner.Utxo
 }
 
-func (o *outpoint) TxId() []byte {
+func (o *outpoint) TxId() []byte { //nolint:staticcheck // should be TxID, but it's part of the gomobile contract with the apps
 	raw, err := hex.DecodeString(o.utxo.TxID)
 	if err != nil {
 		panic(err) // we wrote this hex value ourselves, no input from anywhere else

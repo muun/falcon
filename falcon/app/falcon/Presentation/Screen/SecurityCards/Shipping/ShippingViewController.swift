@@ -29,6 +29,8 @@ final class ShippingViewController: MUViewController {
     private lazy var connectingOverlay = SecurityCardConnectingOverlayView()
     private var connectingDismissWorkItem: DispatchWorkItem?
     private var haloHeightConstraint: NSLayoutConstraint!
+    private var contentMinHeightConstraint: NSLayoutConstraint!
+    private let topFadeMask = ScrollViewTopFadeMask()
 
     private var hasShownConnecting = false
     private var hasSetupPill = false
@@ -67,9 +69,9 @@ final class ShippingViewController: MUViewController {
         navigationItem.largeTitleDisplayMode = .always
         setupHaloView()
         setupScrollView()
-        setupCTAButton()
         setupHeader()
         setupForm()
+        setupCTAButton()
         setupDismissKeyboardOnTap()
         registerKeyboardNotifications()
     }
@@ -98,20 +100,45 @@ final class ShippingViewController: MUViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         haloHeightConstraint.constant = view.bounds.width / 2 + Constants.haloHeightPadding
+        topFadeMask.updateMask()
+        updateContentMinHeight()
+    }
+
+    /// Auto Layout can't reference adjustedContentInset (nav bar / large title),
+    /// so the visible-height correction is applied by hand on every layout pass.
+    private func updateContentMinHeight() {
+        let insets = scrollView.adjustedContentInset
+        let constant = -(insets.top + insets.bottom)
+        if contentMinHeightConstraint.constant != constant {
+            contentMinHeightConstraint.constant = constant
+        }
     }
 
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        // Lets short content pull the collapsed large title back open.
+        scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
+        // The halo at subview index 0 breaks UIKit's scroll auto-tracking, so link it by hand.
+        setContentScrollView(scrollView, for: .top)
+        topFadeMask.attach(to: scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            // bottom pinned to ctaButton.topAnchor in setupCTAButton
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
+
+        // Fills the viewport on tall screens so the CTA anchors to the bottom;
+        // taller-than-viewport content scrolls as usual. The constant discounts
+        // the scroll insets and is kept in sync in updateContentMinHeight().
+        contentMinHeightConstraint = contentView.heightAnchor.constraint(
+            greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor
+        )
+
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.leadingAnchor
@@ -120,7 +147,8 @@ final class ShippingViewController: MUViewController {
                 .constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentView.bottomAnchor
                 .constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            contentMinHeightConstraint
         ])
     }
 
@@ -165,10 +193,6 @@ final class ShippingViewController: MUViewController {
             formView.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
                 constant: -MuunTheme.Spacing.xl
-            ),
-            formView.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -MuunTheme.Spacing.xl3
             )
         ])
     }
@@ -183,22 +207,33 @@ final class ShippingViewController: MUViewController {
         ctaButton.layer.cornerRadius = Constants.ctaButtonCornerRadius
         ctaButton.translatesAutoresizingMaskIntoConstraints = false
         ctaButton.addTarget(self, action: #selector(didTapCTA), for: .touchUpInside)
-        view.addSubview(ctaButton)
+        contentView.addSubview(ctaButton)
+
+        // The gap above the CTA absorbs any extra height when the content
+        // stretches to fill the viewport, pushing the button down.
+        let preferredTopSpacing = ctaButton.topAnchor.constraint(
+            equalTo: formView.bottomAnchor,
+            constant: MuunTheme.Spacing.xl3
+        )
+        preferredTopSpacing.priority = .defaultLow
 
         NSLayoutConstraint.activate([
-            scrollView.bottomAnchor.constraint(equalTo: ctaButton.topAnchor),
-
+            ctaButton.topAnchor.constraint(
+                greaterThanOrEqualTo: formView.bottomAnchor,
+                constant: MuunTheme.Spacing.xl3
+            ),
+            preferredTopSpacing,
             ctaButton.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
+                equalTo: contentView.leadingAnchor,
                 constant: MuunTheme.Spacing.xl
             ),
             ctaButton.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
+                equalTo: contentView.trailingAnchor,
                 constant: -MuunTheme.Spacing.xl
             ),
             ctaButton.heightAnchor.constraint(equalToConstant: Constants.ctaButtonHeight),
             ctaButton.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                equalTo: contentView.bottomAnchor,
                 constant: -MuunTheme.Spacing.xl3
             )
         ])
@@ -310,6 +345,11 @@ extension ShippingViewController: ShippingPresenterDelegate {
     func displayFormErrors(_ errors: [ShippingFormField: String]) {
         formView.showErrors(errors)
     }
+
+    func didValidateForm(provider: SecurityCardProvider, values: ShippingFormValues) {
+        let orderSummary = OrderSummaryViewController(provider: provider, shippingValues: values)
+        navigationController?.pushViewController(orderSummary, animated: true)
+    }
 }
 
 // MARK: - SecurityCardProviderPillViewDelegate
@@ -333,6 +373,20 @@ extension ShippingViewController: SecurityCardProviderPillViewDelegate {
 extension ShippingViewController: ShippingFormViewDelegate {
 
     func shippingFormViewDidTapCountry(_ view: ShippingFormView) {
-        // Country is non-editable for now; the picker hook will land in a later PR.
+        let vc = CountrySelectorViewController(
+            selectedCountryCode: presenter.selectedCountryCode,
+            delegate: self
+        )
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
+    }
+}
+
+// MARK: - CountrySelectorViewControllerDelegate
+
+extension ShippingViewController: CountrySelectorViewControllerDelegate {
+
+    func countrySelectorDidSelect(country: Country) {
+        presenter.update(country: country)
     }
 }

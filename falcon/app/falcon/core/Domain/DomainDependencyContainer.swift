@@ -119,6 +119,7 @@ public extension DependencyContainer {
                 DefaultCardPriceFormatter(exchangeRateRepository: $0) as CardPriceFormatter
             }
             container.register(.singleton, factory: GetSecurityCardCountryAction.init)
+            container.register(.singleton, factory: SetSecurityCardCountryAction.init)
 
             container.register(.singleton, factory: UserSelector.init)
             container.register(.singleton, factory: EmergencyKitDataSelector.init)
@@ -200,7 +201,8 @@ public extension DependencyContainer {
                         userPreferencesSelector: $4
                     ),
                     NodeHandlingGroup(),
-                    NfcCardGroup()
+                    NfcCardGroup(),
+                    SecureKeyValueStorageGroup()
                 ] as [DebugExecutablesGroup]
             }
         }

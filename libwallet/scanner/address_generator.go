@@ -10,18 +10,18 @@ import (
 type AddressGenerator struct {
 	addressCount     int
 	userKey          *libwallet.HDPublicKey
-	muunKey          *libwallet.HDPublicKey
+	cosignerKey      *libwallet.HDPublicKey
 	generateContacts bool
 }
 
 func NewAddressGenerator(
-	userKey, muunKey *libwallet.HDPublicKey,
+	userKey, cosignerKey *libwallet.HDPublicKey,
 	generateContacts bool,
 ) *AddressGenerator {
 	return &AddressGenerator{
 		addressCount:     0,
 		userKey:          userKey,
-		muunKey:          muunKey,
+		cosignerKey:      cosignerKey,
 		generateContacts: generateContacts,
 	}
 }
@@ -55,9 +55,9 @@ func (g *AddressGenerator) generateChangeAddrs(
 ) {
 	const changePath = "m/1'/1'/0"
 	changeUserKey, _ := g.userKey.DeriveTo(changePath)
-	changeMuunKey, _ := g.muunKey.DeriveTo(changePath)
+	changeCosignerKey, _ := g.cosignerKey.DeriveTo(changePath)
 
-	g.deriveTree(consumer, changeUserKey, changeMuunKey, countPerDerivationTree, "change")
+	g.deriveTree(consumer, changeUserKey, changeCosignerKey, countPerDerivationTree, "change")
 }
 
 func (g *AddressGenerator) generateExternalAddrs(
@@ -66,9 +66,9 @@ func (g *AddressGenerator) generateExternalAddrs(
 ) {
 	const externalPath = "m/1'/1'/1"
 	externalUserKey, _ := g.userKey.DeriveTo(externalPath)
-	externalMuunKey, _ := g.muunKey.DeriveTo(externalPath)
+	externalCosignerKey, _ := g.cosignerKey.DeriveTo(externalPath)
 
-	g.deriveTree(consumer, externalUserKey, externalMuunKey, countPerDerivationTree, "external")
+	g.deriveTree(consumer, externalUserKey, externalCosignerKey, countPerDerivationTree, "external")
 }
 
 func (g *AddressGenerator) generateContactAddrs(
@@ -77,19 +77,19 @@ func (g *AddressGenerator) generateContactAddrs(
 ) {
 	const addressPath = "m/1'/1'/2"
 	contactUserKey, _ := g.userKey.DeriveTo(addressPath)
-	contactMuunKey, _ := g.muunKey.DeriveTo(addressPath)
+	contactCosignerKey, _ := g.cosignerKey.DeriveTo(addressPath)
 	for i := int64(0); i <= numContacts; i++ {
 		partialContactUserKey, _ := contactUserKey.DerivedAt(i)
-		partialMuunUserKey, _ := contactMuunKey.DerivedAt(i)
+		partialCosignerKey, _ := contactCosignerKey.DerivedAt(i)
 
 		branch := fmt.Sprintf("contacts-%v", i)
-		g.deriveTree(consumer, partialContactUserKey, partialMuunUserKey, 200, branch)
+		g.deriveTree(consumer, partialContactUserKey, partialCosignerKey, 200, branch)
 	}
 }
 
 func (g *AddressGenerator) deriveTree(
 	consumer chan libwallet.MuunAddress,
-	rootUserKey, rootMuunKey *libwallet.HDPublicKey,
+	rootUserKey, rootCosignerKey *libwallet.HDPublicKey,
 	countPerDerivationTree int64,
 	name string,
 ) {
@@ -99,13 +99,13 @@ func (g *AddressGenerator) deriveTree(
 			slog.Warn(fmt.Sprintf("skipping child %v for %v due to %v", i, name, err))
 			continue
 		}
-		muunKey, err := rootMuunKey.DerivedAt(i)
+		cosignerKey, err := rootCosignerKey.DerivedAt(i)
 		if err != nil {
 			slog.Warn(fmt.Sprintf("skipping child %v for %v due to %v", i, name, err))
 			continue
 		}
 
-		addrV2, err := libwallet.CreateAddressV2(userKey, muunKey)
+		addrV2, err := libwallet.CreateAddressV2(userKey, cosignerKey)
 		if err == nil {
 			consumer <- addrV2
 			g.addressCount++
@@ -113,7 +113,7 @@ func (g *AddressGenerator) deriveTree(
 			slog.Warn(fmt.Sprintf("failed to generate %v v2 for %v due to %v", name, i, err))
 		}
 
-		addrV3, err := libwallet.CreateAddressV3(userKey, muunKey)
+		addrV3, err := libwallet.CreateAddressV3(userKey, cosignerKey)
 		if err == nil {
 			consumer <- addrV3
 			g.addressCount++
@@ -121,7 +121,7 @@ func (g *AddressGenerator) deriveTree(
 			slog.Warn(fmt.Sprintf("failed to generate %v v3 for %v due to %v", name, i, err))
 		}
 
-		addrV4, err := libwallet.CreateAddressV4(userKey, muunKey)
+		addrV4, err := libwallet.CreateAddressV4(userKey, cosignerKey)
 		if err == nil {
 			consumer <- addrV4
 			g.addressCount++
@@ -129,7 +129,7 @@ func (g *AddressGenerator) deriveTree(
 			slog.Warn(fmt.Sprintf("failed to generate %v v4 for %v due to %v", name, i, err))
 		}
 
-		addrV5, err := libwallet.CreateAddressV5(userKey, muunKey)
+		addrV5, err := libwallet.CreateAddressV5(userKey, cosignerKey)
 		if err == nil {
 			consumer <- addrV5
 			g.addressCount++
@@ -137,7 +137,7 @@ func (g *AddressGenerator) deriveTree(
 			slog.Warn(fmt.Sprintf("failed to generate %v v5 for %v due to %v", name, i, err))
 		}
 
-		addrV6, err := libwallet.CreateAddressV6(userKey, muunKey)
+		addrV6, err := libwallet.CreateAddressV6(userKey, cosignerKey)
 		if err == nil {
 			consumer <- addrV6
 			g.addressCount++

@@ -45,8 +45,10 @@ final class BuyDetailsViewController: MUViewController {
     private lazy var productListView = SecurityCardProductListView(delegate: self)
     private lazy var fullPriceView = SecurityCardFullPriceView(delegate: self)
     private let ctaButton = UIButton(type: .system)
+    private let topFadeMask = ScrollViewTopFadeMask()
 
     private var cardImageHeightConstraint: NSLayoutConstraint?
+    private var contentMinHeightConstraint: NSLayoutConstraint!
     private var hasAnimatedEntry = false
 
     override var screenLoggingName: String {
@@ -97,6 +99,22 @@ final class BuyDetailsViewController: MUViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         runEntryAnimationIfNeeded()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        topFadeMask.updateMask()
+        updateContentMinHeight()
+    }
+
+    /// Auto Layout can't reference adjustedContentInset (nav bar / large title),
+    /// so the visible-height correction is applied by hand on every layout pass.
+    private func updateContentMinHeight() {
+        let insets = scrollView.adjustedContentInset
+        let constant = -(insets.top + insets.bottom)
+        if contentMinHeightConstraint.constant != constant {
+            contentMinHeightConstraint.constant = constant
+        }
     }
 
     private var entryAnimatedViews: [UIView] {
@@ -190,17 +208,29 @@ final class BuyDetailsViewController: MUViewController {
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
+        // Lets short content pull the collapsed large title back open.
+        scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
+        // The halo at subview index 0 breaks UIKit's scroll auto-tracking, so link it by hand.
+        setContentScrollView(scrollView, for: .top)
+        topFadeMask.attach(to: scrollView)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            // bottom is pinned to separator.topAnchor in setupFullPrice
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
+
+        // Fills the viewport on tall screens so the CTA anchors to the bottom;
+        // taller-than-viewport content scrolls as usual. The constant discounts
+        // the scroll insets and is kept in sync in updateContentMinHeight().
+        contentMinHeightConstraint = contentView.heightAnchor.constraint(
+            greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor
+        )
 
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
@@ -210,7 +240,8 @@ final class BuyDetailsViewController: MUViewController {
                 .constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentView.bottomAnchor
                 .constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            contentMinHeightConstraint
         ])
     }
 
@@ -307,27 +338,34 @@ final class BuyDetailsViewController: MUViewController {
             productListView.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
                 constant: -MuunTheme.Spacing.xl
-            ),
-            productListView.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -MuunTheme.Spacing.xl3
             )
         ])
     }
 
     private func setupFullPrice() {
         fullPriceView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(fullPriceView)
+        contentView.addSubview(fullPriceView)
+
+        // The gap above the price footer absorbs any extra height when the
+        // content stretches to fill the viewport, pushing the footer down.
+        let preferredTopSpacing = fullPriceView.topAnchor.constraint(
+            equalTo: productListView.bottomAnchor,
+            constant: MuunTheme.Spacing.xl3
+        )
+        preferredTopSpacing.priority = .defaultLow
 
         NSLayoutConstraint.activate([
-            scrollView.bottomAnchor.constraint(equalTo: fullPriceView.topAnchor),
-
+            fullPriceView.topAnchor.constraint(
+                greaterThanOrEqualTo: productListView.bottomAnchor,
+                constant: MuunTheme.Spacing.xl3
+            ),
+            preferredTopSpacing,
             fullPriceView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
+                equalTo: contentView.leadingAnchor,
                 constant: MuunTheme.Spacing.xl
             ),
             fullPriceView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
+                equalTo: contentView.trailingAnchor,
                 constant: -MuunTheme.Spacing.xl
             )
         ])
@@ -349,7 +387,7 @@ final class BuyDetailsViewController: MUViewController {
         ctaButton.configuration = config
         ctaButton.translatesAutoresizingMaskIntoConstraints = false
         ctaButton.addTarget(self, action: #selector(didTapCTA), for: .touchUpInside)
-        view.addSubview(ctaButton)
+        contentView.addSubview(ctaButton)
 
         NSLayoutConstraint.activate([
             ctaButton.topAnchor.constraint(
@@ -357,18 +395,18 @@ final class BuyDetailsViewController: MUViewController {
                 constant: MuunTheme.Spacing.xl3
             ),
             ctaButton.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
+                equalTo: contentView.leadingAnchor,
                 constant: MuunTheme.Spacing.xl
             ),
             ctaButton.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
+                equalTo: contentView.trailingAnchor,
                 constant: -MuunTheme.Spacing.xl
             ),
             ctaButton.heightAnchor.constraint(
                 equalToConstant: Constants.ctaButtonHeight
             ),
             ctaButton.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                equalTo: contentView.bottomAnchor,
                 constant: -MuunTheme.Spacing.xl3
             )
         ])

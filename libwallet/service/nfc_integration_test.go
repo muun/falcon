@@ -45,12 +45,12 @@ func pairCardWithHouston(
 	card *nfc.MuunCardV2,
 ) {
 
-	challengePair, err := mockHouston.ChallengeSecurityCardPair()
+	challengePair, err := mockHouston.PairRequestChallenge()
 	if err != nil {
 		t.Fatalf("error requesting challenge to server: %v", err)
 	}
 
-	serverPublicKey, err := hex.DecodeString(challengePair.ServerPublicKeyInHex)
+	serverPublicKey, err := hex.DecodeString(challengePair.ServerPubKeyInHex)
 	if err != nil {
 		t.Fatalf("error decoding server key: %v", err)
 	}
@@ -95,7 +95,7 @@ func registerPairingOnHouston(
 	clientPubKey []byte,
 ) {
 
-	registerSecurityCardJson, err := MapRegisterSecurityCardJson( //nolint:staticcheck // TODO: var registerSecurityCardJson should be registerSecurityCardJSON
+	registerSecurityCardJSON, err := MapRegisterSecurityCardJSON(
 		pairingResp,
 		clientPubKey,
 	)
@@ -103,7 +103,7 @@ func registerPairingOnHouston(
 		t.Fatalf("failed to map pairing response %v", err)
 	}
 
-	_, err = mockHouston.RegisterSecurityCard(*registerSecurityCardJson)
+	_, err = mockHouston.RegisterSecurityCard(*registerSecurityCardJSON)
 	if err != nil {
 		t.Fatalf("failed to register security card in houston: %v", err)
 	}
@@ -152,7 +152,7 @@ func testSignChallengeSuccess(
 ) {
 
 	challengeResponse, err := mockHouston.ChallengeSecurityCardSign(
-		model.ChallengeSecurityCardSignJson{
+		model.ChallengeSecurityCardSignJSON{
 			ReasonInHex: hex.EncodeToString(reason),
 		},
 	)
@@ -172,12 +172,12 @@ func testSignChallengeSuccess(
 
 	cardPublicKeyInHex := hex.EncodeToString(signChallengeResponse.CardPublicKey)
 	macInHex := hex.EncodeToString(signChallengeResponse.MAC)
-	securityCardChallengeJson := model.SolveSecurityCardChallengeJson{ //nolint:staticcheck // TODO: var securityCardChallengeJson should be securityCardChallengeJSON
+	securityCardChallengeJSON := model.SolveSecurityCardChallengeJSON{
 		PublicKeyInHex: cardPublicKeyInHex,
 		MacInHex:       macInHex,
 	}
 
-	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJson)
+	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJSON)
 	if err != nil {
 		t.Fatalf("error solving challenge: %v", err)
 	}
@@ -190,7 +190,7 @@ func testSignChallengeInvalidCounter(
 	reason []byte,
 ) {
 	challengeResponse, err := mockHouston.ChallengeSecurityCardSign(
-		model.ChallengeSecurityCardSignJson{
+		model.ChallengeSecurityCardSignJSON{
 			ReasonInHex: hex.EncodeToString(reason),
 		},
 	)
@@ -222,12 +222,12 @@ func testSignChallengeInvalidCounter(
 
 	cardPublicKeyInHex := hex.EncodeToString(signChallengeResponse.CardPublicKey)
 	macInHex := hex.EncodeToString(signChallengeResponse.MAC)
-	securityCardChallengeJson := model.SolveSecurityCardChallengeJson{ //nolint:staticcheck // TODO: var securityCardChallengeJson should be securityCardChallengeJSON
+	securityCardChallengeJSON := model.SolveSecurityCardChallengeJSON{
 		PublicKeyInHex: cardPublicKeyInHex,
 		MacInHex:       macInHex,
 	}
 
-	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJson)
+	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJSON)
 	if err != nil {
 		t.Fatalf("error solving challenge: %v", err)
 	}
@@ -240,7 +240,7 @@ func testSignChallengeCounterAdvancesEvenIfSolveChallengeFails(
 	reason []byte,
 ) {
 	challengeResponse, err := mockHouston.ChallengeSecurityCardSign(
-		model.ChallengeSecurityCardSignJson{
+		model.ChallengeSecurityCardSignJSON{
 			ReasonInHex: hex.EncodeToString(reason),
 		},
 	)
@@ -267,7 +267,7 @@ func testSignChallengeCounterAdvancesEvenIfSolveChallengeFails(
 
 	// Simulate failure: SolveSecurityCardChallenge` is not called for the first signed challenge.
 	challengeResponse2, err := mockHouston.ChallengeSecurityCardSign(
-		model.ChallengeSecurityCardSignJson{
+		model.ChallengeSecurityCardSignJSON{
 			ReasonInHex: hex.EncodeToString(reason),
 		},
 	)
@@ -290,12 +290,12 @@ func testSignChallengeCounterAdvancesEvenIfSolveChallengeFails(
 
 	cardPublicKeyInHex := hex.EncodeToString(signChallengeResponse.CardPublicKey)
 	macInHex := hex.EncodeToString(signChallengeResponse.MAC)
-	securityCardChallengeJson := model.SolveSecurityCardChallengeJson{ //nolint:staticcheck // TODO: var securityCardChallengeJson should be securityCardChallengeJSON
+	securityCardChallengeJSON := model.SolveSecurityCardChallengeJSON{
 		PublicKeyInHex: cardPublicKeyInHex,
 		MacInHex:       macInHex,
 	}
 
-	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJson)
+	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJSON)
 	if err != nil {
 		t.Fatalf("error solving challenge: %v", err)
 	}
@@ -308,7 +308,7 @@ func testSignChallengeInvalidSlot(
 	reason []byte,
 ) {
 	challengeResponse, err := mockHouston.ChallengeSecurityCardSign(
-		model.ChallengeSecurityCardSignJson{
+		model.ChallengeSecurityCardSignJSON{
 			ReasonInHex: hex.EncodeToString(reason),
 		},
 	)
@@ -340,12 +340,12 @@ func testSignChallengeInvalidSlot(
 
 	cardPublicKeyInHex := hex.EncodeToString(signChallengeResponse.CardPublicKey)
 	macInHex := hex.EncodeToString(signChallengeResponse.MAC)
-	securityCardChallengeJson := model.SolveSecurityCardChallengeJson{ //nolint:staticcheck // TODO: var securityCardChallengeJson should be securityCardChallengeJSON
+	securityCardChallengeJSON := model.SolveSecurityCardChallengeJSON{
 		PublicKeyInHex: cardPublicKeyInHex,
 		MacInHex:       macInHex,
 	}
 
-	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJson)
+	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJSON)
 	if err != nil {
 		t.Fatalf("error solving challenge: %v", err)
 	}
@@ -358,7 +358,7 @@ func testSignChallengeInvalidMac(
 	reason []byte,
 ) {
 	challengeResponse, err := mockHouston.ChallengeSecurityCardSign(
-		model.ChallengeSecurityCardSignJson{
+		model.ChallengeSecurityCardSignJSON{
 			ReasonInHex: hex.EncodeToString(reason),
 		},
 	)
@@ -389,22 +389,24 @@ func testSignChallengeInvalidMac(
 
 	cardPublicKeyInHex := hex.EncodeToString(signChallengeResponse.CardPublicKey)
 	macInHex := hex.EncodeToString(signChallengeResponse.MAC)
-	securityCardChallengeJson := model.SolveSecurityCardChallengeJson{ //nolint:staticcheck // TODO: var securityCardChallengeJson should be securityCardChallengeJSON
+	securityCardChallengeJSON := model.SolveSecurityCardChallengeJSON{
 		PublicKeyInHex: cardPublicKeyInHex,
 		MacInHex:       macInHex,
 	}
 
-	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJson)
+	err = mockHouston.SolveSecurityCardChallenge(securityCardChallengeJSON)
 	if err != nil {
 		t.Fatalf("error solving challenge: %v", err)
 	}
 }
 
+// Parameters kept as underscores: the stub's single caller already passes them,
+// and the implementation will need all four.
 func testSignChallengeSecretUpdates(
-	t *testing.T, //nolint:revive // TODO: use or remove t
-	houston *MockHoustonService, //nolint:revive // TODO: use or remove houston
-	card *nfc.MuunCardV2, //nolint:revive // TODO: use or remove card
-	reason1 []byte, //nolint:revive // TODO: use or remove reason1
+	_ *testing.T,
+	_ *MockHoustonService,
+	_ *nfc.MuunCardV2,
+	_ []byte,
 ) {
 
 	// challenge 1 should work with initial secret
@@ -426,6 +428,12 @@ func buildStorageSchemaForTests() map[string]storage.Classification {
 			ValueType:        &storage.StringType{},
 		},
 		storage.KeySecurityCardUsageCount: {
+			BackupType:       storage.NoAutoBackup,
+			BackupSecurity:   storage.NotApplicable,
+			SecurityCritical: false,
+			ValueType:        &storage.IntType{},
+		},
+		storage.KeySecurityCardReplayCounter: {
 			BackupType:       storage.NoAutoBackup,
 			BackupSecurity:   storage.NotApplicable,
 			SecurityCritical: false,

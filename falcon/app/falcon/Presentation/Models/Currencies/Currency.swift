@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Libwallet
 
 public let satSymbol = "SAT"
 
@@ -29,6 +30,17 @@ extension Currency {
 
     var displayExponent: Int16 {
         return Int16(0)
+    }
+
+    // A currency with a missing, zero or NaN rate can't be converted: forwarding it to
+    // libwallet's amount conversion would divide by the rate and crash (#16412). Bitcoin is
+    // always valid — its rate is structurally 1.
+    func hasValidRate(in window: NewopExchangeRateWindow) -> Bool {
+        if self is BitcoinCurrency {
+            return true
+        }
+
+        return window.rate(code).isUsableExchangeRate
     }
 }
 

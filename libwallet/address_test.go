@@ -568,12 +568,12 @@ func Test_normalizeAddress(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := buildUriFromString(
+			got, _ := buildURIFromString(
 				tt.args.rawAddress, tt.args.targetScheme,
 			)
 			if got != tt.want {
 				t.Errorf(
-					"buildUriFromString() = %v, want %v",
+					"buildURIFromString() = %v, want %v",
 					got, tt.want,
 				)
 			}

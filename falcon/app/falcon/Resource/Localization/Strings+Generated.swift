@@ -270,6 +270,23 @@ internal enum L10n {
     internal static let s4 = L10n.tr("Localizable", "CurrencyPickerViewController.s4")
   }
 
+  internal enum DeliveryMethodPicker {
+    /// 2 to 4 business days
+    internal static let expressEta = L10n.tr("Localizable", "DeliveryMethodPicker.expressEta")
+    /// Express shipping
+    internal static let expressShipping = L10n.tr("Localizable", "DeliveryMethodPicker.expressShipping")
+    /// FREE
+    internal static let free = L10n.tr("Localizable", "DeliveryMethodPicker.free")
+    /// 5 to 10 business days
+    internal static let standardEta = L10n.tr("Localizable", "DeliveryMethodPicker.standardEta")
+    /// Standard shipping
+    internal static let standardShipping = L10n.tr("Localizable", "DeliveryMethodPicker.standardShipping")
+    /// +%@
+    internal static func surcharge(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "DeliveryMethodPicker.surcharge", String(describing: p1))
+    }
+  }
+
   internal enum DetailPresenter {
     /// %@ hours
     internal static func s1(_ p1: Any) -> String {
@@ -524,6 +541,13 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "HomeViewController.s2")
     /// Cancel
     internal static let s3 = L10n.tr("Localizable", "HomeViewController.s3")
+  }
+
+  internal enum KeyboardToolbar {
+    /// Next
+    internal static let next = L10n.tr("Localizable", "KeyboardToolbar.next")
+    /// Previous
+    internal static let previous = L10n.tr("Localizable", "KeyboardToolbar.previous")
   }
 
   internal enum LNURLFirstTimeViewController {
@@ -1075,6 +1099,44 @@ internal enum L10n {
     internal static let s2 = L10n.tr("Localizable", "OperationTableViewCell.s2")
   }
 
+  internal enum OrderSummaryViewController {
+    /// Card price
+    internal static let cardPrice = L10n.tr("Localizable", "OrderSummaryViewController.cardPrice")
+    /// Address
+    internal static let detailAddress = L10n.tr("Localizable", "OrderSummaryViewController.detailAddress")
+    /// Email
+    internal static let detailEmail = L10n.tr("Localizable", "OrderSummaryViewController.detailEmail")
+    /// Name
+    internal static let detailName = L10n.tr("Localizable", "OrderSummaryViewController.detailName")
+    /// GO TO PAYMENT
+    internal static let goToPayment = L10n.tr("Localizable", "OrderSummaryViewController.goToPayment")
+    /// Shipping & Taxes
+    internal static let shippingAndTaxes = L10n.tr("Localizable", "OrderSummaryViewController.shippingAndTaxes")
+    /// Review your order and proceed to payment.
+    internal static let subtitle = L10n.tr("Localizable", "OrderSummaryViewController.subtitle")
+    /// Summary
+    internal static let summaryTitle = L10n.tr("Localizable", "OrderSummaryViewController.summaryTitle")
+    /// Your order
+    internal static let title = L10n.tr("Localizable", "OrderSummaryViewController.title")
+    /// Total
+    internal static let total = L10n.tr("Localizable", "OrderSummaryViewController.total")
+  }
+
+  internal enum PayWithMuunViewController {
+    /// Amount
+    internal static let amount = L10n.tr("Localizable", "PayWithMuunViewController.amount")
+    /// Network fee
+    internal static let networkFee = L10n.tr("Localizable", "PayWithMuunViewController.networkFee")
+    /// SEND
+    internal static let send = L10n.tr("Localizable", "PayWithMuunViewController.send")
+    /// Pay with Muun
+    internal static let title = L10n.tr("Localizable", "PayWithMuunViewController.title")
+    /// To
+    internal static let to = L10n.tr("Localizable", "PayWithMuunViewController.to")
+    /// Total
+    internal static let total = L10n.tr("Localizable", "PayWithMuunViewController.total")
+  }
+
   internal enum PinPresenter {
     /// Create your PIN
     internal static let s1 = L10n.tr("Localizable", "PinPresenter.s1")
@@ -1240,6 +1302,15 @@ internal enum L10n {
     internal static func s5(_ p1: Any) -> String {
       return L10n.tr("Localizable", "ReceiveViewController.s5", String(describing: p1))
     }
+  }
+
+  internal enum ReceivingNodeDetailsViewController {
+    /// OPEN IN NODE EXPLORER
+    internal static let openInNodeExplorer = L10n.tr("Localizable", "ReceivingNodeDetailsViewController.openInNodeExplorer")
+    /// Public key
+    internal static let publicKey = L10n.tr("Localizable", "ReceivingNodeDetailsViewController.publicKey")
+    /// Receiving node details
+    internal static let title = L10n.tr("Localizable", "ReceivingNodeDetailsViewController.title")
   }
 
   internal enum Recover {

@@ -28,10 +28,39 @@ class SatoshisTests: XCTestCase {
     func testBasicOps() {
         let val1 = Satoshis(value: 1000)
         let val2 = Satoshis(value: 100)
-        
+
         XCTAssertEqual((val1 - val2).value, 900)
         XCTAssertEqual((val1 + val2).value, 1100)
         XCTAssertEqual((-val2).value, -100)
+    }
+
+    func testFromAmountAtInvalidRateDegradesToZero() {
+        XCTAssertEqual(Satoshis.from(amount: 100, at: 0).value, 0)
+        XCTAssertEqual(Satoshis.from(amount: 100, at: -1).value, 0)
+        XCTAssertEqual(Satoshis.from(amount: 100, at: Decimal.nan).value, 0)
+        XCTAssertEqual(Satoshis.from(amount: 0, at: 0).value, 0)
+    }
+
+    func testBoundedAtInvalidRateThrows() {
+        XCTAssertThrowsError(try Satoshis.bounded(amount: 100, at: 0))
+        XCTAssertThrowsError(try Satoshis.bounded(amount: 100, at: -1))
+        XCTAssertThrowsError(try Satoshis.bounded(amount: 100, at: Decimal.nan))
+    }
+
+    func testBitcoinAmountFromInvalidRateDegradesInsteadOfCrashing() {
+        // A zero/negative/NaN rate used to crash via Logger.fatal in BitcoinAmount.from's rate
+        // closure. It must now degrade to a 0 amount instead.
+        for badRate in [0, -1, Double.nan] {
+            let window = ExchangeRateWindow(id: 1, fetchDate: Date(), rates: ["USD": badRate])
+
+            let amount = BitcoinAmount.from(
+                inputCurrency: MonetaryAmount(amount: 100, currency: "USD"),
+                with: window,
+                primaryCurrency: "USD"
+            )
+
+            XCTAssertEqual(amount.inSatoshis.value, 0)
+        }
     }
 }
 

@@ -36,22 +36,22 @@ final class SecurityCardProductListView: UIView {
     }
 
     func configure(
-        material: String,
+        material: SecurityCardMaterial,
         shipsFrom: String,
         deliveryDays: String,
         providerColor: UIColor
     ) {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        let rows: [(symbol: String, label: String, value: String)] = [
-            ("creditcard", L10n.BuyDetailsViewController.material, material),
-            ("shippingbox", L10n.BuyDetailsViewController.shipsFrom, shipsFrom),
-            ("clock", L10n.BuyDetailsViewController.deliveryTime, deliveryDays)
+        let rows: [(symbol: String, label: String, valueView: UIView)] = [
+            ("creditcard", L10n.BuyDetailsViewController.material, makeMaterialValueView(material)),
+            ("shippingbox", L10n.BuyDetailsViewController.shipsFrom, makeValueLabel(shipsFrom)),
+            ("clock", L10n.BuyDetailsViewController.deliveryTime, makeValueLabel(deliveryDays))
         ]
 
         for row in rows {
             stackView.addArrangedSubview(
-                makeProductInfoRow(symbol: row.symbol, label: row.label, value: row.value)
+                makeProductInfoRow(symbol: row.symbol, label: row.label, valueView: row.valueView)
             )
         }
 
@@ -96,7 +96,7 @@ final class SecurityCardProductListView: UIView {
         ])
     }
 
-    private func makeProductInfoRow(symbol: String, label: String, value: String) -> UIView {
+    private func makeProductInfoRow(symbol: String, label: String, valueView: UIView) -> UIView {
         let icon = UIImageView(image: UIImage(systemName: symbol))
         icon.tintColor = MuunTheme.Color.Text.bodySecondary
         icon.contentMode = .scaleAspectFit
@@ -115,12 +115,30 @@ final class SecurityCardProductListView: UIView {
         leadingStack.spacing = MuunTheme.Spacing.xs
         leadingStack.alignment = .center
 
+        return BuyDetailsRowView(leadingView: leadingStack, trailingView: valueView)
+    }
+
+    private func makeValueLabel(_ value: String) -> UILabel {
         let valueLabel = UILabel()
         valueLabel.text = value
         valueLabel.font = Constant.Fonts.system(size: .opDesc)
         valueLabel.textAlignment = .right
+        return valueLabel
+    }
 
-        return BuyDetailsRowView(leadingView: leadingStack, valueLabel: valueLabel)
+    private func makeMaterialValueView(_ material: SecurityCardMaterial) -> UIView {
+        switch material {
+        case .metal:
+            let shimmer = ShimmerLabel(
+                baseColor: MuunTheme.Color.Text.metal,
+                highlightColor: .white
+            )
+            shimmer.text = material.displayName
+            shimmer.font = Constant.Fonts.system(size: .opDesc)
+            return shimmer
+        case .plastic:
+            return makeValueLabel(material.displayName)
+        }
     }
 
     @objc

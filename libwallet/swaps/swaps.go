@@ -36,7 +36,7 @@ type SubmarineSwapFundingOutput struct {
 	// v2 only
 	ExpirationInBlocks int64
 	UserPublicKey      *hdkeychain.ExtendedKey
-	MuunPublicKey      *hdkeychain.ExtendedKey
+	CosignerPublicKey  *hdkeychain.ExtendedKey
 	KeyPath            string
 }
 
@@ -79,7 +79,7 @@ func (d *KeyDescriptor) DeriveTo(path string) (*hdkeychain.ExtendedKey, error) {
 func (swap *SubmarineSwap) Validate(
 	rawInvoice string,
 	userPublicKey *KeyDescriptor,
-	muunPublicKey *KeyDescriptor,
+	cosignerPublicKey *KeyDescriptor,
 	originalExpirationInBlocks int64,
 	network *chaincfg.Params,
 ) error {
@@ -87,12 +87,12 @@ func (swap *SubmarineSwap) Validate(
 	version := swap.FundingOutput.ScriptVersion
 	switch version {
 	case addresses.SubmarineSwapV1:
-		return swap.validateV1(rawInvoice, userPublicKey, muunPublicKey, network)
+		return swap.validateV1(rawInvoice, userPublicKey, cosignerPublicKey, network)
 	case addresses.SubmarineSwapV2:
 		return swap.validateV2(
 			rawInvoice,
 			userPublicKey,
-			muunPublicKey,
+			cosignerPublicKey,
 			originalExpirationInBlocks,
 			network,
 		)

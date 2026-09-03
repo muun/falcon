@@ -45,13 +45,15 @@ class EmergencyKit: Resolver {
             )
 
             let timeTracker: TimeTracker = EmergencyKit.resolve()
-            let result = try timeTracker.start(.ekNewPdfGeneration).toMeasure {
-                try walletService.generateEmergencyKitPDF(
-                    data: data,
-                    outputPath: url.absoluteString,
-                    language: NSLocale.current.languageCode ?? "en"
-                )
-            }
+            let trace = timeTracker.start(.ekNewPdfGeneration)
+            defer { trace.finish() }
+
+            let result = try walletService.generateEmergencyKitPDF(
+                data: data,
+                outputPath: url.absoluteString,
+                language: NSLocale.current.languageCode ?? "en"
+            )
+            addRenderProfiling(to: trace, from: result)
 
             return EmergencyKit(
                 url: url,
@@ -61,6 +63,31 @@ class EmergencyKit: Resolver {
         } catch {
             Logger.log(error: error) // find this error using the filename.
             return generateKitWithHTML(input)
+        }
+    }
+
+    /// Forward libwallet's per-stage render profiling as children of the PDF-generation trace, so
+    /// prod telemetry can validate the offline profiling against real devices.
+    private static func addRenderProfiling(
+        to trace: Trace,
+        from response: Rpc_GenerateEmergencyKitPDFResponse
+    ) {
+        let p = response.profiling
+        let children: [(EmergencyKitRenderChildTrace, Int64)] = [
+            (.loadTranslations, p.loadTranslationsMs),
+            (.registerFonts, p.registerFontsMs),
+            (.registerImages, p.registerImagesMs),
+            (.componentsRendering, p.componentsRenderingMs),
+            (.createAndSaveOnDisk, p.createAndSaveOnDiskMs),
+            (.totalHeapAllocated, p.totalHeapAllocatedBytes),
+            (.totalObjectsAllocated, p.totalObjectsAllocated),
+            (.embedMetadata, p.embedMetadataMs),
+            (.totalInsideGo, p.totalInsideGoMs),
+            (.kitSizeBytes, p.kitSizeBytes),
+            (.drawIcons, p.drawIconsMs),
+        ]
+        for (child, value) in children {
+            trace.addChild(child.rawValue, value: value)
         }
     }
 

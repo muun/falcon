@@ -18,7 +18,7 @@ public class KeychainRepository {
 
     init(
         keyPrefix: String = Identifiers.bundleId,
-        group: String = Identifiers.group
+        group: String = Identifiers.keychainAccessGroup
     ) {
         self.keyPrefix = keyPrefix
         self.group = group
@@ -54,6 +54,18 @@ public class KeychainRepository {
         // swiftlint:enable forbidden_raw_keychain_calls
     }
 
+    public func deleteChecked(_ key: String) throws {
+        let query = buildQuery(for: key, forInsert: false)
+
+        // swiftlint:disable forbidden_raw_keychain_calls
+        let status = SecItemDelete(query as CFDictionary)
+        // swiftlint:enable forbidden_raw_keychain_calls
+
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw MuunError(SecureStorage.Errors.secureStorageError)
+        }
+    }
+
     public func store(_ string: String, at key: String) throws {
 
         /*
@@ -62,9 +74,13 @@ public class KeychainRepository {
         */
 
         let data = string.data(using: .utf8, allowLossyConversion: true)
+        try store(data!, at: key)
+    }
+
+    public func store(_ data: Data, at key: String) throws {
 
         let query = buildQuery(for: key, forInsert: true)
-        let toSet = [kSecValueData as String: data!]
+        let toSet = [kSecValueData as String: data]
 
         // We first try to update it, and if we fail we store it
         // swiftlint:disable forbidden_raw_keychain_calls
@@ -82,6 +98,17 @@ public class KeychainRepository {
 
     public func get(_ key: String) throws -> String {
 
+        let data = try getData(key)
+
+        guard let ret = String(data: data, encoding: .utf8) else {
+            throw MuunError(SecureStorage.Errors.invalidData)
+        }
+
+        return ret
+    }
+
+    func getData(_ key: String) throws -> Data {
+
         var query = buildQuery(for: key, forInsert: false)
         query[kSecReturnData as String] = true
 
@@ -90,16 +117,16 @@ public class KeychainRepository {
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         // swiftlint:enable forbidden_raw_keychain_calls
 
+        if status == errSecItemNotFound {
+            throw MuunError(SecureStorage.Errors.itemNotFound)
+        }
+
         guard status == errSecSuccess,
             let value = item as? Data else {
             throw MuunError(SecureStorage.Errors.secureStorageError)
         }
 
-        guard let ret = String(data: value, encoding: .utf8) else {
-            throw MuunError(SecureStorage.Errors.invalidData)
-        }
-
-        return ret
+        return value
     }
 
     func has(_ key: String) throws -> Bool {

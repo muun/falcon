@@ -39,13 +39,17 @@ func main() {
 
 	switch os.Args[1] {
 	case "lock":
-		lockCmd.Parse(os.Args[2:]) //nolint:errcheck // TODO: check error
+		if err := lockCmd.Parse(os.Args[2:]); err != nil {
+			log.Fatal(err)
+		}
 		err := runLock(storage.BuildKVMigrationPlan(), *lockMigrationsFile, *lockLockfile)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "verify":
-		verifyCmd.Parse(os.Args[2:]) //nolint:errcheck // TODO: check error
+		if err := verifyCmd.Parse(os.Args[2:]); err != nil {
+			log.Fatal(err)
+		}
 		err := runVerify(storage.BuildKVMigrationPlan(), *verifyMigrationsFile, *verifyLockfile)
 		if err != nil {
 			log.Fatal(err)

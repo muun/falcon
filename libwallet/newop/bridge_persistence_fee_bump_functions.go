@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"math"
-	"path"
 	"time"
 
 	"github.com/go-errors/errors"
@@ -35,34 +34,23 @@ func PersistFeeBumpFunctions(
 
 	feeBumpFunctions := convertToLibwalletFeeBumpFunctions(decodedFunctions, uuid, refreshPolicy)
 
-	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	repository := db.NewFeeBumpRepository()
-
-	return repository.Store(feeBumpFunctions)
+	return libwallet.Pool.WithDB(func(db *walletdb.DB) error {
+		return db.NewFeeBumpRepository().Store(feeBumpFunctions)
+	})
 }
 
 func AreFeeBumpFunctionsInvalidated() bool {
-	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
-	if err != nil {
-		return true
-	}
-	defer db.Close()
-
-	repository := db.NewFeeBumpRepository()
-	creationDate, err := repository.GetCreationDate()
-
-	if err != nil || creationDate == nil {
-		return true
-	}
-
-	durationInSeconds := time.Since(*creationDate).Seconds()
-
-	return durationInSeconds >= invalidationTimeInSeconds
+	var invalidated bool
+	poolErr := libwallet.Pool.WithDB(func(db *walletdb.DB) error {
+		creationDate, err := db.NewFeeBumpRepository().GetCreationDate()
+		if err != nil || creationDate == nil {
+			invalidated = true
+			return nil
+		}
+		invalidated = time.Since(*creationDate).Seconds() >= invalidationTimeInSeconds
+		return nil
+	})
+	return poolErr != nil || invalidated
 }
 
 func decodeFunctions(encodedFunctions []string) ([][][]float64, error) {

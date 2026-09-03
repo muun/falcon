@@ -473,7 +473,8 @@ platform :ios do
     sh("sed", "-i", "", "s/static let bundleId = \"[^\"]*\"/static let bundleId = \"#{app_identifier}\"/", "../../app/falcon/Resource/Identifiers.swift")
 
     if env == ENV_DOGFOOD then
-      sh("sed", "-i", "", "s/static let group = \"[^\"]*\"/static let group = \"5YYLBTUB6W.group.com.muun.falcon.internal.beta\"/", "../../app/falcon/Resource/Identifiers.swift")
+      sh("sed", "-i", "", "s/static let keychainAccessGroup = \"[^\"]*\"/static let keychainAccessGroup = \"5YYLBTUB6W.group.com.muun.falcon.internal.beta\"/", "../../app/falcon/Resource/Identifiers.swift")
+      sh("sed", "-i", "", "s/static let appGroup = \"[^\"]*\"/static let appGroup = \"group.com.muun.falcon.internal.beta\"/", "../../app/falcon/Resource/Identifiers.swift")
     end
 
     unless is_prod

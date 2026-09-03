@@ -3,7 +3,6 @@ package newop
 import (
 	"fmt"
 	"log/slog"
-	"path"
 	"strings"
 	"time"
 
@@ -259,7 +258,7 @@ func (s *StartState) resolveBip70(uri *libwallet.MuunPaymentURI, network *libwal
 
 func (s *StartState) ResolveInvoice(
 	invoice *libwallet.Invoice,
-	network *libwallet.Network, //nolint:revive // TODO: use or remove network
+	network *libwallet.Network, //nolint:revive // gomobile export
 ) error {
 	next := &ResolveState{
 		BaseState: s.BaseState,
@@ -301,19 +300,14 @@ func (s *ResolveState) SetContext(initialContext *InitialPaymentContext) error {
 }
 
 func loadFeeBumpFunctions() (*operation.FeeBumpFunctionSet, error) {
-	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
-	if err != nil {
+	var feeBumpFunctionSet *operation.FeeBumpFunctionSet
+	if err := libwallet.Pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		feeBumpFunctionSet, err = db.NewFeeBumpRepository().GetAll()
+		return err
+	}); err != nil {
 		return nil, err
 	}
-	defer db.Close()
-
-	repository := db.NewFeeBumpRepository()
-	feeBumpFunctionSet, err := repository.GetAll()
-
-	if err != nil {
-		return nil, err
-	}
-
 	return feeBumpFunctionSet, nil
 }
 
@@ -490,7 +484,7 @@ func (s *EnterAmountState) EnterAmount(amount *MonetaryAmount, takeFeeFromAmount
 		FeeRateInSatsPerVByte: feeWindow.FastestFeeRate(),
 	}
 
-	if s.Resolved.PaymentIntent.URI.Invoice != nil { //nolint:staticcheck // TODO: could remove embedded field "Resolved" from selector
+	if s.PaymentIntent.URI.Invoice != nil {
 
 		nextState := &ValidateLightningState{
 			Resolved:   s.Resolved,
@@ -504,7 +498,7 @@ func (s *EnterAmountState) EnterAmount(amount *MonetaryAmount, takeFeeFromAmount
 		nextState := &ValidateState{
 			Resolved:   s.Resolved,
 			AmountInfo: amountInfo,
-			Note:       s.Resolved.PaymentIntent.URI.Message, //nolint:staticcheck // TODO: could remove embedded field "Resolved" from selector
+			Note:       s.PaymentIntent.URI.Message,
 		}
 		nextState.emit()
 	}
@@ -791,7 +785,7 @@ func (s *ValidateState) emitAnalysisOk(
 		FeeBumpInfo:    feeBumpInfo,
 	}
 
-	amountInfo := s.AmountInfo.mutating( //nolint:staticcheck // TODO: could remove embedded field "AmountInfo" from selector
+	amountInfo := s.mutating(
 		func(info *AmountInfo) {
 			info.Amount = amount
 		},
@@ -941,7 +935,7 @@ func (s *ValidateLightningState) emitAnalysisOk(analysis *operation.PaymentAnaly
 		FeeBumpInfo: feeBumpInfo,
 	}
 
-	amountInfo := s.AmountInfo.mutating( //nolint:staticcheck // TODO: could remove embedded field "AmountInfo" from selector
+	amountInfo := s.mutating(
 		func(info *AmountInfo) {
 			info.Amount = amount
 		},
@@ -1119,7 +1113,7 @@ func (s *EditFeeState) CalculateFee(rateInSatsPerVByte float64) (*FeeState, erro
 
 func (s *EditFeeState) SetFeeRate(rateInSatsPerVByte float64) error {
 	// We deref to copy before mutating
-	amountInfo := s.AmountInfo.mutating( //nolint:staticcheck // TODO: could remove embedded field "AmountInfo" from selector
+	amountInfo := s.mutating(
 		func(info *AmountInfo) {
 			info.FeeRateInSatsPerVByte = rateInSatsPerVByte
 		},

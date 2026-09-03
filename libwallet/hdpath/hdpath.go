@@ -14,13 +14,21 @@ type Path string
 
 const HardenedSymbol = "'"
 
+// re checks the layout of a path: a bare m prefix, and levels of digits with an optional [a-z]+
+// name. Index values are beyond it, so Parse also runs them through Path.indexes.
 var re = regexp.MustCompile(`^(m?|\/|(([a-z]+:)?\d+'?))(\/([a-z]+:)?\d+'?)*$`)
 
 func Parse(s string) (Path, error) {
 	if !re.MatchString(s) {
 		return "", errors.Errorf("path is not valid: `%s`", s)
 	}
-	return Path(s), nil
+
+	path := Path(s)
+	if _, err := path.indexes(); err != nil {
+		return "", err
+	}
+
+	return path, nil
 }
 
 func MustParse(s string) Path {
@@ -80,17 +88,25 @@ type PathIndex struct {
 // "m/b/c" (alphabetical characters instead of numerical indexes)
 // "m/1.2^3" (contains illegal characters)
 func (p Path) Indexes() []PathIndex {
+	indexes, err := p.indexes()
+	if err != nil {
+		panic("path is malformed: " + err.Error())
+	}
+	return indexes
+}
+
+func (p Path) indexes() ([]PathIndex, error) {
 	path := string(p)
 
 	if path == "m" || path == "/" || path == "" {
-		return make([]PathIndex, 0)
+		return make([]PathIndex, 0), nil
 	}
 
 	var indexes []PathIndex
 	path = strings.TrimPrefix(path, "m")
 	path = strings.TrimPrefix(path, "/")
 
-	for _, chunk := range strings.Split(path, "/") { //nolint:modernize // TODO: use strings.SplitSeq
+	for chunk := range strings.SplitSeq(path, "/") {
 		hardened := false
 		indexText := chunk
 		if strings.HasSuffix(indexText, HardenedSymbol) {
@@ -100,7 +116,7 @@ func (p Path) Indexes() []PathIndex {
 
 		parts := strings.Split(indexText, ":")
 		if len(parts) > 2 {
-			panic("path is malformed: " + path)
+			return nil, errors.Errorf("path is not valid: `%s`", p)
 		}
 
 		var name string
@@ -110,7 +126,7 @@ func (p Path) Indexes() []PathIndex {
 
 		index, err := strconv.ParseUint(parts[len(parts)-1], 10, 31)
 		if err != nil {
-			panic("path is malformed: " + err.Error())
+			return nil, errors.Errorf("index %v is not a valid level: %w", parts[len(parts)-1], err)
 		}
 
 		indexes = append(indexes, PathIndex{
@@ -120,7 +136,7 @@ func (p Path) Indexes() []PathIndex {
 		})
 	}
 
-	return indexes
+	return indexes, nil
 }
 
 // IndexesFrom returns the indexes starting from the given parent path.

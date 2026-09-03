@@ -35,7 +35,7 @@ func TestKitToBtcCore_Integration(t *testing.T) {
 	const (
 		// Test keys and recovery data
 		encodedUserKey        = "Fw11jm3oFyL4EEo8tZHpvApSdQ9DkCspVuxG7ZmH9ziTkfFkfpBg9itmFwwmi5GTekvaEwyghJG2phyBJkW4DkqKNqdZx1DRDCmL3s2PuyhticTA8pgfraQo26kLW9zrKVES2pvfgygHms1y" //nolint:lll
-		encodedMuunKey        = "FvGKMF7cr7mTTF44ZHohs9M7Fh3L5LuUBnDjqJM8kBxuCnYz28i3cjKLEavim2wviGfH95LVBjuxwipbiTyBzDJWwMrQfTG8hq5X144rDeetHHAyGsXBDiyNFWxwN1u6qfQWH9bcC9TGNp6M" //nolint:lll
+		encodedCosignerKey    = "FvGKMF7cr7mTTF44ZHohs9M7Fh3L5LuUBnDjqJM8kBxuCnYz28i3cjKLEavim2wviGfH95LVBjuxwipbiTyBzDJWwMrQfTG8hq5X144rDeetHHAyGsXBDiyNFWxwN1u6qfQWH9bcC9TGNp6M" //nolint:lll
 		recoveryCode          = "LAWN-AXNA-RQ8K-APEA-JKW5-BT2Y-QH75-DRQM"
 		inAppGeneratedAddress = "2N1PtMVLGB2cV3Afn4HwouPZJK1tkFE7GEi"
 
@@ -59,24 +59,27 @@ func TestKitToBtcCore_Integration(t *testing.T) {
 	}
 
 	// MARK: - Step 2: Decrypt keys
-	// Convert encrypted keys to master keys using the recovery code
-	userKey, muunKey := decryptMuunKeys(
+	// Convert encrypted keys to master keys using the recovery code and label the user key
+	// accordingly.
+	userPath := "m/1'/1'"
+	userKey, cosignerKey := decryptEmergencyKitKeys(
 		t,
 		encodedUserKey,
-		encodedMuunKey,
+		encodedCosignerKey,
 		recoveryCode,
+		&userPath,
 	)
 
 	// MARK: - Step 3: Create wallets
 	// Use default wallet for funding operations (empty string uses wallet/ path)
-	daemonRpc := getBitcoindRpcClient( //nolint:staticcheck // TODO: var daemonRpc should be daemonRPC
+	daemonRPC := getBitcoindRPCClient(
 		t,
 		"",
 	)
-	userWalletRpc := loadUserWallet( //nolint:staticcheck // TODO: var userWalletRpc should be userWalletRPC
+	userWalletRPC := loadUserWallet(
 		t,
 		userKey,
-		muunKey,
+		cosignerKey,
 		walletDescriptors,
 	)
 
@@ -84,46 +87,46 @@ func TestKitToBtcCore_Integration(t *testing.T) {
 	// Generate and fund one address per version
 
 	// We might have a previous state so we must consider it.
-	userWalletStateBeforeFunding := getWalletState(t, userWalletRpc)
+	userWalletStateBeforeFunding := getWalletState(t, userWalletRPC)
 
 	fundedAddresses := fundOneAddressPerVersion(
 		t,
 		userKey,
-		muunKey,
-		daemonRpc,
+		cosignerKey,
+		daemonRPC,
 		inAppGeneratedAddress,
-		userWalletRpc,
+		userWalletRPC,
 	)
 
 	// MARK: - Step 5: Validate funding
 	// Check that funds were properly added to addresses
-	checkFundsAdded(t, userWalletRpc, fundedAddresses, userWalletStateBeforeFunding)
+	checkFundsAdded(t, userWalletRPC, fundedAddresses, userWalletStateBeforeFunding)
 
-	userWalletStateBeforeSpendAllFunds := getWalletState(t, userWalletRpc)
+	userWalletStateBeforeSpendAllFunds := getWalletState(t, userWalletRPC)
 
 	// MARK: - Step 6: Spend all funds
 	// Transfer all funds from user wallet back to daemon
-	txid := spendAllFundsFromUserWallet(t, userWalletRpc, daemonRpc)
+	txID := spendAllFundsFromUserWallet(t, userWalletRPC, daemonRPC)
 
 	// MARK: - Step 7: Validate transaction
 	// Verify transaction amounts and fees match expected values
-	checkUserBalanceIsZero(t, userWalletRpc)
+	checkUserBalanceIsZero(t, userWalletRPC)
 	checkTxAmountIsConsistentWithUserBalanceBeforeSpend(
 		t,
-		userWalletRpc,
-		txid,
+		userWalletRPC,
+		txID,
 		userWalletStateBeforeSpendAllFunds,
 	)
 }
 
 func checkTxAmountIsConsistentWithUserBalanceBeforeSpend(
 	t *testing.T,
-	userWalletRpc *rpcclient.Client, //nolint:staticcheck // TODO: func parameter userWalletRpc should be userWalletRPC
-	txid string,
+	userWalletRPC *rpcclient.Client,
+	txID string,
 	userWalletStateBeforeSpendAllFunds WalletState,
 ) {
 
-	txAmount, txFee := getTxAmountAndFee(t, userWalletRpc, txid)
+	txAmount, txFee := getTxAmountAndFee(t, userWalletRPC, txID)
 	walletBalanceBeforeSpendAllFunds := userWalletStateBeforeSpendAllFunds.totalBalance
 
 	// Since we use subtractfeefromamount=true, the transaction amount + fee should equal wallet
@@ -137,8 +140,8 @@ func checkTxAmountIsConsistentWithUserBalanceBeforeSpend(
 	}
 
 	t.Logf(
-		"✅ Transaction validation passed: %d sent with %d fee (txid: %s)",
-		txAmount, txFee, txid,
+		"✅ Transaction validation passed: %d sent with %d fee (txID: %s)",
+		txAmount, txFee, txID,
 	)
 	t.Logf(
 		"✅ Wallet emptied successfully: %d transferred",
@@ -148,9 +151,9 @@ func checkTxAmountIsConsistentWithUserBalanceBeforeSpend(
 
 func checkUserBalanceIsZero(
 	t *testing.T,
-	userWalletRpc *rpcclient.Client, //nolint:staticcheck // TODO: func parameter userWalletRpc should be userWalletRPC
+	userWalletRPC *rpcclient.Client,
 ) {
-	userWalletStateAfterSpendingAllFunds := getWalletState(t, userWalletRpc)
+	userWalletStateAfterSpendingAllFunds := getWalletState(t, userWalletRPC)
 
 	if userWalletStateAfterSpendingAllFunds.totalBalance != 0 {
 		t.Fatalf(
@@ -163,14 +166,14 @@ func checkUserBalanceIsZero(
 func loadUserWallet(
 	t *testing.T,
 	userKey,
-	muunKey *libwallet.HDPrivateKey,
+	cosignerKey *libwallet.HDPrivateKey,
 	walletDescriptors []struct {
 		template string
 		internal bool
 	},
 ) *rpcclient.Client {
 	walletName := fmt.Sprintf("recovery_%d", time.Now().UnixNano())
-	walletRpc := createDescriptorWallet( //nolint:staticcheck // TODO: var walletRpc should be walletRPC
+	walletRPC := createDescriptorWallet(
 		t,
 		walletName,
 	)
@@ -179,26 +182,26 @@ func loadUserWallet(
 		descriptor := fmt.Sprintf(
 			desc.template,
 			userKey.String(),
-			muunKey.String(),
+			cosignerKey.String(),
 		)
 
 		// The btcCore protocol requires the checksum in the importDescriptor function to be already
 		// added.
-		descriptorWithChecksum := addDescriptorChecksum(t, walletRpc, descriptor)
-		importDescriptor(t, walletRpc, descriptorWithChecksum, desc.internal)
+		descriptorWithChecksum := addDescriptorChecksum(t, walletRPC, descriptor)
+		importDescriptor(t, walletRPC, descriptorWithChecksum, desc.internal)
 	}
 
-	rescanTheBlockchain(t, walletRpc)
+	rescanTheBlockchain(t, walletRPC)
 
-	return walletRpc
+	return walletRPC
 }
 
 func addDescriptorChecksum(
 	t *testing.T,
-	walletRpc *rpcclient.Client, //nolint:staticcheck // TODO: func parameter walletRpc should be walletRPC
+	walletRPC *rpcclient.Client,
 	descriptor string,
 ) string {
-	result, err := walletRpc.RawRequest(
+	result, err := walletRPC.RawRequest(
 		"getdescriptorinfo",
 		[]json.RawMessage{mustMarshal(descriptor)},
 	)
@@ -206,7 +209,7 @@ func addDescriptorChecksum(
 		t.Fatalf("Failed to get descriptor info for %s: %v", descriptor, err)
 	}
 
-	var info map[string]interface{} //nolint:modernize // TODO: use any instead of interface{}
+	var info map[string]any
 	if err := json.Unmarshal(result, &info); err != nil {
 		t.Fatalf("Failed to unmarshal descriptor info: %v", err)
 	}
@@ -223,28 +226,28 @@ func addDescriptorChecksum(
 
 func importDescriptor(
 	t *testing.T,
-	walletRpc *rpcclient.Client, //nolint:staticcheck // TODO: func parameter walletRpc should be walletRPC
+	walletRPC *rpcclient.Client,
 	descriptorWithChecksum string,
 	internal bool,
 ) {
 	const maxDerivationIndex = 200
 
-	importDesc := map[string]interface{}{ //nolint:modernize // TODO: use any instead of interface{}
+	importDesc := map[string]any{
 		"desc": descriptorWithChecksum, "timestamp": 0, "active": true,
 		"internal": internal, "range": [2]int{0, maxDerivationIndex},
 	}
 
-	result, err := walletRpc.RawRequest(
+	result, err := walletRPC.RawRequest(
 		"importdescriptors",
 		[]json.RawMessage{
-			mustMarshal([]interface{}{importDesc}), //nolint:modernize // TODO: use any instead of interface{}
+			mustMarshal([]any{importDesc}),
 		},
 	)
 	if err != nil {
 		t.Fatalf("Failed to import descriptor %s: %v", descriptorWithChecksum, err)
 	}
 
-	var results []map[string]interface{} //nolint:modernize // TODO: use any instead of interface{}
+	var results []map[string]any
 	if err := json.Unmarshal(result, &results); err != nil {
 		t.Fatalf("Failed to unmarshal import results: %v", err)
 	}
@@ -265,18 +268,18 @@ func importDescriptor(
 func fundOneAddressPerVersion(
 	t *testing.T,
 	userKey *libwallet.HDPrivateKey,
-	muunKey *libwallet.HDPrivateKey,
-	daemonRpc *rpcclient.Client, //nolint:staticcheck // TODO: func parameter daemonRpc should be daemonRPC
+	cosignerKey *libwallet.HDPrivateKey,
+	daemonRPC *rpcclient.Client,
 	inAppGeneratedAddress string,
-	userWalletRpc *rpcclient.Client, //nolint:staticcheck // TODO: func parameter userWalletRpc should be userWalletRPC
+	userWalletRPC *rpcclient.Client,
 ) []AddressWithBalance {
-	addressesByVersion := generateOneAddressPerVersion(t, userKey, muunKey)
+	addressesByVersion := generateOneAddressPerVersion(t, userKey, cosignerKey)
 	// Track what we're going to fund (only recoverable addresses)
 	var fundedAddresses []AddressWithBalance
 
 	// Fund in-app generated address
 	const inAppFundingAmount = btcutil.Amount(100000)
-	fundAddress(t, daemonRpc, inAppGeneratedAddress, inAppFundingAmount)
+	fundAddress(t, daemonRPC, inAppGeneratedAddress, inAppFundingAmount)
 	fundedAddresses = append(
 		fundedAddresses,
 		AddressWithBalance{
@@ -297,7 +300,7 @@ func fundOneAddressPerVersion(
 		}
 
 		amount := btcutil.Amount(version * 100000)
-		fundAddress(t, daemonRpc, addr.Address(), amount)
+		fundAddress(t, daemonRPC, addr.Address(), amount)
 		fundedAddresses = append(
 			fundedAddresses,
 			AddressWithBalance{
@@ -307,9 +310,9 @@ func fundOneAddressPerVersion(
 		)
 	}
 
-	generateBlock(t, daemonRpc)
+	generateBlock(t, daemonRPC)
 
-	rescanTheBlockchain(t, userWalletRpc)
+	rescanTheBlockchain(t, userWalletRPC)
 
 	return fundedAddresses
 }
@@ -317,10 +320,10 @@ func fundOneAddressPerVersion(
 func generateOneAddressPerVersion(
 	t *testing.T,
 	userKey *libwallet.HDPrivateKey,
-	muunKey *libwallet.HDPrivateKey,
+	cosignerKey *libwallet.HDPrivateKey,
 ) map[int]libwallet.MuunAddress {
 	// Address generator requires both addresses to be in the same path
-	derivedMuunKey, err := muunKey.DeriveTo("m/1'/1'")
+	derivedCosignerKey, err := cosignerKey.DeriveTo("m/1'/1'")
 	if err != nil {
 		t.Fatalf("Failed to derive key2: %v", err)
 	}
@@ -328,7 +331,7 @@ func generateOneAddressPerVersion(
 	// Generate addresses
 	generator := NewAddressGenerator(
 		userKey.PublicKey(),
-		derivedMuunKey.PublicKey(),
+		derivedCosignerKey.PublicKey(),
 		false,
 	)
 	addressesByVersion := make(map[int]libwallet.MuunAddress)
@@ -343,24 +346,25 @@ func generateOneAddressPerVersion(
 	return addressesByVersion
 }
 
-func decryptMuunKeys(
+func decryptEmergencyKitKeys(
 	t *testing.T,
 	userKey string,
-	muunKey string,
+	cosignerKey string,
 	recoveryCode string,
+	userPath *string,
 ) (*libwallet.HDPrivateKey, *libwallet.HDPrivateKey) {
 	// Decode encrypted keys
 	userEncryptedKey, err := libwallet.DecodeEncryptedPrivateKey(userKey)
 	if err != nil {
 		t.Fatalf("Failed to decode user key: %v", err)
 	}
-	muunEncryptedKey, err := libwallet.DecodeEncryptedPrivateKey(muunKey)
+	cosignerEncryptedKey, err := libwallet.DecodeEncryptedPrivateKey(cosignerKey)
 	if err != nil {
-		t.Fatalf("Failed to decode muun key: %v", err)
+		t.Fatalf("Failed to decode cosigner key: %v", err)
 	}
 
 	// Create decryption key from recovery code
-	decryptionKey, err := libwallet.RecoveryCodeToKey(recoveryCode, muunEncryptedKey.Salt)
+	decryptionKey, err := libwallet.RecoveryCodeToKey(recoveryCode, cosignerEncryptedKey.Salt)
 	if err != nil {
 		t.Fatalf("Failed to process recovery code: %v", err)
 	}
@@ -370,11 +374,14 @@ func decryptMuunKeys(
 	if err != nil {
 		t.Fatalf("Failed to decrypt user key: %v", err)
 	}
-	decryptedMuunKey, err := decryptionKey.DecryptKey(muunEncryptedKey, libwallet.Regtest())
+	decryptedCosignerKey, err := decryptionKey.DecryptKey(cosignerEncryptedKey, libwallet.Regtest())
 	if err != nil {
-		t.Fatalf("Failed to decrypt muun key: %v", err)
+		t.Fatalf("Failed to decrypt cosigner key: %v", err)
 	}
 
-	decryptedUserKey.Key.Path = "m/1'/1'"
-	return decryptedUserKey.Key, decryptedMuunKey.Key
+	// Relabel the user key's path when the caller needs it.
+	if userPath != nil {
+		decryptedUserKey.Key.Path = *userPath
+	}
+	return decryptedUserKey.Key, decryptedCosignerKey.Key
 }

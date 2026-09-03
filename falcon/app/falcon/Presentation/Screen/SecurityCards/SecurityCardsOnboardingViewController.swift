@@ -26,6 +26,10 @@ final class SecurityCardsOnboardingViewController: MUViewController {
     private var hasRevealedFinishButton = false
     private var currentIndex = 0
     private lazy var countrySlideVC = CountrySlideViewController(delegate: self)
+    private lazy var presenter = instancePresenter(
+        SecurityCardsOnboardingPresenter.init,
+        delegate: self
+    )
 
     private lazy var pages: [UIViewController] = {
         let slidePages = SecurityCardsSlidesConfiguration.slides.map { slide -> UIViewController in
@@ -238,8 +242,9 @@ extension SecurityCardsOnboardingViewController: ButtonViewDelegate {
 
     func button(didPress button: ButtonView) {
         guard let selectedCountry else { return }
+        presenter.set(selectedCountry: selectedCountry)
         navigationController?.pushViewController(
-            MarketplaceViewController(selectedCountry: selectedCountry),
+            MarketplaceViewController(),
             animated: true
         )
     }

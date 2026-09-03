@@ -82,6 +82,10 @@ enum MuunTheme {
                 ofSize: 16,
                 weight: MuunAliases.FontWeight.textDefault
             )
+            static let mdStrong = UIFont.systemFont(
+                ofSize: 16,
+                weight: MuunAliases.FontWeight.textStrong
+            )
             static let sm = UIFont.systemFont(
                 ofSize: 14,
                 weight: MuunAliases.FontWeight.textDefault

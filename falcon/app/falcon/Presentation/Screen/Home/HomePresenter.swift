@@ -30,7 +30,7 @@ protocol HomePresenterDelegate: BasePresenterDelegate {
     func showWelcome()
     func showTaprootActivated()
     func onOperationsChange()
-    func onBalanceChange(_ balance: MonetaryAmount)
+    func onBalanceChange(_ balance: BitcoinAmount)
     func onBalanceVisibilityChange(_ isHidden: Bool)
     func didReceiveNewOperation(amount: MonetaryAmount, direction: OperationDirection)
     func onCompanionChange(_ companion: HomeCompanion)
@@ -49,7 +49,11 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
     internal let fetchNotificationsAction: FetchNotificationsAction
     private let userActivatedFeatureSelector: UserActivatedFeaturesSelector
     private let featureFlagsSelector: FeatureFlagsSelector
-    private var balance: MonetaryAmount = MonetaryAmount(amount: 0, currency: "BTC")
+    private var balance = BitcoinAmount(
+        inSatoshis: Satoshis.zero,
+        inInputCurrency: MonetaryAmount(amount: 0, currency: "BTC"),
+        inPrimaryCurrency: MonetaryAmount(amount: 0, currency: "BTC")
+    )
 
     private var numberOfOperations: Int?
 
@@ -266,50 +270,17 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
         }
     }
 
-    private func onBalanceChange(_ balance: MonetaryAmount) {
+    private func onBalanceChange(_ balance: BitcoinAmount) {
         self.balance = balance
         delegate.onBalanceChange(balance)
     }
 
     func getBTCBalance() -> MonetaryAmount {
-
-        // swiftlint:disable force_error_handling
-        if let window = getExchangeRateWindow(),
-           let rate = try? window.rate(for: balance.currency),
-           rate > 0 && !rate.isNotANumber {
-            // swiftlint:enable force_error_handling
-
-            let bitcoinAmount = BitcoinAmount.from(
-                inputCurrency: balance,
-                with: window,
-                primaryCurrency: "BTC"
-            )
-            return bitcoinAmount.inPrimaryCurrency
-        }
-
-        return balance
+        return balance.inSatoshis.toBTC()
     }
 
     func getPrimaryBalance() -> MonetaryAmount {
-        guard sessionActions.getPrimaryCurrency() != "BTC" else {
-            return getBTCBalance()
-        }
-
-        // swiftlint:disable force_error_handling
-        if let window = getExchangeRateWindow(),
-           let rate = try? window.rate(for: balance.currency),
-           rate > 0 && !rate.isNotANumber {
-            // swiftlint:enable force_error_handling
-
-            let bitcoinAmount = BitcoinAmount.from(
-                inputCurrency: balance,
-                with: window,
-                primaryCurrency: sessionActions.getPrimaryCurrency()
-            )
-            return bitcoinAmount.inPrimaryCurrency
-        }
-
-        return balance
+        return balance.inPrimaryCurrency
     }
 
     func getOperationsState() -> OperationsState {
@@ -328,10 +299,6 @@ class HomePresenter<Delegate: HomePresenterDelegate>: BasePresenter<Delegate> {
 
     private func setBalanceHidden(_ hidden: Bool) {
         walletService.saveBool(key: Persistence.isBalanceHidden.rawValue, value: hidden)
-    }
-
-    private func getExchangeRateWindow() -> ExchangeRateWindow? {
-        return preferences.object(forKey: .exchangeRateWindow)
     }
 
     func hasEmailAndPassword() -> Bool {

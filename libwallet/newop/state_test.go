@@ -46,7 +46,7 @@ var testContext = createInitialContext()
 type TestBackendActivatedFeatureStatusProvider struct{}
 
 func (t TestBackendActivatedFeatureStatusProvider) IsBackendFlagEnabled(
-	flag string, //nolint:revive // TODO: use or remove flag
+	_ string,
 ) bool {
 	return true
 }
@@ -79,11 +79,18 @@ func createInitialContext() *InitialPaymentContext {
 }
 
 func setupStateTests(t *testing.T) {
-
+	dir := t.TempDir()
 	libwallet.Init(&app_provided_data.Config{
-		DataDir:               t.TempDir(),
+		DataDir:               dir,
 		FeatureStatusProvider: TestBackendActivatedFeatureStatusProvider{},
 	})
+
+	pool, err := walletdb.NewPool(path.Join(dir, "wallet.db"), nil)
+	if err != nil {
+		t.Fatalf("failed to open test DB: %v", err)
+	}
+	libwallet.Pool = pool
+	t.Cleanup(func() { libwallet.Pool.Close() })
 }
 
 //goland:noinspection GoUnhandledErrorResult
@@ -263,28 +270,25 @@ func TestOnChainFixedAmountChangeFeeWithFeeBump(t *testing.T) {
 	})
 	context.NextTransactionSize = &nextTransactionSize
 
-	db, err := walletdb.Open(path.Join(libwallet.Cfg.DataDir, "wallet.db"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer db.Close()
-
-	repository := db.NewFeeBumpRepository()
-	repository.Store(&operation.FeeBumpFunctionSet{
-		UUID: "uuid",
-		FeeBumpFunctions: []*operation.FeeBumpFunction{
-			{
-				PartialLinearFunctions: []*operation.PartialLinearFunction{
-					{
-						LeftClosedEndpoint: 0,
-						RightOpenEndpoint:  math.Inf(1),
-						Slope:              2,
-						Intercept:          300,
+	if err := libwallet.Pool.WithDB(func(db *walletdb.DB) error {
+		return db.NewFeeBumpRepository().Store(&operation.FeeBumpFunctionSet{
+			UUID: "uuid",
+			FeeBumpFunctions: []*operation.FeeBumpFunction{
+				{
+					PartialLinearFunctions: []*operation.PartialLinearFunction{
+						{
+							LeftClosedEndpoint: 0,
+							RightOpenEndpoint:  math.Inf(1),
+							Slope:              2,
+							Intercept:          300,
+						},
 					},
 				},
 			},
-		},
-	})
+		})
+	}); err != nil {
+		t.Fatal(err)
+	}
 
 	resolveState.SetContext(&context)
 

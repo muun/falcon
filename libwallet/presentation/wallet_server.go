@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"log/slog"
+	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
@@ -22,12 +23,13 @@ import (
 	"github.com/muun/libwallet/domain/action/debug"
 	"github.com/muun/libwallet/domain/action/diagnostic_mode_reports"
 	"github.com/muun/libwallet/domain/action/emergency_kit"
+	"github.com/muun/libwallet/domain/action/marketplace"
 	"github.com/muun/libwallet/domain/action/nfc"
 	"github.com/muun/libwallet/domain/action/recovery"
 	"github.com/muun/libwallet/domain/action/reset"
-	"github.com/muun/libwallet/domain/action/security_cards_marketplace"
 	"github.com/muun/libwallet/domain/diagnostic_mode"
-	security_cards_marketplace_model "github.com/muun/libwallet/domain/model/security_cards_marketplace"
+	marketplace_model "github.com/muun/libwallet/domain/model/marketplace"
+	marketplace_deprecated "github.com/muun/libwallet/domain/model/marketplace/deprecated"
 	apierrors "github.com/muun/libwallet/errors"
 	"github.com/muun/libwallet/platform/preconditions"
 	"github.com/muun/libwallet/presentation/api"
@@ -38,27 +40,30 @@ import (
 
 type WalletServer struct {
 	api.UnsafeWalletServiceServer
-	nfcBridge                   app_provided_data.NfcBridge
-	keyProvider                 keys.KeyProvider
-	network                     *libwallet.Network
-	houstonService              service.HoustonService
-	keyValueStorage             *storage.KeyValueStorage
-	resetData                   reset.ResetDataAction
-	startChallengeSetup         *challenge_keys.StartChallengeSetupAction
-	finishChallengeSetup        *challenge_keys.FinishChallengeSetupAction
-	populateEncryptedMuunKey    *recovery.PopulateEncryptedMuunKeyAction
-	scanForFunds                *recovery.ScanForFundsAction
-	submitDiagnostic            *diagnostic_mode_reports.SubmitDiagnosticAction
-	buildSweepTx                *recovery.BuildSweepTxAction
-	signSweepTx                 *recovery.SignSweepTxAction
-	pairSecurityCardV2          *nfc.PairSecurityCardActionV2
-	signMessageSecurityCardV2   *nfc.SignMessageSecurityCardActionV2
-	pairRequestChallenge        *nfc.PairRequestChallengeAction
-	pairSignAndSubmitChallenge  *nfc.PairSignAndSubmitChallengeAction
-	getSecurityCardsMarketplace *security_cards_marketplace.GetSecurityCardsMarketplaceAction
-	generateEmergencyKitPDF     *emergency_kit.GenerateEmergencyKitPDFAction
-	zipDataDir                  *debug.ZipDataDirAction
-	secureKeyValueStorage       securekv.SecureKeyValueStorage
+	nfcBridge                    app_provided_data.NfcBridge
+	keyProvider                  keys.KeyProvider
+	network                      *libwallet.Network
+	houstonService               service.HoustonService
+	keyValueStorage              *storage.KeyValueStorage
+	resetData                    reset.ResetDataAction
+	startChallengeSetup          *challenge_keys.StartChallengeSetupAction
+	finishChallengeSetup         *challenge_keys.FinishChallengeSetupAction
+	populateEncryptedCosignerKey *recovery.PopulateEncryptedCosignerKeyAction
+	scanForFunds                 *recovery.ScanForFundsAction
+	submitDiagnostic             *diagnostic_mode_reports.SubmitDiagnosticAction
+	buildSweepTx                 *recovery.BuildSweepTxAction
+	signSweepTx                  *recovery.SignSweepTxAction
+	pairSecurityCardV2           *nfc.PairSecurityCardActionV2
+	signMessageSecurityCard      nfc.SignMessageSecurityCardAction
+	pairRequestChallenge         *nfc.PairRequestChallengeAction
+	pairSignAndSubmitChallenge   *nfc.PairSignAndSubmitChallengeAction
+	getSecurityCardsMarketplace  *marketplace.GetSecurityCardsMarketplaceAction
+	fetchAvailableCountries      marketplace.FetchAvailableCountriesAction
+	fetchProviderListings        marketplace.FetchProviderListingsByCountryAction
+	fetchCardOffer               marketplace.FetchCardOfferAction
+	generateEmergencyKitPDF      *emergency_kit.GenerateEmergencyKitPDFAction
+	zipDataDir                   *debug.ZipDataDirAction
+	secureKeyValueStorage        securekv.SecureKeyValueStorage
 }
 
 func NewWalletServer(
@@ -70,43 +75,49 @@ func NewWalletServer(
 	resetData reset.ResetDataAction,
 	startChallengeSetup *challenge_keys.StartChallengeSetupAction,
 	finishChallengeSetup *challenge_keys.FinishChallengeSetupAction,
-	obtainVerifiedEncryptedMuunKeyIfAbsent *recovery.PopulateEncryptedMuunKeyAction,
+	obtainVerifiedEncryptedCosignerKeyIfAbsent *recovery.PopulateEncryptedCosignerKeyAction,
 	scanForFunds *recovery.ScanForFundsAction,
 	submitDiagnostic *diagnostic_mode_reports.SubmitDiagnosticAction,
 	buildSweepTx *recovery.BuildSweepTxAction,
 	signSweepTx *recovery.SignSweepTxAction,
 	pairSecurityCardV2 *nfc.PairSecurityCardActionV2,
-	signMessageSecurityCardV2 *nfc.SignMessageSecurityCardActionV2,
+	signMessageSecurityCard nfc.SignMessageSecurityCardAction,
 	pairRequestChallenge *nfc.PairRequestChallengeAction,
 	pairSignAndSubmitChallenge *nfc.PairSignAndSubmitChallengeAction,
-	getSecurityCardsMarketplace *security_cards_marketplace.GetSecurityCardsMarketplaceAction,
+	getSecurityCardsMarketplace *marketplace.GetSecurityCardsMarketplaceAction,
+	fetchAvailableCountries marketplace.FetchAvailableCountriesAction,
+	fetchProviderListings marketplace.FetchProviderListingsByCountryAction,
+	fetchCardOffer marketplace.FetchCardOfferAction,
 	generateEmergencyKitPDF *emergency_kit.GenerateEmergencyKitPDFAction,
 	zipDataDir *debug.ZipDataDirAction,
 	secureKeyValueStorage securekv.SecureKeyValueStorage,
 ) *WalletServer {
 
 	return &WalletServer{
-		nfcBridge:                   nfcBridge,
-		keyProvider:                 keyProvider,
-		network:                     network,
-		houstonService:              houstonService,
-		keyValueStorage:             keyValueStorage,
-		resetData:                   resetData,
-		startChallengeSetup:         startChallengeSetup,
-		finishChallengeSetup:        finishChallengeSetup,
-		populateEncryptedMuunKey:    obtainVerifiedEncryptedMuunKeyIfAbsent,
-		scanForFunds:                scanForFunds,
-		submitDiagnostic:            submitDiagnostic,
-		buildSweepTx:                buildSweepTx,
-		signSweepTx:                 signSweepTx,
-		pairSecurityCardV2:          pairSecurityCardV2,
-		signMessageSecurityCardV2:   signMessageSecurityCardV2,
-		pairRequestChallenge:        pairRequestChallenge,
-		pairSignAndSubmitChallenge:  pairSignAndSubmitChallenge,
-		getSecurityCardsMarketplace: getSecurityCardsMarketplace,
-		generateEmergencyKitPDF:     generateEmergencyKitPDF,
-		zipDataDir:                  zipDataDir,
-		secureKeyValueStorage:       secureKeyValueStorage,
+		nfcBridge:                    nfcBridge,
+		keyProvider:                  keyProvider,
+		network:                      network,
+		houstonService:               houstonService,
+		keyValueStorage:              keyValueStorage,
+		resetData:                    resetData,
+		startChallengeSetup:          startChallengeSetup,
+		finishChallengeSetup:         finishChallengeSetup,
+		populateEncryptedCosignerKey: obtainVerifiedEncryptedCosignerKeyIfAbsent,
+		scanForFunds:                 scanForFunds,
+		submitDiagnostic:             submitDiagnostic,
+		buildSweepTx:                 buildSweepTx,
+		signSweepTx:                  signSweepTx,
+		pairSecurityCardV2:           pairSecurityCardV2,
+		signMessageSecurityCard:      signMessageSecurityCard,
+		pairRequestChallenge:         pairRequestChallenge,
+		pairSignAndSubmitChallenge:   pairSignAndSubmitChallenge,
+		getSecurityCardsMarketplace:  getSecurityCardsMarketplace,
+		fetchAvailableCountries:      fetchAvailableCountries,
+		fetchProviderListings:        fetchProviderListings,
+		fetchCardOffer:               fetchCardOffer,
+		generateEmergencyKitPDF:      generateEmergencyKitPDF,
+		zipDataDir:                   zipDataDir,
+		secureKeyValueStorage:        secureKeyValueStorage,
 	}
 }
 
@@ -114,8 +125,8 @@ func NewWalletServer(
 var _ api.WalletServiceServer = (*WalletServer)(nil)
 
 func (ws WalletServer) SetupSecurityCardV2(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
-	message *emptypb.Empty, //nolint:revive // TODO: use or remove message
+	_ context.Context,
+	_ *emptypb.Empty,
 ) (*api.SetupSecurityCardResponse, error) {
 	response, err := ws.pairSecurityCardV2.Run()
 	if err != nil {
@@ -141,17 +152,20 @@ func (ws WalletServer) SetupSecurityCardV2(
 	}.Build(), nil
 }
 
-func (ws WalletServer) SignMessageSecurityCardV2(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
-	message *emptypb.Empty, //nolint:revive // TODO: use or remove message
+// SignMessageSecurityCard signs with whichever security card version the user
+// taps, so the client no longer picks the protocol.
+func (ws WalletServer) SignMessageSecurityCard(
+	ctx context.Context,
+	_ *emptypb.Empty,
 ) (*emptypb.Empty, error) {
-	err := ws.signMessageSecurityCardV2.Run()
+	err := ws.signMessageSecurityCard.Run(ctx)
 	if err != nil {
 		var invalidMacErr *nfc.InvalidMacError
 		var challengeExpiredErr *nfc.ChallengeExpiredError
 		var pairInternalErr *nfc.PairInternalError
 		var noSlotsAvailableErr *nfc.NoSlotsAvailableError
 		var muunAppletNotFoundErr *nfc.MuunAppletNotFoundError
+		var unsupportedVersionErr *nfc.UnsupportedCardVersionError
 
 		switch {
 		case errors.As(err, &invalidMacErr):
@@ -164,11 +178,25 @@ func (ws WalletServer) SignMessageSecurityCardV2(
 			return nil, NewGrpcErrorFromCodeAndErr(apierrors.ErrorCodes.ErrNoSlotsAvailable, err)
 		case errors.As(err, &muunAppletNotFoundErr):
 			return nil, NewGrpcErrorFromCodeAndErr(apierrors.ErrorCodes.ErrAppletNotFound, err)
+		case errors.As(err, &unsupportedVersionErr):
+			return nil, NewGrpcErrorFromCodeAndErr(
+				apierrors.ErrorCodes.ErrUnsupportedCardVersion,
+				err,
+			)
 		default:
 			return nil, NewGrpcErrorFromCodeAndErr(apierrors.ErrorCodes.ErrSignInternalError, err)
 		}
 	}
 	return &emptypb.Empty{}, nil
+}
+
+// SignMessageSecurityCardV2 is the deprecated alias of SignMessageSecurityCard,
+// kept while apollo and falcon still call this name.
+func (ws WalletServer) SignMessageSecurityCardV2(
+	ctx context.Context,
+	message *emptypb.Empty,
+) (*emptypb.Empty, error) {
+	return ws.SignMessageSecurityCard(ctx, message)
 }
 
 func (ws WalletServer) PairRequestChallenge(
@@ -231,10 +259,10 @@ func (ws WalletServer) PairSignAndSubmitChallenge(
 }
 
 func (ws WalletServer) StartDiagnosticSession(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
-	empty *emptypb.Empty, //nolint:revive // TODO: use or remove empty
+	_ context.Context,
+	_ *emptypb.Empty,
 ) (*api.DiagnosticSessionDescriptor, error) {
-	sessionId := uuid.NewString() //nolint:staticcheck // TODO: var sessionId should be sessionID
+	sessionID := uuid.NewString()
 
 	logBuffer := bytes.NewBuffer(nil)
 	textHandler := slog.NewTextHandler(logBuffer, &slog.HandlerOptions{
@@ -243,7 +271,7 @@ func (ws WalletServer) StartDiagnosticSession(
 	debugLog := slog.New(textHandler)
 
 	err := diagnostic_mode.AddDiagnosticSession(&diagnostic_mode.DiagnosticSessionData{
-		Id:        sessionId,
+		ID:        sessionID,
 		LogBuffer: logBuffer,
 		Logger:    debugLog,
 	})
@@ -251,7 +279,7 @@ func (ws WalletServer) StartDiagnosticSession(
 		return nil, err
 	}
 	return api.DiagnosticSessionDescriptor_builder{
-		SessionId: sessionId,
+		SessionId: sessionID,
 	}.Build(), nil
 }
 
@@ -259,9 +287,9 @@ func (ws WalletServer) PerformDiagnosticScanForUtxos(
 	descriptor *api.DiagnosticSessionDescriptor,
 	g grpc.ServerStreamingServer[api.ScanProgressUpdate],
 ) error {
-	sessionId := descriptor.GetSessionId() //nolint:staticcheck // TODO: var sessionId should be sessionID
+	sessionID := descriptor.GetSessionId()
 
-	if sessionData, ok := diagnostic_mode.GetDiagnosticSession(sessionId); ok {
+	if sessionData, ok := diagnostic_mode.GetDiagnosticSession(sessionID); ok {
 		reports, err := ws.scanForFunds.Run(sessionData.Logger)
 		if err != nil {
 			return NewGrpcError(goerr.Errorf("error scanning for funds: %w", err))
@@ -285,33 +313,33 @@ func (ws WalletServer) PerformDiagnosticScanForUtxos(
 			}.Build(),
 		}.Build())
 	} else {
-		return NewGrpcError(goerr.Errorf("invalid sessionId %s", descriptor.GetSessionId()))
+		return NewGrpcError(goerr.Errorf("invalid sessionID %s", descriptor.GetSessionId()))
 	}
 }
 
 func (ws WalletServer) SubmitDiagnosticLog(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
+	_ context.Context,
 	descriptor *api.DiagnosticSessionDescriptor,
 ) (*api.DiagnosticSubmitStatus, error) {
-	sessionId := descriptor.GetSessionId() //nolint:staticcheck // TODO: var sessionId should be sessionID
-	if session, ok := diagnostic_mode.GetDiagnosticSession(sessionId); ok {
-		err := ws.submitDiagnostic.Run(sessionId, session.LogBuffer.String())
+	sessionID := descriptor.GetSessionId()
+	if session, ok := diagnostic_mode.GetDiagnosticSession(sessionID); ok {
+		err := ws.submitDiagnostic.Run(sessionID, session.LogBuffer.String())
 		if err != nil {
 			return nil, err
 		}
 
-		diagnostic_mode.DeleteDiagnosticSession(sessionId)
+		diagnostic_mode.DeleteDiagnosticSession(sessionID)
 		return api.DiagnosticSubmitStatus_builder{
 			StatusCode:    200,
 			StatusMessage: "OK",
 		}.Build(), nil
 	} else {
-		return nil, goerr.Errorf("invalid sessionId %s", descriptor.GetSessionId())
+		return nil, goerr.Errorf("invalid sessionID %s", descriptor.GetSessionId())
 	}
 }
 
 func (ws WalletServer) PrepareSweepTx(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
+	_ context.Context,
 	parameters *api.PrepareSweepTxRequest,
 ) (*api.PrepareSweepTxResponse, error) {
 	destinationAddressString := parameters.GetDestinationAddress()
@@ -322,8 +350,8 @@ func (ws WalletServer) PrepareSweepTx(
 
 	descriptor := parameters.GetSessionDescriptor()
 
-	sessionId := descriptor.GetSessionId() //nolint:staticcheck // TODO: var sessionId should be sessionID
-	if session, ok := diagnostic_mode.GetDiagnosticSession(sessionId); ok {
+	sessionID := descriptor.GetSessionId()
+	if session, ok := diagnostic_mode.GetDiagnosticSession(sessionID); ok {
 		session.SweepTx, err = ws.buildSweepTx.Run(
 			session.LastScanReport.UtxosFound,
 			address,
@@ -339,16 +367,16 @@ func (ws WalletServer) PrepareSweepTx(
 			TxSizeInBytes:      int64(session.SweepTx.SerializeSize()),
 		}.Build(), nil
 	} else {
-		return nil, goerr.Errorf("invalid sessionId %s", sessionId)
+		return nil, goerr.Errorf("invalid sessionID %s", sessionID)
 	}
 }
 
 func (ws WalletServer) SignAndBroadcastSweepTx(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
+	_ context.Context,
 	confirmation *api.SignAndBroadcastSweepTxRequest,
 ) (*api.SignAndBroadcastSweepTxResponse, error) {
-	sessionId := confirmation.GetSessionDescriptor().GetSessionId() //nolint:staticcheck // TODO: var sessionId should be sessionID
-	if session, ok := diagnostic_mode.GetDiagnosticSession(sessionId); ok {
+	sessionID := confirmation.GetSessionDescriptor().GetSessionId()
+	if session, ok := diagnostic_mode.GetDiagnosticSession(sessionID); ok {
 		signedTx, err := ws.signSweepTx.Run(
 			session.LastScanReport.UtxosFound,
 			session.SweepTx,
@@ -366,7 +394,7 @@ func (ws WalletServer) SignAndBroadcastSweepTx(
 
 		return nil, goerr.Errorf("signed tx %v but did not broadcast", txString)
 	} else {
-		return nil, goerr.Errorf("invalid sessionId %s", sessionId)
+		return nil, goerr.Errorf("invalid sessionID %s", sessionID)
 	}
 }
 
@@ -376,10 +404,10 @@ func (ws WalletServer) SignAndBroadcastSweepTx(
 // Future implementations should move native logic as much as possible to libwallet instead of
 // duplicating this pattern.
 func (ws WalletServer) StartChallengeSetup(
-	ctx context.Context, req *api.ChallengeSetupRequest, //nolint:revive // TODO: use or remove ctx
+	_ context.Context, req *api.ChallengeSetupRequest,
 ) (*api.SetupChallengeResponse, error) {
 
-	challengeSetupJson := model.ChallengeSetupJson{ //nolint:staticcheck // TODO: var challengeSetupJson should be challengeSetupJSON
+	challengeSetupJSON := model.ChallengeSetupJSON{
 		Type:                req.GetType(),
 		PublicKey:           req.GetPublicKey(),
 		Salt:                req.GetSalt(),
@@ -387,21 +415,23 @@ func (ws WalletServer) StartChallengeSetup(
 		Version:             int(req.GetVersion()),
 	}
 
-	setupChallengeResponseJson, err := ws.startChallengeSetup.Run( //nolint:staticcheck // TODO: var setupChallengeResponseJson should be setupChallengeResponseJSON
-		challengeSetupJson,
+	setupChallengeResponseJSON, err := ws.startChallengeSetup.Run(
+		challengeSetupJSON,
 	)
 	if err != nil {
 		return nil, NewGrpcError(goerr.Errorf("failed to start challenge setup: %w", err))
 	}
 
+	// MuunKey and MuunKeyFingerprint are generated from wallet_service.proto, whose field names are
+	// part of the gRPC contract with the apps.
 	return api.SetupChallengeResponse_builder{
-		MuunKey:            setupChallengeResponseJson.MuunKey,
-		MuunKeyFingerprint: setupChallengeResponseJson.MuunKeyFingerprint,
+		MuunKey:            setupChallengeResponseJSON.CosignerKey,
+		MuunKeyFingerprint: setupChallengeResponseJSON.CosignerKeyFingerprint,
 	}.Build(), nil
 }
 
 func (ws WalletServer) FinishRecoveryCodeSetup(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
+	_ context.Context,
 	req *api.FinishRecoveryCodeSetupRequest,
 ) (*emptypb.Empty, error) {
 
@@ -418,8 +448,10 @@ func (ws WalletServer) FinishRecoveryCodeSetup(
 	return &emptypb.Empty{}, nil
 }
 
+// TODO(#16998): rename to PopulateEncryptedCosignerKey; the name comes from
+// wallet_service.proto and is part of the gRPC contract with the apps.
 func (ws WalletServer) PopulateEncryptedMuunKey(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
+	_ context.Context,
 	req *api.PopulateEncryptedMuunKeyRequest,
 ) (*emptypb.Empty, error) {
 	recoveryCodePublicKey, err := hexToPublicKey(req.GetRecoveryCodePublicKeyHex())
@@ -427,7 +459,7 @@ func (ws WalletServer) PopulateEncryptedMuunKey(
 		return nil, goerr.Errorf("error parsing recovery code public key: %w", err)
 	}
 
-	err = ws.populateEncryptedMuunKey.Run(recoveryCodePublicKey)
+	err = ws.populateEncryptedCosignerKey.Run(recoveryCodePublicKey)
 	if err != nil {
 		return nil, err
 	}
@@ -576,104 +608,320 @@ func (ws WalletServer) GetByPrefix(
 }
 
 func (ws WalletServer) GetSecurityCardsMarketplace(
-	ctx context.Context, req *emptypb.Empty, //nolint:revive // TODO: use or remove ctx
-) (*api.GetSecurityCardsMarketplaceResponse, error) {
+	_ context.Context, _ *emptypb.Empty,
+) (*api.SCMDeprecated_GetSecurityCardsMarketplaceResponse, error) {
 
 	marketplace, err := ws.getSecurityCardsMarketplace.Run()
 	if err != nil {
 		return nil, NewGrpcError(
-			goerr.Errorf("failed to get security cards marketplace data: %w", err),
+			goerr.Errorf(
+				"failed to get security cards marketplace data: %w",
+				err,
+			),
 		)
 	}
 
-	providers := make([]*api.SecurityCardsProvider, 0, len(marketplace.Providers))
+	providers := make(
+		[]*api.SCMDeprecated_SecurityCardsProvider,
+		0,
+		len(marketplace.Providers),
+	)
 	for _, provider := range marketplace.Providers {
 
-		securityCards := make([]*api.SecurityCard, 0, len(provider.SecurityCards))
+		securityCards := make(
+			[]*api.SCMDeprecated_SecurityCard,
+			0,
+			len(provider.SecurityCards),
+		)
 		for _, securityCard := range provider.SecurityCards {
-
-			securityCards = append(securityCards, api.SecurityCard_builder{
-				Id:       securityCard.Id,
-				AssetUrl: securityCard.AssetUrl,
-				Tag:      securityCard.Tag,
-				SpecId:   securityCard.SpecId,
-				CardCost: toProtoPriceInfo(securityCard.CardCost),
-			}.Build())
+			securityCards = append(
+				securityCards,
+				api.SCMDeprecated_SecurityCard_builder{
+					Id:       securityCard.Id,
+					AssetUrl: securityCard.AssetUrl,
+					Tag:      securityCard.Tag,
+					SpecId:   securityCard.SpecId,
+					CardCost: toDeprecatedProtoPriceInfo(
+						securityCard.CardCost,
+					),
+				}.Build(),
+			)
 		}
 
-		shippingPrices := make([]*api.ShippingPriceInfo, 0, len(provider.EstimatedShippingPrices))
+		shippingPrices := make(
+			[]*api.SCMDeprecated_ShippingPriceInfo,
+			0,
+			len(provider.EstimatedShippingPrices),
+		)
 		for _, shippingPrice := range provider.EstimatedShippingPrices {
 
-			countries := make([]*api.CountryInfo, 0, len(shippingPrice.Countries))
+			countries := make(
+				[]*api.SCMDeprecated_CountryInfo,
+				0,
+				len(shippingPrice.Countries),
+			)
 			for _, country := range shippingPrice.Countries {
-				countries = append(countries, api.CountryInfo_builder{
-					Code: country.Code,
-					Name: country.Name,
-					Flag: country.Flag,
-				}.Build())
+				countries = append(
+					countries,
+					api.SCMDeprecated_CountryInfo_builder{
+						Code: country.Code,
+						Name: country.Name,
+						Flag: country.Flag,
+					}.Build(),
+				)
 			}
 
-			shippingPrices = append(shippingPrices, api.ShippingPriceInfo_builder{
-				Price:     toProtoPriceInfo(shippingPrice.Price),
-				Countries: countries,
-			}.Build())
+			shippingPrices = append(
+				shippingPrices,
+				api.SCMDeprecated_ShippingPriceInfo_builder{
+					Price: toDeprecatedProtoPriceInfo(
+						shippingPrice.Price,
+					),
+					Countries: countries,
+				}.Build(),
+			)
 		}
 
-		providers = append(providers, api.SecurityCardsProvider_builder{
-			Id:                      provider.Id,
-			Name:                    provider.Name,
-			Description:             provider.Description,
-			SiteUrl:                 provider.SiteUrl,
-			LightTheme:              toProtoProviderTheme(provider.LightTheme),
-			DarkTheme:               toProtoProviderTheme(provider.DarkTheme),
-			SecurityCards:           securityCards,
-			EstimatedShippingPrices: shippingPrices,
-		}.Build())
+		providers = append(
+			providers,
+			api.SCMDeprecated_SecurityCardsProvider_builder{
+				Id:          provider.Id,
+				Name:        provider.Name,
+				Description: provider.Description,
+				SiteUrl:     provider.SiteUrl,
+				LightTheme: toDeprecatedProtoProviderTheme(
+					provider.LightTheme,
+				),
+				DarkTheme: toDeprecatedProtoProviderTheme(
+					provider.DarkTheme,
+				),
+				SecurityCards:           securityCards,
+				EstimatedShippingPrices: shippingPrices,
+			}.Build(),
+		)
 	}
 
-	specs := make([]*api.SecurityCardSpec, 0, len(marketplace.Specs))
+	specs := make(
+		[]*api.SCMDeprecated_SecurityCardSpec,
+		0,
+		len(marketplace.Specs),
+	)
 	for _, spec := range marketplace.Specs {
 
-		items := make(map[string]*api.SpecsItemList, len(spec.Items))
+		items := make(
+			map[string]*api.SCMDeprecated_SpecsItemList,
+			len(spec.Items),
+		)
 		for locale, specItems := range spec.Items {
-			protoItems := make([]*api.SpecsItem, 0, len(specItems))
+			protoItems := make(
+				[]*api.SCMDeprecated_SpecsItem,
+				0,
+				len(specItems),
+			)
 			for _, item := range specItems {
-				protoItems = append(protoItems, api.SpecsItem_builder{
-					IconUrl:        item.IconUrl,
-					Label:          item.Label,
-					Value:          item.Value,
-					AdditionalData: item.AdditionalData,
-				}.Build())
+				protoItems = append(
+					protoItems,
+					api.SCMDeprecated_SpecsItem_builder{
+						IconUrl:        item.IconUrl,
+						Label:          item.Label,
+						Value:          item.Value,
+						AdditionalData: item.AdditionalData,
+					}.Build(),
+				)
 			}
-			items[locale] = api.SpecsItemList_builder{Items: protoItems}.Build()
+			items[locale] = api.SCMDeprecated_SpecsItemList_builder{
+				Items: protoItems,
+			}.Build()
 		}
 
-		specs = append(specs, api.SecurityCardSpec_builder{
-			SpecId: spec.SpecId,
-			Items:  items,
-		}.Build())
+		specs = append(
+			specs,
+			api.SCMDeprecated_SecurityCardSpec_builder{
+				SpecId: spec.SpecId,
+				Items:  items,
+			}.Build(),
+		)
 	}
 
-	return api.GetSecurityCardsMarketplaceResponse_builder{
+	return api.SCMDeprecated_GetSecurityCardsMarketplaceResponse_builder{
 		Providers: providers,
 		Specs:     specs,
 	}.Build(), nil
 }
 
-func toProtoPriceInfo(in security_cards_marketplace_model.Price) *api.PriceInfo {
-	return api.PriceInfo_builder{
+func toDeprecatedProtoPriceInfo(
+	in marketplace_deprecated.Price,
+) *api.SCMDeprecated_PriceInfo {
+	return api.SCMDeprecated_PriceInfo_builder{
 		CurrencyCode: in.CurrencyCode,
 		Amount:       in.Amount,
 	}.Build()
 }
 
-func toProtoProviderTheme(
-	in security_cards_marketplace_model.ProviderTheme,
-) *api.SecurityCardsProviderTheme {
-	return api.SecurityCardsProviderTheme_builder{
+func toDeprecatedProtoProviderTheme(
+	in marketplace_deprecated.ProviderTheme,
+) *api.SCMDeprecated_SecurityCardsProviderTheme {
+	return api.SCMDeprecated_SecurityCardsProviderTheme_builder{
 		PrimaryColor: in.PrimaryColor,
 		SurfaceColor: in.SurfaceColor,
 	}.Build()
+}
+
+func (ws WalletServer) FetchSecurityCardsCountries(
+	_ context.Context, _ *emptypb.Empty,
+) (*api.SCMCountriesResponse, error) {
+	countries, err := ws.fetchAvailableCountries.Run()
+	if err != nil {
+		return nil, NewGrpcError(
+			goerr.Errorf(
+				"failed to fetch marketplace countries: %w", err,
+			),
+		)
+	}
+
+	protoCountries := make(
+		[]*api.SCMCountryInfo, 0, len(countries),
+	)
+	for _, c := range countries {
+		protoCountries = append(
+			protoCountries,
+			api.SCMCountryInfo_builder{Code: c.Code}.Build(),
+		)
+	}
+
+	return api.SCMCountriesResponse_builder{
+		Countries: protoCountries,
+	}.Build(), nil
+}
+
+func (ws WalletServer) FetchSecurityCardsMarketplaceByCountry(
+	_ context.Context,
+	req *api.SCMMarketplaceRequest,
+) (*api.SCMMarketplaceResponse, error) {
+	country := marketplace_model.NewCountryInfo(
+		req.GetCountry().GetCode(),
+	)
+
+	listings, err := ws.fetchProviderListings.Run(country)
+	if err != nil {
+		return nil, NewGrpcError(
+			goerr.Errorf(
+				"failed to fetch marketplace listings: %w", err,
+			),
+		)
+	}
+
+	protoListings := make(
+		[]*api.SCMMarketplaceResponse_ProviderListing,
+		0,
+		len(listings),
+	)
+	for _, listing := range listings {
+		protoListings = append(
+			protoListings,
+			api.SCMMarketplaceResponse_ProviderListing_builder{
+				Provider: toProtoSCMProvider(
+					listing.Provider,
+				),
+				Cards: toProtoSCMCards(listing.Cards),
+				EstimatedShippingPrice: toProtoSCMBitcoinAmount(
+					listing.ShippingPrice,
+				),
+				CardPrice: toProtoSCMBitcoinAmount(
+					listing.CardPrice,
+				),
+			}.Build(),
+		)
+	}
+
+	return api.SCMMarketplaceResponse_builder{
+		Providers: protoListings,
+	}.Build(), nil
+}
+
+func (ws WalletServer) FetchSecurityCardDetail(
+	_ context.Context,
+	req *api.SCMCardDetailRequest,
+) (*api.SCMCardDetailResponse, error) {
+	country := marketplace_model.NewCountryInfo(
+		req.GetCountry().GetCode(),
+	)
+
+	offer, err := ws.fetchCardOffer.Run(
+		country, req.GetSecurityCardUuid(),
+	)
+	if err != nil {
+		return nil, NewGrpcError(
+			goerr.Errorf(
+				"failed to fetch card detail: %w", err,
+			),
+		)
+	}
+
+	return api.SCMCardDetailResponse_builder{
+		Provider: api.SCMCardDetailResponse_Provider_builder{
+			Provider: toProtoSCMProvider(offer.Provider),
+			ShippingCountry: api.SCMCountryInfo_builder{
+				Code: offer.ShippingCountry.Code,
+			}.Build(),
+			MinShippingTimeDays: offer.MinShippingTimeDays,
+			MaxShippingTimeDays: offer.MaxShippingTimeDays,
+			EstimatedShippingPrice: toProtoSCMBitcoinAmount(
+				offer.ShippingPrice,
+			),
+			CardPrice: toProtoSCMBitcoinAmount(offer.CardPrice),
+		}.Build(),
+		Card: api.SCMCardDetailResponse_Card_builder{
+			Card: toProtoSCMCard(offer.Card),
+			Material: toProtoSCMCardMaterial(
+				offer.Card.Material,
+			),
+		}.Build(),
+	}.Build(), nil
+}
+
+func (ws WalletServer) FetchSecurityCardFullSpecs(
+	_ context.Context,
+	req *api.SCMFullSpecsRequest,
+) (*api.SCMFullSpecsResponse, error) {
+	country := marketplace_model.NewCountryInfo(
+		req.GetCountry().GetCode(),
+	)
+
+	offer, err := ws.fetchCardOffer.Run(
+		country, req.GetSecurityCardUuid(),
+	)
+	if err != nil {
+		return nil, NewGrpcError(
+			goerr.Errorf(
+				"failed to fetch card full specs: %w", err,
+			),
+		)
+	}
+
+	return api.SCMFullSpecsResponse_builder{
+		Provider: api.SCMFullSpecsResponse_Provider_builder{
+			Provider: toProtoSCMProvider(offer.Provider),
+			ShippingCountry: api.SCMCountryInfo_builder{
+				Code: offer.ShippingCountry.Code,
+			}.Build(),
+			MinShippingTimeDays: offer.MinShippingTimeDays,
+			MaxShippingTimeDays: offer.MaxShippingTimeDays,
+		}.Build(),
+		Card: api.SCMFullSpecsResponse_Card_builder{
+			Card:     toProtoSCMCard(offer.Card),
+			WidthMm:  offer.Card.WidthMm,
+			HeightMm: offer.Card.HeightMm,
+			Material: toProtoSCMCardMaterial(
+				offer.Card.Material,
+			),
+			ThicknessMm: offer.Card.ThicknessMm,
+			WeightGrams: offer.Card.WeightGrams,
+			SecureElement: toProtoSCMSecureElement(
+				offer.Card.SecureElement,
+			),
+		}.Build(),
+	}.Build(), nil
 }
 
 func toAny(protoValue *api.Value) (any, error) {
@@ -767,9 +1015,10 @@ func (ws WalletServer) ResetData(
 // filename). Example: "/path/to/documents/expected_kit_name.pdf" The directory will be created if
 // it doesn't exist.
 func (ws WalletServer) GenerateEmergencyKitPDF(
-	ctx context.Context, //nolint:revive // TODO: use or remove ctx
+	_ context.Context,
 	request *api.GenerateEmergencyKitPDFRequest,
 ) (*api.GenerateEmergencyKitPDFResponse, error) {
+	startGo := time.Now()
 	ekInput := request.GetEkInput()
 	ekParams := &libwallet.EKInput{
 		FirstEncryptedKey:  ekInput.GetFirstEncryptedKey(),
@@ -788,9 +1037,23 @@ func (ws WalletServer) GenerateEmergencyKitPDF(
 		return nil, NewGrpcError(goerr.Errorf("failed to generate emergency kit PDF: %w", err))
 	}
 
+	profiling := result.Profiling
 	return api.GenerateEmergencyKitPDFResponse_builder{
 		VerificationCode: result.VerificationCode,
 		Version:          int32(result.Version),
+		Profiling: api.RenderProfiling_builder{
+			LoadTranslationsMs:      profiling.LoadTranslationsMs,
+			RegisterFontsMs:         profiling.RegisterFontsMs,
+			RegisterImagesMs:        profiling.RegisterImagesMs,
+			ComponentsRenderingMs:   profiling.ComponentsRenderingMs,
+			CreateAndSaveOnDiskMs:   profiling.CreateAndSaveOnDiskMs,
+			TotalHeapAllocatedBytes: profiling.TotalHeapAllocatedBytes,
+			TotalObjectsAllocated:   profiling.TotalObjectsAllocated,
+			EmbedMetadataMs:         profiling.EmbedMetadataMs,
+			TotalInsideGoMs:         time.Since(startGo).Milliseconds(),
+			KitSizeBytes:            profiling.KitSizeBytes,
+			DrawIconsMs:             profiling.DrawIconsMs,
+		}.Build(),
 	}.Build(), nil
 }
 
@@ -814,6 +1077,21 @@ func (ws WalletServer) SecureKeyValueStoragePut(
 		"secure key-value storage bridge not configured",
 	)
 	err := ws.secureKeyValueStorage.Put(ctx, request.GetKey(), request.GetValue())
+	if err != nil {
+		return nil, NewGrpcErrorFromCodeAndErr(apierrors.ErrorCodes.ErrSecureKvStorageFailed, err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (ws WalletServer) SecureKeyValueStorageDelete(
+	ctx context.Context,
+	request *api.SecureKeyValueStorageDeleteRequest,
+) (*emptypb.Empty, error) {
+	preconditions.CheckStatef(
+		ws.secureKeyValueStorage != nil,
+		"secure key-value storage bridge not configured",
+	)
+	err := ws.secureKeyValueStorage.Delete(ctx, request.GetKey())
 	if err != nil {
 		return nil, NewGrpcErrorFromCodeAndErr(apierrors.ErrorCodes.ErrSecureKvStorageFailed, err)
 	}
@@ -859,4 +1137,19 @@ func (ws WalletServer) SecureKeyValueStorageGet(
 		}
 	}
 	return response, nil
+}
+
+func (ws WalletServer) SecureKeyValueStorageWipe(
+	ctx context.Context,
+	_ *emptypb.Empty,
+) (*emptypb.Empty, error) {
+	preconditions.CheckStatef(
+		ws.secureKeyValueStorage != nil,
+		"secure key-value storage bridge not configured",
+	)
+	err := ws.secureKeyValueStorage.Wipe(ctx)
+	if err != nil {
+		return nil, NewGrpcErrorFromCodeAndErr(apierrors.ErrorCodes.ErrSecureKvStorageFailed, err)
+	}
+	return &emptypb.Empty{}, nil
 }

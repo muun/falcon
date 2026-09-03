@@ -57,9 +57,17 @@ extension Environment {
         }
     }
 
+    var legacyDocumentsLibwalletURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("libwallet", isDirectory: true)
+    }
+
     public var libwalletDataDirectory: URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0].appendingPathComponent("libwallet", isDirectory: true)
+        if LibwalletMigrationHelper.isMigrated,
+           let appGroupDir = LibwalletMigrationHelper.appGroupLibwalletURL {
+            return appGroupDir
+        }
+        return legacyDocumentsLibwalletURL
     }
 
     public var libwalletSocketFile: URL {

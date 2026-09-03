@@ -18,7 +18,7 @@ func TestKVSchemaStateRepositoryTimestampsAreUTC(t *testing.T) {
 	time.Local = loc
 	defer func() { time.Local = original }()
 
-	db, err := setupTestDb(t)
+	db, err := setupTestDB(t)
 	if err != nil {
 		t.Fatalf("failed to set up test db: %v", err)
 	}

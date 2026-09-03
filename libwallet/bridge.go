@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/sha1" //nolint:gosec // TODO: migrate off sha1
+	"slices"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 )
@@ -34,13 +35,7 @@ func (l *StringList) Add(s string) {
 }
 
 func (l *StringList) Contains(s string) bool {
-	for _, v := range l.elems { //nolint:modernize // TODO: use slices.Contains
-		if v == s {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(l.elems, s)
 }
 
 func (l *StringList) ConvertToArray() []string {
@@ -72,18 +67,12 @@ func (l *IntList) Add(number int) {
 }
 
 func (l *IntList) Contains(number int) bool {
-	for _, v := range l.elems { //nolint:modernize // TODO: use slices.Contains
-		if v == number {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(l.elems, number)
 }
 
 // TODO: Remove when delete security cards POC
 func EncryptHMacSha1(key []byte, text []byte) []byte {
-	h := hmac.New(sha1.New, key)
+	h := hmac.New(sha1.New, key) //nolint:gosec // TODO: migrate off sha1
 	h.Write(text)
 	return h.Sum(nil)
 }

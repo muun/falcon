@@ -987,6 +987,9 @@ Many services are not yet compatible with Taproot and may label your addresses a
 
 "SecurityCardConnectingOverlayView.connectingTo" = "Connecting to %@";
 
+"KeyboardToolbar.previous" = "Previous";
+"KeyboardToolbar.next" = "Next";
+
 "ShippingViewController.title" = "Shipping";
 "ShippingViewController.subtitle" = "Information needed to deliver your card.";
 "ShippingViewController.cta" = "GO TO CHECKOUT";
@@ -1011,3 +1014,34 @@ Many services are not yet compatible with Taproot and may label your addresses a
 "ShippingFormView.cityRequired" = "City is required";
 "ShippingFormView.stateRequired" = "State is required";
 "ShippingFormView.zipCodeRequired" = "ZIP code is required";
+
+/* Order Summary */
+"OrderSummaryViewController.title" = "Your order";
+"OrderSummaryViewController.subtitle" = "Review your order and proceed to payment.";
+"OrderSummaryViewController.summaryTitle" = "Summary";
+"OrderSummaryViewController.goToPayment" = "GO TO PAYMENT";
+"OrderSummaryViewController.cardPrice" = "Card price";
+"OrderSummaryViewController.shippingAndTaxes" = "Shipping & Taxes";
+"OrderSummaryViewController.total" = "Total";
+"OrderSummaryViewController.detailName" = "Name";
+"OrderSummaryViewController.detailEmail" = "Email";
+"OrderSummaryViewController.detailAddress" = "Address";
+
+/* Pay with Muun */
+"PayWithMuunViewController.title" = "Pay with Muun";
+"PayWithMuunViewController.to" = "To";
+"PayWithMuunViewController.amount" = "Amount";
+"PayWithMuunViewController.networkFee" = "Network fee";
+"PayWithMuunViewController.total" = "Total";
+"PayWithMuunViewController.send" = "SEND";
+"ReceivingNodeDetailsViewController.title" = "Receiving node details";
+"ReceivingNodeDetailsViewController.publicKey" = "Public key";
+"ReceivingNodeDetailsViewController.openInNodeExplorer" = "OPEN IN NODE EXPLORER";
+
+/* Delivery Method Picker */
+"DeliveryMethodPicker.standardShipping" = "Standard shipping";
+"DeliveryMethodPicker.expressShipping" = "Express shipping";
+"DeliveryMethodPicker.standardEta" = "5 to 10 business days";
+"DeliveryMethodPicker.expressEta" = "2 to 4 business days";
+"DeliveryMethodPicker.free" = "FREE";
+"DeliveryMethodPicker.surcharge" = "+%@";
