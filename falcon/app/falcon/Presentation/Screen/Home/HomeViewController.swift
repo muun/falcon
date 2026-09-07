@@ -173,7 +173,7 @@ extension HomeViewController: HomePresenterDelegate {
         populateView()
     }
 
-    func onBalanceChange(_ balance: MonetaryAmount) {
+    func onBalanceChange(_ balance: BitcoinAmount) {
         populateBalanceView()
     }
 

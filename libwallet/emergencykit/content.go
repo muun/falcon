@@ -1,7 +1,7 @@
 package emergencykit
 
 type pageData struct {
-	Css     string //nolint:staticcheck // TODO: struct field Css should be CSS
+	CSS     string
 	Content string
 }
 
@@ -24,7 +24,7 @@ const page = `
   <title>Emergency Kit</title>
   
   <style>
-    {{.Css}}
+    {{.CSS}}
   </style>
 </head>
 

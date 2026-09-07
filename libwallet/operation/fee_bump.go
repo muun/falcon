@@ -50,14 +50,14 @@ func (fb *FeeBumpFunction) getPartialLinearFunctionForFeeRate(
 }
 
 // GetBumpAmountForFeeRate assumes that there is no overlap between the intervals.
-func (f *FeeBumpFunction) GetBumpAmountForFeeRate( //nolint:staticcheck // TODO: methods on the same type should have the same receiver name (seen 1x "f", 1x "fb")
+func (fb *FeeBumpFunction) GetBumpAmountForFeeRate(
 	feeRateInSatsPerVByte float64,
 ) (int64, error) {
-	if f.PartialLinearFunctions == nil {
+	if fb.PartialLinearFunctions == nil {
 		return 0, errors.New("fee bump function does not exist")
 	}
 
-	partialLinearFunction, err := f.getPartialLinearFunctionForFeeRate(feeRateInSatsPerVByte)
+	partialLinearFunction, err := fb.getPartialLinearFunctionForFeeRate(feeRateInSatsPerVByte)
 
 	if err != nil {
 		return 0, err

@@ -13,19 +13,22 @@ import (
 
 func TestFinishChallengeSetupAction(t *testing.T) {
 
-	t.Run("calls houston and stores encrypted muun key", func(t *testing.T) {
+	t.Run("calls houston and stores encrypted cosigner key", func(t *testing.T) {
 		// Setup
 		keys := testutils.GenerateTestKeys()
 		kvStorage := testutils.NewTestKeyValueStorage(t)
 		keyProvider := testutils.NewMockKeyProvider(keys)
-		vmkJson := testutils.BuildVerifiableMuunKeyJson( //nolint:staticcheck // TODO: var vmkJson should be vmkJSON
+		vmkJSON := testutils.BuildVerifiableCosignerKeyJSON(
 			keys,
 			true,
 		)
 		houston := &testutils.MockHoustonService{
-			FinishWithVerifiableResult: *vmkJson,
+			FinishWithVerifiableResult: *vmkJSON,
 		}
-		computeAction := recovery.NewComputeAndStoreEncryptedMuunKeyAction(kvStorage, keyProvider)
+		computeAction := recovery.NewComputeAndStoreEncryptedCosignerKeyAction(
+			kvStorage,
+			keyProvider,
+		)
 		action := NewFinishChallengeSetupAction(houston, kvStorage, computeAction)
 
 		// Test
@@ -51,13 +54,13 @@ func TestFinishChallengeSetupAction(t *testing.T) {
 				houston.CapturedChallengeSetupVerify.PublicKey, wantPubKey)
 		}
 
-		// Verify encrypted muun key was stored
-		got, err := kvStorage.Get(storage.VerifiedEncryptedMuunKey)
+		// Verify encrypted cosigner key was stored
+		got, err := kvStorage.Get(storage.VerifiedEncryptedCosignerKey)
 		if err != nil {
 			t.Fatalf("Get() error = %v", err)
 		}
 		if got == nil {
-			t.Fatal("expected verified encrypted muun key to be stored")
+			t.Fatal("expected verified encrypted cosigner key to be stored")
 		}
 	})
 
@@ -67,9 +70,12 @@ func TestFinishChallengeSetupAction(t *testing.T) {
 		kvStorage := testutils.NewTestKeyValueStorage(t)
 		keyProvider := testutils.NewMockKeyProvider(keys)
 		houston := &testutils.MockHoustonService{
-			FinishWithVerifiableResult: testutils.BuildInvalidVerifiableMuunKeyJson(),
+			FinishWithVerifiableResult: testutils.BuildInvalidVerifiableCosignerKeyJSON(),
 		}
-		computeAction := recovery.NewComputeAndStoreEncryptedMuunKeyAction(kvStorage, keyProvider)
+		computeAction := recovery.NewComputeAndStoreEncryptedCosignerKeyAction(
+			kvStorage,
+			keyProvider,
+		)
 		action := NewFinishChallengeSetupAction(houston, kvStorage, computeAction)
 
 		// Test — should NOT return error even though verification fails
@@ -87,7 +93,10 @@ func TestFinishChallengeSetupAction(t *testing.T) {
 		houston := &testutils.MockHoustonService{
 			FinishWithVerifiableErr: errors.New("houston network error"),
 		}
-		computeAction := recovery.NewComputeAndStoreEncryptedMuunKeyAction(kvStorage, keyProvider)
+		computeAction := recovery.NewComputeAndStoreEncryptedCosignerKeyAction(
+			kvStorage,
+			keyProvider,
+		)
 		action := NewFinishChallengeSetupAction(houston, kvStorage, computeAction)
 
 		// Test

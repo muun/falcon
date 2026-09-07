@@ -32,12 +32,12 @@ func NewPairSecurityCardActionV2(
 }
 
 func (ac *PairSecurityCardActionV2) Run() (*security_card.SecurityCardPaired, error) {
-	challengePair, err := ac.houstonService.ChallengeSecurityCardPair()
+	challengePair, err := ac.houstonService.PairRequestChallenge()
 	if err != nil {
 		return nil, errors.Errorf("error requesting challenge to server: %w", err)
 	}
 
-	serverPublicKey, err := hex.DecodeString(challengePair.ServerPublicKeyInHex)
+	serverPublicKey, err := hex.DecodeString(challengePair.ServerPubKeyInHex)
 	if err != nil {
 		return nil, errors.Errorf("error decoding server key: %w", err)
 	}
@@ -59,7 +59,7 @@ func (ac *PairSecurityCardActionV2) Run() (*security_card.SecurityCardPaired, er
 					Message: "error during pairing with card",
 					Cause:   err,
 				}
-			case cardError.Code == nfc.ErrAppletIdNotFound:
+			case cardError.Code == nfc.ErrAppletIDNotFound:
 				return nil, &MuunAppletNotFoundError{
 					Message: "muun applet not found",
 					Cause:   err,
@@ -69,7 +69,7 @@ func (ac *PairSecurityCardActionV2) Run() (*security_card.SecurityCardPaired, er
 		return nil, errors.Errorf("error during pairing with card: %w", err)
 	}
 
-	registerSecurityCardJson, err := service.MapRegisterSecurityCardJson( //nolint:staticcheck // TODO: var registerSecurityCardJson should be registerSecurityCardJSON
+	registerSecurityCardJSON, err := service.MapRegisterSecurityCardJSON(
 		pairingResponse,
 		clientPublicKey,
 	)
@@ -79,7 +79,7 @@ func (ac *PairSecurityCardActionV2) Run() (*security_card.SecurityCardPaired, er
 	}
 
 	registerSecurityResponse, err := ac.houstonService.RegisterSecurityCard(
-		*registerSecurityCardJson,
+		*registerSecurityCardJSON,
 	)
 	if err != nil {
 		var houstonError *service.HoustonResponseError

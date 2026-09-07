@@ -1,6 +1,7 @@
 package lnurl
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -123,41 +124,44 @@ func Withdraw(
 	notifier := notifier{notify: notify}
 
 	// decode the qr
-	qrUrl, err := decode(qr) //nolint:staticcheck // TODO: var qrUrl should be qrURL
+	qrURL, err := decode(qr)
 	if err != nil {
 		notifier.Error(ErrDecode, err)
 		return
 	}
-	if strings.HasSuffix(qrUrl.Host, ".onion") {
+	if strings.HasSuffix(qrURL.Host, ".onion") {
 		notifier.Errorf(ErrTorNotSupported, "Tor onion links are not supported")
 		return
 	}
-	tag := qrUrl.Query().Get("tag")
+	tag := qrURL.Query().Get("tag")
 	if tag != "" && !isWithdrawRequest(tag) {
 		notifier.Errorf(ErrWrongTag, "QR is not a LNURL withdraw request")
 		return
 	}
-	if !allowUnsafe && qrUrl.Scheme != "https" {
+	if !allowUnsafe && qrURL.Scheme != "https" {
 		notifier.Errorf(ErrUnsafeURL, "URL from QR is not secure")
 		return
 	}
-	host := qrUrl.Hostname()
+	host := qrURL.Hostname()
 	notifier.SetHost(host)
 
 	// update contacting
 	notifier.Status(StatusContacting)
 
 	// start withdraw with service
-	resp, err := httpClient.Get( //nolint:noctx // TODO: use (*http.Client).Do with http.NewRequestWithContext
-		qrUrl.String(),
-	)
+	req, err := http.NewRequestWithContext(context.Background(), "GET", qrURL.String(), nil)
+	if err != nil {
+		notifier.Error(ErrUnknown, err)
+		return
+	}
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		notifier.Error(ErrUnreachable, err)
 		return
 	}
-	defer resp.Body.Close() //nolint:errcheck // TODO: check error
+	defer func() { _ = resp.Body.Close() }()
 
-	if code, reason := validateHttpResponse(resp); code != ErrNone {
+	if code, reason := validateHTTPResponse(resp); code != ErrNone {
 		notifier.Errorf(code, "%s", reason)
 		return
 	}
@@ -183,7 +187,7 @@ func Withdraw(
 		notifier.Errorf(ErrUnsafeURL, "callback URL is not secure")
 		return
 	}
-	// We don't check for "callbackURL.Host == qrUrl.Host" since for withdraw it does not add
+	// We don't check for "callbackURL.Host == qrURL.Host" since for withdraw it does not add
 	// any security.
 	// Note: for other lnurl action it will definitely be a requirement.
 
@@ -210,9 +214,9 @@ func Withdraw(
 		notifier.Errorf(ErrUnreachable, "failed to get response from callback URL: %v", err)
 		return
 	}
-	defer fresp.Body.Close() //nolint:errcheck // TODO: check error
+	defer func() { _ = fresp.Body.Close() }()
 
-	if code, reason := validateHttpResponse(fresp); code != ErrNone {
+	if code, reason := validateHTTPResponse(fresp); code != ErrNone {
 		notifier.Errorf(code, "%s", reason)
 		return
 	}
@@ -233,7 +237,7 @@ func Withdraw(
 	notifier.Status(StatusReceiving)
 }
 
-func validateHttpResponse( //nolint:staticcheck // TODO: func validateHttpResponse should be validateHTTPResponse
+func validateHTTPResponse(
 	resp *http.Response,
 ) (int, string) {
 
@@ -397,7 +401,7 @@ func (n *notifier) Error(status int, err error) {
 func (n *notifier) Errorf(
 	status int,
 	format string,
-	a ...interface{}, //nolint:modernize // TODO: use any instead of interface{}
+	a ...any,
 ) {
 	msg := fmt.Sprintf(format, a...)
 	n.notify(&Event{Code: status, Message: msg, Metadata: n.metadata})

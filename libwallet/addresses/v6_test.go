@@ -15,15 +15,15 @@ func TestCreateAddressV6(t *testing.T) {
 		basePath        = "m/schema:1'/recovery:1'"
 	)
 
-	baseMuunKey := parseKey(baseCosigningPK)
-	muunKey := derive(baseMuunKey, basePath, addressPath)
+	baseCosignerKey := parseKey(baseCosigningPK)
+	cosignerKey := derive(baseCosignerKey, basePath, addressPath)
 
 	baseUserKey := parseKey(basePK)
 	userKey := derive(baseUserKey, basePath, addressPath)
 
 	expectedAddr := &WalletAddress{address: v6Address, derivationPath: addressPath, version: 6}
 
-	actualAddr, err := CreateAddressV6(userKey, muunKey, addressPath, network)
+	actualAddr, err := CreateAddressV6(userKey, cosignerKey, addressPath, network)
 	if err != nil {
 		t.Fatal(err)
 	}

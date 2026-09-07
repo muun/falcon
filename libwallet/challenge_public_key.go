@@ -30,6 +30,7 @@ func NewChallengePublicKeyFromSerialized(serializedKey []byte) (*ChallengePublic
 // will always have the MuunKey serialized as V2 on their devices. If the user updates
 // the app without re-logging in, a MuunKeyV2 will remain stored, and we must serialize
 // the UserKey as V2 to maintain key consistency in the EmergencyKit.
+// TODO(#16998): rename muunPrivateKey to cosignerPrivateKey; it forms the ObjC selector.
 func (k *ChallengePublicKey) EncryptKey(
 	privKey *HDPrivateKey,
 	recoveryCodeSalt []byte,
@@ -102,7 +103,7 @@ func (k *ChallengePublicKey) encryptKeyAsV2(
 func (k *ChallengePublicKey) encryptKeyAsV3(
 	privKey *HDPrivateKey,
 	recoveryCodeSalt []byte,
-	birthday int, //nolint:revive // TODO: use or remove birthday
+	_ int,
 ) (string, error) {
 	const (
 		chainCodeStart  = 13

@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"math/rand"
-	"path"
 	"time"
 
 	"github.com/btcsuite/btcd/btcec/v2"
@@ -43,8 +42,9 @@ type InvoiceSecrets struct {
 	PaymentHash   []byte
 	IdentityKey   *HDPublicKey
 	UserHtlcKey   *HDPublicKey
-	MuunHtlcKey   *HDPublicKey
-	ShortChanId   int64 //nolint:staticcheck // TODO: struct field ShortChanId should be ShortChanID
+	// TODO(#16998): rename to CosignerHtlcKey; part of the gomobile contract with the apps.
+	MuunHtlcKey *HDPublicKey
+	ShortChanId int64 //nolint:staticcheck // gomobile export
 }
 
 // RouteHints is a struct returned by the remote server containing the data
@@ -88,18 +88,16 @@ func (l *InvoiceSecretsList) Get(i int) *InvoiceSecrets {
 
 // GenerateInvoiceSecrets returns a slice of new secrets to register with the remote server. Once
 // registered, those invoices should be stored with the PersistInvoiceSecrets method.
-func GenerateInvoiceSecrets(userKey, muunKey *HDPublicKey) (*InvoiceSecretsList, error) {
+func GenerateInvoiceSecrets(userKey, cosignerKey *HDPublicKey) (*InvoiceSecretsList, error) {
 
 	var secrets []*InvoiceSecrets
 
-	db, err := openDB()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	unused, err := db.CountUnusedInvoices()
-	if err != nil {
+	var unused int
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		unused, err = db.CountUnusedInvoices()
+		return err
+	}); err != nil {
 		return nil, err
 	}
 
@@ -109,7 +107,7 @@ func GenerateInvoiceSecrets(userKey, muunKey *HDPublicKey) (*InvoiceSecretsList,
 
 	num := MaxUnusedSecrets - unused
 
-	for i := 0; i < num; i++ { //nolint:modernize // TODO: use range over int
+	for range num {
 		preimage := randomBytes(32)
 		paymentSecret := randomBytes(32)
 		paymentHashArray := sha256.Sum256(preimage)
@@ -134,12 +132,12 @@ func GenerateInvoiceSecrets(userKey, muunKey *HDPublicKey) (*InvoiceSecretsList,
 		if err != nil {
 			return nil, err
 		}
-		muunHtlcKey, err := muunKey.DeriveTo(htlcKeyPath.String())
+		cosignerHtlcKey, err := cosignerKey.DeriveTo(htlcKeyPath.String())
 		if err != nil {
 			return nil, err
 		}
 
-		shortChanId := binary.LittleEndian.Uint64( //nolint:staticcheck // TODO: var shortChanId should be shortChanID
+		shortChanId := binary.LittleEndian.Uint64( //nolint:staticcheck // matches gomobile-exported field
 			randomBytes(8),
 		) | (1 << 63)
 
@@ -150,7 +148,7 @@ func GenerateInvoiceSecrets(userKey, muunKey *HDPublicKey) (*InvoiceSecretsList,
 			PaymentHash:   paymentHash,
 			IdentityKey:   identityKey,
 			UserHtlcKey:   userHtlcKey,
-			MuunHtlcKey:   muunHtlcKey,
+			MuunHtlcKey:   cosignerHtlcKey,
 			ShortChanId:   int64(shortChanId),
 		})
 	}
@@ -164,23 +162,22 @@ func GenerateInvoiceSecrets(userKey, muunKey *HDPublicKey) (*InvoiceSecretsList,
 // in the device local database. These secrets can be used to craft new
 // Lightning invoices.
 func PersistInvoiceSecrets(list *InvoiceSecretsList) error {
-	db, err := openDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	for _, s := range list.secrets {
-		db.CreateInvoice(&walletdb.Invoice{ //nolint:errcheck // TODO: check error
-			Preimage:      s.preimage,
-			PaymentHash:   s.PaymentHash,
-			PaymentSecret: s.paymentSecret,
-			KeyPath:       s.keyPath,
-			ShortChanId:   uint64(s.ShortChanId),
-			State:         walletdb.InvoiceStateRegistered,
-		})
-	}
-	return nil
+	return Pool.WithDB(func(db *walletdb.DB) error {
+		for _, s := range list.secrets {
+			err := db.CreateInvoice(&walletdb.Invoice{
+				Preimage:      s.preimage,
+				PaymentHash:   s.PaymentHash,
+				PaymentSecret: s.paymentSecret,
+				KeyPath:       s.keyPath,
+				ShortChanId:   uint64(s.ShortChanId),
+				State:         walletdb.InvoiceStateRegistered,
+			})
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 type InvoiceBuilder struct {
@@ -229,14 +226,12 @@ func (i *InvoiceBuilder) AddRouteHints(routeHints *RouteHints) *InvoiceBuilder {
 
 func (i *InvoiceBuilder) Build() (string, error) {
 	// obtain first unused secret from db
-	db, err := openDB()
-	if err != nil {
-		return "", err
-	}
-	defer db.Close()
-
-	dbInvoice, err := db.FindFirstUnusedInvoice()
-	if err != nil {
+	var dbInvoice *walletdb.Invoice
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		dbInvoice, err = db.FindFirstUnusedInvoice()
+		return err
+	}); err != nil {
 		return "", err
 	}
 	if dbInvoice == nil {
@@ -282,10 +277,10 @@ func (i *InvoiceBuilder) Build() (string, error) {
 	// [2] ACINQ/phoenix@03e709c
 
 	features := lnwire.EmptyFeatureVector()
-	features.RawFeatureVector.Set( //nolint:staticcheck // TODO: could remove embedded field "RawFeatureVector" from selector
+	features.Set(
 		lnwire.TLVOnionPayloadRequired,
 	)
-	features.RawFeatureVector.Set( //nolint:staticcheck // TODO: could remove embedded field "RawFeatureVector" from selector
+	features.Set(
 		lnwire.PaymentAddrRequired,
 	)
 
@@ -386,8 +381,9 @@ func (i *InvoiceBuilder) Build() (string, error) {
 		dbInvoice.Metadata = encryptedMetadata
 	}
 
-	err = db.SaveInvoice(dbInvoice)
-	if err != nil {
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		return db.SaveInvoice(dbInvoice)
+	}); err != nil {
 		return "", err
 	}
 
@@ -407,19 +403,18 @@ func deriveMetadataEncryptionKey(key *HDPrivateKey) (*HDPrivateKey, error) {
 }
 
 func GetInvoiceMetadata(paymentHash []byte) (string, error) {
-	db, err := openDB()
-	if err != nil {
+	var metadata string
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		invoice, err := db.FindByPaymentHash(paymentHash)
+		if err != nil {
+			return err
+		}
+		metadata = invoice.Metadata
+		return nil
+	}); err != nil {
 		return "", err
 	}
-	invoice, err := db.FindByPaymentHash(paymentHash)
-	if err != nil {
-		return "", err
-	}
-	return invoice.Metadata, nil
-}
-
-func openDB() (*walletdb.DB, error) {
-	return walletdb.Open(path.Join(Cfg.DataDir, "wallet.db"))
+	return metadata, nil
 }
 
 func parsePubKey(s string) (*btcec.PublicKey, error) {

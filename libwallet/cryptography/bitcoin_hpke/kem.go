@@ -69,17 +69,17 @@ func diffieHellman(privateKey *btcec.PrivateKey, publicKey *btcec.PublicKey) []b
 
 // See Section 4.1 of RFC 9180
 func extractAndExpand(dh []byte, kemContext []byte) ([]byte, error) {
-	suiteId := slices.Concat( //nolint:staticcheck // TODO: var suiteId should be suiteID
+	suiteID := slices.Concat(
 		[]byte("KEM"),
-		i2Osp(kemId, 2),
+		i2Osp(kemID, 2),
 	)
-	eaePrk := labeledExtract([]byte(""), []byte("eae_prk"), dh, suiteId)
+	eaePrk := labeledExtract([]byte(""), []byte("eae_prk"), dh, suiteID)
 
 	return labeledExpand(
 		eaePrk,
 		[]byte("shared_secret"),
 		kemContext,
 		privateKeyLengthInBytes,
-		suiteId,
+		suiteID,
 	)
 }

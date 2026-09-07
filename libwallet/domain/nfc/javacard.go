@@ -54,15 +54,15 @@ func newJavaCard(nfcBridge app_provided_data.NfcBridge) *JavaCard {
 
 // selectApplet sends the ISO select apdu command with the specified AppletId to this JavaCard
 func (c *JavaCard) selectApplet(
-	appletId string, //nolint:staticcheck // TODO: method parameter appletId should be appletID
+	appletID string,
 ) error {
 
-	selectAPDU, err := newSelectAPDU(appletId)
+	selectAPDU, err := newSelectAPDU(appletID)
 	if err != nil {
 		return errors.Errorf("couldn't build select apdu command: %w", err)
 	}
 
-	initialResponse, err := c.transmit(selectAPDU.serialize())
+	initialResponse, err := c.transmit(selectAPDU.serializeShort())
 	if err != nil {
 		return errors.Errorf("couldn't transmit select apdu command: %w", err)
 	}

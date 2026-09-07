@@ -48,7 +48,7 @@ func TestGenerateBip21Uri(t *testing.T) {
 		//        Amount:  "1.2",
 		//        Label:   "hola",
 		//        Message: "mensaje con espacios",
-		//        Uri:     bitcoinScheme + completeURI,
+		//        URI:     bitcoinScheme + completeURI,
 		//    }},
 		//    want: bitcoinScheme + completeURI,
 		//},

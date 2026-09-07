@@ -475,7 +475,7 @@ func TestParseSignChallengeResponse_Success(t *testing.T) {
 	// TODO: mac verification will tested in another test
 
 	// Verify MAC content matches
-	for i := 0; i < MacSize; i++ { //nolint:modernize // TODO: use range over int
+	for i := range MacSize {
 		if result.MAC[i] != testMAC[i] {
 			t.Fatalf("MAC byte %d not parsed correctly: got 0x%02x, want 0x%02x",
 				i, result.MAC[i], testMAC[i])
@@ -483,7 +483,7 @@ func TestParseSignChallengeResponse_Success(t *testing.T) {
 	}
 
 	// Verify the card public key matches what we put in
-	for i := 0; i < Secp256R1PointSize; i++ { //nolint:modernize // TODO: use range over int
+	for i := range Secp256R1PointSize {
 		if result.CardPublicKey[i] != cardKeyPair.PublicKey[i] {
 			t.Fatalf("CardPublicKey byte %d not parsed correctly: got 0x%02x, want 0x%02x",
 				i, result.CardPublicKey[i], cardKeyPair.PublicKey[i])

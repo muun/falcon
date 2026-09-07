@@ -63,6 +63,12 @@ func TestParsingAndValidation(t *testing.T) {
 		{name: "has no indexes", args: args{path: "m/b/c"}, wantErr: true},
 		{name: "has weird chars", args: args{path: "m/1.2^3"}, wantErr: true},
 		{name: "has several :", args: args{path: "m/recovery:1:1"}, wantErr: true},
+		{name: "has an implicitly hardened index", args: args{path: "m/2147483648"}, wantErr: true},
+		{
+			name:    "has an index past uint64",
+			args:    args{path: "m/schema:1'/recovery:1'/change:0/99999999999999999999"},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -156,16 +162,4 @@ func TestPrefixRecognition(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestHDPathRejectsImplicitlyHardenedPath(t *testing.T) {
-	// This test is built weird cause the call we want to test doesn't return an error but instead
-	// panics. We _can_ "catch" a panic via this defer-recover construction. If the call doesn't
-	// panic, `t.Fatalf()` fails the test
-	defer func() {
-		recover()
-	}()
-
-	indexes := MustParse("m/2147483648").Indexes()
-	t.Fatalf("expected panic, got value %v", indexes)
 }

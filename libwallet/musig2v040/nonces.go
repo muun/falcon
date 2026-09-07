@@ -148,7 +148,7 @@ func WithNonceAuxInput(aux []byte) NonceGenOption {
 //   - return sha256(seed || i)
 //
 // where i is the ith secret nonce being generated.
-// Muun only provides the rand parameter as sessionId. All other parameters are encoded as if they
+// Muun only provides the rand parameter as sessionID. All other parameters are encoded as if they
 // were len=0
 func genNonceAuxBytes(rand []byte, i int) ([]byte, error) {
 	var w bytes.Buffer
@@ -203,7 +203,7 @@ func genNonceAuxBytes(rand []byte, i int) ([]byte, error) {
 //
 // Pseudo algorithm (|| means byte concat)
 //
-//	let seed = TaggedHash("MuSig/nonce", sessionId || 0 || 0 || 0 || 0)
+//	let seed = TaggedHash("MuSig/nonce", sessionID || 0 || 0 || 0 || 0)
 //	let k = [sha256(seed || 0), sha256(seed || 1)]
 //	let r = k*G
 //	return toPublicKeyFormat(r)

@@ -15,7 +15,7 @@ import (
 )
 
 // 127.0.0.1 instead of localhost to avoid problems with network interfaces in local env
-const houstonUrl string = "http://127.0.0.1:8080" //nolint:staticcheck // TODO: const houstonUrl should be houstonURL
+const houstonURL string = "http://127.0.0.1:8080"
 
 func defaultProvider() *TestProvider {
 	return &TestProvider{
@@ -23,7 +23,7 @@ func defaultProvider() *TestProvider {
 		ClientVersionName: "2.9.2",
 		Language:          "en",
 		ClientType:        "FALCON",
-		BaseURL:           houstonUrl,
+		BaseURL:           houstonURL,
 	}
 }
 
@@ -83,7 +83,7 @@ func TestInvalidEndpoint_Integration(t *testing.T) {
 		ClientVersionName: "53.3",
 		Language:          "en",
 		ClientType:        "APOLLO",
-		BaseURL:           houstonUrl,
+		BaseURL:           houstonURL,
 	}
 	houstonService := NewHoustonService(&provider).(*HoustonClient)
 	r := request[any]{
@@ -102,8 +102,8 @@ func TestInvalidEndpoint_Integration(t *testing.T) {
 		log.Println(err.Error()[:])
 		t.Fatal(unmarshallingErr)
 	}
-	if devError.RequestId == 0 {
-		t.Fatal("RequestId should not be zero")
+	if devError.RequestID == 0 {
+		t.Fatal("RequestID should not be zero")
 	}
 	if devError.ErrorCode != 404 {
 		t.Fatalf("want %v, but got %v", 404, devError.ErrorCode)
@@ -127,7 +127,7 @@ func TestValidEndpointButNoAuthToken_Integration(t *testing.T) {
 		ClientVersionName: "53.3",
 		Language:          "en",
 		ClientType:        "APOLLO",
-		BaseURL:           houstonUrl,
+		BaseURL:           houstonURL,
 	}
 	houstonService := NewHoustonService(&provider).(*HoustonClient)
 	r := request[any]{
@@ -146,8 +146,8 @@ func TestValidEndpointButNoAuthToken_Integration(t *testing.T) {
 		log.Println(err.Error()[:])
 		t.Fatal(unmarshallingErr)
 	}
-	if devError.RequestId == 0 {
-		t.Fatal("RequestId should not be zero")
+	if devError.RequestID == 0 {
+		t.Fatal("RequestID should not be zero")
 	}
 	if devError.ErrorCode != 2016 {
 		t.Fatalf("want %v, but got %v", 2016, devError.ErrorCode)
@@ -172,7 +172,7 @@ func TestValidEndpointButInvalidAuthToken_Integration(t *testing.T) {
 		Language:          "en",
 		ClientType:        "APOLLO",
 		AuthToken:         "invalid-auth-token",
-		BaseURL:           houstonUrl,
+		BaseURL:           houstonURL,
 	}
 	houstonService := NewHoustonService(&provider)
 
@@ -190,8 +190,8 @@ func TestValidEndpointButInvalidAuthToken_Integration(t *testing.T) {
 		t.Fatal(unmarshallingErr)
 	}
 
-	if houstonError.RequestId == 0 {
-		t.Fatal("RequestId should not be zero")
+	if houstonError.RequestID == 0 {
+		t.Fatal("RequestID should not be zero")
 	}
 	if houstonError.ErrorCode != 2016 {
 		t.Fatalf("want %v, but got %v", 2016, houstonError.ErrorCode)
@@ -215,7 +215,7 @@ func TestValidEndpointAndValidAuthToken_Integration(t *testing.T) {
 		ClientVersionName: "2.9.2",
 		Language:          "en",
 		ClientType:        "FALCON",
-		BaseURL:           houstonUrl,
+		BaseURL:           houstonURL,
 	}
 	strClientVersion, err := strconv.Atoi(provider.ClientVersion)
 	if err != nil {
@@ -225,8 +225,8 @@ func TestValidEndpointAndValidAuthToken_Integration(t *testing.T) {
 	houstonService := NewHoustonService(&provider)
 
 	// Create first session to get and set a valid AuthToken
-	sessionJson := model.CreateFirstSessionJson{ //nolint:staticcheck // TODO: var sessionJson should be sessionJSON
-		Client: model.ClientJson{
+	sessionJSON := model.CreateFirstSessionJSON{
+		Client: model.ClientJSON{
 			Type:        provider.ClientType,
 			BuildType:   "debug",
 			Version:     strClientVersion,
@@ -235,27 +235,27 @@ func TestValidEndpointAndValidAuthToken_Integration(t *testing.T) {
 		},
 		GcmToken:        nil,
 		PrimaryCurrency: "USD",
-		BasePublicKey: model.PublicKeyJson{
+		BasePublicKey: model.PublicKeyJSON{
 			Key:  "tpubDAygaiK3eZ9hpC3aQkxtu5fGSTK4P7QKTwwGExN8hGZytjpEfsrUjtM8ics8Y7YLrvf1GLBZTFjcpmkEP1KKTRyo8D2ku5zz49bRudDrngd", //nolint:lll
 			Path: "m/schema:1'/recovery:1'",
 		},
 	}
-	sessionOkJson, err := houstonService.CreateFirstSession( //nolint:staticcheck // TODO: var sessionOkJson should be sessionOkJSON
-		sessionJson,
+	sessionOkJSON, err := houstonService.CreateFirstSession(
+		sessionJSON,
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if sessionOkJson.CosigningPublicKey.Key == "" {
+	if sessionOkJSON.CosigningPublicKey.Key == "" {
 		t.Fatal("Cosigning public key should not be empty")
 	}
-	if sessionOkJson.CosigningPublicKey.Path == "" {
+	if sessionOkJSON.CosigningPublicKey.Path == "" {
 		t.Fatal("Cosigning public key path should not be empty")
 	}
-	if sessionOkJson.SwapServerPublicKey.Key == "" {
+	if sessionOkJSON.SwapServerPublicKey.Key == "" {
 		t.Fatal("Swap server public key should not be empty")
 	}
-	if sessionOkJson.SwapServerPublicKey.Path == "" {
+	if sessionOkJSON.SwapServerPublicKey.Path == "" {
 		t.Fatal("Swap server public key path should not be empty")
 	}
 
@@ -265,7 +265,7 @@ func TestValidEndpointAndValidAuthToken_Integration(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if feeWindow.Id <= 0 {
+	if feeWindow.ID <= 0 {
 		t.Fatal("Fee window id should be greater than zero")
 	}
 	if feeWindow.FetchDate == "" {

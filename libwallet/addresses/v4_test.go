@@ -17,15 +17,15 @@ func TestCreateAddressV4(t *testing.T) {
 		basePath        = "m/schema:1'/recovery:1'"
 	)
 
-	baseMuunKey := parseKey(baseCosigningPK)
-	muunKey := derive(baseMuunKey, basePath, addressPath)
+	baseCosignerKey := parseKey(baseCosigningPK)
+	cosignerKey := derive(baseCosignerKey, basePath, addressPath)
 
 	baseUserKey := parseKey(basePK)
 	userKey := derive(baseUserKey, basePath, addressPath)
 
 	type args struct {
-		userKey *hdkeychain.ExtendedKey
-		muunKey *hdkeychain.ExtendedKey
+		userKey     *hdkeychain.ExtendedKey
+		cosignerKey *hdkeychain.ExtendedKey
 	}
 	tests := []struct {
 		name    string
@@ -34,12 +34,12 @@ func TestCreateAddressV4(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "gen bech32 address",
-			args: args{userKey: userKey, muunKey: muunKey},
+			args: args{userKey: userKey, cosignerKey: cosignerKey},
 			want: &WalletAddress{address: v4Address, derivationPath: addressPath, version: V4}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CreateAddressV4(tt.args.userKey, tt.args.muunKey, addressPath, network)
+			got, err := CreateAddressV4(tt.args.userKey, tt.args.cosignerKey, addressPath, network)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateAddressV4() error = %v, wantErr %v", err, tt.wantErr)
 				return

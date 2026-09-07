@@ -26,7 +26,7 @@ const lightningScheme = "lightning:"
 // ParseInvoice parses an Invoice from an invoice string and a network
 func ParseInvoice(rawInput string, network *Network) (*Invoice, error) {
 
-	_, components := buildUriFromString(rawInput, lightningScheme)
+	_, components := buildURIFromString(rawInput, lightningScheme)
 	if components == nil {
 		return nil, errors.Errorf(ErrInvalidInvoice, "failed to parse uri %v", rawInput)
 	}

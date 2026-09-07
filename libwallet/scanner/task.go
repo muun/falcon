@@ -69,7 +69,7 @@ func (t *scanTask) tryExecuteAsync(results chan *scanTaskResult) {
 	result := t.tryExecute()
 
 	if result.Err != nil {
-		t.client.Disconnect() //nolint:errcheck // TODO: check error
+		_ = t.client.Disconnect()
 	}
 
 	results <- result

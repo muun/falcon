@@ -30,10 +30,13 @@
 	<array>
 		<string>iCloud.$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.muun.falcon</string>
+	</array>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)group.com.muun.falcon</string>
-		<string>$(AppIdentifierPrefix)group.com.muun.falcon.internal.beta</string>
 	</array>
 </dict>
 </plist>

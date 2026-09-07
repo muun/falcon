@@ -5,12 +5,12 @@ import (
 
 	"github.com/go-errors/errors"
 
+	"github.com/muun/libwallet/domain/model/marketplace/deprecated"
 	"github.com/muun/libwallet/domain/model/security_card"
-	"github.com/muun/libwallet/domain/model/security_cards_marketplace"
 	"github.com/muun/libwallet/service/model"
 )
 
-func MapSecurityCardPaired(in model.RegisterSecurityCardOkJson) *security_card.SecurityCardPaired {
+func MapSecurityCardPaired(in model.RegisterSecurityCardOkJSON) *security_card.SecurityCardPaired {
 	return security_card.NewSecurityCardPaired(
 		mapSecurityCardMetadata(in.Metadata),
 		in.IsKnownProvider,
@@ -18,8 +18,21 @@ func MapSecurityCardPaired(in model.RegisterSecurityCardOkJson) *security_card.S
 	)
 }
 
+func MapSecurityCardPairedV3(
+	in model.PairSubmitSignedChallengeResponseJSON,
+) *security_card.SecurityCardPaired {
+	// The response carries card metadata (in.SecurityCard.Metadata), but
+	// nothing consumes it yet, so we skip parsing it.
+	// TODO: map the metadata once a caller needs it.
+	return security_card.NewSecurityCardPaired(
+		nil,
+		in.IsKnownProvider,
+		in.IsCardAlreadyUsed,
+	)
+}
+
 func mapSecurityCardMetadata(
-	in model.SecurityCardMetadataJson,
+	in model.SecurityCardMetadataJSON,
 ) *security_card.SecurityCardMetadata {
 	return security_card.NewSecurityCardMetadata(
 		in.GlobalPublicKeyInHex,
@@ -32,7 +45,7 @@ func mapSecurityCardMetadata(
 }
 
 func MapSecurityCardSignChallengeResponse(
-	in model.ChallengeSecurityCardSignResponseJson,
+	in model.ChallengeSecurityCardSignResponseJSON,
 ) (*security_card.SecurityCardSignChallenge, error) {
 
 	serverPublicKeyBytes, err := hex.DecodeString(in.ServerPublicKeyInHex)
@@ -53,71 +66,100 @@ func MapSecurityCardSignChallengeResponse(
 	), nil
 }
 
-func MapSecurityCardsMarketplace(
-	in model.SecurityCardsMarketplaceJson,
-) (*security_cards_marketplace.Marketplace, error) {
+func MapSecurityCardSignChallengeV3(
+	in model.SignRequestChallengeResponseJSON,
+	payload model.SignChallengePerCardPayloadJSON,
+) (*security_card.SecurityCardSignChallengeV3, error) {
 
-	providers := make([]security_cards_marketplace.SecurityCardsProvider, 0, len(in.Providers))
+	serverPublicKey, err := hex.DecodeString(in.ServerPubKeyInHex)
+	if err != nil {
+		return nil, errors.Errorf("error decoding server public key: %w", err)
+	}
+
+	reason, err := hex.DecodeString(in.ReasonInHex)
+	if err != nil {
+		return nil, errors.Errorf("error decoding reason: %w", err)
+	}
+
+	mac, err := hex.DecodeString(payload.MacInHex)
+	if err != nil {
+		return nil, errors.Errorf("error decoding challenge mac: %w", err)
+	}
+
+	return security_card.NewSecurityCardSignChallengeV3(
+		serverPublicKey,
+		payload.ReplayCounter,
+		payload.Index,
+		reason,
+		mac,
+	)
+}
+
+func MapSecurityCardsMarketplace(
+	in model.SecurityCardsMarketplaceJSON,
+) (*deprecated.Marketplace, error) {
+
+	providers := make([]deprecated.SecurityCardsProvider, 0, len(in.Providers))
 	for _, provider := range in.Providers {
 
 		securityCards := make(
-			[]security_cards_marketplace.SecurityCard,
+			[]deprecated.SecurityCard,
 			0,
 			len(provider.SecurityCards),
 		)
 		for _, sc := range provider.SecurityCards {
-			securityCards = append(securityCards, security_cards_marketplace.NewSecurityCard(
-				sc.Id,
-				sc.AssetUrl,
+			securityCards = append(securityCards, deprecated.NewSecurityCard(
+				sc.ID,
+				sc.ImageURL,
 				sc.Tag,
-				sc.SpecId,
-				mapPriceInfo(sc.CardCost),
+				sc.SpecID,
+				mapDeprecatedPriceInfo(provider.CardPrice),
 			))
 		}
 
 		shippingPrices := make(
-			[]security_cards_marketplace.ShippingPrice,
+			[]deprecated.ShippingPrice,
 			0,
 			len(provider.EstimatedShippingPrices),
 		)
 		for _, shippingPrice := range provider.EstimatedShippingPrices {
 
-			countries := make([]security_cards_marketplace.Country, 0, len(shippingPrice.Countries))
+			countries := make([]deprecated.Country, 0, len(shippingPrice.Countries))
 			for _, country := range shippingPrice.Countries {
-				countries = append(countries, security_cards_marketplace.NewCountry(
+				countries = append(countries, deprecated.NewCountry(
 					country.Code,
 					country.Name,
 					country.Flag,
 				))
 			}
 
-			shippingPrices = append(shippingPrices, security_cards_marketplace.NewShippingPrice(
-				mapPriceInfo(shippingPrice.Price),
+			shippingPrices = append(shippingPrices, deprecated.NewShippingPrice(
+				mapDeprecatedPriceInfo(shippingPrice.Price),
 				countries,
 			))
 		}
 
-		providers = append(providers, security_cards_marketplace.NewSecurityCardsProvider(
-			provider.Id,
+		providers = append(providers, deprecated.NewSecurityCardsProvider(
+			provider.ID,
 			provider.Name,
 			provider.Description,
-			provider.SiteUrl,
-			mapProviderTheme(provider.LightTheme),
-			mapProviderTheme(provider.DarkTheme),
+			provider.SiteURL,
+			mapDeprecatedProviderTheme(provider.LightTheme),
+			mapDeprecatedProviderTheme(provider.DarkTheme),
 			securityCards,
 			shippingPrices,
 		))
 	}
 
-	specs := make([]security_cards_marketplace.SecurityCardSpec, 0, len(in.Specs))
+	specs := make([]deprecated.SecurityCardSpec, 0, len(in.Specs))
 	for _, spec := range in.Specs {
 
-		items := make(map[string][]security_cards_marketplace.SpecItem, len(spec.Items))
+		items := make(map[string][]deprecated.SpecItem, len(spec.Items))
 		for category, specItems := range spec.Items {
-			mapped := make([]security_cards_marketplace.SpecItem, 0, len(specItems))
+			mapped := make([]deprecated.SpecItem, 0, len(specItems))
 			for _, item := range specItems {
-				mapped = append(mapped, security_cards_marketplace.NewSpecItem(
-					item.IconUrl,
+				mapped = append(mapped, deprecated.NewSpecItem(
+					item.IconURL,
 					item.Label,
 					item.Value,
 					item.AdditionalData,
@@ -126,19 +168,19 @@ func MapSecurityCardsMarketplace(
 			items[category] = mapped
 		}
 
-		specs = append(specs, security_cards_marketplace.NewSecurityCardSpec(
-			spec.SpecId,
+		specs = append(specs, deprecated.NewSecurityCardSpec(
+			spec.SpecID,
 			items,
 		))
 	}
 
-	return security_cards_marketplace.NewMarketplace(providers, specs), nil
+	return deprecated.NewMarketplace(providers, specs), nil
 }
 
-func mapPriceInfo(in model.PriceInfoJson) security_cards_marketplace.Price {
-	return security_cards_marketplace.NewPrice(in.CurrencyCode, in.Amount)
+func mapDeprecatedPriceInfo(in model.PriceInfoJSON) deprecated.Price {
+	return deprecated.NewPrice(in.CurrencyCode, in.Amount)
 }
 
-func mapProviderTheme(in model.ProviderThemeJson) security_cards_marketplace.ProviderTheme {
-	return security_cards_marketplace.NewProviderTheme(in.PrimaryColor, in.SurfaceColor)
+func mapDeprecatedProviderTheme(in model.SecurityCardProviderThemeJSON) deprecated.ProviderTheme {
+	return deprecated.NewProviderTheme(in.PrimaryColor, in.SurfaceColor)
 }

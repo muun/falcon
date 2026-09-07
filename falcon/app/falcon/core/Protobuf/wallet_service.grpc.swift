@@ -21,6 +21,11 @@ internal protocol Rpc_WalletServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>
 
+  func signMessageSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>
+
   func signMessageSecurityCardV2(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
@@ -111,7 +116,27 @@ internal protocol Rpc_WalletServiceClientProtocol: GRPCClient {
   func getSecurityCardsMarketplace(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
-  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_GetSecurityCardsMarketplaceResponse>
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>
+
+  func fetchSecurityCardsCountries(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMCountriesResponse>
+
+  func fetchSecurityCardsMarketplaceByCountry(
+    _ request: Rpc_SCMMarketplaceRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SCMMarketplaceRequest, Rpc_SCMMarketplaceResponse>
+
+  func fetchSecurityCardDetail(
+    _ request: Rpc_SCMCardDetailRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SCMCardDetailRequest, Rpc_SCMCardDetailResponse>
+
+  func fetchSecurityCardFullSpecs(
+    _ request: Rpc_SCMFullSpecsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SCMFullSpecsRequest, Rpc_SCMFullSpecsResponse>
 
   func generateEmergencyKitPDF(
     _ request: Rpc_GenerateEmergencyKitPDFRequest,
@@ -132,6 +157,21 @@ internal protocol Rpc_WalletServiceClientProtocol: GRPCClient {
     _ request: Rpc_SecureKeyValueStoragePutRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Rpc_SecureKeyValueStoragePutRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func secureKeyValueStorageGet(
+    _ request: Rpc_SecureKeyValueStorageGetRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SecureKeyValueStorageGetRequest, Rpc_SecureKeyValueStorageGetResponse>
+
+  func secureKeyValueStorageDelete(
+    _ request: Rpc_SecureKeyValueStorageDeleteRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Rpc_SecureKeyValueStorageDeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func secureKeyValueStorageWipe(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>
 }
 
 extension Rpc_WalletServiceClientProtocol {
@@ -157,7 +197,27 @@ extension Rpc_WalletServiceClientProtocol {
     )
   }
 
-  /// Unary call to SignMessageSecurityCardV2
+  /// Signs with whichever security card version the user taps, so the client
+  /// no longer picks the protocol.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SignMessageSecurityCard.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func signMessageSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? []
+    )
+  }
+
+  /// Deprecated: use SignMessageSecurityCard. Kept while apollo and falcon still call
+  /// this name; remove it once both moved over.
   ///
   /// - Parameters:
   ///   - request: Request to send to SignMessageSecurityCardV2.
@@ -469,7 +529,7 @@ extension Rpc_WalletServiceClientProtocol {
     )
   }
 
-  /// Marketplace
+  /// Marketplace (deprecated: use screen-specific endpoints below)
   ///
   /// - Parameters:
   ///   - request: Request to send to GetSecurityCardsMarketplace.
@@ -478,12 +538,84 @@ extension Rpc_WalletServiceClientProtocol {
   internal func getSecurityCardsMarketplace(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_GetSecurityCardsMarketplaceResponse> {
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse> {
     return self.makeUnaryCall(
       path: Rpc_WalletServiceClientMetadata.Methods.getSecurityCardsMarketplace.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetSecurityCardsMarketplaceInterceptors() ?? []
+    )
+  }
+
+  /// SCM (Security Cards Marketplace) — screen-specific endpoints
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to FetchSecurityCardsCountries.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func fetchSecurityCardsCountries(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMCountriesResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsCountries.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardsCountriesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to FetchSecurityCardsMarketplaceByCountry
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to FetchSecurityCardsMarketplaceByCountry.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func fetchSecurityCardsMarketplaceByCountry(
+    _ request: Rpc_SCMMarketplaceRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SCMMarketplaceRequest, Rpc_SCMMarketplaceResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsMarketplaceByCountry.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardsMarketplaceByCountryInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to FetchSecurityCardDetail
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to FetchSecurityCardDetail.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func fetchSecurityCardDetail(
+    _ request: Rpc_SCMCardDetailRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SCMCardDetailRequest, Rpc_SCMCardDetailResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardDetail.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardDetailInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to FetchSecurityCardFullSpecs
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to FetchSecurityCardFullSpecs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func fetchSecurityCardFullSpecs(
+    _ request: Rpc_SCMFullSpecsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SCMFullSpecsRequest, Rpc_SCMFullSpecsResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardFullSpecs.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardFullSpecsInterceptors() ?? []
     )
   }
 
@@ -558,6 +690,60 @@ extension Rpc_WalletServiceClientProtocol {
       interceptors: self.interceptors?.makeSecureKeyValueStoragePutInterceptors() ?? []
     )
   }
+
+  /// Unary call to SecureKeyValueStorageGet
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SecureKeyValueStorageGet.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func secureKeyValueStorageGet(
+    _ request: Rpc_SecureKeyValueStorageGetRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SecureKeyValueStorageGetRequest, Rpc_SecureKeyValueStorageGetResponse> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageGet.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageGetInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to SecureKeyValueStorageDelete
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SecureKeyValueStorageDelete.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func secureKeyValueStorageDelete(
+    _ request: Rpc_SecureKeyValueStorageDeleteRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Rpc_SecureKeyValueStorageDeleteRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageDelete.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageDeleteInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to SecureKeyValueStorageWipe
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to SecureKeyValueStorageWipe.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  internal func secureKeyValueStorageWipe(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageWipe.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageWipeInterceptors() ?? []
+    )
+  }
 }
 
 @available(*, deprecated)
@@ -626,6 +812,11 @@ internal protocol Rpc_WalletServiceAsyncClientProtocol: GRPCClient {
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>
+
+  func makeSignMessageSecurityCardCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>
 
   func makeSignMessageSecurityCardV2Call(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
@@ -715,7 +906,27 @@ internal protocol Rpc_WalletServiceAsyncClientProtocol: GRPCClient {
   func makeGetSecurityCardsMarketplaceCall(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions?
-  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_GetSecurityCardsMarketplaceResponse>
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>
+
+  func makeFetchSecurityCardsCountriesCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMCountriesResponse>
+
+  func makeFetchSecurityCardsMarketplaceByCountryCall(
+    _ request: Rpc_SCMMarketplaceRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SCMMarketplaceRequest, Rpc_SCMMarketplaceResponse>
+
+  func makeFetchSecurityCardDetailCall(
+    _ request: Rpc_SCMCardDetailRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SCMCardDetailRequest, Rpc_SCMCardDetailResponse>
+
+  func makeFetchSecurityCardFullSpecsCall(
+    _ request: Rpc_SCMFullSpecsRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SCMFullSpecsRequest, Rpc_SCMFullSpecsResponse>
 
   func makeGenerateEmergencyKitPdfCall(
     _ request: Rpc_GenerateEmergencyKitPDFRequest,
@@ -736,6 +947,21 @@ internal protocol Rpc_WalletServiceAsyncClientProtocol: GRPCClient {
     _ request: Rpc_SecureKeyValueStoragePutRequest,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<Rpc_SecureKeyValueStoragePutRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeSecureKeyValueStorageGetCall(
+    _ request: Rpc_SecureKeyValueStorageGetRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SecureKeyValueStorageGetRequest, Rpc_SecureKeyValueStorageGetResponse>
+
+  func makeSecureKeyValueStorageDeleteCall(
+    _ request: Rpc_SecureKeyValueStorageDeleteRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Rpc_SecureKeyValueStorageDeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeSecureKeyValueStorageWipeCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -757,6 +983,18 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? []
+    )
+  }
+
+  internal func makeSignMessageSecurityCardCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? []
     )
   }
 
@@ -967,12 +1205,60 @@ extension Rpc_WalletServiceAsyncClientProtocol {
   internal func makeGetSecurityCardsMarketplaceCall(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_GetSecurityCardsMarketplaceResponse> {
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse> {
     return self.makeAsyncUnaryCall(
       path: Rpc_WalletServiceClientMetadata.Methods.getSecurityCardsMarketplace.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetSecurityCardsMarketplaceInterceptors() ?? []
+    )
+  }
+
+  internal func makeFetchSecurityCardsCountriesCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMCountriesResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsCountries.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardsCountriesInterceptors() ?? []
+    )
+  }
+
+  internal func makeFetchSecurityCardsMarketplaceByCountryCall(
+    _ request: Rpc_SCMMarketplaceRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SCMMarketplaceRequest, Rpc_SCMMarketplaceResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsMarketplaceByCountry.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardsMarketplaceByCountryInterceptors() ?? []
+    )
+  }
+
+  internal func makeFetchSecurityCardDetailCall(
+    _ request: Rpc_SCMCardDetailRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SCMCardDetailRequest, Rpc_SCMCardDetailResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardDetail.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardDetailInterceptors() ?? []
+    )
+  }
+
+  internal func makeFetchSecurityCardFullSpecsCall(
+    _ request: Rpc_SCMFullSpecsRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SCMFullSpecsRequest, Rpc_SCMFullSpecsResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardFullSpecs.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardFullSpecsInterceptors() ?? []
     )
   }
 
@@ -1023,6 +1309,42 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeSecureKeyValueStoragePutInterceptors() ?? []
     )
   }
+
+  internal func makeSecureKeyValueStorageGetCall(
+    _ request: Rpc_SecureKeyValueStorageGetRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SecureKeyValueStorageGetRequest, Rpc_SecureKeyValueStorageGetResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageGet.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageGetInterceptors() ?? []
+    )
+  }
+
+  internal func makeSecureKeyValueStorageDeleteCall(
+    _ request: Rpc_SecureKeyValueStorageDeleteRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Rpc_SecureKeyValueStorageDeleteRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageDelete.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageDeleteInterceptors() ?? []
+    )
+  }
+
+  internal func makeSecureKeyValueStorageWipeCall(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty> {
+    return self.makeAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageWipe.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageWipeInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -1036,6 +1358,18 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? []
+    )
+  }
+
+  internal func signMessageSecurityCard(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? []
     )
   }
 
@@ -1246,12 +1580,60 @@ extension Rpc_WalletServiceAsyncClientProtocol {
   internal func getSecurityCardsMarketplace(
     _ request: SwiftProtobuf.Google_Protobuf_Empty,
     callOptions: CallOptions? = nil
-  ) async throws -> Rpc_GetSecurityCardsMarketplaceResponse {
+  ) async throws -> Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse {
     return try await self.performAsyncUnaryCall(
       path: Rpc_WalletServiceClientMetadata.Methods.getSecurityCardsMarketplace.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetSecurityCardsMarketplaceInterceptors() ?? []
+    )
+  }
+
+  internal func fetchSecurityCardsCountries(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SCMCountriesResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsCountries.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardsCountriesInterceptors() ?? []
+    )
+  }
+
+  internal func fetchSecurityCardsMarketplaceByCountry(
+    _ request: Rpc_SCMMarketplaceRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SCMMarketplaceResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsMarketplaceByCountry.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardsMarketplaceByCountryInterceptors() ?? []
+    )
+  }
+
+  internal func fetchSecurityCardDetail(
+    _ request: Rpc_SCMCardDetailRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SCMCardDetailResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardDetail.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardDetailInterceptors() ?? []
+    )
+  }
+
+  internal func fetchSecurityCardFullSpecs(
+    _ request: Rpc_SCMFullSpecsRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SCMFullSpecsResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardFullSpecs.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFetchSecurityCardFullSpecsInterceptors() ?? []
     )
   }
 
@@ -1302,6 +1684,42 @@ extension Rpc_WalletServiceAsyncClientProtocol {
       interceptors: self.interceptors?.makeSecureKeyValueStoragePutInterceptors() ?? []
     )
   }
+
+  internal func secureKeyValueStorageGet(
+    _ request: Rpc_SecureKeyValueStorageGetRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Rpc_SecureKeyValueStorageGetResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageGet.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageGetInterceptors() ?? []
+    )
+  }
+
+  internal func secureKeyValueStorageDelete(
+    _ request: Rpc_SecureKeyValueStorageDeleteRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageDelete.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageDeleteInterceptors() ?? []
+    )
+  }
+
+  internal func secureKeyValueStorageWipe(
+    _ request: SwiftProtobuf.Google_Protobuf_Empty,
+    callOptions: CallOptions? = nil
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+    return try await self.performAsyncUnaryCall(
+      path: Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageWipe.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeSecureKeyValueStorageWipeInterceptors() ?? []
+    )
+  }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -1325,6 +1743,9 @@ internal protocol Rpc_WalletServiceClientInterceptorFactoryProtocol: Sendable {
 
   /// - Returns: Interceptors to use when invoking 'setupSecurityCardV2'.
   func makeSetupSecurityCardV2Interceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'signMessageSecurityCard'.
+  func makeSignMessageSecurityCardInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
 
   /// - Returns: Interceptors to use when invoking 'signMessageSecurityCardV2'.
   func makeSignMessageSecurityCardV2Interceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
@@ -1378,7 +1799,19 @@ internal protocol Rpc_WalletServiceClientInterceptorFactoryProtocol: Sendable {
   func makeGetByPrefixInterceptors() -> [ClientInterceptor<Rpc_GetByPrefixRequest, Rpc_GetBatchResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getSecurityCardsMarketplace'.
-  func makeGetSecurityCardsMarketplaceInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_GetSecurityCardsMarketplaceResponse>]
+  func makeGetSecurityCardsMarketplaceInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'fetchSecurityCardsCountries'.
+  func makeFetchSecurityCardsCountriesInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMCountriesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'fetchSecurityCardsMarketplaceByCountry'.
+  func makeFetchSecurityCardsMarketplaceByCountryInterceptors() -> [ClientInterceptor<Rpc_SCMMarketplaceRequest, Rpc_SCMMarketplaceResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'fetchSecurityCardDetail'.
+  func makeFetchSecurityCardDetailInterceptors() -> [ClientInterceptor<Rpc_SCMCardDetailRequest, Rpc_SCMCardDetailResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'fetchSecurityCardFullSpecs'.
+  func makeFetchSecurityCardFullSpecsInterceptors() -> [ClientInterceptor<Rpc_SCMFullSpecsRequest, Rpc_SCMFullSpecsResponse>]
 
   /// - Returns: Interceptors to use when invoking 'generateEmergencyKitPDF'.
   func makeGenerateEmergencyKitPDFInterceptors() -> [ClientInterceptor<Rpc_GenerateEmergencyKitPDFRequest, Rpc_GenerateEmergencyKitPDFResponse>]
@@ -1391,6 +1824,15 @@ internal protocol Rpc_WalletServiceClientInterceptorFactoryProtocol: Sendable {
 
   /// - Returns: Interceptors to use when invoking 'secureKeyValueStoragePut'.
   func makeSecureKeyValueStoragePutInterceptors() -> [ClientInterceptor<Rpc_SecureKeyValueStoragePutRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'secureKeyValueStorageGet'.
+  func makeSecureKeyValueStorageGetInterceptors() -> [ClientInterceptor<Rpc_SecureKeyValueStorageGetRequest, Rpc_SecureKeyValueStorageGetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'secureKeyValueStorageDelete'.
+  func makeSecureKeyValueStorageDeleteInterceptors() -> [ClientInterceptor<Rpc_SecureKeyValueStorageDeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when invoking 'secureKeyValueStorageWipe'.
+  func makeSecureKeyValueStorageWipeInterceptors() -> [ClientInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
 }
 
 internal enum Rpc_WalletServiceClientMetadata {
@@ -1399,6 +1841,7 @@ internal enum Rpc_WalletServiceClientMetadata {
     fullName: "rpc.WalletService",
     methods: [
       Rpc_WalletServiceClientMetadata.Methods.setupSecurityCardV2,
+      Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCard,
       Rpc_WalletServiceClientMetadata.Methods.signMessageSecurityCardV2,
       Rpc_WalletServiceClientMetadata.Methods.pairRequestChallenge,
       Rpc_WalletServiceClientMetadata.Methods.pairSignAndSubmitChallenge,
@@ -1417,10 +1860,17 @@ internal enum Rpc_WalletServiceClientMetadata {
       Rpc_WalletServiceClientMetadata.Methods.getBatch,
       Rpc_WalletServiceClientMetadata.Methods.getByPrefix,
       Rpc_WalletServiceClientMetadata.Methods.getSecurityCardsMarketplace,
+      Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsCountries,
+      Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardsMarketplaceByCountry,
+      Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardDetail,
+      Rpc_WalletServiceClientMetadata.Methods.fetchSecurityCardFullSpecs,
       Rpc_WalletServiceClientMetadata.Methods.generateEmergencyKitPDF,
       Rpc_WalletServiceClientMetadata.Methods.resetData,
       Rpc_WalletServiceClientMetadata.Methods.zipDataDir,
       Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStoragePut,
+      Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageGet,
+      Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageDelete,
+      Rpc_WalletServiceClientMetadata.Methods.secureKeyValueStorageWipe,
     ]
   )
 
@@ -1428,6 +1878,12 @@ internal enum Rpc_WalletServiceClientMetadata {
     internal static let setupSecurityCardV2 = GRPCMethodDescriptor(
       name: "SetupSecurityCardV2",
       path: "/rpc.WalletService/SetupSecurityCardV2",
+      type: GRPCCallType.unary
+    )
+
+    internal static let signMessageSecurityCard = GRPCMethodDescriptor(
+      name: "SignMessageSecurityCard",
+      path: "/rpc.WalletService/SignMessageSecurityCard",
       type: GRPCCallType.unary
     )
 
@@ -1539,6 +1995,30 @@ internal enum Rpc_WalletServiceClientMetadata {
       type: GRPCCallType.unary
     )
 
+    internal static let fetchSecurityCardsCountries = GRPCMethodDescriptor(
+      name: "FetchSecurityCardsCountries",
+      path: "/rpc.WalletService/FetchSecurityCardsCountries",
+      type: GRPCCallType.unary
+    )
+
+    internal static let fetchSecurityCardsMarketplaceByCountry = GRPCMethodDescriptor(
+      name: "FetchSecurityCardsMarketplaceByCountry",
+      path: "/rpc.WalletService/FetchSecurityCardsMarketplaceByCountry",
+      type: GRPCCallType.unary
+    )
+
+    internal static let fetchSecurityCardDetail = GRPCMethodDescriptor(
+      name: "FetchSecurityCardDetail",
+      path: "/rpc.WalletService/FetchSecurityCardDetail",
+      type: GRPCCallType.unary
+    )
+
+    internal static let fetchSecurityCardFullSpecs = GRPCMethodDescriptor(
+      name: "FetchSecurityCardFullSpecs",
+      path: "/rpc.WalletService/FetchSecurityCardFullSpecs",
+      type: GRPCCallType.unary
+    )
+
     internal static let generateEmergencyKitPDF = GRPCMethodDescriptor(
       name: "GenerateEmergencyKitPDF",
       path: "/rpc.WalletService/GenerateEmergencyKitPDF",
@@ -1562,6 +2042,24 @@ internal enum Rpc_WalletServiceClientMetadata {
       path: "/rpc.WalletService/SecureKeyValueStoragePut",
       type: GRPCCallType.unary
     )
+
+    internal static let secureKeyValueStorageGet = GRPCMethodDescriptor(
+      name: "SecureKeyValueStorageGet",
+      path: "/rpc.WalletService/SecureKeyValueStorageGet",
+      type: GRPCCallType.unary
+    )
+
+    internal static let secureKeyValueStorageDelete = GRPCMethodDescriptor(
+      name: "SecureKeyValueStorageDelete",
+      path: "/rpc.WalletService/SecureKeyValueStorageDelete",
+      type: GRPCCallType.unary
+    )
+
+    internal static let secureKeyValueStorageWipe = GRPCMethodDescriptor(
+      name: "SecureKeyValueStorageWipe",
+      path: "/rpc.WalletService/SecureKeyValueStorageWipe",
+      type: GRPCCallType.unary
+    )
   }
 }
 
@@ -1572,6 +2070,12 @@ internal protocol Rpc_WalletServiceProvider: CallHandlerProvider {
   /// NFC security cards Native->Libwallet API
   func setupSecurityCardV2(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SetupSecurityCardResponse>
 
+  /// Signs with whichever security card version the user taps, so the client
+  /// no longer picks the protocol.
+  func signMessageSecurityCard(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  /// Deprecated: use SignMessageSecurityCard. Kept while apollo and falcon still call
+  /// this name; remove it once both moved over.
   func signMessageSecurityCardV2(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
 
   func pairRequestChallenge(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
@@ -1608,8 +2112,17 @@ internal protocol Rpc_WalletServiceProvider: CallHandlerProvider {
 
   func getByPrefix(request: Rpc_GetByPrefixRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GetBatchResponse>
 
-  /// Marketplace
-  func getSecurityCardsMarketplace(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GetSecurityCardsMarketplaceResponse>
+  /// Marketplace (deprecated: use screen-specific endpoints below)
+  func getSecurityCardsMarketplace(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>
+
+  /// SCM (Security Cards Marketplace) — screen-specific endpoints
+  func fetchSecurityCardsCountries(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SCMCountriesResponse>
+
+  func fetchSecurityCardsMarketplaceByCountry(request: Rpc_SCMMarketplaceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SCMMarketplaceResponse>
+
+  func fetchSecurityCardDetail(request: Rpc_SCMCardDetailRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SCMCardDetailResponse>
+
+  func fetchSecurityCardFullSpecs(request: Rpc_SCMFullSpecsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SCMFullSpecsResponse>
 
   /// Emergency Kit PDF Generation
   func generateEmergencyKitPDF(request: Rpc_GenerateEmergencyKitPDFRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_GenerateEmergencyKitPDFResponse>
@@ -1622,6 +2135,12 @@ internal protocol Rpc_WalletServiceProvider: CallHandlerProvider {
 
   /// Secure Key-Value Storage (native hardware-encrypted storage bridge)
   func secureKeyValueStoragePut(request: Rpc_SecureKeyValueStoragePutRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func secureKeyValueStorageGet(request: Rpc_SecureKeyValueStorageGetRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Rpc_SecureKeyValueStorageGetResponse>
+
+  func secureKeyValueStorageDelete(request: Rpc_SecureKeyValueStorageDeleteRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+
+  func secureKeyValueStorageWipe(request: SwiftProtobuf.Google_Protobuf_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
 }
 
 extension Rpc_WalletServiceProvider {
@@ -1643,6 +2162,15 @@ extension Rpc_WalletServiceProvider {
         responseSerializer: ProtobufSerializer<Rpc_SetupSecurityCardResponse>(),
         interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? [],
         userFunction: self.setupSecurityCardV2(request:context:)
+      )
+
+    case "SignMessageSecurityCard":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? [],
+        userFunction: self.signMessageSecurityCard(request:context:)
       )
 
     case "SignMessageSecurityCardV2":
@@ -1802,9 +2330,45 @@ extension Rpc_WalletServiceProvider {
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
-        responseSerializer: ProtobufSerializer<Rpc_GetSecurityCardsMarketplaceResponse>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>(),
         interceptors: self.interceptors?.makeGetSecurityCardsMarketplaceInterceptors() ?? [],
         userFunction: self.getSecurityCardsMarketplace(request:context:)
+      )
+
+    case "FetchSecurityCardsCountries":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMCountriesResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardsCountriesInterceptors() ?? [],
+        userFunction: self.fetchSecurityCardsCountries(request:context:)
+      )
+
+    case "FetchSecurityCardsMarketplaceByCountry":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SCMMarketplaceRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMMarketplaceResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardsMarketplaceByCountryInterceptors() ?? [],
+        userFunction: self.fetchSecurityCardsMarketplaceByCountry(request:context:)
+      )
+
+    case "FetchSecurityCardDetail":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SCMCardDetailRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMCardDetailResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardDetailInterceptors() ?? [],
+        userFunction: self.fetchSecurityCardDetail(request:context:)
+      )
+
+    case "FetchSecurityCardFullSpecs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SCMFullSpecsRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMFullSpecsResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardFullSpecsInterceptors() ?? [],
+        userFunction: self.fetchSecurityCardFullSpecs(request:context:)
       )
 
     case "GenerateEmergencyKitPDF":
@@ -1843,6 +2407,33 @@ extension Rpc_WalletServiceProvider {
         userFunction: self.secureKeyValueStoragePut(request:context:)
       )
 
+    case "SecureKeyValueStorageGet":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SecureKeyValueStorageGetRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SecureKeyValueStorageGetResponse>(),
+        interceptors: self.interceptors?.makeSecureKeyValueStorageGetInterceptors() ?? [],
+        userFunction: self.secureKeyValueStorageGet(request:context:)
+      )
+
+    case "SecureKeyValueStorageDelete":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SecureKeyValueStorageDeleteRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSecureKeyValueStorageDeleteInterceptors() ?? [],
+        userFunction: self.secureKeyValueStorageDelete(request:context:)
+      )
+
+    case "SecureKeyValueStorageWipe":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSecureKeyValueStorageWipeInterceptors() ?? [],
+        userFunction: self.secureKeyValueStorageWipe(request:context:)
+      )
+
     default:
       return nil
     }
@@ -1861,6 +2452,15 @@ internal protocol Rpc_WalletServiceAsyncProvider: CallHandlerProvider, Sendable 
     context: GRPCAsyncServerCallContext
   ) async throws -> Rpc_SetupSecurityCardResponse
 
+  /// Signs with whichever security card version the user taps, so the client
+  /// no longer picks the protocol.
+  func signMessageSecurityCard(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  /// Deprecated: use SignMessageSecurityCard. Kept while apollo and falcon still call
+  /// this name; remove it once both moved over.
   func signMessageSecurityCardV2(
     request: SwiftProtobuf.Google_Protobuf_Empty,
     context: GRPCAsyncServerCallContext
@@ -1950,11 +2550,32 @@ internal protocol Rpc_WalletServiceAsyncProvider: CallHandlerProvider, Sendable 
     context: GRPCAsyncServerCallContext
   ) async throws -> Rpc_GetBatchResponse
 
-  /// Marketplace
+  /// Marketplace (deprecated: use screen-specific endpoints below)
   func getSecurityCardsMarketplace(
     request: SwiftProtobuf.Google_Protobuf_Empty,
     context: GRPCAsyncServerCallContext
-  ) async throws -> Rpc_GetSecurityCardsMarketplaceResponse
+  ) async throws -> Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse
+
+  /// SCM (Security Cards Marketplace) — screen-specific endpoints
+  func fetchSecurityCardsCountries(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SCMCountriesResponse
+
+  func fetchSecurityCardsMarketplaceByCountry(
+    request: Rpc_SCMMarketplaceRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SCMMarketplaceResponse
+
+  func fetchSecurityCardDetail(
+    request: Rpc_SCMCardDetailRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SCMCardDetailResponse
+
+  func fetchSecurityCardFullSpecs(
+    request: Rpc_SCMFullSpecsRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SCMFullSpecsResponse
 
   /// Emergency Kit PDF Generation
   func generateEmergencyKitPDF(
@@ -1977,6 +2598,21 @@ internal protocol Rpc_WalletServiceAsyncProvider: CallHandlerProvider, Sendable 
   /// Secure Key-Value Storage (native hardware-encrypted storage bridge)
   func secureKeyValueStoragePut(
     request: Rpc_SecureKeyValueStoragePutRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func secureKeyValueStorageGet(
+    request: Rpc_SecureKeyValueStorageGetRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Rpc_SecureKeyValueStorageGetResponse
+
+  func secureKeyValueStorageDelete(
+    request: Rpc_SecureKeyValueStorageDeleteRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+
+  func secureKeyValueStorageWipe(
+    request: SwiftProtobuf.Google_Protobuf_Empty,
     context: GRPCAsyncServerCallContext
   ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
 }
@@ -2007,6 +2643,15 @@ extension Rpc_WalletServiceAsyncProvider {
         responseSerializer: ProtobufSerializer<Rpc_SetupSecurityCardResponse>(),
         interceptors: self.interceptors?.makeSetupSecurityCardV2Interceptors() ?? [],
         wrapping: { try await self.setupSecurityCardV2(request: $0, context: $1) }
+      )
+
+    case "SignMessageSecurityCard":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSignMessageSecurityCardInterceptors() ?? [],
+        wrapping: { try await self.signMessageSecurityCard(request: $0, context: $1) }
       )
 
     case "SignMessageSecurityCardV2":
@@ -2166,9 +2811,45 @@ extension Rpc_WalletServiceAsyncProvider {
       return GRPCAsyncServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
-        responseSerializer: ProtobufSerializer<Rpc_GetSecurityCardsMarketplaceResponse>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>(),
         interceptors: self.interceptors?.makeGetSecurityCardsMarketplaceInterceptors() ?? [],
         wrapping: { try await self.getSecurityCardsMarketplace(request: $0, context: $1) }
+      )
+
+    case "FetchSecurityCardsCountries":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMCountriesResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardsCountriesInterceptors() ?? [],
+        wrapping: { try await self.fetchSecurityCardsCountries(request: $0, context: $1) }
+      )
+
+    case "FetchSecurityCardsMarketplaceByCountry":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SCMMarketplaceRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMMarketplaceResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardsMarketplaceByCountryInterceptors() ?? [],
+        wrapping: { try await self.fetchSecurityCardsMarketplaceByCountry(request: $0, context: $1) }
+      )
+
+    case "FetchSecurityCardDetail":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SCMCardDetailRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMCardDetailResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardDetailInterceptors() ?? [],
+        wrapping: { try await self.fetchSecurityCardDetail(request: $0, context: $1) }
+      )
+
+    case "FetchSecurityCardFullSpecs":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SCMFullSpecsRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SCMFullSpecsResponse>(),
+        interceptors: self.interceptors?.makeFetchSecurityCardFullSpecsInterceptors() ?? [],
+        wrapping: { try await self.fetchSecurityCardFullSpecs(request: $0, context: $1) }
       )
 
     case "GenerateEmergencyKitPDF":
@@ -2207,6 +2888,33 @@ extension Rpc_WalletServiceAsyncProvider {
         wrapping: { try await self.secureKeyValueStoragePut(request: $0, context: $1) }
       )
 
+    case "SecureKeyValueStorageGet":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SecureKeyValueStorageGetRequest>(),
+        responseSerializer: ProtobufSerializer<Rpc_SecureKeyValueStorageGetResponse>(),
+        interceptors: self.interceptors?.makeSecureKeyValueStorageGetInterceptors() ?? [],
+        wrapping: { try await self.secureKeyValueStorageGet(request: $0, context: $1) }
+      )
+
+    case "SecureKeyValueStorageDelete":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Rpc_SecureKeyValueStorageDeleteRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSecureKeyValueStorageDeleteInterceptors() ?? [],
+        wrapping: { try await self.secureKeyValueStorageDelete(request: $0, context: $1) }
+      )
+
+    case "SecureKeyValueStorageWipe":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeSecureKeyValueStorageWipeInterceptors() ?? [],
+        wrapping: { try await self.secureKeyValueStorageWipe(request: $0, context: $1) }
+      )
+
     default:
       return nil
     }
@@ -2218,6 +2926,10 @@ internal protocol Rpc_WalletServiceServerInterceptorFactoryProtocol: Sendable {
   /// - Returns: Interceptors to use when handling 'setupSecurityCardV2'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeSetupSecurityCardV2Interceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SetupSecurityCardResponse>]
+
+  /// - Returns: Interceptors to use when handling 'signMessageSecurityCard'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSignMessageSecurityCardInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
 
   /// - Returns: Interceptors to use when handling 'signMessageSecurityCardV2'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -2289,7 +3001,23 @@ internal protocol Rpc_WalletServiceServerInterceptorFactoryProtocol: Sendable {
 
   /// - Returns: Interceptors to use when handling 'getSecurityCardsMarketplace'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetSecurityCardsMarketplaceInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_GetSecurityCardsMarketplaceResponse>]
+  func makeGetSecurityCardsMarketplaceInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse>]
+
+  /// - Returns: Interceptors to use when handling 'fetchSecurityCardsCountries'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeFetchSecurityCardsCountriesInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, Rpc_SCMCountriesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'fetchSecurityCardsMarketplaceByCountry'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeFetchSecurityCardsMarketplaceByCountryInterceptors() -> [ServerInterceptor<Rpc_SCMMarketplaceRequest, Rpc_SCMMarketplaceResponse>]
+
+  /// - Returns: Interceptors to use when handling 'fetchSecurityCardDetail'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeFetchSecurityCardDetailInterceptors() -> [ServerInterceptor<Rpc_SCMCardDetailRequest, Rpc_SCMCardDetailResponse>]
+
+  /// - Returns: Interceptors to use when handling 'fetchSecurityCardFullSpecs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeFetchSecurityCardFullSpecsInterceptors() -> [ServerInterceptor<Rpc_SCMFullSpecsRequest, Rpc_SCMFullSpecsResponse>]
 
   /// - Returns: Interceptors to use when handling 'generateEmergencyKitPDF'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -2306,6 +3034,18 @@ internal protocol Rpc_WalletServiceServerInterceptorFactoryProtocol: Sendable {
   /// - Returns: Interceptors to use when handling 'secureKeyValueStoragePut'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeSecureKeyValueStoragePutInterceptors() -> [ServerInterceptor<Rpc_SecureKeyValueStoragePutRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'secureKeyValueStorageGet'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSecureKeyValueStorageGetInterceptors() -> [ServerInterceptor<Rpc_SecureKeyValueStorageGetRequest, Rpc_SecureKeyValueStorageGetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'secureKeyValueStorageDelete'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSecureKeyValueStorageDeleteInterceptors() -> [ServerInterceptor<Rpc_SecureKeyValueStorageDeleteRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+
+  /// - Returns: Interceptors to use when handling 'secureKeyValueStorageWipe'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeSecureKeyValueStorageWipeInterceptors() -> [ServerInterceptor<SwiftProtobuf.Google_Protobuf_Empty, SwiftProtobuf.Google_Protobuf_Empty>]
 }
 
 internal enum Rpc_WalletServiceServerMetadata {
@@ -2314,6 +3054,7 @@ internal enum Rpc_WalletServiceServerMetadata {
     fullName: "rpc.WalletService",
     methods: [
       Rpc_WalletServiceServerMetadata.Methods.setupSecurityCardV2,
+      Rpc_WalletServiceServerMetadata.Methods.signMessageSecurityCard,
       Rpc_WalletServiceServerMetadata.Methods.signMessageSecurityCardV2,
       Rpc_WalletServiceServerMetadata.Methods.pairRequestChallenge,
       Rpc_WalletServiceServerMetadata.Methods.pairSignAndSubmitChallenge,
@@ -2332,10 +3073,17 @@ internal enum Rpc_WalletServiceServerMetadata {
       Rpc_WalletServiceServerMetadata.Methods.getBatch,
       Rpc_WalletServiceServerMetadata.Methods.getByPrefix,
       Rpc_WalletServiceServerMetadata.Methods.getSecurityCardsMarketplace,
+      Rpc_WalletServiceServerMetadata.Methods.fetchSecurityCardsCountries,
+      Rpc_WalletServiceServerMetadata.Methods.fetchSecurityCardsMarketplaceByCountry,
+      Rpc_WalletServiceServerMetadata.Methods.fetchSecurityCardDetail,
+      Rpc_WalletServiceServerMetadata.Methods.fetchSecurityCardFullSpecs,
       Rpc_WalletServiceServerMetadata.Methods.generateEmergencyKitPDF,
       Rpc_WalletServiceServerMetadata.Methods.resetData,
       Rpc_WalletServiceServerMetadata.Methods.zipDataDir,
       Rpc_WalletServiceServerMetadata.Methods.secureKeyValueStoragePut,
+      Rpc_WalletServiceServerMetadata.Methods.secureKeyValueStorageGet,
+      Rpc_WalletServiceServerMetadata.Methods.secureKeyValueStorageDelete,
+      Rpc_WalletServiceServerMetadata.Methods.secureKeyValueStorageWipe,
     ]
   )
 
@@ -2343,6 +3091,12 @@ internal enum Rpc_WalletServiceServerMetadata {
     internal static let setupSecurityCardV2 = GRPCMethodDescriptor(
       name: "SetupSecurityCardV2",
       path: "/rpc.WalletService/SetupSecurityCardV2",
+      type: GRPCCallType.unary
+    )
+
+    internal static let signMessageSecurityCard = GRPCMethodDescriptor(
+      name: "SignMessageSecurityCard",
+      path: "/rpc.WalletService/SignMessageSecurityCard",
       type: GRPCCallType.unary
     )
 
@@ -2454,6 +3208,30 @@ internal enum Rpc_WalletServiceServerMetadata {
       type: GRPCCallType.unary
     )
 
+    internal static let fetchSecurityCardsCountries = GRPCMethodDescriptor(
+      name: "FetchSecurityCardsCountries",
+      path: "/rpc.WalletService/FetchSecurityCardsCountries",
+      type: GRPCCallType.unary
+    )
+
+    internal static let fetchSecurityCardsMarketplaceByCountry = GRPCMethodDescriptor(
+      name: "FetchSecurityCardsMarketplaceByCountry",
+      path: "/rpc.WalletService/FetchSecurityCardsMarketplaceByCountry",
+      type: GRPCCallType.unary
+    )
+
+    internal static let fetchSecurityCardDetail = GRPCMethodDescriptor(
+      name: "FetchSecurityCardDetail",
+      path: "/rpc.WalletService/FetchSecurityCardDetail",
+      type: GRPCCallType.unary
+    )
+
+    internal static let fetchSecurityCardFullSpecs = GRPCMethodDescriptor(
+      name: "FetchSecurityCardFullSpecs",
+      path: "/rpc.WalletService/FetchSecurityCardFullSpecs",
+      type: GRPCCallType.unary
+    )
+
     internal static let generateEmergencyKitPDF = GRPCMethodDescriptor(
       name: "GenerateEmergencyKitPDF",
       path: "/rpc.WalletService/GenerateEmergencyKitPDF",
@@ -2475,6 +3253,24 @@ internal enum Rpc_WalletServiceServerMetadata {
     internal static let secureKeyValueStoragePut = GRPCMethodDescriptor(
       name: "SecureKeyValueStoragePut",
       path: "/rpc.WalletService/SecureKeyValueStoragePut",
+      type: GRPCCallType.unary
+    )
+
+    internal static let secureKeyValueStorageGet = GRPCMethodDescriptor(
+      name: "SecureKeyValueStorageGet",
+      path: "/rpc.WalletService/SecureKeyValueStorageGet",
+      type: GRPCCallType.unary
+    )
+
+    internal static let secureKeyValueStorageDelete = GRPCMethodDescriptor(
+      name: "SecureKeyValueStorageDelete",
+      path: "/rpc.WalletService/SecureKeyValueStorageDelete",
+      type: GRPCCallType.unary
+    )
+
+    internal static let secureKeyValueStorageWipe = GRPCMethodDescriptor(
+      name: "SecureKeyValueStorageWipe",
+      path: "/rpc.WalletService/SecureKeyValueStorageWipe",
       type: GRPCCallType.unary
     )
   }

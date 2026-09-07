@@ -53,11 +53,5 @@ func checkResponseCode(err error, expectedCodes ...btcjson.RPCErrorCode) bool {
 		return false
 	}
 
-	for _, expectedCode := range expectedCodes { //nolint:modernize // TODO: use slices.Contains
-		if rpcErr.Code == expectedCode {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(expectedCodes, rpcErr.Code)
 }

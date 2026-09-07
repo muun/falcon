@@ -9,9 +9,18 @@
 
 import UIKit
 
+enum SecurityCardMaterial: String {
+    case metal
+    case plastic
+
+    var displayName: String {
+        rawValue.capitalized
+    }
+}
+
 struct SecurityCardProviderExtraInfo {
     let description: String
-    let material: String
+    let material: SecurityCardMaterial
     let shipsFrom: String
     let deliveryDays: String
     let url: URL?
@@ -61,7 +70,7 @@ struct SecurityCardProviderExtraInfo {
             SpecItem(
                 symbol: Symbols.material,
                 label: strings.material,
-                value: material.capitalized,
+                value: material.displayName,
                 additionalHTMLData: nil
             ),
             SpecItem(
@@ -149,7 +158,7 @@ struct SecurityCardProviderExtraInfo {
 
     private static let constellations = SecurityCardProviderExtraInfo(
         description: "their cards celebrate the stars with a collector-grade finish",
-        material: "Metal",
+        material: .metal,
         shipsFrom: "Argentina",
         deliveryDays: "7–14 days",
         url: Constants.muunHome,
@@ -164,7 +173,7 @@ struct SecurityCardProviderExtraInfo {
 
     private static let numbers = SecurityCardProviderExtraInfo(
         description: "their minimalist design keeps focus on what matters: your keys",
-        material: "Plastic",
+        material: .plastic,
         shipsFrom: "Argentina",
         deliveryDays: "5–10 days",
         url: Constants.muunHome,
@@ -179,7 +188,7 @@ struct SecurityCardProviderExtraInfo {
 
     private static let planets = SecurityCardProviderExtraInfo(
         description: "their cards feature planetary illustrations on durable plastic",
-        material: "Plastic",
+        material: .plastic,
         shipsFrom: "Argentina",
         deliveryDays: "10–21 days",
         url: Constants.muunHome,
@@ -194,7 +203,7 @@ struct SecurityCardProviderExtraInfo {
 
     private static let fallback = SecurityCardProviderExtraInfo(
         description: "a trusted hardware security provider",
-        material: "Plastic",
+        material: .plastic,
         shipsFrom: "Unknown",
         deliveryDays: "7–21 days",
         url: nil,

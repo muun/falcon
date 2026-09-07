@@ -32,7 +32,17 @@ func (s *secureKeyValueStorage) Put(_ context.Context, key string, value []byte)
 	if value == nil {
 		return newStorageFailedError(errors.Errorf("value must not be nil"))
 	}
-	return classifyError(s.bridge.Put(key, value))
+	resp, err := s.bridge.Put(key, value)
+	if err != nil {
+		return newStorageFailedError(err)
+	}
+	if resp == nil {
+		return newStorageFailedError(errors.Errorf("bridge returned nil response"))
+	}
+	if resp.StatusCode != app_provided_data.SecureKvStatusOk {
+		return newStorageFailedError(errors.Errorf("unexpected status: %d", resp.StatusCode))
+	}
+	return nil
 }
 
 // Get returns a capability handle; the bridge is queried lazily by WithSecret.
@@ -45,9 +55,32 @@ func (s *secureKeyValueStorage) Get(_ context.Context, key string) (*Secret, err
 }
 
 func (s *secureKeyValueStorage) Delete(_ context.Context, key string) error {
-	return classifyError(s.bridge.Delete(key))
+	if key == "" {
+		return newStorageFailedError(errors.Errorf("key must not be empty"))
+	}
+	resp, err := s.bridge.Delete(key)
+	if err != nil {
+		return newStorageFailedError(err)
+	}
+	if resp == nil {
+		return newStorageFailedError(errors.Errorf("bridge returned nil response"))
+	}
+	if resp.StatusCode != app_provided_data.SecureKvStatusOk {
+		return newStorageFailedError(errors.Errorf("unexpected status: %d", resp.StatusCode))
+	}
+	return nil
 }
 
 func (s *secureKeyValueStorage) Wipe(_ context.Context) error {
-	return classifyError(s.bridge.Wipe())
+	resp, err := s.bridge.Wipe()
+	if err != nil {
+		return newStorageFailedError(err)
+	}
+	if resp == nil {
+		return newStorageFailedError(errors.Errorf("bridge returned nil response"))
+	}
+	if resp.StatusCode != app_provided_data.SecureKvStatusOk {
+		return newStorageFailedError(errors.Errorf("unexpected status: %d", resp.StatusCode))
+	}
+	return nil
 }

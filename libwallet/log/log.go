@@ -19,7 +19,7 @@ func NewBridgeLogHandler(sink io.Writer, level slog.Level) *slog.JSONHandler {
 }
 
 func replaceAttrs(
-	groups []string, //nolint:revive // TODO: use or remove groups
+	_ []string,
 	a slog.Attr,
 ) slog.Attr {
 	// Trim the values in the source key.

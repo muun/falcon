@@ -50,12 +50,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var fcmTokenHandlingAlreadyReported = false
 
     internal let featureFlagsSelector: FeatureFlagsSelector = resolve()
+    // Set in configureLibwallet() (in AppDelegate+Extension) and read back in
+    // application(_:didFinishLaunchingWithOptions:) to log the migration event once Firebase is
+    // ready. This indirection exists because the migration must run before Firebase is configured.
+    var libwalletMigrationResult: LibwalletMigrationResult?
     private let walletService: WalletService = resolve()
     private let preloadFeeDataAction: PreloadFeeDataAction = resolve()
     private let feeDataSyncer: FeeDataSyncer = resolve()
     internal let httpClientSessionProvider: HttpClientSessionProvider = resolve()
     internal let nfcSession: NfcSession = resolve()
     internal let keyProvider: KeyProvider = resolve()
+    internal let libwalletSecureKeyValueStorage: LibwalletSecureKeyValueStorage = resolve()
 
     func application(
         _ application: UIApplication,
@@ -86,6 +91,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         configureFirebase()
+        // Libwallet's migration runs in configureLibwallet() above, before Firebase is ready,
+        // so the result is stored and logged here once Firebase is initialized.
+        // Ideally AnalyticsHelper would handle pre-Firebase events internally
+        // and flush them on configure.
+        if let result = libwalletMigrationResult {
+            AnalyticsHelper.logEvent(LibwalletMigrationEvent(result: result))
+        }
         conectivityCapabilitiesProvider.startMonitoring()
         storeKitCapabilitiesProvider.start()
         appinfoProvider.start()

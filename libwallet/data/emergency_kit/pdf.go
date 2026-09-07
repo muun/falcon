@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"math"
 	"strings"
+	"time"
 
 	"github.com/phpdave11/gofpdf"
 
@@ -35,6 +36,14 @@ type ImageAsset struct {
 type PdfExtensions struct {
 	*gofpdf.Fpdf
 	ctx RenderingContext
+
+	// Per-step durations of the (static) setup, exposed for profiling. In milliseconds.
+	RegisterFontsMs  int64
+	RegisterImagesMs int64
+
+	// DrawIconsDuration accumulates the time spent placing icons, exposed for profiling. Icons
+	// draw amid the components, so this is a subset of the components rendering time.
+	DrawIconsDuration time.Duration
 }
 
 // CreateAndSetupPdf creates a new PdfExtensions wrapper around a gofpdf.Fpdf instance
@@ -50,8 +59,14 @@ func CreateAndSetupPdf(ctx RenderingContext) *PdfExtensions {
 		FontDirStr:     "",
 	})
 	pdfExt := &PdfExtensions{Fpdf: pdf, ctx: ctx}
+
+	startFonts := time.Now()
 	registerFonts(pdfExt)
+	pdfExt.RegisterFontsMs = time.Since(startFonts).Milliseconds()
+
+	startImages := time.Now()
 	registerImages(pdf, ctx.Images)
+	pdfExt.RegisterImagesMs = time.Since(startImages).Milliseconds()
 
 	// Remove cell margins globally to prevent unwanted padding
 	pdf.SetCellMargin(0)
@@ -75,6 +90,13 @@ func registerImages(pdf *gofpdf.Fpdf, images []ImageAsset) {
 	for _, img := range images {
 		pdf.RegisterImageReader(img.Name, img.Format, bytes.NewReader(img.Data))
 	}
+}
+
+// DrawIcon draws the named square icon at (x, y) from the image registered under that name.
+func (p *PdfExtensions) DrawIcon(name string, x, y, size float64) {
+	start := time.Now()
+	p.Image(name, x, y, size, size, false, "", 0, "")
+	p.DrawIconsDuration += time.Since(start)
 }
 
 func (p *PdfExtensions) AddComponentSeparator() {

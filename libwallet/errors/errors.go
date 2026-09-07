@@ -17,6 +17,10 @@ func (e *Error) Code() int64 {
 	return e.code
 }
 
+func (e *Error) Unwrap() error {
+	return e.err
+}
+
 func New(code int64, msg string) error {
 	return &Error{errors.New(msg), code}
 }
@@ -24,7 +28,7 @@ func New(code int64, msg string) error {
 func Errorf(
 	code int64,
 	format string,
-	a ...interface{}, //nolint:modernize // TODO: use any instead of interface{}
+	a ...any,
 ) error {
 	err := errors.Errorf(format, a...)
 	return &Error{err, code}

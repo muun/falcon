@@ -35,6 +35,35 @@
         "sha256:2b88612144adbdfcc661b1c499b357b6ab6bfdf7be69586351ceab6c5feca255",
         "sha256:c293f2b646faca606959ea04da8ad77b22dd992682acdcf864e2b70182c21cbe"
       ]
+    },
+    {
+      "description": "Mock Houston V3 replay counter",
+      "hash": "sha256:faf2c1dfab791ce409c62c996402a7ba6862ca3fe9cc8cdc76465c0e86ad872b",
+      "change_hashes": [
+        "sha256:0b93676ffe8eaa69bb67cae329ed896935ae0507215bf02fc926a02dde7369fe"
+      ]
+    },
+    {
+      "description": "NFC empirical Extended APDU signals",
+      "hash": "sha256:93dc4e8e1b23f32ced540fb53d570faad480cee6703808da851c2d9c2ec29d42",
+      "change_hashes": [
+        "sha256:12230437d604544f6f68fc81456a823fc9566c6e8ba0b2c243823a7d919bf3b8",
+        "sha256:5cf2a221e7747483a636767f21148750ebbdadba7767647468141b0e7536468e"
+      ]
+    },
+    {
+      "description": "Exchange rate window",
+      "hash": "sha256:839d13eba227b9d0c1f3711c6220a878f7ef34fb9b680f0d7b8e8af3aebb0565",
+      "change_hashes": [
+        "sha256:bc99612023d15face186abe0ae48c3e909d9d0420e6930141ee17b1ff4ea987f"
+      ]
+    },
+    {
+      "description": "Security card paired version",
+      "hash": "sha256:a165123fc1f4a56ad60ca35690ddf4a7ce1fdf7f4f51d4bef69008504af95f00",
+      "change_hashes": [
+        "sha256:ecd94d568783952d1fd482bc4f919a9a30fdb1a822d29848e4ddbae19c96644d"
+      ]
     }
   ]
 }

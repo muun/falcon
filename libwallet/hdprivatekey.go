@@ -13,6 +13,8 @@ import (
 	"github.com/muun/libwallet/hdpath"
 )
 
+const baseKeyPath = "m/schema:1'/recovery:1'"
+
 // HDPrivateKey is an HD capable priv key
 type HDPrivateKey struct {
 	key     hdkeychain.ExtendedKey
@@ -54,7 +56,7 @@ func NewBasePathHDPrivateKeyFromBytes(
 	network *Network,
 ) (*HDPrivateKey, error) {
 
-	basePath := "m/schema:1'/recovery:1'" //nolint:goconst // TODO: extract "m/schema:1'/recovery:1'" to a const
+	basePath := baseKeyPath
 	var depth uint8 = 2
 	var childNum uint32 = hdkeychain.HardenedKeyStart + 1
 	isPrivate := true

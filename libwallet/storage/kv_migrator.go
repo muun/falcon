@@ -60,10 +60,10 @@ func RunKeyValueMigrations(
 	// Build the final schema in memory by running all changes without DB operations.
 	// This is done upfront to ensure we can return a valid schema even if DB operations fail.
 	finalSchema := make(map[string]Classification)
-	var discardedDbOperations []func(walletdb.KeyValueRepository) error //nolint:staticcheck // TODO: var discardedDbOperations should be discardedDBOperations
+	var discardedDBOperations []func(walletdb.KeyValueRepository) error
 	for i := range migrations {
 		for _, change := range migrations[i].Changes {
-			change.apply(finalSchema, &discardedDbOperations)
+			change.apply(finalSchema, &discardedDBOperations)
 		}
 	}
 
@@ -81,9 +81,9 @@ func RunKeyValueMigrations(
 
 	// Re-build the schema state up to the current version before starting migrations.
 	currentSchema := make(map[string]Classification)
-	for i := 0; i < currentVersion; i++ { //nolint:modernize // TODO: use range over int
+	for i := range currentVersion {
 		for _, change := range migrations[i].Changes {
-			change.apply(currentSchema, &discardedDbOperations)
+			change.apply(currentSchema, &discardedDBOperations)
 		}
 	}
 

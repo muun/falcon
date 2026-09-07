@@ -10,9 +10,9 @@ import (
 
 // See Section 4.0 of RFC 9180
 func labeledExtract(
-	salt, label, ikm, suiteId []byte, //nolint:staticcheck // TODO: func parameter suiteId should be suiteID
+	salt, label, ikm, suiteID []byte,
 ) []byte {
-	labeledIkm := slices.Concat([]byte(hpkeIdentifier), suiteId, label, ikm)
+	labeledIkm := slices.Concat([]byte(hpkeIdentifier), suiteID, label, ikm)
 	return hkdf.Extract(sha256.New, labeledIkm, salt)
 }
 
@@ -20,12 +20,12 @@ func labeledExtract(
 func labeledExpand(
 	pseudoRandomKey, label, info []byte,
 	lengthInBytes int,
-	suiteId []byte, //nolint:staticcheck // TODO: func parameter suiteId should be suiteID
+	suiteID []byte,
 ) ([]byte, error) {
 	labeledInfo := slices.Concat(
 		i2Osp(lengthInBytes, 2),
 		[]byte(hpkeIdentifier),
-		suiteId,
+		suiteID,
 		label,
 		info,
 	)

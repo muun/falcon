@@ -48,17 +48,17 @@ class InMemoryCurrenciesForPickerRetriever: CurrenciesForPickerRetriever {
                 exchangeRateWindow: exchangeRateWindow
             )
         ]
-        let candidates = CurrencyHelper.currencyList(currencyCodes: userPrimaryCurrency) + [
+        let candidates = (CurrencyHelper.currencyList(currencyCodes: userPrimaryCurrency) + [
             CurrencyHelper.currencyForLocale(),
             CurrencyHelper.bitcoinCurrency,
             CurrencyHelper.dollarCurrency,
             CurrencyHelper.euroCurrency
-        ]
+        ]).filter { $0.hasValidRate(in: exchangeRateWindow) }
 
         let currencesOnExchangeRateWindow = exchangeRateWindow.currencies()!.adapt()
         let candidatesForAllCurrencies = CurrencyHelper.currencyList(
             currencyCodes: currencesOnExchangeRateWindow
-        )
+        ).filter { $0.hasValidRate(in: exchangeRateWindow) }
 
         return InMemoryCurrenciesForPickerRetriever(
             candidatesForMostUsedCurrency: candidates,
@@ -89,10 +89,16 @@ class InMemoryCurrenciesForPickerRetriever: CurrenciesForPickerRetriever {
             candidates += [primaryCurrency]
         }
 
+        // A currency with a missing, zero or NaN rate can't be used for conversions, so it must not
+        // be selectable. `hasValidRate(in:)` is the shared definition of a usable rate.
+        // TODO(#16650): move this "usable exchange rate" rule fully to the domain layer so the
+        // picker and `primaryCurrencyWithValidExchangeRate` share a single source of truth.
+        candidates = candidates.filter { $0.hasValidRate(in: exchangeRateWindow) }
+
         let currenciesOnExchangeRateWindow = exchangeRateWindow.currencies()!.adapt()
         let candidatesForAllCurrencies = CurrencyHelper.currencyList(
             currencyCodes: currenciesOnExchangeRateWindow
-        )
+        ).filter { $0.hasValidRate(in: exchangeRateWindow) }
 
         return InMemoryCurrenciesForPickerRetriever(
             candidatesForMostUsedCurrency: candidates,

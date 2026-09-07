@@ -1,5 +1,7 @@
 package libwallet
 
+import "errors"
+
 const (
 	ErrUnknown               = 1
 	ErrInvalidURI            = 2
@@ -13,10 +15,9 @@ func ErrorCode(err error) int64 {
 	type coder interface {
 		Code() int64
 	}
-	switch e := err.(type) { //nolint:errorlint // TODO: use errors.As
-	case coder:
+	var e coder
+	if errors.As(err, &e) {
 		return e.Code()
-	default:
-		return ErrUnknown
 	}
+	return ErrUnknown
 }

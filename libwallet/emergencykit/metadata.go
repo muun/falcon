@@ -89,7 +89,7 @@ func (mr *MetadataReader) ReadMetadata() (*Metadata, error) {
 		return nil, errors.Errorf("ReadMetadata failed to create a temporary directory")
 	}
 
-	defer os.RemoveAll(tmpDir) //nolint:errcheck // TODO: check error
+	defer func() { _ = os.RemoveAll(tmpDir) }()
 
 	// Extract the embedded attachment from the PDF into that directory:
 	err = api.ExtractAttachmentsFile(mr.SrcFile, tmpDir, []string{metadataName}, pdfConfig)
@@ -141,7 +141,7 @@ func (mw *MetadataWriter) WriteMetadata(metadata *Metadata) error {
 		return errors.Errorf("WriteMetadata failed to write a temporary file: %w", err)
 	}
 
-	defer os.Remove(tmpFile) //nolint:errcheck // TODO: check error
+	defer func() { _ = os.Remove(tmpFile) }()
 
 	// Add the attachment, returning potential errors:
 	err = api.AddAttachmentsFile(mw.SrcFile, mw.DstFile, []string{tmpFile}, false, pdfConfig)

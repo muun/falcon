@@ -11,7 +11,7 @@ import (
 )
 
 func TestCreateFeeBumpFunctions(t *testing.T) {
-	db, err := setupTestDb(t)
+	db, err := setupTestDB(t)
 	if err != nil {
 		t.Fatalf("failed to set up test db: %v", err)
 	}
@@ -180,12 +180,12 @@ func TestCreateFeeBumpFunctions(t *testing.T) {
 	}
 }
 
-func setupTestDb( //nolint:staticcheck // TODO: func setupTestDb should be setupTestDB
+func setupTestDB(
 	t *testing.T,
 ) (*DB, error) {
 	dir := t.TempDir()
 
-	db, err := Open(path.Join(dir, "test.db"))
+	db, err := open(path.Join(dir, "test.db"))
 	if err != nil {
 		return nil, err
 	}

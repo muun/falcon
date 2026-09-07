@@ -21,6 +21,7 @@ final class SecurityCardFullSpecsViewController: MUViewController {
     private let haloView = SecurityCardGradientHaloView()
     private let measurementsView = SecurityCardMeasurementsView()
     private let sectionsStack = UIStackView()
+    private let topFadeMask = ScrollViewTopFadeMask()
 
     override var screenLoggingName: String { "security_cards_full_specs" }
 
@@ -62,6 +63,11 @@ final class SecurityCardFullSpecsViewController: MUViewController {
         measurementsView.animateIn()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        topFadeMask.updateMask()
+    }
+
     // MARK: - Layout
 
     private func setupScrollView() {
@@ -70,6 +76,7 @@ final class SecurityCardFullSpecsViewController: MUViewController {
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.delegate = self
         view.addSubview(scrollView)
+        topFadeMask.attach(to: scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

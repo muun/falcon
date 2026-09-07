@@ -1,8 +1,8 @@
 package model
 
-type CreateFirstSessionJson struct { //nolint:staticcheck // TODO: type CreateFirstSessionJson should be CreateFirstSessionJSON
-	Client          ClientJson    `json:"client"`
+type CreateFirstSessionJSON struct {
+	Client          ClientJSON    `json:"client"`
 	GcmToken        *string       `json:"gcmToken,omitempty"`
 	PrimaryCurrency string        `json:"primaryCurrency"`
-	BasePublicKey   PublicKeyJson `json:"basePublicKey"`
+	BasePublicKey   PublicKeyJSON `json:"basePublicKey"`
 }

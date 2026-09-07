@@ -6,7 +6,7 @@ type Config struct {
 	SocketPath                string
 	FeatureStatusProvider     BackendActivatedFeatureStatusProvider
 	AppLogSink                AppLogSink
-	HttpClientSessionProvider HttpClientSessionProvider //nolint:staticcheck // TODO: struct field HttpClientSessionProvider should be HTTPClientSessionProvider
+	HttpClientSessionProvider HttpClientSessionProvider //nolint:staticcheck // should be HTTPClientSessionProvider, but it's part of the gomobile contract with the apps
 	NfcBridge                 NfcBridge
 	KeyProvider               KeyProvider
 	SecureKeyValueStorage     SecureKeyValueStorage

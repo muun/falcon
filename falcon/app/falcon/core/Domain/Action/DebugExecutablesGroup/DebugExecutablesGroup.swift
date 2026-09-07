@@ -23,4 +23,5 @@ public protocol DebugMenuExecutableContext {
     func showAlert(title: String?, message: String?)
     func showRequests()
     func showAnalytics()
+    func showSecureKeyValueStorage()
 }

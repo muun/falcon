@@ -3,6 +3,7 @@ package libwallet
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/hex"
 	"strings"
 
 	"github.com/btcsuite/btcd/btcutil"
@@ -13,11 +14,16 @@ import (
 	lndinput "github.com/lightningnetwork/lnd/input"
 	"github.com/lightningnetwork/lnd/lnwire"
 
+	"github.com/muun/libwallet/addresses"
 	"github.com/muun/libwallet/btcsuitew/txscriptw"
 	"github.com/muun/libwallet/hdpath"
 	"github.com/muun/libwallet/sphinx"
 	"github.com/muun/libwallet/walletdb"
 )
+
+// changeBranchIndex is the branch, relative to the base key path, where change addresses live.
+// It mirrors Schema.DerivationBranches.CHANGE in the common module.
+const changeBranchIndex = 0
 
 type IncomingSwap struct {
 	Htlc             *IncomingSwapHtlc
@@ -34,10 +40,11 @@ type IncomingSwapHtlc struct {
 }
 
 type IncomingSwapFulfillmentData struct {
-	FulfillmentTx      []byte
+	FulfillmentTx []byte
+	// TODO(#16998): rename to CosignerSignature; part of the gomobile contract with the apps.
 	MuunSignature      []byte
-	OutputVersion      int    // unused
-	OutputPath         string // unused
+	OutputVersion      int
+	OutputPath         string
 	MerkleTree         []byte // unused
 	HtlcBlock          []byte // unused
 	BlockHeight        int64  // unused
@@ -50,13 +57,15 @@ type IncomingSwapFulfillmentResult struct {
 }
 
 func (s *IncomingSwap) getInvoice() (*walletdb.Invoice, error) {
-	db, err := openDB()
-	if err != nil {
+	var invoice *walletdb.Invoice
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		invoice, err = db.FindByPaymentHash(s.PaymentHash)
+		return err
+	}); err != nil {
 		return nil, err
 	}
-	defer db.Close()
-
-	return db.FindByPaymentHash(s.PaymentHash)
+	return invoice, nil
 }
 
 // VerifyFulfillable checks that an incoming swap is fulfillable.
@@ -124,6 +133,7 @@ func (s *IncomingSwap) VerifyFulfillable(userKey *HDPrivateKey, net *Network) er
 
 // Fulfill validates and creates a fulfillment tx for the incoming swap.
 // It returns the fullfillment tx and the preimage.
+// TODO(#16998): rename muunKey to cosignerKey; it forms the ObjC selector, so falcon changes too.
 func (s *IncomingSwap) Fulfill(
 	data *IncomingSwapFulfillmentData,
 	userKey *HDPrivateKey, muunKey *HDPublicKey,
@@ -159,6 +169,11 @@ func (s *IncomingSwap) Fulfill(
 		)
 	}
 
+	err = verifyFulfillmentOutput(tx.TxOut[0], data, userKey, muunKey, net)
+	if err != nil {
+		return nil, err
+	}
+
 	// Lookup invoice data matching this HTLC using the payment hash
 	invoice, err := s.getInvoice()
 	if err != nil {
@@ -168,7 +183,7 @@ func (s *IncomingSwap) Fulfill(
 	// Sign the htlc input (there is only one, at index 0)
 	coin := coinIncomingSwap{
 		Network:             net.network,
-		MuunSignature:       data.MuunSignature,
+		CosignerSignature:   data.MuunSignature,
 		Sphinx:              s.SphinxPacket,
 		HtlcTx:              s.Htlc.HtlcTx,
 		PaymentHash256:      s.PaymentHash,
@@ -194,18 +209,107 @@ func (s *IncomingSwap) Fulfill(
 	}, nil
 }
 
+// verifyFulfillmentOutput checks that the fulfillment tx pays to an address of this wallet.
+//
+// Houston crafts the fulfillment tx and picks its output from the user's change address pool. The
+// only way to know that output is ours is to rebuild its script from our own keys.
+func verifyFulfillmentOutput(
+	output *wire.TxOut,
+	data *IncomingSwapFulfillmentData,
+	userKey *HDPrivateKey,
+	cosignerKey *HDPublicKey,
+	net *Network,
+) error {
+
+	basePath, err := hdpath.Parse(userKey.Path)
+	if err != nil {
+		return errors.Errorf("Fulfill: user key path %v is not valid: %w", userKey.Path, err)
+	}
+	outputPath, err := hdpath.Parse(data.OutputPath)
+	if err != nil {
+		return errors.Errorf("Fulfill: output path %v is not valid: %w", data.OutputPath, err)
+	}
+
+	// Houston only ever fulfills to a change address, which is a single unhardened child of the
+	// change branch. Other paths would be ours too, but we have no reason to accept them.
+	if !outputPath.HasPrefix(basePath) {
+		return errors.Errorf(
+			"Fulfill: expected output path %v to hang from the user key at %v",
+			data.OutputPath, userKey.Path,
+		)
+	}
+
+	indexes := outputPath.IndexesFrom(basePath)
+	if len(indexes) != 2 {
+		return errors.Errorf(
+			"Fulfill: expected output path %v to be two levels below the user key",
+			data.OutputPath,
+		)
+	}
+
+	branch, addressIndex := indexes[0], indexes[1]
+	if branch.Index != changeBranchIndex || branch.Hardened || addressIndex.Hardened {
+		return errors.Errorf(
+			"Fulfill: expected output path %v to be an unhardened child of the change branch",
+			data.OutputPath,
+		)
+	}
+
+	derivedUserKey, err := userKey.PublicKey().DeriveTo(data.OutputPath)
+	if err != nil {
+		return errors.Errorf(
+			"Fulfill: failed to derive user key to output path %v: %w", data.OutputPath, err,
+		)
+	}
+	derivedCosignerKey, err := cosignerKey.DeriveTo(data.OutputPath)
+	if err != nil {
+		return errors.Errorf(
+			"Fulfill: failed to derive cosigner key to output path %v: %w", data.OutputPath, err,
+		)
+	}
+
+	address, err := addresses.Create(
+		data.OutputVersion,
+		&derivedUserKey.key,
+		&derivedCosignerKey.key,
+		data.OutputPath,
+		net.network,
+	)
+	if err != nil {
+		return errors.Errorf(
+			"Fulfill: failed to build the output address with version %v: %w",
+			data.OutputVersion, err,
+		)
+	}
+
+	script, err := addressToScript(address.Address(), net)
+	if err != nil {
+		return errors.Errorf("Fulfill: %w", err)
+	}
+
+	if !bytes.Equal(output.PkScript, script) {
+		return errors.Errorf(
+			"Fulfill: expected fulfillment tx to pay to %v (script %v, path %v, version %v), "+
+				"found script %v",
+			address.Address(), hex.EncodeToString(script),
+			data.OutputPath, data.OutputVersion,
+			hex.EncodeToString(output.PkScript),
+		)
+	}
+
+	return nil
+}
+
 // FulfillFullDebt gives the preimage matching a payment hash if we have it
 func (s *IncomingSwap) FulfillFullDebt() (*IncomingSwapFulfillmentResult, error) {
 
 	// Lookup invoice data matching this HTLC using the payment hash
-	db, err := openDB()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	secrets, err := db.FindByPaymentHash(s.PaymentHash)
-	if err != nil {
+	var secrets *walletdb.Invoice
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		secrets, err = db.FindByPaymentHash(s.PaymentHash)
+		return err
+	}); err != nil {
 		return nil, errors.Errorf(
 			"FulfillFullDebt: could not find invoice data for payment hash: %w",
 			err,
@@ -220,7 +324,7 @@ func (s *IncomingSwap) FulfillFullDebt() (*IncomingSwapFulfillmentResult, error)
 
 type coinIncomingSwap struct {
 	Network             *chaincfg.Params
-	MuunSignature       []byte
+	CosignerSignature   []byte
 	Sphinx              []byte
 	HtlcTx              []byte
 	PaymentHash256      []byte
@@ -237,7 +341,7 @@ func (c *coinIncomingSwap) SignInput(
 	index int,
 	tx *wire.MsgTx,
 	userKey *HDPrivateKey,
-	muunKey *HDPublicKey,
+	cosignerKey *HDPublicKey,
 ) error {
 	// Deserialize the HTLC transaction
 	htlcTx := wire.MsgTx{}
@@ -246,15 +350,19 @@ func (c *coinIncomingSwap) SignInput(
 		return errors.Errorf("could not deserialize htlc tx: %w", err)
 	}
 
-	// Lookup invoice data matching this HTLC using the payment hash
-	db, err := openDB()
-	if err != nil {
+	// Lookup invoice data matching this HTLC using the payment hash. We keep the lookup result
+	// separate from WithDB's own error so that a genuine "DB unavailable" failure surfaces
+	// immediately, instead of being masked as a missing invoice and routed into the recovery
+	// path below (which would sign with fallback-constructed secrets).
+	var secrets *walletdb.Invoice
+	var lookupErr error
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		secrets, lookupErr = db.FindByPaymentHash(c.PaymentHash256)
+		return nil
+	}); err != nil {
 		return err
 	}
-	defer db.Close()
-
-	secrets, err := db.FindByPaymentHash(c.PaymentHash256)
-	if err != nil {
+	if secrets == nil {
 
 		// Note: there's an edge case where fulfillment txs can be dropped and clients may forgot
 		// the invoice secrets (e.g if they logout) thus being unable to spend incoming swap inputs.
@@ -279,7 +387,7 @@ func (c *coinIncomingSwap) SignInput(
 				KeyPath:  invoiceBaseKeyPath,
 			}
 		} else {
-			return errors.Errorf("could not find invoice data for payment hash: %w", err)
+			return errors.Errorf("could not find invoice data for payment hash: %w", lookupErr)
 		}
 	}
 
@@ -299,12 +407,12 @@ func (c *coinIncomingSwap) SignInput(
 	}
 	userPublicKey := userPrivateKey.PublicKey()
 
-	muunPublicKey, err := muunKey.DeriveTo(htlcKeyPath.String())
+	cosignerPublicKey, err := cosignerKey.DeriveTo(htlcKeyPath.String())
 	if err != nil {
 		return err
 	}
 
-	htlcScript, err := c.createHtlcScript(userPublicKey, muunPublicKey)
+	htlcScript, err := c.createHtlcScript(userPublicKey, cosignerPublicKey)
 	if err != nil {
 		return errors.Errorf("could not create htlc script: %w", err)
 	}
@@ -339,12 +447,12 @@ func (c *coinIncomingSwap) SignInput(
 
 	sigHashes := lndinput.NewTxSigHashesV0Only(tx)
 
-	muunSigKey, err := muunPublicKey.key.ECPubKey()
+	cosignerSigKey, err := cosignerPublicKey.key.ECPubKey()
 	if err != nil {
 		return err
 	}
 
-	// Verify Muun signature
+	// Verify cosigner signature
 	htlcOutputAmount := htlcTx.TxOut[htlcOutputIndex].Value
 	err = verifyTxWitnessSignature(
 		tx,
@@ -352,11 +460,11 @@ func (c *coinIncomingSwap) SignInput(
 		index,
 		htlcOutputAmount,
 		htlcScript,
-		c.MuunSignature,
-		muunSigKey,
+		c.CosignerSignature,
+		cosignerSigKey,
 	)
 	if err != nil {
-		return errors.Errorf("could not verify Muun signature for htlc: %w", err)
+		return errors.Errorf("could not verify cosigner signature for htlc: %w", err)
 	}
 
 	var outputAmount, expectedAmount lnwire.MilliSatoshi
@@ -401,7 +509,7 @@ func (c *coinIncomingSwap) SignInput(
 	txInput.Witness = wire.TxWitness{
 		secrets.Preimage,
 		sig,
-		c.MuunSignature,
+		c.CosignerSignature,
 		htlcScript,
 	}
 
@@ -411,45 +519,43 @@ func (c *coinIncomingSwap) SignInput(
 func (c *coinIncomingSwap) FullySignInput(
 	index int,
 	tx *wire.MsgTx,
-	userKey, muunKey *HDPrivateKey,
+	userKey, cosignerKey *HDPrivateKey,
 ) error {
 	// Lookup invoice data matching this HTLC using the payment hash
-	db, err := openDB()
-	if err != nil {
+	var secrets *walletdb.Invoice
+	if err := Pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		secrets, err = db.FindByPaymentHash(c.PaymentHash256)
 		return err
-	}
-	defer db.Close()
-
-	secrets, err := db.FindByPaymentHash(c.PaymentHash256)
-	if err != nil {
+	}); err != nil {
 		return errors.Errorf("could not find invoice data for payment hash: %w", err)
 	}
 
-	derivedMuunKey, err := muunKey.DeriveTo(secrets.KeyPath)
+	derivedCosignerKey, err := cosignerKey.DeriveTo(secrets.KeyPath)
 	if err != nil {
-		return errors.Errorf("failed to derive muun key: %w", err)
+		return errors.Errorf("failed to derive cosigner key: %w", err)
 	}
 
-	muunSignature, err := c.signature(
+	cosignerSignature, err := c.signature(
 		index,
 		tx,
 		userKey.PublicKey(),
-		derivedMuunKey.PublicKey(),
-		derivedMuunKey,
+		derivedCosignerKey.PublicKey(),
+		derivedCosignerKey,
 	)
 	if err != nil {
 		return err
 	}
-	c.MuunSignature = muunSignature
-	return c.SignInput(index, tx, userKey, muunKey.PublicKey())
+	c.CosignerSignature = cosignerSignature
+	return c.SignInput(index, tx, userKey, cosignerKey.PublicKey())
 }
 
 func (c *coinIncomingSwap) createHtlcScript(
-	userPublicKey, muunPublicKey *HDPublicKey,
+	userPublicKey, cosignerPublicKey *HDPublicKey,
 ) ([]byte, error) {
 	return createHtlcScript(
 		userPublicKey.Raw(),
-		muunPublicKey.Raw(),
+		cosignerPublicKey.Raw(),
 		c.SwapServerPublicKey,
 		c.ExpirationHeight,
 		c.PaymentHash256,
@@ -460,7 +566,7 @@ func (c *coinIncomingSwap) signature(
 	index int,
 	tx *wire.MsgTx,
 	userKey *HDPublicKey,
-	muunKey *HDPublicKey,
+	cosignerKey *HDPublicKey,
 	signingKey *HDPrivateKey,
 ) ([]byte, error) {
 
@@ -470,7 +576,7 @@ func (c *coinIncomingSwap) signature(
 		return nil, errors.Errorf("could not deserialize htlc tx: %w", err)
 	}
 
-	htlcScript, err := c.createHtlcScript(userKey, muunKey)
+	htlcScript, err := c.createHtlcScript(userKey, cosignerKey)
 	if err != nil {
 		return nil, errors.Errorf("could not create htlc script: %w", err)
 	}
@@ -518,12 +624,12 @@ func (c *coinIncomingSwap) findHtlcOutputIndex(htlcTx *wire.MsgTx, htlcScript []
 }
 
 func createHtlcScript(
-	userPublicKey, muunPublicKey, swapServerPublicKey []byte,
+	userPublicKey, cosignerPublicKey, swapServerPublicKey []byte,
 	expiry int64,
 	paymentHash []byte,
 ) ([]byte, error) {
 	sb := txscript.NewScriptBuilder()
-	sb.AddData(muunPublicKey)
+	sb.AddData(cosignerPublicKey)
 	sb.AddOp(txscript.OP_CHECKSIG)
 	sb.AddOp(txscript.OP_NOTIF)
 	sb.AddOp(txscript.OP_DUP)

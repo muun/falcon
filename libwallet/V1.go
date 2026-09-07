@@ -49,7 +49,7 @@ func (c *coinV1) SignInput(index int, tx *wire.MsgTx, userKey *HDPrivateKey, _ *
 func (c *coinV1) FullySignInput(
 	index int,
 	tx *wire.MsgTx,
-	userKey, muunKey *HDPrivateKey, //nolint:revive // TODO: use or remove muunKey
+	userKey, _ *HDPrivateKey,
 ) error {
 	return c.SignInput(index, tx, userKey, nil)
 }

@@ -1,6 +1,6 @@
 package model
 
-type SetupChallengeResponseJson struct { //nolint:staticcheck // TODO: type SetupChallengeResponseJson should be SetupChallengeResponseJSON
-	MuunKey            *string `json:"muunKey,omitempty"`
-	MuunKeyFingerprint *string `json:"muunKeyFingerprint,omitempty"`
+type SetupChallengeResponseJSON struct {
+	CosignerKey            *string `json:"muunKey,omitempty"`
+	CosignerKeyFingerprint *string `json:"muunKeyFingerprint,omitempty"`
 }

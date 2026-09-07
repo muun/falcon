@@ -42,15 +42,55 @@ public struct User: Codable {
     }
 
     public func primaryCurrencyWithValidExchangeRate(window: ExchangeRateWindow) -> String {
-        if primaryCurrency != "BTC" && window.rates[primaryCurrency] != nil {
-            return primaryCurrency
+        guard primaryCurrency != "BTC" else {
+            return "BTC"
         }
-        return "BTC"
+
+        do {
+            // rate(for:) also rejects zero/negative/NaN rates, not just missing ones
+            _ = try window.rate(for: primaryCurrency)
+            return primaryCurrency
+        } catch {
+            // A present-but-invalid rate (zero/negative/NaN) is the anomaly worth reporting; a
+            // missing currency is an expected, transient state and would only add noise.
+            if let muunError = error as? MuunError,
+               let windowError = muunError.kind as? ExchangeRateWindow.Errors,
+               case .invalid(_, let rate, _) = windowError {
+                // A plain NSError groups by callsite (not by message), so the offending rate can
+                // live in the description without fragmenting the Crashlytics issue.
+                Logger.log(error: NSError(
+                    domain: "invalid_primary_exchange_rate",
+                    code: 0,
+                    userInfo: [NSLocalizedDescriptionKey:
+                        "Invalid primary rate for \(primaryCurrency): \(rate)"]
+                ))
+            }
+            return "BTC"
+        }
     }
 
     public func primaryCurrencyWithValidExchangeRate(window: NewopExchangeRateWindow) -> String {
-        if primaryCurrency != "BTC" && window.rate(primaryCurrency) != 0.0 {
+        guard primaryCurrency != "BTC" else {
+            return "BTC"
+        }
+
+        // rate() returns 0 for missing currencies, so this also covers the nil case
+        let rate = window.rate(primaryCurrency)
+        if rate.isUsableExchangeRate {
             return primaryCurrency
+        }
+
+        // Report a present-but-broken rate (negative/NaN). A 0 is indistinguishable from a
+        // missing currency in this API, so we don't report it to avoid noise.
+        if rate < 0 || rate.isNaN {
+            // A plain NSError groups by callsite (not by message), so the offending rate can
+            // live in the description without fragmenting the Crashlytics issue.
+            Logger.log(error: NSError(
+                domain: "invalid_primary_exchange_rate",
+                code: 0,
+                userInfo: [NSLocalizedDescriptionKey:
+                    "Invalid primary rate (newop) for \(primaryCurrency): \(rate)"]
+            ))
         }
         return "BTC"
     }
@@ -80,6 +120,7 @@ public struct User: Codable {
         customId.insert("-", at: customId.index(customId.startIndex, offsetBy: 4))
         return customId
     }
+
 }
 
 struct PhoneNumber: Codable {

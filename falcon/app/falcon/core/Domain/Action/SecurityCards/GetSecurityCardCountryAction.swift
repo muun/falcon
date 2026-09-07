@@ -6,12 +6,17 @@
 //  Copyright © 2026 muun. All rights reserved.
 //
 
-import RxSwift
+final class GetSecurityCardCountryAction {
 
-final class GetSecurityCardCountryAction: Resolver {
+    private let marketplaceSelectedCountryRepository: MarketplaceSelectedCountryRepository
 
-    func run() -> Single<Country> {
-        // TODO: replace with the country selected during security cards onboarding.
-        return .just(Country(code: "AR", name: "Argentina", flag: "🇦🇷"))
+    init(marketplaceSelectedCountryRepository: MarketplaceSelectedCountryRepository) {
+        self.marketplaceSelectedCountryRepository = marketplaceSelectedCountryRepository
+    }
+
+    /// Returns the country the user selected in the onboarding / marketplace,
+    /// defaulting until a selection has been made.
+    func run() -> Country {
+        marketplaceSelectedCountryRepository.fetch()
     }
 }

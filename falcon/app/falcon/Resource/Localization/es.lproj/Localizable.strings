@@ -991,6 +991,9 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 
 "SecurityCardConnectingOverlayView.connectingTo" = "Conectando con %@";
 
+"KeyboardToolbar.previous" = "Anterior";
+"KeyboardToolbar.next" = "Siguiente";
+
 "ShippingViewController.title" = "Envío";
 "ShippingViewController.subtitle" = "Información necesaria para entregarte tu tarjeta.";
 "ShippingViewController.cta" = "IR A CHECKOUT";
@@ -1015,3 +1018,34 @@ Muchos servicios aún no son compatibles con Taproot y pueden marcar tus direcci
 "ShippingFormView.cityRequired" = "La ciudad es obligatoria";
 "ShippingFormView.stateRequired" = "La provincia es obligatoria";
 "ShippingFormView.zipCodeRequired" = "El código postal es obligatorio";
+
+/* Order Summary */
+"OrderSummaryViewController.title" = "Tu pedido";
+"OrderSummaryViewController.subtitle" = "Revisá tu pedido y continuá con el pago.";
+"OrderSummaryViewController.summaryTitle" = "Resumen";
+"OrderSummaryViewController.goToPayment" = "IR AL PAGO";
+"OrderSummaryViewController.cardPrice" = "Precio de la tarjeta";
+"OrderSummaryViewController.shippingAndTaxes" = "Envío e impuestos";
+"OrderSummaryViewController.total" = "Total";
+"OrderSummaryViewController.detailName" = "Nombre";
+"OrderSummaryViewController.detailEmail" = "Email";
+"OrderSummaryViewController.detailAddress" = "Dirección";
+
+/* Pay with Muun */
+"PayWithMuunViewController.title" = "Pagar con Muun";
+"PayWithMuunViewController.to" = "Para";
+"PayWithMuunViewController.amount" = "Monto";
+"PayWithMuunViewController.networkFee" = "Comisión de red";
+"PayWithMuunViewController.total" = "Total";
+"PayWithMuunViewController.send" = "ENVIAR";
+"ReceivingNodeDetailsViewController.title" = "Detalles del nodo receptor";
+"ReceivingNodeDetailsViewController.publicKey" = "Clave pública";
+"ReceivingNodeDetailsViewController.openInNodeExplorer" = "ABRIR EN EL EXPLORADOR DE NODOS";
+
+/* Delivery Method Picker */
+"DeliveryMethodPicker.standardShipping" = "Envío estándar";
+"DeliveryMethodPicker.expressShipping" = "Envío exprés";
+"DeliveryMethodPicker.standardEta" = "5 a 10 días hábiles";
+"DeliveryMethodPicker.expressEta" = "2 a 4 días hábiles";
+"DeliveryMethodPicker.free" = "GRATIS";
+"DeliveryMethodPicker.surcharge" = "+%@";

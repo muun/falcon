@@ -170,6 +170,7 @@ extension AppDelegate {
     }
 
     internal func configureLibwallet() {
+        libwalletMigrationResult = LibwalletMigrationHelper.migrateFromDocumentsIfNeeded()
         LibwalletStorageHelper.ensureExists()
         // In some cases we might have leftovers from an unclean shutdown.
         LibwalletStorageHelper.cleanupSocket()
@@ -183,6 +184,7 @@ extension AppDelegate {
         let libwalletNfcBridge = LibwalletNfcBridge(nfcSession: nfcSession)
         libwalletConfig.nfcBridge = libwalletNfcBridge
         libwalletConfig.keyProvider = keyProvider
+        libwalletConfig.secureKeyValueStorage = libwalletSecureKeyValueStorage
         libwalletConfig.network = Environment.current.network.name()
 
         Libwallet_initInit(libwalletConfig)

@@ -1,6 +1,6 @@
 package model
 
-type SecurityCardMetadataJson struct { //nolint:staticcheck // TODO: type SecurityCardMetadataJson should be SecurityCardMetadataJSON
+type SecurityCardMetadataJSON struct {
 	GlobalPublicKeyInHex string `json:"globalPublicKeyInHex"`
 	CardVendorInHex      string `json:"cardVendorInHex"`
 	CardModelInHex       string `json:"cardModelInHex"`

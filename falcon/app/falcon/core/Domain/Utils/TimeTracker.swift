@@ -35,6 +35,22 @@ enum EmergencyKitChildTrace: String {
     case rcChecksum = "rc_checksum"
 }
 
+/// Children attached to the Go PDF-generation trace, forwarding libwallet's per-stage render
+/// profiling.
+enum EmergencyKitRenderChildTrace: String {
+    case loadTranslations = "go_load_translations_ms"
+    case registerFonts = "go_register_fonts_ms"
+    case registerImages = "go_register_images_ms"
+    case componentsRendering = "go_components_rendering_ms"
+    case createAndSaveOnDisk = "go_create_and_save_on_disk_ms"
+    case totalHeapAllocated = "go_total_heap_allocated_bytes"
+    case totalObjectsAllocated = "go_total_objects_allocated"
+    case embedMetadata = "go_embed_metadata_ms"
+    case totalInsideGo = "go_total_inside_go_ms"
+    case kitSizeBytes = "go_kit_size_bytes"
+    case drawIcons = "go_draw_icons_ms"
+}
+
 /// Factory for timing traces. Inject this and call start to begin measuring.
 final class TimeTracker {
 

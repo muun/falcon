@@ -11,11 +11,15 @@ import UIKit
 protocol SecurityCardTextFieldDelegate: AnyObject {
     func securityCardTextFieldDidChange(_ field: SecurityCardTextField)
     func securityCardTextFieldDidTap(_ field: SecurityCardTextField)
+    /// Return `false` to signal the field handled the return key itself
+    /// (e.g. by moving focus to another field).
+    func securityCardTextFieldShouldReturn(_ field: SecurityCardTextField) -> Bool
 }
 
 extension SecurityCardTextFieldDelegate {
     func securityCardTextFieldDidChange(_ field: SecurityCardTextField) {}
     func securityCardTextFieldDidTap(_ field: SecurityCardTextField) {}
+    func securityCardTextFieldShouldReturn(_ field: SecurityCardTextField) -> Bool { true }
 }
 
 /// Rounded floating-label text field matching the security cards prototype style.
@@ -57,6 +61,25 @@ final class SecurityCardTextField: UIView {
         get { textField.autocorrectionType }
         set { textField.autocorrectionType = newValue }
     }
+
+    var returnKeyType: UIReturnKeyType {
+        get { textField.returnKeyType }
+        set { textField.returnKeyType = newValue }
+    }
+
+    /// Accessory shown above the keyboard while this field edits (e.g. a prev/next toolbar).
+    var keyboardAccessoryView: UIView? {
+        get { textField.inputAccessoryView }
+        set { textField.inputAccessoryView = newValue }
+    }
+
+    override var isFirstResponder: Bool { textField.isFirstResponder }
+
+    @discardableResult
+    override func becomeFirstResponder() -> Bool { textField.becomeFirstResponder() }
+
+    @discardableResult
+    override func resignFirstResponder() -> Bool { textField.resignFirstResponder() }
 
     // MARK: - Init
 
@@ -242,5 +265,9 @@ extension SecurityCardTextField: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateFloatingLabel(animated: true)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        delegate?.securityCardTextFieldShouldReturn(self) ?? true
     }
 }

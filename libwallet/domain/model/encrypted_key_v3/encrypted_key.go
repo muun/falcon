@@ -18,7 +18,7 @@ const (
 	chainCodeLenBytes  = 32
 )
 
-func FinishMuunKeyEncryption(
+func FinishCosignerKeyEncryption(
 	recoveryCodePublicKey *btcec.PublicKey,
 	firstHalfKey *btcec.PrivateKey,
 	chainCode []byte,
@@ -32,7 +32,7 @@ func FinishMuunKeyEncryption(
 	firstEncryptedMessage, err := bitcoin_hpke.SingleShotEncrypt(
 		slices.Concat(firstHalfKey.Serialize(), chainCode[:]),
 		recoveryCodePublicKey,
-		[]byte(muunFirstHalfToRecoveryCode),
+		[]byte(cosignerFirstHalfToRecoveryCode),
 		[]byte(""),
 	)
 
@@ -42,7 +42,12 @@ func FinishMuunKeyEncryption(
 		)
 	}
 
-	k := newEncryptedKey(version, muun, firstEncryptedMessage, secondHalfKeyEncryptedToRecoveryCode)
+	k := newEncryptedKey(
+		version,
+		cosigner,
+		firstEncryptedMessage,
+		secondHalfKeyEncryptedToRecoveryCode,
+	)
 	return k.serialize(), nil
 }
 
@@ -107,7 +112,7 @@ func DecryptExtendedKey(
 	if key.bearer == user {
 		infoForFirstHalf = userFirstHalfToRecoveryCode
 	} else {
-		infoForFirstHalf = muunFirstHalfToRecoveryCode
+		infoForFirstHalf = cosignerFirstHalfToRecoveryCode
 	}
 	firstMessage, err := key.firstEncryptedMessage.SingleShotDecrypt(
 		recoveryCodePrivateKey,
@@ -124,7 +129,7 @@ func DecryptExtendedKey(
 	if key.bearer == user {
 		infoForSecondHalf = userSecondHalfToRecoveryCode
 	} else {
-		infoForSecondHalf = MuunSecondHalfToRecoveryCode
+		infoForSecondHalf = CosignerSecondHalfToRecoveryCode
 	}
 	secondMessage, err := key.secondEncryptedMessage.SingleShotDecrypt(
 		recoveryCodePrivateKey,
@@ -241,7 +246,7 @@ func deserializeEncryptedKeyV3(serializedKey string) (*encryptedKey, error) {
 func validateBearerByte(bearerByte uint8) (keyBearer, error) {
 	bearer := keyBearer(bearerByte)
 	switch bearer {
-	case user, muun:
+	case user, cosigner:
 		return bearer, nil
 	default:
 		return bearer, errors.Errorf("invalid value for key bearer byte: %d", bearerByte)

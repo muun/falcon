@@ -13,16 +13,23 @@ struct NewOpActionEvent: AnalyticsEvent {
         case disableFlagDialogShown = "disable_flag_dialog_shown"
         case abort = "abort"
         case cancelAbort = "cancel_abort"
+        case securityCardRetry = "security_card_retry"
     }
 
     var parameters: [String: AnalyticsValue]? {
-        [
-            "type": type.rawValue,
-            "has_2fa": has2fa
-        ]
+        var params: [String: AnalyticsValue] = ["type": type.rawValue]
+        if let has2fa {
+            params["has_2fa"] = has2fa
+        }
+        return params
     }
 
     let name: String = "e_new_op_action"
     let type: `Type`
-    let has2fa: Bool
+    let has2fa: Bool?
+
+    init(type: `Type`, has2fa: Bool? = nil) {
+        self.type = type
+        self.has2fa = has2fa
+    }
 }

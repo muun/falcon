@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"path"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -28,6 +29,8 @@ import (
 	"github.com/muun/libwallet/domain/action/recovery"
 	"github.com/muun/libwallet/domain/action/reset"
 	apierrors "github.com/muun/libwallet/errors"
+	"github.com/muun/libwallet/platform/observability/otel"
+	"github.com/muun/libwallet/platform/test/testenv"
 	"github.com/muun/libwallet/presentation/api"
 	"github.com/muun/libwallet/recoverycode"
 	"github.com/muun/libwallet/service"
@@ -38,9 +41,10 @@ import (
 
 var bufconnListener *bufconn.Listener
 var walletServer = &WalletServer{}
+var otelSetup *otel.Setup
 
 // 127.0.0.1 instead of localhost to avoid problems with network interfaces in local env
-const houstonUrl string = "http://127.0.0.1:8080" //nolint:staticcheck // TODO: const houstonUrl should be houstonURL
+const houstonURL string = "http://127.0.0.1:8080"
 
 func defaultProvider() *service.TestProvider {
 	return &service.TestProvider{
@@ -48,7 +52,7 @@ func defaultProvider() *service.TestProvider {
 		ClientVersionName: "2.9.2",
 		Language:          "en",
 		ClientType:        "FALCON",
-		BaseURL:           houstonUrl,
+		BaseURL:           houstonURL,
 	}
 }
 
@@ -59,6 +63,15 @@ func init() {
 		walletServer.houstonService,
 	)
 
+	env, err := testenv.LoadEnvironmentIntoMap("local_vars.env")
+	if err != nil {
+		panic(err)
+	}
+	otelSetup, err = otel.NewSetup(context.Background(), otel.NewConfigFromMap(env))
+	if err != nil {
+		panic(err)
+	}
+
 	// Initialize grpc server of WalletService with bufconn
 	bufconnListener = bufconn.Listen(1024 * 1024)
 
@@ -66,14 +79,14 @@ func init() {
 	opts := []grpc.ServerOption{
 		grpc.UnaryInterceptor(
 			grpc_middleware.ChainUnaryServer(
-				LoggingUnaryInterceptor(),
+				TracingUnaryInterceptor(otelSetup),
 				RecoverUnknownErrorUnaryInterceptor(),
 				RecoverPanicUnaryInterceptor(),
 			),
 		),
 		grpc.StreamInterceptor(
 			grpc_middleware.ChainStreamServer(
-				LoggingStreamInterceptor(),
+				TracingStreamInterceptor(otelSetup),
 				RecoverUnknownErrorStreamInterceptor(),
 				RecoverPanicStreamInterceptor(),
 			),
@@ -112,6 +125,15 @@ func TestMain(m *testing.M) {
 	}
 
 	code := m.Run()
+
+	if otelSetup != nil {
+		func() {
+			shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			_ = otelSetup.Shutdown(shutdownCtx)
+		}()
+	}
+
 	os.Exit(code)
 }
 
@@ -657,13 +679,22 @@ func TestErrorInterceptors(t *testing.T) {
 			t.Errorf("want %v, but got %v", wantErr, got)
 		}
 
+		// Verify the recovery handler captured a stack trace for the panic
+		errorNode := getErrorDetail(t, grpcStatus).GetStackTrace()
+		if errorNode == nil {
+			t.Fatalf("want non-nil error node, but got nil")
+		}
+		if !errorStackTraceContainsFramePackage(errorNode, "github.com/muun/libwallet") {
+			t.Errorf("error tree does not reference libwallet frames: %v", errorNode)
+		}
+
 	})
 
 	t.Run("unary: return internal error when intercepting a generic error", func(t *testing.T) {
 
 		// Create a generic error with fmt package
 		wantDevMsg := "generic error for testing"
-		handler := func(ctx context.Context, req any) (any, error) { //nolint:revive // TODO: use or remove ctx
+		handler := func(_ context.Context, _ any) (any, error) {
 			return nil, goerr.New(wantDevMsg)
 		}
 
@@ -693,6 +724,15 @@ func TestErrorInterceptors(t *testing.T) {
 			t.Errorf("want %v, but got %v", wantDevMsg, got)
 		}
 
+		// Verify the stack trace from the go-errors error is propagated
+		errorNode := getErrorDetail(t, grpcStatus).GetStackTrace()
+		if errorNode == nil {
+			t.Fatalf("want non-nil error node, but got nil")
+		}
+		if !errorStackTraceContainsFrameFile(errorNode, "wallet_server_test.go") {
+			t.Errorf("error tree does not reference the handler frame: %v", errorNode)
+		}
+
 	})
 
 	t.Run("unary: return internal error when intercepting unknown grpc error", func(t *testing.T) {
@@ -701,7 +741,7 @@ func TestErrorInterceptors(t *testing.T) {
 		errorMsg := "an unknown error for testing"
 		unknownErrorStatus := status.New(codes.Unknown, errorMsg)
 
-		handler := func(ctx context.Context, req any) (any, error) { //nolint:revive // TODO: use or remove ctx
+		handler := func(_ context.Context, _ any) (any, error) {
 			return nil, unknownErrorStatus.Err()
 		}
 
@@ -730,6 +770,12 @@ func TestErrorInterceptors(t *testing.T) {
 		gotDevMsg := getErrorDetail(t, grpcStatus).GetDeveloperMessage()
 		if gotDevMsg != wantDevMsg {
 			t.Errorf("want %v, but got %v", wantDevMsg, gotDevMsg)
+		}
+
+		// Verify no stack frames are present because the cause has no go-errors wrapping
+		stackTrace := getErrorDetail(t, grpcStatus).GetStackTrace()
+		if stackTrace != nil {
+			t.Errorf("want no stack trace, but got %v", stackTrace)
 		}
 
 	})
@@ -765,6 +811,15 @@ func TestErrorInterceptors(t *testing.T) {
 		got := getErrorDetail(t, grpcStatus).GetDeveloperMessage()
 		if got != wantDevMsg {
 			t.Errorf("want %v, but got %v", wantDevMsg, got)
+		}
+
+		// Verify the stack trace from the go-errors error is propagated
+		errorNode := getErrorDetail(t, grpcStatus).GetStackTrace()
+		if errorNode == nil {
+			t.Fatalf("want non-nil error node, but got nil")
+		}
+		if !errorStackTraceContainsFrameFile(errorNode, "wallet_server_test.go") {
+			t.Errorf("error tree does not reference the handler frame: %v", errorNode)
 		}
 
 	})
@@ -833,27 +888,28 @@ func TestFinishRecoveryCodeSetupEndpoint_Integration(t *testing.T) {
 
 	recoveryCodePublicKey := recoveryCodePrivateKey.PubKey()
 
-	createFirstSessionOkJson := createFirstSession( //nolint:staticcheck // TODO: var createFirstSessionOkJson should be createFirstSessionOkJSON
+	createFirstSessionOkJSON := createFirstSession(
 		t,
 		userPrivateKey.PublicKey(),
 	)
-	muunPublicKey, err := libwallet.NewHDPublicKeyFromString(
-		createFirstSessionOkJson.CosigningPublicKey.Key,
-		createFirstSessionOkJson.CosigningPublicKey.Path,
+	cosignerPublicKey, err := libwallet.NewHDPublicKeyFromString(
+		createFirstSessionOkJSON.CosigningPublicKey.Key,
+		createFirstSessionOkJSON.CosigningPublicKey.Path,
 		libwallet.Regtest())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	walletServer.keyProvider = NewMockKeyProvider(userPrivateKey, muunPublicKey, 0)
-	computeAndStoreEncryptedMuunKeyAction := recovery.NewComputeAndStoreEncryptedMuunKeyAction(
-		walletServer.keyValueStorage,
-		walletServer.keyProvider,
-	)
+	walletServer.keyProvider = NewMockKeyProvider(userPrivateKey, cosignerPublicKey, 0)
+	computeAndStoreEncryptedCosignerKeyAction :=
+		recovery.NewComputeAndStoreEncryptedCosignerKeyAction(
+			walletServer.keyValueStorage,
+			walletServer.keyProvider,
+		)
 	walletServer.finishChallengeSetup = challenge_keys.NewFinishChallengeSetupAction(
 		walletServer.houstonService,
 		walletServer.keyValueStorage,
-		computeAndStoreEncryptedMuunKeyAction,
+		computeAndStoreEncryptedCosignerKeyAction,
 	)
 
 	_, err = walletServer.StartChallengeSetup(
@@ -883,14 +939,14 @@ func TestFinishRecoveryCodeSetupEndpoint_Integration(t *testing.T) {
 	}
 }
 
-func createFirstSession(t *testing.T, key *libwallet.HDPublicKey) model.CreateFirstSessionOkJson {
+func createFirstSession(t *testing.T, key *libwallet.HDPublicKey) model.CreateFirstSessionOkJSON {
 	provider := defaultProvider()
 	strClientVersion, err := strconv.Atoi(provider.ClientVersion)
 	if err != nil {
 		t.Fatal(err)
 	}
-	sessionJson := model.CreateFirstSessionJson{ //nolint:staticcheck // TODO: var sessionJson should be sessionJSON
-		Client: model.ClientJson{
+	sessionJSON := model.CreateFirstSessionJSON{
+		Client: model.ClientJSON{
 			Type:        provider.ClientType,
 			BuildType:   "debug",
 			Version:     strClientVersion,
@@ -899,18 +955,18 @@ func createFirstSession(t *testing.T, key *libwallet.HDPublicKey) model.CreateFi
 		},
 		GcmToken:        nil,
 		PrimaryCurrency: "USD",
-		BasePublicKey: model.PublicKeyJson{
+		BasePublicKey: model.PublicKeyJSON{
 			Key:  key.String(),
 			Path: "m/schema:1'/recovery:1'",
 		},
 	}
-	sessionOkJson, err := walletServer.houstonService.CreateFirstSession( //nolint:staticcheck // TODO: var sessionOkJson should be sessionOkJSON
-		sessionJson,
+	sessionOkJSON, err := walletServer.houstonService.CreateFirstSession(
+		sessionJSON,
 	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return sessionOkJson
+	return sessionOkJSON
 }
 
 func setupKeyValueStorage(t *testing.T, migrationPlan []storage.Migration) {
@@ -946,7 +1002,7 @@ func newGrpcClient(t *testing.T) (*grpc.ClientConn, context.Context) {
 }
 
 func dialer() func(context.Context, string) (net.Conn, error) {
-	return func(ctx context.Context, s string) (net.Conn, error) { //nolint:revive // TODO: use or remove ctx
+	return func(_ context.Context, _ string) (net.Conn, error) {
 		return bufconnListener.Dial()
 	}
 }
@@ -1051,20 +1107,20 @@ func buildTestMigrationPlan() []storage.Migration {
 }
 
 type mockKeyProvider struct {
-	userPrivateKey  *libwallet.HDPrivateKey
-	muunPublicKey   *libwallet.HDPublicKey
-	maxDerivedIndex int
+	userPrivateKey    *libwallet.HDPrivateKey
+	cosignerPublicKey *libwallet.HDPublicKey
+	maxDerivedIndex   int
 }
 
 func NewMockKeyProvider(
 	userPrivateKey *libwallet.HDPrivateKey,
-	muunPublicKey *libwallet.HDPublicKey,
+	cosignerPublicKey *libwallet.HDPublicKey,
 	maxDerivedIndex int,
 ) keys.KeyProvider {
 	return &mockKeyProvider{
-		userPrivateKey:  userPrivateKey,
-		muunPublicKey:   muunPublicKey,
-		maxDerivedIndex: maxDerivedIndex,
+		userPrivateKey:    userPrivateKey,
+		cosignerPublicKey: cosignerPublicKey,
+		maxDerivedIndex:   maxDerivedIndex,
 	}
 }
 
@@ -1076,18 +1132,56 @@ func (m *mockKeyProvider) UserPublicKey() (*libwallet.HDPublicKey, error) {
 	return m.userPrivateKey.PublicKey(), nil
 }
 
-func (m *mockKeyProvider) MuunPublicKey() (*libwallet.HDPublicKey, error) {
-	return m.muunPublicKey, nil
+func (m *mockKeyProvider) CosignerPublicKey() (*libwallet.HDPublicKey, error) {
+	return m.cosignerPublicKey, nil
 }
 
 func (m *mockKeyProvider) MaxDerivedIndex() int {
 	return m.maxDerivedIndex
 }
 
-func (m *mockKeyProvider) EncryptedMuunPrivateKey() (*libwallet.EncryptedPrivateKeyInfo, error) {
+func (m *mockKeyProvider) EncryptedCosignerPrivateKey() (
+	*libwallet.EncryptedPrivateKeyInfo, error,
+) {
 	return nil, goerr.New("not implemented")
 }
 
 func (m *mockKeyProvider) SetMaxDerivedIndex(maxDerivedIndex int) {
 	m.maxDerivedIndex = maxDerivedIndex
+}
+
+// errorStackTraceAnyFrame reports whether any frame anywhere in the error tree
+// satisfies pred.
+func errorStackTraceAnyFrame(node *api.ErrorStackTrace, pred func(*api.StackFrame) bool) bool {
+	if node == nil {
+		return false
+	}
+	if slices.ContainsFunc(node.GetFrames(), pred) {
+		return true
+	}
+	if errorStackTraceAnyFrame(node.GetCause(), pred) {
+		return true
+	}
+	for _, s := range node.GetSiblings() {
+		if errorStackTraceAnyFrame(s, pred) {
+			return true
+		}
+	}
+	return false
+}
+
+// errorStackTraceContainsFramePackage reports whether any frame anywhere in the
+// error tree was captured from the given package path prefix.
+func errorStackTraceContainsFramePackage(node *api.ErrorStackTrace, pkgPrefix string) bool {
+	return errorStackTraceAnyFrame(node, func(f *api.StackFrame) bool {
+		return strings.HasPrefix(f.GetPackage(), pkgPrefix)
+	})
+}
+
+// errorStackTraceContainsFrameFile reports whether any frame anywhere in the error
+// tree references the given file basename.
+func errorStackTraceContainsFrameFile(node *api.ErrorStackTrace, fileBasename string) bool {
+	return errorStackTraceAnyFrame(node, func(f *api.StackFrame) bool {
+		return strings.Contains(f.GetFile(), fileBasename)
+	})
 }

@@ -167,7 +167,7 @@ func encodeUTF16(s string) []byte {
 
 	var buf bytes.Buffer
 	for _, r := range utf16.Encode([]rune(s)) {
-		binary.Write(&buf, binary.BigEndian, r) //nolint:errcheck // TODO: check error
+		_ = binary.Write(&buf, binary.BigEndian, r)
 	}
 	return buf.Bytes()
 }

@@ -62,17 +62,7 @@ func (r *HelpComponent) Render() {
 
 	iconX := helpIconMarginLeft
 	iconY := startY + helpPaddingVertical
-	r.pdf.Image(
-		assets.HelpImageName,
-		iconX,
-		iconY,
-		assets.HelpIconSize,
-		assets.HelpIconSize,
-		false,
-		"",
-		0,
-		"",
-	)
+	r.pdf.DrawIcon(assets.HelpImageName, iconX, iconY, assets.HelpIconSize)
 
 	textX := helpIconMarginLeft + assets.HelpIconSize + helpIconMarginRight
 	textY := startY + helpPaddingVertical

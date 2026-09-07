@@ -55,17 +55,7 @@ func (r *KeysHeaderComponent) Render() {
 
 	iconX := assets.StandardHorizontalMargin + iconMarginX
 	iconY := startY + assets.StandardHorizontalMargin + iconMarginTop
-	r.pdf.Image(
-		assets.PadlockImageName,
-		iconX,
-		iconY,
-		assets.PadlockIconSize,
-		assets.PadlockIconSize,
-		false,
-		"",
-		0,
-		"",
-	)
+	r.pdf.DrawIcon(assets.PadlockImageName, iconX, iconY, assets.PadlockIconSize)
 
 	titleX := iconX + assets.PadlockIconSize
 	relativeToComponentYTitleY := startY + titleY

@@ -13,6 +13,7 @@ public class SecureStorage {
     enum Errors: Error {
         case secureStorageError
         case invalidData
+        case itemNotFound
     }
 
     enum Keys: String, CaseIterable {
@@ -65,6 +66,8 @@ extension SecureStorage.Errors: ClassifiedError {
         switch self {
         case .secureStorageError, .invalidData:
             return .unexpected
+        case .itemNotFound:
+            return .expected
         }
     }
 }

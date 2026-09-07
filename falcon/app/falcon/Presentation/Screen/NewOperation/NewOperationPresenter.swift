@@ -394,8 +394,10 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
         // TODO(newop): careful what happens when this is empty, read something about
         // returning nil when one of the outpoints is empty
-        let outpoints: [String] = state.resolved!.paymentContext!.nextTransactionSize!
+        let nextTransactionSize = state.resolved!.paymentContext!.nextTransactionSize!
+        let outpoints: [String] = nextTransactionSize
             .getOutpoints().split(separator: "\n").map { String($0) }
+        let expectedDebtInSat = Satoshis(value: nextTransactionSize.expectedDebtInSat)
 
         let operation = BuildOperationAction.toAddress(
             address,
@@ -414,7 +416,10 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
         delegate.requestFinish(operation)
 
-        subscribeTo(operationActions.newOperation(operation), onSuccess: self.operationCreated)
+        subscribeTo(
+            operationActions.newOperation(operation, expectedDebtInSat: expectedDebtInSat),
+            onSuccess: self.operationCreated
+        )
     }
 
     private func createOpSubmarineSwap(state: NewopConfirmLightningState) {
@@ -423,8 +428,10 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
 
         // TODO(newop): careful what happens when this is empty, read something about
         // returning nil when one of the outpoints is empty
-        let outpoints: [String] = state.resolved!.paymentContext!.nextTransactionSize!
+        let nextTransactionSize = state.resolved!.paymentContext!.nextTransactionSize!
+        let outpoints: [String] = nextTransactionSize
             .getOutpoints().split(separator: "\n").map { String($0) }
+        let expectedDebtInSat = Satoshis(value: nextTransactionSize.expectedDebtInSat)
 
         let operation = BuildOperationAction.swap(
             submarineSwapCreated!.swap,
@@ -445,6 +452,7 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         subscribeTo(
             operationActions.newOperation(
                 operation,
+                expectedDebtInSat: expectedDebtInSat,
                 with: params,
                 maxAlternativeTransactionCount: maxAlternativeTransactionCount
             ),
@@ -466,6 +474,10 @@ class NewOperationPresenter<Delegate: NewOperationPresenterDelegate>: BasePresen
         // Temporary UX shortcut for internal dogfood testing.
         // Will be removed once the security card feature is stable.
         featureFlagsOverridesRepository.setFlag(.nfcCardV2, isDisabled: true)
+    }
+
+    func retrySecurityCardSign() {
+        signWithSecurityCardV2AndCreateOperation()
     }
 
     override func handleError(_ e: Error) {
@@ -545,13 +557,15 @@ extension NewOperationPresenter: NewOperationTransitions {
                     .signMacValidationFailed, .muunAppletNotFound:
                 delegate.nfc2faError(
                     .nfcError(
-                        description: grpcError.errorDetail?.developerMessage ?? "Internal error"
+                        description: grpcError.errorDetail?.developerMessage ?? "Internal error",
+                        isRetryable: true
                     )
                 )
             case .noSlotsAvailable:
                 delegate.nfc2faError(
                     .nfcError(
-                        description: grpcError.errorDetail?.developerMessage ?? "Internal error"
+                        description: grpcError.errorDetail?.developerMessage ?? "Internal error",
+                        isRetryable: false
                     )
                 )
                 delegate.nfcNoSlotsAvailable()
@@ -676,8 +690,18 @@ extension NewOperationPresenter: OpAmountTransitions {
     }
 
     func changeCurrency(_ currency: Currency) {
-        lastSelectedCurrency = currency
         try! stateMachine.withState { (state: NewopEnterAmountState) in
+            // The picker only lists currencies with a usable rate, so in practice an invalid one
+            // can't reach here — this is pure defense-in-depth at the boundary into libwallet,
+            // whose conversion divides by the rate and would crash on zero/NaN (#16412). The check
+            // lives inside withState because the exchange-rate window comes from the resolved
+            // state.
+            guard currency.hasValidRate(in: state.resolved!.paymentContext!.exchangeRateWindow!)
+                else {
+                return
+            }
+
+            lastSelectedCurrency = currency
             try state.changeCurrency(currency.code)
         }
     }

@@ -1,6 +1,6 @@
 package model
 
-type ChallengeSecurityCardSignResponseJson struct { //nolint:staticcheck // TODO: type ChallengeSecurityCardSignResponseJson should be ChallengeSecurityCardSignResponseJSON
+type ChallengeSecurityCardSignResponseJSON struct {
 	ServerPublicKeyInHex string `json:"serverPublicKeyInHex"`
 	MacInHex             string `json:"macInHex"`
 	CardUsageCount       uint16 `json:"cardUsageCount"`

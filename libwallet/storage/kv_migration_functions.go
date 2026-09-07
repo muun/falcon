@@ -102,7 +102,7 @@ type TypeMigration struct {
 
 func (c TypeMigration) apply(
 	schema map[string]Classification,
-	dbOps *[]func(repo walletdb.KeyValueRepository) error, //nolint:revive // TODO: use or remove dbOps
+	_ *[]func(repo walletdb.KeyValueRepository) error,
 ) {
 	classification, ok := schema[c.Key]
 	if !ok {
@@ -257,19 +257,19 @@ func isTrivialConversion(from, to ValueType) bool {
 	toType := reflect.TypeOf(to)
 
 	// Trivial conversion to String from safe types.
-	if toType == reflect.TypeOf(&StringType{}) { //nolint:modernize // TODO: use reflect.TypeFor
+	if toType == reflect.TypeFor[*StringType]() {
 		switch fromType {
-		case reflect.TypeOf(&IntType{}), //nolint:modernize // TODO: use reflect.TypeFor
-			reflect.TypeOf(&LongType{}),   //nolint:modernize // TODO: use reflect.TypeFor
-			reflect.TypeOf(&DoubleType{}), //nolint:modernize // TODO: use reflect.TypeFor
-			reflect.TypeOf(&BoolType{}):   //nolint:modernize // TODO: use reflect.TypeFor
+		case reflect.TypeFor[*IntType](),
+			reflect.TypeFor[*LongType](),
+			reflect.TypeFor[*DoubleType](),
+			reflect.TypeFor[*BoolType]():
 			return true
 		}
 	}
 
 	// Trivial conversion from Int to Long.
-	if fromType == reflect.TypeOf(&IntType{}) && //nolint:modernize // TODO: use reflect.TypeFor
-		toType == reflect.TypeOf(&LongType{}) { //nolint:modernize // TODO: use reflect.TypeFor
+	if fromType == reflect.TypeFor[*IntType]() &&
+		toType == reflect.TypeFor[*LongType]() {
 		return true
 	}
 

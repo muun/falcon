@@ -14,7 +14,7 @@ type Pool struct {
 
 // NewPool opens a new database at path, calls setup(db) if non-nil, and returns a Pool.
 func NewPool(path string, setup func(*DB) error) (*Pool, error) {
-	db, err := Open(path)
+	db, err := open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,11 @@ func NewPool(path string, setup func(*DB) error) (*Pool, error) {
 }
 
 // WithDB runs fn under a shared read lock.
+// A nil pool returns an error instead of panicking on the receiver.
 func (p *Pool) WithDB(fn func(*DB) error) error {
+	if p == nil {
+		return errors.New("pool: not initialized")
+	}
 	p.poolMutex.RLock()
 	defer p.poolMutex.RUnlock()
 	if p.db == nil {
@@ -53,7 +57,7 @@ func (p *Pool) ReplaceDB(fn func() (string, error), setup func(*DB) error) error
 			"step", "wipe", "error", err)
 		return err
 	}
-	newDB, err := Open(path)
+	newDB, err := open(path)
 	if err != nil {
 		slog.Error("pool: replace failed, db unavailable until restart",
 			"step", "open", "error", err)
@@ -79,8 +83,11 @@ func (p *Pool) NewKeyValueRepository() KeyValueRepository {
 	}
 }
 
-// Close closes the DB and nils the pointer under the exclusive write lock.
+// Close closes the DB and nils the pointer under the exclusive write lock. A nil pool is a no-op.
 func (p *Pool) Close() {
+	if p == nil {
+		return
+	}
 	p.poolMutex.Lock()
 	defer p.poolMutex.Unlock()
 	if p.db != nil {

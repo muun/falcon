@@ -35,13 +35,14 @@ type SubmarineSwapFundingOutput interface {
 	// v2 only
 	ExpirationInBlocks() int64
 	UserPublicKey() *HDPublicKey
+	// TODO(#16998): rename to CosignerPublicKey; part of the gomobile contract with the apps.
 	MuunPublicKey() *HDPublicKey
 }
 
 func ValidateSubmarineSwap(
 	rawInvoice string,
 	userPublicKey *HDPublicKey,
-	muunPublicKey *HDPublicKey,
+	cosignerPublicKey *HDPublicKey,
 	swap SubmarineSwap,
 	originalExpirationInBlocks int64,
 	network *Network,
@@ -58,7 +59,7 @@ func ValidateSubmarineSwap(
 	return data.Validate(
 		rawInvoice,
 		&swaps.KeyDescriptor{Key: &userPublicKey.key, Path: userPublicKey.Path},
-		&swaps.KeyDescriptor{Key: &muunPublicKey.key, Path: muunPublicKey.Path},
+		&swaps.KeyDescriptor{Key: &cosignerPublicKey.key, Path: cosignerPublicKey.Path},
 		originalExpirationInBlocks,
 		network.network,
 	)
@@ -84,7 +85,7 @@ func createSwapFundingOutput(output SubmarineSwapFundingOutput) swaps.SubmarineS
 	case AddressVersionSwapsV2:
 		out.ExpirationInBlocks = output.ExpirationInBlocks()
 		out.UserPublicKey = &output.UserPublicKey().key
-		out.MuunPublicKey = &output.MuunPublicKey().key
+		out.CosignerPublicKey = &output.MuunPublicKey().key
 		out.KeyPath = output.UserPublicKey().Path
 	}
 	return out

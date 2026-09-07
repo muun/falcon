@@ -161,10 +161,7 @@ func ConvertBits(data []byte, fromBits, toBits uint8, pad bool) ([]byte, error) 
 
 			// The number of bytes to next extract is the minimum of
 			// remFromBits and remToBits.
-			toExtract := remFromBits
-			if remToBits < toExtract { //nolint:modernize // TODO: use min/max builtin
-				toExtract = remToBits
-			}
+			toExtract := min(remToBits, remFromBits)
 
 			// Add the next bits to nextByte, shifting the already
 			// added bits to the left.
@@ -214,7 +211,7 @@ func bech32Checksum(hrp string, data []byte) []byte {
 	values = append(values, []int{0, 0, 0, 0, 0, 0}...)
 	polymod := bech32Polymod(values) ^ bech32mChecksumConst
 	var res []byte
-	for i := 0; i < 6; i++ { //nolint:modernize // TODO: use range over int
+	for i := range 6 {
 		res = append(res, byte((polymod>>uint(5*(5-i)))&31))
 	}
 	return res
@@ -226,7 +223,7 @@ func bech32Polymod(values []int) int {
 	for _, v := range values {
 		b := chk >> 25
 		chk = (chk&0x1ffffff)<<5 ^ v
-		for i := 0; i < 5; i++ { //nolint:modernize // TODO: use range over int
+		for i := range 5 {
 			if (b>>uint(i))&1 == 1 {
 				chk ^= gen[i]
 			}

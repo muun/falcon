@@ -21,7 +21,7 @@ var (
 	userKey = secp256k1.PrivKeyFromBytes(hexDecode(
 		"507d881f0b5e1b12423cb0c84a196fb24227f3fe1540a1c7b20bf78d83de4533",
 	))
-	muunKey = secp256k1.PrivKeyFromBytes(hexDecode(
+	cosignerKey = secp256k1.PrivKeyFromBytes(hexDecode(
 		"b6f14c73ee5269f5a13a11f48ad54306293ee134e924f680fcd35f615881105b",
 	))
 	swapperKey = secp256k1.PrivKeyFromBytes(hexDecode(
@@ -47,7 +47,7 @@ func TestTweakedKeyGeneration(t *testing.T) {
 	musigVersion := Musig2v100
 	pubKeys := [][]byte{
 		userKey.PubKey().SerializeCompressed(),
-		muunKey.PubKey().SerializeCompressed(),
+		cosignerKey.PubKey().SerializeCompressed(),
 	}
 
 	// first combine the public keys
@@ -179,7 +179,7 @@ func MuSig2ComputeInternalKey(
 // - the WitnessScript (same as on the leaf) used to redeem the UTXO
 func TestSpendTapscript(t *testing.T) {
 	spendPathAKey := userKey
-	spendPathBKey := muunKey
+	spendPathBKey := cosignerKey
 	internalKey := swapperKey
 
 	// We're going to commit to a script and spend the output using the
@@ -269,9 +269,9 @@ func TestSpendTapscript(t *testing.T) {
 // Output descriptor of this test:
 //
 //	tr(
-//	   musig(userKey, muunKey),
+//	   musig(userKey, cosignerKey),
 //	   {
-//	      musig(userKey, muunKey),
+//	      musig(userKey, cosignerKey),
 //	      userKey,
 //	   }
 //	 )
@@ -280,7 +280,7 @@ func TestSpendTapscriptMusig(t *testing.T) {
 
 	pubKeys := [][]byte{
 		userKey.PubKey().SerializeCompressed(),
-		muunKey.PubKey().SerializeCompressed(),
+		cosignerKey.PubKey().SerializeCompressed(),
 	}
 
 	// first combine the public keys to get the internalKey P
@@ -302,9 +302,9 @@ func TestSpendTapscriptMusig(t *testing.T) {
 	testCases := []tapscriptTestCase{
 		{
 			//   tr(
-			//      musig(userKey, muunKey), <----------- redeem
+			//      musig(userKey, cosignerKey), <----------- redeem
 			//      {
-			//         musig(userKey, muunKey),
+			//         musig(userKey, cosignerKey),
 			//         userKey,
 			//      }
 			//    )
@@ -318,14 +318,14 @@ func TestSpendTapscriptMusig(t *testing.T) {
 				// in the keyspend path we must pass the script root
 				// hash to compute the final tweaked key.
 				tweak := TapScriptTweak(scriptRootHash[:])
-				return muunSignMusig(t, musigVersion, msg, tweak)
+				return cosignerSignMusig(t, musigVersion, msg, tweak)
 			},
 		},
 		{
 			//   tr(
-			//      musig(userKey, muunKey),
+			//      musig(userKey, cosignerKey),
 			//      {
-			//         musig(userKey, muunKey), <---- redeem
+			//         musig(userKey, cosignerKey), <---- redeem
 			//         userKey,
 			//      }
 			//    )
@@ -340,14 +340,14 @@ func TestSpendTapscriptMusig(t *testing.T) {
 				// script spend path no tweaks should be applied
 				// see the next test case for a non-musig example
 				tweak := NoopTweak()
-				return muunSignMusig(t, musigVersion, msg, tweak)
+				return cosignerSignMusig(t, musigVersion, msg, tweak)
 			},
 		},
 		{
 			//   tr(
-			//      musig(userKey, muunKey),
+			//      musig(userKey, cosignerKey),
 			//      {
-			//         musig(userKey, muunKey),
+			//         musig(userKey, cosignerKey),
 			//         userKey, <-------------------- redeem
 			//      }
 			//    )
@@ -371,7 +371,7 @@ func TestSpendTapscriptMusig(t *testing.T) {
 			//   tr(
 			//      RANDOM_PUB_KEY, ================> (CHANGED!)
 			//      {
-			//         musig(userKey, muunKey),
+			//         musig(userKey, cosignerKey),
 			//         userKey, <-------------------- redeem
 			//      }
 			//    )
@@ -593,13 +593,13 @@ func testTapscriptSpend(t *testing.T, tc tapscriptTestCase) {
 }
 
 // signs a message using the globally configured keys
-func muunSignMusig(
+func cosignerSignMusig(
 	t *testing.T, musigVersion MusigVersion, msg []byte, tweak *MuSig2Tweaks,
 ) []byte {
-	// generate musig sessionId
+	// generate musig sessionID
 	userSession, err := secp256k1.GeneratePrivateKey()
 	require.NoError(t, err)
-	muunSession, err := secp256k1.GeneratePrivateKey()
+	cosignerSession, err := secp256k1.GeneratePrivateKey()
 	require.NoError(t, err)
 
 	// generate musig nonces
@@ -610,21 +610,21 @@ func muunSignMusig(
 	)
 	require.NoError(t, err)
 
-	muunNonce, err := MuSig2GenerateNonce(
+	cosignerNonce, err := MuSig2GenerateNonce(
 		musigVersion,
-		muunSession.Serialize(),
-		SerializePublicKey(musigVersion, muunKey.PubKey()),
+		cosignerSession.Serialize(),
+		SerializePublicKey(musigVersion, cosignerKey.PubKey()),
 	)
 	require.NoError(t, err)
 
-	// sign muun's part
-	muunPartialSignatureBytes, err := ComputeMuunPartialSignature(
+	// sign cosigner's part
+	cosignerPartialSignatureBytes, err := ComputeCosignerPartialSignature(
 		musigVersion,
 		msg,
 		SerializePublicKey(musigVersion, userKey.PubKey()),
-		muunKey.Serialize(),
+		cosignerKey.Serialize(),
 		userNonce.PubNonce[:],
-		muunSession.Serialize(),
+		cosignerSession.Serialize(),
 		tweak,
 	)
 	require.NoError(t, err)
@@ -634,9 +634,9 @@ func muunSignMusig(
 		musigVersion,
 		msg,
 		userKey.Serialize(),
-		SerializePublicKey(musigVersion, muunKey.PubKey()),
-		muunPartialSignatureBytes,
-		muunNonce.PubNonce[:],
+		SerializePublicKey(musigVersion, cosignerKey.PubKey()),
+		cosignerPartialSignatureBytes,
+		cosignerNonce.PubNonce[:],
 		userSession.Serialize(),
 		tweak,
 	)

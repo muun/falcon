@@ -78,7 +78,7 @@ enum DIManager {
                 type: String.self,
                 tag: DependencyContainer.DataTags.secureStorageGroup
             ) {
-                Identifiers.group
+                Identifiers.keychainAccessGroup
             }
 
             // Make system objects available to data classes

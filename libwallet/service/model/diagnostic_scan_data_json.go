@@ -1,6 +1,6 @@
 package model
 
-type DiagnosticScanDataJson struct { //nolint:staticcheck // TODO: type DiagnosticScanDataJson should be DiagnosticScanDataJSON
-	ScanId string `json:"scanId"` //nolint:staticcheck // TODO: struct field ScanId should be ScanID
+type DiagnosticScanDataJSON struct {
+	ScanID string `json:"scanId"`
 	Logs   string `json:"logs"`
 }

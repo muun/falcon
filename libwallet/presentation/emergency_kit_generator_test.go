@@ -42,6 +42,17 @@ func TestGenerateEmergencyKitPDFGrpc(t *testing.T) {
 			t.Fatalf("Version should be 3")
 		}
 
+		profiling := result.GetProfiling()
+		if profiling == nil {
+			t.Fatal("expected render profiling in the response")
+		}
+		// totalInsideGo is reliably multi-ms; smaller stages can truncate to 0ms, and JPEG icons
+		// register in microseconds (embedded verbatim). Allocs stable.
+		if profiling.GetTotalHeapAllocatedBytes() == 0 ||
+			profiling.GetTotalInsideGoMs() == 0 {
+			t.Fatalf("expected non-zero profiling stats, got %+v", profiling)
+		}
+
 		if _, err := os.Stat(outputPath); os.IsNotExist(err) {
 			t.Fatalf("PDF file not created at expected path: %s", outputPath)
 		}

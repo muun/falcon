@@ -15,6 +15,9 @@ struct FormattedCardPrice {
 
 protocol CardPriceFormatter: AnyObject {
     func formattedPrice(for provider: SecurityCardProvider, showBTC: Bool) -> FormattedCardPrice?
+    /// Formats an arbitrary amount in the given currency. When `showBTC` is true it
+    /// converts using the current exchange-rate window, returning nil if it's unavailable.
+    func format(_ amount: Decimal, currencyCode: String, showBTC: Bool) -> String?
 }
 
 final class DefaultCardPriceFormatter: CardPriceFormatter {
@@ -29,38 +32,42 @@ final class DefaultCardPriceFormatter: CardPriceFormatter {
         for provider: SecurityCardProvider,
         showBTC: Bool
     ) -> FormattedCardPrice? {
-        if showBTC, let btc = btcPrice(for: provider) {
-            return btc
-        }
         let code = provider.currencyCode
-        return FormattedCardPrice(
-            price: format(provider.price, currencyCode: code),
-            shipping: format(provider.shippingCost, currencyCode: code)
-        )
+        guard
+            let price = format(Decimal(provider.price), currencyCode: code, showBTC: showBTC),
+            let shipping = format(
+                Decimal(provider.shippingCost),
+                currencyCode: code,
+                showBTC: showBTC
+            )
+        else {
+            return nil
+        }
+        return FormattedCardPrice(price: price, shipping: shipping)
     }
 
-    private func btcPrice(for provider: SecurityCardProvider) -> FormattedCardPrice? {
+    func format(_ amount: Decimal, currencyCode: String, showBTC: Bool) -> String? {
+        if showBTC {
+            guard let btc = btcAmount(amount, currencyCode: currencyCode) else { return nil }
+            return MonetaryAmount(amount: btc, currency: "BTC").toAmountPlusCode()
+        }
+        return MonetaryAmount(amount: amount, currency: currencyCode).toAmountPlusCode()
+    }
+
+    /// Converts a fiat amount to BTC using the current exchange-rate window.
+    private func btcAmount(_ amount: Decimal, currencyCode: String) -> Decimal? {
         guard let window = exchangeRateRepository.getExchangeRateWindow() else {
             return nil
         }
         let rate: Decimal
         do {
-            rate = try window.rate(for: provider.currencyCode)
+            rate = try window.rate(for: currencyCode)
         } catch {
             return nil
         }
         guard rate > 0 else {
             return nil
         }
-        let btcPrice = Decimal(provider.price) / rate
-        let btcShipping = Decimal(provider.shippingCost) / rate
-        return FormattedCardPrice(
-            price: MonetaryAmount(amount: btcPrice, currency: "BTC").toAmountPlusCode(),
-            shipping: MonetaryAmount(amount: btcShipping, currency: "BTC").toAmountPlusCode()
-        )
-    }
-
-    private func format(_ amount: Double, currencyCode: String) -> String {
-        MonetaryAmount(amount: Decimal(amount), currency: currencyCode).toAmountPlusCode()
+        return amount / rate
     }
 }

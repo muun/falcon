@@ -89,7 +89,7 @@ func TestLNURLWithdrawAllowUnsafe(t *testing.T) {
 	})
 	mux.HandleFunc(
 		"/withdraw/complete",
-		func(w http.ResponseWriter, r *http.Request) { //nolint:revive // TODO: use or remove r
+		func(w http.ResponseWriter, _ *http.Request) {
 			json.NewEncoder(w).Encode(&lnurl.Response{
 				Status: lnurl.StatusOK,
 			})

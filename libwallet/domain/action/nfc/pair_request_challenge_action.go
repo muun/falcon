@@ -25,15 +25,15 @@ func NewPairRequestChallengeAction(
 }
 
 func (ac *PairRequestChallengeAction) Run() error {
-	challengePair, err := ac.houstonService.ChallengeSecurityCardPair()
+	challengePair, err := ac.houstonService.PairRequestChallenge()
 	if err != nil {
 		return errors.Errorf("error requesting pair challenge from server: %w", err)
 	}
 
-	_, err = hex.DecodeString(challengePair.ServerPublicKeyInHex)
+	_, err = hex.DecodeString(challengePair.ServerPubKeyInHex)
 	if err != nil {
 		return errors.Errorf("server returned malformed pair challenge pub key: %w", err)
 	}
 
-	return ac.protocolRepository.SavePendingPairChallenge(challengePair.ServerPublicKeyInHex)
+	return ac.protocolRepository.SavePendingPairChallenge(challengePair.ServerPubKeyInHex)
 }

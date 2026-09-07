@@ -3,6 +3,7 @@ package libwallet
 import (
 	"bytes"
 	"encoding/hex"
+	"strings"
 
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
@@ -15,11 +16,12 @@ import (
 )
 
 type SigningExpectations struct {
-	destination string
-	amount      int64
-	change      MuunAddress
-	fee         int64
-	alternative bool
+	destination       string
+	amount            int64
+	change            MuunAddress
+	fee               int64
+	alternative       bool
+	expectedDebtInSat int64
 }
 
 func NewSigningExpectations(
@@ -28,23 +30,26 @@ func NewSigningExpectations(
 	change MuunAddress,
 	fee int64,
 	alternative bool,
+	expectedDebtInSat int64,
 ) *SigningExpectations {
 	return &SigningExpectations{
-		destination,
-		amount,
-		change,
-		fee,
-		alternative,
+		destination:       destination,
+		amount:            amount,
+		change:            change,
+		fee:               fee,
+		alternative:       alternative,
+		expectedDebtInSat: expectedDebtInSat,
 	}
 }
 
 func (e *SigningExpectations) ForAlternativeTransaction() *SigningExpectations {
 	return &SigningExpectations{
-		e.destination,
-		e.amount,
-		e.change,
-		e.fee,
-		true,
+		destination:       e.destination,
+		amount:            e.amount,
+		change:            e.change,
+		fee:               e.fee,
+		alternative:       true,
+		expectedDebtInSat: e.expectedDebtInSat,
 	}
 }
 
@@ -55,7 +60,7 @@ type MuunAddress interface {
 }
 
 type Outpoint interface {
-	TxId() []byte
+	TxId() []byte //nolint:staticcheck // should be TxID, but it's part of the gomobile contract with the apps
 	Index() int
 	Amount() int64
 }
@@ -70,6 +75,7 @@ type InputSubmarineSwapV1 interface {
 type InputSubmarineSwapV2 interface {
 	PaymentHash256() []byte
 	UserPublicKey() []byte
+	// TODO(#16998): rename to CosignerPublicKey; part of the gomobile contract with the apps.
 	MuunPublicKey() []byte
 	ServerPublicKey() []byte
 	BlocksForExpiration() int64
@@ -91,10 +97,12 @@ type Input interface {
 	OutPoint() Outpoint
 	Address() MuunAddress
 	UserSignature() []byte
+	// TODO(#16998): rename to CosignerSignature; part of the gomobile contract with the apps.
 	MuunSignature() []byte
 	SubmarineSwapV1() InputSubmarineSwapV1
 	SubmarineSwapV2() InputSubmarineSwapV2
 	IncomingSwap() InputIncomingSwap
+	// TODO(#16998): rename to CosignerPublicNonce; part of the gomobile contract with the apps.
 	MuunPublicNonce() []byte
 }
 
@@ -192,6 +200,7 @@ func (p *PartiallySignedTransaction) createPrevOuts(net *Network) ([]*wire.TxOut
 	return prevOuts, nil
 }
 
+// TODO(#16998): rename muunKey to cosignerKey; it forms the ObjC selector, so falcon changes too.
 func (p *PartiallySignedTransaction) Sign(
 	userKey *HDPrivateKey,
 	muunKey *HDPublicKey,
@@ -213,6 +222,7 @@ func (p *PartiallySignedTransaction) Sign(
 
 }
 
+// TODO(#16998): rename muunKey to cosignerKey; it forms the ObjC selector, so falcon changes too.
 func (p *PartiallySignedTransaction) FullySign(
 	userKey, muunKey *HDPrivateKey,
 ) (*Transaction, error) {
@@ -232,113 +242,166 @@ func (p *PartiallySignedTransaction) FullySign(
 	return newTransaction(p.tx)
 }
 
+// VerificationResult is the outcome of checking a partially signed transaction against the
+// expectations the user approved.
+//
+// Checks come in two groups. Enforced checks gate signing: if one fails, the crafter is trying to
+// get us to sign something the user did not approve. Incubating checks don't stop us from signing
+// yet; they only feed telemetry.
+type VerificationResult struct {
+	// Enforced.
+	destination error
+	ownership   error
+	evaluation  error
+	outputShape error
+
+	// Incubating.
+	changeAmount error
+	fee          error
+}
+
+// MustNotSign reports whether an enforced check failed. Callers must not sign when it's true.
+func (r *VerificationResult) MustNotSign() bool {
+	return r.destination != nil || r.ownership != nil || r.evaluation != nil ||
+		r.outputShape != nil
+}
+
+// IncubatingCheckFailed reports whether a check we don't enforce yet failed. Callers log these so
+// we can learn whether they're safe to enforce.
+func (r *VerificationResult) IncubatingCheckFailed() bool {
+	return r.changeAmount != nil || r.fee != nil
+}
+
+// FailedChecks names the checks that failed, comma separated. It carries no amounts, so reports can
+// be grouped and filtered by it. Empty when the transaction verified cleanly.
+func (r *VerificationResult) FailedChecks() string {
+	var names []string
+
+	for _, check := range []struct {
+		name string
+		err  error
+	}{
+		{"destination", r.destination},
+		{"ownership", r.ownership},
+		{"evaluation", r.evaluation},
+		{"outputShape", r.outputShape},
+		{"changeAmount", r.changeAmount},
+		{"fee", r.fee},
+	} {
+		if check.err != nil {
+			names = append(names, check.name)
+		}
+	}
+
+	return strings.Join(names, ",")
+}
+
+// Summary describes every check that failed. Empty when the transaction verified cleanly.
+func (r *VerificationResult) Summary() string {
+	var failures []string
+
+	for _, err := range []error{
+		r.destination,
+		r.ownership,
+		r.evaluation,
+		r.outputShape,
+		r.changeAmount,
+		r.fee,
+	} {
+		if err != nil {
+			failures = append(failures, err.Error())
+		}
+	}
+
+	return strings.Join(failures, "; ")
+}
+
+// TODO(#16998): rename muunPublickKey to cosignerPublicKey, fixing the typo; ObjC selector.
 func (p *PartiallySignedTransaction) Verify(
 	expectations *SigningExpectations,
 	userPublicKey *HDPublicKey,
 	muunPublickKey *HDPublicKey,
-) error {
+) *VerificationResult {
+
+	result := &VerificationResult{}
 
 	// TODO: We don't have enough information (yet) to check the inputs are actually ours and they
 	// exist.
 
 	network := userPublicKey.Network
 
-	// We expect TX to be frugal in their outputs: one to the destination and an optional change.
-	// If we were to receive more than that, we consider it invalid.
-	if expectations.change != nil {
-
-		// Alternative TXs with change output might not have the destination output, so we don't do
-		// a strict check but rather a sanity one. The strict check will be down the line.
-		if expectations.alternative {
-			if len(p.tx.TxOut) > 2 {
-				return errors.Errorf(
-					"expected at most destination and change outputs but found %v",
-					len(p.tx.TxOut),
-				)
-			}
-
-		} else if len(p.tx.TxOut) != 2 {
-			return errors.Errorf(
-				"expected destination and change outputs but found %v",
-				len(p.tx.TxOut),
-			)
-		}
-
-	} else if len(p.tx.TxOut) != 1 {
-		return errors.Errorf("expected destination output only but found %v", len(p.tx.TxOut))
-	}
-
-	// Build output script corresponding to the destination address.
-	toScript, err := addressToScript(expectations.destination, network)
-	if err != nil {
-		return err
-	}
-
 	expectedAmount := expectations.amount
 	expectedFee := expectations.fee
 	expectedChange := expectations.change
 
+	// Build output script corresponding to the destination address.
+	toScript, err := addressToScript(expectations.destination, network)
+	if err != nil {
+		result.evaluation = err
+		return result
+	}
+
 	// Build output script corresponding to the change address.
 	var changeScript []byte
 	if expectedChange != nil {
-		changeScript, err = addressToScript(expectations.change.Address(), network)
+		changeScript, err = addressToScript(expectedChange.Address(), network)
 		if err != nil {
-			return err
+			result.evaluation = err
+			return result
 		}
 	}
 
-	// Find destination and change outputs using the script we just built.
+	// Find destination and change outputs using the scripts we just built. Anything else pays
+	// someone who is neither the destination nor us.
 	var toOutput, changeOutput *wire.TxOut
+	var foreignOutputs int
 	for _, output := range p.tx.TxOut {
 		if bytes.Equal(output.PkScript, toScript) {
 			toOutput = output
+
 		} else if changeScript != nil && bytes.Equal(output.PkScript, changeScript) {
 			changeOutput = output
+
+		} else {
+			foreignOutputs++
 		}
 	}
 
+	if foreignOutputs > 0 {
+		result.ownership = errors.Errorf(
+			"found %v output(s) paying neither the destination nor our change", foreignOutputs)
+	}
+
+	if result.ownership == nil && expectedChange != nil {
+		result.ownership = verifyChangeAddress(
+			expectedChange,
+			userPublicKey,
+			muunPublickKey,
+			network,
+		)
+	}
+
+	result.destination = verifyDestinationOutput(expectations, toOutput, changeOutput)
+
+	// The shape doesn't depend on the amounts, so we check it even when the destination is wrong:
+	// it's what tells a wrong address apart from extra outputs smuggled in.
+	result.outputShape = verifyOutputShape(toOutput, changeOutput, len(p.tx.TxOut))
+
+	// The change and fee checks are relative to the destination amount, so they say nothing once
+	// the destination itself is wrong. MustNotSign already covers that case.
+	if result.destination != nil {
+		return result
+	}
+
+	// Alternative TXs pay the destination less than the user approved, moving the difference to
+	// fee, so re-adjust before checking amounts.
 	if expectations.alternative {
-		// Alternative TXs might not have a destination output if there's change present
-		if toOutput == nil && changeOutput == nil {
-			return errors.Errorf(
-				"expected at least one of destination and change outputs but found zero",
-			)
-		}
-
-		if toOutput != nil && toOutput.Value >= expectedAmount {
-			return errors.Errorf(
-				"destination amount is mismatched. found %v expected at most %v",
-				toOutput.Value,
-				expectedAmount,
-			)
-		}
-
-		if (toOutput == nil || changeOutput == nil) && len(p.tx.TxOut) > 1 {
-			return errors.Errorf("expected exactly one output and found %v", len(p.tx.TxOut))
-		}
-
-		// Re-adjust our expectations by moving the reduced destination amount to fee.
 		if toOutput == nil {
 			expectedFee += expectedAmount
 			expectedAmount = 0
 		} else {
 			expectedFee += expectedAmount - toOutput.Value
 			expectedAmount = toOutput.Value
-		}
-
-	} else {
-		// Fail if not destination output was found in the TX.
-		if toOutput == nil {
-			return errors.New("destination output is not present")
-		}
-
-		// Verify destination output value matches expected amount
-		if toOutput.Value != expectedAmount {
-			return errors.Errorf(
-				"destination amount is mismatched. found %v expected %v",
-				toOutput.Value,
-				expectedAmount,
-			)
 		}
 	}
 
@@ -366,58 +429,38 @@ func (p *PartiallySignedTransaction) Verify(
 		addresses.
 	*/
 
-	// Verify change output is spendable by the wallet.
+	expectedDebt := expectations.expectedDebtInSat
+
 	if expectedChange != nil {
-		if changeOutput == nil {
-			return errors.New("change is not present")
-		}
-
+		// Checking the change amount also checks the fee: the two add up to the inputs minus the
+		// destination amount, so one can't be wrong on its own.
 		expectedChangeAmount := actualTotal - expectedAmount - expectedFee
-		if changeOutput.Value != expectedChangeAmount {
-			return errors.Errorf("change amount is mismatched. found %v expected %v",
-				changeOutput.Value, expectedChangeAmount)
-		}
 
-		derivedUserKey, err := userPublicKey.DeriveTo(expectedChange.DerivationPath())
-		if err != nil {
-			return errors.Errorf("failed to derive user key to change path %v: %w",
-				expectedChange.DerivationPath(), err)
-		}
+		if changeOutput == nil {
+			if expectedChangeAmount >= expectedDebt+dustThreshold {
+				result.changeAmount = errors.Errorf(
+					"change of %v is not present, which the debt of %v does not account for",
+					expectedChangeAmount, expectedDebt)
+			}
 
-		derivedMuunKey, err := muunPublickKey.DeriveTo(expectedChange.DerivationPath())
-		if err != nil {
-			return errors.Errorf("failed to derive muun key to change path %v: %w",
-				expectedChange.DerivationPath(), err)
-		}
+		} else {
+			shortfall := expectedChangeAmount - changeOutput.Value
 
-		expectedChangeAddress, err := addresses.Create(
-			expectedChange.Version(),
-			&derivedUserKey.key,
-			&derivedMuunKey.key,
-			expectedChange.DerivationPath(),
-			network.network,
-		)
-		if err != nil {
-			return errors.Errorf("failed to build the change address with version %v: %w",
-				expectedChange.Version(), err)
-		}
-
-		if expectedChangeAddress.Address() != expectedChange.Address() {
-			return errors.Errorf("mismatched change address. found %v, expected %v",
-				expectedChange.Address(), expectedChangeAddress.Address())
-		}
-
-		actualFee := actualTotal - expectedAmount - expectedChangeAmount
-		if actualFee != expectedFee {
-			return errors.Errorf("fee mismatched. found %v, expected %v", actualFee, expectedFee)
+			if shortfall < 0 || shortfall > expectedDebt {
+				result.changeAmount = errors.Errorf(
+					"change amount is mismatched. found %v expected %v, which the debt of %v "+
+						"does not account for",
+					changeOutput.Value, expectedChangeAmount, expectedDebt)
+			}
 		}
 
 	} else {
 		actualFee := actualTotal - expectedAmount
-		if actualFee >= expectedFee+dustThreshold {
-			return errors.Errorf(
-				"change output is too big to be burned as fee. actual fee: %v, expected: %v",
-				actualFee, expectedFee,
+		if actualFee >= expectedFee+expectedDebt+dustThreshold {
+			result.fee = errors.Errorf(
+				"change output is too big to be burned as fee. actual fee: %v, expected: %v, "+
+					"debt: %v",
+				actualFee, expectedFee, expectedDebt,
 			)
 		}
 	}
@@ -431,6 +474,114 @@ func (p *PartiallySignedTransaction) Verify(
 		and would then need version checks to decide whether to send
 		them to specific clients.
 	*/
+
+	return result
+}
+
+// verifyChangeAddress checks that the change address is one the wallet can spend, which we establish
+// by re-deriving it from our own keys.
+func verifyChangeAddress(
+	expectedChange MuunAddress,
+	userPublicKey *HDPublicKey,
+	cosignerPublicKey *HDPublicKey,
+	network *Network,
+) error {
+
+	derivedUserKey, err := userPublicKey.DeriveTo(expectedChange.DerivationPath())
+	if err != nil {
+		return errors.Errorf("failed to derive user key to change path %v: %w",
+			expectedChange.DerivationPath(), err)
+	}
+
+	derivedCosignerKey, err := cosignerPublicKey.DeriveTo(expectedChange.DerivationPath())
+	if err != nil {
+		return errors.Errorf("failed to derive cosigner key to change path %v: %w",
+			expectedChange.DerivationPath(), err)
+	}
+
+	expectedChangeAddress, err := addresses.Create(
+		expectedChange.Version(),
+		&derivedUserKey.key,
+		&derivedCosignerKey.key,
+		expectedChange.DerivationPath(),
+		network.network,
+	)
+	if err != nil {
+		return errors.Errorf("failed to build the change address with version %v: %w",
+			expectedChange.Version(), err)
+	}
+
+	if expectedChangeAddress.Address() != expectedChange.Address() {
+		return errors.Errorf("mismatched change address. found %v, expected %v",
+			expectedChange.Address(), expectedChangeAddress.Address())
+	}
+
+	return nil
+}
+
+// verifyDestinationOutput checks that the destination is paid what the user approved.
+func verifyDestinationOutput(
+	expectations *SigningExpectations,
+	toOutput, changeOutput *wire.TxOut,
+) error {
+
+	if !expectations.alternative {
+		if toOutput == nil {
+			return errors.New("destination output is not present")
+		}
+
+		if toOutput.Value != expectations.amount {
+			return errors.Errorf(
+				"destination amount is mismatched. found %v expected %v",
+				toOutput.Value,
+				expectations.amount,
+			)
+		}
+
+		return nil
+	}
+
+	// Alternative TXs pay the destination less than approved, moving the difference to fee, and
+	// might not pay it at all when there's a change output to reduce instead.
+	if toOutput == nil && changeOutput == nil {
+		return errors.New("expected at least one of destination and change outputs but found zero")
+	}
+
+	if toOutput == nil {
+		return nil
+	}
+
+	// Paying the destination less than approved is the whole point of an alternative TX.
+	if toOutput.Value < expectations.amount {
+		return nil
+	}
+
+	// A destination at the dust floor can't be reduced any further, so an alternative has no choice
+	// but to pay exactly the approved amount. Paying the destination what the user approved is
+	// never theft, so allow it there.
+	if toOutput.Value == expectations.amount && expectations.amount <= dustThreshold {
+		return nil
+	}
+
+	return errors.Errorf(
+		"destination amount is mismatched. found %v expected at most %v",
+		toOutput.Value,
+		expectations.amount,
+	)
+}
+
+// verifyOutputShape checks that the TX pays nothing but the destination and our own change: at most
+// two outputs, and when there are two, one of each.
+func verifyOutputShape(toOutput, changeOutput *wire.TxOut, outputCount int) error {
+
+	if outputCount > 2 {
+		return errors.Errorf(
+			"expected at most destination and change outputs but found %v", outputCount)
+	}
+
+	if outputCount == 2 && (toOutput == nil || changeOutput == nil) {
+		return errors.New("expected two outputs to be the destination and our change")
+	}
 
 	return nil
 }
@@ -463,8 +614,8 @@ func newTransaction(tx *wire.MsgTx) (*Transaction, error) {
 type coin interface {
 	// TODO: these two methods can be collapsed into a single one once we move
 	// it to a submodule and use *hdkeychain.ExtendedKey's for the arguments.
-	SignInput(index int, tx *wire.MsgTx, userKey *HDPrivateKey, muunKey *HDPublicKey) error
-	FullySignInput(index int, tx *wire.MsgTx, userKey, muunKey *HDPrivateKey) error
+	SignInput(index int, tx *wire.MsgTx, userKey *HDPrivateKey, cosignerKey *HDPublicKey) error
+	FullySignInput(index int, tx *wire.MsgTx, userKey, cosignerKey *HDPrivateKey) error
 }
 
 func createCoin(
@@ -490,7 +641,7 @@ func createCoin(
 	if userNonces == nil {
 		return nil, errors.Errorf("userNonces cannot be nil")
 	}
-	if len(userNonces.sessionIds) <= index {
+	if len(userNonces.sessionIDs) <= index {
 		return nil, errors.Errorf("not enough nonces were provided")
 	}
 
@@ -503,56 +654,56 @@ func createCoin(
 		}, nil
 	case addresses.V2:
 		return &coinV2{
-			Network:       network.network,
-			OutPoint:      outPoint,
-			KeyPath:       keyPath,
-			MuunSignature: input.MuunSignature(),
+			Network:           network.network,
+			OutPoint:          outPoint,
+			KeyPath:           keyPath,
+			CosignerSignature: input.MuunSignature(),
 		}, nil
 	case addresses.V3:
 		return &coinV3{
-			Network:       network.network,
-			OutPoint:      outPoint,
-			KeyPath:       keyPath,
-			Amount:        amount,
-			MuunSignature: input.MuunSignature(),
+			Network:           network.network,
+			OutPoint:          outPoint,
+			KeyPath:           keyPath,
+			Amount:            amount,
+			CosignerSignature: input.MuunSignature(),
 		}, nil
 	case addresses.V4:
 		return &coinV4{
-			Network:       network.network,
-			OutPoint:      outPoint,
-			KeyPath:       keyPath,
-			Amount:        amount,
-			MuunSignature: input.MuunSignature(),
+			Network:           network.network,
+			OutPoint:          outPoint,
+			KeyPath:           keyPath,
+			Amount:            amount,
+			CosignerSignature: input.MuunSignature(),
 		}, nil
 	case addresses.V5:
 		var nonce [66]byte
 		copy(nonce[:], input.MuunPublicNonce())
-		var muunPartialSig [32]byte
-		copy(muunPartialSig[:], input.MuunSignature())
+		var cosignerPartialSig [32]byte
+		copy(cosignerPartialSig[:], input.MuunSignature())
 		return &coinV5{
-			Network:        network.network,
-			OutPoint:       outPoint,
-			KeyPath:        keyPath,
-			Amount:         amount,
-			UserSessionId:  userNonces.sessionIds[index],
-			MuunPubNonce:   nonce,
-			MuunPartialSig: muunPartialSig,
-			SigHashes:      sigHashes,
+			Network:            network.network,
+			OutPoint:           outPoint,
+			KeyPath:            keyPath,
+			Amount:             amount,
+			UserSessionID:      userNonces.sessionIDs[index],
+			CosignerPubNonce:   nonce,
+			CosignerPartialSig: cosignerPartialSig,
+			SigHashes:          sigHashes,
 		}, nil
 	case addresses.V6:
 		var nonce [66]byte
 		copy(nonce[:], input.MuunPublicNonce())
-		var muunPartialSig [32]byte
-		copy(muunPartialSig[:], input.MuunSignature())
+		var cosignerPartialSig [32]byte
+		copy(cosignerPartialSig[:], input.MuunSignature())
 		return &coinV6{
-			Network:        network.network,
-			OutPoint:       outPoint,
-			KeyPath:        keyPath,
-			Amount:         amount,
-			UserSessionId:  userNonces.sessionIds[index],
-			MuunPubNonce:   nonce,
-			MuunPartialSig: muunPartialSig,
-			SigHashes:      sigHashes,
+			Network:            network.network,
+			OutPoint:           outPoint,
+			KeyPath:            keyPath,
+			Amount:             amount,
+			UserSessionID:      userNonces.sessionIDs[index],
+			CosignerPubNonce:   nonce,
+			CosignerPartialSig: cosignerPartialSig,
+			SigHashes:          sigHashes,
 		}, nil
 	case addresses.SubmarineSwapV1:
 		swap := input.SubmarineSwapV1()
@@ -581,7 +732,7 @@ func createCoin(
 			Amount:              amount,
 			PaymentHash256:      swap.PaymentHash256(),
 			UserPublicKey:       swap.UserPublicKey(),
-			MuunPublicKey:       swap.MuunPublicKey(),
+			CosignerPublicKey:   swap.MuunPublicKey(),
 			ServerPublicKey:     swap.ServerPublicKey(),
 			BlocksForExpiration: swap.BlocksForExpiration(),
 			ServerSignature:     swap.ServerSignature(),
@@ -597,7 +748,7 @@ func createCoin(
 		}
 		return &coinIncomingSwap{
 			Network:             network.network,
-			MuunSignature:       input.MuunSignature(),
+			CosignerSignature:   input.MuunSignature(),
 			Sphinx:              swap.Sphinx(),
 			HtlcTx:              swap.HtlcTx(),
 			PaymentHash256:      swap.PaymentHash256(),

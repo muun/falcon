@@ -20,20 +20,20 @@ const (
 
 	baseMode     = 0x00 // Table 1 of RFC 9180
 	defaultPsk   = ""   // Section 5.1 of RFC 9180
-	defaultPskId = ""   //nolint:staticcheck // TODO: const defaultPskId should be defaultPskID // Section 5.1 of RFC 9180
+	defaultPskID = ""   // Section 5.1 of RFC 9180
 
 	// KEM constants (see Wahby's Internet-Draft)
-	kemId                        = 0x0016 //nolint:staticcheck // TODO: const kemId should be kemID // This is DHKEM(secp256k1, HKDF-SHA256)
+	kemID                        = 0x0016 // DHKEM(secp256k1, HKDF-SHA256)
 	privateKeyLengthInBytes      = 32     // The length in bytes of a KEM shared secret
 	encapsulatedKeyLengthInBytes = 65     // The length in bytes of an encapsulated key
 	// The length in bytes of a Diffie-Hellman shared secret.
 	diffieHellmanSharedSecretLengthInBytes = 32
 
 	// KDF constants (see Table 3 of RFC 9180)
-	kdfId = 0x0001 //nolint:staticcheck // TODO: const kdfId should be kdfID // This is HKDF-SHA256
+	kdfID = 0x0001 // HKDF-SHA256
 
 	// AEAD constants (see Table 5 of RFC 9180)
-	aeadId                         = 0x0003 //nolint:staticcheck // TODO: const aeadId should be aeadID // This is Chacha20Poly1305
+	aeadID                         = 0x0003 // Chacha20Poly1305
 	keyLengthInBytes               = 32     // The length in bytes of a key
 	nonceLengthInBytes             = 12     // The length in bytes of a nonce
 	authenticationTagLengthInBytes = 16     // The length in bytes of an authentication tag
@@ -109,27 +109,27 @@ func (encryptedMessage EncryptedMessage) SingleShotDecrypt(
 // See Section 5.1 of RFC 9180
 func keyScheduleBase(sharedSecret, info []byte) (key, baseNonce []byte, err error) {
 
-	suiteId := slices.Concat( //nolint:staticcheck // TODO: var suiteId should be suiteID
+	suiteID := slices.Concat(
 		[]byte("HPKE"),
-		i2Osp(kemId, 2),
-		i2Osp(kdfId, 2),
-		i2Osp(aeadId, 2),
+		i2Osp(kemID, 2),
+		i2Osp(kdfID, 2),
+		i2Osp(aeadID, 2),
 	)
 
-	pskIdHash := labeledExtract( //nolint:staticcheck // TODO: var pskIdHash should be pskIDHash
+	pskIDHash := labeledExtract(
 		[]byte(""),
 		[]byte("psk_id_hash"),
-		[]byte(defaultPskId),
-		suiteId,
+		[]byte(defaultPskID),
+		suiteID,
 	)
 
-	infoHash := labeledExtract([]byte(""), []byte("info_hash"), info, suiteId)
+	infoHash := labeledExtract([]byte(""), []byte("info_hash"), info, suiteID)
 
-	keyScheduleContext := slices.Concat(i2Osp(baseMode, 1), pskIdHash, infoHash)
+	keyScheduleContext := slices.Concat(i2Osp(baseMode, 1), pskIDHash, infoHash)
 
-	secret := labeledExtract(sharedSecret, []byte("secret"), []byte(defaultPsk), suiteId)
+	secret := labeledExtract(sharedSecret, []byte("secret"), []byte(defaultPsk), suiteID)
 
-	key, err = labeledExpand(secret, []byte("key"), keyScheduleContext, keyLengthInBytes, suiteId)
+	key, err = labeledExpand(secret, []byte("key"), keyScheduleContext, keyLengthInBytes, suiteID)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -139,7 +139,7 @@ func keyScheduleBase(sharedSecret, info []byte) (key, baseNonce []byte, err erro
 		[]byte("base_nonce"),
 		keyScheduleContext,
 		nonceLengthInBytes,
-		suiteId,
+		suiteID,
 	)
 	if err != nil {
 		return nil, nil, err

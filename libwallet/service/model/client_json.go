@@ -1,6 +1,6 @@
 package model
 
-type ClientJson struct { //nolint:staticcheck // TODO: type ClientJson should be ClientJSON
+type ClientJSON struct {
 	Type        string `json:"type"`
 	BuildType   string `json:"buildType"`
 	Version     int    `json:"version"`

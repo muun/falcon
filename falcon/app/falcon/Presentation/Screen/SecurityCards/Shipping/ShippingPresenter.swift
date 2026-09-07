@@ -18,14 +18,17 @@ struct ShippingViewModel {
 protocol ShippingPresenterDelegate: BasePresenterDelegate {
     func update(viewModel: ShippingViewModel)
     func displayFormErrors(_ errors: [ShippingFormField: String])
+    func didValidateForm(provider: SecurityCardProvider, values: ShippingFormValues)
 }
 
 final class ShippingPresenter<Delegate: ShippingPresenterDelegate>: BasePresenter<Delegate> {
 
     private let provider: SecurityCardProvider
     private let getSecurityCardCountryAction: GetSecurityCardCountryAction = resolve()
+    private let setSecurityCardCountryAction: SetSecurityCardCountryAction = resolve()
 
     var providerURL: URL? { provider.siteUrl }
+    var selectedCountryCode: String { getSecurityCardCountryAction.run().code }
 
     init(delegate: Delegate, provider: SecurityCardProvider) {
         self.provider = provider
@@ -34,21 +37,25 @@ final class ShippingPresenter<Delegate: ShippingPresenterDelegate>: BasePresente
 
     override func setUp() {
         super.setUp()
-        subscribeTo(getSecurityCardCountryAction.run(), onSuccess: { [weak self] country in
-            guard let self else { return }
-            self.delegate.update(viewModel: self.buildViewModel(country: country))
-        })
+        delegate.update(viewModel: buildViewModel(country: getSecurityCardCountryAction.run()))
     }
 
-    /// Validates the submitted form. On success the checkout flow continues (next PR);
-    /// otherwise per-field errors are pushed back to the view.
+    /// Updates the shipping country from the picker, recording it as the shared
+    /// selection so upstream screens (e.g. the marketplace) stay in sync.
+    func update(country: Country) {
+        setSecurityCardCountryAction.run(country)
+        delegate.update(viewModel: buildViewModel(country: country))
+    }
+
+    /// Validates the submitted form. On success the view advances to the order
+    /// summary; otherwise per-field errors are pushed back to the view.
     func submit(_ values: ShippingFormValues) {
         let errors = validationErrors(for: values)
         guard errors.isEmpty else {
             delegate.displayFormErrors(errors)
             return
         }
-        // TODO: navigate to OrderSummaryViewController (next PR)
+        delegate.didValidateForm(provider: provider, values: values)
     }
 
     private func validationErrors(for values: ShippingFormValues) -> [ShippingFormField: String] {

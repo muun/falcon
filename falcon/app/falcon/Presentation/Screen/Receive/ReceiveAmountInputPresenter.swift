@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Libwallet
 
 protocol ReceiveAmountInputPresenterDelegate: BasePresenterDelegate {
 
@@ -63,12 +64,8 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
     }
 
     private func rate(for currency: String) -> Decimal {
-        do {
-            let window = getExchangeRateWindow()
-            return try window.rate(for: currency)
-        } catch {
-            Logger.fatal(error: error)
-        }
+        // An unusable or missing rate degrades to 0 (yielding a 0 amount) instead of crashing.
+        return getExchangeRateWindow().displayRate(for: currency) ?? 0
     }
     // TODO: Tech debt. This is dangerous domain logic and must be thoroughly tested
     func validityCheck(
@@ -110,6 +107,11 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
         if currency.code == "BTC" {
             let primaryCurrency = getUserPrimaryCurrency()
             if primaryCurrency != "BTC" {
+                // Hide the secondary line when the primary currency has no usable rate, instead of
+                // showing a misleading "0.00 <primary>".
+                guard getExchangeRateWindow().displayRate(for: primaryCurrency) != nil else {
+                    return nil
+                }
                 let completedCurrency = GetCurrencyForCode()
                     .runAssumingCrashPosibility(code: primaryCurrency)
                 let convertedMonetaryAmount = convert(
@@ -133,6 +135,26 @@ class ReceiveAmountInputPresenter<Delegate: ReceiveAmountInputPresenterDelegate>
             monetaryAmount: convertedAmount,
             currency: currentCurrency
         )
+    }
+
+}
+
+enum ReceiveInitialCurrency {
+
+    /// Picks the currency the amount input should start on. Falls back to `defaultCurrency` when
+    /// the preferred one has no usable rate, so `validityCheck` is never entered on a currency we
+    /// can't convert — which divides by a zero rate and surfaces a misleading `.tooBig`. The picker
+    /// already filters unusable currencies, so this closes the only remaining entry point: a broken
+    /// currency restored from a previous amount (e.g. the user's primary while its rate is down).
+    static func resolve(
+        preferred: Currency?,
+        default defaultCurrency: Currency,
+        window: NewopExchangeRateWindow
+    ) -> Currency {
+        guard let preferred, preferred.hasValidRate(in: window) else {
+            return defaultCurrency
+        }
+        return preferred
     }
 
 }

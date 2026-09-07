@@ -19,6 +19,7 @@ struct PartiallySignedTransaction {
         let fee: Satoshis
         let change: MuunAddress?
         let alternative: Bool
+        let expectedDebtInSat: Satoshis
 
         func toAlternative() -> Expectations {
             return Expectations(
@@ -26,7 +27,8 @@ struct PartiallySignedTransaction {
                 amount: amount,
                 fee: fee,
                 change: change,
-                alternative: true
+                alternative: true,
+                expectedDebtInSat: expectedDebtInSat
             )
         }
     }
@@ -58,22 +60,40 @@ struct PartiallySignedTransaction {
             )
         })
 
-        let expectations = LibwalletNewSigningExpectations(
+        let libwalletExpectations = LibwalletNewSigningExpectations(
             expectations.destination,
             expectations.amount.value,
             expectations.change,
             expectations.fee.value,
-            expectations.alternative
+            expectations.alternative,
+            expectations.expectedDebtInSat.value
         )
 
-        do {
-            try partial.verify(
-                expectations,
-                userPublicKey: key.walletPublicKey().key,
-                muunPublickKey: muunKey.key
+        let result = partial.verify(
+            libwalletExpectations,
+            userPublicKey: key.walletPublicKey().key,
+            muunPublickKey: muunKey.key
+        )
+
+        guard let verification = result else {
+            throw MuunError(Errors.verificationFailed(failedChecks: "noResult"))
+        }
+
+        if verification.mustNotSign() {
+            Logger.log(.err, "PST verification failed: \(verification.summary())")
+            throw MuunError(Errors.verificationFailed(failedChecks: verification.failedChecks()))
+        }
+
+        if verification.incubatingCheckFailed() {
+            Logger.log(
+                .err,
+                "PST incubating checks failed: \(verification.summary()) "
+                + "(expectedDebtInSat: \(expectations.expectedDebtInSat.value), "
+                + "alternative: \(expectations.alternative))"
             )
-        } catch {
-            Logger.log(error: error)
+            Logger.log(error: MuunError(
+                Errors.incubatingCheckFailed(failedChecks: verification.failedChecks())
+            ))
         }
 
         let signedTransaction = try partial.sign(key.key, muunKey: muunKey.key)
@@ -86,13 +106,15 @@ struct PartiallySignedTransaction {
 
     enum Errors: Error {
         case noMuunSignature
+        case verificationFailed(failedChecks: String)
+        case incubatingCheckFailed(failedChecks: String)
     }
 }
 
 extension PartiallySignedTransaction.Errors: ClassifiedError {
     var classification: ErrorClassification {
         switch self {
-        case .noMuunSignature:
+        case .noMuunSignature, .verificationFailed, .incubatingCheckFailed:
             return .unexpected
         }
     }

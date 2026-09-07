@@ -47,11 +47,9 @@ extension BitcoinAmount {
     ) -> BitcoinAmount {
 
         func rate(for currency: String) -> Decimal {
-            do {
-                return try window.rate(for: currency)
-            } catch {
-                Logger.fatal(error: error)
-            }
+            // An unusable or missing rate degrades to 0: Satoshis.from then yields a 0 amount
+            // (and reports the degradation) instead of crashing.
+            return window.displayRate(for: currency) ?? 0
         }
 
         return from(inputCurrency: inInputCurrency, rate: rate, primaryCurrency: primaryCurrency)
@@ -90,12 +88,12 @@ extension BitcoinAmount {
     ) -> BitcoinAmount {
 
         func valuation(for currency: String) -> MonetaryAmount {
-            do {
-                let rate = try window.rate(for: currency)
-                return satoshis.valuation(at: rate, currency: currency)
-            } catch {
-                Logger.fatal(error: error)
+            // An unusable or missing rate degrades to a 0 amount in that currency instead of
+            // crashing the conversion.
+            guard let rate = window.displayRate(for: currency) else {
+                return MonetaryAmount(amount: 0, currency: currency)
             }
+            return satoshis.valuation(at: rate, currency: currency)
         }
 
         return BitcoinAmount(
@@ -160,6 +158,10 @@ extension Satoshis {
     }
 
     public static func bounded(amount: Decimal, at rate: Decimal) throws -> Satoshis {
+        guard rate.isUsableExchangeRate else {
+            throw MuunError(Errors.invalidRate)
+        }
+
         let decimalValue = (amount / rate).multiplyByPowerOf10(power: Satoshis.magnitude)
 
         // We multiply by 1000 to account for millisat convertions
@@ -177,6 +179,21 @@ extension Satoshis {
 
     @available(*, deprecated, message: "Use bounded(amount:at:) to prevent silent overflows")
     public static func from(amount: Decimal, at rate: Decimal) -> Satoshis {
+        // Dividing by a zero/NaN rate yields NaN, which crashes multiplyByPowerOf10.
+        // Degrade to 0 instead of crashing, mirroring Apollo's behavior with invalid rates.
+        guard rate.isUsableExchangeRate else {
+            // Report the degradation so we notice an upstream feeding invalid rates. A plain
+            // NSError groups by callsite (not by message), so the offending rate can live in the
+            // description without fragmenting the Crashlytics issue.
+            Logger.log(error: NSError(
+                domain: "satoshis_from_invalid_rate",
+                code: 0,
+                userInfo: [NSLocalizedDescriptionKey:
+                    "Satoshis.from called with invalid rate: \(rate)"]
+            ))
+            return Satoshis.zero
+        }
+
         let decimalValue = (amount / rate).multiplyByPowerOf10(power: Satoshis.magnitude)
 
         // We HAVE to round before converting, otherwise some strange things happen
@@ -228,6 +245,7 @@ extension Satoshis {
 
     enum Errors: Error {
         case amountNotRepresentable
+        case invalidRate
     }
 
 }
@@ -282,7 +300,7 @@ public struct FeeRate: Codable, Equatable {
 extension Satoshis.Errors: ClassifiedError {
     var classification: ErrorClassification {
         switch self {
-        case .amountNotRepresentable:
+        case .amountNotRepresentable, .invalidRate:
             return .unexpected
         }
     }

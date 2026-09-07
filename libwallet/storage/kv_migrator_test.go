@@ -265,10 +265,13 @@ func TestEarlyExitMigration(t *testing.T) {
 
 	// Verify the raw value was not changed
 	var val *string
-	_ = pool.WithDB(func(db *walletdb.DB) error {
-		val, _ = db.NewKeyValueRepository().Get("nightMode")
-		return nil
-	})
+	if err := pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		val, err = db.NewKeyValueRepository().Get("nightMode")
+		return err
+	}); err != nil {
+		t.Fatalf("Get failed: %v", err)
+	}
 	if *val != "0" {
 		t.Fatalf("Value was changed despite early exit: got %s", *val)
 	}
@@ -319,10 +322,13 @@ func TestMigrationRollback(t *testing.T) {
 	}
 
 	var version int
-	_ = pool.WithDB(func(db *walletdb.DB) error {
-		version, _ = db.NewKVSchemaStateRepository().GetCurrentSchemaVersion()
-		return nil
-	})
+	if err := pool.WithDB(func(db *walletdb.DB) error {
+		var err error
+		version, err = db.NewKVSchemaStateRepository().GetCurrentSchemaVersion()
+		return err
+	}); err != nil {
+		t.Fatalf("GetCurrentSchemaVersion failed: %v", err)
+	}
 	if version != 1 {
 		t.Fatalf("Expected schema version 1, got %d", version)
 	}

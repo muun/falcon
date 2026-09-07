@@ -21,8 +21,11 @@ enum NewOpError: ErrorViewModel, Error {
     case amountBelowDust
     case unexpected(error: Error?)
 
-    // Nfc
-    case nfcError(description: String)
+    // Nfc TODO: NFC error handling will move out of NewOpError. Errors
+    // coming from the security card flow don't really belong here; they
+    // should be modeled and presented by that flow, separately from
+    // new operation errors.
+    case nfcError(description: String, isRetryable: Bool)
 
     func title() -> String {
         switch self {
@@ -96,7 +99,7 @@ enum NewOpError: ErrorViewModel, Error {
         case .cyclicalSwap:
             return L10n.NewOpError.s21
                 .attributedForDescription(alignment: .center)
-        case .nfcError(description: let description):
+        case .nfcError(let description, _):
             return description.attributedForDescription(alignment: .center)
         }
     }
@@ -173,6 +176,15 @@ enum NewOpError: ErrorViewModel, Error {
 
     func secondaryButtonText() -> String {
         return L10n.ErrorView.goToHome
+    }
+
+    func kind() -> ErrorViewKind {
+        switch self {
+        case .nfcError(_, let isRetryable):
+            return isRetryable ? .retryable : .final
+        default:
+            return .final
+        }
     }
 }
 // swiftlint:enable cyclomatic_complexity

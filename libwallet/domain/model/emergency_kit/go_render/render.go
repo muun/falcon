@@ -1,7 +1,8 @@
 package go_render
 
 import (
-	"fmt"
+	"runtime"
+	"time"
 
 	"github.com/go-errors/errors"
 
@@ -20,6 +21,44 @@ type GeneratedEKPDF struct {
 	Path             string
 	VerificationCode string
 	Version          int
+	Profiling        *RenderProfiling // per-stage timings and allocation stats for this render
+}
+
+// RenderProfiling captures per-stage durations and allocation totals for a single Render call.
+// Alloc stats are a process-wide delta from runtime.MemStats, so they are an approximation: other
+// goroutines allocating concurrently during the render pollute the number.
+type RenderProfiling struct {
+	LoadTranslationsMs      int64
+	RegisterFontsMs         int64
+	RegisterImagesMs        int64
+	ComponentsRenderingMs   int64
+	CreateAndSaveOnDiskMs   int64
+	TotalHeapAllocatedBytes int64
+	TotalObjectsAllocated   int64
+	EmbedMetadataMs         int64
+	// KitSizeBytes is the size of the final artifact after metadata embedding.
+	KitSizeBytes int64
+	DrawIconsMs  int64
+}
+
+func NewRenderProfiling(
+	loadTranslationsMs int64,
+	registerFontsMs int64,
+	registerImagesMs int64,
+	componentsRenderingMs int64,
+	createAndSaveOnDiskMs int64,
+	totalHeapAllocatedBytes int64,
+	totalObjectsAllocated int64,
+) *RenderProfiling {
+	return &RenderProfiling{
+		LoadTranslationsMs:      loadTranslationsMs,
+		RegisterFontsMs:         registerFontsMs,
+		RegisterImagesMs:        registerImagesMs,
+		ComponentsRenderingMs:   componentsRenderingMs,
+		CreateAndSaveOnDiskMs:   createAndSaveOnDiskMs,
+		TotalHeapAllocatedBytes: totalHeapAllocatedBytes,
+		TotalObjectsAllocated:   totalObjectsAllocated,
+	}
 }
 
 func NewGeneratedEKPDF(path, verificationCode string, version int) *GeneratedEKPDF {
@@ -35,20 +74,23 @@ func Render(
 	expectedFilePath string,
 	lang string,
 ) (*GeneratedEKPDF, error) {
+	var memBefore runtime.MemStats
+	runtime.ReadMemStats(&memBefore)
+
 	verificationCode := emergencykit.GenerateDeterministicCode(ekInput)
 
+	startLocalizables := time.Now()
 	translations, err := loadTranslations(lang)
 	if err != nil {
 		return nil, errors.Errorf("failed to load translations: %w", err)
 	}
-
-	fmt.Println("Creating PDF with custom page size...")
+	loadTranslationsMs := time.Since(startLocalizables).Milliseconds()
 
 	ctx := emergency_kit.RenderingContext{
 		NonDrawableHorizontalMargins: assets.StandardHorizontalMargin,
 		Images: []emergency_kit.ImageAsset{
-			{Name: assets.PadlockImageName, Format: "png", Data: assets.PadlockPNG},
-			{Name: assets.HelpImageName, Format: "png", Data: assets.HelpPNG},
+			{Name: assets.PadlockImageName, Format: "jpg", Data: assets.PadlockJPEG},
+			{Name: assets.HelpImageName, Format: "jpg", Data: assets.HelpJPEG},
 		},
 		TextStyling: emergency_kit.TextStyling{
 			SetBodyFont:  assets.SetBodyParagraphFont,
@@ -58,7 +100,10 @@ func Render(
 		},
 	}
 	pdfExt := emergency_kit.CreateAndSetupPdf(ctx)
+	registerFontsMs := pdfExt.RegisterFontsMs
+	registerImagesMs := pdfExt.RegisterImagesMs
 
+	startDraw := time.Now()
 	pdfExt.AddPage()
 	pdfExt.SetXY(0, 0)
 
@@ -92,14 +137,32 @@ func Render(
 	descriptors := emergencykit.GetDescriptors(descriptorsData)
 
 	advanced.NewAdvancedComponent(pdfExt, descriptors, translations).Render()
+	componentsRenderingMs := time.Since(startDraw).Milliseconds()
 
 	// Save PDF to file
+	startOutput := time.Now()
 	err = pdfExt.OutputFileAndClose(expectedFilePath)
 	if err != nil {
 		return nil, errors.Errorf("failed to save PDF: %w", err)
 	}
+	createAndSaveOnDiskMs := time.Since(startOutput).Milliseconds()
 
-	return NewGeneratedEKPDF(expectedFilePath, verificationCode, ekInput.Version), nil
+	var memAfter runtime.MemStats
+	runtime.ReadMemStats(&memAfter)
+
+	result := NewGeneratedEKPDF(expectedFilePath, verificationCode, ekInput.Version)
+	result.Profiling = NewRenderProfiling(
+		loadTranslationsMs,
+		registerFontsMs,
+		registerImagesMs,
+		componentsRenderingMs,
+		createAndSaveOnDiskMs,
+		// TotalAlloc/Mallocs only grow, so the delta is never negative.
+		int64(memAfter.TotalAlloc-memBefore.TotalAlloc),
+		int64(memAfter.Mallocs-memBefore.Mallocs),
+	)
+	result.Profiling.DrawIconsMs = pdfExt.DrawIconsDuration.Milliseconds()
+	return result, nil
 }
 
 func loadTranslations(lang string) (*assets.Translations, error) {

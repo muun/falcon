@@ -13,23 +13,23 @@ final class BuyDetailsRowView: UIView {
         static let rowHeight = MuunTheme.Legacy.s44
     }
 
-    init(leadingView: UIView, valueLabel: UILabel) {
+    init(leadingView: UIView, trailingView: UIView) {
         super.init(frame: .zero)
 
         leadingView.translatesAutoresizingMaskIntoConstraints = false
-        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+        trailingView.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(leadingView)
-        addSubview(valueLabel)
+        addSubview(trailingView)
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: Constants.rowHeight),
             leadingView.leadingAnchor.constraint(equalTo: leadingAnchor),
             leadingView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            valueLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            valueLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            trailingView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            trailingView.centerYAnchor.constraint(equalTo: centerYAnchor),
             leadingView.trailingAnchor.constraint(
-                lessThanOrEqualTo: valueLabel.leadingAnchor, constant: -MuunTheme.Spacing.xs
+                lessThanOrEqualTo: trailingView.leadingAnchor, constant: -MuunTheme.Spacing.xs
             )
         ])
     }

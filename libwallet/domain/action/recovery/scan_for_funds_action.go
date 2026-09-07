@@ -54,12 +54,12 @@ func generateAddresses(keyProvider keys.KeyProvider) (chan libwallet.MuunAddress
 		return nil, err
 	}
 
-	muunKey, err := keyProvider.MuunPublicKey()
+	cosignerKey, err := keyProvider.CosignerPublicKey()
 	if err != nil {
 		return nil, err
 	}
 
-	addrGen := scanner.NewAddressGenerator(userPubKey, muunKey, false)
+	addrGen := scanner.NewAddressGenerator(userPubKey, cosignerKey, false)
 
 	maxIndex := keyProvider.MaxDerivedIndex()
 	if maxIndex == 0 {

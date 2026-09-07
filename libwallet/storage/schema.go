@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"encoding/json"
 	"strconv"
 
 	"github.com/go-errors/errors"
@@ -23,18 +24,24 @@ const (
 	Encrypted
 )
 
+// The following key constants are a convention, not a requirement. The KV schema is
+// defined by the ordered migration plan in kv_migrations.go, and new keys must be
+// added there via a Define(...) change — that is the source of truth. Adding a
+// constant below is only useful when libwallet Go code itself references the key
+// string; Kotlin/Swift callers pass raw strings over gRPC and never see these.
 const (
 	KeyIsBalanceHidden            string = "isBalanceHidden"
 	KeyNightMode                  string = "nightMode"
 	KeySecurityCardXpubSerialized string = "securityCardXpubSerialized"
+	KeySecurityCardPairedVersion  string = "securityCardPairedVersion"
 	KeyBiometricsOptIn            string = "biometricsOptIn"
 	KeyPinLength                  string = "pinLength"
 	// TODO: These three are marked as prototypes to avoid accidentally setting the non-prototype
 	// fields in a consumer device before finalizing the design. Before production, the "Prototype"
 	// suffix must be removed
-	UnverifiedEncryptedMuunKey string = "unverifiedEncryptedMuungKeyPrototype"
-	VerifiedEncryptedMuunKey   string = "verifiedEncryptedMuunKeyPrototype"
-	EncryptedUserKey           string = "encryptedUserKeyPrototype"
+	UnverifiedEncryptedCosignerKey string = "unverifiedEncryptedMuungKeyPrototype"
+	VerifiedEncryptedCosignerKey   string = "verifiedEncryptedMuunKeyPrototype"
+	EncryptedUserKey               string = "encryptedUserKeyPrototype"
 
 	// ==== Feature flag overrides ====
 	FeatureFlagOverridesNfcCardV2Key  = "featureFlagOverrides:nfcCardV2"
@@ -48,6 +55,7 @@ const (
 	// ==== Temporary keys for mock houston. Will remove soon ====
 	KeyLastRandomPrivKeyInHex           string = "lastRandomPrivKeyInHex"
 	KeySecurityCardUsageCount           string = "securityCardUsageCount"
+	KeySecurityCardReplayCounter        string = "securityCardReplayCounter"
 	KeySecretCardBytesInHex             string = "secretCardBytesInHex"
 	KeySecurityCardPairingSlot          string = "securityCardPairingSlot"
 	KeyTimeSinceLastChallengeUnixMillis string = "timeSinceLastChallengeUnixMillis"
@@ -67,6 +75,7 @@ type LongType struct{}
 type DoubleType struct{}
 type StringType struct{}
 type BoolType struct{}
+type JSONType struct{}
 
 func (IntType) FromString(value string) (any, error) {
 	n, err := strconv.ParseInt(value, 10, 32)
@@ -142,6 +151,21 @@ func (BoolType) ToString(value any) (string, error) {
 		return strconv.FormatBool(bo), nil
 	}
 	return "", errors.Errorf("BoolType: invalid type, expected bool")
+}
+
+func (JSONType) FromString(value string) (any, error) {
+	return value, nil
+}
+
+func (JSONType) ToString(value any) (string, error) {
+	str, ok := value.(string)
+	if !ok {
+		return "", errors.Errorf("JSONType: invalid type, expected string")
+	}
+	if !json.Valid([]byte(str)) {
+		return "", errors.Errorf("JSONType: invalid JSON document")
+	}
+	return str, nil
 }
 
 // Classification that should contain each stored value

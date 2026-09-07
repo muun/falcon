@@ -1497,7 +1497,7 @@ extension Array: APIConvertible where Element: APIConvertible {
     }
 }
 
-extension Rpc_GetSecurityCardsMarketplaceResponse: ModelConvertible {
+extension Rpc_SCMDeprecated.GetSecurityCardsMarketplaceResponse: ModelConvertible {
 
     // The proto now exposes per-card prices, per-country shipping, themed
     // colors and specs. The current UI still consumes the legacy flat shape,
@@ -1508,6 +1508,12 @@ extension Rpc_GetSecurityCardsMarketplaceResponse: ModelConvertible {
         return providers.map { provider in
             let firstCard = provider.securityCards.first
             let firstShipping = provider.estimatedShippingPrices.first
+            // Known limitations, acceptable while this data is mocked:
+            // - amounts are parsed String -> Double, so later `Decimal(price)` carries binary
+            //   float imprecision. The fix is to keep them Decimal from here (the JSON is a
+            //   String).
+            // - currencyCode is "" when a provider has no cards; the price formatter then
+            //   defaults to fiat instead of surfacing the missing currency.
             let price = firstCard.flatMap { Double($0.cardCost.amount) } ?? 0
             let shippingCost = firstShipping.flatMap { Double($0.price.amount) } ?? 0
             let currencyCode = firstCard?.cardCost.currencyCode ?? ""

@@ -11,7 +11,7 @@ import (
 )
 
 type DiagnosticSessionData struct {
-	Id             string //nolint:staticcheck // TODO: struct field Id should be ID
+	ID             string
 	LogBuffer      *bytes.Buffer
 	Logger         *slog.Logger
 	LastScanReport *scanner.Report
@@ -21,11 +21,11 @@ type DiagnosticSessionData struct {
 var diagnosticData = make(map[string]*DiagnosticSessionData)
 
 func AddDiagnosticSession(data *DiagnosticSessionData) error {
-	if _, ok := diagnosticData[data.Id]; ok {
-		return errors.Errorf("id %s already exists", data.Id)
+	if _, ok := diagnosticData[data.ID]; ok {
+		return errors.Errorf("id %s already exists", data.ID)
 	}
 
-	diagnosticData[data.Id] = data
+	diagnosticData[data.ID] = data
 	return nil
 }
 

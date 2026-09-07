@@ -234,7 +234,7 @@ class NotificationService: UNNotificationServiceExtension {
             kSecAttrAccount as String: tag,
             kSecReturnData as String: kCFBooleanTrue,
             kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecAttrAccessGroup as String: Identifiers.group,
+            kSecAttrAccessGroup as String: Identifiers.keychainAccessGroup,
             kSecAttrService as String: Identifiers.bundleId
         ]
 

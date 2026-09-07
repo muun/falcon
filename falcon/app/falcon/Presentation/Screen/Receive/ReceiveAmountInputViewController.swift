@@ -93,11 +93,23 @@ class ReceiveAmountInputViewController: MUViewController {
         amountInput = AmountInputView(delegate: self, converter: presenter.convert)
         amountInput.translatesAutoresizingMaskIntoConstraints = false
 
-        if let amount = initialAmount {
-            amountInput.currency = amount.currency
-            if amount.monetaryAmount.amount != 0 {
-                amountInput.value = amount.toAmountWithoutCode(btcCurrencyFormat: .short)
-            }
+        // Never start on a currency without a usable rate: validityCheck would divide by a zero
+        // rate and surface a misleading "amount too big". `amountInput.currency` defaults to the
+        // BTC unit, whose rate is structurally 1, so the fallback is always valid.
+        let startingCurrency = ReceiveInitialCurrency.resolve(
+            preferred: initialAmount?.currency,
+            default: amountInput.currency,
+            window: presenter.getExchangeRateWindow().toLibwallet()
+        )
+        amountInput.currency = startingCurrency
+
+        // Only prefill the value when we kept the requested currency. If its rate was unusable we
+        // fell back to BTC, and the amount (expressed in that currency) can't be shown, so we
+        // start with an empty field instead.
+        if let amount = initialAmount,
+           startingCurrency.code == amount.currency.code,
+           amount.monetaryAmount.amount != 0 {
+            amountInput.value = amount.toAmountWithoutCode(btcCurrencyFormat: .short)
         }
 
         validate(amount: amountInput.value, currency: amountInput.currency)
@@ -160,10 +172,10 @@ class ReceiveAmountInputViewController: MUViewController {
         if state == .tooBig {
             amountInput.subtitle = ""
         } else {
+            // A nil secondary amount (no conversion needed, or the target currency has no usable
+            // rate) clears the line rather than leaving a stale "0.00 <ccy>".
             let secondaryAmount = presenter.getSecondaryAmount(amount: amount, currency: currency)
-            secondaryAmount.map {
-                amountInput.subtitle = $0.toAmountPlusCode()
-            }
+            amountInput.subtitle = secondaryAmount?.toAmountPlusCode() ?? ""
         }
     }
 

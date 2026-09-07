@@ -159,6 +159,55 @@ func TestGetAndSave(t *testing.T) {
 
 	})
 
+	t.Run("success saving and getting a JSON value", func(t *testing.T) {
+		// Setup
+		keyValueStorage := newKeyValueStorageForTesting(t)
+
+		in := `{"name":"satoshi","number":21}`
+		err := keyValueStorage.Save("jsonDocument", in)
+		if err != nil {
+			t.Fatalf("Error saving value into db: %v", err)
+		}
+
+		got, err := keyValueStorage.Get("jsonDocument")
+		if err != nil {
+			t.Fatalf("Error getting value from db: %v", err)
+		}
+		if got != in {
+			t.Fatalf("Get() = %q, want %q", got, in)
+		}
+	})
+
+	t.Run("returns error when JSON value is not a string", func(t *testing.T) {
+		// Setup
+		keyValueStorage := newKeyValueStorageForTesting(t)
+
+		err := keyValueStorage.Save("jsonDocument", 3.14)
+
+		if err == nil {
+			t.Fatal("Parsing should fail")
+		}
+		wantErr := "JSONType: invalid type, expected string"
+		if !strings.Contains(err.Error(), wantErr) {
+			t.Fatalf("Save() error = %v, wantErr = %v", err, wantErr)
+		}
+	})
+
+	t.Run("returns error when JSON value is not a valid JSON document", func(t *testing.T) {
+		// Setup
+		keyValueStorage := newKeyValueStorageForTesting(t)
+
+		err := keyValueStorage.Save("jsonDocument", `{"name":`)
+
+		if err == nil {
+			t.Fatal("Parsing should fail")
+		}
+		wantErr := "JSONType: invalid JSON document"
+		if !strings.Contains(err.Error(), wantErr) {
+			t.Fatalf("Save() error = %v, wantErr = %v", err, wantErr)
+		}
+	})
+
 	t.Run("success when value with type Int can be parsed", func(t *testing.T) {
 		// Setup
 		keyValueStorage := newKeyValueStorageForTesting(t)
@@ -624,6 +673,12 @@ func buildStorageSchemaForTests() map[string]Classification {
 			BackupSecurity:   NotApplicable,
 			SecurityCritical: false,
 			ValueType:        &BoolType{},
+		},
+		"jsonDocument": {
+			BackupType:       NoAutoBackup,
+			BackupSecurity:   NotApplicable,
+			SecurityCritical: false,
+			ValueType:        &JSONType{},
 		},
 	}
 }

@@ -197,6 +197,11 @@ class NewOperationViewController: MUViewController {
         self.view.gestureRecognizers?.removeAll()
     }
 
+    private func hideBlockingFlowErrorView() {
+        blockingFlowErrorView.removeFromSuperview()
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+
 }
 
 extension NewOperationViewController: NewOpViewDelegate {
@@ -494,6 +499,12 @@ extension NewOperationViewController: ErrorViewDelegate {
             extraParameters["swap_uuid"] = swapUUID
         }
         AnalyticsHelper.logEvent(event, extraParameters: extraParameters)
+    }
+
+    func retryTouched(button: ButtonView) {
+        AnalyticsHelper.logEvent(NewOpActionEvent(type: .securityCardRetry))
+        hideBlockingFlowErrorView()
+        presenter.retrySecurityCardSign()
     }
 
     func secondaryButtonTouched() {

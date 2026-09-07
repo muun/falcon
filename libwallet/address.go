@@ -1,6 +1,7 @@
 package libwallet
 
 import (
+	"context"
 	"io"
 	"math"
 	"net/http"
@@ -35,7 +36,7 @@ type MuunPaymentURI struct {
 	Label        string
 	Message      string
 	Amount       string
-	Uri          string //nolint:staticcheck // TODO: struct field Uri should be URI
+	Uri          string //nolint:staticcheck // gomobile export
 	Bip70Url     string
 	CreationTime string
 	ExpiresTime  string
@@ -50,7 +51,7 @@ const (
 // GetPaymentURI builds a MuunPaymentURI from text (Bitcoin Uri, Muun Uri or address) and a network
 func GetPaymentURI(rawInput string, network *Network) (*MuunPaymentURI, error) {
 
-	bitcoinUri, components := buildUriFromString( //nolint:staticcheck // TODO: var bitcoinUri should be bitcoinURI
+	bitcoinURI, components := buildURIFromString(
 		rawInput,
 		bitcoinScheme,
 	)
@@ -121,7 +122,7 @@ func GetPaymentURI(rawInput string, network *Network) (*MuunPaymentURI, error) {
 			Label:   label,
 			Message: message,
 			Amount:  amount,
-			Uri:     bitcoinUri,
+			Uri:     bitcoinURI,
 		}, nil
 	}
 
@@ -141,7 +142,7 @@ func GetPaymentURI(rawInput string, network *Network) (*MuunPaymentURI, error) {
 				Label:    label,
 				Message:  message,
 				Amount:   amount,
-				Uri:      bitcoinUri,
+				Uri:      bitcoinURI,
 				Bip70Url: queryValues["r"][0],
 				Invoice:  invoice,
 			}, nil
@@ -151,7 +152,7 @@ func GetPaymentURI(rawInput string, network *Network) (*MuunPaymentURI, error) {
 			Label:    label,
 			Message:  message,
 			Amount:   amount,
-			Uri:      bitcoinUri,
+			Uri:      bitcoinURI,
 			Bip70Url: queryValues["r"][0],
 			Invoice:  invoice,
 		}, nil
@@ -191,7 +192,7 @@ func GetPaymentURI(rawInput string, network *Network) (*MuunPaymentURI, error) {
 		Label:   label,
 		Message: message,
 		Amount:  amount,
-		Uri:     bitcoinUri,
+		Uri:     bitcoinURI,
 		Invoice: invoice,
 	}, nil
 
@@ -199,7 +200,8 @@ func GetPaymentURI(rawInput string, network *Network) (*MuunPaymentURI, error) {
 
 // DoPaymentRequestCall builds a MuunPaymentUri from a url and a network. Handling BIP70 to 72
 func DoPaymentRequestCall(url string, network *Network) (*MuunPaymentURI, error) {
-	req, err := http.NewRequest( //nolint:noctx // TODO: use http.NewRequestWithContext
+	req, err := http.NewRequestWithContext(
+		context.Background(),
 		"GET",
 		url,
 		nil,
@@ -215,7 +217,7 @@ func DoPaymentRequestCall(url string, network *Network) (*MuunPaymentURI, error)
 	if err != nil {
 		return nil, errors.Errorf(ErrNetwork, "failed to make request to: %s", url)
 	}
-	defer resp.Body.Close() //nolint:errcheck // TODO: check error
+	defer func() { _ = resp.Body.Close() }()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -268,24 +270,24 @@ func getAddressFromScript(script []byte, network *Network) (string, error) {
 	return address.String(), nil
 }
 
-func buildUriFromString( //nolint:staticcheck // TODO: func buildUriFromString should be buildURIFromString
+func buildURIFromString(
 	rawInput string,
 	targetScheme string,
 ) (string, *url.URL) {
-	newUri := strings.Replace( //nolint:staticcheck // TODO: var newUri should be newURI
+	newURI := strings.Replace(
 		rawInput,
 		muunScheme,
 		targetScheme,
 		1,
 	)
-	if !strings.HasPrefix(strings.ToLower(newUri), targetScheme) {
-		newUri = targetScheme + rawInput
+	if !strings.HasPrefix(strings.ToLower(newURI), targetScheme) {
+		newURI = targetScheme + rawInput
 	}
 
-	components, err := url.Parse(newUri)
+	components, err := url.Parse(newURI)
 	if err != nil {
 		return "", nil
 	}
 
-	return newUri, components
+	return newURI, components
 }

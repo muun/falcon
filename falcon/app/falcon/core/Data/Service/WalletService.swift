@@ -138,6 +138,55 @@ public class WalletService {
         }
     }
 
+    func secureKeyValueStoragePut(key: String, value: Data) throws {
+        guard let client = client else {
+            throw MuunError(ServiceError.defaultError)
+        }
+
+        let request = Rpc_SecureKeyValueStoragePutRequest.with {
+            $0.key = key
+            $0.value = value
+        }
+
+        let call = client.secureKeyValueStoragePut(request)
+        _ = try performSyncRequest(call)
+    }
+
+    func secureKeyValueStorageGet(key: String) throws -> Secret {
+        guard let client = client else {
+            throw MuunError(ServiceError.defaultError)
+        }
+
+        let request = Rpc_SecureKeyValueStorageGetRequest.with {
+            $0.key = key
+        }
+
+        let call = client.secureKeyValueStorageGet(request)
+        return Secret(try performSyncRequest(call).value)
+    }
+
+    func secureKeyValueStorageDelete(key: String) throws {
+        guard let client = client else {
+            throw MuunError(ServiceError.defaultError)
+        }
+
+        let request = Rpc_SecureKeyValueStorageDeleteRequest.with {
+            $0.key = key
+        }
+
+        let call = client.secureKeyValueStorageDelete(request)
+        _ = try performSyncRequest(call)
+    }
+
+    func secureKeyValueStorageWipe() throws {
+        guard let client = client else {
+            throw MuunError(ServiceError.defaultError)
+        }
+
+        let call = client.secureKeyValueStorageWipe(empty)
+        _ = try performSyncRequest(call)
+    }
+
     func getSecurityCardsMarketplace() -> Single<[SecurityCardProvider]> {
         guard let client = client else {
             return Single.error(MuunError(ServiceError.defaultError))

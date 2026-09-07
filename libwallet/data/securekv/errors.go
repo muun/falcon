@@ -1,8 +1,6 @@
 package securekv
 
 import (
-	"strings"
-
 	"github.com/go-errors/errors"
 
 	"github.com/muun/libwallet/app_provided_data"
@@ -32,16 +30,17 @@ func newStorageFailedError(err error) error {
 	}
 }
 
-func classifyError(err error) error {
-	if err == nil {
-		return nil
+// errorFromGetStatus maps a non-Ok Get status to its typed error. Caller must
+// branch on Ok before invoking; Ok is treated as unexpected here.
+func errorFromGetStatus(status int32) error {
+	switch status {
+	case app_provided_data.SecureKvStatusNotFound:
+		return newNotFoundError(errors.New("key missing"))
+	case app_provided_data.SecureKvStatusDecryptionFailed:
+		return newDecryptionFailedError(errors.New("key invalidated"))
+	case app_provided_data.SecureKvStatusStorageFailed:
+		return newStorageFailedError(errors.New("operation failed"))
+	default:
+		return newStorageFailedError(errors.Errorf("unexpected status: %d", status))
 	}
-	msg := err.Error()
-	if strings.Contains(msg, app_provided_data.ErrCodeNotFound) {
-		return newNotFoundError(err)
-	}
-	if strings.Contains(msg, app_provided_data.ErrCodeDecryptionFailed) {
-		return newDecryptionFailedError(err)
-	}
-	return newStorageFailedError(err)
 }

@@ -70,4 +70,23 @@ class AmountLabelTests: MuunTestCase {
         amountLabel.cycleCurrency(animated: false)
         XCTAssertEqual(amountLabel.attributedText?.string, "10,000 SAT")
     }
+
+    func testSkipsPrimaryCurrencyWithUnusableRate() {
+        // A primary currency with an unusable rate converts to 0: it's dropped from the cycle so we
+        // never show a misleading "0.00 USD" — the label falls back to BTC instead.
+        let arsWithUnusableUsd = BitcoinAmount(inSatoshis: sats, inInputCurrency: arsAmount,
+                                               inPrimaryCurrency: MonetaryAmount(amount: 0, currency: "USD"))
+        let arsWithUnusableUsdValue = BitcoinAmountWithSelectedCurrency(
+            bitcoinAmount: arsWithUnusableUsd, selectedCurrency: CurrencyHelper.allCurrencies["ARS"]!)
+
+        amountLabel.setAmount(from: arsWithUnusableUsdValue, in: .inInput)
+        XCTAssertEqual(amountLabel.attributedText?.string, "4,500.00 ARS")
+
+        // USD (the primary) is skipped: input cycles straight to BTC.
+        amountLabel.cycleCurrency(animated: false)
+        XCTAssertEqual(amountLabel.attributedText?.string, "0.00010000 BTC")
+
+        amountLabel.cycleCurrency(animated: false)
+        XCTAssertEqual(amountLabel.attributedText?.string, "4,500.00 ARS")
+    }
 }
